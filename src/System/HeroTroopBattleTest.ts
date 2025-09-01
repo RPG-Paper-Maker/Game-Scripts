@@ -49,7 +49,7 @@ class HeroTroopBattleTest extends Base {
 	 *  @param {Player} player
 	 */
 	equip(player: Player) {
-		for (let equipment of this.equipments) {
+		for (const equipment of this.equipments) {
 			equipment.equip(player);
 		}
 	}

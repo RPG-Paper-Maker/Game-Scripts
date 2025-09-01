@@ -68,7 +68,7 @@ class RandomBattle extends Base {
 		if (this.isEntireMap) {
 			this.currentNumberSteps++;
 		} else {
-			for (let terrain of this.terrains) {
+			for (const terrain of this.terrains) {
 				if (Game.current.hero.terrain === terrain.getValue()) {
 					this.currentNumberSteps++;
 					break;

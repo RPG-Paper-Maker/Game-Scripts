@@ -53,11 +53,11 @@ class Item extends Base {
 		this.graphicInformations = new Graphic.SkillItem(this.item.system);
 		this.graphicCurrencies = [];
 		if (!Utils.isUndefined(item.shop) || showSellPrice) {
-			let price = showSellPrice ? item.system.getPrice() : item.shop.getPrice();
+			const price = showSellPrice ? item.system.getPrice() : item.shop.getPrice();
 			this.graphicCurrencies = [];
 			let graphic: Graphic.TextIcon;
-			for (let id in price) {
-				let [kind, value] = price[id];
+			for (const id in price) {
+				const [kind, value] = price[id];
 				graphic = Graphic.TextIcon.createFromSystem(
 					Mathf.numberWithCommas(
 						showSellPrice ? Math.round((Datas.Systems.priceSoldItem.getValue() * value) / 100) : value

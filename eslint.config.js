@@ -25,5 +25,15 @@ export default defineConfig([
 			'@typescript-eslint': tseslint.plugin,
 		},
 		extends: [js.configs.recommended, ...tseslint.configs.recommended],
+		rules: {
+			'@typescript-eslint/no-unused-vars': [
+				'warn',
+				{
+					argsIgnorePattern: '^_',
+					varsIgnorePattern: '^_',
+				},
+			],
+			'@typescript-eslint/no-floating-promises': 'warn',
+		},
 	},
 ]);

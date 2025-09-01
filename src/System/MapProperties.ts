@@ -110,7 +110,7 @@ class MapProperties extends Base {
 				? DynamicValue.readOrDefaultDatabase(json.sbid)
 				: DynamicValue.createNumber(datas.skybox);
 		}
-		var startupReactions = new System.MapObject(json.so);
+		const startupReactions = new System.MapObject(json.so);
 		this.startupObject = new MapObject(startupReactions);
 		this.startupObject.changeState();
 
@@ -136,7 +136,7 @@ class MapProperties extends Base {
 	 */
 	readObjects(json: Record<string, any>) {
 		const { objs } = json;
-		let l = objs.length;
+		const l = objs.length;
 		this.allObjects = new Array(l + 1);
 		let jsonObject: Record<string, any>;
 		this.maxObjectsID = 1;
@@ -184,7 +184,7 @@ class MapProperties extends Base {
 	 *  Update the background skybox.
 	 */
 	updateBackgroundSkybox() {
-		let size = (10000 * Datas.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
+		const size = (10000 * Datas.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
 		this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		this.skyboxMesh = new THREE.Mesh(
 			this.skyboxGeometry,
@@ -197,7 +197,7 @@ class MapProperties extends Base {
 	 *  Update the max steps numbers for starting a random battle.
 	 */
 	updateMaxNumberSteps() {
-		for (let battle of this.randomBattles) {
+		for (const battle of this.randomBattles) {
 			battle.resetCurrentNumberSteps();
 		}
 		this.maxNumberSteps = Mathf.variance(
@@ -220,10 +220,10 @@ class MapProperties extends Base {
 		}
 		if (test) {
 			randomBattle = null;
-			let rand = Mathf.random(0, 100);
+			const rand = Mathf.random(0, 100);
 			let priority = 0;
 			// Remove 0 priority or not reached current steps
-			let battles = [];
+			const battles = [];
 			let total = 0;
 			for (randomBattle of this.randomBattles) {
 				randomBattle.updateCurrentPriority();
@@ -242,7 +242,7 @@ class MapProperties extends Base {
 			}
 			if (randomBattle !== null) {
 				this.updateMaxNumberSteps();
-				let battleMap = Datas.BattleSystems.getBattleMap(this.randomBattleMapID.getValue());
+				const battleMap = Datas.BattleSystems.getBattleMap(this.randomBattleMapID.getValue());
 				Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
 				Manager.Stack.push(
 					new Scene.Battle(

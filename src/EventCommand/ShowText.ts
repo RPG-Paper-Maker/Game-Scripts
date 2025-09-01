@@ -32,14 +32,14 @@ class ShowText extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.interlocutor = System.DynamicValue.createValueCommand(command, iterator);
 		this.facesetID = command[iterator.i++];
 		this.facesetIndexX = command[iterator.i++];
 		this.facesetIndexY = command[iterator.i++];
-		let lang = new System.Translatable();
+		const lang = new System.Translatable();
 		while (iterator.i < command.length) {
 			lang.getCommand(command, iterator);
 		}

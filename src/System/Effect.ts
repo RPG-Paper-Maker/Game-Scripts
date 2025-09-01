@@ -142,15 +142,15 @@ class Effect extends Base {
 	 *  Get if effect is miss in battler temp variables.
 	 */
 	getMissAndCrit() {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 		Scene.Map.current.tempTargets = Scene.Map.current.targets;
 		if (this.isTemporarilyChangeTarget) {
 			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue(), {
 				user: user,
 			});
 		}
-		let targets = Scene.Map.current.targets;
-		let l = targets.length;
+		const targets = Scene.Map.current.targets;
+		const l = targets.length;
 		let target: Player, battler: Battler, precision: number, critical: number, miss: boolean, crit: boolean;
 		switch (this.kind) {
 			case EffectKind.Damages: {
@@ -226,7 +226,7 @@ class Effect extends Base {
 	 *  @returns {boolean}
 	 */
 	execute(forceReaction = false): boolean {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 		this.canSkip = false;
 		Scene.Map.current.tempTargets = Scene.Map.current.targets;
 		if (this.isTemporarilyChangeTarget) {
@@ -234,9 +234,9 @@ class Effect extends Base {
 				user: user,
 			});
 		}
-		let targets = Scene.Map.current.targets;
+		const targets = Scene.Map.current.targets;
 		let result = false;
-		let l = targets.length;
+		const l = targets.length;
 		let target: Player, battler: Battler;
 		switch (this.kind) {
 			case EffectKind.Damages: {
@@ -484,7 +484,7 @@ class Effect extends Base {
 			}
 			case EffectKind.AddRemoveSkill:
 				for (battler of targets) {
-					let skillID = this.addSkillID.getValue();
+					const skillID = this.addSkillID.getValue();
 					if (this.isAddSkill) {
 						battler.player.addSkill(skillID);
 					} else {
@@ -496,7 +496,7 @@ class Effect extends Base {
 			case EffectKind.PerformSkill:
 				break;
 			case EffectKind.CommonReaction:
-				let reactionInterpreter = new ReactionInterpreter(
+				const reactionInterpreter = new ReactionInterpreter(
 					null,
 					Datas.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
 					null,
@@ -518,11 +518,11 @@ class Effect extends Base {
 				result = true;
 				break;
 			case EffectKind.Script:
-				let script = this.scriptFormula.getValue();
+				const script = this.scriptFormula.getValue();
 				if (targets.length === 0) {
 					Interpreter.evaluate(script, { addReturn: false, user: user, target: null });
 				}
-				for (let target of targets) {
+				for (const target of targets) {
 					Interpreter.evaluate(script, { addReturn: false, user: user, target: target.player });
 				}
 				result = true;
@@ -549,8 +549,8 @@ class Effect extends Base {
 	 *  @returns {string}
 	 */
 	toString(): string {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		let target = Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const target = Player.getTemporaryPlayer();
 		switch (this.kind) {
 			case EffectKind.Damages:
 				let damage = Interpreter.evaluate(this.damageFormula.getValue(), { user: user, target: target });
@@ -574,11 +574,11 @@ class Effect extends Base {
 				let min = damage - variance;
 				let max = damage + variance;
 				if (damage < 0) {
-					let temp = min;
+					const temp = min;
 					min = -max;
 					max = -temp;
 				}
-				let options = [];
+				const options = [];
 				if (this.isDamagePrecision) {
 					precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
 						user: user,

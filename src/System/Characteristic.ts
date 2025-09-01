@@ -188,10 +188,10 @@ class Characteristic extends Base {
 				addition: 0,
 			};
 		}
-		let value = this.value.getValue();
+		const value = this.value.getValue();
 		if (this.operation) {
 			// * (multiplication)
-			let v = this.unit ? value / 100 : value;
+			const v = this.unit ? value / 100 : value;
 			res[propName][id].multiplication *= this.isIncreaseDecrease ? v : 1 / v; // % / Fix
 		} else {
 			// + (addition)
@@ -212,8 +212,8 @@ class Characteristic extends Base {
 	 *  @returns {string}
 	 */
 	toString(): string {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		let target = Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const target = Player.getTemporaryPlayer();
 		let result = '';
 		switch (this.kind) {
 			case Enum.CharacteristicKind.IncreaseDecrease:
@@ -248,7 +248,7 @@ class Characteristic extends Base {
 				}
 				result += ' ';
 				let sign = this.isIncreaseDecrease ? 1 : -1;
-				let value = this.value.getValue();
+				const value = this.value.getValue();
 				sign *= Math.sign(value);
 				if (this.operation) {
 					result += 'x';

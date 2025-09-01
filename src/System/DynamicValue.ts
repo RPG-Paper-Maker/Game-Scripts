@@ -52,7 +52,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {SystemValue}
 	 */
 	static create(k: DynamicValueKind = DynamicValueKind.None, v: any = 0): System.DynamicValue {
-		let systemValue = new System.DynamicValue();
+		const systemValue = new System.DynamicValue();
 		systemValue.kind = k;
 		switch (k) {
 			case DynamicValueKind.None:
@@ -89,8 +89,8 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createValueCommand(command: any[], iterator: StructIterator): System.DynamicValue {
-		let k = command[iterator.i++];
-		let v = command[iterator.i++];
+		const k = command[iterator.i++];
+		const v = command[iterator.i++];
 		return System.DynamicValue.create(k, v);
 	}
 
@@ -287,7 +287,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readFromJSON(json: StructJSON): System.DynamicValue {
-		let value = new System.DynamicValue();
+		const value = new System.DynamicValue();
 		value.read(json);
 		return value;
 	}
@@ -303,7 +303,7 @@ class DynamicValue extends System.Base {
 		switch (this.kind) {
 			case DynamicValueKind.CustomStructure:
 				this.customStructure = {};
-				let jsonList = Utils.defaultValue(json.customStructure.properties, []);
+				const jsonList = Utils.defaultValue(json.customStructure.properties, []);
 				let parameter: System.DynamicValue, jsonParameter: Record<string, any>;
 				for (let i = 0, l = jsonList.length; i < l; i++) {
 					jsonParameter = jsonList[i];
@@ -340,7 +340,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {Record<string, any>}
 	 */
 	toJson(): Record<string, any> {
-		let json: Record<string, any> = {};
+		const json: Record<string, any> = {};
 		json.k = this.kind;
 		json.v = this.value;
 		return json;
@@ -427,8 +427,8 @@ class DynamicValue extends System.Base {
 				return Datas.CommonEvents.getCommonObject(this.value);
 			case DynamicValueKind.CustomStructure:
 				if (deep) {
-					let obj = {};
-					for (let k in this.customStructure) {
+					const obj = {};
+					for (const k in this.customStructure) {
 						obj[k] = this.customStructure[k].getValue(forceVariable, true);
 					}
 					return obj;
@@ -436,8 +436,8 @@ class DynamicValue extends System.Base {
 				return this.customStructure;
 			case DynamicValueKind.CustomList:
 				if (deep) {
-					let list = [];
-					for (let v of this.customList) {
+					const list = [];
+					for (const v of this.customList) {
 						list.push(v.getValue(forceVariable, true));
 					}
 					return list;

@@ -82,13 +82,13 @@ class Land extends MapElement {
 		count: number
 	): StructMapElementCollision {
 		const localPosition = position.toVector3();
-		let a = localPosition.x;
+		const a = localPosition.x;
 		let yLayerOffset = position.layer * 0.05;
 		if (!this.up) {
 			yLayerOffset *= -1;
 		}
-		let b = localPosition.y + yLayerOffset;
-		let c = localPosition.z;
+		const b = localPosition.y + yLayerOffset;
+		const c = localPosition.z;
 		let objCollision: StructMapElementCollision = null;
 
 		// Vertices
@@ -96,7 +96,7 @@ class Land extends MapElement {
 		const vecB = new THREE.Vector3(a + Datas.Systems.SQUARE_SIZE / 2, b, c - Datas.Systems.SQUARE_SIZE / 2);
 		const vecC = new THREE.Vector3(a + Datas.Systems.SQUARE_SIZE / 2, b, c + Datas.Systems.SQUARE_SIZE / 2);
 		const vecD = new THREE.Vector3(a - Datas.Systems.SQUARE_SIZE / 2, b, c + Datas.Systems.SQUARE_SIZE / 2);
-		let center = new THREE.Vector3(a, b, c);
+		const center = new THREE.Vector3(a, b, c);
 		Sprite.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 		// Vertices
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
@@ -105,16 +105,16 @@ class Land extends MapElement {
 		geometry.pushQuadIndices(count * 4);
 
 		// UVs
-		let coefX = MapElement.COEF_TEX / width;
-		let coefY = MapElement.COEF_TEX / height;
+		const coefX = MapElement.COEF_TEX / width;
+		const coefY = MapElement.COEF_TEX / height;
 		x += coefX;
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new THREE.Vector2();
-		let texB = new THREE.Vector2();
-		let texC = new THREE.Vector2();
-		let texD = new THREE.Vector2();
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 

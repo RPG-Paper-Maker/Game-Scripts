@@ -29,7 +29,7 @@ class ChangeASkill extends Base {
 	constructor(command: any[]) {
 		super();
 
-		var iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.skillID = System.DynamicValue.createValueCommand(command, iterator);
@@ -57,7 +57,7 @@ class ChangeASkill extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let skillID = this.skillID.getValue();
+		const skillID = this.skillID.getValue();
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:

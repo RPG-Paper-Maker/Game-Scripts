@@ -29,7 +29,7 @@ class StartShopMenu extends Base {
 		super();
 
 		this.isRestock = isRestock;
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		if (!isRestock) {
@@ -51,13 +51,13 @@ class StartShopMenu extends Base {
 	 */
 	initialize(): Record<string, any> {
 		// Create or load stock according to first time opening or not
-		let shopID = this.shopID.getValue();
+		const shopID = this.shopID.getValue();
 		let stocks: Record<string, number>[] = [];
 		stocks[Enum.ItemKind.Item] = {};
 		stocks[Enum.ItemKind.Weapon] = {};
 		stocks[Enum.ItemKind.Armor] = {};
 		let system: System.ShopItem;
-		let list: Item[] = [];
+		const list: Item[] = [];
 		let id: number, stock: number, newStock;
 		if (Game.current.shops[shopID]) {
 			stocks = Game.current.shops[shopID];

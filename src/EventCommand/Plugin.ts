@@ -26,13 +26,13 @@ class Plugin extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 
 		this.pluginID = command[iterator.i++];
 		this.commandID = command[iterator.i++];
-		let l = command.length;
+		const l = command.length;
 		this.parameters = [];
 		while (iterator.i < l) {
 			this.parameters.push(System.DynamicValue.createValueCommand(command, iterator));
@@ -47,7 +47,7 @@ class Plugin extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let parameters = [];
+		const parameters = [];
 		for (let i = 0, l = this.parameters.length; i < l; i++) {
 			parameters[i] = this.parameters[i].getValue();
 		}

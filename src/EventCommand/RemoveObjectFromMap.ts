@@ -24,7 +24,7 @@ class RemoveObjectFromMap extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
@@ -49,7 +49,7 @@ class RemoveObjectFromMap extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let objectID = this.objectID.getValue();
+		const objectID = this.objectID.getValue();
 		if (!currentState.started) {
 			currentState.started = true;
 			MapObject.search(
@@ -60,7 +60,7 @@ class RemoveObjectFromMap extends Base {
 							switch (result.kind) {
 								case 0:
 									result.datas.m.splice(result.index, 1);
-									let index = result.datas.min.indexOf(result.object);
+									const index = result.datas.min.indexOf(result.object);
 									if (index === -1) {
 										result.datas = Game.current.getPortionDatas(
 											Scene.Map.current.id,

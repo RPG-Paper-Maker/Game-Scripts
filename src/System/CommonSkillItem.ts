@@ -79,12 +79,12 @@ class CommonSkillItem extends Icon {
 		Utils.readJSONSystemList({ list: Utils.defaultValue(json.p, []), listIndexes: this.price, cons: Cost });
 		this.costs = [];
 		Utils.readJSONSystemList({ list: Utils.defaultValue(json.cos, []), listIndexes: this.costs, cons: Cost });
-		for (let cost of this.costs) {
+		for (const cost of this.costs) {
 			cost.skillItem = this;
 		}
 		this.effects = [];
 		Utils.readJSONSystemList({ list: Utils.defaultValue(json.e, []), listIndexes: this.effects, cons: Effect });
-		for (let effect of this.effects) {
+		for (const effect of this.effects) {
 			effect.skillItem = this;
 		}
 		this.characteristics = [];
@@ -101,7 +101,7 @@ class CommonSkillItem extends Icon {
 	 */
 	getEffects(): System.Effect[] {
 		let effects: System.Effect[] = [];
-		for (let effect of this.effects) {
+		for (const effect of this.effects) {
 			if (effect.kind === Enum.EffectKind.PerformSkill) {
 				effects = effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
 			} else {
@@ -116,7 +116,7 @@ class CommonSkillItem extends Icon {
 	 *  @returns {boolean}
 	 */
 	useCommand(): boolean {
-		let possible = this.isPossible();
+		const possible = this.isPossible();
 		if (possible) {
 			this.use(false);
 		}
@@ -130,11 +130,11 @@ class CommonSkillItem extends Icon {
 	 */
 	use(useCost: boolean = true): boolean {
 		let isDoingSomething = false;
-		for (let effect of this.getEffects()) {
+		for (const effect of this.getEffects()) {
 			isDoingSomething = effect.execute() || isDoingSomething;
 		}
 		if (useCost && isDoingSomething) {
-			for (let cost of this.costs) {
+			for (const cost of this.costs) {
 				cost.use();
 			}
 		}
@@ -154,15 +154,15 @@ class CommonSkillItem extends Icon {
 	 *  @returns {boolean}
 	 */
 	isPossible(target?: Player, checkCost: boolean = true): boolean {
-		let targets = Scene.Map.current.getPossibleTargets(this.targetKind);
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
+		const targets = Scene.Map.current.getPossibleTargets(this.targetKind);
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
 
 		// Condition
 		if (!Interpreter.evaluate(this.conditionFormula.getValue())) {
 			return false;
 		}
 		// Target condition : at least one target can be selected
-		let fTargetCondition = (target: Player) => {
+		const fTargetCondition = (target: Player) => {
 			return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user: user, target: target });
 		};
 		if (target) {

@@ -254,14 +254,14 @@ class MenuEnterAName extends MenuBase {
 		if (this.currentCharacterPosition === this.maxCharacters) {
 			return;
 		}
-		let windowChoice = this.currentRow === this.rows ? null : this.windowChoicesMain[this.currentRow];
-		let index = windowChoice === null ? 0 : windowChoice.currentSelectedIndex;
+		const windowChoice = this.currentRow === this.rows ? null : this.windowChoicesMain[this.currentRow];
+		const index = windowChoice === null ? 0 : windowChoice.currentSelectedIndex;
 		if (isKey) {
 			if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Down)) {
 				if (windowChoice !== null) {
 					windowChoice.listWindows[windowChoice.currentSelectedIndex].selected = false;
 				}
-				let i = this.currentRow;
+				const i = this.currentRow;
 				if (i < this.rows && i >= 0) {
 					this.currentRow++;
 					if (
@@ -297,7 +297,7 @@ class MenuEnterAName extends MenuBase {
 				if (windowChoice !== null) {
 					windowChoice.listWindows[windowChoice.currentSelectedIndex].selected = false;
 				}
-				let i = this.currentRow;
+				const i = this.currentRow;
 				if (i > 0) {
 					this.currentRow--;
 					if (this.offsetRow === this.currentRow + 1) {
@@ -396,7 +396,7 @@ class MenuEnterAName extends MenuBase {
 	 *  @returns {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		let res = super.onKeyPressedAndRepeat(key);
+		const res = super.onKeyPressedAndRepeat(key);
 		this.move(true, { key: key });
 		return res;
 	}

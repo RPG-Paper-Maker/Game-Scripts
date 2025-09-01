@@ -28,8 +28,8 @@ class Shapes {
 	 *  Read the JSON file associated to shapes.
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_SHAPES)).list;
-		let l = json.length;
+		const json = (await Platform.parseFileJSON(Paths.FILE_SHAPES)).list;
+		const l = json.length;
 		this.list = new Array(l);
 		let j: number,
 			m: number,

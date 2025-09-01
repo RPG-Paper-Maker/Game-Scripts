@@ -67,10 +67,10 @@ class TroopReactionConditions extends Base {
 	 *  @returns {boolean}
 	 */
 	isValid(): boolean {
-		let sceneBattle = <Scene.Battle>Scene.Map.current;
+		const sceneBattle = <Scene.Battle>Scene.Map.current;
 		if (this.isNumberOfTurn) {
-			let plus = this.numberOfTurnPlus.getValue();
-			let times = this.numberOfTurnTimes.getValue();
+			const plus = this.numberOfTurnPlus.getValue();
+			const times = this.numberOfTurnTimes.getValue();
 			if (times === 1) {
 				if (sceneBattle.turn < plus) {
 					return false;

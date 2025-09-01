@@ -27,7 +27,7 @@ class ChangeStatus extends Base {
 	constructor(command: any[]) {
 		super();
 
-		var iterator = {
+		const iterator = {
 			i: 0,
 		};
 
@@ -57,7 +57,7 @@ class ChangeStatus extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let statusID = this.statusID.getValue();
+		const statusID = this.statusID.getValue();
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:

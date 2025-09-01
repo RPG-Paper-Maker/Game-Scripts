@@ -31,8 +31,8 @@ class Pictures {
 	 *  @async
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_PICTURES)).list;
-		let l = json.length;
+		const json = (await Platform.parseFileJSON(Paths.FILE_PICTURES)).list;
+		const l = json.length;
 		this.list = new Array(l);
 		let k: number,
 			j: number,
@@ -126,7 +126,7 @@ class Pictures {
 	 *   @returns {Picture2D}
 	 */
 	static getPictureCopy(kind: PictureKind, id: number): Picture2D {
-		let picture = this.get(kind, id);
+		const picture = this.get(kind, id);
 		return picture && picture.picture ? picture.picture.createCopy() : new Picture2D();
 	}
 }

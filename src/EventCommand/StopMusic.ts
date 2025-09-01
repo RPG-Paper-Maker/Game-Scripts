@@ -35,7 +35,7 @@ class StopMusic extends Base {
 	 *  @param {any[]} command - Direct JSON command to parse
 	 */
 	static parseStopSong(that: any, command: any[], kind: Enum.SongKind) {
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		that.seconds = System.DynamicValue.createValueCommand(command, iterator);
@@ -81,7 +81,7 @@ class StopMusic extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let stopped = EventCommand.StopMusic.stopSong(this, SongKind.Music, currentState.time);
+		const stopped = EventCommand.StopMusic.stopSong(this, SongKind.Music, currentState.time);
 		return currentState.parallel ? stopped : 1;
 	}
 }

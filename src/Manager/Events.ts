@@ -29,7 +29,7 @@ class Events {
 	 *  @returns {EventCommand.Base}
 	 */
 	static getEventCommand(json: Record<string, any>): EventCommand.Base {
-		let command = json.command;
+		const command = json.command;
 		switch (json.kind) {
 			case EventCommandKind.ShowText:
 				return new EventCommand.ShowText(command);
@@ -234,7 +234,7 @@ class Events {
 					Scene.Map.current.updatePortions(
 						this,
 						function (x: number, y: number, z: number, i: number, j: number, k: number) {
-							let objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
+							const objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
 
 							// Moved objects
 							let a: number, l: number, object: MapObject;
@@ -254,7 +254,7 @@ class Events {
 							}
 
 							// Static
-							let mapPortion = Scene.Map.current.getMapPortion(i, j, k);
+							const mapPortion = Scene.Map.current.getMapPortion(i, j, k);
 							if (mapPortion) {
 								for (a = 0, l = mapPortion.objectsList.length; a < l; a++) {
 									object = mapPortion.objectsList[a];
@@ -294,7 +294,7 @@ class Events {
 		onlyTheClosest: boolean = false
 	) {
 		let objects: Record<string, any>;
-		let closests: any[][] = [];
+		const closests: any[][] = [];
 		Scene.Map.current.updatePortions(this, (x: number, y: number, z: number, i: number, j: number, k: number) => {
 			objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
 
@@ -322,7 +322,7 @@ class Events {
 				closests
 			);
 			// Static
-			let mapPortion = Scene.Map.current.getMapPortion(i, j, k);
+			const mapPortion = Scene.Map.current.getMapPortion(i, j, k);
 			if (mapPortion) {
 				Manager.Events.sendEventObjects(
 					mapPortion.objectsList,

@@ -32,7 +32,7 @@ class TimeCurrencies extends Base {
 		// Currencies
 		this.currencies = [];
 		let graphic: Graphic.TextIcon, systemCurrency: System.Currency;
-		for (let id in Game.current.currencies) {
+		for (const id in Game.current.currencies) {
 			systemCurrency = Datas.Systems.getCurrency(parseInt(id));
 			if (systemCurrency.displayInMenu.getValue()) {
 				graphic = Graphic.TextIcon.createFromSystem(
@@ -54,7 +54,7 @@ class TimeCurrencies extends Base {
 		});
 
 		// Calculate height
-		var currency: Graphic.TextIcon;
+		let currency: Graphic.TextIcon;
 		this.height = 0;
 		for (let i = 0, l = this.currencies.length; i < l; i++) {
 			currency = this.currencies[i];

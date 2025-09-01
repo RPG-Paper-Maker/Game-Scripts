@@ -31,7 +31,7 @@ class ChangeExperienceCurve extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.selectionKind = command[iterator.i++];
@@ -66,11 +66,11 @@ class ChangeExperienceCurve extends Base {
 				targets = Game.current.getTeam(this.selectionTeam);
 				break;
 		}
-		let level = this.levelRange.getValue();
-		let levelTo = this.levelRangeTo.getValue();
-		let totalExperience = this.totalExperience.getValue();
+		const level = this.levelRange.getValue();
+		const levelTo = this.levelRangeTo.getValue();
+		const totalExperience = this.totalExperience.getValue();
 		let i: number, value: number;
-		for (let target of targets) {
+		for (const target of targets) {
 			for (i = level; i <= levelTo; i++) {
 				value = Mathf.OPERATORS_NUMBERS[this.operation](target.expList[i], totalExperience);
 				target.expList[i] = value;

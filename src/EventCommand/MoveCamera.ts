@@ -41,7 +41,7 @@ class MoveCamera extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 
@@ -86,23 +86,23 @@ class MoveCamera extends Base {
 	 */
 	initialize(): Record<string, any> {
 		Scene.Map.current.camera.update();
-		let time = this.time.getValue() * 1000;
-		let operation = Mathf.OPERATORS_NUMBERS[this.operation];
-		let finalX = operation(
+		const time = this.time.getValue() * 1000;
+		const operation = Mathf.OPERATORS_NUMBERS[this.operation];
+		const finalX = operation(
 			Scene.Map.current.camera.getThreeCamera().position.x,
 			this.x.getValue() * (this.xSquare ? Datas.Systems.SQUARE_SIZE : 1)
 		);
-		let finalY = operation(
+		const finalY = operation(
 			Scene.Map.current.camera.getThreeCamera().position.y,
 			this.y.getValue() * (this.ySquare ? Datas.Systems.SQUARE_SIZE : 1)
 		);
-		let finalZ = operation(
+		const finalZ = operation(
 			Scene.Map.current.camera.getThreeCamera().position.z,
 			this.z.getValue() * (this.zSquare ? Datas.Systems.SQUARE_SIZE : 1)
 		);
-		let finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue());
-		let finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue());
-		let finalDistance = operation(Scene.Map.current.camera.distance, this.distance.getValue());
+		const finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue());
+		const finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue());
+		const finalDistance = operation(Scene.Map.current.camera.distance, this.distance.getValue());
 		return {
 			parallel: this.isWaitEnd,
 			initialH: Scene.Map.current.camera.horizontalAngle,

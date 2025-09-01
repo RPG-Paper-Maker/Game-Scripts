@@ -29,7 +29,7 @@ class Classes {
 	 *  @async
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)).classes;
+		const json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)).classes;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Class });
 	}

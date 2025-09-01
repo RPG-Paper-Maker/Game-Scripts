@@ -40,7 +40,7 @@ abstract class Base {
 		} else if (Utils.isUndefined(id)) {
 			throw new Error();
 		}
-		let v = list[id];
+		const v = list[id];
 		if (Utils.isUndefined(v)) {
 			Platform.showErrorMessage(
 				errorMessage === ''

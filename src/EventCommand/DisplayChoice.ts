@@ -33,7 +33,7 @@ class DisplayChoice extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.cancelAutoIndex = System.DynamicValue.createValueCommand(command, iterator);
@@ -112,7 +112,7 @@ class DisplayChoice extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let maxItems = this.maxNumberChoices.getValue();
+		const maxItems = this.maxNumberChoices.getValue();
 		this.windowChoices = new WindowChoices(
 			(ScreenResolution.SCREEN_X - this.maxWidth) / 2,
 			ScreenResolution.SCREEN_Y -

@@ -35,18 +35,18 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @param {number} depth
 	 */
 	static createBox(width: number, height: number, depth: number) {
-		let geometry = new CustomGeometry();
-		let w = width / 2;
-		let h = height / 2;
-		let d = depth / 2;
-		let vecA = new THREE.Vector3(-w, -h, -d);
-		let vecB = new THREE.Vector3(w, -h, -d);
-		let vecC = new THREE.Vector3(w, -h, d);
-		let vecD = new THREE.Vector3(-w, -h, d);
-		let vecE = new THREE.Vector3(-w, h, -d);
-		let vecF = new THREE.Vector3(w, h, -d);
-		let vecG = new THREE.Vector3(w, h, d);
-		let vecH = new THREE.Vector3(-w, h, d);
+		const geometry = new CustomGeometry();
+		const w = width / 2;
+		const h = height / 2;
+		const d = depth / 2;
+		const vecA = new THREE.Vector3(-w, -h, -d);
+		const vecB = new THREE.Vector3(w, -h, -d);
+		const vecC = new THREE.Vector3(w, -h, d);
+		const vecD = new THREE.Vector3(-w, -h, d);
+		const vecE = new THREE.Vector3(-w, h, -d);
+		const vecF = new THREE.Vector3(w, h, -d);
+		const vecG = new THREE.Vector3(w, h, d);
+		const vecH = new THREE.Vector3(-w, h, d);
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadVertices(vecE, vecF, vecG, vecH);
 		geometry.pushQuadVertices(vecE, vecH, vecD, vecA);
@@ -100,8 +100,8 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 *  @returns {ArrayLike<number>}
 	 */
 	getVerticesVectors(): THREE.Vector3[] {
-		let vertices = [];
-		let array = this.getVertices();
+		const vertices = [];
+		const array = this.getVertices();
 		for (let i = 0, l = array.length; i < l; i += 3) {
 			vertices.push(new THREE.Vector3(array[i], array[i + 1], array[i + 2]));
 		}
@@ -148,7 +148,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 */
 	rotate(angle: number, axis: THREE.Vector3, center: THREE.Vector3) {
 		const vertices = this.getVertices();
-		let vertex = new THREE.Vector3();
+		const vertex = new THREE.Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			Mathf.rotateVertex(vertex, center, angle, axis);
@@ -166,7 +166,7 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 */
 	rotateFromEuler(euler: THREE.Euler, center: THREE.Vector3) {
 		const vertices = this.getVertices();
-		let vertex = new THREE.Vector3();
+		const vertex = new THREE.Vector3();
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			Mathf.rotateVertexEuler(vertex, center, euler);

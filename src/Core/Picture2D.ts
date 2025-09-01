@@ -92,7 +92,7 @@ class Picture2D extends Bitmap {
 			stretch?: boolean;
 		} = {}
 	) {
-		let pic = picture ? new Picture2D(picture.getPath(), opts) : new Picture2D();
+		const pic = picture ? new Picture2D(picture.getPath(), opts) : new Picture2D();
 		await pic.load();
 		return pic;
 	}
@@ -129,7 +129,7 @@ class Picture2D extends Bitmap {
 	 */
 	static async loadImage(path: string): Promise<HTMLImageElement> {
 		return await new Promise((resolve, reject) => {
-			let image: any = new Image();
+			const image: any = new Image();
 			image.onload = () => {
 				resolve(image);
 			};
@@ -177,7 +177,7 @@ class Picture2D extends Bitmap {
 	 *  @returns {Picture2D}
 	 */
 	createCopy(): Picture2D {
-		let picture = new Picture2D();
+		const picture = new Picture2D();
 		picture.empty = this.empty;
 		picture.path = this.path;
 		picture.image = this.image;
@@ -240,7 +240,7 @@ class Picture2D extends Bitmap {
 					: ScreenResolution.getScreenMinXY(h);
 
 			// Draw the image according to all parameters
-			let angle = (this.angle * Math.PI) / 180;
+			const angle = (this.angle * Math.PI) / 180;
 			Platform.ctx.save();
 			Platform.ctx.globalAlpha = this.opacity;
 			if (!this.centered) {

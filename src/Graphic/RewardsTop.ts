@@ -31,7 +31,7 @@ class RewardsTop extends Base {
 
 		// Currencies
 		this.graphicCurrencies = [];
-		for (let id in currencies) {
+		for (const id in currencies) {
 			this.graphicCurrencies.push(
 				Graphic.TextIcon.createFromSystem(
 					Utils.numToString(currencies[id]),

@@ -38,7 +38,7 @@ class TeleportObject extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 
@@ -133,7 +133,7 @@ class TeleportObject extends Base {
 		}
 		// Search object
 		if (!currentState.waitingObject) {
-			let objectID = this.objectID.getValue();
+			const objectID = this.objectID.getValue();
 			if (!currentState.waitingPosition) {
 				// Set object's position
 				if (this.objectIDPosition === null) {
@@ -161,15 +161,15 @@ class TeleportObject extends Base {
 						// If needs teleport hero in another map
 						let needReload = false;
 						if (this.mapID !== null) {
-							let id = this.mapID.getValue();
+							const id = this.mapID.getValue();
 
 							// If hero set the current map
 							if (result.object.isHero) {
 								Game.current.hero.position = currentState.position;
-								let direction =
+								const direction =
 									this.direction === 0 ? Game.current.hero.orientation : this.direction - 1;
 								if (Scene.Map.current.id !== id) {
-									let map = new Scene.Map(id, false, false, direction);
+									const map = new Scene.Map(id, false, false, direction);
 									// Include current reaction in the new map so it excecute commands after teleport
 									map.reactionInterpreters.push(ReactionInterpreter.currentReaction);
 									// Initialize time event again to reinclude time repeat off

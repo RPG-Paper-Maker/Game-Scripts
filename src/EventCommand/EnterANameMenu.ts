@@ -25,7 +25,7 @@ class EnterANameMenu extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);

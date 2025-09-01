@@ -32,11 +32,11 @@ class SendEvent extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		// Target
-		let l = command.length;
+		const l = command.length;
 		this.targetKind = command[iterator.i++];
 		this.senderNoReceiver = false;
 		switch (this.targetKind) {
@@ -53,7 +53,7 @@ class SendEvent extends Base {
 		this.eventID = command[iterator.i++];
 
 		// Parameters
-		let parameters = (
+		const parameters = (
 			this.isSystem
 				? Datas.CommonEvents.getEventSystem(this.eventID)
 				: Datas.CommonEvents.getEventUser(this.eventID)

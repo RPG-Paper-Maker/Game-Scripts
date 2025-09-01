@@ -232,7 +232,7 @@ class WindowSkin extends System.Base {
 	 *  to be resize (resolution)
 	 */
 	drawArrowTarget(frame: number, x: number, y: number, positionResize: boolean = false) {
-		let width = this.arrowTargetSelection[2] / Datas.Systems.FRAMES;
+		const width = this.arrowTargetSelection[2] / Datas.Systems.FRAMES;
 		this.picture.draw({
 			x: x - width / 2,
 			y: y,
@@ -253,7 +253,7 @@ class WindowSkin extends System.Base {
 	 *  @param {number} y - The y position
 	 */
 	drawArrowMessage(frame: number, x: number, y: number) {
-		let width = this.arrowEndMessage[2] / Datas.Systems.FRAMES;
+		const width = this.arrowEndMessage[2] / Datas.Systems.FRAMES;
 		this.picture.draw({
 			x: x - width / 2,
 			y: y,
@@ -315,9 +315,9 @@ class WindowSkin extends System.Base {
 	 *  @returns {[number, number]} The x offset and height for after damages
 	 */
 	drawDamagesNumber(damage: number, x: number, y: number, rect: number[], zoom: number): [number, number] {
-		let digits = Utils.numToString(damage).split('').map(Number);
-		let width = rect[2] / 10;
-		let height = rect[3];
+		const digits = Utils.numToString(damage).split('').map(Number);
+		const width = rect[2] / 10;
+		const height = rect[3];
 		this.picture.stretch = false;
 		for (let i = 0, l = digits.length; i < l; i++) {
 			this.picture.draw({

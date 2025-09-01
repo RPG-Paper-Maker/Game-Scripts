@@ -29,7 +29,7 @@ class PlayAVideo extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.operation = command[iterator.i++];

@@ -63,7 +63,7 @@ class SkillItem extends Base {
 				this.graphicEffects.push(graphic);
 			}
 			if (effect.isDamageElement) {
-				let element = Datas.BattleSystems.getElement(effect.damageElementID.getValue());
+				const element = Datas.BattleSystems.getElement(effect.damageElementID.getValue());
 				graphicIcon = Datas.Pictures.getPictureCopy(PictureKind.Icons, element.pictureID);
 				graphicIcon.sx = element.pictureIndexX * Datas.Systems.iconsSize;
 				graphicIcon.sy = element.pictureIndexY * Datas.Systems.iconsSize;

@@ -31,7 +31,7 @@ class Variables {
 	 *  @async
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_VARIABLES)).variables;
+		const json = (await Platform.parseFileJSON(Paths.FILE_VARIABLES)).variables;
 		this.variablesNumbers = json.length * this.VARIABLES_PER_PAGE + 1;
 		this.variablesNames = new Array(this.variablesNumbers);
 		let i: number, j: number, l: number, m: number, variable: Record<string, any>;

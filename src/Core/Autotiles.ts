@@ -59,7 +59,7 @@ class Autotiles {
 
 	constructor(bundle: TextureBundle) {
 		this.bundle = bundle;
-		let texture = Manager.GL.getMaterialTexture(bundle.material);
+		const texture = Manager.GL.getMaterialTexture(bundle.material);
 		this.width = texture ? texture.image.width : 0;
 		this.height = texture ? texture.image.height : 0;
 		this.geometry = new CustomGeometry();

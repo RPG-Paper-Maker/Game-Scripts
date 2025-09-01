@@ -24,7 +24,7 @@ class AllowForbidSaves extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.allow = System.DynamicValue.createValueCommand(command, iterator);

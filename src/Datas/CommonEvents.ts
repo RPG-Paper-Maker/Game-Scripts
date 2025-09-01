@@ -34,7 +34,7 @@ class CommonEvents {
 	 *  @async
 	 */
 	static async read() {
-		let json = await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS);
+		const json = await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS);
 
 		// Lists
 		this.eventsSystem = [];
@@ -52,8 +52,8 @@ class CommonEvents {
 		// Common objects
 		/* First, we'll need to reorder the json list according to
         inheritance */
-		let jsonObjects = json.commonObjects;
-		let reorderedList = [];
+		const jsonObjects = json.commonObjects;
+		const reorderedList = [];
 		let jsonObject: Record<string, any>;
 		for (let i = 0, l = jsonObjects.length; i < l; i++) {
 			jsonObject = jsonObjects[i];
@@ -83,7 +83,7 @@ class CommonEvents {
 	) {
 		if (jsonObject && !jsonObject.hasOwnProperty(Datas.CommonEvents.PROPERTY_STOCKED)) {
 			// If id = -1, we can add to the list
-			let id = jsonObject.hId;
+			const id = jsonObject.hId;
 			if (id !== -1) {
 				// Search id in the json list
 				let inheritedObject: Record<string, any>;

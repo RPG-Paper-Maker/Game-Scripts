@@ -62,8 +62,8 @@ class AnimationFrameElement extends Base {
 		picture.angle = this.angle;
 		picture.centered = true;
 		picture.reverse = this.flip;
-		let w = picture.oW / cols;
-		let h = picture.oH / rows;
+		const w = picture.oW / cols;
+		const h = picture.oH / rows;
 		picture.draw({
 			x: position.x + this.x,
 			y: position.y + this.y,

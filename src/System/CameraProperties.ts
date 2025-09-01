@@ -77,8 +77,8 @@ class CameraProperties extends Base {
 				this.far.getValue()
 			);
 		} else {
-			let x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
-			let y = ScreenResolution.CANVAS_HEIGHT * (camera.distance / 1000);
+			const x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
+			const y = ScreenResolution.CANVAS_HEIGHT * (camera.distance / 1000);
 			camera.orthographicCamera = new THREE.OrthographicCamera(
 				-x,
 				x,

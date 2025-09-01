@@ -47,7 +47,7 @@ class StopBackgroundSound extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let stopped = EventCommand.StopMusic.stopSong(this, SongKind.BackgroundSound, currentState.time);
+		const stopped = EventCommand.StopMusic.stopSong(this, SongKind.BackgroundSound, currentState.time);
 		return currentState.parallel ? stopped : 1;
 	}
 }

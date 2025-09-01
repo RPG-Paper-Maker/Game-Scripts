@@ -33,7 +33,7 @@ class CreateObjectInMap extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.modelID = System.DynamicValue.createValueCommand(command, iterator);
@@ -108,11 +108,11 @@ class CreateObjectInMap extends Base {
 			currentState.waitingPosition = true;
 		}
 		if (currentState.position !== null) {
-			let id = ++Scene.Map.current.mapProperties.maxObjectsID;
-			let position = Position.createFromVector3(currentState.position);
-			let globalPortion = position.getGlobalPortion();
+			const id = ++Scene.Map.current.mapProperties.maxObjectsID;
+			const position = Position.createFromVector3(currentState.position);
+			const globalPortion = position.getGlobalPortion();
 			Scene.Map.current.mapProperties.allObjects[id] = position;
-			let newObject = new MapObject(
+			const newObject = new MapObject(
 				System.MapObject.createFromModelID(this.modelID.getValue(), id),
 				currentState.position
 			);

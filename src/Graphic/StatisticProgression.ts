@@ -30,7 +30,7 @@ class StatisticProgression extends Base {
 		super();
 
 		this.player = player;
-		this.listStatsProgression = new Array();
+		this.listStatsProgression = [];
 		let id: number, statistic: System.Statistic, value: number, txt: string, graphic: Graphic.Text;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
@@ -57,8 +57,8 @@ class StatisticProgression extends Base {
 	 *  Update the statistic progression graphics.
 	 */
 	updateStatisticProgression() {
-		this.listStatsNames = new Array();
-		this.listStats = new Array();
+		this.listStatsNames = [];
+		this.listStats = [];
 		this.maxLength = 0;
 		this.maxProgressionLength = 0;
 		let id: number, statistic: System.Statistic, graphic: Graphic.Text, txt: string;

@@ -292,7 +292,7 @@ class Battle extends Map {
 	 *  @returns {boolean}
 	 */
 	isDefined(kind: CharacterKind, index: number, target?: boolean): boolean {
-		let battler = this.battlers[kind][index];
+		const battler = this.battlers[kind][index];
 		if (target) {
 			return !battler.hidden && (!this.skill || this.skill.isPossible(battler.player));
 		}
@@ -326,7 +326,7 @@ class Battle extends Map {
 	 *  @returns {boolean}
 	 */
 	isGroupDeadHidden(group: CharacterKind): boolean {
-		for (let battler of this.battlers[group]) {
+		for (const battler of this.battlers[group]) {
 			if (!battler.player.isDead() && !battler.hidden) {
 				return false;
 			}
@@ -372,7 +372,7 @@ class Battle extends Map {
 	 */
 	endBattle() {
 		// Heroes
-		for (let battler of this.battlers[CharacterKind.Hero]) {
+		for (const battler of this.battlers[CharacterKind.Hero]) {
 			battler.removeFromScene();
 		}
 		Manager.Stack.pop();
@@ -451,9 +451,9 @@ class Battle extends Map {
 		super.update();
 
 		// Y angle
-		let vector = new THREE.Vector3();
+		const vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
-		let angle = Math.atan2(vector.x, vector.z) + (180 * Math.PI) / 180.0;
+		const angle = Math.atan2(vector.x, vector.z) + (180 * Math.PI) / 180.0;
 
 		// Heroes
 		let battlers = this.battlers[CharacterKind.Hero];

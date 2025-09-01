@@ -49,7 +49,7 @@ class Inputs {
 			'keydown',
 			function (event) {
 				if (Main.loaded && !Manager.Stack.isLoading()) {
-					let key = event.key;
+					const key = event.key;
 
 					// On pressing F12, quit game
 					switch (key) {
@@ -86,7 +86,7 @@ class Inputs {
 			'keyup',
 			function (event) {
 				if (Main.loaded && !Manager.Stack.isLoading()) {
-					let key = event.key;
+					const key = event.key;
 					// Remove this key from pressed keys list
 					Inputs.keysPressed.splice(Inputs.keysPressed.indexOf(key), 1);
 					Inputs.lockedKeys.splice(

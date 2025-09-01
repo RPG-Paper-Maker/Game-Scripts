@@ -129,14 +129,14 @@ class Hero extends Translatable {
 	 *  @returns {number[]}
 	 */
 	createExpList(changedClass: System.Class): number[] {
-		let finalLevel = this.getProperty(Class.PROPERTY_FINAL_LEVEL, changedClass);
-		let experienceBase = this.getProperty(Class.PROPERTY_EXPERIENCE_BASE, changedClass);
-		let experienceInflation = this.getProperty(Class.PROPERTY_EXPERIENCE_INFLATION, changedClass);
-		let experienceTable = this.getExperienceTable(changedClass);
-		let expList = new Array(finalLevel + 1);
+		const finalLevel = this.getProperty(Class.PROPERTY_FINAL_LEVEL, changedClass);
+		const experienceBase = this.getProperty(Class.PROPERTY_EXPERIENCE_BASE, changedClass);
+		const experienceInflation = this.getProperty(Class.PROPERTY_EXPERIENCE_INFLATION, changedClass);
+		const experienceTable = this.getExperienceTable(changedClass);
+		const expList = new Array(finalLevel + 1);
 
 		// Basis
-		let pow = 2.4 + experienceInflation / 100;
+		const pow = 2.4 + experienceInflation / 100;
 		expList[1] = 0;
 		for (let i = 2; i <= finalLevel; i++) {
 			expList[i] =

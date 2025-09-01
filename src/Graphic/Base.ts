@@ -16,7 +16,7 @@ import { Bitmap } from '../Core';
  *  The abstract class who model the Structure of graphics (inside window boxes).
  */
 abstract class Base extends Bitmap {
-	public datas: Object;
+	public datas: object;
 
 	/** Drawing the stuff behind the window box.
 	 *  @param {number} x - The x position to draw graphic

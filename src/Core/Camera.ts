@@ -134,9 +134,9 @@ class Camera {
 	 *  @returns {number}
 	 */
 	getVerticalAngle(p1: THREE.Vector3, p2: THREE.Vector3): number {
-		let x = p2.x - p1.x;
-		let y = p2.y - p1.y;
-		let z = p2.z - p1.z;
+		const x = p2.x - p1.x;
+		const y = p2.y - p1.y;
+		const z = p2.z - p1.z;
 		return 90 + (Math.atan2(y, Math.sqrt(x * x + z * z)) * 180) / Math.PI;
 	}
 
@@ -185,14 +185,14 @@ class Camera {
 	 *  Update the three.js camera position.
 	 */
 	updateCameraPosition() {
-		let distance = this.getDistance();
-		let camera = this.getThreeCamera();
+		const distance = this.getDistance();
+		const camera = this.getThreeCamera();
 		camera.position.x = this.targetPosition.x - distance * Math.cos((this.horizontalAngle * Math.PI) / 180.0);
 		camera.position.y = this.targetPosition.y + this.getHeight();
 		camera.position.z = this.targetPosition.z - distance * Math.sin((this.horizontalAngle * Math.PI) / 180.0);
 		if (!this.isPerspective) {
-			let x = ScreenResolution.CANVAS_WIDTH * (distance / 1000);
-			let y = ScreenResolution.CANVAS_HEIGHT * (distance / 1000);
+			const x = ScreenResolution.CANVAS_WIDTH * (distance / 1000);
+			const y = ScreenResolution.CANVAS_HEIGHT * (distance / 1000);
 			this.orthographicCamera.left = -x;
 			this.orthographicCamera.right = x;
 			this.orthographicCamera.top = y;
@@ -204,8 +204,8 @@ class Camera {
 	 *  Update target offset position.
 	 */
 	updateTargetOffset() {
-		let distance = this.getDistance();
-		let camera = this.getThreeCamera();
+		const distance = this.getDistance();
+		const camera = this.getThreeCamera();
 		this.targetOffset.x +=
 			camera.position.x -
 			distance * Math.cos(((this.horizontalAngle + 180) * Math.PI) / 180.0) -
@@ -221,7 +221,7 @@ class Camera {
 	 *  Update horizontal and vertical angles.
 	 */
 	updateAngles() {
-		let camera = this.getThreeCamera();
+		const camera = this.getThreeCamera();
 		this.horizontalAngle = this.getHorizontalAngle(camera.position, this.targetPosition);
 		this.verticalAngle = this.getVerticalAngle(camera.position, this.targetPosition);
 	}

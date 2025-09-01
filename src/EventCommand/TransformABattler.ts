@@ -29,7 +29,7 @@ class TransformABattler extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.battlerKind = command[iterator.i++];
@@ -62,7 +62,7 @@ class TransformABattler extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (Scene.Map.current.isBattleMap) {
-			let map = <Scene.Battle>Scene.Map.current;
+			const map = <Scene.Battle>Scene.Map.current;
 			let battler: Battler = null;
 			let index = 0;
 			let side = Enum.CharacterKind.Hero;
@@ -73,8 +73,8 @@ class TransformABattler extends Base {
 					side = Enum.CharacterKind.Monster;
 					break;
 				case 1: // Hero instance ID
-					let id = this.battlerHeroEnemyInstanceID.getValue();
-					for (let [i, b] of map.battlers[Enum.CharacterKind.Hero].entries()) {
+					const id = this.battlerHeroEnemyInstanceID.getValue();
+					for (const [i, b] of map.battlers[Enum.CharacterKind.Hero].entries()) {
 						if (b.player.instid === id) {
 							battler = b;
 							index = i;
@@ -82,7 +82,7 @@ class TransformABattler extends Base {
 							break;
 						}
 					}
-					for (let [i, b] of map.battlers[Enum.CharacterKind.Monster].entries()) {
+					for (const [i, b] of map.battlers[Enum.CharacterKind.Monster].entries()) {
 						if (b.player.instid === id) {
 							battler = b;
 							index = i;
@@ -93,7 +93,7 @@ class TransformABattler extends Base {
 					break;
 			}
 			if (battler) {
-				let player = new Player(
+				const player = new Player(
 					battler.player.kind,
 					this.monsterID.getValue(),
 					Game.current.charactersInstances++,
@@ -101,7 +101,7 @@ class TransformABattler extends Base {
 					[]
 				);
 				player.instanciate(this.level.getValue());
-				let newBattler = new Battler(
+				const newBattler = new Battler(
 					player,
 					battler.isEnemy,
 					battler.initialPosition,

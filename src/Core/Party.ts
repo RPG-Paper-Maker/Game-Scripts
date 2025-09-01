@@ -49,7 +49,7 @@ class Party {
      * @memberof Party
      */
     allMembers(): Player[] {
-        let heroes = [];
+        const heroes = [];
         return heroes.concat(this.teamHeroes, this.hiddenHeroes, this.reserveHeroes);
     }
 
@@ -129,8 +129,8 @@ class Party {
 
 
     swapTeam(teamA: structSwap, teamB: structSwap) {
-        let a = this.allocateTeamGroup(teamA.team)[teamA.id];
-        let b = this.allocateTeamGroup(teamB.team)[teamB.id];
+        const a = this.allocateTeamGroup(teamA.team)[teamA.id];
+        const b = this.allocateTeamGroup(teamB.team)[teamB.id];
 
         this.allocateTeamGroup(teamA.team)[teamA.id] = b;
         this.allocateTeamGroup(teamB.team)[teamB.id] = a;

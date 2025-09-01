@@ -27,7 +27,7 @@ class ChangeName extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.name = System.DynamicValue.createValueCommand(command, iterator);
@@ -52,7 +52,7 @@ class ChangeName extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let name = this.name.getValue();
+		const name = this.name.getValue();
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:

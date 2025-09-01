@@ -31,7 +31,7 @@ class ChangeBattlerGraphics extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.battlerKind = command[iterator.i++];
@@ -70,7 +70,7 @@ class ChangeBattlerGraphics extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let map = <Scene.Battle>Scene.Map.current;
+		const map = <Scene.Battle>Scene.Map.current;
 		let player: Player = null;
 		let battler: Battler = null;
 		let index = 0;
@@ -85,7 +85,7 @@ class ChangeBattlerGraphics extends Base {
 				}
 				break;
 			case 1: // Hero instance ID
-				let id = this.battlerHeroEnemyInstanceID.getValue();
+				const id = this.battlerHeroEnemyInstanceID.getValue();
 				if (Scene.Map.current.isBattleMap) {
 					for (const [i, b] of map.battlers[Enum.CharacterKind.Hero].entries()) {
 						if (b.player.instid === id) {
@@ -96,7 +96,7 @@ class ChangeBattlerGraphics extends Base {
 							break;
 						}
 					}
-					for (let [i, b] of map.battlers[Enum.CharacterKind.Monster].entries()) {
+					for (const [i, b] of map.battlers[Enum.CharacterKind.Monster].entries()) {
 						if (b.player.instid === id) {
 							battler = b;
 							player = b.player;
@@ -106,7 +106,7 @@ class ChangeBattlerGraphics extends Base {
 						}
 					}
 				} else {
-					for (let [i, p] of Game.current.teamHeroes.entries()) {
+					for (const [i, p] of Game.current.teamHeroes.entries()) {
 						if (p.instid === id) {
 							player = p;
 							index = i;
@@ -127,7 +127,7 @@ class ChangeBattlerGraphics extends Base {
 				player.facesetIndexY = this.facesetIndexY;
 			}
 			if (Scene.Map.current.isBattleMap) {
-				let newBattler = new Battler(
+				const newBattler = new Battler(
 					player,
 					battler.isEnemy,
 					battler.initialPosition,

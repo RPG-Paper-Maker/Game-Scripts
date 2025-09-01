@@ -28,7 +28,7 @@ class InputNumber extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.stockVariableID = System.DynamicValue.createValueCommand(command, iterator);
@@ -65,7 +65,7 @@ class InputNumber extends Base {
 		currentState.spinBoxes[currentState.index].move(isKey, options);
 
 		// Wait for a slower update
-		let t = new Date().getTime();
+		const t = new Date().getTime();
 		if (!isKey || (isKey && t - currentState.startTime >= WindowChoices.TIME_WAIT_PRESS)) {
 			currentState.startTime = t;
 			currentState.spinBoxes[currentState.index].setActive(false);
@@ -97,13 +97,13 @@ class InputNumber extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let spinBoxes = [];
-		let digits = this.digits.getValue();
-		let w = 50;
-		let h = 50;
-		let totalWidth = w * digits;
-		let x = (ScreenResolution.SCREEN_X - totalWidth) / 2;
-		let y = (ScreenResolution.SCREEN_Y - h) / 2;
+		const spinBoxes = [];
+		const digits = this.digits.getValue();
+		const w = 50;
+		const h = 50;
+		const totalWidth = w * digits;
+		const x = (ScreenResolution.SCREEN_X - totalWidth) / 2;
+		const y = (ScreenResolution.SCREEN_Y - h) / 2;
 		for (let i = 0; i < digits; i++) {
 			spinBoxes.push(
 				new SpinBox(x + i * w, y, {
@@ -137,12 +137,12 @@ class InputNumber extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		for (let spinbox of currentState.spinBoxes) {
+		for (const spinbox of currentState.spinBoxes) {
 			spinbox.update();
 		}
 		if (currentState.confirmed) {
 			let value = '';
-			for (let spinbox of currentState.spinBoxes) {
+			for (const spinbox of currentState.spinBoxes) {
 				value += spinbox.value;
 			}
 			Game.current.variables[this.stockVariableID.getValue(true)] = parseInt(value);

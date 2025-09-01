@@ -28,7 +28,7 @@ class ChangeState extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.mapID = System.DynamicValue.createValueCommand(command, iterator);
@@ -45,7 +45,7 @@ class ChangeState extends Base {
 	 *  @param {number} state - ID of the state
 	 */
 	static addState(portionDatas: Record<string, any>, index: number, state: number) {
-		let states = portionDatas.s[index];
+		const states = portionDatas.s[index];
 		if (states.indexOf(state) === -1) {
 			states.push(state);
 		}
@@ -60,8 +60,8 @@ class ChangeState extends Base {
 	 *  @param {number} state - ID of the state
 	 */
 	static removeState(portionDatas: Record<string, any>, index: number, state: number) {
-		let states = portionDatas.s[index];
-		let indexState = states.indexOf(state);
+		const states = portionDatas.s[index];
+		const indexState = states.indexOf(state);
 		if (states.indexOf(state) !== -1) {
 			states.splice(indexState, 1);
 		}
@@ -111,7 +111,7 @@ class ChangeState extends Base {
 	 *  @param {number} state - ID of the state
 	 */
 	static removeStateSpecial(states: number[], state: number) {
-		let indexState = states.indexOf(state);
+		const indexState = states.indexOf(state);
 		if (indexState !== -1) {
 			states.splice(indexState, 1);
 		}
@@ -194,8 +194,8 @@ class ChangeState extends Base {
 						break;
 				}
 			} else {
-				let objectID = currentState.objectID === -1 ? object.system.id : currentState.objectID;
-				let position = currentState.map.mapProperties.allObjects[objectID];
+				const objectID = currentState.objectID === -1 ? object.system.id : currentState.objectID;
+				const position = currentState.map.mapProperties.allObjects[objectID];
 				if (!position) {
 					Platform.showErrorMessage(
 						'Change state command: the object ID ' +
@@ -204,8 +204,8 @@ class ChangeState extends Base {
 							currentState.map.name
 					);
 				}
-				let portion = position.getGlobalPortion();
-				let portionDatas = Game.current.getPortionDatas(currentState.map.id, portion);
+				const portion = position.getGlobalPortion();
+				const portionDatas = Game.current.getPortionDatas(currentState.map.id, portion);
 				let indexState = portionDatas.si.indexOf(objectID);
 				if (indexState === -1) {
 					indexState = portionDatas.si.length;

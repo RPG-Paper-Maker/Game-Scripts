@@ -195,7 +195,7 @@ class SpinBox extends Bitmap {
 	 *  Update the widget.
 	 */
 	update() {
-		let t = new Date().getTime();
+		const t = new Date().getTime();
 		if (t - this.mouseArrowTime >= WindowChoices.TIME_WAIT_MOUSE_ARROW) {
 			this.mouseArrowTime = t;
 			// If pressing on arrow up
@@ -217,7 +217,7 @@ class SpinBox extends Bitmap {
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
 		if (this.active) {
-			let t = new Date().getTime();
+			const t = new Date().getTime();
 			if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
 				this.startTime = t;
 				if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
@@ -247,7 +247,7 @@ class SpinBox extends Bitmap {
 			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
 			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3]);
 			if (this.value < this.max) {
-				let rect = new Rectangle(
+				const rect = new Rectangle(
 					this.x + (this.w - arrowWidth) / 2,
 					this.y - arrowHeight / 2 - 1,
 					arrowWidth,
@@ -258,7 +258,7 @@ class SpinBox extends Bitmap {
 				}
 			}
 			if (this.value > this.min) {
-				let rect = new Rectangle(
+				const rect = new Rectangle(
 					this.x + (this.w - arrowWidth) / 2,
 					this.y + this.h + 1,
 					arrowWidth,

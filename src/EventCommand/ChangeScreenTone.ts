@@ -35,7 +35,7 @@ class ChangeScreenTone extends Base {
 		if (!command) {
 			return;
 		}
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.r = System.DynamicValue.createValueCommand(command, iterator);
@@ -56,8 +56,8 @@ class ChangeScreenTone extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let time = this.time.getValue() * 1000;
-		let color = this.colorID ? Datas.Systems.getColor(this.colorID.getValue()) : null;
+		const time = this.time.getValue() * 1000;
+		const color = this.colorID ? Datas.Systems.getColor(this.colorID.getValue()) : null;
 		return {
 			parallel: this.waitEnd,
 			finalDifRed:

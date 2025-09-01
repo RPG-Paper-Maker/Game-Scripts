@@ -40,8 +40,8 @@ class MenuSkills extends Base {
 		this.title = title;
 
 		// Tab heroes
-		let nbHeroes = Game.current.teamHeroes.length;
-		let listHeroes = new Array(nbHeroes);
+		const nbHeroes = Game.current.teamHeroes.length;
+		const listHeroes = new Array(nbHeroes);
 		this.positionChoice = new Array(nbHeroes);
 		for (let i = 0; i < nbHeroes; i++) {
 			listHeroes[i] = new Graphic.PlayerDescription(Game.current.teamHeroes[i]);
@@ -123,12 +123,12 @@ class MenuSkills extends Base {
 	 *  Update tab
 	 */
 	updateForTab() {
-		let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+		const indexTab = this.windowChoicesTabs.currentSelectedIndex;
 		Scene.Map.current.user = new Battler(Game.current.teamHeroes[indexTab]);
-		let skills = Scene.Map.current.user.player.skills;
+		const skills = Scene.Map.current.user.player.skills;
 
 		// Get the first skills of the hero
-		let list = [];
+		const list = [];
 		for (let i = 0, l = skills.length; i < l; i++) {
 			list.push(new Graphic.Skill(skills[i]));
 		}
@@ -148,7 +148,7 @@ class MenuSkills extends Base {
 	 */
 	moveTabKey(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		// Tab
-		let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+		const indexTab = this.windowChoicesTabs.currentSelectedIndex;
 		if (isKey) {
 			this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
 		} else {
@@ -163,7 +163,7 @@ class MenuSkills extends Base {
 		} else {
 			this.windowChoicesList.onMouseMove(options.x, options.y);
 		}
-		let position = this.positionChoice[this.windowChoicesTabs.currentSelectedIndex];
+		const position = this.positionChoice[this.windowChoicesTabs.currentSelectedIndex];
 		position.index = this.windowChoicesList.currentSelectedIndex;
 		position.offset = this.windowChoicesList.offsetSelectedIndex;
 		this.synchronize();
@@ -175,16 +175,16 @@ class MenuSkills extends Base {
 	 *  @param {{ key?: string, x?: number, y?: number }} [options={}]
 	 */
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
-		let graphic = <Graphic.Skill>this.windowBoxInformation.content;
-		let graphicUse = <Graphic.UseSkillItem>this.windowBoxUseSkill.content;
+		const graphic = <Graphic.Skill>this.windowBoxInformation.content;
+		const graphicUse = <Graphic.UseSkillItem>this.windowBoxUseSkill.content;
 		switch (this.substep) {
 			case 0:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 					if (this.windowBoxInformation.content === null) {
 						return;
 					}
-					let targetKind = graphic.system.targetKind;
-					let availableKind = graphic.system.availableKind;
+					const targetKind = graphic.system.targetKind;
+					const availableKind = graphic.system.availableKind;
 					if (
 						graphic.system.isPossible() &&
 						(targetKind === TargetKind.Ally || targetKind === TargetKind.AllAllies) &&
@@ -289,7 +289,7 @@ class MenuSkills extends Base {
 	 *  @returns {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		let res = super.onKeyPressedAndRepeat(key);
+		const res = super.onKeyPressedAndRepeat(key);
 		if (this.reactionInterpreters.length === 0) {
 			this.move(true, { key: key });
 		}

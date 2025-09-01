@@ -40,7 +40,7 @@ class MapObject extends Base {
 	 *  @param {Record<string, any>} id
 	 */
 	static createFromModelID(modelID: number, id: number): MapObject {
-		let mapObject = new MapObject();
+		const mapObject = new MapObject();
 		mapObject.id = id;
 		mapObject.name = '';
 		mapObject.addDefaultValues();
@@ -130,31 +130,31 @@ class MapObject extends Base {
 	 */
 	addInheritanceModel(modelID: number) {
 		if (modelID !== -1) {
-			let inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
+			const inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
 
 			// Only one event per frame inheritance is a priority
 			this.isEventFrame = inheritedObject.isEventFrame;
 			this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
 
 			// States
-			let states = Utils.defaultValue(inheritedObject.states, []);
+			const states = Utils.defaultValue(inheritedObject.states, []);
 			let i: number, l: number;
 			for (i = 0, l = states.length; i < l; i++) {
 				this.states.push(states[i]);
 			}
 
 			// Properties
-			let properties = Utils.defaultValue(inheritedObject.properties, []);
+			const properties = Utils.defaultValue(inheritedObject.properties, []);
 			for (i = 0, l = properties.length; i < l; i++) {
 				this.properties.push(properties[i]);
 			}
 
 			// Events
-			let events = inheritedObject.events;
+			const events = inheritedObject.events;
 			let eventsList: System.Event[], realEventsList: System.Event[];
-			for (let idEvent in events) {
+			for (const idEvent in events) {
 				eventsList = events[idEvent];
-				realEventsList = new Array();
+				realEventsList = [];
 				for (i = 0, l = eventsList.length; i < l; i++) {
 					realEventsList.push(eventsList[i]);
 				}
@@ -168,8 +168,8 @@ class MapObject extends Base {
 	 *  @returns {System.Event[]}
 	 */
 	getTimeEvents(): System.Event[] {
-		let completeList = this.events[1];
-		let list = [];
+		const completeList = this.events[1];
+		const list = [];
 		if (completeList) {
 			let event: System.Event;
 			for (let i = 0, l = completeList.length; i < l; i++) {
@@ -196,8 +196,8 @@ class MapObject extends Base {
 		state: number,
 		parameters: System.DynamicValue[]
 	): System.Reaction[] {
-		let events = this.events[idEvent];
-		let reactions = [];
+		const events = this.events[idEvent];
+		const reactions = [];
 		if (!Utils.isUndefined(events)) {
 			let test: boolean, event: System.Event, j: number, m: number, reaction: System.Reaction;
 			for (let i = 0, l = events.length; i < l; i++) {

@@ -33,8 +33,8 @@ class Detection extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the detection
 	 */
 	read(json: Record<string, any>) {
-		let jsonList = Utils.defaultValue(json.b, []);
-		let l = jsonList.length;
+		const jsonList = Utils.defaultValue(json.b, []);
+		const l = jsonList.length;
 		this.boxes = new Array(l);
 		let jsonElement: Record<string, any>;
 		for (let i = 0; i < l; i++) {
@@ -58,7 +58,7 @@ class Detection extends Base {
 	 *  @returns {boolean}
 	 */
 	checkCollision(sender: MapObject, object: MapObject): boolean {
-		let boundingBoxes = this.getBoundingBoxes(sender);
+		const boundingBoxes = this.getBoundingBoxes(sender);
 		for (let i = 0, l = boundingBoxes.length; i < l; i++) {
 			Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions.getBBBoxDetection(), boundingBoxes[i]);
 			if (object.checkCollisionDetection()) {
@@ -74,10 +74,10 @@ class Detection extends Base {
 	 *  @returns {number[][]}
 	 */
 	getBoundingBoxes(sender: MapObject): number[][] {
-		let orientation = sender.orientationEye;
-		let localPosition = sender.position;
-		let l = this.boxes.length;
-		let list = new Array(l);
+		const orientation = sender.orientationEye;
+		const localPosition = sender.position;
+		const l = this.boxes.length;
+		const list = new Array(l);
 		let box: [Position, number, number, number, number, number, number],
 			p: Position,
 			x: number,

@@ -54,7 +54,7 @@ class UseSkillItem extends Base {
 	setAll(b: boolean) {
 		this.all = b;
 		if (b) {
-			let l = Game.current.teamHeroes.length;
+			const l = Game.current.teamHeroes.length;
 			Scene.Map.current.targets = new Array(l);
 			for (let i = 0; i < l; i++) {
 				Scene.Map.current.targets[i] = new Battler(Game.current.teamHeroes[i]);
@@ -128,7 +128,7 @@ class UseSkillItem extends Base {
 	updateGraphicCharactersEquip(equip: Item) {
 		this.graphicCharacters = [];
 		let graphicPlayer: Graphic.Player, isPossible: boolean;
-		for (let player of Game.current.teamHeroes) {
+		for (const player of Game.current.teamHeroes) {
 			isPossible = true;
 			if (equip !== null) {
 				isPossible = player.canEquipWeaponArmor(equip);
@@ -192,7 +192,7 @@ class UseSkillItem extends Base {
 				}
 			}
 			if (changed && i !== this.indexArrow) {
-				let target = Game.current.teamHeroes[i];
+				const target = Game.current.teamHeroes[i];
 				if (this.skillItem.isPossible(target)) {
 					this.indexArrow = i;
 					Scene.Map.current.targets = [new Battler(target)];

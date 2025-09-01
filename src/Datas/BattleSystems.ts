@@ -54,7 +54,7 @@ class BattleSystems {
 	 *  Read the JSON file associated to battle System.
 	 */
 	static async read() {
-		let json = await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM);
+		const json = await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM);
 
 		// Elements
 		this.elements = [];
@@ -81,7 +81,7 @@ class BattleSystems {
 		// Add elements res to statistics
 		this.statisticsElements = [];
 		this.statisticsElementsPercent = [];
-		let index = this.statisticsOrder.length;
+		const index = this.statisticsOrder.length;
 		let id: number, name: string, i: number, l: number;
 		for (i = 0, l = this.elementsOrder.length; i < l; i++) {
 			id = this.elementsOrder[i];
@@ -189,7 +189,7 @@ class BattleSystems {
 	 *  @returns {System.Statistic}
 	 */
 	static getExpStatistic(): System.Statistic {
-		let stat = this.statistics[this.idExpStatistic];
+		const stat = this.statistics[this.idExpStatistic];
 		return Utils.isUndefined(stat) || stat.isRes ? null : stat;
 	}
 

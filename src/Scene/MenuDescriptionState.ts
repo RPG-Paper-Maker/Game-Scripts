@@ -197,7 +197,7 @@ class MenuDescriptionState extends MenuBase {
 	 * @memberof MenuDescriptionState
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map.current, key);
+		const res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map.current, key);
 		this.move(true, { key: key });
 		return res;
 	}

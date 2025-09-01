@@ -29,7 +29,7 @@ class Weapons {
 	 *  @async
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_WEAPONS)).weapons;
+		const json = (await Platform.parseFileJSON(Paths.FILE_WEAPONS)).weapons;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Weapon });
 	}

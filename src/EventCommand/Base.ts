@@ -30,7 +30,7 @@ abstract class Base {
 	 * Initialize the current state.
 	 * @returns {Object} The current state
 	 */
-	initialize(): Object {
+	initialize(): object {
 		return null;
 	}
 
@@ -50,14 +50,14 @@ abstract class Base {
 	 *  @param {Object} currentState - The current state of the event
 	 *  @param {number} key - The key ID pressed
 	 */
-	onKeyPressed(currentState: Object, key: string) {}
+	onKeyPressed(currentState: object, key: string) {}
 
 	/**
 	 *  First key release handle for the current stack.
 	 *  @param {Object} currentState - The current state of the event
 	 *  @param {number} key - The key ID pressed
 	 */
-	onKeyReleased(currentState: Object, key: string) {}
+	onKeyReleased(currentState: object, key: string) {}
 
 	/**
 	 *  Key pressed repeat handle for the current stack.
@@ -65,7 +65,7 @@ abstract class Base {
 	 *  @param {number} key - The key ID pressed
 	 *  @returns {boolean}
 	 */
-	onKeyPressedRepeat(currentState: Object, key: string): boolean {
+	onKeyPressedRepeat(currentState: object, key: string): boolean {
 		return true;
 	}
 
@@ -76,7 +76,7 @@ abstract class Base {
 	 *  @param {number} key - The key ID pressed
 	 *  @returns {boolean}
 	 */
-	onKeyPressedAndRepeat(currentState: Object, key: string): boolean {
+	onKeyPressedAndRepeat(currentState: object, key: string): boolean {
 		return true;
 	}
 
@@ -86,7 +86,7 @@ abstract class Base {
 	 *  @param {number} x - The x mouse position on screen
 	 *  @param {number} y - The y mouse position on screen
 	 */
-	onMouseDown(currentState: Object, x: number, y: number) {}
+	onMouseDown(currentState: object, x: number, y: number) {}
 
 	/**
 	 *  Mouse move handle for the current stack.
@@ -94,7 +94,7 @@ abstract class Base {
 	 *  @param {number} x - The x mouse position on screen
 	 *  @param {number} y - The y mouse position on screen
 	 */
-	onMouseMove(currentState: Object, x: number, y: number) {}
+	onMouseMove(currentState: object, x: number, y: number) {}
 
 	/**
 	 *  Mouse up handle for the current stack.
@@ -102,13 +102,13 @@ abstract class Base {
 	 *  @param {number} x - The x mouse position on screen
 	 *  @param {number} y - The y mouse position on screen
 	 */
-	onMouseUp(currentState: Object, x: number, y: number) {}
+	onMouseUp(currentState: object, x: number, y: number) {}
 
 	/**
 	 *  Draw the HUD.
 	 *  @param {Object} currentState - The current state of the event
 	 */
-	drawHUD(currentState?: Object) {}
+	drawHUD(currentState?: object) {}
 }
 
 export { Base, StructIterator };

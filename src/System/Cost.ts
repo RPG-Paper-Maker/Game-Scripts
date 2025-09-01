@@ -39,7 +39,7 @@ class Cost extends Base {
 	 *  Get the price for several costs.
 	 */
 	static getPrice(list: System.Cost[]): Record<string, [DamagesKind, number]> {
-		let price = {};
+		const price = {};
 		let cost: System.Cost, value: [DamagesKind, number];
 		for (let i = 0, l = list.length; i < l; i++) {
 			cost = list[i];
@@ -105,7 +105,7 @@ class Cost extends Base {
 	 */
 	getValue(user: Player, target: Player) {
 		let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target });
-		let baseValue = value;
+		const baseValue = value;
 		if (user.skillCostRes[-1]) {
 			value *= user.skillCostRes[-1].multiplication;
 		}
@@ -125,9 +125,9 @@ class Cost extends Base {
 	 *  Use the cost.
 	 */
 	use() {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		let target = Player.getTemporaryPlayer();
-		let value = this.getValue(user, target);
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const target = Player.getTemporaryPlayer();
+		const value = this.getValue(user, target);
 		switch (this.kind) {
 			case DamagesKind.Stat:
 				user[Datas.BattleSystems.getStatistic(this.statisticID.getValue()).abbreviation] -= value;
@@ -146,9 +146,9 @@ class Cost extends Base {
 	 *  @returns {boolean}
 	 */
 	isPossible(): boolean {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		let target = Player.getTemporaryPlayer();
-		let value = this.getValue(user, target);
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const target = Player.getTemporaryPlayer();
+		const value = this.getValue(user, target);
 		let currentValue: number;
 		switch (this.kind) {
 			case DamagesKind.Stat:
@@ -169,8 +169,8 @@ class Cost extends Base {
 	 *  @returns {string}
 	 */
 	toString(): string {
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		let target = Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const target = Player.getTemporaryPlayer();
 		let result = this.getValue(user, target) + ' ';
 		switch (this.kind) {
 			case DamagesKind.Stat:

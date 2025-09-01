@@ -69,7 +69,7 @@ class Chrono {
 		if (this.paused || this.finished) {
 			return false;
 		}
-		let date = new Date().getTime();
+		const date = new Date().getTime();
 		this.time += (this.reverse ? -1 : 1) * (date - this.lastTime);
 		this.time = Math.max(0, this.time);
 		this.lastTime = date;

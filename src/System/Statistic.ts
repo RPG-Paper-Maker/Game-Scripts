@@ -38,7 +38,7 @@ class Statistic extends Translatable {
 	 *  @returns {SystemStatistic}
 	 */
 	static createElementRes(id: number, name: string): Statistic {
-		let stat = new Statistic();
+		const stat = new Statistic();
 		stat.suffixName = ' res.';
 		stat.abbreviation = 'elres' + id;
 		stat.isFix = true;
@@ -54,7 +54,7 @@ class Statistic extends Translatable {
 	 *  @returns {SystemStatistic}
 	 */
 	static createElementResPercent(id: number, name: string): Statistic {
-		let stat = new Statistic();
+		const stat = new Statistic();
 		stat.suffixName = name + ' res.(%)';
 		stat.abbreviation = 'elresp' + id;
 		stat.isFix = true;

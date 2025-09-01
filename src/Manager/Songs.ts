@@ -85,10 +85,10 @@ class Songs {
 		if (this.current[kind] !== null) {
 			this.current[kind].stop();
 		}
-		let song = Datas.Songs.get(kind, id);
+		const song = Datas.Songs.get(kind, id);
 		if (song) {
 			song.load();
-			let howl = song.howl;
+			const howl = song.howl;
 			howl.volume(volume);
 			howl.seek(start);
 			howl.play();
@@ -112,9 +112,9 @@ class Songs {
 	 */
 	static stopSong(kind: SongKind, time: number, seconds: number, id: number = -1, pause: boolean = false): boolean {
 		System.PlaySong.currentPlayingMusic = new System.PlaySong(SongKind.Music);
-		let current = new Date().getTime();
-		let ellapsedTime = current - time;
-		let currentHowl = kind === SongKind.Sound ? this.currentSounds[id] : this.current[kind];
+		const current = new Date().getTime();
+		const ellapsedTime = current - time;
+		const currentHowl = kind === SongKind.Sound ? this.currentSounds[id] : this.current[kind];
 		if (!currentHowl) {
 			return true;
 		}
@@ -143,9 +143,9 @@ class Songs {
 	 *  @returns {boolean} Indicate if the song is played with all volume
 	 */
 	static unpauseSong(kind: SongKind, time: number, seconds: number): boolean {
-		let current = new Date().getTime();
-		let ellapsedTime = current - time;
-		let currentHowl = this.current[kind];
+		const current = new Date().getTime();
+		const ellapsedTime = current - time;
+		const currentHowl = this.current[kind];
 		if (currentHowl === null) {
 			return true;
 		}
@@ -168,9 +168,9 @@ class Songs {
 		if (id === -1) {
 			return;
 		}
-		let sound = Datas.Songs.get(SongKind.Sound, id);
+		const sound = Datas.Songs.get(SongKind.Sound, id);
 		if (sound) {
-			let howl = new Howl({
+			const howl = new Howl({
 				src: [sound.getPath()],
 				volume: volume,
 			});
@@ -234,7 +234,7 @@ class Songs {
 	 *  @param {SongKind} kind - The song kind
 	 */
 	static updateByKind(kind: SongKind) {
-		let howl = this.current[kind];
+		const howl = this.current[kind];
 		if (howl !== null && howl.playing()) {
 			if (this.ends[kind] && howl.seek() >= this.ends[kind]) {
 				howl.seek(this.starts[kind]);
@@ -290,7 +290,7 @@ class Songs {
 				tick = this.progressionMusicEnd;
 				this.isProgressionMusicEnd = true;
 			}
-			let howl = this.current[SongKind.Music];
+			const howl = this.current[SongKind.Music];
 			if (howl) {
 				howl.volume(this.progressionMusic.getProgressionAt(tick, this.progressionMusicEnd) / 100);
 				if (howl.volume() === 0) {
@@ -319,7 +319,7 @@ class Songs {
 			this.current[SongKind.MusicEffect] = null;
 			this.musicEffectStep = 0;
 		}
-		for (let sound of this.currentSounds) {
+		for (const sound of this.currentSounds) {
 			if (sound) {
 				sound.stop();
 			}

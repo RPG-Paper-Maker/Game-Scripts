@@ -189,7 +189,7 @@ class WindowChoices extends Bitmap {
 	 *  @returns {Graphic.Base}
 	 */
 	getContent(i: number): Graphic.Base {
-		let window = this.listWindows[i];
+		const window = this.listWindows[i];
 		return window ? window.content : null;
 	}
 
@@ -208,7 +208,7 @@ class WindowChoices extends Bitmap {
 	 */
 	updateContentSize(currentSelectedIndex: number = 0, offsetSelectedIndex: number = 0) {
 		// Getting the main box size
-		let totalNb = this.listContents.length;
+		const totalNb = this.listContents.length;
 		this.size = totalNb > this.nbItemsMax ? this.nbItemsMax : totalNb;
 		let boxWidth: number, boxHeight: number;
 		if (this.orientation === OrientationWindow.Horizontal) {
@@ -298,7 +298,7 @@ class WindowChoices extends Bitmap {
 	setCallbacks(callbacks: Function[]) {
 		if (callbacks === null) {
 			// Create a complete empty list according to contents length
-			let l = this.listContents.length;
+			const l = this.listContents.length;
 			this.listCallBacks = new Array(l);
 			for (let i = 0; i < l; i++) {
 				this.listCallBacks[i] = null;
@@ -374,7 +374,7 @@ class WindowChoices extends Bitmap {
 	 *  Go cursor up.
 	 */
 	goUp() {
-		let index = this.currentSelectedIndex;
+		const index = this.currentSelectedIndex;
 		if (index > 0) {
 			this.currentSelectedIndex--;
 			if (this.offsetSelectedIndex > 0) {
@@ -394,7 +394,7 @@ class WindowChoices extends Bitmap {
 	 *  Go cursor down.
 	 */
 	goDown() {
-		let index = this.currentSelectedIndex;
+		const index = this.currentSelectedIndex;
 		if (index < this.listWindows.length - 1 && index >= 0) {
 			this.currentSelectedIndex++;
 			if (this.offsetSelectedIndex < this.size - 1) {
@@ -445,10 +445,10 @@ class WindowChoices extends Bitmap {
 	 *  Update the widget.
 	 */
 	update() {
-		let t = new Date().getTime();
+		const t = new Date().getTime();
 		if (t - this.mouseArrowTime >= WindowChoices.TIME_WAIT_MOUSE_ARROW) {
 			this.mouseArrowTime = t;
-			let offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
+			const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
 			// If pressing on arrow up
 			if (this.isMouseInArrowUp && this.currentSelectedIndex - offset > 0) {
 				this.goArrowUp();
@@ -468,10 +468,10 @@ class WindowChoices extends Bitmap {
 	 *  @param {number} key - The key ID pressed
 	 *  @param {Object} base - The base object to apply with callback
 	 */
-	onKeyPressed(key: string, base?: Object) {
+	onKeyPressed(key: string, base?: object) {
 		if (this.currentSelectedIndex !== -1) {
 			if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
-				let callback = this.listCallBacks[this.currentSelectedIndex];
+				const callback = this.listCallBacks[this.currentSelectedIndex];
 				if (callback !== null) {
 					// Play a sound according to callback result
 					if (callback.call(base)) {
@@ -494,7 +494,7 @@ class WindowChoices extends Bitmap {
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
 		// Wait for a slower update
-		let t = new Date().getTime();
+		const t = new Date().getTime();
 		if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
 			this.startTime = t;
 			if (this.currentSelectedIndex !== -1) {
@@ -548,22 +548,22 @@ class WindowChoices extends Bitmap {
 			}
 		} else {
 			// If on arrow
-			let offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
-			let ws = Datas.Systems.getCurrentWindowSkin();
+			const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
+			const ws = Datas.Systems.getCurrentWindowSkin();
 			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
 			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3] / 2);
 			const arrowX = this.x + this.w / 2 - arrowWidth / 2;
 
 			// If pressing on arrow up
 			if (this.currentSelectedIndex - offset > 0) {
-				let rect = new Rectangle(arrowX, this.y - arrowHeight - 1, arrowWidth, arrowHeight);
+				const rect = new Rectangle(arrowX, this.y - arrowHeight - 1, arrowWidth, arrowHeight);
 				if (rect.isInside(x, y)) {
 					this.isMouseInArrowUp = true;
 				}
 			}
 			// If pressing on arrow down
 			if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
-				let rect = new Rectangle(arrowX, this.y + this.h + 1, arrowWidth, arrowHeight);
+				const rect = new Rectangle(arrowX, this.y + this.h + 1, arrowWidth, arrowHeight);
 				if (rect.isInside(x, y)) {
 					this.isMouseInArrowDown = true;
 				}
@@ -577,9 +577,9 @@ class WindowChoices extends Bitmap {
 	 *  @param {number} y - The y mouse position on screen
 	 *  @param {Object} base - The base object to apply with callback
 	 */
-	onMouseUp(x: number, y: number, base?: Object) {
+	onMouseUp(x: number, y: number, base?: object) {
 		if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed && this.isInside(x, y)) {
-			let callback = this.listCallBacks[this.currentSelectedIndex];
+			const callback = this.listCallBacks[this.currentSelectedIndex];
 			if (callback !== null) {
 				// Play a sound according to callback result
 				if (callback.call(base)) {
@@ -601,7 +601,7 @@ class WindowChoices extends Bitmap {
 		if (!this.bordersInsideVisible && this.bordersVisible) {
 			this.windowMain.draw();
 		}
-		let offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
+		const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
 		let index: number;
 		for (let i = 0; i < this.size; i++) {
 			index = i + this.currentSelectedIndex - offset;
@@ -613,7 +613,7 @@ class WindowChoices extends Bitmap {
 		}
 
 		// Draw arrows
-		let ws = Datas.Systems.getCurrentWindowSkin();
+		const ws = Datas.Systems.getCurrentWindowSkin();
 		const arrowWidth = ws.arrowUpDown[2];
 		const arrowHeight = ws.arrowUpDown[3] / 2;
 		const arrowX = this.oX + this.oW / 2 - arrowWidth / 2;

@@ -45,8 +45,8 @@ class CollisionSquare {
 	 *  @returns {number[][]}
 	 */
 	static unionSquares(squares: number[][], l: number, w: number, h: number): number[][] {
-		let boolGrid = new Array(l);
-		let result = new Array();
+		const boolGrid = new Array(l);
+		const result = [];
 		let i: number, j: number, k: number, square: number[];
 		for (j = 0; j < h; j++) {
 			k = j * w;
@@ -181,7 +181,7 @@ class CollisionSquare {
 	 * @memberof CollisionSquare
 	 */
 	read(json: Record<string, any>) {
-		let rect = json.rec;
+		const rect = json.rec;
 		this.left = Utils.defaultValue(json.l, true);
 		this.right = Utils.defaultValue(json.r, true);
 		this.top = Utils.defaultValue(json.t, true);

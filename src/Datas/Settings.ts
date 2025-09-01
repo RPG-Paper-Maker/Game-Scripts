@@ -32,10 +32,10 @@ class Settings {
 	 */
 	static async read() {
 		// Settings
-		let json = await Platform.parseFileJSON(Paths.FILE_SETTINGS);
+		const json = await Platform.parseFileJSON(Paths.FILE_SETTINGS);
 		this.kb = [];
-		let jsonObjs = json[Utils.numToString(TitleSettingKind.KeyboardAssigment)];
-		for (let id in jsonObjs) {
+		const jsonObjs = json[Utils.numToString(TitleSettingKind.KeyboardAssigment)];
+		for (const id in jsonObjs) {
 			this.kb[id] = jsonObjs[id];
 		}
 		this.currentLanguage = Utils.defaultValue(
@@ -49,9 +49,9 @@ class Settings {
 	 *  @static
 	 */
 	static write() {
-		let json = {};
-		let jsonObjs = {};
-		for (let id in this.kb) {
+		const json = {};
+		const jsonObjs = {};
+		for (const id in this.kb) {
 			jsonObjs[id] = this.kb[id];
 		}
 		json[Utils.numToString(TitleSettingKind.KeyboardAssigment)] = jsonObjs;

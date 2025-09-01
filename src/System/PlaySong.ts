@@ -49,7 +49,7 @@ class PlaySong extends Base {
 	 *  @returns {System.PlaySong}
 	 */
 	static createValueCommand(command: any[], iterator: StructIterator, kind: Enum.SongKind): System.PlaySong {
-		let song = new System.PlaySong(kind);
+		const song = new System.PlaySong(kind);
 		song.parse(command, iterator);
 		return song;
 	}
@@ -78,15 +78,15 @@ class PlaySong extends Base {
 	 *  @param {StructIterator} iterator
 	 */
 	parse(command: any[], iterator: StructIterator) {
-		let isIDprimitive = Utils.numToBool(command[iterator.i++]);
-		let valueID = System.DynamicValue.createValueCommand(command, iterator);
-		let id = System.DynamicValue.createNumber(command[iterator.i++]);
-		let songID = isIDprimitive ? valueID : id;
-		let volume = System.DynamicValue.createValueCommand(command, iterator);
-		let isStart = Utils.numToBool(command[iterator.i++]);
+		const isIDprimitive = Utils.numToBool(command[iterator.i++]);
+		const valueID = System.DynamicValue.createValueCommand(command, iterator);
+		const id = System.DynamicValue.createNumber(command[iterator.i++]);
+		const songID = isIDprimitive ? valueID : id;
+		const volume = System.DynamicValue.createValueCommand(command, iterator);
+		const isStart = Utils.numToBool(command[iterator.i++]);
 		let start = System.DynamicValue.createValueCommand(command, iterator);
 		start = isStart ? start : System.DynamicValue.createNumber(0);
-		let isEnd = Utils.numToBool(command[iterator.i++]);
+		const isEnd = Utils.numToBool(command[iterator.i++]);
 		let end = System.DynamicValue.createValueCommand(command, iterator);
 		end = isEnd ? end : null;
 		this.updateValues(songID, volume, isStart, start, isEnd, end);
@@ -97,7 +97,7 @@ class PlaySong extends Base {
 	 *  @returns {Record<string, any>}
 	 */
 	toJson(): Record<string, any> {
-		let json: Record<string, any> = {};
+		const json: Record<string, any> = {};
 		json.isbi = true;
 		json.vid = this.songID.toJson();
 		json.v = this.volume.toJson();
@@ -217,7 +217,7 @@ class PlaySong extends Base {
 	 */
 	playMusicEffect(currentState: Record<string, any>): number {
 		if (currentState.parallel) {
-			let played = Manager.Songs.playMusicEffect(
+			const played = Manager.Songs.playMusicEffect(
 				this.songID.getValue(),
 				this.volume.getValue() / 100,
 				currentState

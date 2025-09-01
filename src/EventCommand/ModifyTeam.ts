@@ -35,7 +35,7 @@ class ModifyTeam extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.kind = command[iterator.i++];
@@ -82,9 +82,9 @@ class ModifyTeam extends Base {
 				if (!Scene.Map.current.isBattleMap) {
 					return;
 				}
-				let id = this.enemyInstanceID.getValue();
+				const id = this.enemyInstanceID.getValue();
 				let player: Player = null;
-				for (let battler of (<Scene.Battle>Scene.Map.current).battlers[Enum.CharacterKind.Monster]) {
+				for (const battler of (<Scene.Battle>Scene.Map.current).battlers[Enum.CharacterKind.Monster]) {
 					if (battler.player.instid === id) {
 						player = battler.player;
 						break;
@@ -98,12 +98,12 @@ class ModifyTeam extends Base {
 			}
 			case 2: {
 				// Modify (move/remove)
-				let groups = Game.current.getGroups();
+				const groups = Game.current.getGroups();
 				let selectedGroup = null;
-				let id = this.modifyInstanceID.getValue();
+				const id = this.modifyInstanceID.getValue();
 				let player: Player;
 				// Find group and player associated to instance ID
-				for (let group of groups) {
+				for (const group of groups) {
 					for (player of group) {
 						if (player.instid === id) {
 							selectedGroup = group;

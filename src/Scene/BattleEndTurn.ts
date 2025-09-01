@@ -35,7 +35,7 @@ class BattleEndTurn {
 	public initialize() {
 		// Each end turn troop reaction
 		if (this.step === 0) {
-			let reactions = this.battle.troop.reactions;
+			const reactions = this.battle.troop.reactions;
 			let reaction: System.TroopReaction, l: number;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];

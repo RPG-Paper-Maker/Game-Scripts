@@ -60,7 +60,7 @@ class SetDialogBoxOptions extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		if (Utils.numToBool(command[iterator.i++])) {

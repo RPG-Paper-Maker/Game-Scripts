@@ -34,7 +34,7 @@ class ForceAnAction extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.battlerKind = command[iterator.i++];
@@ -73,7 +73,7 @@ class ForceAnAction extends Base {
 		if (!Scene.Map.current.isBattleMap) {
 			return {};
 		}
-		let map = <Scene.Battle>Scene.Map.current;
+		const map = <Scene.Battle>Scene.Map.current;
 		map.forceAnAction = true;
 		// Battler (user)
 		let side: Enum.CharacterKind;
@@ -83,16 +83,16 @@ class ForceAnAction extends Base {
 				side = Enum.CharacterKind.Monster;
 				break;
 			case 1: // Hero instance ID
-				let id = this.battlerHeroEnemyInstanceID.getValue();
+				const id = this.battlerHeroEnemyInstanceID.getValue();
 				Scene.Map.current.user = null;
-				for (let battler of map.battlers[Enum.CharacterKind.Hero]) {
+				for (const battler of map.battlers[Enum.CharacterKind.Hero]) {
 					if (battler.player.instid === id) {
 						Scene.Map.current.user = battler;
 						side = Enum.CharacterKind.Hero;
 						break;
 					}
 				}
-				for (let battler of map.battlers[Enum.CharacterKind.Monster]) {
+				for (const battler of map.battlers[Enum.CharacterKind.Monster]) {
 					if (battler.player.instid === id) {
 						Scene.Map.current.user = battler;
 						side = Enum.CharacterKind.Monster;
@@ -165,14 +165,14 @@ class ForceAnAction extends Base {
 							map.targets = [map.battlers[Enum.CharacterKind.Monster][this.targetEnemyIndex]];
 							break;
 						case 1: // Hero instance ID
-							let id = this.targetHeroEnemyInstanceID.getValue();
-							for (let battler of map.battlers[Enum.CharacterKind.Hero]) {
+							const id = this.targetHeroEnemyInstanceID.getValue();
+							for (const battler of map.battlers[Enum.CharacterKind.Hero]) {
 								if (battler.player.instid === id) {
 									map.targets = [battler];
 									break;
 								}
 							}
-							for (let battler of map.battlers[Enum.CharacterKind.Monster]) {
+							for (const battler of map.battlers[Enum.CharacterKind.Monster]) {
 								if (battler.player.instid === id) {
 									map.targets = [battler];
 									break;

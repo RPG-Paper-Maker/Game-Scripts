@@ -204,11 +204,11 @@ class Item {
 	 *  @returns {boolean}
 	 */
 	buy(shopID: number, times: number): boolean {
-		let price = this.shop.getPrice();
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const price = this.shop.getPrice();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 
 		// Update value
-		for (let id in price) {
+		for (const id in price) {
 			let [kind, value] = price[id];
 			value *= times;
 			switch (kind) {
@@ -232,7 +232,7 @@ class Item {
 			this.nb -= times;
 		}
 		// Add items to inventory
-		let item = Item.findItem(this.kind, this.system.id);
+		const item = Item.findItem(this.kind, this.system.id);
 		if (item) {
 			item.nb += times;
 		} else {
@@ -253,13 +253,13 @@ class Item {
 	 *  @returns {boolean}
 	 */
 	sell(times: number): boolean {
-		let price = this.system.getPrice();
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const price = this.system.getPrice();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 
 		// Update currency
-		for (let id in price) {
-			let [kind, value] = price[id];
-			let p = Math.round((value * Datas.Systems.priceSoldItem.getValue()) / 100) * times;
+		for (const id in price) {
+			const [kind, value] = price[id];
+			const p = Math.round((value * Datas.Systems.priceSoldItem.getValue()) / 100) * times;
 			switch (kind) {
 				case Enum.DamagesKind.Currency:
 					Game.current.currencies[id] += p;

@@ -104,7 +104,7 @@ class Utils {
 	 *   @param {function} func - The async function to apply
 	 *   @returns {Promise<any>}
 	 */
-	static async tryCatch(func: Function, that?: Object): Promise<any> {
+	static async tryCatch(func: Function, that?: object): Promise<any> {
 		try {
 			return await func.call(that);
 		} catch (e) {
@@ -153,7 +153,7 @@ class Utils {
 	 *   @returns {any[]}
 	 */
 	static fillNullList(size: number): any[] {
-		let list = new Array(size);
+		const list = new Array(size);
 		for (let i = 0; i < size; i++) {
 			list[i] = null;
 		}
@@ -223,7 +223,7 @@ class Utils {
 		}
 		// Everything else:
 		let c = 0;
-		for (let p in obj) {
+		for (const p in obj) {
 			if (obj.hasOwnProperty(p)) {
 				c += 1;
 			}
@@ -240,7 +240,7 @@ class Utils {
 	 *  @param {any} value - The value to check on the object attribute
 	 *  @returns {number}
 	 */
-	static indexOfProp(array: Object[], attr: string, value: any): number {
+	static indexOfProp(array: object[], attr: string, value: any): number {
 		for (let i = 0, l = array.length; i < l; i++) {
 			if (array[i][attr] === value) {
 				return i;
@@ -260,7 +260,7 @@ class Utils {
 	 * @memberof Utils
 	 */
 	static fillScreen(r: number, g: number, b: number, a: number) {
-		let color = `rgba(${r},${g},${b},${a})`;
+		const color = `rgba(${r},${g},${b},${a})`;
 		const rect = new Rectangle(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
 		Platform.ctx.fillStyle = color;
 		Platform.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
@@ -270,7 +270,7 @@ class Utils {
 	 * Remove an element from an array.
 	 */
 	static removeFromArray<T>(array: T[], element: T): boolean {
-		let index = array.indexOf(element);
+		const index = array.indexOf(element);
 		if (index === -1) {
 			return false;
 		} else {

@@ -44,7 +44,7 @@ class ShopCurrencies extends Base {
 	update() {
 		this.currencies = [];
 		let graphic: Graphic.TextIcon;
-		for (let id in Game.current.currencies) {
+		for (const id in Game.current.currencies) {
 			graphic = Graphic.TextIcon.createFromSystem(
 				Mathf.numberWithCommas(Game.current.currencies[id]),
 				Datas.Systems.getCurrency(parseInt(id))

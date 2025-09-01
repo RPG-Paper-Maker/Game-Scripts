@@ -35,7 +35,7 @@ class ChangeAStatistic extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.statisticID = System.DynamicValue.createValueCommand(command, iterator);
@@ -81,15 +81,15 @@ class ChangeAStatistic extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let statisticID = this.statisticID.getValue();
-		let stat = Datas.BattleSystems.getStatistic(statisticID);
-		let isChangingExperience = Datas.BattleSystems.idExpStatistic === statisticID;
-		let isChangingLevel = Datas.BattleSystems.idLevelStatistic === statisticID;
-		let abr = this.isApplyToMax ? stat.getMaxAbbreviation() : stat.abbreviation;
+		const statisticID = this.statisticID.getValue();
+		const stat = Datas.BattleSystems.getStatistic(statisticID);
+		const isChangingExperience = Datas.BattleSystems.idExpStatistic === statisticID;
+		const isChangingLevel = Datas.BattleSystems.idLevelStatistic === statisticID;
+		const abr = this.isApplyToMax ? stat.getMaxAbbreviation() : stat.abbreviation;
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:
-				let t = Game.current.getHeroByInstanceID(this.heInstanceID.getValue());
+				const t = Game.current.getHeroByInstanceID(this.heInstanceID.getValue());
 				if (t === null) {
 					Platform.showErrorMessage(
 						"Can't get any hero/enemy with instance ID " +

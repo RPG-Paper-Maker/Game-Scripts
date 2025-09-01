@@ -67,8 +67,8 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	createCommandWindow() {
-		let graphics: Graphic.Text[] = [];
-		let actions: Function[] = [];
+		const graphics: Graphic.Text[] = [];
+		const actions: Function[] = [];
 		let command: System.MainMenuCommand;
 		for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
 			command = Datas.Systems.mainMenuCommands[i];
@@ -118,7 +118,7 @@ class Menu extends MenuBase {
 			content: new Graphic.TimeCurrencies(),
 			padding: WindowBox.HUGE_PADDING_BOX,
 		});
-		let h =
+		const h =
 			(<Graphic.TimeCurrencies>this.windowTimeCurrencies.content).height +
 			this.windowTimeCurrencies.padding[1] +
 			this.windowTimeCurrencies.padding[3];
@@ -175,8 +175,8 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	swapHeroOrder(id1: number, id2: number) {
-		let hero1 = this.party()[id1];
-		let hero2 = this.party()[id2];
+		const hero1 = this.party()[id1];
+		const hero2 = this.party()[id2];
 		this.party()[id1] = hero2;
 		this.party()[id2] = hero1;
 	}
@@ -197,8 +197,8 @@ class Menu extends MenuBase {
 		} else {
 			this.swapHeroOrder(this.selectedOrder, currentSelectedHero);
 
-			let graphic1 = winTeam.getContent(this.selectedOrder);
-			let graphic2 = winTeam.getContent(currentSelectedHero);
+			const graphic1 = winTeam.getContent(this.selectedOrder);
+			const graphic2 = winTeam.getContent(currentSelectedHero);
 
 			winTeam.setContent(this.selectedOrder, graphic2);
 			winTeam.setContent(currentSelectedHero, graphic1);

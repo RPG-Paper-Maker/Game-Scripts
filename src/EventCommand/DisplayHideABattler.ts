@@ -28,7 +28,7 @@ class DisplayHideABattler extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.battlerKind = command[iterator.i++];
@@ -60,21 +60,21 @@ class DisplayHideABattler extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (Scene.Map.current.isBattleMap) {
-			let map = <Scene.Battle>Scene.Map.current;
+			const map = <Scene.Battle>Scene.Map.current;
 			let battler: Battler = null;
 			switch (this.battlerKind) {
 				case 0: // Enemy
 					battler = map.battlers[Enum.CharacterKind.Monster][this.battlerEnemyIndex];
 					break;
 				case 1: // Hero instance ID
-					let id = this.battlerHeroEnemyInstanceID.getValue();
-					for (let b of map.battlers[Enum.CharacterKind.Hero]) {
+					const id = this.battlerHeroEnemyInstanceID.getValue();
+					for (const b of map.battlers[Enum.CharacterKind.Hero]) {
 						if (b.player.instid === id) {
 							battler = b;
 							break;
 						}
 					}
-					for (let b of map.battlers[Enum.CharacterKind.Monster]) {
+					for (const b of map.battlers[Enum.CharacterKind.Monster]) {
 						if (b.player.instid === id) {
 							battler = b;
 							break;

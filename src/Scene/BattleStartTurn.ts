@@ -46,7 +46,7 @@ class BattleStartTurn {
 		// One time troop reaction or each begin turn
 		let i: number, l: number, battler: Battler;
 		if (this.step === 0) {
-			let reactions = this.battle.troop.reactions;
+			const reactions = this.battle.troop.reactions;
 			let reaction: System.TroopReaction;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
@@ -137,7 +137,7 @@ class BattleStartTurn {
 		if (this.battle.attackingGroup === Enum.CharacterKind.Hero) {
 			this.battle.battleCommandKind = Enum.EffectSpecialActionKind.OpenSkills;
 			this.battle.currentEffectIndex = 0;
-			let skills: System.Skill[] = [];
+			const skills: System.Skill[] = [];
 			let skill: System.Skill;
 			for (let i = 0, l = user.player.skills.length; i < l; i++) {
 				skill = Datas.Skills.get(user.player.skills[i].id);
@@ -223,11 +223,11 @@ class BattleStartTurn {
 			// Healed status
 			if (this.step === 2) {
 				if (this.statusHealed.length > 0) {
-					let tab = this.statusHealed[0];
-					let battler = tab[0];
-					let status = tab[1];
-					let s = status[0];
-					let message = s.getMessageHealed(battler);
+					const tab = this.statusHealed[0];
+					const battler = tab[0];
+					const status = tab[1];
+					const s = status[0];
+					const message = s.getMessageHealed(battler);
 					(<Graphic.Text>this.battle.windowTopInformations.content).setText(message);
 					if (message !== '') {
 						this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION / 2;
@@ -243,11 +243,11 @@ class BattleStartTurn {
 			// Still status + effects
 			if (this.step === 3) {
 				if (this.statusStill.length > 0) {
-					let tab = this.statusStill[0];
-					let battler = tab[0];
-					let status = tab[1];
-					let s = status[0];
-					let message = s.getMessageStillAffected(battler);
+					const tab = this.statusStill[0];
+					const battler = tab[0];
+					const status = tab[1];
+					const s = status[0];
+					const message = s.getMessageStillAffected(battler);
 					(<Graphic.Text>this.battle.windowTopInformations.content).setText(message);
 					status.splice(0, 1);
 					if (status.length === 0) {
@@ -257,7 +257,7 @@ class BattleStartTurn {
 						this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION / 2;
 					}
 					// If effects, apply animation only for those
-					let effects = s.system.getEffects();
+					const effects = s.system.getEffects();
 					if (effects.length > 0) {
 						this.battle.effects = effects;
 						this.battle.user = null;

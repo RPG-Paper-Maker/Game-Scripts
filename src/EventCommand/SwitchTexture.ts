@@ -39,7 +39,7 @@ class SwitchTexture extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.isTilesetID = Utils.numToBool(command[iterator.i++]);

@@ -27,7 +27,7 @@ class ModifyCurrency extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.currencyID = System.DynamicValue.createValueCommand(command, iterator);
@@ -43,13 +43,13 @@ class ModifyCurrency extends Base {
 	 *   @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let currencyID = this.currencyID.getValue();
-		let previousCurrency = Game.current.currencies[currencyID];
+		const currencyID = this.currencyID.getValue();
+		const previousCurrency = Game.current.currencies[currencyID];
 		Game.current.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this.operation](
 			Game.current.currencies[currencyID],
 			this.value.getValue()
 		);
-		let dif = Game.current.currencies[currencyID] - previousCurrency;
+		const dif = Game.current.currencies[currencyID] - previousCurrency;
 		if (dif > 0) {
 			Game.current.currenciesEarned[currencyID] += dif;
 		} else {

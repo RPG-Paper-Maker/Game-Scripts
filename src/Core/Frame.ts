@@ -58,7 +58,7 @@ class Frame {
 		if (!this.loop && this.value === this.frames - 1) {
 			return false;
 		}
-		let frame = this.value;
+		const frame = this.value;
 		this.tick += Manager.Stack.elapsedTime;
 		if (this.tick >= duration) {
 			this.value = (this.value + 1) % this.frames;

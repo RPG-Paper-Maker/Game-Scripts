@@ -32,7 +32,7 @@ class ChangeEquipment extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.equipmentID = System.DynamicValue.createValueCommand(command, iterator);
@@ -60,9 +60,9 @@ class ChangeEquipment extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let equipmentID = this.equipmentID.getValue();
-		let kind = this.isWeapon ? ItemKind.Weapon : ItemKind.Armor;
-		let weaponArmorID = this.weaponArmorID.getValue();
+		const equipmentID = this.equipmentID.getValue();
+		const kind = this.isWeapon ? ItemKind.Weapon : ItemKind.Armor;
+		const weaponArmorID = this.weaponArmorID.getValue();
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:

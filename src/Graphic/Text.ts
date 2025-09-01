@@ -95,9 +95,9 @@ class Text extends Base {
 	}
 
 	wrapText(maxWidth: number) {
-		let text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
-		let lines = text.split(Constants.STRING_NEW_LINE);
-		let words: string[] = [];
+		const text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
+		const lines = text.split(Constants.STRING_NEW_LINE);
+		const words: string[] = [];
 		let i: number, j: number, l: number, m: number, tempWords: string[];
 		for (i = 0, l = lines.length; i < l; i++) {
 			tempWords = lines[i].split(' ');
@@ -111,13 +111,13 @@ class Text extends Base {
 		this.lines = [];
 		let currentLine = words[0];
 		for (let i = 1, l = words.length; i < l; i++) {
-			let word = words[i];
+			const word = words[i];
 			if (word === Constants.STRING_NEW_LINE) {
 				this.lines.push(currentLine);
 				currentLine = words[++i];
 				continue;
 			}
-			let width = Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : 2);
+			const width = Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : 2);
 			if (width < maxWidth) {
 				currentLine += ' ' + word;
 			} else {
@@ -173,7 +173,7 @@ class Text extends Base {
 	measureText() {
 		this.updateContextFont();
 		this.textWidth = 0;
-		let l = this.lines.length;
+		const l = this.lines.length;
 		let size: number;
 		for (let i = 0; i < l; i++) {
 			size =
@@ -207,8 +207,8 @@ class Text extends Base {
 			this.updateContextFont();
 			this.wrapText(w);
 		}
-		let textWidth = this.textWidth;
-		let textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this.strokeColor === null ? 0 : 2);
+		const textWidth = this.textWidth;
+		const textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this.strokeColor === null ? 0 : 2);
 		switch (this.align) {
 			case Align.Left:
 				x += ScreenResolution.getScreenMinXY(1);
@@ -243,7 +243,7 @@ class Text extends Base {
 		// Set context options
 		Platform.ctx.font = this.font;
 		Platform.ctx.textAlign = <CanvasTextAlign>this.align;
-		let lineHeight = this.fontSize * 2;
+		const lineHeight = this.fontSize * 2;
 		let i: number,
 			l = this.lines.length;
 

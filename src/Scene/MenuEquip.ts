@@ -75,7 +75,7 @@ class MenuEquip extends MenuBase {
 	 */
 	createWindowChoiceTabs() {
 		const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
-		let listHeroes = [];
+		const listHeroes = [];
 		for (let i = 0; i < this.party().length; i++) {
 			listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
 		}
@@ -143,11 +143,11 @@ class MenuEquip extends MenuBase {
 	 */
 	updateForTab() {
 		// update equipment
-		let equipLength = Player.getEquipmentLength();
-		let l = Datas.BattleSystems.equipmentsOrder.length;
-		let player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
-		let characteristics = player.getCharacteristics();
-		let list = new Array(l);
+		const equipLength = Player.getEquipmentLength();
+		const l = Datas.BattleSystems.equipmentsOrder.length;
+		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+		const characteristics = player.getCharacteristics();
+		const list = new Array(l);
 		let j: number, m: number, characteristic: System.Characteristic, isPossible: boolean;
 		for (let i = 0; i < l; i++) {
 			// Check if is possible because of characteristics
@@ -177,11 +177,11 @@ class MenuEquip extends MenuBase {
 	 */
 	updateEquipmentList() {
 		const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
-		let idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
-		let list: Graphic.Base[] = [new Graphic.Text('  [' + Datas.Languages.extras.remove.name() + ']')];
+		const idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
+		const list: Graphic.Base[] = [new Graphic.Text('  [' + Datas.Languages.extras.remove.name() + ']')];
 		let item: Item, systemItem: System.CommonSkillItem;
 		let type: System.WeaponArmorKind, nbItem: number;
-		let player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
 		let j: number,
 			m: number,
 			characteristic: System.Characteristic,
@@ -217,14 +217,14 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	updateInformations() {
-		let player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
+		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
 		if (this.selectedEquipment === -1) {
 			this.list = [];
 		} else {
-			let item = <Graphic.Item>this.windowChoicesList.getCurrentContent();
-			let equipmentID = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
-			let system = item.item ? item.item.system : null;
-			let result = player.getEquipmentStatsAndBonus(system, equipmentID);
+			const item = <Graphic.Item>this.windowChoicesList.getCurrentContent();
+			const equipmentID = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
+			const system = item.item ? item.item.system : null;
+			const result = player.getEquipmentStatsAndBonus(system, equipmentID);
 			this.list = result[0];
 			this.bonus = result[1];
 		}
@@ -238,7 +238,7 @@ class MenuEquip extends MenuBase {
 	 */
 	moveTabKey(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		// Tab
-		let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+		const indexTab = this.windowChoicesTabs.currentSelectedIndex;
 		if (isKey) {
 			this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
 		} else {
@@ -250,7 +250,7 @@ class MenuEquip extends MenuBase {
 
 		// Equipment
 		if (this.selectedEquipment === -1) {
-			let indexEquipment = this.windowChoicesEquipment.currentSelectedIndex;
+			const indexEquipment = this.windowChoicesEquipment.currentSelectedIndex;
 			if (isKey) {
 				this.windowChoicesEquipment.onKeyPressedAndRepeat(options.key);
 			} else {
@@ -260,7 +260,7 @@ class MenuEquip extends MenuBase {
 				this.updateEquipmentList();
 			}
 		} else {
-			let indexList = this.windowChoicesList.currentSelectedIndex;
+			const indexList = this.windowChoicesList.currentSelectedIndex;
 			if (isKey) {
 				this.windowChoicesList.onKeyPressedAndRepeat(options.key);
 			} else {
@@ -284,11 +284,11 @@ class MenuEquip extends MenuBase {
 	 *  @param {number} id
 	 */
 	removeAnEquipment(id: number) {
-		let player = this.party()[this.windowChoicesTabs.currentSelectedIndex];
-		let prev = player.equip[id];
+		const player = this.party()[this.windowChoicesTabs.currentSelectedIndex];
+		const prev = player.equip[id];
 		player.equip[id] = null;
 		if (prev) {
-			let item = Item.findItem(prev.kind, prev.system.id);
+			const item = Item.findItem(prev.kind, prev.system.id);
 			if (item === null) {
 				prev.add(1);
 			} else {
@@ -302,20 +302,20 @@ class MenuEquip extends MenuBase {
 	 *  Equip the selected equipment.
 	 */
 	equip() {
-		let index = this.windowChoicesTabs.currentSelectedIndex;
-		let character = Game.current.teamHeroes[index];
-		let gameItem = (<Graphic.Item>this.windowChoicesList.getCurrentContent()).item;
-		let id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
-		let prev = character.equip[id];
+		const index = this.windowChoicesTabs.currentSelectedIndex;
+		const character = Game.current.teamHeroes[index];
+		const gameItem = (<Graphic.Item>this.windowChoicesList.getCurrentContent()).item;
+		const id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
+		const prev = character.equip[id];
 		character.equip[id] = gameItem;
 
 		// If "don't allow weapon/armor" characteristic now active, remove equipment
-		for (let characteristic of gameItem.system.characteristics) {
+		for (const characteristic of gameItem.system.characteristics) {
 			if (characteristic.kind === Enum.CharacteristicKind.AllowForbidEquip && !characteristic.isAllowEquip) {
-				let weaponArmor = characteristic.isAllowEquipWeapon
+				const weaponArmor = characteristic.isAllowEquipWeapon
 					? Datas.BattleSystems.getWeaponKind(characteristic.equipWeaponTypeID.getValue())
 					: Datas.BattleSystems.getArmorKind(characteristic.equipArmorTypeID.getValue());
-				for (let [id, equipment] of weaponArmor.equipments.entries()) {
+				for (const [id, equipment] of weaponArmor.equipments.entries()) {
 					if (equipment) {
 						this.removeAnEquipment(id);
 					}
@@ -333,7 +333,7 @@ class MenuEquip extends MenuBase {
 			}
 		}
 		if (prev) {
-			let item = Item.findItem(prev.kind, prev.system.id);
+			const item = Item.findItem(prev.kind, prev.system.id);
 			if (item === null) {
 				prev.add(1);
 			} else {
@@ -452,7 +452,7 @@ class MenuEquip extends MenuBase {
 	 *  @returns {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		let res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map.current, key);
+		const res = Scene.Base.prototype.onKeyPressedAndRepeat.call(Scene.Map.current, key);
 		this.move(true, { key: key });
 		return res;
 	}

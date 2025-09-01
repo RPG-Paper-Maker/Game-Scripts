@@ -142,16 +142,16 @@ class Battler {
 		);
 		this.timerMove = 0;
 		this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
-		let idBattler = player.getBattlerID();
+		const idBattler = player.getBattlerID();
 		if (idBattler === -1) {
 			this.mesh = null;
 		} else {
 			// Copy original material because there will be individual color
 			// changes
-			let originalMaterial = Datas.Tilesets.texturesBattlers[idBattler];
-			let texture = Manager.GL.getMaterialTexture(originalMaterial);
-			let copiedTexture = texture.clone();
-			let material = Manager.GL.createMaterial({
+			const originalMaterial = Datas.Tilesets.texturesBattlers[idBattler];
+			const texture = Manager.GL.getMaterialTexture(originalMaterial);
+			const copiedTexture = texture.clone();
+			const material = Manager.GL.createMaterial({
 				texture: copiedTexture,
 				uniforms: {
 					colorD: { type: 'v4', value: Manager.GL.screenTone.clone() },
@@ -160,8 +160,8 @@ class Battler {
 			});
 			this.width = copiedTexture.image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersFrames;
 			this.height = copiedTexture.image.height / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersColumns;
-			let sprite = Sprite.create(Enum.ElementMapKind.SpritesFace, [0, 0, this.width, this.height]);
-			let geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
+			const sprite = Sprite.create(Enum.ElementMapKind.SpritesFace, [0, 0, this.width, this.height]);
+			const geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
 			this.mesh = new THREE.Mesh(geometry, material);
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 			this.mesh.receiveShadow = true;
@@ -239,7 +239,7 @@ class Battler {
 	 */
 	setActive(active: boolean) {
 		this.active = active;
-		let material = <MeshPhongMaterial>this.mesh.material;
+		const material = <MeshPhongMaterial>this.mesh.material;
 		if (active) {
 			material.userData.uniforms.colorD.value.setX(Manager.GL.screenTone.x);
 			material.userData.uniforms.colorD.value.setY(Manager.GL.screenTone.y);
@@ -448,8 +448,8 @@ class Battler {
 		this.topPosition = Manager.GL.toScreenPosition(this.upPosition, Scene.Map.current.camera.getThreeCamera());
 		this.midPosition = Manager.GL.toScreenPosition(this.halfPosition, Scene.Map.current.camera.getThreeCamera());
 		this.botPosition = Manager.GL.toScreenPosition(this.mesh.position, Scene.Map.current.camera.getThreeCamera());
-		let topLeft = Manager.GL.toScreenPosition(this.topLeftPosition, Scene.Map.current.camera.getThreeCamera());
-		let botRight = Manager.GL.toScreenPosition(this.botRightPosition, Scene.Map.current.camera.getThreeCamera());
+		const topLeft = Manager.GL.toScreenPosition(this.topLeftPosition, Scene.Map.current.camera.getThreeCamera());
+		const botRight = Manager.GL.toScreenPosition(this.botRightPosition, Scene.Map.current.camera.getThreeCamera());
 		this.rect.setCoords(topLeft.x, topLeft.y, botRight.x - topLeft.x, botRight.y - topLeft.y);
 	}
 
@@ -465,7 +465,7 @@ class Battler {
 	 *  @param {Core.Status} previousFirst - The previous status animation.
 	 */
 	updateAnimationStatus(previousFirst: Status = undefined) {
-		let status = this.player.status[0];
+		const status = this.player.status[0];
 		if (previousFirst != status) {
 			if (status) {
 				this.currentStatusAnimation = new Animation(status.system.animationID.getValue(), true);
@@ -498,9 +498,9 @@ class Battler {
 	 */
 	updateUVs() {
 		if (this.mesh) {
-			let texture = Manager.GL.getMaterialTexture(<MeshPhongMaterial>this.mesh.material);
-			let textureWidth = texture.image.width;
-			let textureHeight = texture.image.height;
+			const texture = Manager.GL.getMaterialTexture(<MeshPhongMaterial>this.mesh.material);
+			const textureWidth = texture.image.width;
+			const textureHeight = texture.image.height;
 			let frame = 0;
 			switch (this.step) {
 				case Enum.BattlerStep.Attack:
@@ -512,16 +512,16 @@ class Battler {
 					frame = this.frame.value;
 					break;
 			}
-			let w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
-			let h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
-			let x = frame * w;
-			let y = this.step * h;
+			const w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
+			const h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
+			const x = frame * w;
+			const y = this.step * h;
 
 			// Update geometry
-			let texA = new THREE.Vector2();
-			let texB = new THREE.Vector2();
-			let texC = new THREE.Vector2();
-			let texD = new THREE.Vector2();
+			const texA = new THREE.Vector2();
+			const texB = new THREE.Vector2();
+			const texC = new THREE.Vector2();
+			const texD = new THREE.Vector2();
 			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 			// Update geometry
@@ -536,7 +536,7 @@ class Battler {
 	 *  @returns {Core.Status}
 	 */
 	addStatus(id: number): Status {
-		let status = this.player.addStatus(id);
+		const status = this.player.addStatus(id);
 		this.updateStatusStep();
 		return status;
 	}
@@ -547,7 +547,7 @@ class Battler {
 	 *  @returns {Core.Status}
 	 */
 	removeStatus(id: number): Status {
-		let status = this.player.removeStatus(id);
+		const status = this.player.removeStatus(id);
 		this.updateStatusStep();
 		return status;
 	}
@@ -558,7 +558,7 @@ class Battler {
 	updateStatusStep() {
 		// Update step if changed
 		let step = Enum.BattlerStep.Normal;
-		let s = this.player.status[0];
+		const s = this.player.status[0];
 		if (s) {
 			step = s.system.battlerPosition.getValue();
 		}

@@ -139,7 +139,7 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
 		let l = Datas.Systems.inventoryFilters.length;
-		let list: Graphic.Text[] = new Array();
+		const list: Graphic.Text[] = [];
 		let i: number;
 		for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
 			list[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: Enum.Align.Center });
@@ -343,9 +343,9 @@ class MenuShop extends MenuBase {
 	 *  Update items list.
 	 */
 	updateItemsList() {
-		let listToSort = this.isBuy() ? this.stock : Game.current.items;
-		let indexTab = this.windowChoicesItemsKind.currentSelectedIndex;
-		let list: Graphic.Item[] = [];
+		const listToSort = this.isBuy() ? this.stock : Game.current.items;
+		const indexTab = this.windowChoicesItemsKind.currentSelectedIndex;
+		const list: Graphic.Item[] = [];
 		let item: Item;
 		for (let i = 0, l = listToSort.length; i < l; i++) {
 			item = listToSort[i];
@@ -411,7 +411,7 @@ class MenuShop extends MenuBase {
 
 		// Update stats short if weapon / armor
 		if (this.windowChoicesList.getCurrentContent()) {
-			let system = (<Graphic.Item>this.windowChoicesList.getCurrentContent()).item.system;
+			const system = (<Graphic.Item>this.windowChoicesList.getCurrentContent()).item.system;
 			if (system.isWeaponArmor()) {
 				(<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateStatShort(system);
 			} else {
@@ -421,7 +421,7 @@ class MenuShop extends MenuBase {
 
 		// Update position
 		if (this.windowChoicesList.currentSelectedIndex !== -1) {
-			let position = this.positionChoice[this.windowChoicesItemsKind.currentSelectedIndex];
+			const position = this.positionChoice[this.windowChoicesItemsKind.currentSelectedIndex];
 			position.index = this.windowChoicesList.currentSelectedIndex;
 			position.offset = this.windowChoicesList.offsetSelectedIndex;
 		}
@@ -431,8 +431,8 @@ class MenuShop extends MenuBase {
 	 *  Update the equipments stats when selecting a player.
 	 */
 	updateEquipmentStats() {
-		let player = this.getCurrentPlayer();
-		let result = player.getBestWeaponArmorToReplace(
+		const player = this.getCurrentPlayer();
+		const result = player.getBestWeaponArmorToReplace(
 			(<Graphic.Item>this.windowChoicesList.getCurrentContent()).item.system
 		);
 		this.windowBoxInformation.content = new Graphic.EquipStats(player, result[2][0], false);
@@ -445,9 +445,9 @@ class MenuShop extends MenuBase {
 	 *  Equip the selected equipment.
 	 */
 	equip(shopItem: Item) {
-		let player = this.getCurrentPlayer();
-		let item = Item.findItem(shopItem.kind, shopItem.system.id);
-		let prev = player.equip[this.currentEquipmentID];
+		const player = this.getCurrentPlayer();
+		const item = Item.findItem(shopItem.kind, shopItem.system.id);
+		const prev = player.equip[this.currentEquipmentID];
 		player.equip[this.currentEquipmentID] = item;
 		item.remove(1);
 		if (prev) {
@@ -462,7 +462,7 @@ class MenuShop extends MenuBase {
 	 *  @param {{ key?: string, x?: number, y?: number }} [options={}]
 	 */
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
-		let graphic = <Graphic.Item>this.windowChoicesList.getCurrentContent();
+		const graphic = <Graphic.Item>this.windowChoicesList.getCurrentContent();
 		switch (this.step) {
 			case 0:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
@@ -518,7 +518,7 @@ class MenuShop extends MenuBase {
 			case 4:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 					Datas.Systems.soundConfirmation.playSound();
-					let shopItem = graphic.item;
+					const shopItem = graphic.item;
 					if (this.isBuy()) {
 						if (
 							this.step === 2 &&
@@ -628,7 +628,7 @@ class MenuShop extends MenuBase {
 	 *  @returns {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		let res = super.onKeyPressedAndRepeat(key);
+		const res = super.onKeyPressedAndRepeat(key);
 		this.move(true, { key: key });
 		return res;
 	}

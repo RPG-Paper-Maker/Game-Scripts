@@ -42,7 +42,7 @@ class TitlescreenGameover {
 	 *  @async
 	 */
 	static async read() {
-		let json = await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER);
+		const json = await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER);
 
 		// Title screen
 		this.isTitleBackgroundImage = Utils.defaultValue(json.itbi, true);
@@ -55,8 +55,8 @@ class TitlescreenGameover {
 			listIndexes: this.titleCommands,
 			cons: System.TitleCommand,
 		});
-		let jsonList = json.ts;
-		let l = jsonList.length;
+		const jsonList = json.ts;
+		const l = jsonList.length;
 		this.titleSettings = [];
 		let obj: Record<string, any>;
 		for (let i = 0, j = 0; i < l; i++) {
@@ -86,8 +86,8 @@ class TitlescreenGameover {
 	 *  @returns {Graphic.Text[]}
 	 */
 	static getTitleCommandsNames(): Graphic.Text[] {
-		let l = this.titleCommands.length;
-		let list = new Array(l);
+		const l = this.titleCommands.length;
+		const list = new Array(l);
 		let titleCommand: System.TitleCommand, obj: Graphic.Text;
 		for (let i = 0; i < l; i++) {
 			titleCommand = this.titleCommands[i];
@@ -104,8 +104,8 @@ class TitlescreenGameover {
 	 *  @returns {function[]}
 	 */
 	static getTitleCommandsActions(): Function[] {
-		let l = this.titleCommands.length;
-		let list = new Array(l);
+		const l = this.titleCommands.length;
+		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = this.titleCommands[i].getAction();
 		}
@@ -118,8 +118,8 @@ class TitlescreenGameover {
 	 *  @returns {Graphic.Setting[]}
 	 */
 	static getTitleSettingsCommandsContent(): Graphic.Setting[] {
-		let l = this.titleSettings.length;
-		let list = new Array(l);
+		const l = this.titleSettings.length;
+		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = new Graphic.Setting(this.titleSettings[i]);
 		}
@@ -132,8 +132,8 @@ class TitlescreenGameover {
 	 *  @returns {function[]}
 	 */
 	static getTitleSettingsCommandsActions(): Function[] {
-		let l = this.titleSettings.length;
-		let list = new Array(l);
+		const l = this.titleSettings.length;
+		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = this.getTitleSettingsCommandsAction(this.titleSettings[i]);
 		}
@@ -161,8 +161,8 @@ class TitlescreenGameover {
 	 *  @returns {Graphic.Text[]}
 	 */
 	static getGameOverCommandsNames(): Graphic.Text[] {
-		let l = this.gameOverCommands.length;
-		let list = new Array(l);
+		const l = this.gameOverCommands.length;
+		const list = new Array(l);
 		let command: System.GameOverCommand, obj: Graphic.Text;
 		for (let i = 0; i < l; i++) {
 			command = this.gameOverCommands[i];
@@ -179,8 +179,8 @@ class TitlescreenGameover {
 	 *  @returns {function[]}
 	 */
 	static getGameOverCommandsActions(): Function[] {
-		let l = this.gameOverCommands.length;
-		let list = new Array(l);
+		const l = this.gameOverCommands.length;
+		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = this.gameOverCommands[i].getAction();
 		}

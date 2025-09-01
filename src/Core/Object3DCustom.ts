@@ -45,7 +45,7 @@ class Object3DCustom extends Object3D {
 	 *  @returns {Core.Object3DBox}
 	 */
 	static create(datas: System.Object3D): Object3DCustom {
-		let object = new Object3DCustom(undefined, datas);
+		const object = new Object3DCustom(undefined, datas);
 		object.id = datas.id;
 		return object;
 	}
@@ -78,12 +78,12 @@ class Object3DCustom extends Object3D {
 	 *  @return {any[]}
 	 */
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]] {
-		let localPosition = position.toVector3();
-		let modelGeometry = Datas.Shapes.get(CustomShapeKind.OBJ, this.datas.objID).geometry;
-		let vertices = modelGeometry.vertices;
-		let uvs = modelGeometry.uvs;
-		let scale = this.datas.scale;
-		let scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
+		const localPosition = position.toVector3();
+		const modelGeometry = Datas.Shapes.get(CustomShapeKind.OBJ, this.datas.objID).geometry;
+		const vertices = modelGeometry.vertices;
+		const uvs = modelGeometry.uvs;
+		const scale = this.datas.scale;
+		const scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
 		const center = new THREE.Vector3();
 		center.multiply(scaleVec);
 		let vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3;
@@ -107,13 +107,13 @@ class Object3DCustom extends Object3D {
 		}
 
 		// Collisions
-		let objCollision: StructMapElementCollision[] = new Array();
+		const objCollision: StructMapElementCollision[] = [];
 		if (this.datas.collisionKind === ObjectCollisionKind.Simplified) {
-			let obj = this.datas.getObj().geometry;
-			let w = obj.w * scale * position.scaleX;
-			let h = obj.h * scale * position.scaleY;
-			let d = obj.d * scale * position.scaleZ;
-			let minPos = obj.minVertex.clone();
+			const obj = this.datas.getObj().geometry;
+			const w = obj.w * scale * position.scaleX;
+			const h = obj.h * scale * position.scaleY;
+			const d = obj.d * scale * position.scaleZ;
+			const minPos = obj.minVertex.clone();
 			minPos.multiply(scaleVec);
 			objCollision.push({
 				p: position,
@@ -144,11 +144,11 @@ class Object3DCustom extends Object3D {
 				k: true,
 			});
 		} else if (this.datas.collisionKind === ObjectCollisionKind.Custom) {
-			let obj = Datas.Shapes.get(CustomShapeKind.Collisions, this.datas.collisionCustomID).geometry;
-			let w = obj.w * scale * position.scaleX;
-			let h = obj.h * scale * position.scaleY;
-			let d = obj.d * scale * position.scaleZ;
-			let minPos = obj.minVertex.clone();
+			const obj = Datas.Shapes.get(CustomShapeKind.Collisions, this.datas.collisionCustomID).geometry;
+			const w = obj.w * scale * position.scaleX;
+			const h = obj.h * scale * position.scaleY;
+			const d = obj.d * scale * position.scaleZ;
+			const minPos = obj.minVertex.clone();
 			minPos.multiply(scaleVec);
 			objCollision.push({
 				id: this.datas.collisionCustomID,
@@ -190,8 +190,8 @@ class Object3DCustom extends Object3D {
 	 *  @return {[Core.CustomGeometry, [number, StructMapElementCollision[]]]}
 	 */
 	createGeometry(position: Position): [CustomGeometry, [number, StructMapElementCollision[]]] {
-		let geometry = new CustomGeometry();
-		let collisions = this.updateGeometry(geometry, position, 0);
+		const geometry = new CustomGeometry();
+		const collisions = this.updateGeometry(geometry, position, 0);
 		geometry.updateAttributes();
 		return [geometry, collisions];
 	}

@@ -26,7 +26,7 @@ class Script extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.isDynamic = Utils.numToBool(command[iterator.i++]);
@@ -43,7 +43,7 @@ class Script extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let res = Interpreter.evaluate(this.script.getValue(), { thisObject: object, addReturn: false });
+		const res = Interpreter.evaluate(this.script.getValue(), { thisObject: object, addReturn: false });
 		return Utils.isUndefined(res) ? 1 : res;
 	}
 }

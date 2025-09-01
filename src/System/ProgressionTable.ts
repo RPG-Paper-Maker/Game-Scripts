@@ -51,7 +51,7 @@ class ProgressionTable extends Base {
 	 *  @returns {ProgressionTable}
 	 */
 	static create(i: System.DynamicValue, f: System.DynamicValue, equation: number): ProgressionTable {
-		let progression = new ProgressionTable();
+		const progression = new ProgressionTable();
 		progression.initialize(i, f, equation);
 		return progression;
 	}
@@ -77,7 +77,7 @@ class ProgressionTable extends Base {
 		this.finalValue = new DynamicValue(json.f);
 		this.equation = json.e;
 		this.table = {};
-		let jsonTable = json.t;
+		const jsonTable = json.t;
 		if (jsonTable) {
 			for (let i = 0, l = jsonTable.length; i < l; i++) {
 				this.table[jsonTable[i].k] = jsonTable[i].v;
@@ -108,7 +108,7 @@ class ProgressionTable extends Base {
 	 */
 	getProgressionAt(current: number, f: number, decimal: boolean = false): number {
 		// Check if specific value
-		let table = this.table[current];
+		const table = this.table[current];
 		if (table) {
 			return table;
 		}
@@ -119,7 +119,7 @@ class ProgressionTable extends Base {
 		this.duration = f - 1;
 
 		// Check according to equation
-		let x = current - 1;
+		const x = current - 1;
 		let result: number;
 		switch (this.equation) {
 			case 0:

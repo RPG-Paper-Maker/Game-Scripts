@@ -24,7 +24,7 @@ class Wait extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.milliseconds = System.DynamicValue.createValueCommand(command, iterator);

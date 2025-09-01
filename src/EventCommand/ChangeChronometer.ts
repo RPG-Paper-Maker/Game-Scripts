@@ -30,7 +30,7 @@ class ChangeChronometer extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.chronometerID = System.DynamicValue.createValueCommand(command, iterator);
@@ -54,12 +54,12 @@ class ChangeChronometer extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let chronometerID = this.chronometerID.getValue(this.operation === 0);
-		let index = Utils.indexOfProp(Game.current.chronometers, 'id', chronometerID);
-		let chrono = index === -1 ? null : Game.current.chronometers[index];
+		const chronometerID = this.chronometerID.getValue(this.operation === 0);
+		const index = Utils.indexOfProp(Game.current.chronometers, 'id', chronometerID);
+		const chrono = index === -1 ? null : Game.current.chronometers[index];
 		switch (this.operation) {
 			case 0: // Start
-				let time = this.time.getValue() * 1000;
+				const time = this.time.getValue() * 1000;
 				if (chrono === null) {
 					Game.current.chronometers.push(
 						new Chrono(time, Game.current.getNewChronoID(), true, this.diplayOnScreen)

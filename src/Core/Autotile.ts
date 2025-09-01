@@ -68,8 +68,8 @@ class Autotile extends Land {
 		pictureID: number,
 		count: number
 	): StructMapElementCollision {
-		let autotile = Datas.SpecialElements.getAutotile(this.autotileID);
-		let picture = autotile ? Datas.Pictures.get(PictureKind.Autotiles, pictureID) : null;
+		const autotile = Datas.SpecialElements.getAutotile(this.autotileID);
+		const picture = autotile ? Datas.Pictures.get(PictureKind.Autotiles, pictureID) : null;
 		return super.updateGeometryLand(
 			geometry,
 			picture ? picture.getCollisionAtIndex(Land.prototype.getIndex.call(this, picture.width)) : null,

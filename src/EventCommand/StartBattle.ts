@@ -38,7 +38,7 @@ class StartBattle extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.battleMapID = null;
@@ -53,7 +53,7 @@ class StartBattle extends Base {
 		this.canGameOver = Utils.numToBool(command[iterator.i++]);
 
 		// Troop
-		let type = command[iterator.i++];
+		const type = command[iterator.i++];
 		switch (type) {
 			case 0: // Existing troop ID
 				this.troopID = System.DynamicValue.createValueCommand(command, iterator);
@@ -119,7 +119,7 @@ class StartBattle extends Base {
 			if (this.battleMapType === 3) {
 				this.battleMapID = Scene.Map.current.mapProperties.tileset.battleMap;
 			}
-			let battleMap =
+			const battleMap =
 				this.battleMapID === null
 					? System.BattleMap.create(
 							this.mapID.getValue(),
@@ -129,7 +129,7 @@ class StartBattle extends Base {
 			Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
 
 			// Defining the battle state instance
-			let sceneBattle = new Scene.Battle(
+			const sceneBattle = new Scene.Battle(
 				this.troopID.getValue(),
 				this.canGameOver,
 				this.canEscape,

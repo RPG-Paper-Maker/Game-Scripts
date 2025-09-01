@@ -36,7 +36,7 @@ class DisplayAPicture extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.pictureID = System.DynamicValue.createValueCommand(command, iterator);
@@ -66,8 +66,8 @@ class DisplayAPicture extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let currentIndex = this.index.getValue();
-		let picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, this.pictureID.getValue());
+		const currentIndex = this.index.getValue();
+		const picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, this.pictureID.getValue());
 		picture.setX(this.originX + this.x.getValue());
 		picture.setY(this.originY + this.y.getValue());
 		picture.centered = this.centered;
@@ -79,7 +79,7 @@ class DisplayAPicture extends Base {
 			picture.setW(picture.image.width);
 			picture.setH(picture.image.height);
 		}
-		let value: [number, Picture2D] = [currentIndex, picture];
+		const value: [number, Picture2D] = [currentIndex, picture];
 		let ok = false;
 		let index: number;
 		for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {

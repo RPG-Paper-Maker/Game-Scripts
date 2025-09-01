@@ -39,7 +39,7 @@ class ChangeWeather extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		switch (command[iterator.i++]) {
@@ -80,8 +80,8 @@ class ChangeWeather extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let time = this.time.getValue() * 1000;
-		let result: Record<string, any> = {
+		const time = this.time.getValue() * 1000;
+		const result: Record<string, any> = {
 			parallel: this.isWaitEnd,
 			time: time,
 			timeLeft: time,

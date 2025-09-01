@@ -36,7 +36,7 @@ class ChangeMapProperties extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.mapID = System.DynamicValue.createValueCommand(command, iterator);

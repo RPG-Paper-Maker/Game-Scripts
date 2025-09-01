@@ -83,7 +83,7 @@ class Systems {
 	 *  @static
 	 */
 	static async read() {
-		let json = await Platform.parseFileJSON(Paths.FILE_SYSTEM);
+		const json = await Platform.parseFileJSON(Paths.FILE_SYSTEM);
 
 		// Project name
 		this.projectName = new System.Translatable(json.pn);
@@ -379,8 +379,8 @@ class Systems {
 	 *  @returns {number[]}
 	 */
 	static getDefaultCurrencies(): number[] {
-		let list = [];
-		for (let id in this.currencies) {
+		const list = [];
+		for (const id in this.currencies) {
 			list[id] = 0;
 		}
 		return list;
@@ -421,7 +421,7 @@ class Systems {
 		ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / ScreenResolution.SCREEN_Y;
 		Manager.GL.resize();
 		Manager.Stack.requestPaintHUD = true;
-		for (let scene of Manager.Stack.content) {
+		for (const scene of Manager.Stack.content) {
 			scene.draw3D();
 		}
 	}

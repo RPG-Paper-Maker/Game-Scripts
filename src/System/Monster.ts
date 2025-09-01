@@ -51,8 +51,8 @@ class Monster extends Hero {
 		this.rewards.xp = new ProgressionTable(this.getProperty(Class.PROPERTY_FINAL_LEVEL, undefined), json.xp);
 
 		// Currencies
-		let jsonCurrencies = json.cur;
-		let l = jsonCurrencies.length;
+		const jsonCurrencies = json.cur;
+		const l = jsonCurrencies.length;
 		this.rewards.currencies = new Array(l);
 		let hash: Record<string, any>, progression: ProgressionTable;
 		for (let i = 0; i < l; i++) {
@@ -74,7 +74,7 @@ class Monster extends Hero {
 			list: Utils.defaultValue(json.a, []),
 			listIndexes: this.actions,
 			func: (jsonAction: Record<string, any>) => {
-				let action = new MonsterAction(jsonAction);
+				const action = new MonsterAction(jsonAction);
 				action.monster = this;
 				return action;
 			},
@@ -96,7 +96,7 @@ class Monster extends Hero {
 	 *  @returns {Object}
 	 */
 	getRewardCurrencies(level: number): Record<string, number> {
-		let currencies = {};
+		const currencies = {};
 		let progression: ProgressionTable;
 		for (let i = 0, l = this.rewards.currencies.length; i < l; i++) {
 			progression = this.rewards.currencies[i];
@@ -114,7 +114,7 @@ class Monster extends Hero {
 	 *  @returns {Record<string, Item>[]}
 	 */
 	getRewardLoots(level: number): Record<string, Item>[] {
-		let list = new Array(3);
+		const list = new Array(3);
 		list[LootKind.Item] = {};
 		list[LootKind.Weapon] = {};
 		list[LootKind.Armor] = {};

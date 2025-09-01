@@ -107,7 +107,7 @@ class Map extends Base {
 		this.scene = new THREE.Scene();
 
 		// Adding meshes for collision
-		this.collisions = new Array();
+		this.collisions = [];
 		if (Datas.Systems.showBB) {
 			this.scene.add(Manager.Collisions.BB_BOX);
 			this.scene.add(Manager.Collisions.BB_ORIENTED_BOX);
@@ -137,14 +137,14 @@ class Map extends Base {
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
 				for (k = -limit; k <= limit; k++) {
-					let mapPortion = this.getMapPortion(i, j, k);
+					const mapPortion = this.getMapPortion(i, j, k);
 					if (mapPortion) {
 						mapPortion.cleanStatic();
 					}
 				}
 			}
 		}
-		this.collisions = new Array();
+		this.collisions = [];
 		await this.readMapProperties();
 		this.initializeCamera();
 		await this.loadTextures();
@@ -152,14 +152,14 @@ class Map extends Base {
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
 				for (k = -limit; k <= limit; k++) {
-					let mapPortion = this.getMapPortion(i, j, k);
+					const mapPortion = this.getMapPortion(i, j, k);
 					if (mapPortion) {
-						let portion = new Portion(
+						const portion = new Portion(
 							this.currentPortion.x + i,
 							this.currentPortion.y + j,
 							this.currentPortion.z + k
 						);
-						let json = await Platform.parseFileJSON(
+						const json = await Platform.parseFileJSON(
 							Paths.FILE_MAPS + this.mapFilename + Constants.STRING_SLASH + portion.getFileName()
 						);
 						mapPortion.readStatic(json);
@@ -185,7 +185,7 @@ class Map extends Base {
 	 */
 	async readMapProperties(minimal: boolean = false) {
 		this.mapProperties = new System.MapProperties();
-		let json = await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS);
+		const json = await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS);
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
 				'The battle map ' + this.id + " doesn't " + 'exists. Please check your battle maps.'
@@ -259,13 +259,13 @@ class Map extends Base {
 	 *  Initialize all the objects moved or / and with changed states.
 	 */
 	initializePortionsObjects() {
-		let mapsDatas = Game.current.mapsDatas[this.id];
+		const mapsDatas = Game.current.mapsDatas[this.id];
 		let datas = null;
-		let l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
-		let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
-		let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
-		let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
-		let objectsPortions = new Array(l);
+		const l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
+		const w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
+		const d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
+		const h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
+		const objectsPortions = new Array(l);
 		let i: number, j: number, jp: number, k: number, jabs: number;
 		for (i = 0; i < l; i++) {
 			objectsPortions[i] = new Array(2);
@@ -316,10 +316,10 @@ class Map extends Base {
 	 *  Load all the textures of the map.
 	 */
 	async loadTextures() {
-		let tileset = this.mapProperties.tileset;
-		let path = tileset.getPath();
+		const tileset = this.mapProperties.tileset;
+		const path = tileset.getPath();
 		this.textureTileset = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
-		let t: THREE.Texture = this.textureTileset.map;
+		const t: THREE.Texture = this.textureTileset.map;
 		if (t.image.width % Datas.Systems.SQUARE_SIZE !== 0 || t.image.height % Datas.Systems.SQUARE_SIZE !== 0) {
 			Platform.showErrorMessage(
 				'Tileset in ' +
@@ -337,19 +337,19 @@ class Map extends Base {
 	 */
 	loadCollisions() {
 		// Tileset
-		let texture = Manager.GL.getMaterialTexture(this.textureTileset);
+		const texture = Manager.GL.getMaterialTexture(this.textureTileset);
 		if (this.mapProperties.tileset.picture && texture) {
 			this.mapProperties.tileset.picture.readCollisionsImage(texture.image);
 		}
 
 		// Characters
-		let pictures = Datas.Pictures.getListByKind(PictureKind.Characters);
-		let l = pictures.length;
+		const pictures = Datas.Pictures.getListByKind(PictureKind.Characters);
+		const l = pictures.length;
 		this.collisions[PictureKind.Characters] = new Array(l);
 		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: System.Picture;
 		for (let i = 1; i < l; i++) {
 			material = this.texturesCharacters[i];
-			let texture = Manager.GL.getMaterialTexture(material);
+			const texture = Manager.GL.getMaterialTexture(material);
 			if (texture) {
 				image = texture.image;
 			}
@@ -473,8 +473,8 @@ class Map extends Base {
 					ok = k - offsetZ;
 					// If with negative offset, in ray boundaries, move
 					if (oi >= -limit && oi <= limit && oj >= -limit && oj <= limit && ok >= -limit && ok <= limit) {
-						let previousIndex = this.getPortionIndex(i, j, k);
-						let newIndex = this.getPortionIndex(oi, oj, ok);
+						const previousIndex = this.getPortionIndex(i, j, k);
+						const newIndex = this.getPortionIndex(oi, oj, ok);
 						this.mapPortions[newIndex] = temp[previousIndex];
 					}
 					oi = i + offsetX;
@@ -510,13 +510,13 @@ class Map extends Base {
 		z: number,
 		move: boolean = false
 	) {
-		let lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
-		let lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
-		let ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
-		let lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
+		const lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
+		const lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
+		const ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
+		const lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
-			let portion = new Portion(realX, realY, realZ);
-			let json = await Platform.parseFileJSON(
+			const portion = new Portion(realX, realY, realZ);
+			const json = await Platform.parseFileJSON(
 				Paths.FILE_MAPS + this.mapFilename + Constants.STRING_SLASH + portion.getFileName()
 			);
 			if (json.hasOwnProperty('lands')) {
@@ -582,8 +582,8 @@ class Map extends Base {
 	 *  loaded
 	 */
 	setMapPortion(x: number, y: number, z: number, mapPortion: MapPortion, move: boolean) {
-		let index = this.getPortionIndex(x, y, z);
-		let currentMapPortion = this.mapPortions[index];
+		const index = this.getPortionIndex(x, y, z);
+		const currentMapPortion = this.mapPortions[index];
 		if (currentMapPortion && !move) {
 			currentMapPortion.cleanAll();
 		}
@@ -696,7 +696,7 @@ class Map extends Base {
 	 *  @returns {boolean}
 	 */
 	isInPortion(portion: Portion): boolean {
-		let limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Datas.Systems.PORTIONS_RAY;
 		return (
 			portion.x >= -limit &&
 			portion.x <= limit &&
@@ -778,12 +778,12 @@ class Map extends Base {
 	/**
 	 *  Update portions according to a callback.
 	 */
-	updatePortions(base: Object, callback: Function) {
+	updatePortions(base: object, callback: Function) {
 		const limit = Datas.Systems.PORTIONS_RAY;
-		let lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
-		let lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
-		let ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
-		let lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
+		const lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
+		const lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
+		const ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
+		const lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		let i: number, j: number, k: number, x: number, y: number, z: number;
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
@@ -866,7 +866,7 @@ class Map extends Base {
 		}
 		const geometry = new THREE.BufferGeometry();
 		geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-		let material = new THREE.PointsMaterial({
+		const material = new THREE.PointsMaterial({
 			color: options.isColor ? Datas.Systems.getColor(options.colorID).getHex() : 0xffffff,
 			size: options.size,
 			transparent: true,
@@ -1072,22 +1072,22 @@ class Map extends Base {
 
 		// Update skybox
 		if (this.mapProperties.skyboxGeometry !== null && this.previousCameraPosition) {
-			let posDif = this.camera.getThreeCamera().position.clone().sub(this.previousCameraPosition);
+			const posDif = this.camera.getThreeCamera().position.clone().sub(this.previousCameraPosition);
 			this.mapProperties.skyboxGeometry.translate(posDif.x, posDif.y, posDif.z);
 			this.previousCameraPosition = this.camera.getThreeCamera().position.clone();
 		}
 
 		// Getting the Y angle of the camera
-		let vector = new THREE.Vector3();
+		const vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
-		let angle = Math.atan2(vector.x, vector.z) + Math.PI;
+		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 
 		// Update the objects
 		if (Game.current !== null) {
 			Game.current.hero.update(angle);
 		}
 		this.updatePortions(this, function (x: number, y: number, z: number, i: number, j: number, k: number) {
-			let objects = Game.current.getPortionDatas(this.id, new Portion(x, y, z));
+			const objects = Game.current.getPortionDatas(this.id, new Portion(x, y, z));
 			let movedObjects = objects.min;
 			let p: number, l: number;
 			for (p = 0, l = movedObjects.length; p < l; p++) {
@@ -1099,7 +1099,7 @@ class Map extends Base {
 			}
 
 			// Update face sprites
-			let mapPortion = this.getMapPortion(i, j, k);
+			const mapPortion = this.getMapPortion(i, j, k);
 			if (mapPortion) {
 				mapPortion.updateFaceSprites(angle);
 			}
@@ -1116,7 +1116,7 @@ class Map extends Base {
 		if (Game.current !== null && Datas.Systems.moveCameraOnBlockView.getValue()) {
 			this.camera.forceNoHide = false;
 			this.camera.hidingDistance = -1;
-			let pointer = Manager.GL.toScreenPosition(
+			const pointer = Manager.GL.toScreenPosition(
 				this.camera.target.position
 					.clone()
 					.add(new THREE.Vector3(0, this.camera.target.height * Datas.Systems.SQUARE_SIZE, 0)),
@@ -1354,10 +1354,10 @@ class Map extends Base {
 	 *  Close the map.
 	 */
 	close() {
-		let l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
-		let w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
-		let d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
-		let h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
+		const l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
+		const w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
+		const d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
+		const h = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		let i: number, j: number, k: number, portion: Record<string, any>, x: number;
 		for (i = 0; i < l; i++) {
 			for (j = -d; j < h; j++) {

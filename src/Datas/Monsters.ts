@@ -29,7 +29,7 @@ class Monsters {
 	 *  @async
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_MONSTERS)).monsters;
+		const json = (await Platform.parseFileJSON(Paths.FILE_MONSTERS)).monsters;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Monster });
 	}

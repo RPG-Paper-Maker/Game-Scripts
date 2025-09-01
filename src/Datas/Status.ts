@@ -29,7 +29,7 @@ class Status {
 	 *  @async
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_STATUS)).status;
+		const json = (await Platform.parseFileJSON(Paths.FILE_STATUS)).status;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Status });
 	}

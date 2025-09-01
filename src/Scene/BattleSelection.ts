@@ -211,7 +211,7 @@ class BattleSelection {
 	 */
 	public moveArrow() {
 		// Updating window informations
-		let window =
+		const window =
 			this.battle.subStep === 2 ? this.battle.windowTargetInformations : this.battle.windowUserInformations;
 		window.content = this.battle.graphicPlayers[this.battle.kindSelection][this.selectedUserTargetIndex()];
 		window.content.update();
@@ -239,7 +239,7 @@ class BattleSelection {
 		this.battle.skill = null;
 
 		// Update skills list
-		let skills = this.battle.user.player.skills;
+		const skills = this.battle.user.player.skills;
 		this.battle.listSkills = [];
 		let ownedSkill: Skill, skill: System.Skill;
 		for (let i = 0, l = skills.length; i < l; i++) {
@@ -297,7 +297,7 @@ class BattleSelection {
 	public onCommandSelected(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		switch (this.battle.battleCommandKind) {
 			case EffectSpecialActionKind.OpenSkills:
-				let skill = (<Graphic.Skill>this.battle.windowChoicesSkills.getCurrentContent()).system;
+				const skill = (<Graphic.Skill>this.battle.windowChoicesSkills.getCurrentContent()).system;
 				if (skill.isPossible()) {
 					this.battle.skill = skill;
 					this.selectTarget(skill.targetKind);
@@ -305,7 +305,7 @@ class BattleSelection {
 				}
 				return;
 			case EffectSpecialActionKind.OpenItems:
-				let item = (<Graphic.Item>this.battle.windowItemDescription.content).item.system;
+				const item = (<Graphic.Item>this.battle.windowItemDescription.content).item.system;
 				if (item.isPossible()) {
 					this.battle.skill = item;
 					this.selectTarget(item.targetKind);
@@ -316,7 +316,7 @@ class BattleSelection {
 				this.battle.battleCommandKind = EffectSpecialActionKind.None;
 				break;
 		}
-		let system = (<Graphic.TextIcon>this.battle.windowChoicesBattleCommands.getCurrentContent()).system;
+		const system = (<Graphic.TextIcon>this.battle.windowChoicesBattleCommands.getCurrentContent()).system;
 		if (isKey) {
 			this.battle.windowChoicesBattleCommands.onKeyPressed(options.key, system);
 		} else {
@@ -331,7 +331,7 @@ class BattleSelection {
 				)).system;
 				this.battle.skill = this.battle.attackSkill;
 				let targetKind = null;
-				let equipments = this.battle.user.player.equip;
+				const equipments = this.battle.user.player.equip;
 				let gameItem: Item;
 				for (i = 0, l = equipments.length; i < l; i++) {
 					gameItem = equipments[i];
@@ -390,7 +390,7 @@ class BattleSelection {
 				this.battle.changeStep(Enum.BattleStep.Animation);
 				return;
 			case EffectSpecialActionKind.None: // If any other skill that is not a special action
-				let skill = <System.Skill>(
+				const skill = <System.Skill>(
 					(<Graphic.TextIcon>this.battle.windowChoicesBattleCommands.getCurrentContent()).system
 				);
 				if (skill.isPossible()) {
@@ -408,9 +408,9 @@ class BattleSelection {
 	 *  When targets are selected.
 	 */
 	public onTargetsSelected() {
-		let battlers = this.battle.battlers[this.battle.kindSelection];
+		const battlers = this.battle.battlers[this.battle.kindSelection];
 		if (this.battle.all) {
-			for (let battler of battlers) {
+			for (const battler of battlers) {
 				if (
 					!battler.hidden &&
 					Interpreter.evaluate(this.battle.skill.targetConditionFormula.getValue(), {
@@ -636,9 +636,9 @@ class BattleSelection {
 		}
 
 		// Arrows
-		let battlers = this.battle.battlers[this.battle.kindSelection];
+		const battlers = this.battle.battlers[this.battle.kindSelection];
 		if (this.battle.all) {
-			for (let battler of battlers) {
+			for (const battler of battlers) {
 				battler.drawArrow();
 			}
 		} else {

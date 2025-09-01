@@ -63,25 +63,25 @@ class MapPortion {
 		for (i = 0; i < Constants.PORTION_SIZE; i++) {
 			this.squareNonEmpty[i] = new Array(Constants.PORTION_SIZE);
 			for (j = 0; j < Constants.PORTION_SIZE; j++) {
-				this.squareNonEmpty[i][j] = new Array();
+				this.squareNonEmpty[i][j] = [];
 			}
 		}
-		let l = Constants.PORTION_SIZE * Constants.PORTION_SIZE * Constants.PORTION_SIZE;
+		const l = Constants.PORTION_SIZE * Constants.PORTION_SIZE * Constants.PORTION_SIZE;
 		this.boundingBoxesLands = new Array(l);
 		this.boundingBoxesSprites = new Array(l);
 		this.boundingBoxesMountains = new Array(l);
 		this.boundingBoxesObjects3D = new Array(l);
 		for (i = 0; i < l; i++) {
-			this.boundingBoxesLands[i] = new Array();
-			this.boundingBoxesSprites[i] = new Array();
-			this.boundingBoxesMountains[i] = new Array();
-			this.boundingBoxesObjects3D[i] = new Array();
+			this.boundingBoxesLands[i] = [];
+			this.boundingBoxesSprites[i] = [];
+			this.boundingBoxesMountains[i] = [];
+			this.boundingBoxesObjects3D[i] = [];
 		}
-		this.staticAutotilesList = new Array();
+		this.staticAutotilesList = [];
 		this.staticMountainsList = new Map();
-		this.objectsList = new Array();
-		this.staticWallsList = new Array();
-		this.staticObjects3DList = new Array();
+		this.objectsList = [];
+		this.staticWallsList = [];
+		this.staticObjects3DList = [];
 	}
 
 	/**
@@ -117,11 +117,11 @@ class MapPortion {
 			return;
 		}
 		const material = Scene.Map.current.textureTileset;
-		let texture = Manager.GL.getMaterialTexture(material);
-		let width = texture ? texture.image.width : 0;
-		let height = texture ? texture.image.height : 0;
-		let geometry = new CustomGeometry();
-		let layers: [Position, Floor][] = [];
+		const texture = Manager.GL.getMaterialTexture(material);
+		const width = texture ? texture.image.width : 0;
+		const height = texture ? texture.image.height : 0;
+		const geometry = new CustomGeometry();
+		const layers: [Position, Floor][] = [];
 		let count = 0;
 
 		for (const { k, v } of json) {
@@ -132,7 +132,7 @@ class MapPortion {
 					const floor = new Floor(v);
 					if (layer > 0) {
 						let j = 0;
-						let m = layers.length;
+						const m = layers.length;
 						for (; j < m; j++) {
 							if (layer <= layers[j][0].layer) {
 								layers.splice(j, 0, [position, floor]);
@@ -213,7 +213,7 @@ class MapPortion {
 			Scene.Map.current.scene.add(this.staticFloorsMesh);
 		}
 
-		for (let list of this.staticAutotilesList) {
+		for (const list of this.staticAutotilesList) {
 			if (list) {
 				for (const autotiles of list) {
 					if (autotiles && autotiles.createMesh()) {
@@ -243,11 +243,11 @@ class MapPortion {
 	 */
 	readSpritesGlobals(json: Record<string, any>) {
 		const material = Scene.Map.current.textureTileset;
-		let staticGeometry = new CustomGeometry();
-		let faceGeometry = new CustomGeometryFace();
+		const staticGeometry = new CustomGeometry();
+		const faceGeometry = new CustomGeometryFace();
 		let staticCount = 0,
 			faceCount = 0;
-		let texture = Manager.GL.getMaterialTexture(material);
+		const texture = Manager.GL.getMaterialTexture(material);
 		if (texture) {
 			let s: Record<string, any>,
 				position: Position,
@@ -321,7 +321,7 @@ class MapPortion {
 	 *  walls
 	 */
 	async readSpritesWalls(json: any[]) {
-		let hash = new Map<number, any>();
+		const hash = new Map<number, any>();
 		for (const { k, v } of json) {
 			const position = Position.createFromArray(k);
 			const sprite = new SpriteWall(v);
@@ -530,11 +530,11 @@ class MapPortion {
 	 *  @param {Record<string, any>} json - Json object describing the objects
 	 */
 	async readObjects(json: Record<string, any>) {
-		let datas = Scene.Map.current.getObjectsAtPortion(this.portion);
-		let objectsM = datas.m;
-		let objectsR = datas.r;
-		let m = objectsM.length;
-		let n = objectsR.length;
+		const datas = Scene.Map.current.getObjectsAtPortion(this.portion);
+		const objectsM = datas.m;
+		const objectsR = datas.r;
+		const m = objectsM.length;
+		const n = objectsR.length;
 
 		// Read
 		let i: number,
@@ -610,9 +610,9 @@ class MapPortion {
 			Scene.Map.current.scene.remove(this.staticWallsList[i]);
 		}
 		this.staticWallsList = [];
-		for (let list of this.staticAutotilesList) {
+		for (const list of this.staticAutotilesList) {
 			if (list) {
-				for (let autotiles of list) {
+				for (const autotiles of list) {
 					Scene.Map.current.scene.remove(autotiles.mesh);
 				}
 			}
@@ -642,7 +642,7 @@ class MapPortion {
 		}
 
 		// Remove moved objects from the scene
-		let datas = Game.current.getPortionDatas(Scene.Map.current.id, this.portion);
+		const datas = Game.current.getPortionDatas(Scene.Map.current.id, this.portion);
 		let objects = datas.min;
 		for (i = 0, l = objects.length; i < l; i++) {
 			objects[i].removeFromScene();
@@ -695,7 +695,7 @@ class MapPortion {
 		if (this.faceSpritesMesh) {
 			(<CustomGeometryFace>this.faceSpritesMesh.geometry).rotate(angle, Sprite.Y_AXIS);
 		}
-		for (let object of this.objectsList) {
+		for (const object of this.objectsList) {
 			object.update(angle);
 		}
 	}
@@ -823,12 +823,12 @@ class MapPortion {
 		positionTarget: Position,
 		kind: ElementMapKind
 	): StructMapElementCollision[] {
-		let result: StructMapElementCollision[] = new Array();
+		const result: StructMapElementCollision[] = [];
 		switch (kind) {
 			case ElementMapKind.Mountains:
-				let a = positionTarget.x - positionSource.x;
-				let c = positionTarget.z - positionSource.z;
-				let collisions = this.boundingBoxesMountains[positionSource.toIndex()];
+				const a = positionTarget.x - positionSource.x;
+				const c = positionTarget.z - positionSource.z;
+				const collisions = this.boundingBoxesMountains[positionSource.toIndex()];
 				let w: number, objCollision: StructMapElementCollision;
 				for (let i = 0, l = collisions.length; i < l; i++) {
 					w = collisions[i].w;

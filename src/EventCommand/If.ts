@@ -69,7 +69,7 @@ class If extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.hasElse = Utils.numToBool(command[iterator.i++]);
@@ -220,7 +220,7 @@ class If extends Base {
 				}
 				switch (this.heroesKind) {
 					case 0:
-						let name = this.heroesNamed.getValue();
+						const name = this.heroesNamed.getValue();
 						result = Player.applySelection(
 							this.heroesSelection,
 							heroesSelection,
@@ -231,7 +231,7 @@ class If extends Base {
 						);
 						break;
 					case 1:
-						let tab = Game.current.getTeam(this.heroesInTeamValue);
+						const tab = Game.current.getTeam(this.heroesInTeamValue);
 						result = Player.applySelection(
 							this.heroesSelection,
 							heroesSelection,
@@ -405,8 +405,8 @@ class If extends Base {
 				result = Mathf.OPERATORS_COMPARE[this.operationArmor](nb, this.armorValue.getValue());
 				break;
 			case 6:
-				let key = Datas.Keyboards.get(this.keyID.getValue());
-				let b = this.keyValue.getValue();
+				const key = Datas.Keyboards.get(this.keyID.getValue());
+				const b = this.keyValue.getValue();
 				result = !b;
 				for (i = 0, l = Inputs.keysPressed.length; i < l; i++) {
 					if (Datas.Keyboards.isKeyEqual(Inputs.keysPressed[i], key)) {
@@ -425,7 +425,7 @@ class If extends Base {
 				break;
 			case 9: {
 				if (!currentState.waitingObject) {
-					let objectID = this.objectIDLookingAt.getValue();
+					const objectID = this.objectIDLookingAt.getValue();
 					MapObject.search(
 						objectID,
 						(result: StructSearchResult) => {
@@ -443,12 +443,12 @@ class If extends Base {
 				}
 			}
 			case 10:
-				let index = Utils.indexOfProp(Game.current.chronometers, 'id', this.chronometerID.getValue());
+				const index = Utils.indexOfProp(Game.current.chronometers, 'id', this.chronometerID.getValue());
 				if (index === -1) {
 					result = false;
 					break;
 				} else {
-					let chrono = Game.current.chronometers[index];
+					const chrono = Game.current.chronometers[index];
 					result = Mathf.OPERATORS_COMPARE[this.chronometerOperation](
 						chrono.getSeconds(),
 						this.chronometerSeconds.getValue()
@@ -457,7 +457,7 @@ class If extends Base {
 				break;
 			case 11: {
 				if (!currentState.waitingObject) {
-					let objectID = this.objectIDClimbing.getValue();
+					const objectID = this.objectIDClimbing.getValue();
 					MapObject.search(
 						objectID,
 						(result: StructSearchResult) => {

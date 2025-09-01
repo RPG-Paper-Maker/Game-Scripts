@@ -87,7 +87,7 @@ class BattleAnimation {
 		switch (this.battle.battleCommandKind) {
 			case EffectSpecialActionKind.ApplyWeapons:
 				if (this.battle.user.player.kind === CharacterKind.Hero) {
-					let equipments = this.battle.user.player.equip;
+					const equipments = this.battle.user.player.equip;
 					let j: number, m: number, gameItem: Item, weapon: System.Weapon;
 					for (i = 0, l = equipments.length; i < l; i++) {
 						gameItem = equipments[i];
@@ -105,7 +105,7 @@ class BattleAnimation {
 				if (this.battle.effects.length === 0) {
 					this.battle.animationUser = new Animation(Datas.Skills.get(1).animationUserID.getValue());
 					this.battle.animationTarget = new Animation(Datas.Skills.get(1).animationTargetID.getValue());
-					let effects = this.battle.attackSkill.getEffects();
+					const effects = this.battle.attackSkill.getEffects();
 					for (i = 1, l = effects.length; i < l; i++) {
 						this.battle.effects.push(effects[i]);
 					}
@@ -121,7 +121,7 @@ class BattleAnimation {
 				this.battle.user.setUsingSkill();
 				break;
 			case EffectSpecialActionKind.OpenItems:
-				let graphic = <Graphic.Item>this.battle.windowChoicesItems.getCurrentContent();
+				const graphic = <Graphic.Item>this.battle.windowChoicesItems.getCurrentContent();
 				this.battle.animationUser = new Animation(content.animationUserID.getValue());
 				this.battle.animationTarget = new Animation(content.animationTargetID.getValue());
 				this.battle.effects = content.getEffects();
@@ -163,7 +163,7 @@ class BattleAnimation {
 	 *  @returns {AnimationEffectConditionKind}
 	 */
 	public getCondition(): AnimationEffectConditionKind {
-		for (let target of this.battle.targets) {
+		for (const target of this.battle.targets) {
 			if (target.tempIsDamagesMiss) {
 				return AnimationEffectConditionKind.Miss;
 			}
@@ -269,7 +269,7 @@ class BattleAnimation {
 							this.battle.currentEffectIndex < l;
 							this.battle.currentEffectIndex++
 						) {
-							let effect = this.battle.effects[this.battle.currentEffectIndex];
+							const effect = this.battle.effects[this.battle.currentEffectIndex];
 							effect.execute(true);
 							if (!effect.canSkip && effect.isAnimated()) {
 								if (effect.kind === Enum.EffectKind.Status) {

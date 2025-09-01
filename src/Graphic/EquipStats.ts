@@ -39,9 +39,9 @@ class EquipStats extends Base {
 		this.displayAll = displayAll;
 
 		// All the graphics
-		this.listStatsNames = new Array();
-		this.listStats = new Array();
-		this.listNewStats = new Array();
+		this.listStatsNames = [];
+		this.listStats = [];
+		this.listNewStats = [];
 		let maxLength = 0;
 		let maxLengthValue = 0;
 		let id: number,
@@ -111,8 +111,8 @@ class EquipStats extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		let xStats = x + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
-		let yStats = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const xStats = x + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+		const yStats = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		let yStat: number, xStat: number;
 		for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
 			yStat = yStats + i * ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);

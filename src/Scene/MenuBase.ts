@@ -142,7 +142,7 @@ abstract class MenuBase extends Base {
 	 * @memberof MenuBase
 	 */
 	partyGraphics(): Graphic.Player[] {
-		let array: Graphic.Player[] = [];
+		const array: Graphic.Player[] = [];
 		for (let i = 0; i < this.party().length; i++) {
 			array[i] = new Graphic.Player(this.party()[i], { isMainMenu: true });
 		}
@@ -159,7 +159,7 @@ abstract class MenuBase extends Base {
 	 * @memberof MenuBase
 	 */
 	heroGraphics(): Graphic.Player {
-		let id = this._activeHero;
+		const id = this._activeHero;
 		return this.partyGraphics()[id];
 	}
 

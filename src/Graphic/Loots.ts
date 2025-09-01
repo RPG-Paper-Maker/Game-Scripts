@@ -25,7 +25,7 @@ class Loots extends Base {
 	constructor(loots: Record<string, Item>[], nb: number) {
 		super();
 
-		let order = [LootKind.Weapon, LootKind.Armor, LootKind.Item];
+		const order = [LootKind.Weapon, LootKind.Armor, LootKind.Item];
 		this.graphicsLoots = new Array(nb);
 		let list: Record<string, Item>, id: string;
 		for (let i = 0, j = 0, l = order.length; i < l; i++) {

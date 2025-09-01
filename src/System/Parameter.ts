@@ -36,7 +36,7 @@ class Parameter extends Base {
 	 *  @returns {System.Parameter[]}
 	 */
 	static readParameters(json: Record<string, any>): Parameter[] {
-		let list = [];
+		const list = [];
 		Utils.readJSONSystemList({ list: Utils.defaultValue(json.p, []), listIDs: list, cons: Parameter });
 		return list;
 	}
@@ -48,9 +48,9 @@ class Parameter extends Base {
 	 *  @returns {Parameter[]}
 	 */
 	static readParametersWithDefault(json: Record<string, any>, list: Parameter[]): Parameter[] {
-		let jsonParameters = json.p;
-		let l = jsonParameters.length;
-		let parameters = new Array(l + 1);
+		const jsonParameters = json.p;
+		const l = jsonParameters.length;
+		const parameters = new Array(l + 1);
 		let jsonParameter: Record<string, any>, parameter: Parameter;
 		for (let i = 0, l = jsonParameters.length; i < l; i++) {
 			jsonParameter = jsonParameters[i];

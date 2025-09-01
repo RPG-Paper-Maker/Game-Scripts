@@ -32,7 +32,7 @@ class Equip extends Base {
 
 		this.length = ScreenResolution.getScreenMinXY(length);
 		this.isPossible = isPossible;
-		let equiped = player.equip[id];
+		const equiped = player.equip[id];
 
 		// All the graphics
 		this.graphicEquipmentName = new Graphic.Text(

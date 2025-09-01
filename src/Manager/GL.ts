@@ -88,7 +88,7 @@ class GL {
 	 *  @returns {Promise<THREE.Material>}
 	 */
 	static async loadTexture(path: string): Promise<THREE.MeshPhongMaterial> {
-		let texture: THREE.Texture = await new Promise((resolve, reject) => {
+		const texture: THREE.Texture = await new Promise((resolve, reject) => {
 			this.textureLoader.load(
 				path,
 				(t: THREE.Texture) => {
@@ -96,9 +96,9 @@ class GL {
 				},
 				() => {},
 				() => {
-					let error = 'Could not load ' + path;
+					const error = 'Could not load ' + path;
 					if (Datas.Systems.ignoreAssetsLoadingErrors) {
-						let t = new THREE.Texture();
+						const t = new THREE.Texture();
 						t.image = new Image();
 						console.warn(error);
 						resolve(t);
@@ -238,9 +238,9 @@ class GL {
 	 *  @returns {Vector2}
 	 */
 	static toScreenPosition(vector: THREE.Vector3, camera: THREE.Camera): THREE.Vector2 {
-		let widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
-		let heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
-		let position = vector.clone();
+		const widthHalf = ScreenResolution.CANVAS_WIDTH / 2;
+		const heightHalf = ScreenResolution.CANVAS_HEIGHT / 2;
+		const position = vector.clone();
 		camera.updateMatrixWorld(true);
 		position.project(camera);
 		return new THREE.Vector2(position.x * widthHalf + widthHalf, -(position.y * heightHalf) + heightHalf);

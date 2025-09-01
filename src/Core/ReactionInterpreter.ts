@@ -153,7 +153,7 @@ class ReactionInterpreter {
 
 		// Update can return different type of values
 		ReactionInterpreter.currentReaction = this;
-		let result = this.currentCommand.data.update(
+		const result = this.currentCommand.data.update(
 			this.currentCommandState,
 			this.currentMapObject,
 			this.currentState

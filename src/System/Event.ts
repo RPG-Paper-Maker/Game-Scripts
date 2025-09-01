@@ -46,9 +46,9 @@ class Event extends Base {
 		);
 
 		// Reactions
-		let jsonReactions = json.r;
+		const jsonReactions = json.r;
 		this.reactions = {};
-		for (let idState in jsonReactions) {
+		for (const idState in jsonReactions) {
 			const reaction = new System.Reaction(jsonReactions[idState]);
 			reaction.event = this;
 			this.reactions[idState] = reaction;
@@ -77,7 +77,7 @@ class Event extends Base {
 	 *  @param {Record<number, System.Reaction>} - reactions The reactions to add
 	 */
 	addReactions(reactions: Record<number, System.Reaction>) {
-		for (let idState in reactions) {
+		for (const idState in reactions) {
 			this.reactions[idState] = reactions[idState];
 		}
 	}

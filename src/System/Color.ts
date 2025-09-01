@@ -45,7 +45,7 @@ class Color extends Base {
 	 *  @returns {Color}
 	 */
 	static createColor(r: number, g: number, b: number, a?: number): Color {
-		let color = new Color();
+		const color = new Color();
 		color.initialize(r, g, b, a);
 		return color;
 	}
@@ -97,14 +97,14 @@ class Color extends Base {
 	getHex(tone?: THREE.Vector4): string {
 		let hex: string;
 		if (tone) {
-			let rgb = new THREE.Vector3(
+			const rgb = new THREE.Vector3(
 				Math.max(Math.min(this.color.r + tone.x, 1), -1),
 				Math.max(Math.min(this.color.g + tone.y, 1), -1),
 				Math.max(Math.min(this.color.b + tone.z, 1), -1)
 			);
-			let w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
-			let intensity = rgb.dot(w);
-			let m = Color.mix(new THREE.Vector3(intensity, intensity, intensity), rgb, tone.w);
+			const w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
+			const intensity = rgb.dot(w);
+			const m = Color.mix(new THREE.Vector3(intensity, intensity, intensity), rgb, tone.w);
 			hex = new THREE.Color(
 				Math.min(Math.max(0, m.x), 1),
 				Math.min(Math.max(0, m.y), 1),

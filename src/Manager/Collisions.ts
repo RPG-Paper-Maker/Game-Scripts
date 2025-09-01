@@ -57,7 +57,7 @@ class Collisions {
 	 *  @returns {THREE.Mesh}
 	 */
 	static createBox(detection: boolean = false): THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> {
-		let box = new THREE.Mesh(
+		const box = new THREE.Mesh(
 			CustomGeometry.createBox(1, 1, 1),
 			detection ? this.BB_MATERIAL_DETECTION : this.BB_MATERIAL
 		);
@@ -75,7 +75,7 @@ class Collisions {
 	 *  @returns {THREE.Mesh}
 	 */
 	static createOrientedBox(): THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> {
-		let box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this.BB_MATERIAL);
+		const box = new THREE.Mesh(CustomGeometry.createBox(1, 1, 1), this.BB_MATERIAL);
 		box['previousTranslate'] = [0, 0, 0];
 		box['previousRotate'] = [0, 0, 0];
 		box['previousScale'] = [1, 1, 1];
@@ -97,7 +97,7 @@ class Collisions {
 			-box['previousTranslate'][1] + box['previousCenter'][1],
 			-box['previousTranslate'][2] + box['previousCenter'][2]
 		);
-		let geometry = <CustomGeometry>box.geometry;
+		const geometry = <CustomGeometry>box.geometry;
 		geometry.rotateFromEuler(
 			new THREE.Euler(
 				(-box['previousRotate'][1] * Math.PI) / 180.0,
@@ -142,7 +142,7 @@ class Collisions {
 			-box['previousTranslate'][1] + box['previousCenter'][1],
 			-box['previousTranslate'][2] + box['previousCenter'][2]
 		);
-		let geometry = <CustomGeometry>box.geometry;
+		const geometry = <CustomGeometry>box.geometry;
 		geometry.rotateFromEuler(
 			new THREE.Euler(
 				(-box['previousRotate'][1] * Math.PI) / 180.0,
@@ -190,7 +190,7 @@ class Collisions {
 	 *  @param {number[]} boundingBox - The bounding box list parameters
 	 */
 	static applyOrientedBoxTransforms(box: THREE.Mesh, boundingBox: number[], center = [0, 0, 0]) {
-		let size = Math.floor(boundingBox[3] / Math.sqrt(2));
+		const size = Math.floor(boundingBox[3] / Math.sqrt(2));
 
 		// Cancel previous geometry transforms
 		box.geometry.translate(
@@ -198,7 +198,7 @@ class Collisions {
 			-box['previousTranslate'][1],
 			-box['previousTranslate'][2]
 		);
-		let geometry = <CustomGeometry>box.geometry;
+		const geometry = <CustomGeometry>box.geometry;
 		geometry.rotateFromEuler(
 			new THREE.Euler(
 				(-box['previousRotate'][1] * Math.PI) / 180.0,
@@ -249,7 +249,7 @@ class Collisions {
 	 */
 	static getBBBoxDetection(force: boolean = false): THREE.Mesh {
 		if (Datas.Systems.showBB && !force) {
-			let box = Collisions.createBox(true);
+			const box = Collisions.createBox(true);
 			this.BB_BOX_DETECTION = box;
 			box.geometry.boundingBox = new THREE.Box3();
 			Scene.Map.current.scene.add(box);
@@ -315,12 +315,12 @@ class Collisions {
 		if (!bbIntersect) {
 			return false;
 		}
-		let facesA = shapeA.getNormals();
-		let facesB = shapeB.getNormals();
-		let verticesA = shapeA.getVertices();
-		let verticesB = shapeB.getVertices();
-		let lA = verticesA.length;
-		let lB = verticesB.length;
+		const facesA = shapeA.getNormals();
+		const facesB = shapeB.getNormals();
+		const verticesA = shapeA.getVertices();
+		const verticesB = shapeB.getVertices();
+		const lA = verticesA.length;
+		const lB = verticesB.length;
 		if (!this.checkNormals(facesA, verticesA, verticesB, lA, lB)) {
 			return false;
 		}
@@ -428,21 +428,21 @@ class Collisions {
 		bbSettings: number[],
 		reverseTestObjects: boolean = false
 	): [boolean, number, Enum.Orientation] {
-		let direction = new THREE.Vector3();
+		const direction = new THREE.Vector3();
 		direction.subVectors(positionAfter, positionBefore).normalize();
-		let jpositionBefore = Position.createFromVector3(positionBefore);
-		let jpositionAfter = Position.createFromVector3(positionAfter);
-		let positionBeforePlus = new THREE.Vector3();
-		let positionAfterPlus = new THREE.Vector3();
-		let testedCollisions = [];
+		const jpositionBefore = Position.createFromVector3(positionBefore);
+		const jpositionAfter = Position.createFromVector3(positionAfter);
+		const positionBeforePlus = new THREE.Vector3();
+		const positionAfterPlus = new THREE.Vector3();
+		const testedCollisions = [];
 		let yMountain = null;
 
 		// Squares to inspect according to the direction of the object
-		let [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
+		const [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
 
 		// Test objects
 		if (reverseTestObjects) {
-			let result = this.checkObjectsRay(positionAfter, object);
+			const result = this.checkObjectsRay(positionAfter, object);
 			if (result !== null) {
 				return result;
 			}
@@ -496,7 +496,7 @@ class Collisions {
 											);
 											mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
 											if (mapPortion) {
-												let [b, y] = this.checkSprites(
+												const [b, y] = this.checkSprites(
 													mapPortion,
 													new Position(
 														jpositionBefore.x + i2,
@@ -542,7 +542,7 @@ class Collisions {
 
 		// Test objects
 		if (!reverseTestObjects) {
-			let result = this.checkObjectsRay(positionAfter, object);
+			const result = this.checkObjectsRay(positionAfter, object);
 			if (result !== null) {
 				return result;
 			}
@@ -557,7 +557,7 @@ class Collisions {
 				mapPortion.squareNonEmpty[jpositionAfter.x % Constants.PORTION_SIZE][
 					jpositionAfter.z % Constants.PORTION_SIZE
 				];
-			let otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
+			const otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
 			if (otherMapPortion) {
 				floors = floors.concat(
 					otherMapPortion.squareNonEmpty[jpositionAfter.x % Constants.PORTION_SIZE][
@@ -566,12 +566,12 @@ class Collisions {
 				);
 			}
 			if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
-				let l = floors.length;
+				const l = floors.length;
 				if (l === 0) {
 					return [true, null, Enum.Orientation.None];
 				} else {
 					let maxY = null;
-					let limitY = positionAfter.y - Datas.Systems.mountainCollisionHeight.getValue();
+					const limitY = positionAfter.y - Datas.Systems.mountainCollisionHeight.getValue();
 					let temp: number;
 					for (i = 0; i < l; i++) {
 						temp = floors[i];
@@ -597,7 +597,7 @@ class Collisions {
 								mapPortion.squareNonEmpty[jpositionBefore.x % Constants.PORTION_SIZE][
 									jpositionBefore.z % Constants.PORTION_SIZE
 								];
-							let otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
+							const otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
 							if (otherMapPortion) {
 								floors = floors.concat(
 									otherMapPortion.squareNonEmpty[jpositionBefore.x % Constants.PORTION_SIZE][
@@ -606,12 +606,12 @@ class Collisions {
 								);
 							}
 							if (yMountain === null && floors.indexOf(positionBefore.y) === -1) {
-								let l = floors.length;
+								const l = floors.length;
 								if (l === 0) {
 									return [null, null, Enum.Orientation.None];
 								} else {
 									let maxY = null;
-									let limitY = positionBefore.y - Datas.Systems.mountainCollisionHeight.getValue();
+									const limitY = positionBefore.y - Datas.Systems.mountainCollisionHeight.getValue();
 									let temp: number;
 									for (i = 0; i < l; i++) {
 										temp = floors[i];
@@ -632,7 +632,7 @@ class Collisions {
 									if (maxY === null) {
 										if (object.orientation === object.previousOrientation) {
 											// If non empty square on front of object, then force move front
-											let positionFront = positionBefore.clone();
+											const positionFront = positionBefore.clone();
 											switch (object.orientationEye) {
 												case Enum.Orientation.North:
 													positionFront.setZ(positionFront.z - Datas.Systems.SQUARE_SIZE / 2);
@@ -661,7 +661,7 @@ class Collisions {
 															Constants.PORTION_SIZE
 													];
 												if (floors.length > 0) {
-													for (let y of floors) {
+													for (const y of floors) {
 														if (y === positionFront.y) {
 															return [false, null, Enum.Orientation.None];
 														}
@@ -806,7 +806,7 @@ class Collisions {
 		}
 
 		// Check objects collisions
-		let portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfter));
+		const portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfter));
 		let i: number, j: number, mapPortion: MapPortion;
 		for (i = 0; i < 2; i++) {
 			for (j = 0; j < 2; j++) {
@@ -889,8 +889,8 @@ class Collisions {
 		direction: THREE.Vector3,
 		testedCollisions: StructMapElementCollision[]
 	): boolean {
-		let index = jpositionAfter.toIndex();
-		let lands = mapPortion.boundingBoxesLands[index];
+		const index = jpositionAfter.toIndex();
+		const lands = mapPortion.boundingBoxesLands[index];
 		if (lands !== null) {
 			let objCollision: StructMapElementCollision, boundingBox: number[], collision: CollisionSquare;
 			for (let i = 0, l = lands.length; i < l; i++) {
@@ -935,7 +935,7 @@ class Collisions {
 		jpositionAfter: Position,
 		direction: THREE.Vector3
 	): boolean {
-		let lands = mapPortion.boundingBoxesLands[jpositionBefore.toIndex()];
+		const lands = mapPortion.boundingBoxesLands[jpositionBefore.toIndex()];
 		if (lands !== null) {
 			let objCollision: StructMapElementCollision, collision: CollisionSquare;
 			for (let i = 0, l = lands.length; i < l; i++) {
@@ -1063,7 +1063,7 @@ class Collisions {
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject
 	): [boolean, number, Enum.Orientation] {
-		let sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
+		const sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
 		let tested = false;
 		if (sprites !== null) {
 			let objCollision: StructMapElementCollision;
@@ -1087,7 +1087,7 @@ class Collisions {
 							if (y === object.position.y) {
 								continue;
 							}
-							let angle = objCollision.b[6];
+							const angle = objCollision.b[6];
 							let force = false,
 								front = false;
 							if (angle === 0 || angle === 180) {
@@ -1158,7 +1158,7 @@ class Collisions {
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject
 	): boolean {
-		let objects3D = mapPortion.boundingBoxesObjects3D[jpositionAfter.toIndex()];
+		const objects3D = mapPortion.boundingBoxesObjects3D[jpositionAfter.toIndex()];
 		if (objects3D !== null) {
 			let objCollision: StructMapElementCollision;
 			for (let i = 0, l = objects3D.length; i < l; i++) {
@@ -1195,7 +1195,7 @@ class Collisions {
 		positionAfter: THREE.Vector3
 	): boolean {
 		// Remove previous
-		let mesh = Datas.Shapes.get(Enum.CustomShapeKind.Collisions, objCollision.id).mesh;
+		const mesh = Datas.Shapes.get(Enum.CustomShapeKind.Collisions, objCollision.id).mesh;
 		if (mesh !== this.currentCustomObject3D) {
 			Scene.Map.current.scene.remove(this.currentCustomObject3D);
 			this.currentCustomObject3D = mesh;
@@ -1211,7 +1211,7 @@ class Collisions {
 			} else {
 				this.currentCustomObject3D.material = this.BB_EMPTY_MATERIAL;
 			}
-			let direction = positionAfter.clone().sub(object.position).normalize();
+			const direction = positionAfter.clone().sub(object.position).normalize();
 			if (this.checkIntersectionMeshes(object.currentBoundingBox, this.currentCustomObject3D, direction)) {
 				return true;
 			}
@@ -1232,11 +1232,11 @@ class Collisions {
 		meshB: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>,
 		direction: THREE.Vector3
 	): boolean {
-		let vertices = meshA.geometry.getVerticesVectors();
-		let raycaster = new THREE.Raycaster();
-		let directionNegate = direction.clone().negate();
+		const vertices = meshA.geometry.getVerticesVectors();
+		const raycaster = new THREE.Raycaster();
+		const directionNegate = direction.clone().negate();
 		let collisionResults: THREE.Intersection[];
-		for (let vertex of vertices) {
+		for (const vertex of vertices) {
 			raycaster.set(vertex, direction);
 			collisionResults = raycaster.intersectObject(meshB);
 			if (collisionResults.length === 0) {
@@ -1331,7 +1331,7 @@ class Collisions {
 	): [boolean, boolean, number] {
 		if (testedCollisions.indexOf(objCollision) === -1) {
 			testedCollisions.push(objCollision);
-			let result = this.checkIntersectionMountain(
+			const result = this.checkIntersectionMountain(
 				mapPortion,
 				jpositionAfter,
 				positionAfter,
@@ -1370,15 +1370,15 @@ class Collisions {
 		objCollision: StructMapElementCollision,
 		object: MapObject
 	): [boolean, number] {
-		let mountain = <Mountain>objCollision.t;
-		let forceAlways = (<System.Mountain>mountain.getSystem()).forceAlways();
-		let forceNever = (<System.Mountain>mountain.getSystem()).forceNever();
+		const mountain = <Mountain>objCollision.t;
+		const forceAlways = (<System.Mountain>mountain.getSystem()).forceAlways();
+		const forceNever = (<System.Mountain>mountain.getSystem()).forceNever();
 		let point = new THREE.Vector2(positionAfter.x, positionAfter.z);
-		let x = objCollision.l.x;
-		let y = objCollision.l.y;
-		let z = objCollision.l.z;
-		let w = objCollision.rw;
-		let h = objCollision.rh;
+		const x = objCollision.l.x;
+		const y = objCollision.l.y;
+		const z = objCollision.l.z;
+		const w = objCollision.rw;
+		const h = objCollision.rh;
 
 		// If not in the height, no test
 		if (positionAfter.y < y || positionAfter.y > y + h) {
@@ -1387,7 +1387,7 @@ class Collisions {
 
 		// if w = 0, check height
 		if (w === 0) {
-			let pass =
+			const pass =
 				forceNever ||
 				-(!forceAlways && y + h <= positionAfter.y + Datas.Systems.mountainCollisionHeight.getValue());
 			if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE, z, z + Datas.Systems.SQUARE_SIZE)) {
@@ -1395,7 +1395,7 @@ class Collisions {
 			} else {
 				if (!pass) {
 					// Collide with BB (avoiding use of checkIntersectionSprite here for perfs issues)
-					let vertices = object.currentBoundingBox.geometry.getVertices();
+					const vertices = object.currentBoundingBox.geometry.getVertices();
 					let vy = 0;
 					for (let i = 0, l = vertices.length; i < l; i += 3) {
 						vy = vertices[i + 1];
@@ -1527,14 +1527,14 @@ class Collisions {
 				}
 			}
 			// Get the intersection point for updating mountain y
-			let plane = new THREE.Plane();
-			let ray = new THREE.Ray(new THREE.Vector3(positionAfter.x, y, positionAfter.z), new THREE.Vector3(0, 1, 0));
-			let newPosition = new THREE.Vector3();
+			const plane = new THREE.Plane();
+			const ray = new THREE.Ray(new THREE.Vector3(positionAfter.x, y, positionAfter.z), new THREE.Vector3(0, 1, 0));
+			const newPosition = new THREE.Vector3();
 			plane.setFromCoplanarPoints(pA, pB, pC);
 			ray.intersectPlane(plane, newPosition);
 
 			// If going down, check if there's a blocking floor
-			let jposition =
+			const jposition =
 				newPosition.y - positionAfter.y < 0
 					? new Position(
 							Math.floor(positionAfter.x / Datas.Systems.SQUARE_SIZE),
@@ -1576,7 +1576,7 @@ class Collisions {
 	 *  @returns {boolean}
 	 */
 	static checkObjects(mapPortion: MapPortion, object: MapObject): boolean {
-		let datas = Scene.Map.current.getObjectsAtPortion(mapPortion.portion);
+		const datas = Scene.Map.current.getObjectsAtPortion(mapPortion.portion);
 		return (
 			this.checkObjectsList(mapPortion.objectsList, object) ||
 			this.checkObjectsList(datas.min, object) ||

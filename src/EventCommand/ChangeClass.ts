@@ -28,7 +28,7 @@ class ChangeClass extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.classID = System.DynamicValue.createValueCommand(command, iterator);
@@ -51,7 +51,7 @@ class ChangeClass extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let newClass = Datas.Classes.get(this.classID.getValue());
+		const newClass = Datas.Classes.get(this.classID.getValue());
 		let targets: Player[];
 		switch (this.selectionKind) {
 			case 0:
@@ -62,7 +62,7 @@ class ChangeClass extends Base {
 				break;
 		}
 		let level: number;
-		for (let target of targets) {
+		for (const target of targets) {
 			target.changedClass = newClass;
 			level = target[Datas.BattleSystems.getLevelStatistic().abbreviation];
 			target.skills = target.system.getSkills(level, newClass);

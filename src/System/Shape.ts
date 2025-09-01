@@ -69,21 +69,21 @@ class Shape extends Base {
 	 *  @returns {Record<string, any>}
 	 */
 	static parse(text: string): Record<string, any> {
-		let object: Record<string, any> = {};
-		let vertices = [];
-		let normals = [];
-		let uvs = [];
-		let v = [];
-		let t = [];
+		const object: Record<string, any> = {};
+		const vertices = [];
+		const normals = [];
+		const uvs = [];
+		const v = [];
+		const t = [];
 		let minVertex = new THREE.Vector3();
 		let maxVertex = new THREE.Vector3();
 		let firstVertex = true;
-		let vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
-		let normal_pattern = /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
-		let uv_pattern = /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
-		let face_pattern =
+		const vertex_pattern = /^v\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
+		const normal_pattern = /^vn\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
+		const uv_pattern = /^vt\s+([\d|\.|\+|\-|e|E]+)\s+([\d|\.|\+|\-|e|E]+)/;
+		const face_pattern =
 			/^f\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))\s+((-?\d+)\/(-?\d+)\/(-?\d+))(?:\s+((-?\d+)\/(-?\d+)\/(-?\d+)))?/;
-		let lines = text.split('\n');
+		const lines = text.split('\n');
 		let arg1: string[],
 			arg2: string[],
 			arg3: string[],
@@ -225,7 +225,7 @@ class Shape extends Base {
 				this.geometry = Shape.parse(atob(base64Data));
 				this.base64 = '';
 			} else {
-				let url = this.getPath();
+				const url = this.getPath();
 				this.geometry = await new Promise((resolve, reject) => {
 					Shape.loader.load(
 						url,
@@ -234,7 +234,7 @@ class Shape extends Base {
 						},
 						() => {},
 						() => {
-							let error = 'Could not load ' + url;
+							const error = 'Could not load ' + url;
 							if (Datas.Systems.ignoreAssetsLoadingErrors) {
 								console.warn(error);
 								resolve({});
@@ -244,9 +244,9 @@ class Shape extends Base {
 						}
 					);
 				});
-				let geometry = new CustomGeometry();
-				let vertices = this.geometry.vertices;
-				let uvs = this.geometry.uvs;
+				const geometry = new CustomGeometry();
+				const vertices = this.geometry.vertices;
+				const uvs = this.geometry.uvs;
 				let count = 0;
 				let vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3;
 				for (let i = 0, l = this.geometry.vertices.length; i < l; i += 3) {

@@ -33,8 +33,8 @@ class Tilesets {
 	 *  Read the JSON file associated to tilesets.
 	 */
 	static async read() {
-		let json = (await Platform.parseFileJSON(Paths.FILE_TILESETS)).list;
-		let l = json.length;
+		const json = (await Platform.parseFileJSON(Paths.FILE_TILESETS)).list;
+		const l = json.length;
 		this.list = new Array(l + 1);
 
 		// Sorting all the tilesets according to the ID
@@ -64,9 +64,9 @@ class Tilesets {
 	 *  @param {string} texturesName - The field name textures
 	 */
 	static async loadPictures(pictureKind: PictureKind, texturesName: string) {
-		let pictures = Datas.Pictures.getListByKind(pictureKind);
-		let l = pictures.length;
-		let textures = new Array(l);
+		const pictures = Datas.Pictures.getListByKind(pictureKind);
+		const l = pictures.length;
+		const textures = new Array(l);
 		textures[0] = Manager.GL.loadTextureEmpty();
 		let picture: System.Picture, path: string;
 		for (let i = 1; i < l; i++) {

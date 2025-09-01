@@ -118,7 +118,7 @@ class KeyboardAssign extends Base {
 		this.compareWait = Scene.KeyboardAssign.MAX_WAIT_TIME_FIRST;
 		this.waitTime = new Date().getTime();
 		this.showPress = true;
-		let graphic = <Graphic.Keyboard>this.windowChoicesMain.getCurrentContent();
+		const graphic = <Graphic.Keyboard>this.windowChoicesMain.getCurrentContent();
 		this.originalSC = graphic.kb.sc;
 		this.currentSC = [];
 		graphic.updateShort(this.currentSC);
@@ -150,7 +150,7 @@ class KeyboardAssign extends Base {
 				this.showPress = false;
 
 				// If nothing, go back to previous sc
-				let graphic = <Graphic.Keyboard>this.windowChoicesMain.getCurrentContent();
+				const graphic = <Graphic.Keyboard>this.windowChoicesMain.getCurrentContent();
 				if (this.currentSC.length === 0) {
 					graphic.updateShort(this.originalSC);
 				} else {
@@ -174,7 +174,7 @@ class KeyboardAssign extends Base {
 				this.currentSC.push([]);
 				this.nextOR = false;
 			}
-			let current = this.currentSC[this.currentSC.length - 1];
+			const current = this.currentSC[this.currentSC.length - 1];
 			if (current.indexOf(key) === -1) {
 				this.compareWait = Scene.KeyboardAssign.MAX_WAIT_TIME_FIRST;
 				this.currentSC[this.currentSC.length - 1].push(key);

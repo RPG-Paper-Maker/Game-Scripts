@@ -68,10 +68,10 @@ class Message extends Graphic.Base {
 	 */
 	setMessage(message: string) {
 		this.tree = new Tree(null);
-		let root = this.tree.root;
+		const root = this.tree.root;
 		let currentNode = root;
 		let lastC = 0;
-		let notClosed = [];
+		const notClosed = [];
 		let c: number, l: number, ch: string, open: boolean, cr: number, tag: string, tagKind: TagKind, split: string[];
 		for (c = 0, l = message.length; c < l; c++) {
 			ch = message.charAt(c);
@@ -226,7 +226,7 @@ class Message extends Graphic.Base {
 		this.heights = [];
 		this.aligns = [];
 		this.heights.push(0);
-		let result = {
+		const result = {
 			g: this.graphics,
 			p: this.positions,
 			a: this.aligns,
@@ -272,8 +272,8 @@ class Message extends Graphic.Base {
 	 *  @param {Record<string, any>} - result The result object
 	 */
 	updateNodes(node: Node, result: Record<string, any>) {
-		let tag = node.data[0];
-		let value = node.data[1];
+		const tag = node.data[0];
+		const value = node.data[1];
 		let bold: boolean,
 			italic: boolean,
 			align: Align,
@@ -315,7 +315,7 @@ class Message extends Graphic.Base {
 						text = Game.current.getHeroByInstanceID(value.getValue()).name;
 						break;
 				}
-				let graphic = new Graphic.Text(text, {
+				const graphic = new Graphic.Text(text, {
 					bold: result.cb,
 					italic: result.ci,
 					fontSize: result.cs,
@@ -334,8 +334,8 @@ class Message extends Graphic.Base {
 				break;
 			}
 			case TagKind.Icon: {
-				let args = value.split(';');
-				let graphic = Datas.Pictures.getPictureCopy(PictureKind.Icons, parseInt(args[0]));
+				const args = value.split(';');
+				const graphic = Datas.Pictures.getPictureCopy(PictureKind.Icons, parseInt(args[0]));
 				graphic.sx = parseInt(args[1]) * Datas.Systems.iconsSize;
 				if (isNaN(graphic.sx)) {
 					graphic.sx = 0;
@@ -491,8 +491,8 @@ class Message extends Graphic.Base {
 		if (Datas.Systems.dbOptions.v_fPosAbove) {
 			this.drawFaceset(x, y, w, h);
 		}
-		let newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Datas.Systems.facesetScalingWidth));
-		let newY = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Datas.Systems.facesetScalingWidth));
+		const newY = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		let offsetY = 0;
 		let align = Align.None;
 		let c = this.heights.length - 1;

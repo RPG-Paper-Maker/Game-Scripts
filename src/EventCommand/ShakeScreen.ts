@@ -28,7 +28,7 @@ class ShakeScreen extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.offset = System.DynamicValue.createValueCommand(command, iterator);
@@ -45,7 +45,7 @@ class ShakeScreen extends Base {
 	 *  @param {number} timeRate - The time rate
 	 */
 	static updateTargetOffset(currentState: Record<string, any>, timeRate: number) {
-		let value = timeRate * currentState.finalDifPos;
+		const value = timeRate * currentState.finalDifPos;
 		Scene.Map.current.camera.targetOffset.x +=
 			value * -Math.sin((Scene.Map.current.camera.horizontalAngle * Math.PI) / 180.0);
 		Scene.Map.current.camera.targetOffset.z +=
@@ -57,19 +57,19 @@ class ShakeScreen extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let t = this.time.getValue();
-		let time = t * 1000;
+		const t = this.time.getValue();
+		const time = t * 1000;
 		let shakeNumber = this.shakeNumber.getValue() * 2;
-		let totalShakes = shakeNumber * t;
+		const totalShakes = shakeNumber * t;
 
 		// Should be pair to have perfect cycles
 		if (totalShakes % 2 !== 0) {
-			let floor = Math.floor(totalShakes / 2) * 2;
-			let ceil = floor + 2;
+			const floor = Math.floor(totalShakes / 2) * 2;
+			const ceil = floor + 2;
 			shakeNumber = (floor !== 0 && totalShakes - floor < ceil - totalShakes ? floor : ceil) / t;
 		}
-		let shakeTime = (1 / (shakeNumber * 2)) * 1000;
-		let offset = this.offset.getValue();
+		const shakeTime = (1 / (shakeNumber * 2)) * 1000;
+		const offset = this.offset.getValue();
 		return {
 			parallel: this.isWaitEnd,
 			offset: offset,

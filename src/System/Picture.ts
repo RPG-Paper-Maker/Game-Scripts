@@ -235,8 +235,8 @@ class Picture extends Base {
 		}
 
 		// Initialize
-		let w = this.width / Datas.Systems.FRAMES;
-		let h = this.height / this.getRows();
+		const w = this.width / Datas.Systems.FRAMES;
+		const h = this.height / this.getRows();
 		this.collisions = new Array(this.width * this.height);
 		let i: number, l: number;
 		for (i = 0, l = this.width * this.height; i < l; i++) {
@@ -304,10 +304,10 @@ class Picture extends Base {
 	 *  @returns {number[][]}
 	 */
 	getSquaresForWall(texture: number[]): number[][] {
-		let w = texture[2];
-		let h = texture[3];
-		let l = w * h;
-		let squares = new Array(l);
+		const w = texture[2];
+		const h = texture[3];
+		const l = w * h;
+		const squares = new Array(l);
 		let x: number, y: number, leftSquare: CollisionSquare, rightSquare: CollisionSquare, square: CollisionSquare;
 		for (let i = 0; i < l; i++) {
 			x = texture[0] + (i % w);
@@ -349,10 +349,10 @@ class Picture extends Base {
 	 *  @returns {number[][]}
 	 */
 	getSquaresForTexture(texture: number[]): number[][] {
-		let w = texture[2];
-		let h = texture[3];
-		let l = w * h;
-		var squares = new Array(l);
+		const w = texture[2];
+		const h = texture[3];
+		const l = w * h;
+		const squares = new Array(l);
 		let square: CollisionSquare;
 		for (let i = 0; i < l; i++) {
 			square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] + Math.floor(i / w));
@@ -367,9 +367,9 @@ class Picture extends Base {
 	 *  @returns {number[][][]}
 	 */
 	getSquaresForStates(image: any): number[][] {
-		let w = Math.floor(image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.FRAMES);
-		let h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / this.getRows());
-		let states = new Array(Datas.Systems.FRAMES * 4);
+		const w = Math.floor(image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.FRAMES);
+		const h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / this.getRows());
+		const states = new Array(Datas.Systems.FRAMES * 4);
 		let j: number;
 		for (let i = 0; i < Datas.Systems.FRAMES; i++) {
 			for (j = 0; j < 4; j++) {

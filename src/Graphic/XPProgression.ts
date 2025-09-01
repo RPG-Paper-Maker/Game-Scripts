@@ -23,7 +23,7 @@ class XPProgression extends Base {
 	constructor() {
 		super();
 
-		let l = Game.current.teamHeroes.length;
+		const l = Game.current.teamHeroes.length;
 		this.graphicCharacters = new Array(l);
 		for (let i = 0; i < l; i++) {
 			this.graphicCharacters[i] = new Graphic.Player(Game.current.teamHeroes[i]);
@@ -34,7 +34,7 @@ class XPProgression extends Base {
 	 *  Update graphics experience.
 	 */
 	updateExperience() {
-		for (let graphic of this.graphicCharacters) {
+		for (const graphic of this.graphicCharacters) {
 			graphic.updateExperience();
 		}
 	}

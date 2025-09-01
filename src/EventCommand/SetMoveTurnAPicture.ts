@@ -34,7 +34,7 @@ class SetMoveTurnAPicture extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.index = System.DynamicValue.createValueCommand(command, iterator);
@@ -67,8 +67,8 @@ class SetMoveTurnAPicture extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let time = this.time.getValue() * 1000;
-		let index = this.index.getValue();
+		const time = this.time.getValue() * 1000;
+		const index = this.index.getValue();
 		let obj: [number, Picture2D], picture: Picture2D;
 		let i: number, l: number;
 		for (i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
@@ -83,12 +83,12 @@ class SetMoveTurnAPicture extends Base {
 			if (this.pictureID) {
 				let prevX = picture.oX;
 				let prevY = picture.oY;
-				let prevW = picture.oW;
-				let prevH = picture.oH;
-				let prevCentered = picture.centered;
-				let prevZoom = picture.zoom;
-				let prevOpacity = picture.opacity;
-				let prevAngle = picture.angle;
+				const prevW = picture.oW;
+				const prevH = picture.oH;
+				const prevCentered = picture.centered;
+				const prevZoom = picture.zoom;
+				const prevOpacity = picture.opacity;
+				const prevAngle = picture.angle;
 				picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, this.pictureID.getValue());
 				if (prevCentered) {
 					prevX += (prevW - picture.oW) / 2;

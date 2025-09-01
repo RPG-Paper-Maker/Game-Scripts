@@ -54,7 +54,7 @@ class Sprite extends MapElement {
 	 *  @param {number[]} texture - Texture UV coords
 	 */
 	static create(kind: ElementMapKind, texture: number[]): Sprite {
-		let sprite = new Sprite();
+		const sprite = new Sprite();
 		sprite.kind = kind;
 		sprite.textureRect = texture;
 		return sprite;
@@ -204,13 +204,13 @@ class Sprite extends MapElement {
 		tileset: boolean,
 		localPosition: THREE.Vector3
 	): [number, StructMapElementCollision[]] {
-		let vecA = Sprite.MODEL[0].clone();
-		let vecB = Sprite.MODEL[1].clone();
-		let vecC = Sprite.MODEL[2].clone();
-		let vecD = Sprite.MODEL[3].clone();
-		let center = new THREE.Vector3();
-		let pos = new THREE.Vector3();
-		let size = new THREE.Vector3(
+		const vecA = Sprite.MODEL[0].clone();
+		const vecB = Sprite.MODEL[1].clone();
+		const vecC = Sprite.MODEL[2].clone();
+		const vecD = Sprite.MODEL[3].clone();
+		const center = new THREE.Vector3();
+		const pos = new THREE.Vector3();
+		const size = new THREE.Vector3(
 			this.textureRect[2] * Datas.Systems.SQUARE_SIZE * position.scaleX,
 			this.textureRect[3] * Datas.Systems.SQUARE_SIZE * position.scaleY,
 			1.0
@@ -234,25 +234,25 @@ class Sprite extends MapElement {
 		let y = (this.textureRect[1] * Datas.Systems.SQUARE_SIZE) / height;
 		let w = (this.textureRect[2] * Datas.Systems.SQUARE_SIZE) / width;
 		let h = (this.textureRect[3] * Datas.Systems.SQUARE_SIZE) / height;
-		let coefX = MapElement.COEF_TEX / width;
-		let coefY = MapElement.COEF_TEX / height;
+		const coefX = MapElement.COEF_TEX / width;
+		const coefY = MapElement.COEF_TEX / height;
 		x += coefX;
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new THREE.Vector2();
-		let texB = new THREE.Vector2();
-		let texC = new THREE.Vector2();
-		let texD = new THREE.Vector2();
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		// Collision
-		let objCollision: StructMapElementCollision[] = new Array();
-		let twidth = Math.floor((this.textureRect[2] * position.scaleX) / 2);
-		let theight = Math.floor((this.textureRect[3] * position.scaleY) / 2);
+		const objCollision: StructMapElementCollision[] = [];
+		const twidth = Math.floor((this.textureRect[2] * position.scaleX) / 2);
+		const theight = Math.floor((this.textureRect[3] * position.scaleY) / 2);
 		if (tileset) {
-			let collisions = Scene.Map.current.mapProperties.tileset.picture.getSquaresForTexture(this.textureRect);
-			for (let rect of collisions) {
+			const collisions = Scene.Map.current.mapProperties.tileset.picture.getSquaresForTexture(this.textureRect);
+			for (const rect of collisions) {
 				objCollision.push({
 					p: position,
 					l: localPosition,
@@ -280,8 +280,8 @@ class Sprite extends MapElement {
 					k: this.kind === ElementMapKind.SpritesFix,
 				});
 			}
-			let climbing = Scene.Map.current.mapProperties.tileset.picture.getSquaresClimbing(this.textureRect);
-			for (let [x, y] of climbing) {
+			const climbing = Scene.Map.current.mapProperties.tileset.picture.getSquaresClimbing(this.textureRect);
+			for (const [x, y] of climbing) {
 				objCollision.push({
 					p: position,
 					l: localPosition,
@@ -339,10 +339,10 @@ class Sprite extends MapElement {
 			// Simple sprite
 			center.setX(center.x + this.xOffset * Datas.Systems.SQUARE_SIZE);
 			center.setZ(center.z + this.zOffset * Datas.Systems.SQUARE_SIZE);
-			let vecSimpleA = vecA.clone();
-			let vecSimpleB = vecB.clone();
-			let vecSimpleC = vecC.clone();
-			let vecSimpleD = vecD.clone();
+			const vecSimpleA = vecA.clone();
+			const vecSimpleB = vecB.clone();
+			const vecSimpleC = vecC.clone();
+			const vecSimpleD = vecD.clone();
 			Sprite.rotateQuadEuler(vecSimpleA, vecSimpleB, vecSimpleC, vecSimpleD, center, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
@@ -360,10 +360,10 @@ class Sprite extends MapElement {
 
 		// Double sprite
 		if (this.kind === ElementMapKind.SpritesDouble || this.kind === ElementMapKind.SpritesQuadra) {
-			let vecDoubleA = vecA.clone();
-			let vecDoubleB = vecB.clone();
-			let vecDoubleC = vecC.clone();
-			let vecDoubleD = vecD.clone();
+			const vecDoubleA = vecA.clone();
+			const vecDoubleB = vecB.clone();
+			const vecDoubleC = vecC.clone();
+			const vecDoubleD = vecD.clone();
 			Sprite.rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, 90, Sprite.Y_AXIS);
 			Sprite.rotateQuadEuler(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
@@ -381,14 +381,14 @@ class Sprite extends MapElement {
 
 			// Quadra sprite
 			if (this.kind === ElementMapKind.SpritesQuadra) {
-				let vecQuadra1A = vecA.clone();
-				let vecQuadra1B = vecB.clone();
-				let vecQuadra1C = vecC.clone();
-				let vecQuadra1D = vecD.clone();
-				let vecQuadra2A = vecA.clone();
-				let vecQuadra2B = vecB.clone();
-				let vecQuadra2C = vecC.clone();
-				let vecQuadra2D = vecD.clone();
+				const vecQuadra1A = vecA.clone();
+				const vecQuadra1B = vecB.clone();
+				const vecQuadra1C = vecC.clone();
+				const vecQuadra1D = vecD.clone();
+				const vecQuadra2A = vecA.clone();
+				const vecQuadra2B = vecB.clone();
+				const vecQuadra2C = vecC.clone();
+				const vecQuadra2D = vecD.clone();
 				Sprite.rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D, center, 45, Sprite.Y_AXIS);
 				Sprite.rotateQuadEuler(
 					vecQuadra1A,
@@ -450,8 +450,8 @@ class Sprite extends MapElement {
 		tileset: boolean,
 		position: Position
 	): [CustomGeometry, [number, StructMapElementCollision[]]] {
-		let geometry = new CustomGeometry();
-		let collisions = this.updateGeometry(geometry, width, height, position, 0, tileset, null);
+		const geometry = new CustomGeometry();
+		const collisions = this.updateGeometry(geometry, width, height, position, 0, tileset, null);
 		geometry.updateAttributes();
 		return [geometry, collisions];
 	}

@@ -43,7 +43,7 @@ class ChangeVariables extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 2,
 		};
 		// Selection
@@ -131,12 +131,12 @@ class ChangeVariables extends Base {
 					currentState.value = this.valueSwitch.getValue();
 					break;
 				case 4: // Map object characteristic
-					let objectID = this.valueMapObject.getValue();
+					const objectID = this.valueMapObject.getValue();
 					currentState.valid = false;
 					MapObject.search(
 						objectID,
 						(result: StructSearchResult) => {
-							let obj = result.object;
+							const obj = result.object;
 							if (!obj) {
 								Platform.showErrorMessage(
 									'Cannot find object ID ' +
@@ -176,7 +176,7 @@ class ChangeVariables extends Base {
 					);
 					break;
 				case 5: // Number of weapon / armor / item in inventory
-					let item = Item.findItem(this.valueItemKind, this.valueItemID.getValue());
+					const item = Item.findItem(this.valueItemKind, this.valueItemID.getValue());
 					currentState.value = item === null ? 0 : item.nb;
 					break;
 				case 6: // Total currency
@@ -194,8 +194,8 @@ class ChangeVariables extends Base {
 					break;
 				case 7: // Hero / enemy stat
 					currentState.value = 0;
-					let id = this.valueHeroEnemyInstanceID.getValue();
-					for (let player of Game.current.teamHeroes) {
+					const id = this.valueHeroEnemyInstanceID.getValue();
+					for (const player of Game.current.teamHeroes) {
 						if (player.instid === id) {
 							currentState.value =
 								player[Datas.BattleSystems.getStatistic(this.valueStatisticID.getValue()).abbreviation];
@@ -248,7 +248,7 @@ class ChangeVariables extends Base {
 							break;
 						case Enum.ChangeVariablesOtherCharacteristics.TotalSecondsCurrentMusic: {
 							currentState.value = 0;
-							let current = Manager.Songs.current[Enum.SongKind.Music];
+							const current = Manager.Songs.current[Enum.SongKind.Music];
 							if (current) {
 								currentState.value = current.seek();
 							}
@@ -256,7 +256,7 @@ class ChangeVariables extends Base {
 						}
 						case Enum.ChangeVariablesOtherCharacteristics.TotalSecondsCurrentBackgroundMusic: {
 							currentState.value = 0;
-							let current = Manager.Songs.current[Enum.SongKind.BackgroundSound];
+							const current = Manager.Songs.current[Enum.SongKind.BackgroundSound];
 							if (current) {
 								currentState.value = current.seek();
 							}

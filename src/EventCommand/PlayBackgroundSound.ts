@@ -25,7 +25,7 @@ class PlayBackgroundSound extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.song = System.PlaySong.createValueCommand(command, iterator, Enum.SongKind.BackgroundSound);

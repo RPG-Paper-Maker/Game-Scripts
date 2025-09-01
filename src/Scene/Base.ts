@@ -60,9 +60,9 @@ abstract class Base {
 	 *  loading asynchronosively.
 	 */
 	constructor(loading: boolean = true, ...args: any) {
-		this.reactionInterpreters = new Array();
-		this.reactionInterpretersEffects = new Array();
-		this.parallelCommands = new Array();
+		this.reactionInterpreters = [];
+		this.reactionInterpretersEffects = [];
+		this.parallelCommands = [];
 		this.initialize(...args);
 		if (loading) {
 			this.loading = true;
@@ -108,7 +108,7 @@ abstract class Base {
 	 */
 	updateInterpreters() {
 		// Index of all the finished parallel reactions
-		let endingReactions = new Array();
+		const endingReactions = [];
 
 		// Updating blocking hero
 		ReactionInterpreter.blockingHero = false;
@@ -149,7 +149,7 @@ abstract class Base {
 	 *  Update all the parallel commands from the scenes.
 	 */
 	updateParallelCommands() {
-		let endingCommands = new Array(); // Index of all the finished commands
+		const endingCommands = []; // Index of all the finished commands
 		let i: number, l: number, previousCommand: Node, command: Node;
 		for (i = 0, l = this.parallelCommands.length; i < l; i++) {
 			previousCommand = this.parallelCommands[i].currentCommand;
@@ -230,7 +230,7 @@ abstract class Base {
 	 *  @param {number} key - the key ID
 	 */
 	onKeyPressed(key: string) {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onKeyPressed(key);
 		}
 	}
@@ -240,7 +240,7 @@ abstract class Base {
 	 *  @param {number} key - the key ID
 	 */
 	onKeyReleased(key: string) {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onKeyReleased(key);
 		}
 	}
@@ -251,7 +251,7 @@ abstract class Base {
 	 *  @return {boolean}
 	 */
 	onKeyPressedRepeat(key: string): boolean {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onKeyPressedRepeat(key);
 		}
 		return true;
@@ -263,7 +263,7 @@ abstract class Base {
 	 *  @return {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onKeyPressedAndRepeat(key);
 		}
 		return true;
@@ -275,7 +275,7 @@ abstract class Base {
 	 *  @param {number} y - The y mouse position on screen
 	 */
 	onMouseDown(x: number, y: number) {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onMouseDown(x, y);
 		}
 	}
@@ -286,7 +286,7 @@ abstract class Base {
 	 *  @param {number} y - The y mouse position on screen
 	 */
 	onMouseMove(x: number, y: number) {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onMouseMove(x, y);
 		}
 	}
@@ -297,7 +297,7 @@ abstract class Base {
 	 *  @param {number} y - The y mouse position on screen
 	 */
 	onMouseUp(x: number, y: number) {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.onMouseUp(x, y);
 		}
 	}
@@ -311,10 +311,10 @@ abstract class Base {
 	 *  Draw the HUD contents on the scene.
 	 */
 	drawHUD() {
-		for (let reaction of this.reactionInterpreters) {
+		for (const reaction of this.reactionInterpreters) {
 			reaction.drawHUD();
 		}
-		for (let command of this.parallelCommands) {
+		for (const command of this.parallelCommands) {
 			command.drawHUD();
 		}
 		// Draw FPS

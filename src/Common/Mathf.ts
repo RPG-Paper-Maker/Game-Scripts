@@ -302,7 +302,7 @@ class Mathf {
 	 *   @returns {number}
 	 */
 	static mod(x: number, m: number): number {
-		let r = x % m;
+		const r = x % m;
 		return r < 0 ? r + m : r;
 	}
 
@@ -347,7 +347,7 @@ class Mathf {
 	 *   @returns {number}
 	 */
 	static variance(value: number, variance: number): number {
-		let v = Math.round((value * variance) / 100);
+		const v = Math.round((value * variance) / 100);
 		return this.random(value - v, value + v);
 	}
 
@@ -375,10 +375,10 @@ class Mathf {
 	 *  @returns {boolean}
 	 */
 	static isPointOnTriangle(p: THREE.Vector2, p0: THREE.Vector2, p1: THREE.Vector2, p2: THREE.Vector2): boolean {
-		let a = (1 / 2) * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
-		let sign = a < 0 ? -1 : 1;
-		let s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) * sign;
-		let t = (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y) * sign;
+		const a = (1 / 2) * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
+		const sign = a < 0 ? -1 : 1;
+		const s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) * sign;
+		const t = (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y) * sign;
 		return s > 0 && t > 0 && s + t < 2 * a * sign;
 	}
 
@@ -390,9 +390,9 @@ class Mathf {
 	 *  @returns {number}
 	 */
 	static orthogonalProjection(u: THREE.Vector3, v: THREE.Vector3): number {
-		let lu = u.length();
-		let lv = v.length();
-		let dot = u.dot(v);
+		const lu = u.length();
+		const lv = v.length();
+		const dot = u.dot(v);
 		return (dot / (lu * lv)) * lu;
 	}
 

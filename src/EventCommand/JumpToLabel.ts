@@ -24,7 +24,7 @@ class JumpToLabel extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.label = System.DynamicValue.createValueCommand(command, iterator);

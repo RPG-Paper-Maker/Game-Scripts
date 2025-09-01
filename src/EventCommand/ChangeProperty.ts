@@ -27,7 +27,7 @@ class ChangeProperty extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.propertyID = System.DynamicValue.createValueCommand(command, iterator);
@@ -43,8 +43,8 @@ class ChangeProperty extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		let propertyID = this.propertyID.getValue();
-		let newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](
+		const propertyID = this.propertyID.getValue();
+		const newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](
 			object.properties[propertyID],
 			this.newValue.getValue()
 		);
@@ -59,9 +59,9 @@ class ChangeProperty extends Base {
 				Game.current.startupProperties[Scene.Map.current.id] = props;
 			}
 		} else {
-			let portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
-			let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
-			let indexProp = portionDatas.pi.indexOf(object.system.id);
+			const portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
+			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+			const indexProp = portionDatas.pi.indexOf(object.system.id);
 			if (indexProp === -1) {
 				props = [];
 				portionDatas.pi.push(object.system.id);

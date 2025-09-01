@@ -34,7 +34,7 @@ class Node {
 	 * @param data
 	 */
 	public add(data: any): Node {
-		let node = new Node(this, data);
+		const node = new Node(this, data);
 		if (this.firstChild === null) {
 			this.firstChild = node;
 		} else {

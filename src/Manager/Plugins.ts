@@ -34,7 +34,7 @@ class Plugins {
 	 *  @async
 	 */
 	static async load() {
-		let plugins = Utils.defaultValue((await Platform.parseFileJSON(Paths.FILE_SCRIPTS)).plugins, []);
+		const plugins = Utils.defaultValue((await Platform.parseFileJSON(Paths.FILE_SCRIPTS)).plugins, []);
 		for (let i = 0, l = plugins.length; i < l; i++) {
 			await this.loadPlugin(plugins[i]);
 		}
@@ -48,10 +48,10 @@ class Plugins {
 	 *  @returns {Promise<boolean>}
 	 */
 	static async loadPlugin(pluginJSON: Record<string, any>): Promise<boolean> {
-		let json = await Platform.parseFileJSON(
+		const json = await Platform.parseFileJSON(
 			Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH + Paths.FILE_PLUGIN_DETAILS
 		);
-		let plugin = new System.Plugin(pluginJSON.id, json);
+		const plugin = new System.Plugin(pluginJSON.id, json);
 		// FIX 01 : plugin wasn't unloaded if not enabled.
 		if (Utils.defaultValue(pluginJSON.checked, true)) {
 			this.register(plugin);
@@ -96,7 +96,7 @@ class Plugins {
 	 *  @param {any[]} args
 	 */
 	static executeCommand(pluginID: number, commandID: number, args: any[]) {
-		let plugin = this.fetch(this.pluginsNames[pluginID]);
+		const plugin = this.fetch(this.pluginsNames[pluginID]);
 		plugin.commands[plugin.commandsNames[commandID]].apply(this, args);
 	}
 
@@ -196,9 +196,9 @@ class Plugins {
 		overwrite: boolean = false,
 		loadOriginalBefore: boolean = true
 	) {
-		let TheAnyPrototype: any = prototype; //force any type, system will not accept otherwise!
+		const TheAnyPrototype: any = prototype; //force any type, system will not accept otherwise!
 		if (!staticType) {
-			let classPrototype = classObject.prototype[prototypeName];
+			const classPrototype = classObject.prototype[prototypeName];
 			if (classPrototype instanceof Function) {
 				if (overwrite) {
 					classObject.prototype[prototypeName] = function (...args) {
@@ -209,7 +209,7 @@ class Plugins {
 					};
 				} else if (loadOriginalBefore) {
 					classObject.prototype[prototypeName] = function (...args) {
-						let result = classPrototype.call(this, ...args);
+						const result = classPrototype.call(this, ...args);
 						this.super = (...arggs) => {
 							classPrototype.call(this, ...arggs);
 						};
@@ -229,8 +229,8 @@ class Plugins {
 				classObject.prototype[prototypeName] = prototype;
 			}
 		} else {
-			let classAnyObject: any = classObject; //force any type, system will not accept otherwise!
-			let classMethod = classAnyObject[prototypeName];
+			const classAnyObject: any = classObject; //force any type, system will not accept otherwise!
+			const classMethod = classAnyObject[prototypeName];
 			if (classMethod instanceof Function) {
 				if (overwrite) {
 					classAnyObject[prototypeName] = function (...args) {
@@ -241,7 +241,7 @@ class Plugins {
 					};
 				} else if (loadOriginalBefore) {
 					classAnyObject[prototypeName] = function (...args) {
-						let result = classMethod.call(this, ...args);
+						const result = classMethod.call(this, ...args);
 						this.super = (...arggs) => {
 							classMethod.call(this, ...arggs);
 						};

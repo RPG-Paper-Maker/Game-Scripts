@@ -51,7 +51,7 @@ class Status {
 	 *  @param {Enum.Align} [align=Enum.Align.Left]
 	 */
 	static drawList(statusList: Status[], x: number, y: number, align: Enum.Align = Enum.Align.Left) {
-		let l = statusList.length;
+		const l = statusList.length;
 		let totalWidth = l * ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
 		let s: Status;
 		if (l > 1) {

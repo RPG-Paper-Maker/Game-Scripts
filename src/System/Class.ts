@@ -53,8 +53,8 @@ class Class extends Translatable {
 		this.experienceBase = Utils.defaultValue(json.eB, -1);
 		this.experienceInflation = Utils.defaultValue(json.eI, -1);
 		this.experienceTable = {};
-		let jsonExperienceTable = json.eT;
-		var i: number, l: number;
+		const jsonExperienceTable = json.eT;
+		let i: number, l: number;
 		if (jsonExperienceTable) {
 			for (i = 0, l = jsonExperienceTable.length; i < l; i++) {
 				this.experienceTable[jsonExperienceTable[i].k] = jsonExperienceTable[i].v;
@@ -102,7 +102,7 @@ class Class extends Translatable {
 	 *  @returns {Record<string, number>}
 	 */
 	getExperienceTable(upClass: Class): Record<string, number> {
-		let list = {};
+		const list = {};
 		let level: string;
 		for (level in this.experienceTable) {
 			list[level] = this.experienceTable[level];
@@ -128,7 +128,7 @@ class Class extends Translatable {
 	 *  @returns {System.StatisticProgression[]}
 	 */
 	getStatisticsProgression(upClass: Class): System.StatisticProgression[] {
-		let list = [];
+		const list = [];
 		let i: number, l: number;
 		for (i = 0, l = this.statisticsProgression.length; i < l; i++) {
 			list.push(this.statisticsProgression[i]);
@@ -157,8 +157,8 @@ class Class extends Translatable {
 	 *  @returns {Skill[]}
 	 */
 	getSkills(upClass: System.Class, level: number): Skill[] {
-		let all = this.getSkillsWithoutDuplicate(upClass);
-		let skills = [];
+		const all = this.getSkillsWithoutDuplicate(upClass);
+		const skills = [];
 		let skill: System.ClassSkill;
 		for (let i = 0, l = all.length; i < l; i++) {
 			skill = all[i];
@@ -176,8 +176,8 @@ class Class extends Translatable {
 	 *  @returns {Skill[]}
 	 */
 	getLearnedSkills(upClass: System.Class, level: number): Skill[] {
-		let all = this.getSkillsWithoutDuplicate(upClass);
-		let skills = [];
+		const all = this.getSkillsWithoutDuplicate(upClass);
+		const skills = [];
 		let skill: System.ClassSkill;
 		for (let i = 0, l = all.length; i < l; i++) {
 			skill = all[i];
@@ -194,7 +194,7 @@ class Class extends Translatable {
 	 *  @returns {System.ClassSkill[]}
 	 */
 	getSkillsWithoutDuplicate(upClass: Class): System.ClassSkill[] {
-		let skills: System.ClassSkill[] = [];
+		const skills: System.ClassSkill[] = [];
 		let i: number,
 			l: number,
 			j: number,

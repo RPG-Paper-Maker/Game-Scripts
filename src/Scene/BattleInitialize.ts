@@ -64,7 +64,7 @@ class BattleInitialize {
 	 *  Initialize allies battlers.
 	 */
 	initializeAlliesBattlers() {
-		let l = Game.current.teamHeroes.length;
+		const l = Game.current.teamHeroes.length;
 		this.battle.battlers[CharacterKind.Hero] = new Array(l);
 		this.battle.players[CharacterKind.Hero] = new Array(l);
 		this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
@@ -100,7 +100,7 @@ class BattleInitialize {
 	 *  Initialize enemies battlers.
 	 */
 	initializeEnemiesBattlers() {
-		let l = this.battle.troop.list.length;
+		const l = this.battle.troop.list.length;
 		this.battle.battlers[CharacterKind.Monster] = new Array(l);
 		this.battle.players[CharacterKind.Monster] = new Array(l);
 		this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
@@ -186,9 +186,9 @@ class BattleInitialize {
 	 *  Initialize window commands.
 	 */
 	public initializeWindowCommands() {
-		let l = Datas.BattleSystems.battleCommandsOrder.length;
-		let listContent: Graphic.TextIcon[] = new Array(l);
-		let listCallbacks = new Array(l);
+		const l = Datas.BattleSystems.battleCommandsOrder.length;
+		const listContent: Graphic.TextIcon[] = new Array(l);
+		const listCallbacks = new Array(l);
 		let skill: System.Skill;
 		for (let i = 0; i < l; i++) {
 			skill = Datas.Skills.get(Datas.BattleSystems.getBattleCommand(Datas.BattleSystems.battleCommandsOrder[i]));
@@ -279,7 +279,7 @@ class BattleInitialize {
 	 */
 	initializeMusic() {
 		this.battle.musicMap = System.PlaySong.currentPlayingMusic;
-		let song = Manager.Songs.current[SongKind.Music];
+		const song = Manager.Songs.current[SongKind.Music];
 		this.battle.musicMapTime = song === null ? 0 : song.seek();
 		if (Game.current.battleMusic.songID.getValue() !== -1) {
 			Game.current.battleMusic.playMusic();

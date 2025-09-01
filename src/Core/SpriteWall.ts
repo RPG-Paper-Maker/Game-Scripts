@@ -64,14 +64,14 @@ class SpriteWall extends MapElement {
 		pictureID: number,
 		count: number
 	): [number, StructMapElementCollision[]] {
-		let vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
-		let vecB = new THREE.Vector3(0.5, 1.0, 0.0);
-		let vecC = new THREE.Vector3(0.5, 0.0, 0.0);
-		let vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
-		let center = new THREE.Vector3();
-		let size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
-		let angle = position.angleY;
-		let localPosition = position.toVector3();
+		const vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
+		const vecB = new THREE.Vector3(0.5, 1.0, 0.0);
+		const vecC = new THREE.Vector3(0.5, 0.0, 0.0);
+		const vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
+		const center = new THREE.Vector3();
+		const size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
+		const angle = position.angleY;
+		const localPosition = position.toVector3();
 
 		// Scale
 		vecA.multiply(size);
@@ -87,29 +87,29 @@ class SpriteWall extends MapElement {
 		center.add(localPosition);
 
 		// Getting UV coordinates
-		let textureRect: number[] = [this.kind, 0, 1, Math.floor(height / Datas.Systems.SQUARE_SIZE)];
+		const textureRect: number[] = [this.kind, 0, 1, Math.floor(height / Datas.Systems.SQUARE_SIZE)];
 		let x: number = (textureRect[0] * Datas.Systems.SQUARE_SIZE) / width;
 		let y = textureRect[1];
 		let w = Datas.Systems.SQUARE_SIZE / width;
 		let h = 1.0;
-		let coefX: number = MapElement.COEF_TEX / width;
-		let coefY: number = MapElement.COEF_TEX / height;
+		const coefX: number = MapElement.COEF_TEX / width;
+		const coefY: number = MapElement.COEF_TEX / height;
 		x += coefX;
 		y += coefY;
 		w -= coefX * 2;
 		h -= coefY * 2;
-		let texA = new THREE.Vector2();
-		let texB = new THREE.Vector2();
-		let texC = new THREE.Vector2();
-		let texD = new THREE.Vector2();
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
 		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
 
 		// Collision
-		let objCollision: StructMapElementCollision[] = [];
+		const objCollision: StructMapElementCollision[] = [];
 		let collisions: number[][] = [];
-		let wall = Datas.SpecialElements.getWall(this.id);
+		const wall = Datas.SpecialElements.getWall(this.id);
 		if (wall) {
-			let picture = Datas.Pictures.get(PictureKind.Walls, pictureID);
+			const picture = Datas.Pictures.get(PictureKind.Walls, pictureID);
 			if (picture) {
 				collisions = picture.getSquaresForWall(textureRect);
 			}
@@ -134,8 +134,8 @@ class SpriteWall extends MapElement {
 					h: textureRect[3],
 					k: true,
 				});
-				let climbing = picture.getSquaresClimbing(textureRect);
-				for (let [x, y] of climbing) {
+				const climbing = picture.getSquaresClimbing(textureRect);
+				for (const [x, y] of climbing) {
 					objCollision.push({
 						p: position,
 						l: localPosition,

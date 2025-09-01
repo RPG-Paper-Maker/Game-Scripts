@@ -43,8 +43,8 @@ class Reaction extends Base {
 		this.blockingHero = json.bh;
 
 		// Read commands
-		let jsonCommands = json.c;
-		let commands = new Tree('root');
+		const jsonCommands = json.c;
+		const commands = new Tree('root');
 		this.readChildrenJSON(jsonCommands, commands.root);
 		this.commands = commands;
 	}

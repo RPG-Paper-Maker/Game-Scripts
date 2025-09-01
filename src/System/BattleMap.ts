@@ -34,7 +34,7 @@ class BattleMap extends Base {
 	 *  @returns {System.BattleMap}
 	 */
 	static create(idMap: number, position: Position): BattleMap {
-		let map = new BattleMap();
+		const map = new BattleMap();
 		map.idMap = idMap;
 		map.position = position;
 		return map;

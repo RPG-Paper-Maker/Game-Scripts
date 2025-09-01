@@ -36,7 +36,7 @@ class SpecialElements {
 	 *  Read the JSON file associated to special elements.
 	 */
 	static async read() {
-		let json = await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS);
+		const json = await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS);
 		this.autotiles = [];
 		Utils.readJSONSystemList({ list: json.autotiles, listIDs: this.autotiles, cons: System.Autotile });
 		this.walls = [];
@@ -97,7 +97,7 @@ class SpecialElements {
 	 *  @returns {Promise<TextureBundle>}
 	 */
 	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
-		let autotile = this.getAutotile(id);
+		const autotile = this.getAutotile(id);
 		let pictureID = Game.current.textures.autotiles[id];
 		if (pictureID === undefined) {
 			pictureID = autotile.pictureID;
@@ -108,13 +108,13 @@ class SpecialElements {
 			let result = null;
 			let textureAutotile: TextureBundle = null;
 			let texture = new THREE.Texture();
-			texturesAutotile = new Array();
+			texturesAutotile = [];
 			this.texturesAutotiles[pictureID] = texturesAutotile;
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
 			Platform.canvasRendering.width = 64 * Datas.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
 			if (autotile) {
-				let picture = Datas.Pictures.get(Enum.PictureKind.Autotiles, pictureID);
+				const picture = Datas.Pictures.get(Enum.PictureKind.Autotiles, pictureID);
 				if (picture) {
 					result = await this.loadTextureAutotile(
 						textureAutotile,
@@ -157,8 +157,8 @@ class SpecialElements {
 		offset: number,
 		isAnimated: boolean
 	): Promise<any[]> {
-		let frames = isAnimated ? Datas.Systems.autotilesFrames : 1;
-		let picture2D = await Picture2D.create(picture);
+		const frames = isAnimated ? Datas.Systems.autotilesFrames : 1;
+		const picture2D = await Picture2D.create(picture);
 
 		// Check if correct format size
 		this.checkPictureSize(
@@ -173,9 +173,9 @@ class SpecialElements {
 		);
 
 		// Get width and height
-		let width = Math.floor(picture2D.image.width / 2 / Datas.Systems.SQUARE_SIZE) / frames;
-		let height = Math.floor(picture2D.image.height / 3 / Datas.Systems.SQUARE_SIZE);
-		let size = width * height;
+		const width = Math.floor(picture2D.image.width / 2 / Datas.Systems.SQUARE_SIZE) / frames;
+		const height = Math.floor(picture2D.image.height / 3 / Datas.Systems.SQUARE_SIZE);
+		const size = width * height;
 
 		// Update picture width and height for collisions settings
 		picture.width = width;
@@ -224,10 +224,10 @@ class SpecialElements {
 	 */
 	static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[]) {
 		let row = -1;
-		let offsetX = point[0] * 2 * Datas.Systems.SQUARE_SIZE;
-		let offsetY = point[1] * 3 * Datas.Systems.SQUARE_SIZE;
-		let sDiv = Math.floor(Datas.Systems.SQUARE_SIZE / 2);
-		let y = offset * Autotiles.COUNT_LIST * 2;
+		const offsetX = point[0] * 2 * Datas.Systems.SQUARE_SIZE;
+		const offsetY = point[1] * 3 * Datas.Systems.SQUARE_SIZE;
+		const sDiv = Math.floor(Datas.Systems.SQUARE_SIZE / 2);
+		const y = offset * Autotiles.COUNT_LIST * 2;
 		let a: number, b: number, c: number, d: number, count: number, lA: number, lB: number, lC: number, lD: number;
 		for (a = 0; a < Autotiles.COUNT_LIST; a++) {
 			lA = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_A[a]];
@@ -318,7 +318,7 @@ class SpecialElements {
 	 *  @returns {Promise<THREE.MeshPhongMaterial>}
 	 */
 	static async loadWallTexture(id: number): Promise<THREE.MeshPhongMaterial> {
-		let wall = this.getWall(id);
+		const wall = this.getWall(id);
 		let pictureID = Game.current.textures.walls[id];
 		if (pictureID === undefined) {
 			pictureID = wall.pictureID;
@@ -326,7 +326,7 @@ class SpecialElements {
 		let textureWall = this.texturesWalls[pictureID];
 		if (Utils.isUndefined(textureWall)) {
 			if (wall) {
-				let picture = Datas.Pictures.get(Enum.PictureKind.Walls, pictureID);
+				const picture = Datas.Pictures.get(Enum.PictureKind.Walls, pictureID);
 				if (picture) {
 					textureWall = await this.loadTextureWall(picture, id);
 				} else {
@@ -348,10 +348,10 @@ class SpecialElements {
 	 *  @returns {THREE.MeshPhongMaterial}
 	 */
 	static async loadTextureWall(picture: System.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
-		let picture2D = await Picture2D.create(picture);
-		let texture = new THREE.Texture();
-		let w = picture2D.image.width;
-		let h = picture2D.image.height;
+		const picture2D = await Picture2D.create(picture);
+		const texture = new THREE.Texture();
+		const w = picture2D.image.width;
+		const h = picture2D.image.height;
 		if (w === 0 || h === 0) {
 			return Manager.GL.loadTextureEmpty();
 		}
@@ -375,8 +375,8 @@ class SpecialElements {
 		Platform.canvasRendering.width = w + Datas.Systems.SQUARE_SIZE;
 		Platform.canvasRendering.height = h;
 		Platform.ctxr.drawImage(picture2D.image, 0, 0);
-		let left = Platform.ctxr.getImageData(0, 0, Math.floor(Datas.Systems.SQUARE_SIZE / 2), h);
-		let right = Platform.ctxr.getImageData(
+		const left = Platform.ctxr.getImageData(0, 0, Math.floor(Datas.Systems.SQUARE_SIZE / 2), h);
+		const right = Platform.ctxr.getImageData(
 			w - Math.floor(Datas.Systems.SQUARE_SIZE / 2),
 			0,
 			Math.floor(Datas.Systems.SQUARE_SIZE / 2),
@@ -409,7 +409,7 @@ class SpecialElements {
 	 *  @returns {Promise<TextureBundle>}
 	 */
 	static async loadMountainTexture(id: number): Promise<TextureBundle> {
-		let mountain = this.getMountain(id);
+		const mountain = this.getMountain(id);
 		let pictureID = Game.current.textures.mountains[id];
 		if (pictureID === undefined) {
 			pictureID = mountain.pictureID;
@@ -423,8 +423,8 @@ class SpecialElements {
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
 			Platform.canvasRendering.width = 4 * Datas.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = 7 * Datas.Systems.SQUARE_SIZE;
-			this.texturesMountains = new Array();
-			let picture = mountain ? Datas.Pictures.get(Enum.PictureKind.Mountains, pictureID) : null;
+			this.texturesMountains = [];
+			const picture = mountain ? Datas.Pictures.get(Enum.PictureKind.Mountains, pictureID) : null;
 			result = await this.loadTextureMountain(textureMountain, texture, picture, offset, id);
 			if (result !== null) {
 				textureMountain = result[0];
@@ -454,10 +454,10 @@ class SpecialElements {
 		offset: number,
 		id: number
 	): Promise<any[]> {
-		let picture2D = await Picture2D.create(picture);
-		let width = 3;
-		let height = 3;
-		let size = 9;
+		const picture2D = await Picture2D.create(picture);
+		const width = 3;
+		const height = 3;
+		const size = 9;
 
 		// Check if correct format size
 		this.checkPictureSize(
@@ -507,9 +507,9 @@ class SpecialElements {
 	 *  @param {number} id - The picture id
 	 */
 	static paintPictureMountain(img: HTMLImageElement, offset: number, id: number) {
-		let y = offset * 4 * Datas.Systems.SQUARE_SIZE;
-		let sourceSize = 3 * Datas.Systems.SQUARE_SIZE;
-		let sDiv = Math.round(Datas.Systems.SQUARE_SIZE / 2);
+		const y = offset * 4 * Datas.Systems.SQUARE_SIZE;
+		const sourceSize = 3 * Datas.Systems.SQUARE_SIZE;
+		const sDiv = Math.round(Datas.Systems.SQUARE_SIZE / 2);
 
 		// Draw original image
 		Platform.ctxr.drawImage(img, 0, y);
@@ -646,16 +646,16 @@ class SpecialElements {
 	 *  @returns {Promise<THREE.MeshPhongMaterial>}
 	 */
 	static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongMaterial> {
-		let object3D = this.getObject3D(id);
+		const object3D = this.getObject3D(id);
 		let pictureID = Game.current.textures.objects3D[id];
 		if (pictureID === undefined) {
 			pictureID = object3D.pictureID;
 		}
 		let textureObject3D = this.texturesObjects3D[pictureID];
 		if (Utils.isUndefined(textureObject3D)) {
-			let picture = Datas.Pictures.get(Enum.PictureKind.Objects3D, pictureID);
+			const picture = Datas.Pictures.get(Enum.PictureKind.Objects3D, pictureID);
 			if (picture) {
-				let path = picture.getPath();
+				const path = picture.getPath();
 				textureObject3D = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();
@@ -684,8 +684,8 @@ class SpecialElements {
 		strictw: boolean,
 		stricth: boolean
 	) {
-		let isOKW = strictw ? w === cw : w % cw === 0;
-		let isOKH = stricth ? h === ch : h % ch === 0;
+		const isOKW = strictw ? w === cw : w % cw === 0;
+		const isOKH = stricth ? h === ch : h % ch === 0;
 		let error = 'Wrong ' + type + ' size for ' + name + '. ';
 		if (!isOKW) {
 			error += 'Width should be ' + (strictw ? '' : 'a multiple of ') + cw + " but it's currently " + w + '.';

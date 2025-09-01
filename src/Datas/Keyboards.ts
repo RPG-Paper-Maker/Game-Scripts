@@ -35,7 +35,7 @@ class Keyboards {
 	 */
 	static isKeyEqual(key: string, abr: System.Keyboard): boolean {
 		if (abr) {
-			let sc = abr.sc;
+			const sc = abr.sc;
 			let m: number;
 			for (let i = 0, l = sc.length; i < l; i++) {
 				m = sc[i].length;
@@ -57,11 +57,11 @@ class Keyboards {
 	 *  @async
 	 */
 	static async read() {
-		let json = await Platform.parseFileJSON(Paths.FILE_KEYBOARD);
+		const json = await Platform.parseFileJSON(Paths.FILE_KEYBOARD);
 
 		// Shortcuts
-		let jsonList = json.list;
-		let l = jsonList.length;
+		const jsonList = json.list;
+		const l = jsonList.length;
 		this.list = new Array(l + 1);
 		this.listOrdered = new Array(l);
 		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: System.Keyboard, sc: string[][];
@@ -104,8 +104,8 @@ class Keyboards {
 	 *  @returns {GraphicKeyboard[]}
 	 */
 	static getCommandsGraphics(): Graphic.Keyboard[] {
-		let l = this.listOrdered.length;
-		let list = new Array(l);
+		const l = this.listOrdered.length;
+		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = new Graphic.Keyboard(this.listOrdered[i]);
 		}
@@ -118,8 +118,8 @@ class Keyboards {
 	 *  @returns {Function[]}
 	 */
 	static getCommandsActions(): Function[] {
-		let l = this.listOrdered.length;
-		let list = new Array(l);
+		const l = this.listOrdered.length;
+		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = Scene.KeyboardAssign.prototype.updateKey;
 		}

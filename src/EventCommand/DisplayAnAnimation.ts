@@ -28,7 +28,7 @@ class DisplayAnAnimation extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
@@ -42,7 +42,7 @@ class DisplayAnAnimation extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let animation = new Animation(this.animationID.getValue());
+		const animation = new Animation(this.animationID.getValue());
 		return {
 			parallel: this.isWaitEnd,
 			animation: animation,
@@ -62,7 +62,7 @@ class DisplayAnAnimation extends Base {
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (currentState.parallel) {
 			if (!currentState.waitingObject) {
-				let objectID = this.objectID.getValue();
+				const objectID = this.objectID.getValue();
 				MapObject.search(
 					objectID,
 					(result: StructSearchResult) => {

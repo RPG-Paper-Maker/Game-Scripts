@@ -74,9 +74,9 @@ class BattleEnemyAttack {
 	 */
 	definePossibleActions(actions: System.MonsterAction[], restriction: Enum.StatusRestrictionsKind): number {
 		let priorities = 0;
-		let player = this.battle.user.player;
-		let monster = <System.Monster>player.system;
-		let systemActions = monster.actions;
+		const player = this.battle.user.player;
+		const monster = <System.Monster>player.system;
+		const systemActions = monster.actions;
 
 		// If status can't do anything, do nothing
 		if (this.battle.user.containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything)) {
@@ -131,7 +131,7 @@ class BattleEnemyAttack {
 				continue;
 			}
 			if (action.actionKind === MonsterActionKind.UseSkill) {
-				let skill = Datas.Skills.get(action.skillID.getValue());
+				const skill = Datas.Skills.get(action.skillID.getValue());
 				if (
 					!skill.isPossible() ||
 					this.battle.user.containsRestriction(Enum.StatusRestrictionsKind.CantUseSkills)
@@ -181,10 +181,10 @@ class BattleEnemyAttack {
 	 *  Define the action to do.
 	 */
 	defineAction(restriction: Enum.StatusRestrictionsKind = Enum.StatusRestrictionsKind.None) {
-		let actions = [];
+		const actions = [];
 		this.battle.action = this.battle.actionDoNothing;
 		this.battle.battleCommandKind = EffectSpecialActionKind.DoNothing;
-		let priorities = this.definePossibleActions(actions, restriction);
+		const priorities = this.definePossibleActions(actions, restriction);
 
 		// If no action
 		if (priorities <= 0) {
@@ -192,7 +192,7 @@ class BattleEnemyAttack {
 		}
 
 		// Random
-		let random = Mathf.random(0, 100);
+		const random = Mathf.random(0, 100);
 		let step = 0;
 		let value: number, action: System.MonsterAction;
 		for (let i = 0, l = actions.length; i < l; i++) {
@@ -208,7 +208,7 @@ class BattleEnemyAttack {
 		// Define battle command kind
 		switch (this.battle.action.actionKind) {
 			case MonsterActionKind.UseSkill:
-				let effect = Datas.Skills.get(this.battle.action.skillID.getValue()).getEffects()[0];
+				const effect = Datas.Skills.get(this.battle.action.skillID.getValue()).getEffects()[0];
 				if (effect) {
 					this.battle.battleCommandKind =
 						effect.kind === EffectKind.SpecialActions
@@ -223,7 +223,7 @@ class BattleEnemyAttack {
 				this.battle.battleCommandKind = EffectSpecialActionKind.OpenItems;
 
 				// If item, use one
-				let id = this.battle.action.itemID.getValue();
+				const id = this.battle.action.itemID.getValue();
 				this.battle.user.itemsNumbers[id] =
 					(this.battle.user.itemsNumbers[id]
 						? this.battle.user.itemsNumbers[id]
@@ -336,8 +336,8 @@ class BattleEnemyAttack {
 		}
 
 		// Select one enemy / ally according to target kind
-		let l = this.battle.battlers[side].length;
-		let targetKindAction =
+		const l = this.battle.battlers[side].length;
+		const targetKindAction =
 			restriction === Enum.StatusRestrictionsKind.None
 				? this.battle.action.targetKind
 				: MonsterActionTargetKind.Random;
@@ -358,7 +358,7 @@ class BattleEnemyAttack {
 					i = i % l;
 				}
 				target = this.battle.battlers[side][i];
-				let minHP = target.player['hp'];
+				const minHP = target.player['hp'];
 				let tempTarget: Battler, tempHP: Battler;
 				while (i < l) {
 					tempTarget = this.battle.battlers[side][i];

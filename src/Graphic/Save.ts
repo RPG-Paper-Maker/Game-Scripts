@@ -40,7 +40,7 @@ class Save extends Base {
 			this.graphicTimer = new Graphic.Text(Utils.getStringDate(this.game.playTime.getSeconds()), {
 				align: Align.Right,
 			});
-			let l = this.game.teamHeroes.length;
+			const l = this.game.teamHeroes.length;
 			this.graphicPlayers = new Array(l);
 			let graphic: Graphic.Player;
 			for (let i = 0; i < l; i++) {

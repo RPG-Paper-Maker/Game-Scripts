@@ -163,7 +163,7 @@ class Object3DBox extends Object3D {
 	 *  @returns {Core.Object3DBox}
 	 */
 	static create(datas: System.Object3D): Object3DBox {
-		let object = new Object3DBox(undefined, datas);
+		const object = new Object3DBox(undefined, datas);
 		object.id = datas.id;
 		return object;
 	}
@@ -199,8 +199,8 @@ class Object3DBox extends Object3D {
 	 *  @return {number[]}
 	 */
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]] {
-		let coef = 0.01;
-		let localPosition = position.toVector3(false);
+		const coef = 0.01;
+		const localPosition = position.toVector3(false);
 		if (this.datas.isTopLeft) {
 			localPosition.setX(
 				localPosition.x - Math.floor(Datas.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterX() + coef
@@ -213,19 +213,19 @@ class Object3DBox extends Object3D {
 			localPosition.setZ(localPosition.z + position.getPixelsCenterZ() + coef);
 		}
 		localPosition.setY(localPosition.y + coef);
-		let size = this.datas.getSizeVector().multiply(position.toScaleVector());
+		const size = this.datas.getSizeVector().multiply(position.toScaleVector());
 		size.setX(size.x - 2 * coef);
 		size.setY(size.y - 2 * coef);
 		size.setZ(size.z - 2 * coef);
-		let w = this.datas.widthPixels();
-		let h = this.datas.heightPixels();
-		let d = this.datas.depthPixels();
+		const w = this.datas.widthPixels();
+		const h = this.datas.heightPixels();
+		const d = this.datas.depthPixels();
 
 		// Textures
-		let textures = Object3DBox.TEXTURES_VALUES.slice(0);
+		const textures = Object3DBox.TEXTURES_VALUES.slice(0);
 		if (!this.datas.stretch) {
-			let totalX = d * 2 + w * 2;
-			let totalY = d * 2 + h;
+			const totalX = d * 2 + w * 2;
+			const totalY = d * 2 + h;
 			textures[1] = d / totalX;
 			textures[2] = (d + w) / totalX;
 			textures[3] = (2 * d + w) / totalX;
@@ -247,7 +247,7 @@ class Object3DBox extends Object3D {
 			texC: THREE.Vector2,
 			texD: THREE.Vector2;
 		for (let i = 0; i < Object3DBox.NB_VERTICES; i += 4) {
-			let vertices = this.datas.isTopLeft ? Object3DBox.VERTICES : Object3DBox.VERTICES_CENTER;
+			const vertices = this.datas.isTopLeft ? Object3DBox.VERTICES : Object3DBox.VERTICES_CENTER;
 			vecA = vertices[i].clone();
 			vecB = vertices[i + 1].clone();
 			vecC = vertices[i + 2].clone();
@@ -273,11 +273,11 @@ class Object3DBox extends Object3D {
 		}
 
 		// Collisions
-		let objCollision: StructMapElementCollision[] = new Array();
+		const objCollision: StructMapElementCollision[] = [];
 		if (this.datas.collisionKind === ObjectCollisionKind.Perfect) {
-			let ws = Math.floor(this.datas.width() * position.scaleX);
-			let hs = Math.floor(this.datas.height() * position.scaleY);
-			let ds = Math.floor(this.datas.depth() * position.scaleZ);
+			const ws = Math.floor(this.datas.width() * position.scaleX);
+			const hs = Math.floor(this.datas.height() * position.scaleY);
+			const ds = Math.floor(this.datas.depth() * position.scaleZ);
 			objCollision.push({
 				p: position,
 				l: localPosition,
@@ -313,8 +313,8 @@ class Object3DBox extends Object3D {
 	 *  @return {[Core.CustomGeometry, [number, StructMapElementCollision[]]]}
 	 */
 	createGeometry(position: Position): [CustomGeometry, [number, StructMapElementCollision[]]] {
-		let geometry = new CustomGeometry();
-		let collisions = this.updateGeometry(geometry, position, 0);
+		const geometry = new CustomGeometry();
+		const collisions = this.updateGeometry(geometry, position, 0);
 		geometry.updateAttributes();
 		return [geometry, collisions];
 	}

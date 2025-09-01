@@ -113,10 +113,10 @@ class ShopItem extends Base {
 	 *  @returns {boolean}
 	 */
 	isPossiblePrice(): boolean {
-		let price = this.getPrice();
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		for (let id in price) {
-			let [kind, value] = price[id];
+		const price = this.getPrice();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		for (const id in price) {
+			const [kind, value] = price[id];
 			let currentValue = 0;
 			switch (kind) {
 				case Enum.DamagesKind.Currency:
@@ -142,11 +142,11 @@ class ShopItem extends Base {
 	 *  @returns {number}
 	 */
 	getMax(initial: number): number {
-		let price = this.getPrice();
-		let user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const price = this.getPrice();
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 		let max = initial;
-		for (let id in price) {
-			let [kind, value] = price[id];
+		for (const id in price) {
+			const [kind, value] = price[id];
 			let currentValue = 0;
 			switch (kind) {
 				case Enum.DamagesKind.Currency:

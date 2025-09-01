@@ -43,10 +43,10 @@ class PlayerDescription extends Base {
 		this.player = player;
 
 		// Informations
-		let system = this.player.system;
-		let cl = this.player.getClass();
-		let levelStat = Datas.BattleSystems.getLevelStatistic();
-		let expStat = Datas.BattleSystems.getExpStatistic();
+		const system = this.player.system;
+		const cl = this.player.getClass();
+		const levelStat = Datas.BattleSystems.getLevelStatistic();
+		const expStat = Datas.BattleSystems.getExpStatistic();
 
 		// All the graphics
 		this.graphicNameCenter = new Graphic.Text(this.player.name, { align: Enum.Align.Center });
@@ -67,8 +67,8 @@ class PlayerDescription extends Base {
 		}
 
 		// Adding stats
-		this.listStatsNames = new Array();
-		this.listStats = new Array();
+		this.listStatsNames = [];
+		this.listStats = [];
 		let id: number, statistic: System.Statistic, graphicName: Graphic.Text, txt: string;
 		for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
@@ -97,7 +97,7 @@ class PlayerDescription extends Base {
 	 *  Initialize the statistic progression
 	 */
 	initializeStatisticProgression() {
-		this.listStatsProgression = new Array();
+		this.listStatsProgression = [];
 		let id: number, statistic: System.Statistic, value: number, graphic: Graphic.Text;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
@@ -130,8 +130,8 @@ class PlayerDescription extends Base {
 	 *  Update the statistic progression.
 	 */
 	updateStatisticProgression() {
-		this.listStatsNames = new Array();
-		this.listStats = new Array();
+		this.listStatsNames = [];
+		this.listStats = [];
 		this.maxLength = 0;
 		let id: number, statistic: System.Statistic, graphicName: Graphic.Text, txt: string;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
@@ -207,13 +207,13 @@ class PlayerDescription extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	draw(x: number, y: number, w: number, h: number) {
-		let xCharacter = x + ScreenResolution.getScreenMinXY(80);
+		const xCharacter = x + ScreenResolution.getScreenMinXY(80);
 		let yName = y + ScreenResolution.getScreenMinXY(20);
-		let coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-		let wBattler = this.battler.w / Datas.Systems.battlersFrames;
-		let hBattler = this.battler.h / Datas.Systems.battlersColumns;
-		let owBattler = this.battler.oW / Datas.Systems.battlersFrames;
-		let ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
+		const coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
+		const wBattler = this.battler.w / Datas.Systems.battlersFrames;
+		const hBattler = this.battler.h / Datas.Systems.battlersColumns;
+		const owBattler = this.battler.oW / Datas.Systems.battlersFrames;
+		const ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
 
 		// Battler
 		this.battler.draw({
@@ -230,15 +230,15 @@ class PlayerDescription extends Base {
 		// Name, level, description, exp
 		yName = y + ScreenResolution.getScreenMinXY(10);
 		this.graphicName.draw(xCharacter, yName, 0, 0);
-		let xLevelName = xCharacter + this.graphicName.textWidth + ScreenResolution.getScreenMinXY(10);
+		const xLevelName = xCharacter + this.graphicName.textWidth + ScreenResolution.getScreenMinXY(10);
 		this.graphicLevelName.draw(xLevelName, yName, 0, 0);
-		let xLevel = xLevelName + this.graphicLevelName.textWidth;
+		const xLevel = xLevelName + this.graphicLevelName.textWidth;
 		this.graphicLevel.draw(xLevel, yName, 0, 0);
-		let xStatus = xLevel + this.graphicLevel.textWidth;
+		const xStatus = xLevel + this.graphicLevel.textWidth;
 		Status.drawList(this.player.status, xStatus, yName);
-		let yClass = yName + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const yClass = yName + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		this.graphicClass.draw(xCharacter, yClass, 0, 0);
-		let yExp = yClass + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const yExp = yClass + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		let yDescription = yExp;
 		if (this.graphicExpName !== null) {
 			this.graphicExpName.draw(xCharacter, yExp, 0, 0);
@@ -251,7 +251,7 @@ class PlayerDescription extends Base {
 			yDescription += ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		}
 		this.graphicDescription.draw(xCharacter, yDescription, ScreenResolution.getScreenX(450), 0);
-		let yStats =
+		const yStats =
 			yDescription + this.graphicDescription.textHeight + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 
 		// Stats

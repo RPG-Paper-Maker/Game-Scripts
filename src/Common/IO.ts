@@ -30,7 +30,7 @@ class IO {
 	 */
 	static fileExists = async function (url: string): Promise<boolean> {
 		return await new Promise((resolve, reject) => {
-			let xhr = new XMLHttpRequest();
+			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					resolve(xhr.status === 200);
@@ -49,7 +49,7 @@ class IO {
 	 */
 	static openFile = async function (url: string): Promise<string> {
 		return await new Promise((resolve, reject) => {
-			let xhr = new XMLHttpRequest();
+			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function () {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200 || xhr.status == 0) {
@@ -86,7 +86,7 @@ class IO {
 	 *  @param {string} url - The path of the file
 	 *  @param {Object} obj - An object that can be stringified by JSON
 	 */
-	static saveFile = async function (url: string, obj: Object) {
+	static saveFile = async function (url: string, obj: object) {
 		if (Platform.DESKTOP) {
 			// Cannot be used in browser, need local storage
 			const fs = require('fs').promises;

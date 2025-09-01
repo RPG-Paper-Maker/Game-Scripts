@@ -52,8 +52,8 @@ class Tileset extends Base {
 	 *  @returns {string}
 	 */
 	getPath(): string {
-		let newID = Game.current.textures.tilesets[this.id];
-		let picture = Utils.isUndefined(newID) ? this.picture : Datas.Pictures.get(Enum.PictureKind.Tilesets, newID);
+		const newID = Game.current.textures.tilesets[this.id];
+		const picture = Utils.isUndefined(newID) ? this.picture : Datas.Pictures.get(Enum.PictureKind.Tilesets, newID);
 		return picture ? picture.getPath() : null;
 	}
 }

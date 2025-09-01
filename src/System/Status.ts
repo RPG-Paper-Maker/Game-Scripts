@@ -86,8 +86,8 @@ class Status extends Icon {
 	 *  @returns {System.Effect}
 	 */
 	getEffects(): System.Effect[] {
-		let effects: System.Effect[] = [];
-		for (let effect of this.effects) {
+		const effects: System.Effect[] = [];
+		for (const effect of this.effects) {
 			if (effect.kind === Enum.EffectKind.PerformSkill) {
 				effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
 			} else {

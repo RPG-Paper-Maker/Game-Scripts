@@ -44,7 +44,7 @@ class MenuInventory extends Base {
 
 		// Initializing the top menu for item kinds
 		let l = Datas.Systems.inventoryFilters.length;
-		let menuKind: Graphic.Text[] = new Array();
+		const menuKind: Graphic.Text[] = [];
 		let i: number;
 		for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
 			menuKind[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: Align.Center });
@@ -146,9 +146,9 @@ class MenuInventory extends Base {
 	 *  Update tab.
 	 */
 	updateForTab() {
-		let indexTab = this.windowChoicesTabs.currentSelectedIndex;
-		let nbItems = Game.current.items.length;
-		let list = [];
+		const indexTab = this.windowChoicesTabs.currentSelectedIndex;
+		const nbItems = Game.current.items.length;
+		const list = [];
 		let ownedItem: Item;
 		for (let i = 0; i < nbItems; i++) {
 			ownedItem = Game.current.items[i];
@@ -166,7 +166,7 @@ class MenuInventory extends Base {
 	 *  Use the current item.
 	 */
 	useItem() {
-		let graphic = <Graphic.Item>this.windowBoxInformation.content;
+		const graphic = <Graphic.Item>this.windowBoxInformation.content;
 		if (graphic.item.system.consumable) {
 			Game.current.useItem(graphic.item);
 		}
@@ -187,7 +187,7 @@ class MenuInventory extends Base {
 	 */
 	moveTabKey(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		// Tab
-		let indexTab = this.windowChoicesTabs.currentSelectedIndex;
+		const indexTab = this.windowChoicesTabs.currentSelectedIndex;
 		if (isKey) {
 			this.windowChoicesTabs.onKeyPressedAndRepeat(options.key);
 		} else {
@@ -203,7 +203,7 @@ class MenuInventory extends Base {
 		} else {
 			this.windowChoicesList.onMouseMove(options.x, options.y);
 		}
-		let position = this.positionChoice[this.windowChoicesTabs.currentSelectedIndex];
+		const position = this.positionChoice[this.windowChoicesTabs.currentSelectedIndex];
 		position.index = this.windowChoicesList.currentSelectedIndex;
 		position.offset = this.windowChoicesList.offsetSelectedIndex;
 
@@ -216,16 +216,16 @@ class MenuInventory extends Base {
 	 *  @param {{ key?: string, x?: number, y?: number }} [options={}]
 	 */
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
-		let graphic = <Graphic.Item>this.windowBoxInformation.content;
-		let graphicUse = <Graphic.UseSkillItem>this.windowBoxUseItem.content;
+		const graphic = <Graphic.Item>this.windowBoxInformation.content;
+		const graphicUse = <Graphic.UseSkillItem>this.windowBoxUseItem.content;
 		switch (this.substep) {
 			case 0:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 					if (this.windowBoxInformation.content === null) {
 						return;
 					}
-					let targetKind = graphic.item.system.targetKind;
-					let availableKind = graphic.item.system.availableKind;
+					const targetKind = graphic.item.system.targetKind;
+					const availableKind = graphic.item.system.availableKind;
 					if (
 						graphic.item.system.isPossible() &&
 						(availableKind === AvailableKind.Always || availableKind === AvailableKind.MainMenu)
@@ -337,7 +337,7 @@ class MenuInventory extends Base {
 	 *  @returns {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		let res = super.onKeyPressedAndRepeat(key);
+		const res = super.onKeyPressedAndRepeat(key);
 		if (this.reactionInterpreters.length === 0) {
 			this.move(true, { key: key });
 		}

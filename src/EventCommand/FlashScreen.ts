@@ -27,7 +27,7 @@ class FlashScreen extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.colorID = System.DynamicValue.createValueCommand(command, iterator);
@@ -41,8 +41,8 @@ class FlashScreen extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		let time = this.time.getValue() * 1000;
-		let color = Datas.Systems.getColor(this.colorID.getValue());
+		const time = this.time.getValue() * 1000;
+		const color = Datas.Systems.getColor(this.colorID.getValue());
 		return {
 			parallel: this.isWaitEnd,
 			time: time,

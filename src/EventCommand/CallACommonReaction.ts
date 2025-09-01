@@ -27,12 +27,12 @@ class CallACommonReaction extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
 		this.commonReactionID = command[iterator.i++];
 		this.parameters = [];
-		let l = command.length;
+		const l = command.length;
 		let paramID: number;
 		while (iterator.i < l) {
 			paramID = command[iterator.i++];
@@ -59,12 +59,12 @@ class CallACommonReaction extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (!currentState.interpreter) {
-			let reaction = Datas.CommonEvents.getCommonReaction(this.commonReactionID);
-			let parameters = System.DynamicValue.mapWithParametersProperties(this.parameters);
+			const reaction = Datas.CommonEvents.getCommonReaction(this.commonReactionID);
+			const parameters = System.DynamicValue.mapWithParametersProperties(this.parameters);
 
 			// Correct parameters for default values
 			let v: System.DynamicValue, parameter: System.DynamicValue, k: DynamicValueKind;
-			for (let id in reaction.parameters) {
+			for (const id in reaction.parameters) {
 				v = reaction.parameters[id].value;
 				parameter = parameters[id];
 				k = parameter ? parameter.kind : DynamicValueKind.None;
@@ -81,7 +81,7 @@ class CallACommonReaction extends Base {
 				parameters
 			);
 		}
-		let previousBlocking = ReactionInterpreter.blockingHero;
+		const previousBlocking = ReactionInterpreter.blockingHero;
 		ReactionInterpreter.blockingHero = currentState.interpreter.currentReaction.blockingHero;
 		currentState.interpreter.update();
 		ReactionInterpreter.blockingHero = previousBlocking;

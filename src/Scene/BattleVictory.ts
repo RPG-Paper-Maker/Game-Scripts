@@ -100,8 +100,8 @@ class BattleVictory {
 		}
 
 		// Windows
-		let w = 200 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];
-		let h = this.battle.lootsNumber * 30 + WindowBox.SMALL_PADDING_BOX[1] + WindowBox.SMALL_PADDING_BOX[3];
+		const w = 200 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];
+		const h = this.battle.lootsNumber * 30 + WindowBox.SMALL_PADDING_BOX[1] + WindowBox.SMALL_PADDING_BOX[3];
 		this.battle.windowLoots = new WindowBox(
 			ScreenResolution.SCREEN_X - 20 - w,
 			ScreenResolution.SCREEN_Y - 20 - h,
@@ -126,7 +126,7 @@ class BattleVictory {
 		this.battle.loots[LootKind.Weapon] = {};
 		this.battle.loots[LootKind.Armor] = {};
 		this.battle.lootsNumber = 0;
-		let battlers = this.battle.battlers[CharacterKind.Monster];
+		const battlers = this.battle.battlers[CharacterKind.Monster];
 
 		// Calculate rewards
 		let i: number,
@@ -231,7 +231,7 @@ class BattleVictory {
 	 *  Pause the team progression xp.
 	 */
 	pauseTeamXP() {
-		for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+		for (const battler of this.battle.battlers[CharacterKind.Hero]) {
 			battler.player.pauseExperience();
 		}
 	}
@@ -240,7 +240,7 @@ class BattleVictory {
 	 *  Unpause the team progression xp.
 	 */
 	unpauseTeamXP() {
-		for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+		for (const battler of this.battle.battlers[CharacterKind.Hero]) {
 			battler.player.unpauseExperience();
 		}
 		this.battle.user.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
@@ -287,7 +287,7 @@ class BattleVictory {
 						this.prepareEndTransition();
 					} else {
 						// Pass xp
-						for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+						for (const battler of this.battle.battlers[CharacterKind.Hero]) {
 							battler.player.passExperience();
 							battler.player.updateObtainedExperience();
 						}
@@ -327,7 +327,7 @@ class BattleVictory {
 				if (new Date().getTime() - this.battle.time >= Scene.Battle.TIME_END_WAIT) {
 					this.battle.time = new Date().getTime();
 					this.battle.windowTopInformations.content = this.battle.graphicRewardTop;
-					for (let battler of this.battle.battlers[CharacterKind.Hero]) {
+					for (const battler of this.battle.battlers[CharacterKind.Hero]) {
 						battler.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
 					}
 					Manager.Stack.requestPaintHUD = true;

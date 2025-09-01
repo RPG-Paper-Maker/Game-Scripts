@@ -97,8 +97,8 @@ class Game {
 	 *  @async
 	 */
 	async load() {
-		let path = this.getPathSave();
-		let json = await Platform.loadSave(this.slot, path);
+		const path = this.getPathSave();
+		const json = await Platform.loadSave(this.slot, path);
 		if (json === null) {
 			return;
 		}
@@ -125,19 +125,19 @@ class Game {
 
 		// Currencies
 		this.currencies = [];
-		for (let id in json.cur) {
+		for (const id in json.cur) {
 			if (json.cur[id] !== null) {
 				this.currencies[id] = json.cur[id];
 			}
 		}
 		this.currenciesEarned = [];
-		for (let id in json.cure) {
+		for (const id in json.cure) {
 			if (json.cure[id] !== null) {
 				this.currenciesEarned[id] = json.cure[id];
 			}
 		}
 		this.currenciesUsed = [];
-		for (let id in json.curu) {
+		for (const id in json.curu) {
 			if (json.curu[id] !== null) {
 				this.currenciesUsed[id] = json.curu[id];
 			}
@@ -171,7 +171,7 @@ class Game {
 
 		// Map infos
 		this.currentMapID = json.currentMapId;
-		var positionHero = json.heroPosition;
+		const positionHero = json.heroPosition;
 		this.hero.position.set(positionHero[0], positionHero[1], positionHero[2]);
 		this.heroStates = json.heroStates;
 		this.heroProperties = json.heroProp;
@@ -195,23 +195,23 @@ class Game {
 			this.slot = slot;
 		}
 		let l = this.teamHeroes.length;
-		let teamHeroes = new Array(l);
+		const teamHeroes = new Array(l);
 		let i: number;
 		for (i = 0; i < l; i++) {
 			teamHeroes[i] = this.teamHeroes[i].getSaveCharacter();
 		}
 		l = this.reserveHeroes.length;
-		let reserveHeroes = new Array(l);
+		const reserveHeroes = new Array(l);
 		for (i = 0; i < l; i++) {
 			reserveHeroes[i] = this.reserveHeroes[i].getSaveCharacter();
 		}
 		l = this.hiddenHeroes.length;
-		let hiddenHeroes = new Array(l);
+		const hiddenHeroes = new Array(l);
 		for (i = 0; i < l; i++) {
 			hiddenHeroes[i] = this.hiddenHeroes[i].getSaveCharacter();
 		}
 		l = this.items.length;
-		let items: Record<string, any>[] = new Array(l);
+		const items: Record<string, any>[] = new Array(l);
 		for (i = 0; i < l; i++) {
 			items[i] = this.items[i].getSave();
 		}
@@ -271,7 +271,7 @@ class Game {
 			movedObjects: MapObject[],
 			objectMapMinMout: Function;
 		objectMap = objectMap = async (t: number[]) => {
-			let obj = (await MapObject.searchOutMap(t[0])).object;
+			const obj = (await MapObject.searchOutMap(t[0])).object;
 			obj.position = new THREE.Vector3(t[1], t[2], t[3]);
 			obj.previousPosition = obj.position;
 			return obj;
@@ -342,8 +342,8 @@ class Game {
 	 *  Get a compressed version of mapsDatas (don't retain meshs).
 	 *  @returns {Object}
 	 */
-	getCompressedMapsDatas(): Object {
-		let obj = {};
+	getCompressedMapsDatas(): object {
+		const obj = {};
 		let i: number,
 			l: number,
 			jp: number,
@@ -454,7 +454,7 @@ class Game {
 		this.startupStates = {};
 		this.startupProperties = {};
 		this.mapsProperties = {};
-		for (let member of Datas.Systems.initialPartyMembers) {
+		for (const member of Datas.Systems.initialPartyMembers) {
 			this.instanciateTeam(
 				member.teamKind,
 				member.characterKind,
@@ -498,7 +498,7 @@ class Game {
 		this.variables[stockID] = this.charactersInstances;
 
 		// Adding the instanciated character in the right group
-		let player = new Player(type, id, this.charactersInstances++, [], []);
+		const player = new Player(type, id, this.charactersInstances++, [], []);
 		player.instanciate(level);
 		this.getTeam(groupKind).push(player);
 		return player;
@@ -682,7 +682,7 @@ class Game {
 	 */
 	update() {
 		this.playTime.update();
-		for (let chrono of this.chronometers) {
+		for (const chrono of this.chronometers) {
 			if (chrono.update()) {
 				Manager.Events.sendEvent(
 					null,
@@ -702,7 +702,7 @@ class Game {
 	 *  Draw the HUD.
 	 */
 	drawHUD() {
-		for (let chrono of this.chronometers) {
+		for (const chrono of this.chronometers) {
 			chrono.drawHUD();
 		}
 	}

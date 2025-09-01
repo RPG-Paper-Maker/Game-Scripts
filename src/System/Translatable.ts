@@ -53,8 +53,8 @@ class Translatable extends Base {
 	 *  Update lang according to a command list and iterator.
 	 */
 	getCommand(command: string[], iterator: EventCommand.StructIterator) {
-		let id = command[iterator.i++];
-		let name = '' + command[iterator.i++];
+		const id = command[iterator.i++];
+		const name = '' + command[iterator.i++];
 		this.names[id] = name;
 	}
 }

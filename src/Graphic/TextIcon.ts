@@ -112,8 +112,8 @@ class TextIcon extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		let iconWidth = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
-		let iconHeight = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
+		const iconWidth = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
+		const iconHeight = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
 
 		// Align offset
 		let offset: number;
@@ -130,8 +130,8 @@ class TextIcon extends Base {
 		}
 
 		// Draw according to side
-		let sx = this.indexX * Datas.Systems.iconsSize;
-		let sy = this.indexY * Datas.Systems.iconsSize;
+		const sx = this.indexX * Datas.Systems.iconsSize;
+		const sy = this.indexY * Datas.Systems.iconsSize;
 		if (this.side === Align.Left) {
 			this.graphicIcon.draw({
 				x: x + offset,

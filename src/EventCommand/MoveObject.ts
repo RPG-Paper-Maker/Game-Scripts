@@ -37,10 +37,10 @@ class MoveObject extends Base {
 	constructor(command: any[]) {
 		super();
 
-		let iterator = {
+		const iterator = {
 			i: 0,
 		};
-		let l = command.length;
+		const l = command.length;
 
 		// Object ID
 		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
@@ -105,14 +105,14 @@ class MoveObject extends Base {
 						break;
 				}
 			} else if (this.kind === CommandMoveKind.Jump) {
-				let square = !Utils.numToBool(command[iterator.i++]);
-				let x = System.DynamicValue.createValueCommand(command, iterator);
-				let y = System.DynamicValue.createValueCommand(command, iterator);
-				let yPlus = System.DynamicValue.createValueCommand(command, iterator);
-				let z = System.DynamicValue.createValueCommand(command, iterator);
-				let peakY = System.DynamicValue.createValueCommand(command, iterator);
-				let peakYPlus = System.DynamicValue.createValueCommand(command, iterator);
-				let time = System.DynamicValue.createValueCommand(command, iterator);
+				const square = !Utils.numToBool(command[iterator.i++]);
+				const x = System.DynamicValue.createValueCommand(command, iterator);
+				const y = System.DynamicValue.createValueCommand(command, iterator);
+				const yPlus = System.DynamicValue.createValueCommand(command, iterator);
+				const z = System.DynamicValue.createValueCommand(command, iterator);
+				const peakY = System.DynamicValue.createValueCommand(command, iterator);
+				const peakYPlus = System.DynamicValue.createValueCommand(command, iterator);
+				const time = System.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
 					square: square,
 					x: x,
@@ -126,8 +126,8 @@ class MoveObject extends Base {
 				this.moves.push(this.jump);
 			} else if (this.kind === CommandMoveKind.ChangeGraphics) {
 				permanent = Utils.numToBool(command[iterator.i++]);
-				let dontChangeOrientation = Utils.numToBool(command[iterator.i++]);
-				let indexKind = command[iterator.i++];
+				const dontChangeOrientation = Utils.numToBool(command[iterator.i++]);
+				const indexKind = command[iterator.i++];
 				let kind = Enum.ElementMapKind.None;
 				switch (indexKind) {
 					case 0:
@@ -143,12 +143,12 @@ class MoveObject extends Base {
 						kind = Enum.ElementMapKind.Object3D;
 						break;
 				}
-				let pictureID = System.DynamicValue.createValueCommand(command, iterator);
+				const pictureID = System.DynamicValue.createValueCommand(command, iterator);
 				iterator.i++;
-				let indexX = command[iterator.i++];
-				let indexY = command[iterator.i++];
-				let width = command[iterator.i++];
-				let height = command[iterator.i++];
+				const indexX = command[iterator.i++];
+				const indexY = command[iterator.i++];
+				const width = command[iterator.i++];
+				const height = command[iterator.i++];
 				this.parameters.push({
 					permanent: permanent,
 					dontChangeOrientation: dontChangeOrientation,
@@ -189,8 +189,8 @@ class MoveObject extends Base {
 						break;
 				}
 			} else if (this.kind === CommandMoveKind.ChangeSpeed || this.kind === CommandMoveKind.ChangeFrequency) {
-				let permanent = Utils.numToBool(command[iterator.i++]);
-				let value = System.DynamicValue.createValueCommand(command, iterator);
+				const permanent = Utils.numToBool(command[iterator.i++]);
+				const value = System.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
 					permanent: permanent,
 					value: value,
@@ -201,8 +201,8 @@ class MoveObject extends Base {
 					this.moves.push(this.changeFrequency);
 				}
 			} else if (this.kind >= CommandMoveKind.MoveAnimation && this.kind <= CommandMoveKind.KeepPosition) {
-				let onOff = Utils.numToBool(command[iterator.i++]);
-				let permanent = Utils.numToBool(command[iterator.i++]);
+				const onOff = Utils.numToBool(command[iterator.i++]);
+				const permanent = Utils.numToBool(command[iterator.i++]);
 				this.parameters.push({
 					onOff: onOff,
 					permanent: permanent,
@@ -249,9 +249,9 @@ class MoveObject extends Base {
 						l = Utils.numToBool(command[iterator.i]) ? 3 : 2;
 						break;
 				}
-				let commandList = command.slice(iterator.i, iterator.i + l);
+				const commandList = command.slice(iterator.i, iterator.i + l);
 				iterator.i += l;
-				let eventCommand = Manager.Events.getEventCommand({
+				const eventCommand = Manager.Events.getEventCommand({
 					kind: kind,
 					command: commandList,
 				});
@@ -321,8 +321,8 @@ class MoveObject extends Base {
 				const value = Inputs.lockedKeys.find(([k]) => k === pressedKey);
 				if (value) {
 					const [, lockedAngle] = value;
-					let dif = lockedAngle - Scene.Map.current.camera.horizontalAngle;
-					let angleDif = Math.round(dif / 90);
+					const dif = lockedAngle - Scene.Map.current.camera.horizontalAngle;
+					const angleDif = Math.round(dif / 90);
 					return Mathf.mod(orientation + angleDif, 4);
 				}
 			}
@@ -367,7 +367,7 @@ class MoveObject extends Base {
 		} else if (object.previousMoveCommand !== this) {
 			object.otherMoveCommand = this;
 		}
-		let distances = object.move(
+		const distances = object.move(
 			orientation,
 			Datas.Systems.SQUARE_SIZE - currentState.distance,
 			angle,
@@ -490,7 +490,7 @@ class MoveObject extends Base {
 		if (object) {
 			object.previousOrientation = Orientation.North;
 		}
-		let orientation = this.moveWest(currentState, object, parameters);
+		const orientation = this.moveWest(currentState, object, parameters);
 		return object ? orientation : Orientation.North;
 	}
 
@@ -509,7 +509,7 @@ class MoveObject extends Base {
 		if (object) {
 			object.previousOrientation = Orientation.North;
 		}
-		let orientation = this.moveEast(currentState, object, parameters);
+		const orientation = this.moveEast(currentState, object, parameters);
 		return object ? orientation : Orientation.North;
 	}
 
@@ -528,7 +528,7 @@ class MoveObject extends Base {
 		if (object) {
 			object.previousOrientation = Orientation.South;
 		}
-		let orientation = this.moveWest(currentState, object, parameters);
+		const orientation = this.moveWest(currentState, object, parameters);
 		return object ? orientation : Orientation.South;
 	}
 
@@ -547,7 +547,7 @@ class MoveObject extends Base {
 		if (object) {
 			object.previousOrientation = Orientation.South;
 		}
-		let orientation = this.moveEast(currentState, object, parameters);
+		const orientation = this.moveEast(currentState, object, parameters);
 		return object ? orientation : Orientation.South;
 	}
 
@@ -657,7 +657,7 @@ class MoveObject extends Base {
 		parameters: Record<string, any>
 	): Orientation | boolean {
 		if (object) {
-			let orientation =
+			const orientation =
 				currentState.moveHeroOrientation === null ? object.orientationEye : currentState.moveHeroOrientation;
 			currentState.moveHeroOrientation = orientation;
 			return this.move(currentState, object, parameters.square, currentState.moveHeroOrientation);
@@ -678,7 +678,7 @@ class MoveObject extends Base {
 		parameters: Record<string, any>
 	): Orientation | boolean {
 		if (object) {
-			let orientation =
+			const orientation =
 				currentState.moveHeroOrientation === null
 					? EventCommand.MoveObject.oppositeOrientation(object.orientationEye)
 					: currentState.moveHeroOrientation;
@@ -700,7 +700,7 @@ class MoveObject extends Base {
 			if (currentState.currentTime === -1) {
 				currentState.currentTime = 0;
 				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
-				let square = parameters.square ? Datas.Systems.SQUARE_SIZE : 1;
+				const square = parameters.square ? Datas.Systems.SQUARE_SIZE : 1;
 				currentState.endJump = new THREE.Vector3(
 					parameters.x.getValue() * square + currentState.startJump.x,
 					parameters.y.getValue() * square + parameters.yPlus.getValue() + currentState.startJump.y,
@@ -920,7 +920,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -955,7 +955,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -986,7 +986,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1017,7 +1017,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1045,7 +1045,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1073,7 +1073,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1101,7 +1101,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1129,7 +1129,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1159,7 +1159,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1187,7 +1187,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1215,7 +1215,7 @@ class MoveObject extends Base {
 
 			// Permanent change
 			if (parameters.permanent) {
-				let options = this.getPermanentOptions(object);
+				const options = this.getPermanentOptions(object);
 				if (options === null) {
 					return;
 				}
@@ -1256,8 +1256,8 @@ class MoveObject extends Base {
 	 *  @returns {Orientation}
 	 */
 	getHeroOrientation(object: MapObject): Orientation {
-		let xDif = object.position.x - Game.current.hero.position.x;
-		let zDif = object.position.z - Game.current.hero.position.z;
+		const xDif = object.position.x - Game.current.hero.position.x;
+		const zDif = object.position.z - Game.current.hero.position.z;
 		let orientationX = Orientation.None;
 		let orientationZ = Orientation.None;
 		if (xDif > 1) {
@@ -1321,9 +1321,9 @@ class MoveObject extends Base {
 		} else if (object.isStartup) {
 			return null;
 		} else {
-			let portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
-			let portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
-			let indexProp = portionDatas.soi.indexOf(object.system.id);
+			const portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
+			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+			const indexProp = portionDatas.soi.indexOf(object.system.id);
 			if (indexProp === -1) {
 				statesOptions = [];
 				portionDatas.soi.push(object.system.id);
@@ -1353,7 +1353,7 @@ class MoveObject extends Base {
 		}
 		if (currentState.parallel && this.moves.length > 0) {
 			if (!currentState.waitingObject) {
-				let objectID = this.objectID.getValue();
+				const objectID = this.objectID.getValue();
 				MapObject.search(
 					objectID,
 					(result: StructSearchResult) => {
@@ -1364,7 +1364,7 @@ class MoveObject extends Base {
 				currentState.waitingObject = true;
 			}
 			if (currentState.object !== null) {
-				let finished = this.moves[currentState.index].call(
+				const finished = this.moves[currentState.index].call(
 					this,
 					currentState,
 					currentState.object,

@@ -97,7 +97,7 @@ class Statistic extends Base {
 				sw: this.pictureBar.picture.oW / 2,
 				w: this.pictureBar.picture.oW / 2,
 			});
-			let percent = this.player[this.statistic.abbreviation] / this.player[this.statistic.getMaxAbbreviation()];
+			const percent = this.player[this.statistic.abbreviation] / this.player[this.statistic.getMaxAbbreviation()];
 			this.pictureBar.picture.draw({
 				x: x + ScreenResolution.getScreenMinXY(this.pictureBar.borderLeft),
 				y: y,

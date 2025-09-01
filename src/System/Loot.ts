@@ -65,8 +65,8 @@ class Loot extends Base {
 		}
 
 		// Calculate number with proba
-		let proba = this.probability.getValue();
-		let totalNumber = this.number.getValue();
+		const proba = this.probability.getValue();
+		const totalNumber = this.number.getValue();
 		let i: number, rand: number, nb: number;
 		for (i = 0, nb = 0; i < totalNumber; i++) {
 			rand = Mathf.random(0, 100);
