@@ -16,7 +16,7 @@
     "outDir": "build/Scripts"
   },
   "include": [
-    "./src/**/*.ts",
+    "./src/**/*.ts"
   ],
   "types": ["howler"]
 }
