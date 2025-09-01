@@ -11,7 +11,8 @@
 		"update-packages": "ncu -u && npm run clear-packages && npm run update-libs",
 		"update-libs": "bash scripts/update-libs.sh",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
-		"push-build": "bash scripts/push-build.sh"
+		"push-build": "bash scripts/push-build.sh",
+		"generate-docs": "npx typedoc src --plugin typedoc-github-theme"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.34.0",
@@ -27,6 +28,8 @@
 		"jiti": "^2.5.1",
 		"nodemon": "^3.1.10",
 		"three": "^0.179.1",
+		"typedoc": "^0.28.12",
+		"typedoc-github-theme": "^0.3.1",
 		"typescript": "^5.9.2",
 		"typescript-eslint": "^8.41.0"
 	}
