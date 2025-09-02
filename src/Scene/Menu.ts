@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, ScreenResolution } from '../Common';
+import { ALIGN, ScreenResolution } from '../Common';
 import { ChoicesOptions, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager, Scene, System } from '../index';
 import { MenuBase } from './MenuBase';
@@ -72,7 +72,7 @@ class Menu extends MenuBase {
 		let command: System.MainMenuCommand;
 		for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
 			command = Datas.Systems.mainMenuCommands[i];
-			graphics[i] = new Graphic.Text(command.name(), { align: Enum.Align.Center });
+			graphics[i] = new Graphic.Text(command.name(), { align: ALIGN.CENTER });
 			actions[i] = command.getCallback();
 		}
 		const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);

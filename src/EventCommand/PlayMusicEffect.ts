@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { SONG_KIND } from '../Common';
 import { MapObject } from '../Core';
 import { System } from '../index';
 import { Base } from './Base';
@@ -28,7 +28,7 @@ class PlayMusicEffect extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.song = System.PlaySong.createValueCommand(command, iterator, Enum.SongKind.MusicEffect);
+		this.song = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC_EFFECT);
 		this.parallel = true;
 	}
 

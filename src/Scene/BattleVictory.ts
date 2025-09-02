@@ -10,12 +10,9 @@
 */
 
 import { Datas, Graphic, Manager, Scene, System } from '..';
-import { Enum, Platform, ScreenResolution } from '../Common';
+import { CHARACTER_KIND, LOOT_KIND, Platform, ScreenResolution } from '../Common';
 import { Battler, Game, Item, Player, WindowBox } from '../Core';
 import { Status } from '../Core/Status';
-import Align = Enum.Align;
-import CharacterKind = Enum.CharacterKind;
-import LootKind = Enum.LootKind;
 
 // -------------------------------------------------------
 //
@@ -42,7 +39,7 @@ class BattleVictory {
 	public initialize() {
 		// Remove status if release at end of battles
 		let i: number, l: number, battler: Battler, s: Status;
-		for (battler of this.battle.battlers[CharacterKind.Hero]) {
+		for (battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 			s = battler.player.status[0];
 			battler.player.removeEndBattleStatus();
 			battler.updateStatusStep();
@@ -78,7 +75,7 @@ class BattleVictory {
 
 		// Heroes
 		let xp: number;
-		for (battler of this.battle.battlers[CharacterKind.Hero]) {
+		for (battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 			battler.setVictory();
 			xp = this.battle.xp;
 			if (battler.player.experienceGain[0]) {
@@ -122,11 +119,11 @@ class BattleVictory {
 		this.battle.xp = 0;
 		this.battle.currencies = {};
 		this.battle.loots = [];
-		this.battle.loots[LootKind.Item] = {};
-		this.battle.loots[LootKind.Weapon] = {};
-		this.battle.loots[LootKind.Armor] = {};
+		this.battle.loots[LOOT_KIND.ITEM] = {};
+		this.battle.loots[LOOT_KIND.WEAPON] = {};
+		this.battle.loots[LOOT_KIND.ARMOR] = {};
 		this.battle.lootsNumber = 0;
-		const battlers = this.battle.battlers[CharacterKind.Monster];
+		const battlers = this.battle.battlers[CHARACTER_KIND.MONSTER];
 
 		// Calculate rewards
 		let i: number,
@@ -149,12 +146,12 @@ class BattleVictory {
 				baseCurrency = currencies[id];
 				currency = baseCurrency;
 				// Get team currency bonus
-				for (hero of this.battle.battlers[CharacterKind.Hero]) {
+				for (hero of this.battle.battlers[CHARACTER_KIND.HERO]) {
 					if (hero.player.currencyGain[id]) {
 						currency *= hero.player.currencyGain[id].multiplication;
 					}
 				}
-				for (hero of this.battle.battlers[CharacterKind.Hero]) {
+				for (hero of this.battle.battlers[CHARACTER_KIND.HERO]) {
 					if (hero.player.currencyGain[id]) {
 						currency += (baseCurrency * hero.player.currencyGain[id].addition) / 100;
 					}
@@ -194,8 +191,8 @@ class BattleVictory {
 	updateTeamXP() {
 		this.battle.finishedXP = true;
 		let battler: Battler, player: Player, y: number, h: number;
-		for (let i = this.battle.priorityIndex, l = this.battle.battlers[CharacterKind.Hero].length; i < l; i++) {
-			battler = this.battle.battlers[CharacterKind.Hero][i];
+		for (let i = this.battle.priorityIndex, l = this.battle.battlers[CHARACTER_KIND.HERO].length; i < l; i++) {
+			battler = this.battle.battlers[CHARACTER_KIND.HERO][i];
 			player = battler.player;
 			if (!player.isExperienceUpdated()) {
 				if (player.updateExperience()) {
@@ -231,7 +228,7 @@ class BattleVictory {
 	 *  Pause the team progression xp.
 	 */
 	pauseTeamXP() {
-		for (const battler of this.battle.battlers[CharacterKind.Hero]) {
+		for (const battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 			battler.player.pauseExperience();
 		}
 	}
@@ -240,7 +237,7 @@ class BattleVictory {
 	 *  Unpause the team progression xp.
 	 */
 	unpauseTeamXP() {
-		for (const battler of this.battle.battlers[CharacterKind.Hero]) {
+		for (const battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 			battler.player.unpauseExperience();
 		}
 		this.battle.user.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
@@ -287,7 +284,7 @@ class BattleVictory {
 						this.prepareEndTransition();
 					} else {
 						// Pass xp
-						for (const battler of this.battle.battlers[CharacterKind.Hero]) {
+						for (const battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 							battler.player.passExperience();
 							battler.player.updateObtainedExperience();
 						}
@@ -327,7 +324,7 @@ class BattleVictory {
 				if (new Date().getTime() - this.battle.time >= Scene.Battle.TIME_END_WAIT) {
 					this.battle.time = new Date().getTime();
 					this.battle.windowTopInformations.content = this.battle.graphicRewardTop;
-					for (const battler of this.battle.battlers[CharacterKind.Hero]) {
+					for (const battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 						battler.player.updateRemainingXP(Scene.Battle.TIME_PROGRESSION_XP);
 					}
 					Manager.Stack.requestPaintHUD = true;

@@ -10,12 +10,11 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Utils } from '../Common';
+import { ANIMATION_EFFECT_CONDITION_KIND, Utils } from '../Common';
 import { Picture2D } from '../Core';
 import { AnimationFrameEffect } from './AnimationFrameEffect';
 import { AnimationFrameElement } from './AnimationFrameElement';
 import { Base } from './Base';
-import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 
 /** @class
  *  An animation frame.
@@ -52,9 +51,9 @@ class AnimationFrame extends Base {
 
 	/**
 	 *  Play the sounds according to condition.
-	 *  @param {AnimationEffectConditionKind} condition - The condition
+	 *  @param {ANIMATION_EFFECT_CONDITION_KIND} condition - The condition
 	 */
-	playSounds(condition: AnimationEffectConditionKind) {
+	playSounds(condition: ANIMATION_EFFECT_CONDITION_KIND) {
 		for (let i = 0, l = this.effects.length; i < l; i++) {
 			this.effects[i].playSE(condition);
 		}

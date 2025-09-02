@@ -9,20 +9,41 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+/**
+ * Utility methods for working with arrays.
+ */
 class ArrayUtils {
-	constructor() {
-		throw new Error('This is a static class!');
-	}
-
-	static removeAt(array: any[], index: number) {
+	/**
+	 * Removes an element at the given index.
+	 *
+	 * @param array - The array to modify.
+	 * @param index - The index of the element to remove.
+	 */
+	static removeAt<T>(array: T[], index: number): void {
 		array.splice(index, 1);
 	}
 
-	static removeElement<T>(array: T[], value: T) {
-		this.removeAt(array, array.indexOf(value));
+	/**
+	 * Removes the first occurrence of a value from the array, if found.
+	 *
+	 * @param array - The array to modify.
+	 * @param value - The value to search for and remove.
+	 */
+	static removeElement<T>(array: T[], value: T): void {
+		const idx = array.indexOf(value);
+		if (idx !== -1) {
+			this.removeAt(array, idx);
+		}
 	}
 
-	static insert(array: any[], index: number, value: any) {
+	/**
+	 * Inserts a value at the given index.
+	 *
+	 * @param array - The array to modify.
+	 * @param index - The index where the value should be inserted.
+	 * @param value - The value to insert.
+	 */
+	static insert<T>(array: T[], index: number, value: T): void {
 		array.splice(index, 0, value);
 	}
 }

@@ -10,7 +10,7 @@
 */
 
 import { System } from '..';
-import { Enum, Utils } from '../Common';
+import { TROOP_REACTION_FREQUENCY_KIND, Utils } from '../Common';
 import { Reaction } from './Reaction';
 
 /** @class
@@ -22,7 +22,7 @@ import { Reaction } from './Reaction';
 class TroopReaction extends Reaction {
 	public id: number;
 	public conditions: System.TroopReactionConditions;
-	public frequency: Enum.TroopReactionFrequencyKind;
+	public frequency: TROOP_REACTION_FREQUENCY_KIND;
 
 	constructor(json?: Record<string, any>) {
 		super(json);
@@ -37,7 +37,7 @@ class TroopReaction extends Reaction {
 		super.read(json);
 		this.id = json.id;
 		this.conditions = new System.TroopReactionConditions(json.conditions);
-		this.frequency = Utils.defaultValue(json.frequency, Enum.TroopReactionFrequencyKind.OneTime);
+		this.frequency = Utils.defaultValue(json.frequency, TROOP_REACTION_FREQUENCY_KIND.ONE_TIME);
 	}
 }
 

@@ -10,13 +10,12 @@
 */
 
 import * as THREE from 'three';
-import { Enum } from '../Common';
+import { PICTURE_KIND } from '../Common';
 import { Datas } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 import { Sprite } from './Sprite';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A sprite in the map.
@@ -109,7 +108,7 @@ class SpriteWall extends MapElement {
 		let collisions: number[][] = [];
 		const wall = Datas.SpecialElements.getWall(this.id);
 		if (wall) {
-			const picture = Datas.Pictures.get(PictureKind.Walls, pictureID);
+			const picture = Datas.Pictures.get(PICTURE_KIND.WALLS, pictureID);
 			if (picture) {
 				collisions = picture.getSquaresForWall(textureRect);
 			}

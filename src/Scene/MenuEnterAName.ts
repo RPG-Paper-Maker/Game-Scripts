@@ -10,7 +10,7 @@
 */
 
 import { Datas, Graphic, Manager, Scene } from '..';
-import { Enum, ScreenResolution } from '../Common';
+import { ALIGN, ORIENTATION_WINDOW, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Game, Picture2D, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { MenuBase } from './MenuBase';
 
@@ -89,10 +89,7 @@ class MenuEnterAName extends MenuBase {
 	 *  Create all the pictures.
 	 */
 	createPictures() {
-		this.pictureFaceset = Datas.Pictures.getPictureCopy(
-			Enum.PictureKind.Facesets,
-			this.selectedhero.system.idFaceset
-		);
+		this.pictureFaceset = Datas.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, this.selectedhero.system.idFaceset);
 	}
 
 	/**
@@ -101,7 +98,7 @@ class MenuEnterAName extends MenuBase {
 	createWindowBoxTop() {
 		const slotWidth = 20;
 		const options = {
-			orientation: Enum.OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: this.maxCharacters,
 			bordersInsideVisible: false,
 			padding: WindowBox.SMALL_SLOT_PADDING,
@@ -154,7 +151,7 @@ class MenuEnterAName extends MenuBase {
 			40
 		);
 		const options = {
-			orientation: Enum.OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: this.displayColumns,
 			bordersVisible: false,
 			padding: WindowBox.NONE_PADDING,
@@ -164,7 +161,7 @@ class MenuEnterAName extends MenuBase {
 		for (let i = 0; i < this.rows; i++) {
 			listGraphics = new Array(this.columns);
 			for (let j = 0; j < this.columns; j++) {
-				listGraphics[j] = new Graphic.Text(Datas.Systems.enterNameTable[i][j], { align: Enum.Align.Center });
+				listGraphics[j] = new Graphic.Text(Datas.Systems.enterNameTable[i][j], { align: ALIGN.CENTER });
 			}
 			this.windowChoicesMain[i] = new WindowChoices(
 				rect.x,
@@ -190,7 +187,7 @@ class MenuEnterAName extends MenuBase {
 			width,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text('OK', { align: Enum.Align.Center });
+		const graphic = new Graphic.Text('OK', { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 		};

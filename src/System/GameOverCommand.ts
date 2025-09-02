@@ -10,7 +10,7 @@
 */
 
 import { Manager, Scene, System } from '..';
-import { Enum, Interpreter, Platform, Utils } from '../Common';
+import { GAME_OVER_COMMAND_KIND, Interpreter, Platform, Utils } from '../Common';
 import { Game } from '../Core';
 import { Translatable } from './Translatable';
 
@@ -21,7 +21,7 @@ import { Translatable } from './Translatable';
  *  game over command
  */
 class GameOverCommand extends Translatable {
-	public kind: Enum.GameOverCommandKind;
+	public kind: GAME_OVER_COMMAND_KIND;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
@@ -35,7 +35,7 @@ class GameOverCommand extends Translatable {
 	 */
 	read(json: Record<string, any>) {
 		super.read(json);
-		this.kind = Utils.defaultValue(json.k, Enum.GameOverCommandKind.Continue);
+		this.kind = Utils.defaultValue(json.k, GAME_OVER_COMMAND_KIND.CONTINUE);
 		this.script = Utils.defaultValue(json.s, '');
 	}
 
@@ -45,13 +45,13 @@ class GameOverCommand extends Translatable {
 	 */
 	getAction(): Function {
 		switch (this.kind) {
-			case Enum.GameOverCommandKind.Continue:
+			case GAME_OVER_COMMAND_KIND.CONTINUE:
 				return this.continue;
-			case Enum.GameOverCommandKind.TitleScreen:
+			case GAME_OVER_COMMAND_KIND.TITLE_SCREEN:
 				return this.titleScreen;
-			case Enum.GameOverCommandKind.Exit:
+			case GAME_OVER_COMMAND_KIND.EXIT:
 				return this.exit;
-			case Enum.GameOverCommandKind.Script:
+			case GAME_OVER_COMMAND_KIND.SCRIPT:
 				return this.executeScript;
 		}
 	}

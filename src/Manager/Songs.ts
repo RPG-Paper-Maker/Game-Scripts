@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { SONG_KIND } from '../Common';
 import { Datas, System } from '../index';
 import { ProgressionTable } from '../System';
-import SongKind = Enum.SongKind;
 
 /** @class
  *  The manager for songs.
@@ -37,49 +36,49 @@ class Songs {
 	}
 
 	/**
-	 *  Initialize all the lists according to SongKind.
+	 *  Initialize all the lists according to SONG_KIND.
 	 */
 	static initialize() {
-		System.PlaySong.currentPlayingMusic = new System.PlaySong(SongKind.Music);
-		this.volumes[SongKind.Music] = 0;
-		this.volumes[SongKind.BackgroundSound] = 0;
-		this.volumes[SongKind.MusicEffect] = 0;
-		this.starts[SongKind.Music] = null;
-		this.starts[SongKind.BackgroundSound] = null;
-		this.starts[SongKind.MusicEffect] = null;
-		this.ends[SongKind.Music] = null;
-		this.ends[SongKind.BackgroundSound] = null;
-		this.ends[SongKind.MusicEffect] = null;
-		this.current[SongKind.Music] = null;
-		this.current[SongKind.BackgroundSound] = null;
-		this.current[SongKind.MusicEffect] = null;
+		System.PlaySong.currentPlayingMusic = new System.PlaySong(SONG_KIND.MUSIC);
+		this.volumes[SONG_KIND.MUSIC] = 0;
+		this.volumes[SONG_KIND.BACKGROUND_SOUND] = 0;
+		this.volumes[SONG_KIND.MUSIC_EFFECT] = 0;
+		this.starts[SONG_KIND.MUSIC] = null;
+		this.starts[SONG_KIND.BACKGROUND_SOUND] = null;
+		this.starts[SONG_KIND.MUSIC_EFFECT] = null;
+		this.ends[SONG_KIND.MUSIC] = null;
+		this.ends[SONG_KIND.BACKGROUND_SOUND] = null;
+		this.ends[SONG_KIND.MUSIC_EFFECT] = null;
+		this.current[SONG_KIND.MUSIC] = null;
+		this.current[SONG_KIND.BACKGROUND_SOUND] = null;
+		this.current[SONG_KIND.MUSIC_EFFECT] = null;
 		this.currentSounds = [];
 	}
 
 	/**
 	 *  Play a music.
-	 *  @param {SongKind} kind - The kind of the song
+	 *  @param {SONG_KIND} kind - The kind of the song
 	 *  @param {number} id - The id of the song
 	 *  @param {number} volume - The volume of the song
 	 *  @param {number} start - The start of the song
 	 *  @param {number} end - The end of the song
 	 */
-	static playMusic(kind: SongKind, id: number, volume: number, start: number, end: number) {
+	static playMusic(kind: SONG_KIND, id: number, volume: number, start: number, end: number) {
 		if (id < 1) {
 			switch (kind) {
-				case SongKind.Music:
+				case SONG_KIND.MUSIC:
 					this.stopMusic(0);
 					break;
-				case SongKind.BackgroundSound:
+				case SONG_KIND.BACKGROUND_SOUND:
 					break;
 			}
 			return;
 		}
 		switch (kind) {
-			case SongKind.Music:
+			case SONG_KIND.MUSIC:
 				this.isMusicNone = false;
 				break;
-			case SongKind.BackgroundSound:
+			case SONG_KIND.BACKGROUND_SOUND:
 				break;
 		}
 		if (this.current[kind] !== null) {
@@ -102,7 +101,7 @@ class Songs {
 	/**
 	 *  Stop a song.
 	 *  @static
-	 *  @param {SongKind} kind - The kind of song to stop
+	 *  @param {SONG_KIND} kind - The kind of song to stop
 	 *  @param {number} time - The date seconds value in the first call of stop
 	 *  @param {number} seconds - The seconds needed for entirely stop the song
 	 *  @param {number} id - For sounds only, to know which sound should be stopped
@@ -110,11 +109,11 @@ class Songs {
 	 *  of stoppped
 	 *  @returns {boolean} Indicates if the song is stopped
 	 */
-	static stopSong(kind: SongKind, time: number, seconds: number, id: number = -1, pause: boolean = false): boolean {
-		System.PlaySong.currentPlayingMusic = new System.PlaySong(SongKind.Music);
+	static stopSong(kind: SONG_KIND, time: number, seconds: number, id: number = -1, pause: boolean = false): boolean {
+		System.PlaySong.currentPlayingMusic = new System.PlaySong(SONG_KIND.MUSIC);
 		const current = new Date().getTime();
 		const ellapsedTime = current - time;
-		const currentHowl = kind === SongKind.Sound ? this.currentSounds[id] : this.current[kind];
+		const currentHowl = kind === SONG_KIND.SOUND ? this.currentSounds[id] : this.current[kind];
 		if (!currentHowl) {
 			return true;
 		}
@@ -136,13 +135,13 @@ class Songs {
 	/**
 	 *  Unpause a song.
 	 *  @static
-	 *  @param {SongKind} kind - The kind of song to unpause
+	 *  @param {SONG_KIND} kind - The kind of song to unpause
 	 *  @param {number} time - The date seconds value in the first call of
 	 *  unpause
 	 *  @param {number} seconds - The seconds needed for entirely play the song
 	 *  @returns {boolean} Indicate if the song is played with all volume
 	 */
-	static unpauseSong(kind: SongKind, time: number, seconds: number): boolean {
+	static unpauseSong(kind: SONG_KIND, time: number, seconds: number): boolean {
 		const current = new Date().getTime();
 		const ellapsedTime = current - time;
 		const currentHowl = this.current[kind];
@@ -168,7 +167,7 @@ class Songs {
 		if (id === -1) {
 			return;
 		}
-		const sound = Datas.Songs.get(SongKind.Sound, id);
+		const sound = Datas.Songs.get(SONG_KIND.SOUND, id);
 		if (sound) {
 			const howl = new Howl({
 				src: [sound.getPath()],
@@ -197,29 +196,29 @@ class Songs {
 			return true;
 		}
 		if (this.musicEffectStep === 0) {
-			this.playMusic(SongKind.MusicEffect, id, volume, null, null);
+			this.playMusic(SONG_KIND.MUSIC_EFFECT, id, volume, null, null);
 			this.musicEffectStep++;
 		}
 		if (this.musicEffectStep === 1) {
-			if (this.stopSong(SongKind.Music, currentState.timeStop, 0, -1, true)) {
+			if (this.stopSong(SONG_KIND.MUSIC, currentState.timeStop, 0, -1, true)) {
 				this.musicEffectStep++;
 			}
 		}
 		if (this.musicEffectStep === 2) {
-			if (this.current[SongKind.MusicEffect] === null || !this.current[SongKind.MusicEffect].playing()) {
-				if (this.current[SongKind.MusicEffect] !== null) {
-					this.current[SongKind.MusicEffect].stop();
-					this.current[SongKind.MusicEffect] = null;
+			if (this.current[SONG_KIND.MUSIC_EFFECT] === null || !this.current[SONG_KIND.MUSIC_EFFECT].playing()) {
+				if (this.current[SONG_KIND.MUSIC_EFFECT] !== null) {
+					this.current[SONG_KIND.MUSIC_EFFECT].stop();
+					this.current[SONG_KIND.MUSIC_EFFECT] = null;
 				}
-				if (this.current[SongKind.Music] !== null) {
-					this.current[SongKind.Music].play();
+				if (this.current[SONG_KIND.MUSIC] !== null) {
+					this.current[SONG_KIND.MUSIC].play();
 				}
 				currentState.timePlay = new Date().getTime();
 				this.musicEffectStep++;
 			}
 		}
 		if (this.musicEffectStep === 3) {
-			if (this.unpauseSong(SongKind.Music, currentState.timePlay, 0.5)) {
+			if (this.unpauseSong(SONG_KIND.MUSIC, currentState.timePlay, 0.5)) {
 				this.musicEffectStep = 0;
 				this.currentStateMusicEffect = null;
 				return true;
@@ -231,9 +230,9 @@ class Songs {
 	/**
 	 *  Update songs positions or other stuff.
 	 *  @static
-	 *  @param {SongKind} kind - The song kind
+	 *  @param {SONG_KIND} kind - The song kind
 	 */
-	static updateByKind(kind: SongKind) {
+	static updateByKind(kind: SONG_KIND) {
 		const howl = this.current[kind];
 		if (howl !== null && howl.playing()) {
 			if (this.ends[kind] && howl.seek() >= this.ends[kind]) {
@@ -246,8 +245,8 @@ class Songs {
 	 *  Update songs positions or other stuffs.
 	 */
 	static update() {
-		this.updateByKind(SongKind.Music);
-		this.updateByKind(SongKind.BackgroundSound);
+		this.updateByKind(SONG_KIND.MUSIC);
+		this.updateByKind(SONG_KIND.BACKGROUND_SOUND);
 		this.updateProgressionMusic();
 	}
 
@@ -257,9 +256,9 @@ class Songs {
 	 */
 	static stopMusic(time: number) {
 		this.isMusicNone = true;
-		this.stopSong(SongKind.Music, time, 0, -1, false);
+		this.stopSong(SONG_KIND.MUSIC, time, 0, -1, false);
 		this.initializeProgressionMusic(
-			this.current[SongKind.Music] === null ? 0 : this.current[SongKind.Music].volume(),
+			this.current[SONG_KIND.MUSIC] === null ? 0 : this.current[SONG_KIND.MUSIC].volume(),
 			0,
 			0,
 			time
@@ -290,7 +289,7 @@ class Songs {
 				tick = this.progressionMusicEnd;
 				this.isProgressionMusicEnd = true;
 			}
-			const howl = this.current[SongKind.Music];
+			const howl = this.current[SONG_KIND.MUSIC];
 			if (howl) {
 				howl.volume(this.progressionMusic.getProgressionAt(tick, this.progressionMusicEnd) / 100);
 				if (howl.volume() === 0) {
@@ -306,19 +305,20 @@ class Songs {
 	 *  Stop all the songs
 	 */
 	static stopAll() {
-		if (this.current[SongKind.Music] !== null) {
-			this.current[SongKind.Music].stop();
-			this.current[SongKind.Music] = null;
+		if (this.current[SONG_KIND.MUSIC] !== null) {
+			this.current[SONG_KIND.MUSIC].stop();
+			this.current[SONG_KIND.MUSIC] = null;
 		}
-		if (this.current[SongKind.BackgroundSound] !== null) {
-			this.current[SongKind.BackgroundSound].stop();
-			this.current[SongKind.BackgroundSound] = null;
+		if (this.current[SONG_KIND.BACKGROUND_SOUND] !== null) {
+			this.current[SONG_KIND.BACKGROUND_SOUND].stop();
+			this.current[SONG_KIND.BACKGROUND_SOUND] = null;
 		}
-		if (this.current[SongKind.MusicEffect] !== null) {
-			this.current[SongKind.MusicEffect].stop();
-			this.current[SongKind.MusicEffect] = null;
+		if (this.current[SONG_KIND.MUSIC_EFFECT] !== null) {
+			this.current[SONG_KIND.MUSIC_EFFECT].stop();
+			this.current[SONG_KIND.MUSIC_EFFECT] = null;
 			this.musicEffectStep = 0;
 		}
+
 		for (const sound of this.currentSounds) {
 			if (sound) {
 				sound.stop();

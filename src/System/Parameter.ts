@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { System } from '../index';
 import { Base } from './Base';
 import { DynamicValue } from './DynamicValue';
-import DynamicValueKind = Enum.DynamicValueKind;
 
 /** @class
  *  A parameter of a reaction.
@@ -56,7 +55,7 @@ class Parameter extends Base {
 			jsonParameter = jsonParameters[i];
 			parameter = new Parameter();
 			parameter.readDefault(jsonParameter.v);
-			if (parameter.value.kind === DynamicValueKind.Default) {
+			if (parameter.value.kind === DYNAMIC_VALUE_KIND.DEFAULT) {
 				parameter = list[i + 1];
 			}
 			parameters[jsonParameter.id] = parameter;

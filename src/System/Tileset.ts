@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { PICTURE_KIND, Utils } from '../Common';
 import { CollisionSquare, Game } from '../Core';
 import { Datas, System } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A tileset of the game.
@@ -43,7 +42,7 @@ class Tileset extends Base {
 	 */
 	read(json: Record<string, any>) {
 		this.id = json.id;
-		this.picture = Datas.Pictures.get(PictureKind.Tilesets, json.pic);
+		this.picture = Datas.Pictures.get(PICTURE_KIND.TILESETS, json.pic);
 		this.battleMap = System.DynamicValue.readOrDefaultDatabase(json.bm, 1);
 	}
 
@@ -53,7 +52,7 @@ class Tileset extends Base {
 	 */
 	getPath(): string {
 		const newID = Game.current.textures.tilesets[this.id];
-		const picture = Utils.isUndefined(newID) ? this.picture : Datas.Pictures.get(Enum.PictureKind.Tilesets, newID);
+		const picture = Utils.isUndefined(newID) ? this.picture : Datas.Pictures.get(PICTURE_KIND.TILESETS, newID);
 		return picture ? picture.getPath() : null;
 	}
 }

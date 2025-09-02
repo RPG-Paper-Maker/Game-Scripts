@@ -9,28 +9,27 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Paths, Platform, Utils } from '../Common';
+import { Paths, Platform, SONG_KIND, Utils } from '../Common';
 import { Datas } from '../index';
 import { Base } from './Base';
-import SongKind = Enum.SongKind;
 
 /** @class
  *  A song of the game.
  *  @extends System.Base
  *  @param {Record<string ,any>} - [json=undefined] Json object describing the
  *  song
- *  @param {SongKind} [kind=SongKind.Music] - The kind of song
+ *  @param {SONG_KIND} [kind=SONG_KIND.Music] - The kind of song
  */
 class Song extends Base {
 	public id: number;
-	public kind: SongKind;
+	public kind: SONG_KIND;
 	public name: string;
 	public isBR: boolean;
 	public dlc: string;
 	public base64: string;
 	public howl: typeof Howl;
 
-	constructor(json?: Record<string, any>, kind: SongKind = SongKind.Music) {
+	constructor(json?: Record<string, any>, kind: SONG_KIND = SONG_KIND.MUSIC) {
 		super(json, kind);
 	}
 
@@ -44,18 +43,18 @@ class Song extends Base {
 
 	/**
 	 *  Get string of song kind.
-	 *  @param {SongKind} kind - The song kind
+	 *  @param {SONG_KIND} kind - The song kind
 	 *  @returns {string}
 	 */
-	static songKindToString(kind: SongKind): string {
+	static songKindToString(kind: SONG_KIND): string {
 		switch (kind) {
-			case SongKind.Music:
+			case SONG_KIND.MUSIC:
 				return 'music';
-			case SongKind.BackgroundSound:
+			case SONG_KIND.BACKGROUND_SOUND:
 				return 'background music';
-			case SongKind.MusicEffect:
+			case SONG_KIND.MUSIC_EFFECT:
 				return 'music effect';
-			case SongKind.Sound:
+			case SONG_KIND.SOUND:
 				return 'sound';
 		}
 		return '';
@@ -64,35 +63,32 @@ class Song extends Base {
 	/**
 	 *  Get the folder associated to a kind of song.
 	 *  @static
-	 *  @param {SongKind} kind - The kind of song
+	 *  @param {SONG_KIND} kind - The kind of song
 	 *  @param {boolean} isBR - Indicate if the pciture is a BR
 	 *  @param {string} isDLC - Indicate if the pciture is a DLC
 	 *  @returns {string}
 	 */
-	static getFolder(kind: SongKind, isBR: boolean, dlc: string): string {
+	static getFolder(kind: SONG_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR
-				? Datas.Systems.PATH_BR
-				: dlc
-				? Datas.Systems.PATH_DLCS + Constants.STRING_SLASH + dlc
-				: Platform.ROOT_DIRECTORY) + this.getLocalFolder(kind)
+			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			this.getLocalFolder(kind)
 		);
 	}
 
 	/**
 	 *  Get the local folder associated to a kind of song.
-	 *  @param {SongKind} kind - The kind of song
+	 *  @param {SONG_KIND} kind - The kind of song
 	 *  @returns {string}
 	 */
-	static getLocalFolder(kind: SongKind): string {
+	static getLocalFolder(kind: SONG_KIND): string {
 		switch (kind) {
-			case SongKind.Music:
+			case SONG_KIND.MUSIC:
 				return Paths.MUSICS;
-			case SongKind.BackgroundSound:
+			case SONG_KIND.BACKGROUND_SOUND:
 				return Paths.BACKGROUND_SOUNDS;
-			case SongKind.Sound:
+			case SONG_KIND.SOUND:
 				return Paths.SOUNDS;
-			case SongKind.MusicEffect:
+			case SONG_KIND.MUSIC_EFFECT:
 				return Paths.MUSIC_EFFECTS;
 		}
 		return '';
@@ -121,7 +117,7 @@ class Song extends Base {
 		if (this.howl) {
 			return this.howl._src;
 		}
-		return Song.getFolder(this.kind, this.isBR, this.dlc) + Constants.STRING_SLASH + this.name;
+		return Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}
 
 	/**
@@ -131,7 +127,7 @@ class Song extends Base {
 		if (this.id !== -1 && !this.howl) {
 			this.howl = new Howl({
 				src: [this.getPath()],
-				loop: this.kind !== SongKind.MusicEffect,
+				loop: this.kind !== SONG_KIND.MUSIC_EFFECT,
 				html5: true,
 				pool: 10,
 			});

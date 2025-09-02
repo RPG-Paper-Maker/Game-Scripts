@@ -9,14 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { PICTURE_KIND } from '../Common';
 import { Datas } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { Land } from './Land';
 import { StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 import { TextureBundle } from './TextureBundle';
-import PictureKind = Enum.PictureKind;
 
 /**
  * An autotile in the map
@@ -69,7 +68,7 @@ class Autotile extends Land {
 		count: number
 	): StructMapElementCollision {
 		const autotile = Datas.SpecialElements.getAutotile(this.autotileID);
-		const picture = autotile ? Datas.Pictures.get(PictureKind.Autotiles, pictureID) : null;
+		const picture = autotile ? Datas.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID) : null;
 		return super.updateGeometryLand(
 			geometry,
 			picture ? picture.getCollisionAtIndex(Land.prototype.getIndex.call(this, picture.width)) : null,

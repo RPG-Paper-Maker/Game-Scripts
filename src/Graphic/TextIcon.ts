@@ -9,12 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
 import { Datas, Graphic, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  The graphic displaying a text and an icon.
@@ -22,7 +20,7 @@ import PictureKind = Enum.PictureKind;
  *  @param {string} text - The brut text to display
  *  @param {number} iconID - The icon ID
  *  @param {Object} [opts={}] - Options
- *  @param {Align} [opts.side=Align.Left] - The side to display icon
+ *  @param {Align} [opts.side=ALIGN.LEFT] - The side to display icon
  *  @param {Align} [opts.align=Align.left] - The complete graphic align
  *  @param {number} [opts.space=RPM.MEDIUM_SPACE] - The space between icon and
  *  text
@@ -33,8 +31,8 @@ class TextIcon extends Base {
 	public indexX: number;
 	public indexY: number;
 	public system: System.Base;
-	public side: Align;
-	public align: Align;
+	public side: ALIGN;
+	public align: ALIGN;
 	public space: number;
 	public graphicIcon: Picture2D;
 	public graphicText: Graphic.Text;
@@ -44,7 +42,7 @@ class TextIcon extends Base {
 		iconID: number,
 		indexX: number,
 		indexY: number,
-		{ side = Align.Left, align = Align.Left, space = Constants.MEDIUM_SPACE } = {},
+		{ side = ALIGN.LEFT, align = ALIGN.LEFT, space = Constants.MEDIUM_SPACE } = {},
 		textOptions = {}
 	) {
 		super();
@@ -55,7 +53,7 @@ class TextIcon extends Base {
 		this.side = side;
 		this.align = align;
 		this.space = ScreenResolution.getScreenMinXY(space);
-		this.graphicIcon = Datas.Pictures.getPictureCopy(PictureKind.Icons, this.iconID);
+		this.graphicIcon = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.iconID);
 		this.graphicText = new Graphic.Text('', textOptions);
 		this.setText(text);
 	}
@@ -118,13 +116,13 @@ class TextIcon extends Base {
 		// Align offset
 		let offset: number;
 		switch (this.align) {
-			case Align.Left:
+			case ALIGN.LEFT:
 				offset = 0;
 				break;
-			case Align.Right:
+			case ALIGN.RIGHT:
 				offset = w - this.getWidth();
 				break;
-			case Align.Center:
+			case ALIGN.CENTER:
 				offset = (w - this.getWidth()) / 2;
 				break;
 		}
@@ -132,7 +130,7 @@ class TextIcon extends Base {
 		// Draw according to side
 		const sx = this.indexX * Datas.Systems.iconsSize;
 		const sy = this.indexY * Datas.Systems.iconsSize;
-		if (this.side === Align.Left) {
+		if (this.side === ALIGN.LEFT) {
 			this.graphicIcon.draw({
 				x: x + offset,
 				y: y - iconHeight / 2 + h / 2,
@@ -145,7 +143,7 @@ class TextIcon extends Base {
 			});
 			offset += iconWidth + this.space;
 			this.graphicText.draw(x + offset, y, w, h);
-		} else if (this.side === Align.Right) {
+		} else if (this.side === ALIGN.RIGHT) {
 			this.graphicText.draw(x + offset, y, w, h);
 			offset += this.graphicText.textWidth + this.space;
 			this.graphicIcon.draw({

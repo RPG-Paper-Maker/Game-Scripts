@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ModifyInventory extends Base {
-	public itemKind: number;
+	public ITEM_KIND: number;
 	public itemID: System.DynamicValue;
 	public operation: number;
 	public value: System.DynamicValue;
@@ -30,7 +30,7 @@ class ModifyInventory extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.itemKind = command[iterator.i++];
+		this.ITEM_KIND = command[iterator.i++];
 		this.itemID = System.DynamicValue.createValueCommand(command, iterator);
 		this.operation = command[iterator.i++];
 		this.value = System.DynamicValue.createValueCommand(command, iterator);
@@ -44,7 +44,7 @@ class ModifyInventory extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const item = new Item(this.itemKind, this.itemID.getValue(), this.value.getValue());
+		const item = new Item(this.ITEM_KIND, this.itemID.getValue(), this.value.getValue());
 
 		// Doing the coresponding operation
 		switch (this.operation) {

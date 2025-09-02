@@ -10,7 +10,15 @@
 */
 
 import { Datas, Graphic, Scene, System } from '..';
-import { Enum, Mathf } from '../Common';
+import {
+	BATTLE_STEP,
+	CHARACTER_KIND,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Mathf,
+	STATUS_RESTRICTIONS_KIND,
+	TARGET_KIND,
+	TROOP_REACTION_FREQUENCY_KIND,
+} from '../Common';
 import { Animation, Battler, ReactionInterpreter } from '../Core';
 import { Status } from '../Core/Status';
 
@@ -50,7 +58,7 @@ class BattleStartTurn {
 			let reaction: System.TroopReaction;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
-				if (reaction.frequency === Enum.TroopReactionFrequencyKind.EachTurnBegin) {
+				if (reaction.frequency === TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_BEGIN) {
 					// Check conditions
 					if (!reaction.conditions.isValid()) {
 						continue;
@@ -100,19 +108,19 @@ class BattleStartTurn {
 			for (i = 0, l = this.battle.battlers[this.battle.attackingGroup].length; i < l; i++) {
 				battler = this.battle.battlers[this.battle.attackingGroup][i];
 				if (battler.active) {
-					if (battler.containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything)) {
+					if (battler.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_DO_ANYTHING)) {
 						continue;
 					}
-					if (battler.containsRestriction(Enum.StatusRestrictionsKind.AttackRandomAlly)) {
-						this.defineRandom(battler, Enum.StatusRestrictionsKind.AttackRandomAlly);
+					if (battler.containsRestriction(STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY)) {
+						this.defineRandom(battler, STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY);
 						return;
 					}
-					if (battler.containsRestriction(Enum.StatusRestrictionsKind.AttackRandomEnemy)) {
-						this.defineRandom(battler, Enum.StatusRestrictionsKind.AttackRandomEnemy);
+					if (battler.containsRestriction(STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY)) {
+						this.defineRandom(battler, STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY);
 						return;
 					}
-					if (battler.containsRestriction(Enum.StatusRestrictionsKind.AttackRandomTarget)) {
-						this.defineRandom(battler, Enum.StatusRestrictionsKind.AttackRandomTarget);
+					if (battler.containsRestriction(STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET)) {
+						this.defineRandom(battler, STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET);
 						return;
 					}
 				}
@@ -125,17 +133,17 @@ class BattleStartTurn {
 		this.active = false;
 		this.step = 0;
 		this.indexTroopReaction = 0;
-		if (this.battle.attackingGroup === Enum.CharacterKind.Hero) {
-			this.battle.changeStep(Enum.BattleStep.Selection); // Attack of heroes
+		if (this.battle.attackingGroup === CHARACTER_KIND.HERO) {
+			this.battle.changeStep(BATTLE_STEP.SELECTION); // Attack of heroes
 		} else {
-			this.battle.changeStep(Enum.BattleStep.EnemyAttack); // Attack of ennemies
+			this.battle.changeStep(BATTLE_STEP.ENEMY_ATTACK); // Attack of ennemies
 		}
 	}
 
-	public defineRandom(user: Battler, restriction: Enum.StatusRestrictionsKind) {
+	public defineRandom(user: Battler, restriction: STATUS_RESTRICTIONS_KIND) {
 		this.battle.user = user;
-		if (this.battle.attackingGroup === Enum.CharacterKind.Hero) {
-			this.battle.battleCommandKind = Enum.EffectSpecialActionKind.OpenSkills;
+		if (this.battle.attackingGroup === CHARACTER_KIND.HERO) {
+			this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 			this.battle.currentEffectIndex = 0;
 			const skills: System.Skill[] = [];
 			let skill: System.Skill;
@@ -145,54 +153,54 @@ class BattleStartTurn {
 					continue;
 				}
 				if (
-					restriction === Enum.StatusRestrictionsKind.AttackRandomAlly &&
-					skill.targetKind !== Enum.TargetKind.AllEnemies &&
-					skill.targetKind !== Enum.TargetKind.Enemy
+					restriction === STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY &&
+					skill.targetKind !== TARGET_KIND.ALL_ENEMIES &&
+					skill.targetKind !== TARGET_KIND.ENEMY
 				) {
 					continue;
 				}
 				if (
-					restriction === Enum.StatusRestrictionsKind.AttackRandomEnemy &&
-					skill.targetKind !== Enum.TargetKind.AllEnemies &&
-					skill.targetKind !== Enum.TargetKind.Enemy
+					restriction === STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY &&
+					skill.targetKind !== TARGET_KIND.ALL_ENEMIES &&
+					skill.targetKind !== TARGET_KIND.ENEMY
 				) {
 					continue;
 				}
 				if (
-					restriction === Enum.StatusRestrictionsKind.AttackRandomTarget &&
-					skill.targetKind !== Enum.TargetKind.AllEnemies &&
-					skill.targetKind !== Enum.TargetKind.Enemy
+					restriction === STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET &&
+					skill.targetKind !== TARGET_KIND.ALL_ENEMIES &&
+					skill.targetKind !== TARGET_KIND.ENEMY
 				) {
 					continue;
 				}
 				skills.push(skill);
 			}
 			if (skills.length === 0) {
-				this.battle.battleCommandKind = Enum.EffectSpecialActionKind.DoNothing;
+				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.DO_NOTHING;
 				return;
 			}
 			skill = skills[Mathf.random(0, skills.length - 1)];
 			this.battle.currentSkill = skill;
 			this.battle.animationUser = new Animation(skill.animationUserID.getValue());
 			this.battle.animationTarget = new Animation(skill.animationTargetID.getValue());
-			let side: Enum.CharacterKind;
+			let side: CHARACTER_KIND;
 			switch (restriction) {
-				case Enum.StatusRestrictionsKind.AttackRandomAlly:
-					side = Enum.CharacterKind.Hero;
+				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
+					side = CHARACTER_KIND.HERO;
 					break;
-				case Enum.StatusRestrictionsKind.AttackRandomEnemy:
-					side = Enum.CharacterKind.Monster;
+				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
+					side = CHARACTER_KIND.MONSTER;
 					break;
-				case Enum.StatusRestrictionsKind.AttackRandomTarget:
-					side = Mathf.random(0, 1) === 0 ? Enum.CharacterKind.Hero : Enum.CharacterKind.Monster;
+				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
+					side = Mathf.random(0, 1) === 0 ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
 					break;
 			}
 			switch (skill.targetKind) {
-				case Enum.TargetKind.AllEnemies: {
+				case TARGET_KIND.ALL_ENEMIES: {
 					this.battle.targets = this.battle.battlers[side];
 					break;
 				}
-				case Enum.TargetKind.Enemy: {
+				case TARGET_KIND.ENEMY: {
 					this.battle.targets = [
 						this.battle.battlers[side][Mathf.random(0, this.battle.battlers[side].length - 1)],
 					];
@@ -203,7 +211,7 @@ class BattleStartTurn {
 			this.battle.battleEnemyAttack.defineAction(restriction);
 			this.battle.battleEnemyAttack.defineTargets(restriction);
 		}
-		this.battle.changeStep(Enum.BattleStep.Animation);
+		this.battle.changeStep(BATTLE_STEP.ANIMATION);
 	}
 
 	/**
@@ -266,7 +274,7 @@ class BattleStartTurn {
 						this.battle.currentTargetIndex = null;
 						this.battle.animationUser = null;
 						this.battle.animationTarget = null;
-						this.battle.step = Enum.BattleStep.Animation;
+						this.battle.step = BATTLE_STEP.ANIMATION;
 						this.battle.subStep = 2;
 					}
 					return;

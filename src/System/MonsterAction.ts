@@ -9,13 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { MONSTER_ACTION_KIND, MONSTER_ACTION_TARGET_KIND, OPERATION_KIND, Utils } from '../Common';
 import { Base } from './Base';
 import { DynamicValue } from './DynamicValue';
 import { Monster } from './Monster';
-import MonsterActionKind = Enum.MonsterActionKind;
-import OperationKind = Enum.OperationKind;
-import MonsterActionTargetKind = Enum.MonsterActionTargetKind;
 
 /** @class
  *  A monster action of the game.
@@ -57,12 +54,12 @@ class MonsterAction extends Base {
 	 *  action
 	 */
 	read(json: Record<string, any>) {
-		this.actionKind = Utils.defaultValue(json.ak, MonsterActionKind.DoNothing);
+		this.actionKind = Utils.defaultValue(json.ak, MONSTER_ACTION_KIND.DO_NOTHING);
 		switch (this.actionKind) {
-			case MonsterActionKind.UseSkill:
+			case MONSTER_ACTION_KIND.USE_SKILL:
 				this.skillID = DynamicValue.readOrDefaultNumber(json.sid, 1);
 				break;
-			case MonsterActionKind.UseItem:
+			case MONSTER_ACTION_KIND.USE_ITEM:
 				this.itemID = DynamicValue.readOrDefaultNumber(json.iid, 1);
 				this.itemNumberMax = DynamicValue.readOrDefaultNumber(json.inm, 1);
 				break;
@@ -70,22 +67,22 @@ class MonsterAction extends Base {
 				break;
 		}
 		this.priority = DynamicValue.readOrDefaultNumber(json.p, 10);
-		this.targetKind = Utils.defaultValue(json.tk, MonsterActionTargetKind.Random);
+		this.targetKind = Utils.defaultValue(json.tk, MONSTER_ACTION_TARGET_KIND.RANDOM);
 		this.isConditionTurn = Utils.defaultValue(json.ict, false);
 		if (this.isConditionTurn) {
-			this.operationKindTurn = Utils.defaultValue(json.okt, OperationKind.EqualTo);
+			this.operationKindTurn = Utils.defaultValue(json.okt, OPERATION_KIND.EQUAL_TO);
 			this.turnValueCompare = DynamicValue.readOrDefaultNumber(json.tvc, 0);
 		}
 		this.isConditionStatistic = Utils.defaultValue(json.ics, false);
 		if (this.isConditionStatistic) {
 			this.statisticID = DynamicValue.readOrDefaultDatabase(json.stid);
-			this.operationKindStatistic = Utils.defaultValue(json.oks, OperationKind.EqualTo);
+			this.operationKindStatistic = Utils.defaultValue(json.oks, OPERATION_KIND.EQUAL_TO);
 			this.statisticValueCompare = DynamicValue.readOrDefaultNumber(json.svc, 0);
 		}
 		this.isConditionVariable = Utils.defaultValue(json.icv, false);
 		if (this.isConditionVariable) {
 			this.variableID = Utils.defaultValue(json.vid, 1);
-			this.operationKindVariable = Utils.defaultValue(json.okv, OperationKind.EqualTo);
+			this.operationKindVariable = Utils.defaultValue(json.okv, OPERATION_KIND.EQUAL_TO);
 			this.variableValueCompare = DynamicValue.readOrDefaultNumber(json.vvc, 0);
 		}
 		this.isConditionStatus = Utils.defaultValue(json.icst, false);

@@ -11,13 +11,19 @@
 
 import * as THREE from 'three';
 import { Datas, Graphic, Manager, Scene, System } from '..';
-import { Constants, Enum, Interpreter, Platform, ScreenResolution } from '../Common';
+import {
+	ALIGN,
+	BATTLE_STEP,
+	CHARACTER_KIND,
+	Constants,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Interpreter,
+	MAP_TRANSITION_KIND,
+	Platform,
+	ScreenResolution,
+	SONG_KIND,
+} from '../Common';
 import { Battler, Game, Player, Position, WindowBox, WindowChoices } from '../Core';
-import CharacterKind = Enum.CharacterKind;
-import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import SongKind = Enum.SongKind;
-import MapTransitionKind = Enum.MapTransitionKind;
-import BattleStep = Enum.BattleStep;
 
 // -------------------------------------------------------
 //
@@ -41,17 +47,17 @@ class BattleInitialize {
 	initialize() {
 		Scene.Battle.escapedLastBattle = false;
 		this.battle.winning = false;
-		this.battle.kindSelection = CharacterKind.Hero;
+		this.battle.kindSelection = CHARACTER_KIND.HERO;
 		this.battle.selectedUserIndex = 0;
 		this.battle.selectedTargetIndex = 0;
-		this.battle.battleCommandKind = EffectSpecialActionKind.None;
+		this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.NONE;
 		this.battle.targets = [];
 		this.battle.battlers = new Array(2);
 		this.battle.players = new Array(2);
 		this.battle.graphicPlayers = new Array(2);
 		this.battle.time = new Date().getTime();
 		this.battle.turn = 0;
-		this.battle.attackingGroup = CharacterKind.Hero;
+		this.battle.attackingGroup = CHARACTER_KIND.HERO;
 		this.initializeAlliesBattlers();
 		this.initializeEnemiesBattlers();
 		this.initializeInformation();
@@ -65,9 +71,9 @@ class BattleInitialize {
 	 */
 	initializeAlliesBattlers() {
 		const l = Game.current.teamHeroes.length;
-		this.battle.battlers[CharacterKind.Hero] = new Array(l);
-		this.battle.players[CharacterKind.Hero] = new Array(l);
-		this.battle.graphicPlayers[CharacterKind.Hero] = new Array(l);
+		this.battle.battlers[CHARACTER_KIND.HERO] = new Array(l);
+		this.battle.players[CHARACTER_KIND.HERO] = new Array(l);
+		this.battle.graphicPlayers[CHARACTER_KIND.HERO] = new Array(l);
 		let position: THREE.Vector3, player: Player, battler: Battler, center: THREE.Vector3, offset: THREE.Vector3;
 		for (let i = 0; i < l; i++) {
 			// Battlers
@@ -88,11 +94,11 @@ class BattleInitialize {
 			battler.updateDead(false);
 			player.battler = battler;
 			battler.updateHidden(false);
-			this.battle.battlers[CharacterKind.Hero][i] = battler;
-			this.battle.players[CharacterKind.Hero][i] = player;
+			this.battle.battlers[CHARACTER_KIND.HERO][i] = battler;
+			this.battle.players[CHARACTER_KIND.HERO][i] = player;
 
 			// Graphic player
-			this.battle.graphicPlayers[CharacterKind.Hero][i] = new Graphic.Player(player);
+			this.battle.graphicPlayers[CHARACTER_KIND.HERO][i] = new Graphic.Player(player);
 		}
 	}
 
@@ -101,9 +107,9 @@ class BattleInitialize {
 	 */
 	initializeEnemiesBattlers() {
 		const l = this.battle.troop.list.length;
-		this.battle.battlers[CharacterKind.Monster] = new Array(l);
-		this.battle.players[CharacterKind.Monster] = new Array(l);
-		this.battle.graphicPlayers[CharacterKind.Monster] = new Array(l);
+		this.battle.battlers[CHARACTER_KIND.MONSTER] = new Array(l);
+		this.battle.players[CHARACTER_KIND.MONSTER] = new Array(l);
+		this.battle.graphicPlayers[CHARACTER_KIND.MONSTER] = new Array(l);
 		let troopMonster: System.TroopMonster,
 			position: THREE.Vector3,
 			player: Player,
@@ -133,16 +139,16 @@ class BattleInitialize {
 				}
 			}
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
-			player = new Player(CharacterKind.Monster, troopMonster.id, Game.current.charactersInstances++, [], []);
+			player = new Player(CHARACTER_KIND.MONSTER, troopMonster.id, Game.current.charactersInstances++, [], []);
 			player.instanciate(troopMonster.level.getValue());
 			battler = new Battler(player, true, Position.createFromVector3(position), position, this.battle.camera);
 			player.battler = battler;
 			battler.updateHidden(troopMonster.hidden.getValue());
-			this.battle.battlers[CharacterKind.Monster][i] = battler;
-			this.battle.players[CharacterKind.Monster][i] = player;
+			this.battle.battlers[CHARACTER_KIND.MONSTER][i] = battler;
+			this.battle.players[CHARACTER_KIND.MONSTER][i] = player;
 
 			// Graphic player
-			this.battle.graphicPlayers[CharacterKind.Monster][i] = new Graphic.Player(player, { reverse: true });
+			this.battle.graphicPlayers[CHARACTER_KIND.MONSTER][i] = new Graphic.Player(player, { reverse: true });
 		}
 	}
 
@@ -157,7 +163,7 @@ class BattleInitialize {
 			WindowBox.SMALL_SLOT_HEIGHT,
 			{
 				padding: WindowBox.SMALL_SLOT_PADDING,
-				content: new Graphic.Text('', { align: Enum.Align.Center }),
+				content: new Graphic.Text('', { align: ALIGN.CENTER }),
 			}
 		);
 		this.battle.windowUserInformations = new WindowBox(
@@ -279,7 +285,7 @@ class BattleInitialize {
 	 */
 	initializeMusic() {
 		this.battle.musicMap = System.PlaySong.currentPlayingMusic;
-		const song = Manager.Songs.current[SongKind.Music];
+		const song = Manager.Songs.current[SONG_KIND.MUSIC];
 		this.battle.musicMapTime = song === null ? 0 : song.seek();
 		if (Game.current.battleMusic.songID.getValue() !== -1) {
 			Game.current.battleMusic.playMusic();
@@ -291,13 +297,13 @@ class BattleInitialize {
 	 */
 	update() {
 		Manager.Stack.requestPaintHUD = true;
-		if (this.battle.transitionStart === MapTransitionKind.Fade) {
+		if (this.battle.transitionStart === MAP_TRANSITION_KIND.FADE) {
 			this.updateTransitionStartFade();
-		} else if (this.battle.transitionStart === MapTransitionKind.Zoom) {
+		} else if (this.battle.transitionStart === MAP_TRANSITION_KIND.ZOOM) {
 			this.updateTransitionStartZoom();
 		} else {
 			this.battle.turn = 1;
-			this.battle.changeStep(Enum.BattleStep.StartTurn);
+			this.battle.changeStep(BATTLE_STEP.START_TURN);
 		}
 	}
 
@@ -326,7 +332,7 @@ class BattleInitialize {
 			return;
 		}
 		this.battle.turn = 1;
-		this.battle.changeStep(BattleStep.StartTurn);
+		this.battle.changeStep(BATTLE_STEP.START_TURN);
 	}
 
 	/**
@@ -363,7 +369,7 @@ class BattleInitialize {
 			}
 		}
 		this.battle.turn = 1;
-		this.battle.changeStep(BattleStep.StartTurn);
+		this.battle.changeStep(BATTLE_STEP.START_TURN);
 	}
 
 	/**
@@ -401,17 +407,7 @@ class BattleInitialize {
 	 */
 	drawHUDStep() {
 		if (this.battle.transitionStart === 1) {
-			Platform.ctx.fillStyle =
-				Constants.STRING_RGBA +
-				Constants.STRING_PARENTHESIS_LEFT +
-				this.battle.transitionStartColor.red +
-				Constants.STRING_COMA +
-				this.battle.transitionStartColor.green +
-				Constants.STRING_COMA +
-				this.battle.transitionStartColor.blue +
-				Constants.STRING_COMA +
-				this.battle.transitionColorAlpha +
-				Constants.STRING_PARENTHESIS_RIGHT;
+			Platform.ctx.fillStyle = `rgba(${this.battle.transitionStartColor.red},${this.battle.transitionStartColor.green},${this.battle.transitionStartColor.blue},${this.battle.transitionColorAlpha})`;
 			Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
 		}
 	}

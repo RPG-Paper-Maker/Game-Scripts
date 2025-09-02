@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Platform, ScreenResolution } from '../Common';
+import { PICTURE_KIND, Platform, ScreenResolution } from '../Common';
 import { Datas, System } from '../index';
 import { Stack } from '../Manager';
 import { Bitmap } from './Bitmap';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *   A class for pictures drawable in HUD.
@@ -101,7 +100,7 @@ class Picture2D extends Bitmap {
 	 *  Create a picture from kind and id and then load it
 	 *  @static
 	 *  @param {number} id - The picture id to load
-	 *  @param {PictureKind} kind - The picture kind to load
+	 *  @param {PICTURE_KIND} kind - The picture kind to load
 	 *  @param {number} x - The x position
 	 *  @param {number} y - The y position
 	 *  @param {number} w - The w size
@@ -112,12 +111,12 @@ class Picture2D extends Bitmap {
 	 *
 	 * @static
 	 * @param {number} id - The picture id to load
-	 * @param {PictureKind} kind - The picture kind to load
+	 * @param {PICTURE_KIND} kind - The picture kind to load
 	 * @param {pictureOptions} [opts={}]
 	 * @return {*}
 	 * @memberof Picture2D
 	 */
-	static async createWithID(id: number, kind: PictureKind, opts: pictureOptions = {}) {
+	static async createWithID(id: number, kind: PICTURE_KIND, opts: pictureOptions = {}) {
 		return await Picture2D.create(Datas.Pictures.get(kind, id), opts);
 	}
 

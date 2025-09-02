@@ -10,7 +10,19 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Inputs, Interpreter, Paths, Platform, ScreenResolution, Utils } from '../Common';
+import {
+	Constants,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Inputs,
+	Interpreter,
+	ORIENTATION,
+	Paths,
+	PICTURE_KIND,
+	Platform,
+	ScreenResolution,
+	TARGET_KIND,
+	Utils,
+} from '../Common';
 import {
 	Autotiles,
 	Battler,
@@ -25,9 +37,6 @@ import {
 } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
 import { Base } from './Base';
-import Orientation = Enum.Orientation;
-import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A scene for a local map.
@@ -46,12 +55,12 @@ class Map extends Base {
 
 	public id: number;
 	public mapFilename: string;
-	public orientation: Orientation;
+	public orientation: ORIENTATION;
 	public user: Battler;
 	public isBattleMap: boolean;
 	public tempTargets: Battler[];
 	public targets: Battler[];
-	public battleCommandKind: EffectSpecialActionKind;
+	public battleCommandKind: EFFECT_SPECIAL_ACTION_KIND;
 	public mapProperties: System.MapProperties;
 	public scene: THREE.Scene;
 	public currentPortion: Portion;
@@ -62,7 +71,7 @@ class Map extends Base {
 	public collisions: number[][][][];
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
-	public heroOrientation: Enum.Orientation;
+	public heroOrientation: ORIENTATION;
 	public previousWeatherPoints: THREE.Points = null;
 	public previousWeatherVelocities: number[];
 	public previousWeatherRotationsAngle: number[];
@@ -80,7 +89,7 @@ class Map extends Base {
 		id: number,
 		isBattleMap: boolean = false,
 		minimal: boolean = false,
-		heroOrientation: Enum.Orientation = null
+		heroOrientation: ORIENTATION = null
 	) {
 		super(false);
 
@@ -160,7 +169,7 @@ class Map extends Base {
 							this.currentPortion.z + k
 						);
 						const json = await Platform.parseFileJSON(
-							Paths.FILE_MAPS + this.mapFilename + Constants.STRING_SLASH + portion.getFileName()
+							Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName()
 						);
 						mapPortion.readStatic(json);
 					}
@@ -199,13 +208,13 @@ class Map extends Base {
 
 	/**
 	 *  Get all the possible targets of a skill.
-	 *  @param {Enum.TargetKind} targetKind
+	 *  @param {TARGET_KIND} targetKind
 	 *  @returns {Player[]}
 	 */
-	getPossibleTargets(targetKind: Enum.TargetKind): Player[] {
-		if (targetKind === Enum.TargetKind.User) {
+	getPossibleTargets(targetKind: TARGET_KIND): Player[] {
+		if (targetKind === TARGET_KIND.USER) {
 			return this.user ? [this.user.player] : [];
-		} else if (targetKind === Enum.TargetKind.Ally || targetKind === Enum.TargetKind.AllAllies) {
+		} else if (targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) {
 			return Game.current.teamHeroes;
 		} else {
 			return [];
@@ -343,9 +352,9 @@ class Map extends Base {
 		}
 
 		// Characters
-		const pictures = Datas.Pictures.getListByKind(PictureKind.Characters);
+		const pictures = Datas.Pictures.getListByKind(PICTURE_KIND.CHARACTERS);
 		const l = pictures.length;
-		this.collisions[PictureKind.Characters] = new Array(l);
+		this.collisions[PICTURE_KIND.CHARACTERS] = new Array(l);
 		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: System.Picture;
 		for (let i = 1; i < l; i++) {
 			material = this.texturesCharacters[i];
@@ -356,9 +365,9 @@ class Map extends Base {
 			p = pictures[i];
 			if (p) {
 				p.readCollisionsImage(image);
-				this.collisions[PictureKind.Characters][i] = p.getSquaresForStates(image);
+				this.collisions[PICTURE_KIND.CHARACTERS][i] = p.getSquaresForStates(image);
 			} else {
-				this.collisions[PictureKind.Characters][i] = null;
+				this.collisions[PICTURE_KIND.CHARACTERS][i] = null;
 			}
 		}
 	}
@@ -516,9 +525,7 @@ class Map extends Base {
 		const lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			const portion = new Portion(realX, realY, realZ);
-			const json = await Platform.parseFileJSON(
-				Paths.FILE_MAPS + this.mapFilename + Constants.STRING_SLASH + portion.getFileName()
-			);
+			const json = await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName());
 			if (json.hasOwnProperty('lands')) {
 				const mapPortion = new MapPortion(portion);
 				this.setMapPortion(x, y, z, mapPortion, move);
@@ -740,10 +747,10 @@ class Map extends Base {
 	/**
 	 *  Load collision for special elements.
 	 *  @param {number[]} list - The IDs list
-	 *  @param {PictureKind} kind - The picture kind
+	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @param {SpecialElement[]} specials - The specials list
 	 */
-	loadSpecialsCollision(list: number[], kind: PictureKind, specials: System.SpecialElement[]) {
+	loadSpecialsCollision(list: number[], kind: PICTURE_KIND, specials: System.SpecialElement[]) {
 		let special: System.SpecialElement, picture: System.Picture;
 		for (let i = 0, l = list.length; i < l; i++) {
 			const id = list[i];
@@ -751,16 +758,16 @@ class Map extends Base {
 			if (special) {
 				let pictureID = undefined;
 				switch (kind) {
-					case Enum.PictureKind.Autotiles:
+					case PICTURE_KIND.AUTOTILES:
 						pictureID = Game.current.textures.autotiles[id];
 						break;
-					case Enum.PictureKind.Mountains:
+					case PICTURE_KIND.MOUNTAINS:
 						pictureID = Game.current.textures.mountains[id];
 						break;
-					case Enum.PictureKind.Walls:
+					case PICTURE_KIND.WALLS:
 						pictureID = Game.current.textures.walls[id];
 						break;
-					case Enum.PictureKind.Objects3D:
+					case PICTURE_KIND.OBJECTS_3D:
 						pictureID = Game.current.textures.objects3D[id];
 						break;
 				}
@@ -875,7 +882,7 @@ class Map extends Base {
 		});
 		if (!options.isColor) {
 			const texture = new THREE.TextureLoader().load(
-				Datas.Pictures.get(Enum.PictureKind.Particles, options.imageID).getPath()
+				Datas.Pictures.get(PICTURE_KIND.PARTICLES, options.imageID).getPath()
 			);
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.NearestFilter;

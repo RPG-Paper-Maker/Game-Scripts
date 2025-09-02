@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { SONG_KIND } from '../Common';
 import { MapObject } from '../Core';
 import { EventCommand } from '../index';
 import { Base } from './Base';
-import SongKind = Enum.SongKind;
 
 /** @class
  *  An event command for stopping the background sound.
@@ -24,7 +23,7 @@ class StopBackgroundSound extends Base {
 	constructor(command: any[]) {
 		super();
 
-		EventCommand.StopMusic.parseStopSong(this, command, Enum.SongKind.BackgroundSound);
+		EventCommand.StopMusic.parseStopSong(this, command, SONG_KIND.BACKGROUND_SOUND);
 		this.parallel = true;
 	}
 
@@ -47,7 +46,7 @@ class StopBackgroundSound extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const stopped = EventCommand.StopMusic.stopSong(this, SongKind.BackgroundSound, currentState.time);
+		const stopped = EventCommand.StopMusic.stopSong(this, SONG_KIND.BACKGROUND_SOUND, currentState.time);
 		return currentState.parallel ? stopped : 1;
 	}
 }

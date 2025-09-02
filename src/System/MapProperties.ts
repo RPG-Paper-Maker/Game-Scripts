@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Mathf, Utils } from '../Common';
+import { Constants, MAP_TRANSITION_KIND, Mathf, PICTURE_KIND, SONG_KIND, Utils } from '../Common';
 import { Game, Position } from '../Core';
 import { MapObject } from '../Core/MapObject';
 import { Datas, Manager, Scene, System } from '../index';
@@ -19,8 +19,6 @@ import { CameraProperties } from './CameraProperties';
 import { Color } from './Color';
 import { DynamicValue } from './DynamicValue';
 import { PlaySong } from './PlaySong';
-import SongKind = Enum.SongKind;
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  The properties of a map.
@@ -83,9 +81,9 @@ class MapProperties extends Base {
 			datas = {};
 		}
 		this.tileset = Datas.Tilesets.get(Utils.defaultValue(datas.tileset, json.tileset));
-		this.music = new PlaySong(SongKind.Music, Utils.defaultValue(datas.music, json.music));
+		this.music = new PlaySong(SONG_KIND.MUSIC, Utils.defaultValue(datas.music, json.music));
 		this.backgroundSound = new PlaySong(
-			SongKind.BackgroundSound,
+			SONG_KIND.BACKGROUND_SOUND,
 			Utils.defaultValue(datas.backgroundSound, json.bgs)
 		);
 		this.cameraProperties = Datas.Systems.getCameraProperties(
@@ -173,7 +171,7 @@ class MapProperties extends Base {
 	 */
 	updateBackgroundImage() {
 		const texture = Manager.GL.textureLoader.load(
-			Datas.Pictures.get(PictureKind.Pictures, this.backgroundImageID).getPath()
+			Datas.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath()
 		);
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
@@ -250,8 +248,8 @@ class MapProperties extends Base {
 						true,
 						true,
 						battleMap,
-						Enum.MapTransitionKind.Zoom,
-						Enum.MapTransitionKind.Zoom,
+						MAP_TRANSITION_KIND.ZOOM,
+						MAP_TRANSITION_KIND.ZOOM,
 						null,
 						null
 					)

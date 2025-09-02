@@ -51,7 +51,7 @@ class Utils {
 	 *   @returns {boolean}
 	 */
 	public static isUndefined(value: any): boolean {
-		return typeof value === Constants.UNDEFINED;
+		return typeof value === 'undefined';
 	}
 
 	/** Check if the value is a number
@@ -60,7 +60,7 @@ class Utils {
 	 *   @returns {boolean}
 	 */
 	static isNumber(value: any): boolean {
-		return typeof value === Constants.NUMBER;
+		return typeof value === 'number';
 	}
 
 	/** Check if the value is a string
@@ -69,7 +69,7 @@ class Utils {
 	 *   @returns {boolean}
 	 */
 	static isString(value: any): boolean {
-		return typeof value === Constants.STRING;
+		return typeof value === 'string';
 	}
 
 	/** Convert a number to boolean
@@ -78,7 +78,7 @@ class Utils {
 	 *   @returns {boolean}
 	 */
 	static numToBool(num: number): boolean {
-		return num === Constants.NUM_BOOL_TRUE;
+		return num === 1;
 	}
 
 	/** Convert a boolean to number
@@ -87,7 +87,7 @@ class Utils {
 	 *   @returns {number}
 	 */
 	static boolToNum(b: boolean): number {
-		return b ? Constants.NUM_BOOL_TRUE : Constants.NUM_BOOL_FALSE;
+		return b ? 1 : 0;
 	}
 
 	/** Convert number to string
@@ -120,9 +120,9 @@ class Utils {
 	static getStringDate(total: number): string {
 		return (
 			this.formatNumber(Math.floor(total / 3600), 4) +
-			Constants.STRING_COLON +
+			':' +
 			this.formatNumber(Math.floor((total % 3600) / 60), 2) +
-			Constants.STRING_COLON +
+			':' +
 			this.formatNumber(Math.floor(total % 60), 2)
 		);
 	}

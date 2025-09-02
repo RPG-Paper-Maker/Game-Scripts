@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Mathf } from '../Common';
+import { GROUP_KIND, Mathf } from '../Common';
 import { Game, MapObject, Player } from '../Core';
 import { System } from '../index';
 import { Base } from './Base';
@@ -22,7 +22,7 @@ import { Base } from './Base';
 class ChangeExperienceCurve extends Base {
 	public selectionKind: number;
 	public selectionHeroEnemyInstanceID: System.DynamicValue;
-	public selectionTeam: Enum.GroupKind;
+	public selectionTeam: GROUP_KIND;
 	public levelRange: System.DynamicValue;
 	public levelRangeTo: System.DynamicValue;
 	public operation: number;

@@ -10,7 +10,7 @@
 */
 
 import { Graphic } from '..';
-import { Enum, ScreenResolution, Utils } from '../Common';
+import { ALIGN, ALIGN_VERTICAL, ScreenResolution, Utils } from '../Common';
 
 /** @class
  *  A chrono in the game.
@@ -31,8 +31,8 @@ class Chrono {
 		this.time = start;
 		this.graphic = displayOnScreen
 			? new Graphic.Text(Utils.getStringDate(this.getSeconds()), {
-					align: Enum.Align.Right,
-					verticalAlign: Enum.AlignVertical.Top,
+					align: ALIGN.RIGHT,
+					verticalAlign: ALIGN_VERTICAL.TOP,
 			  })
 			: null;
 		this.lastTime = new Date().getTime();

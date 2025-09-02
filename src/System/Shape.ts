@@ -10,23 +10,22 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Paths, Platform, Utils } from '../Common';
+import { CUSTOM_SHAPE_KIND, Paths, Platform, Utils } from '../Common';
 import { CustomGeometry } from '../Core';
 import { Datas, Manager } from '../index';
 import { Base } from './Base';
-import CustomShapeKind = Enum.CustomShapeKind;
 
 /** @class
  *  A shape of the game.
  *  @extends System.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  shape
- *  @param {CustomShapeKind} [kind=CustomShapeKin] - The kind of custom shape
+ *  @param {CustomSHAPE_KIND} [kind=CustomShapeKin] - The kind of custom shape
  */
 class Shape extends Base {
 	public static loader = new THREE.FileLoader();
 	public id: number;
-	public kind: CustomShapeKind;
+	public kind: CUSTOM_SHAPE_KIND;
 	public name: string;
 	public isBR: boolean;
 	public dlc: string;
@@ -34,7 +33,7 @@ class Shape extends Base {
 	public mesh: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
 	public geometry: Record<string, any>;
 
-	constructor(json?: Record<string, any>, kind: CustomShapeKind = CustomShapeKind.OBJ) {
+	constructor(json?: Record<string, any>, kind: CUSTOM_SHAPE_KIND = CUSTOM_SHAPE_KIND.OBJ) {
 		super(json, kind);
 	}
 
@@ -48,16 +47,16 @@ class Shape extends Base {
 
 	/**
 	 *  Get string of custom shape kind.
-	 *  @param {CustomShapeKind} kind - The custom shape kind
+	 *  @param {CustomSHAPE_KIND} kind - The custom shape kind
 	 *  @returns {string}
 	 */
-	static customShapeKindToString(kind: CustomShapeKind): string {
+	static customSHAPE_KINDToString(kind: CUSTOM_SHAPE_KIND): string {
 		switch (kind) {
-			case CustomShapeKind.OBJ:
+			case CUSTOM_SHAPE_KIND.OBJ:
 				return '.obj';
-			case CustomShapeKind.MTL:
+			case CUSTOM_SHAPE_KIND.MTL:
 				return '.mtl';
-			case CustomShapeKind.Collisions:
+			case CUSTOM_SHAPE_KIND.COLLISIONS:
 				return '.obj collisions';
 		}
 		return '';
@@ -171,33 +170,30 @@ class Shape extends Base {
 	/**
 	 *  Get the folder associated to a kind of custom shape.
 	 *  @static
-	 *  @param {CustomShapeKind} kind - The kind of custom shape
+	 *  @param {CustomSHAPE_KIND} kind - The kind of custom shape
 	 *  @param {boolean} isBR - Indicate if the shape is a BR
 	 *  @param {string} dlc - The dlc name
 	 *  @returns {string}
 	 */
-	static getFolder(kind: CustomShapeKind, isBR: boolean, dlc: string): string {
+	static getFolder(kind: CUSTOM_SHAPE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR
-				? Datas.Systems.PATH_BR
-				: dlc
-				? Datas.Systems.PATH_DLCS + Constants.STRING_SLASH + dlc
-				: Platform.ROOT_DIRECTORY) + this.getLocalFolder(kind)
+			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			this.getLocalFolder(kind)
 		);
 	}
 
 	/**
 	 *  Get the local folder associated to a kind of custom shape.
-	 *  @param {CustomShapeKind} kind - The kind of custom shape
+	 *  @param {CustomSHAPE_KIND} kind - The kind of custom shape
 	 *  @returns {string}
 	 */
-	static getLocalFolder(kind: CustomShapeKind): string {
+	static getLocalFolder(kind: CUSTOM_SHAPE_KIND): string {
 		switch (kind) {
-			case CustomShapeKind.OBJ:
+			case CUSTOM_SHAPE_KIND.OBJ:
 				return Paths.OBJ;
-			case CustomShapeKind.MTL:
+			case CUSTOM_SHAPE_KIND.MTL:
 				return Paths.MTL;
-			case CustomShapeKind.Collisions:
+			case CUSTOM_SHAPE_KIND.COLLISIONS:
 				return Paths.OBJ_COLLISIONS;
 		}
 		return '';
@@ -269,9 +265,7 @@ class Shape extends Base {
 	 *  @returns {string}
 	 */
 	getPath(): string {
-		return this.id === -1
-			? ''
-			: Shape.getFolder(this.kind, this.isBR, this.dlc) + Constants.STRING_SLASH + this.name;
+		return this.id === -1 ? '' : Shape.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}
 }
 

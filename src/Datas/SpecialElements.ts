@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Paths, Platform, Utils } from '../Common';
+import { Constants, Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
 
@@ -114,7 +114,7 @@ class SpecialElements {
 			Platform.canvasRendering.width = 64 * Datas.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
 			if (autotile) {
-				const picture = Datas.Pictures.get(Enum.PictureKind.Autotiles, pictureID);
+				const picture = Datas.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID);
 				if (picture) {
 					result = await this.loadTextureAutotile(
 						textureAutotile,
@@ -326,7 +326,7 @@ class SpecialElements {
 		let textureWall = this.texturesWalls[pictureID];
 		if (Utils.isUndefined(textureWall)) {
 			if (wall) {
-				const picture = Datas.Pictures.get(Enum.PictureKind.Walls, pictureID);
+				const picture = Datas.Pictures.get(PICTURE_KIND.WALLS, pictureID);
 				if (picture) {
 					textureWall = await this.loadTextureWall(picture, id);
 				} else {
@@ -424,7 +424,7 @@ class SpecialElements {
 			Platform.canvasRendering.width = 4 * Datas.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = 7 * Datas.Systems.SQUARE_SIZE;
 			this.texturesMountains = [];
-			const picture = mountain ? Datas.Pictures.get(Enum.PictureKind.Mountains, pictureID) : null;
+			const picture = mountain ? Datas.Pictures.get(PICTURE_KIND.MOUNTAINS, pictureID) : null;
 			result = await this.loadTextureMountain(textureMountain, texture, picture, offset, id);
 			if (result !== null) {
 				textureMountain = result[0];
@@ -653,7 +653,7 @@ class SpecialElements {
 		}
 		let textureObject3D = this.texturesObjects3D[pictureID];
 		if (Utils.isUndefined(textureObject3D)) {
-			const picture = Datas.Pictures.get(Enum.PictureKind.Objects3D, pictureID);
+			const picture = Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
 				const path = picture.getPath();
 				textureObject3D = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();

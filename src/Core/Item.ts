@@ -9,34 +9,33 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { DAMAGES_KIND, ITEM_KIND } from '../Common';
 import { Datas, Scene, System } from '../index';
 import { Game } from './Game';
 import { Player } from './Player';
-import ItemKind = Enum.ItemKind;
 
 /** @class
  *  An item in the inventory.
- *  @param {ItemKind} kind - Kind of item (item, weapon, or armor)
+ *  @param {ITEM_KIND} kind - Kind of item (item, weapon, or armor)
  *  @param {number} id - The ID of the item
  *  @param {number} nb - The occurence of the item in the inventory
  */
 class Item {
-	public kind: ItemKind;
+	public kind: ITEM_KIND;
 	public system: System.CommonSkillItem;
 	public nb: number;
 	public shop: System.ShopItem;
 
-	constructor(kind: ItemKind, id: number, nb: number, shop?: System.ShopItem) {
+	constructor(kind: ITEM_KIND, id: number, nb: number, shop?: System.ShopItem) {
 		this.kind = kind;
 		switch (this.kind) {
-			case ItemKind.Item:
+			case ITEM_KIND.ITEM:
 				this.system = Datas.Items.get(id);
 				break;
-			case ItemKind.Weapon:
+			case ITEM_KIND.WEAPON:
 				this.system = Datas.Weapons.get(id);
 				break;
-			case ItemKind.Armor:
+			case ITEM_KIND.ARMOR:
 				this.system = Datas.Armors.get(id);
 				break;
 		}
@@ -47,11 +46,11 @@ class Item {
 	/**
 	 *  Find an item in the inventory.
 	 *  @static
-	 *  @param {ItemKind} kind - The kind of item
+	 *  @param {ITEM_KIND} kind - The kind of item
 	 *  @param {number} id - The item ID
 	 *  @returns {Item}
 	 */
-	static findItem(kind: ItemKind, id: number): Item {
+	static findItem(kind: ITEM_KIND, id: number): Item {
 		let item: Item;
 		for (let i = 0, l = Game.current.items.length; i < l; i++) {
 			item = Game.current.items[i];
@@ -212,7 +211,7 @@ class Item {
 			let [kind, value] = price[id];
 			value *= times;
 			switch (kind) {
-				case Enum.DamagesKind.Currency:
+				case DAMAGES_KIND.CURRENCY:
 					Game.current.currencies[id] -= value;
 					if (value > 0) {
 						Game.current.currenciesUsed[id] += value;
@@ -220,10 +219,10 @@ class Item {
 						Game.current.currenciesEarned[id] -= value;
 					}
 					break;
-				case Enum.DamagesKind.Stat:
+				case DAMAGES_KIND.STAT:
 					user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation] -= value;
 					break;
-				case Enum.DamagesKind.Variable:
+				case DAMAGES_KIND.VARIABLE:
 					Game.current.variables[parseInt(id)] -= value;
 					break;
 			}
@@ -261,7 +260,7 @@ class Item {
 			const [kind, value] = price[id];
 			const p = Math.round((value * Datas.Systems.priceSoldItem.getValue()) / 100) * times;
 			switch (kind) {
-				case Enum.DamagesKind.Currency:
+				case DAMAGES_KIND.CURRENCY:
 					Game.current.currencies[id] += p;
 					if (p > 0) {
 						Game.current.currenciesEarned[id] += p;
@@ -269,10 +268,10 @@ class Item {
 						Game.current.currenciesUsed[id] -= p;
 					}
 					break;
-				case Enum.DamagesKind.Stat:
+				case DAMAGES_KIND.STAT:
 					user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation] += p;
 					break;
-				case Enum.DamagesKind.Variable:
+				case DAMAGES_KIND.VARIABLE:
 					Game.current.variables[parseInt(id)] += p;
 					break;
 			}

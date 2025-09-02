@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { ORIENTATION, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
 import { Datas, Manager } from '../index';
 import { Base } from './Base';
-import Orientation = Enum.Orientation;
 
 /** @class
  *  A detection of the game.
@@ -98,19 +97,19 @@ class Detection extends Base {
 			px = (p.x - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterX() + length / 2;
 			pz = (p.z - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterZ() + width / 2;
 			switch (orientation) {
-				case Orientation.South:
+				case ORIENTATION.SOUTH:
 					x = px;
 					z = pz;
 					break;
-				case Orientation.West:
+				case ORIENTATION.WEST:
 					x = -pz;
 					z = px;
 					break;
-				case Orientation.North:
+				case ORIENTATION.NORTH:
 					x = -px;
 					z = -pz;
 					break;
-				case Orientation.East:
+				case ORIENTATION.EAST:
 					x = pz;
 					z = -px;
 					break;

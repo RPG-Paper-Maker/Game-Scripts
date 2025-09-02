@@ -9,12 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN, PICTURE_KIND } from '../Common';
 import { Game, Picture2D } from '../Core';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { SaveLoadGame } from './SaveLoadGame';
-import Align = Enum.Align;
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A scene in the menu for loading a game.
@@ -34,13 +32,13 @@ class LoadGame extends SaveLoadGame {
 		await super.load();
 
 		this.setContents(
-			new Graphic.Text(Datas.Languages.extras.loadAGame.name(), { align: Align.Center }),
-			new Graphic.Text(Datas.Languages.extras.loadAGameDescription.name(), { align: Align.Center })
+			new Graphic.Text(Datas.Languages.extras.loadAGame.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Datas.Languages.extras.loadAGameDescription.name(), { align: ALIGN.CENTER })
 		);
 		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
 				Datas.TitlescreenGameover.titleBackgroundImageID,
-				PictureKind.TitleScreen,
+				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
 		}

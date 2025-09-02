@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { DYNAMIC_VALUE_KIND } from '../Common';
 import { MapObject, ReactionInterpreter } from '../Core';
 import { Datas, System } from '../index';
 import { Base } from './Base';
-import DynamicValueKind = Enum.DynamicValueKind;
 
 /** @class
  *  An event command for calling a common reaction.
@@ -63,13 +62,13 @@ class CallACommonReaction extends Base {
 			const parameters = System.DynamicValue.mapWithParametersProperties(this.parameters);
 
 			// Correct parameters for default values
-			let v: System.DynamicValue, parameter: System.DynamicValue, k: DynamicValueKind;
+			let v: System.DynamicValue, parameter: System.DynamicValue, k: DYNAMIC_VALUE_KIND;
 			for (const id in reaction.parameters) {
 				v = reaction.parameters[id].value;
 				parameter = parameters[id];
-				k = parameter ? parameter.kind : DynamicValueKind.None;
-				if (k > DynamicValueKind.Unknown && k <= DynamicValueKind.Default) {
-					parameter = k === DynamicValueKind.Default ? v : System.DynamicValue.create(k, null);
+				k = parameter ? parameter.kind : DYNAMIC_VALUE_KIND.NONE;
+				if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
+					parameter = k === DYNAMIC_VALUE_KIND.DEFAULT ? v : System.DynamicValue.create(k, null);
 				}
 				parameters[id] = parameter;
 			}

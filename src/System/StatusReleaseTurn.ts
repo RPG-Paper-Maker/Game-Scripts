@@ -10,7 +10,7 @@
 */
 
 import { System } from '..';
-import { Enum, Utils } from '../Common';
+import { OPERATION_KIND, Utils } from '../Common';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {Record<string, any>} - json Json object describing the object state
  */
 class StatusReleaseTurn extends Base {
-	public operationTurnKind: Enum.OperationKind;
+	public operationTurnKind: OPERATION_KIND;
 	public turn: System.DynamicValue;
 	public chance: System.DynamicValue;
 
@@ -33,7 +33,7 @@ class StatusReleaseTurn extends Base {
 	 *  release turn
 	 */
 	read(json: Record<string, any>) {
-		this.operationTurnKind = Utils.defaultValue(json.operationTurnKind, Enum.OperationKind.GreaterThanOrEqualTo);
+		this.operationTurnKind = Utils.defaultValue(json.operationTurnKind, OPERATION_KIND.GREATER_THAN_OR_EQUAL_TO);
 		this.turn = System.DynamicValue.readOrDefaultNumber(json.turn, 1);
 		this.chance = System.DynamicValue.readOrDefaultNumberDouble(json.chance);
 	}

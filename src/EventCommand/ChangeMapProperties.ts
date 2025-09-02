@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { SONG_KIND, Utils } from '../Common';
 import { Game, MapObject } from '../Core';
 import { Scene, System } from '../index';
 import { Base } from './Base';
@@ -46,11 +46,11 @@ class ChangeMapProperties extends Base {
 		}
 		this.isMusic = Utils.numToBool(command[iterator.i++]);
 		if (this.isMusic) {
-			this.music = System.PlaySong.createValueCommand(command, iterator, Enum.SongKind.Music);
+			this.music = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC);
 		}
 		this.isBackgroundSound = Utils.numToBool(command[iterator.i++]);
 		if (this.isBackgroundSound) {
-			this.backgroundSound = System.PlaySong.createValueCommand(command, iterator, Enum.SongKind.BackgroundSound);
+			this.backgroundSound = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.BACKGROUND_SOUND);
 		}
 		this.isCameraPropertiesID = Utils.numToBool(command[iterator.i++]);
 		if (this.isCameraPropertiesID) {

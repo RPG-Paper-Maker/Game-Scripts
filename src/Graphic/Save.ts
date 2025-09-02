@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, ScreenResolution, Utils } from '../Common';
+import { ALIGN, ScreenResolution, Utils } from '../Common';
 import { Game } from '../Core';
 import { Datas, Graphic } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying a save.
@@ -32,13 +31,13 @@ class Save extends Base {
 
 		this.game = game;
 		this.graphicSlot = new Graphic.Text(Datas.Languages.extras.slot.name() + ' ' + this.game.slot, {
-			align: Align.Center,
+			align: ALIGN.CENTER,
 		});
 		if (this.game.isEmpty) {
-			this.graphicEmpty = new Graphic.Text(Datas.Languages.extras.empty.name(), { align: Align.Center });
+			this.graphicEmpty = new Graphic.Text(Datas.Languages.extras.empty.name(), { align: ALIGN.CENTER });
 		} else {
 			this.graphicTimer = new Graphic.Text(Utils.getStringDate(this.game.playTime.getSeconds()), {
-				align: Align.Right,
+				align: ALIGN.RIGHT,
 			});
 			const l = this.game.teamHeroes.length;
 			this.graphicPlayers = new Array(l);

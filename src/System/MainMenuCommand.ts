@@ -10,7 +10,7 @@
 */
 
 import { Manager, Scene } from '..';
-import { Enum, Interpreter, Utils } from '../Common';
+import { Interpreter, MAIN_MENU_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
 import { Translatable } from './Translatable';
 
@@ -20,7 +20,7 @@ import { Translatable } from './Translatable';
  *  @param {Record<string, any>} [json=undefined] - Json object describing the item
  */
 class MainMenuCommand extends Translatable {
-	public kind: Enum.MainMenuCommandKind;
+	public kind: MAIN_MENU_COMMAND_KIND;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
@@ -34,8 +34,8 @@ class MainMenuCommand extends Translatable {
 	 */
 	read(json: Record<string, any>) {
 		super.read(json);
-		this.kind = Utils.defaultValue(json.kind, Enum.MainMenuCommandKind.Inventory);
-		if (this.kind === Enum.MainMenuCommandKind.Script) {
+		this.kind = Utils.defaultValue(json.kind, MAIN_MENU_COMMAND_KIND.INVENTORY);
+		if (this.kind === MAIN_MENU_COMMAND_KIND.SCRIPT) {
 			this.script = Utils.defaultValue(json.script, '');
 		}
 	}
@@ -47,12 +47,12 @@ class MainMenuCommand extends Translatable {
 	getCallback(): () => boolean {
 		const name = this.name();
 		switch (this.kind) {
-			case Enum.MainMenuCommandKind.Inventory:
+			case MAIN_MENU_COMMAND_KIND.INVENTORY:
 				return function () {
 					Manager.Stack.push(new Scene.MenuInventory(name));
 					return true;
 				};
-			case Enum.MainMenuCommandKind.Skills:
+			case MAIN_MENU_COMMAND_KIND.SKILLS:
 				return function () {
 					if (Game.current.teamHeroes.length > 0) {
 						Manager.Stack.push(new Scene.MenuSkills(name));
@@ -60,7 +60,7 @@ class MainMenuCommand extends Translatable {
 					}
 					return false;
 				};
-			case Enum.MainMenuCommandKind.Equip:
+			case MAIN_MENU_COMMAND_KIND.EQUIP:
 				return function () {
 					if (Game.current.teamHeroes.length > 0) {
 						Manager.Stack.push(new Scene.MenuEquip(name));
@@ -68,7 +68,7 @@ class MainMenuCommand extends Translatable {
 					}
 					return false;
 				};
-			case Enum.MainMenuCommandKind.States:
+			case MAIN_MENU_COMMAND_KIND.STATES:
 				return function () {
 					if (Game.current.teamHeroes.length > 0) {
 						Manager.Stack.push(new Scene.MenuDescriptionState(name));
@@ -76,7 +76,7 @@ class MainMenuCommand extends Translatable {
 					}
 					return false;
 				};
-			case Enum.MainMenuCommandKind.Order:
+			case MAIN_MENU_COMMAND_KIND.ORDER:
 				return function () {
 					if (Game.current.teamHeroes.length > 0) {
 						this.windowChoicesTeam.select(0);
@@ -84,7 +84,7 @@ class MainMenuCommand extends Translatable {
 					}
 					return false;
 				};
-			case Enum.MainMenuCommandKind.Save:
+			case MAIN_MENU_COMMAND_KIND.SAVE:
 				return function () {
 					if (Scene.Map.allowSaves) {
 						Manager.Stack.push(new Scene.SaveGame());
@@ -92,7 +92,7 @@ class MainMenuCommand extends Translatable {
 					}
 					return false;
 				};
-			case Enum.MainMenuCommandKind.Quit:
+			case MAIN_MENU_COMMAND_KIND.QUIT:
 				return function () {
 					Manager.Stack.push(
 						new Scene.Confirm(() => {
@@ -102,7 +102,7 @@ class MainMenuCommand extends Translatable {
 					);
 					return true;
 				};
-			case Enum.MainMenuCommandKind.Script:
+			case MAIN_MENU_COMMAND_KIND.SCRIPT:
 				const t = this;
 				return function () {
 					return Interpreter.evaluate(t.script, {

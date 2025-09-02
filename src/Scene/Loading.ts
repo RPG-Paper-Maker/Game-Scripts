@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN } from '../Common';
 import { Datas, Graphic, Scene } from '../index';
-import Align = Enum.Align;
 
 /** @class
  *   A scene for the loading.
@@ -26,7 +25,7 @@ class Loading extends Scene.Base {
 		super(false);
 
 		this.text = new Graphic.Text(Datas.Languages.extras.loading.name(), {
-			align: Align.Right,
+			align: ALIGN.RIGHT,
 			x: 590,
 			y: 450,
 			w: 40,

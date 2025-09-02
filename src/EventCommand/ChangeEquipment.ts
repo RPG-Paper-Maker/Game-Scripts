@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { ITEM_KIND, Utils } from '../Common';
 import { Game, Item, MapObject, Player } from '../Core';
 import { System } from '../index';
 import { Base } from './Base';
-import ItemKind = Enum.ItemKind;
 
 /** @class
  *  An event command for changing a property value.
@@ -61,7 +60,7 @@ class ChangeEquipment extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const equipmentID = this.equipmentID.getValue();
-		const kind = this.isWeapon ? ItemKind.Weapon : ItemKind.Armor;
+		const kind = this.isWeapon ? ITEM_KIND.WEAPON : ITEM_KIND.ARMOR;
 		const weaponArmorID = this.weaponArmorID.getValue();
 		let targets: Player[];
 		switch (this.selection) {

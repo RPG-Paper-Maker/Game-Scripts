@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, ScreenResolution, Utils } from '../Common';
+import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
 import { Datas, Manager, System } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  An event command for setting / moving / turning a picture.
@@ -89,7 +88,7 @@ class SetMoveTurnAPicture extends Base {
 				const prevZoom = picture.zoom;
 				const prevOpacity = picture.opacity;
 				const prevAngle = picture.angle;
-				picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, this.pictureID.getValue());
+				picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue());
 				if (prevCentered) {
 					prevX += (prevW - picture.oW) / 2;
 					prevY += (prevH - picture.oH) / 2;

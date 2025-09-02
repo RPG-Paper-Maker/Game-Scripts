@@ -72,7 +72,7 @@ class Portion {
 	 *  @returns {string}
 	 */
 	getFileName(): string {
-		return this.toKey() + Constants.EXTENSION_JSON;
+		return this.toKey() + '.json';
 	}
 
 	toKey(): string {

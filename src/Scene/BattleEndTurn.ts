@@ -10,7 +10,7 @@
 */
 
 import { Scene, System } from '..';
-import { Enum } from '../Common';
+import { BATTLE_STEP, TROOP_REACTION_FREQUENCY_KIND } from '../Common';
 import { ReactionInterpreter } from '../Core';
 
 // -------------------------------------------------------
@@ -39,7 +39,7 @@ class BattleEndTurn {
 			let reaction: System.TroopReaction, l: number;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
-				if (reaction.frequency === Enum.TroopReactionFrequencyKind.EachTurnEnd) {
+				if (reaction.frequency === TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_END) {
 					// Check conditions
 					if (!reaction.conditions.isValid()) {
 						continue;
@@ -58,7 +58,7 @@ class BattleEndTurn {
 			this.indexTroopReaction = 0;
 			this.battle.activeGroup();
 			this.battle.switchAttackingGroup();
-			this.battle.changeStep(Enum.BattleStep.StartTurn);
+			this.battle.changeStep(BATTLE_STEP.START_TURN);
 		}
 	}
 

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { CHARACTER_KIND } from '../Common';
 import { Battler, Game, MapObject, Player } from '../Core';
 import { Graphic, Scene, System } from '../index';
 import { Base } from './Base';
@@ -65,28 +65,28 @@ class TransformABattler extends Base {
 			const map = <Scene.Battle>Scene.Map.current;
 			let battler: Battler = null;
 			let index = 0;
-			let side = Enum.CharacterKind.Hero;
+			let side = CHARACTER_KIND.HERO;
 			switch (this.battlerKind) {
 				case 0: // Enemy
-					battler = map.battlers[Enum.CharacterKind.Monster][this.battlerEnemyIndex];
+					battler = map.battlers[CHARACTER_KIND.MONSTER][this.battlerEnemyIndex];
 					index = this.battlerEnemyIndex;
-					side = Enum.CharacterKind.Monster;
+					side = CHARACTER_KIND.MONSTER;
 					break;
 				case 1: // Hero instance ID
 					const id = this.battlerHeroEnemyInstanceID.getValue();
-					for (const [i, b] of map.battlers[Enum.CharacterKind.Hero].entries()) {
+					for (const [i, b] of map.battlers[CHARACTER_KIND.HERO].entries()) {
 						if (b.player.instid === id) {
 							battler = b;
 							index = i;
-							side = Enum.CharacterKind.Hero;
+							side = CHARACTER_KIND.HERO;
 							break;
 						}
 					}
-					for (const [i, b] of map.battlers[Enum.CharacterKind.Monster].entries()) {
+					for (const [i, b] of map.battlers[CHARACTER_KIND.MONSTER].entries()) {
 						if (b.player.instid === id) {
 							battler = b;
 							index = i;
-							side = Enum.CharacterKind.Monster;
+							side = CHARACTER_KIND.MONSTER;
 							break;
 						}
 					}

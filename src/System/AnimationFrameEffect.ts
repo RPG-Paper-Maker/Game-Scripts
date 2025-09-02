@@ -9,11 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { ANIMATION_EFFECT_CONDITION_KIND, SONG_KIND, Utils } from '../Common';
 import { Base } from './Base';
 import { PlaySong } from './PlaySong';
-import SongKind = Enum.SongKind;
-import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 
 /** @class
  *  An animation frame effect.
@@ -38,18 +36,18 @@ class AnimationFrameEffect extends Base {
 	read(json: Record<string, any>) {
 		this.isSE = Utils.defaultValue(json.ise, true);
 		if (this.isSE) {
-			this.se = new PlaySong(SongKind.Sound, json.se);
+			this.se = new PlaySong(SONG_KIND.SOUND, json.se);
 		}
-		this.condition = Utils.defaultValue(json.c, AnimationEffectConditionKind.None);
+		this.condition = Utils.defaultValue(json.c, ANIMATION_EFFECT_CONDITION_KIND.NONE);
 	}
 
 	/**
 	 *  Play the sound effect according to a condition.
-	 *  @param {AnimationEffectConditionKind} condition - The animation effect
+	 *  @param {ANIMATION_EFFECT_CONDITION_KIND} condition - The animation effect
 	 *  condition kind
 	 */
-	playSE(condition: AnimationEffectConditionKind) {
-		if (this.isSE && (this.condition === AnimationEffectConditionKind.None || this.condition === condition)) {
+	playSE(condition: ANIMATION_EFFECT_CONDITION_KIND) {
+		if (this.isSE && (this.condition === ANIMATION_EFFECT_CONDITION_KIND.NONE || this.condition === condition)) {
 			this.se.playSound();
 		}
 	}

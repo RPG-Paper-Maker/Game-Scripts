@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution, Utils } from '../Common';
+import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { Core, Datas, Graphic, System } from '../index';
 import { Base } from './Base';
 
@@ -31,7 +31,7 @@ class Statistic extends Base {
 		super();
 		this.player = player;
 		this.statistic = statistic;
-		this.graphicName = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
+		this.graphicName = new Graphic.Text(statistic.name() + ':');
 		this.maxStatNamesLength = 0;
 		if (Utils.isUndefined(offsetStat)) {
 			this.graphicName.measureText();
@@ -43,8 +43,8 @@ class Statistic extends Base {
 		}
 		let txt = Utils.numToString(this.player[statistic.abbreviation]);
 		if (!statistic.isFix) {
-			txt += Constants.STRING_SLASH + this.player[statistic.getMaxAbbreviation()];
-			this.pictureBar = Datas.Pictures.get(Enum.PictureKind.Bars, this.statistic.pictureBarID);
+			txt += '/' + this.player[statistic.getMaxAbbreviation()];
+			this.pictureBar = Datas.Pictures.get(PICTURE_KIND.BARS, this.statistic.pictureBarID);
 		}
 		this.graphicValue = new Graphic.Text(txt);
 	}
@@ -64,7 +64,7 @@ class Statistic extends Base {
 	update() {
 		let txt = Utils.numToString(this.player[this.statistic.abbreviation]);
 		if (!this.statistic.isFix) {
-			txt += Constants.STRING_SLASH + this.player[this.statistic.getMaxAbbreviation()];
+			txt += '/' + this.player[this.statistic.getMaxAbbreviation()];
 		}
 		this.graphicValue.setText(txt);
 	}

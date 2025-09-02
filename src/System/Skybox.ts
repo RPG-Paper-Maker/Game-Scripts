@@ -10,10 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Utils } from '../Common';
+import { PICTURE_KIND, Utils } from '../Common';
 import { Datas, Manager } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A skybox of the game.
@@ -52,7 +51,7 @@ class Skybox extends Base {
 	 */
 	createTextures(): THREE.MeshPhongMaterial[] {
 		return [this.left, this.right, this.top, this.bot, this.front, this.back].map((side) => {
-			const texture = Manager.GL.textureLoader.load(Datas.Pictures.get(PictureKind.Skyboxes, side).getPath());
+			const texture = Manager.GL.textureLoader.load(Datas.Pictures.get(PICTURE_KIND.SKYBOXES, side).getPath());
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.repeat.x = -1;
 			return Manager.GL.createMaterial({

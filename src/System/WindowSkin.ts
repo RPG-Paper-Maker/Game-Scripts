@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, ScreenResolution, Utils } from '../Common';
+import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { Picture2D } from '../Core';
 import { Datas, System } from '../index';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A window skin of the game.
@@ -76,7 +75,7 @@ class WindowSkin extends System.Base {
 	 * Update the window skin picture ID.
 	 */
 	async updatePicture() {
-		this.picture = await Picture2D.create(Datas.Pictures.get(PictureKind.WindowSkins, this.pictureID), {
+		this.picture = await Picture2D.create(Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.pictureID), {
 			stretch: true,
 		});
 	}

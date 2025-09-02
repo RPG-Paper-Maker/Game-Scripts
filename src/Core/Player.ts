@@ -9,7 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter, Mathf, Platform, Utils } from '../Common';
+import {
+	CHARACTER_KIND,
+	CHARACTERISTIC_KIND,
+	CONDITION_HEROES_KIND,
+	INCREASE_DECREASE_KIND,
+	Interpreter,
+	ITEM_KIND,
+	Mathf,
+	Platform,
+	Utils,
+} from '../Common';
 import { Core, Datas, Graphic, System } from '../index';
 import { Battler } from './Battler';
 import { Item } from './Item';
@@ -18,7 +28,7 @@ import { Status } from './Status';
 
 /** @class
  *  A character in the team/hidden/reserve.
- *  @param {CharacterKind} [kind=undefined] - The kind of the character (hero or monster)
+ *  @param {CHARACTER_KIND} [kind=undefined] - The kind of the character (hero or monster)
  *  @param {number} [id=undefined] - The ID of the character
  *  @param {number} [instanceID=undefined] - The instance id of the character
  *  @param {Skill[]} [skills=undefined] - List of all the learned skills
@@ -28,7 +38,7 @@ class Player {
 	public static MAX_STATUS_DISPLAY_TOP: number = 3;
 
 	public id: number;
-	public kind: Enum.CharacterKind;
+	public kind: CHARACTER_KIND;
 	public instid: number;
 	public system: System.Hero;
 	public name: string;
@@ -58,7 +68,7 @@ class Player {
 	public facesetIndexY: number = null;
 
 	constructor(
-		kind?: Enum.CharacterKind,
+		kind?: CHARACTER_KIND,
 		id?: number,
 		instanceID?: number,
 		skills?: Record<string, any>[],
@@ -216,19 +226,19 @@ class Player {
 	 *  @returns {boolean}
 	 */
 	static applySelection(
-		selectionKind: Enum.ConditionHeroesKind,
+		selectionKind: CONDITION_HEROES_KIND,
 		tab: Player[],
 		instanceID: number,
 		callback: Function
 	): boolean {
 		switch (selectionKind) {
-			case Enum.ConditionHeroesKind.AllTheHeroes:
+			case CONDITION_HEROES_KIND.ALL_THE_HEROES:
 				return Player.allTheHeroes(tab, callback);
-			case Enum.ConditionHeroesKind.NoneOfTheHeroes:
+			case CONDITION_HEROES_KIND.NONE_OF_THE_HEROES:
 				return Player.noneOfTheHeroes(tab, callback);
-			case Enum.ConditionHeroesKind.AtLeastOneHero:
+			case CONDITION_HEROES_KIND.AT_LEAST_ONE_HERO:
 				return Player.atLeastOneHero(tab, callback);
-			case Enum.ConditionHeroesKind.TheHeroeWithInstanceID:
+			case CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID:
 				return Player.theHeroeWithInstanceID(tab, instanceID, callback);
 		}
 	}
@@ -239,9 +249,9 @@ class Player {
 	 */
 	getSystem(): System.Hero {
 		switch (this.kind) {
-			case Enum.CharacterKind.Hero:
+			case CHARACTER_KIND.HERO:
 				return Datas.Heroes.get(this.id);
-			case Enum.CharacterKind.Monster:
+			case CHARACTER_KIND.MONSTER:
 				return Datas.Monsters.get(this.id);
 		}
 	}
@@ -340,16 +350,11 @@ class Player {
 		// Begin equipment / elements
 		const characteristics = this.system.getCharacteristics(this.changedClass);
 		this.elements = [];
-		let i: number,
-			l: number,
-			characteristic: System.Characteristic,
-			kind: Enum.ItemKind,
-			itemID: number,
-			item: Item;
+		let i: number, l: number, characteristic: System.Characteristic, kind: ITEM_KIND, itemID: number, item: Item;
 		for (i = 0, l = characteristics.length; i < l; i++) {
 			characteristic = characteristics[i];
-			if (characteristic.kind === Enum.CharacteristicKind.BeginEquipment) {
-				kind = characteristic.isBeginWeapon ? Enum.ItemKind.Weapon : Enum.ItemKind.Armor;
+			if (characteristic.kind === CHARACTERISTIC_KIND.BEGIN_EQUIPMENT) {
+				kind = characteristic.isBeginWeapon ? ITEM_KIND.WEAPON : ITEM_KIND.ARMOR;
 				itemID = characteristic.beginWeaponArmorID.getValue();
 				item = Item.findItem(kind, itemID);
 				if (item) {
@@ -358,7 +363,7 @@ class Player {
 					item = new Item(kind, itemID, 0);
 				}
 				this.equip[characteristic.beginEquipmentID.getValue()] = item;
-			} else if (characteristic.kind === Enum.CharacteristicKind.Element) {
+			} else if (characteristic.kind === CHARACTERISTIC_KIND.ELEMENT) {
 				this.elements.push(characteristic.elementID);
 			}
 		}
@@ -523,10 +528,10 @@ class Player {
 		let characteristic: System.Characteristic, statistic: System.Statistic, base: number;
 		for (let i = 0, l = characteristics.length; i < l; i++) {
 			characteristic = characteristics[i];
-			if (characteristic.kind === Enum.CharacteristicKind.IncreaseDecrease) {
+			if (characteristic.kind === CHARACTERISTIC_KIND.INCREASE_DECREASE) {
 				switch (characteristic.increaseDecreaseKind) {
-					case Enum.IncreaseDecreaseKind.StatValue:
-					case Enum.IncreaseDecreaseKind.ElementRes:
+					case INCREASE_DECREASE_KIND.STAT_VALUE:
+					case INCREASE_DECREASE_KIND.ELEMENT_RES:
 						const result = characteristic.getNewStatValue(this);
 						if (result !== null) {
 							if (list[result[0]] === null) {
@@ -543,7 +548,7 @@ class Player {
 						characteristic.setIncreaseDecreaseValues(res);
 						break;
 				}
-			} else if (characteristic.kind === Enum.CharacteristicKind.Script) {
+			} else if (characteristic.kind === CHARACTERISTIC_KIND.SCRIPT) {
 				characteristic.executeScript(this);
 			}
 		}
@@ -1172,7 +1177,7 @@ class Player {
 		this.elements = [];
 		const characteristics = this.system.getCharacteristics(this.changedClass);
 		for (const characteristic of characteristics) {
-			if (characteristic.kind === Enum.CharacteristicKind.Element) {
+			if (characteristic.kind === CHARACTERISTIC_KIND.ELEMENT) {
 				this.elements.push(characteristic.elementID);
 			}
 		}
@@ -1219,11 +1224,11 @@ class Player {
 		const characteristics = this.getCharacteristics();
 		for (const characteristic of characteristics) {
 			if (
-				characteristic.kind === Enum.CharacteristicKind.AllowForbidEquip &&
-				((weaponArmor.kind === Enum.ItemKind.Weapon &&
+				characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
+				((weaponArmor.kind === ITEM_KIND.WEAPON &&
 					characteristic.isAllowEquipWeapon &&
 					weaponArmor.system.type === characteristic.equipWeaponTypeID.getValue()) ||
-					(weaponArmor.kind === Enum.ItemKind.Armor &&
+					(weaponArmor.kind === ITEM_KIND.ARMOR &&
 						!characteristic.isAllowEquipWeapon &&
 						weaponArmor.system.type === characteristic.equipArmorTypeID.getValue())) &&
 				!characteristic.isAllowEquip
@@ -1231,11 +1236,11 @@ class Player {
 				return false;
 			}
 			if (
-				characteristic.kind === Enum.CharacteristicKind.AllowForbidChange &&
+				characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
 				!characteristic.isAllowChangeEquipment
 			) {
 				const type =
-					weaponArmor.kind === Enum.ItemKind.Weapon
+					weaponArmor.kind === ITEM_KIND.WEAPON
 						? Datas.BattleSystems.getWeaponKind(weaponArmor.system.type)
 						: Datas.BattleSystems.getArmorKind(weaponArmor.system.type);
 				if (type.equipments[characteristic.changeEquipmentID.getValue()]) {

@@ -9,15 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, AVAILABLE_KIND, Constants, ORIENTATION_WINDOW, ScreenResolution, TARGET_KIND } from '../Common';
 import { Battler, Game, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 import { StructPositionChoice } from './Menu';
-import Align = Enum.Align;
-import OrientationWindow = Enum.OrientationWindow;
-import TargetKind = Enum.TargetKind;
-import AvailableKind = Enum.AvailableKind;
 
 /** @class
  *  A scene in the menu for describing players skills.
@@ -53,17 +49,17 @@ class MenuSkills extends Base {
 
 		// All the windows
 		this.windowTop = new WindowBox(20, 20, 200, 30, {
-			content: new Graphic.Text(this.title, { align: Align.Center }),
+			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
 		this.windowChoicesTabs = new WindowChoices(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT, listHeroes, {
-			orientation: OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: 4,
 			padding: [0, 0, 0, 0],
 		});
 		this.createWindowChoicesList();
 		this.createWindowBoxInformation();
 		this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20, WindowBox.SMALL_SLOT_HEIGHT, {
-			content: new Graphic.Text(Datas.Languages.extras.empty.name(), { align: Align.Center }),
+			content: new Graphic.Text(Datas.Languages.extras.empty.name(), { align: ALIGN.CENTER }),
 			padding: WindowBox.SMALL_SLOT_PADDING,
 		});
 		this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140, {
@@ -187,13 +183,13 @@ class MenuSkills extends Base {
 					const availableKind = graphic.system.availableKind;
 					if (
 						graphic.system.isPossible() &&
-						(targetKind === TargetKind.Ally || targetKind === TargetKind.AllAllies) &&
-						(availableKind === AvailableKind.Always || availableKind === AvailableKind.MainMenu)
+						(targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) &&
+						(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU)
 					) {
 						Datas.Systems.soundConfirmation.playSound();
 						this.substep = 1;
 						graphicUse.setSkillItem(graphic.system);
-						graphicUse.setAll(targetKind === TargetKind.AllAllies);
+						graphicUse.setAll(targetKind === TARGET_KIND.ALL_ALLIES);
 						Manager.Stack.requestPaintHUD = true;
 					} else {
 						Datas.Systems.soundImpossible.playSound();

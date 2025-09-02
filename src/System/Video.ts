@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Paths, Platform, Utils } from '../Common';
+import { Paths, Platform, Utils } from '../Common';
 import { Datas, System } from '../index';
 import { Base } from './Base';
 
@@ -39,11 +39,8 @@ class Video extends Base {
 	 */
 	static getFolder(isBR: boolean, dlc: string): string {
 		return (
-			(isBR
-				? Datas.Systems.PATH_BR
-				: dlc
-				? Datas.Systems.PATH_DLCS + Constants.STRING_SLASH + dlc
-				: Platform.ROOT_DIRECTORY) + this.getLocalFolder()
+			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			this.getLocalFolder()
 		);
 	}
 
@@ -75,7 +72,7 @@ class Video extends Base {
 		if (this.base64) {
 			return this.base64;
 		}
-		return this.id === -1 ? '' : System.Video.getFolder(this.isBR, this.dlc) + Constants.STRING_SLASH + this.name;
+		return this.id === -1 ? '' : System.Video.getFolder(this.isBR, this.dlc) + '/' + this.name;
 	}
 }
 

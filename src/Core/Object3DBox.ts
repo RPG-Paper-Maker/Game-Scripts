@@ -10,14 +10,13 @@
 */
 
 import * as THREE from 'three';
-import { Enum } from '../Common';
+import { OBJECT_COLLISION_KIND } from '../Common';
 import { Datas, System } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
 import { Object3D } from './Object3D';
 import { Position } from './Position';
 import { Sprite } from './Sprite';
-import ObjectCollisionKind = Enum.ObjectCollisionKind;
 
 /**
  * A 3D object box in the map.
@@ -274,7 +273,7 @@ class Object3DBox extends Object3D {
 
 		// Collisions
 		const objCollision: StructMapElementCollision[] = [];
-		if (this.datas.collisionKind === ObjectCollisionKind.Perfect) {
+		if (this.datas.collisionKind === OBJECT_COLLISION_KIND.PERFECT) {
 			const ws = Math.floor(this.datas.width() * position.scaleX);
 			const hs = Math.floor(this.datas.height() * position.scaleY);
 			const ds = Math.floor(this.datas.depth() * position.scaleZ);

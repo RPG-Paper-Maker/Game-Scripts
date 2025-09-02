@@ -9,12 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Inputs, Interpreter, Mathf, Utils } from '../Common';
+import { CONDITION_HEROES_KIND, Inputs, Interpreter, ITEM_KIND, Mathf, ORIENTATION, Utils } from '../Common';
 import { Game, Item, MapObject, Player, StructSearchResult } from '../Core';
 import { Datas, Scene, System } from '../index';
 import { Base } from './Base';
-import ConditionHeroesKind = Enum.ConditionHeroesKind;
-import ItemKind = Enum.ItemKind;
 
 /** @class
  *  An event command for condition event command block.
@@ -25,7 +23,7 @@ class If extends Base {
 	public hasElse: boolean;
 	public kind: number;
 	public variableParamProp: System.DynamicValue;
-	public variableParamPropOperationKind: number;
+	public variableParamPropOPERATION_KIND: number;
 	public variableParamPropValue: System.DynamicValue;
 	public heroesSelection: number;
 	public heroInstanceID: System.DynamicValue;
@@ -59,7 +57,7 @@ class If extends Base {
 	public keyID: System.DynamicValue;
 	public keyValue: System.DynamicValue;
 	public objectIDLookingAt: System.DynamicValue;
-	public orientationLookingAt: Enum.Orientation;
+	public orientationLookingAt: ORIENTATION;
 	public chronometerID: System.DynamicValue;
 	public chronometerOperation: number;
 	public chronometerSeconds: System.DynamicValue;
@@ -77,12 +75,12 @@ class If extends Base {
 		switch (this.kind) {
 			case 0: // Variable / Param / Prop
 				this.variableParamProp = System.DynamicValue.createValueCommand(command, iterator);
-				this.variableParamPropOperationKind = command[iterator.i++];
+				this.variableParamPropOPERATION_KIND = command[iterator.i++];
 				this.variableParamPropValue = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // Heroes
 				this.heroesSelection = command[iterator.i++];
-				if (this.heroesSelection === ConditionHeroesKind.TheHeroeWithInstanceID) {
+				if (this.heroesSelection === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
 					this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);
 				}
 				this.heroesInTeam = Utils.numToBool(command[iterator.i++]);
@@ -206,7 +204,7 @@ class If extends Base {
 			nb: number;
 		switch (this.kind) {
 			case 0: // Variable / Param / Prop
-				result = Mathf.OPERATORS_COMPARE[this.variableParamPropOperationKind](
+				result = Mathf.OPERATORS_COMPARE[this.variableParamPropOPERATION_KIND](
 					this.variableParamProp.getValue(),
 					this.variableParamPropValue.getValue()
 				);
@@ -274,7 +272,7 @@ class If extends Base {
 									(hero: Player) => {
 										for (i = 0, l = hero.equip.length; i < l; i++) {
 											equip = hero.equip[i];
-											if (equip && equip.kind === ItemKind.Weapon && equip.system.id === id) {
+											if (equip && equip.kind === ITEM_KIND.WEAPON && equip.system.id === id) {
 												return true;
 											}
 										}
@@ -291,7 +289,7 @@ class If extends Base {
 									(hero: Player) => {
 										for (i = 0, l = hero.equip.length; i < l; i++) {
 											equip = hero.equip[i];
-											if (equip && equip.kind === ItemKind.Armor && equip.system.id === id) {
+											if (equip && equip.kind === ITEM_KIND.ARMOR && equip.system.id === id) {
 												return true;
 											}
 										}
@@ -345,7 +343,7 @@ class If extends Base {
 				id = this.itemID.getValue();
 				for (i = 0, l = Game.current.items.length; i < l; i++) {
 					item = Game.current.items[i];
-					if (item.kind === ItemKind.Item && item.system.id === id) {
+					if (item.kind === ITEM_KIND.ITEM && item.system.id === id) {
 						nb = item.nb;
 						break;
 					}
@@ -357,7 +355,7 @@ class If extends Base {
 				id = this.weaponID.getValue();
 				for (i = 0, l = Game.current.items.length; i < l; i++) {
 					item = Game.current.items[i];
-					if (item.kind === ItemKind.Weapon && item.system.id === id) {
+					if (item.kind === ITEM_KIND.WEAPON && item.system.id === id) {
 						nb = item.nb;
 						break;
 					}
@@ -370,7 +368,7 @@ class If extends Base {
 						h = heroesSelection[i];
 						for (j = 0, m = h.equip.length; j < m; j++) {
 							equip = h.equip[j];
-							if (equip && equip.kind === ItemKind.Weapon && equip.system.id === id) {
+							if (equip && equip.kind === ITEM_KIND.WEAPON && equip.system.id === id) {
 								nb += 1;
 							}
 						}
@@ -383,7 +381,7 @@ class If extends Base {
 				id = this.armorID.getValue();
 				for (i = 0, l = Game.current.items.length; i < l; i++) {
 					item = Game.current.items[i];
-					if (item.kind === ItemKind.Armor && item.system.id === id) {
+					if (item.kind === ITEM_KIND.ARMOR && item.system.id === id) {
 						nb = item.nb;
 						break;
 					}
@@ -396,7 +394,7 @@ class If extends Base {
 						h = heroesSelection[i];
 						for (j = 0, m = h.equip.length; j < m; j++) {
 							equip = h.equip[j];
-							if (equip && equip.kind === ItemKind.Armor && equip.system.id === id) {
+							if (equip && equip.kind === ITEM_KIND.ARMOR && equip.system.id === id) {
 								nb += 1;
 							}
 						}

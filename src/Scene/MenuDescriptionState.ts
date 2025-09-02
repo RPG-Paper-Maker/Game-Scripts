@@ -9,12 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN, ORIENTATION_WINDOW } from '../Common';
 import { Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { MenuBase } from './MenuBase';
-import Align = Enum.Align;
-import OrientationWindow = Enum.OrientationWindow;
 
 /**
  * The scene menu describing players statistics.
@@ -79,7 +77,7 @@ class MenuDescriptionState extends MenuBase {
 	createWindowTop() {
 		const rect = new Rectangle(20, 20, 200, 30);
 		const options = {
-			content: new Graphic.Text(this.title, { align: Align.Center }),
+			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		};
 		this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
 	}
@@ -91,7 +89,7 @@ class MenuDescriptionState extends MenuBase {
 	 */
 	createWindowTabs() {
 		const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
-		const options = { orientation: OrientationWindow.Horizontal, nbItemsMax: 4 };
+		const options = { orientation: ORIENTATION_WINDOW.HORIZONTAL, nbItemsMax: 4 };
 		const listHeroes = [];
 		for (let i = 0; i < this.party().length; i++) {
 			listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);

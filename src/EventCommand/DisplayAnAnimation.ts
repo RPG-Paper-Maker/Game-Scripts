@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { ANIMATION_EFFECT_CONDITION_KIND, Utils } from '../Common';
 import { Animation, MapObject, StructSearchResult } from '../Core';
 import { Manager, Scene, System } from '../index';
 import { Base } from './Base';
-import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
 
 /** @class
  *  An event command for displaying an animation.
@@ -85,7 +84,7 @@ class DisplayAnAnimation extends Base {
 					currentState.object.position,
 					Scene.Map.current.camera.getThreeCamera()
 				);
-				currentState.animation.playSounds(AnimationEffectConditionKind.None);
+				currentState.animation.playSounds(ANIMATION_EFFECT_CONDITION_KIND.NONE);
 				currentState.animation.update();
 				Manager.Stack.requestPaintHUD = true;
 				return currentState.animation.frame > currentState.frameMax ? 1 : 0;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { GROUP_KIND } from '../Common';
 import { Game, MapObject, Player } from '../Core';
 import { Datas, System } from '../index';
 import { Base } from './Base';
@@ -23,7 +23,7 @@ class ChangeClass extends Base {
 	public classID: System.DynamicValue;
 	public selectionKind: number;
 	public selectionHeroEnemyInstanceID: System.DynamicValue;
-	public selectionTeam: Enum.GroupKind;
+	public selectionTeam: GROUP_KIND;
 
 	constructor(command: any[]) {
 		super();

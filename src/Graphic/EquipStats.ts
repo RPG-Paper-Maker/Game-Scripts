@@ -63,7 +63,7 @@ class EquipStats extends Base {
 				txt = Utils.numToString(baseValue);
 				if (!statistic.isFix) {
 					baseValue = gamePlayer[statistic.getMaxAbbreviation()];
-					txt += Constants.STRING_SLASH + baseValue;
+					txt += '/' + baseValue;
 				}
 				newValue = newValues[id];
 				if (this.isChanging && !this.displayAll && baseValue === newValue) {
@@ -71,7 +71,7 @@ class EquipStats extends Base {
 				}
 
 				// Name of the stat
-				graphicName = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
+				graphicName = new Graphic.Text(statistic.name() + ':');
 				maxLength = Math.max(graphicName.textWidth, maxLength);
 				this.listStatsNames.push(graphicName);
 
@@ -82,7 +82,7 @@ class EquipStats extends Base {
 				if (this.isChanging) {
 					txt = statistic.isFix
 						? Utils.numToString(newValue)
-						: Math.min(gamePlayer[statistic.abbreviation], newValue) + Constants.STRING_SLASH + newValue;
+						: Math.min(gamePlayer[statistic.abbreviation], newValue) + '/' + newValue;
 					graphicValue = new Graphic.Text(txt);
 					if (newValue > baseValue) {
 						graphicValue.color = System.Color.GREEN;

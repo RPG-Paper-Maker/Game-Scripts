@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Mathf, ScreenResolution } from '../Common';
+import { Mathf, ORIENTATION, ScreenResolution } from '../Common';
 import { Datas, Manager, Scene, System } from '../index';
 import { MapObject } from './MapObject';
 
@@ -76,7 +76,7 @@ class Camera {
 	 *  Get the map orientation according to the camera.
 	 *  @returns {Orientation}
 	 */
-	getMapOrientation(): Enum.Orientation {
+	getMapOrientation(): ORIENTATION {
 		return Mathf.mod(Math.round(this.horizontalAngle / 90) - 1, 4);
 	}
 

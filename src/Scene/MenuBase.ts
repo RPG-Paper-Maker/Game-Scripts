@@ -11,15 +11,14 @@
 
 import { Base } from '.';
 import { Datas, Graphic, Scene } from '..';
-import { Enum, Inputs } from '../Common';
+import { ALIGN, Inputs } from '../Common';
 import { Game, Player } from '../Core';
-import Align = Enum.Align;
 
 /**
  * The menu commands structure
  */
 interface MenuCommands {
-	command: { name: string; align: Align };
+	command: { name: string; align: ALIGN };
 	action: Function;
 }
 

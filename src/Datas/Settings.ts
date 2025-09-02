@@ -10,8 +10,7 @@
 */
 
 import { Datas } from '..';
-import { Enum, IO, Paths, Platform, Utils } from '../Common';
-import TitleSettingKind = Enum.TitleSettingKind;
+import { IO, Paths, Platform, TITLE_SETTING_KIND, Utils } from '../Common';
 
 /** @class
  *  All the settings datas.
@@ -34,12 +33,12 @@ class Settings {
 		// Settings
 		const json = await Platform.parseFileJSON(Paths.FILE_SETTINGS);
 		this.kb = [];
-		const jsonObjs = json[Utils.numToString(TitleSettingKind.KeyboardAssigment)];
+		const jsonObjs = json[Utils.numToString(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)];
 		for (const id in jsonObjs) {
 			this.kb[id] = jsonObjs[id];
 		}
 		this.currentLanguage = Utils.defaultValue(
-			json[Utils.numToString(TitleSettingKind.Language)],
+			json[Utils.numToString(TITLE_SETTING_KIND.LANGUAGE)],
 			Datas.Languages.getMainLanguageID()
 		);
 	}
@@ -54,8 +53,8 @@ class Settings {
 		for (const id in this.kb) {
 			jsonObjs[id] = this.kb[id];
 		}
-		json[Utils.numToString(TitleSettingKind.KeyboardAssigment)] = jsonObjs;
-		json[Utils.numToString(TitleSettingKind.Language)] = this.currentLanguage;
+		json[Utils.numToString(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)] = jsonObjs;
+		json[Utils.numToString(TITLE_SETTING_KIND.LANGUAGE)] = this.currentLanguage;
 		IO.saveFile(Paths.FILE_SETTINGS, json);
 	}
 

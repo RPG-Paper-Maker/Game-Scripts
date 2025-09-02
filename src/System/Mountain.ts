@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { MOUNTAIN_COLLISION_KIND, Utils } from '../Common';
 import { SpecialElement } from './SpecialElement';
-import MountainCollisionKind = Enum.MountainCollisionKind;
 
 /** @class
  *  A mountain of the game.
@@ -35,7 +34,7 @@ class Mountain extends SpecialElement {
 		super.read(json);
 
 		this.id = json.id;
-		this.collisionKind = Utils.defaultValue(json.mck, MountainCollisionKind.Default);
+		this.collisionKind = Utils.defaultValue(json.mck, MOUNTAIN_COLLISION_KIND.DEFAULT);
 	}
 
 	/**
@@ -43,7 +42,7 @@ class Mountain extends SpecialElement {
 	 *  @returns {boolean}
 	 */
 	forceAlways(): boolean {
-		return this.collisionKind === MountainCollisionKind.Always;
+		return this.collisionKind === MOUNTAIN_COLLISION_KIND.ALWAYS;
 	}
 
 	/**
@@ -51,7 +50,7 @@ class Mountain extends SpecialElement {
 	 *  @returns {boolean}
 	 */
 	forceNever(): boolean {
-		return this.collisionKind === MountainCollisionKind.Never;
+		return this.collisionKind === MOUNTAIN_COLLISION_KIND.NEVER;
 	}
 }
 

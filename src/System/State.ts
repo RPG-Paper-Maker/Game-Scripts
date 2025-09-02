@@ -9,13 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { COMMAND_MOVE_KIND, DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../Common';
 import { EventCommand, Manager, System } from '../index';
 import { Base } from './Base';
-import ObjectMovingKind = Enum.ObjectMovingKind;
-import EventCommandKind = Enum.EventCommandKind;
-import DynamicValueKind = Enum.DynamicValueKind;
-import CommandMoveKind = Enum.CommandMoveKind;
 
 /** @class
  *  A possible state of an object.
@@ -29,7 +25,7 @@ class State extends Base {
 	public rectTileset: number[];
 	public indexX: number;
 	public indexY: number;
-	public objectMovingKind: ObjectMovingKind;
+	public objectMovingKind: OBJECT_MOVING_KIND;
 	public route: System.Reaction;
 	public speedID: number;
 	public frequencyID: number;
@@ -74,13 +70,13 @@ class State extends Base {
 			this.indexX = json.x;
 			this.indexY = json.y;
 		}
-		this.objectMovingKind = Utils.defaultValue(json.omk, ObjectMovingKind.Fix);
+		this.objectMovingKind = Utils.defaultValue(json.omk, OBJECT_MOVING_KIND.FIX);
 		this.route = new System.Reaction({
 			bh: false,
 			c: [
 				Utils.defaultValue(json.ecr, {
-					kind: EventCommandKind.MoveObject,
-					command: [DynamicValueKind.DataBase, -1, 1, 1, 0, CommandMoveKind.MoveRandom, 0],
+					kind: EVENT_COMMAND_KIND.MOVE_OBJECT,
+					command: [DYNAMIC_VALUE_KIND.DATABASE, -1, 1, 1, 0, COMMAND_MOVE_KIND.MOVE_RANDOM, 0],
 				}),
 			],
 		});

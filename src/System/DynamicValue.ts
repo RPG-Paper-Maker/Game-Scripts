@@ -10,14 +10,13 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Platform, Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, PICTURE_KIND, Platform, SONG_KIND, Utils } from '../Common';
 import { Game, ReactionInterpreter } from '../Core';
 import { StructIterator } from '../EventCommand';
 import { Datas, System } from '../index';
-import DynamicValueKind = Enum.DynamicValueKind;
 
 interface StructJSON {
-	k: DynamicValueKind;
+	k: DYNAMIC_VALUE_KIND;
 	v: any;
 	x: StructJSON;
 	y: StructJSON;
@@ -32,7 +31,7 @@ interface StructJSON {
  *  @param {Record<string, any>} - [json=undefined] Json object describing the value
  */
 class DynamicValue extends System.Base {
-	public kind: DynamicValueKind;
+	public kind: DYNAMIC_VALUE_KIND;
 	public value: any;
 	public customStructure: Record<string, System.DynamicValue>;
 	public customList: System.DynamicValue[];
@@ -47,21 +46,21 @@ class DynamicValue extends System.Base {
 	/**
 	 *  Create a new value from kind and value.
 	 *  @static
-	 *  @param {DynamicValueKind} [k=DynamicValueKind.None] - The kind of value
+	 *  @param {DYNAMIC_VALUE_KIND} [k=DYNAMIC_VALUE_KIND.NONE] - The kind of value
 	 *  @param {any} [v=0] - The value
 	 *  @returns {SystemValue}
 	 */
-	static create(k: DynamicValueKind = DynamicValueKind.None, v: any = 0): System.DynamicValue {
+	static create(k: DYNAMIC_VALUE_KIND = DYNAMIC_VALUE_KIND.NONE, v: any = 0): System.DynamicValue {
 		const systemValue = new System.DynamicValue();
 		systemValue.kind = k;
 		switch (k) {
-			case DynamicValueKind.None:
+			case DYNAMIC_VALUE_KIND.NONE:
 				systemValue.value = null;
 				break;
-			case DynamicValueKind.Message:
+			case DYNAMIC_VALUE_KIND.MESSAGE:
 				systemValue.value = Utils.numToString(v);
 				break;
-			case DynamicValueKind.Switch:
+			case DYNAMIC_VALUE_KIND.SWITCH:
 				switch (v) {
 					case 1:
 						systemValue.value = true;
@@ -100,7 +99,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createNone(): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.None, null);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.NONE, null);
 	}
 
 	/**
@@ -110,7 +109,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createNumber(n: number): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.Number, n);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, n);
 	}
 
 	/**
@@ -120,7 +119,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createMessage(m: string): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.Message, m);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m);
 	}
 
 	/**
@@ -130,7 +129,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createNumberDouble(n: number): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.NumberDouble, n);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DOUBLE, n);
 	}
 
 	/**
@@ -140,7 +139,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createKeyBoard(k: number): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.KeyBoard, k);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.KEYBOARD, k);
 	}
 
 	/**
@@ -150,7 +149,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createSwitch(b: boolean): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.Switch, Utils.boolToNum(b));
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, Utils.boolToNum(b));
 	}
 
 	/**
@@ -160,7 +159,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createVariable(id: number): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.Variable, id);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.VARIABLE, id);
 	}
 
 	/**
@@ -170,7 +169,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createParameter(id: number): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.Parameter, id);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.PARAMETER, id);
 	}
 
 	/**
@@ -180,7 +179,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createProperty(id: number): System.DynamicValue {
-		return System.DynamicValue.create(DynamicValueKind.Property, id);
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.PROPERTY, id);
 	}
 
 	/**
@@ -192,8 +191,8 @@ class DynamicValue extends System.Base {
 	 */
 	static mapWithParametersProperties(parameters: System.DynamicValue[]): System.DynamicValue[] {
 		return parameters.map((value) => {
-			return value.kind === Enum.DynamicValueKind.Parameter || Enum.DynamicValueKind.Property
-				? System.DynamicValue.create(Enum.DynamicValueKind.Unknown, value.getValue())
+			return value.kind === DYNAMIC_VALUE_KIND.PARAMETER || DYNAMIC_VALUE_KIND.PROPERTY
+				? System.DynamicValue.create(DYNAMIC_VALUE_KIND.UNKNOWN, value.getValue())
 				: value;
 		});
 	}
@@ -242,7 +241,7 @@ class DynamicValue extends System.Base {
 	 */
 	static readOrDefaultDatabase(json: StructJSON, id: number = 1): System.DynamicValue {
 		return Utils.isUndefined(json)
-			? System.DynamicValue.create(DynamicValueKind.DataBase, id)
+			? System.DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, id)
 			: System.DynamicValue.readFromJSON(json);
 	}
 
@@ -255,7 +254,7 @@ class DynamicValue extends System.Base {
 	 */
 	static readOrDefaultMessage(json: StructJSON, m: string = ''): System.DynamicValue {
 		return Utils.isUndefined(json)
-			? System.DynamicValue.create(DynamicValueKind.Message, m)
+			? System.DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m)
 			: System.DynamicValue.readFromJSON(json);
 	}
 
@@ -301,7 +300,7 @@ class DynamicValue extends System.Base {
 		this.value = json.v;
 
 		switch (this.kind) {
-			case DynamicValueKind.CustomStructure:
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				this.customStructure = {};
 				const jsonList = Utils.defaultValue(json.customStructure.properties, []);
 				let parameter: System.DynamicValue, jsonParameter: Record<string, any>;
@@ -311,7 +310,7 @@ class DynamicValue extends System.Base {
 					this.customStructure[jsonParameter.name] = parameter;
 				}
 				break;
-			case DynamicValueKind.CustomList:
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
 				this.customList = [];
 				Utils.readJSONSystemList({
 					list: Utils.defaultValue(json.customList.list, []),
@@ -321,11 +320,11 @@ class DynamicValue extends System.Base {
 					},
 				});
 				break;
-			case DynamicValueKind.Vector2:
+			case DYNAMIC_VALUE_KIND.VECTOR2:
 				this.x = System.DynamicValue.readFromJSON(json.x);
 				this.y = System.DynamicValue.readFromJSON(json.y);
 				break;
-			case DynamicValueKind.Vector3:
+			case DYNAMIC_VALUE_KIND.VECTOR3:
 				this.x = System.DynamicValue.readFromJSON(json.x);
 				this.y = System.DynamicValue.readFromJSON(json.y);
 				this.z = System.DynamicValue.readFromJSON(json.z);
@@ -352,80 +351,80 @@ class DynamicValue extends System.Base {
 	 */
 	getValue<T>(forceVariable: boolean = false, deep: boolean = false): any {
 		switch (this.kind) {
-			case DynamicValueKind.Variable:
+			case DYNAMIC_VALUE_KIND.VARIABLE:
 				if (!Game.current) {
 					Platform.showErrorMessage('Trying to access a variable value without any game loaded.');
 				}
 				return forceVariable ? this.value : Game.current.variables[this.value];
-			case DynamicValueKind.Parameter:
+			case DYNAMIC_VALUE_KIND.PARAMETER:
 				return ReactionInterpreter.currentParameters[this.value].getValue();
-			case DynamicValueKind.Property:
+			case DYNAMIC_VALUE_KIND.PROPERTY:
 				return ReactionInterpreter.currentObject.properties[this.value];
-			case DynamicValueKind.Class:
+			case DYNAMIC_VALUE_KIND.CLASS:
 				return Datas.Classes.get(this.value);
-			case DynamicValueKind.Hero:
+			case DYNAMIC_VALUE_KIND.HERO:
 				return Datas.Heroes.get(this.value);
-			case DynamicValueKind.Monster:
+			case DYNAMIC_VALUE_KIND.MONSTER:
 				return Datas.Monsters.get(this.value);
-			case DynamicValueKind.Troop:
+			case DYNAMIC_VALUE_KIND.TROOP:
 				return Datas.Troops.get(this.value);
-			case DynamicValueKind.Item:
+			case DYNAMIC_VALUE_KIND.ITEM:
 				return Datas.Items.get(this.value);
-			case DynamicValueKind.Weapon:
+			case DYNAMIC_VALUE_KIND.WEAPON:
 				return Datas.Weapons.get(this.value);
-			case DynamicValueKind.Armor:
+			case DYNAMIC_VALUE_KIND.ARMOR:
 				return Datas.Armors.get(this.value);
-			case DynamicValueKind.Skill:
+			case DYNAMIC_VALUE_KIND.SKILL:
 				return Datas.Skills.get(this.value);
-			case DynamicValueKind.Animation:
+			case DYNAMIC_VALUE_KIND.ANIMATION:
 				return Datas.Animations.get(this.value);
-			case DynamicValueKind.Status:
+			case DYNAMIC_VALUE_KIND.STATUS:
 				return Datas.Status.get(this.value);
-			case DynamicValueKind.Tileset:
+			case DYNAMIC_VALUE_KIND.TILESET:
 				return Datas.Tilesets.get(this.value);
-			case DynamicValueKind.FontSize:
+			case DYNAMIC_VALUE_KIND.FONT_SIZE:
 				return Datas.Systems.getFontSize(this.value);
-			case DynamicValueKind.FontName:
+			case DYNAMIC_VALUE_KIND.FONT_NAME:
 				return Datas.Systems.getFontName(this.value);
-			case DynamicValueKind.Color:
+			case DYNAMIC_VALUE_KIND.COLOR:
 				return Datas.Systems.getColor(this.value);
-			case DynamicValueKind.WindowSkin:
+			case DYNAMIC_VALUE_KIND.WINDOW_SKIN:
 				return Datas.Systems.getWindowSkin(this.value);
-			case DynamicValueKind.Currency:
+			case DYNAMIC_VALUE_KIND.CURRENCY:
 				return Datas.Systems.getCurrency(this.value);
-			case DynamicValueKind.Speed:
+			case DYNAMIC_VALUE_KIND.SPEED:
 				return Datas.Systems.getSpeed(this.value);
-			case DynamicValueKind.Detection:
+			case DYNAMIC_VALUE_KIND.DETECTION:
 				return Datas.Systems.getDetection(this.value);
-			case DynamicValueKind.CameraProperty:
+			case DYNAMIC_VALUE_KIND.CAMERA_PROPERTY:
 				return Datas.Systems.getCameraProperties(this.value);
-			case DynamicValueKind.Frequency:
+			case DYNAMIC_VALUE_KIND.FREQUENCY:
 				return Datas.Systems.getFrequency(this.value);
-			case DynamicValueKind.Skybox:
+			case DYNAMIC_VALUE_KIND.SKYBOX:
 				return Datas.Systems.getSkybox(this.value);
-			case DynamicValueKind.BattleMap:
+			case DYNAMIC_VALUE_KIND.BATTLE_MAP:
 				return Datas.BattleSystems.getBattleMap(this.value);
-			case DynamicValueKind.Element:
+			case DYNAMIC_VALUE_KIND.ELEMENT:
 				return Datas.BattleSystems.getElement(this.value);
-			case DynamicValueKind.CommonStatistic:
+			case DYNAMIC_VALUE_KIND.COMMON_STATISTIC:
 				return Datas.BattleSystems.getStatistic(this.value);
-			case DynamicValueKind.WeaponsKind:
+			case DYNAMIC_VALUE_KIND.WEAPONS_KIND:
 				return Datas.BattleSystems.getWeaponKind(this.value);
-			case DynamicValueKind.ArmorsKind:
+			case DYNAMIC_VALUE_KIND.ARMORS_KIND:
 				return Datas.BattleSystems.getArmorKind(this.value);
-			case DynamicValueKind.CommonBattleCommand:
+			case DYNAMIC_VALUE_KIND.COMMON_BATTLE_COMMAND:
 				return Datas.BattleSystems.getBattleCommand(this.value);
-			case DynamicValueKind.CommonEquipment:
+			case DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT:
 				return Datas.BattleSystems.getEquipment(this.value);
-			case DynamicValueKind.Event:
+			case DYNAMIC_VALUE_KIND.EVENT:
 				return Datas.CommonEvents.getEventUser(this.value);
-			case DynamicValueKind.State:
+			case DYNAMIC_VALUE_KIND.STATE:
 				return this.value;
-			case DynamicValueKind.CommonReaction:
+			case DYNAMIC_VALUE_KIND.COMMON_REACTION:
 				return Datas.CommonEvents.getCommonReaction(this.value);
-			case DynamicValueKind.Model:
+			case DYNAMIC_VALUE_KIND.MODEL:
 				return Datas.CommonEvents.getCommonObject(this.value);
-			case DynamicValueKind.CustomStructure:
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				if (deep) {
 					const obj = {};
 					for (const k in this.customStructure) {
@@ -434,7 +433,7 @@ class DynamicValue extends System.Base {
 					return obj;
 				}
 				return this.customStructure;
-			case DynamicValueKind.CustomList:
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
 				if (deep) {
 					const list = [];
 					for (const v of this.customList) {
@@ -443,48 +442,48 @@ class DynamicValue extends System.Base {
 					return list;
 				}
 				return this.customList;
-			case DynamicValueKind.Vector2:
+			case DYNAMIC_VALUE_KIND.VECTOR2:
 				return new THREE.Vector2(this.x.getValue(), this.y.getValue());
-			case DynamicValueKind.Vector3:
+			case DYNAMIC_VALUE_KIND.VECTOR3:
 				return new THREE.Vector3(this.x.getValue(), this.y.getValue(), this.z.getValue());
-			case DynamicValueKind.Bars:
-				return Datas.Pictures.get(Enum.PictureKind.Bars, this.value);
-			case DynamicValueKind.Icons:
-				return Datas.Pictures.get(Enum.PictureKind.Icons, this.value);
-			case DynamicValueKind.Autotiles:
-				return Datas.Pictures.get(Enum.PictureKind.Autotiles, this.value);
-			case DynamicValueKind.Characters:
-				return Datas.Pictures.get(Enum.PictureKind.Characters, this.value);
-			case DynamicValueKind.Mountains:
-				return Datas.Pictures.get(Enum.PictureKind.Mountains, this.value);
-			case DynamicValueKind.Tilesets:
-				return Datas.Pictures.get(Enum.PictureKind.Tilesets, this.value);
-			case DynamicValueKind.Walls:
-				return Datas.Pictures.get(Enum.PictureKind.Walls, this.value);
-			case DynamicValueKind.Battlers:
-				return Datas.Pictures.get(Enum.PictureKind.Battlers, this.value);
-			case DynamicValueKind.Facesets:
-				return Datas.Pictures.get(Enum.PictureKind.Facesets, this.value);
-			case DynamicValueKind.WindowSkins:
-				return Datas.Pictures.get(Enum.PictureKind.WindowSkins, this.value);
-			case DynamicValueKind.TitleScreen:
-				return Datas.Pictures.get(Enum.PictureKind.TitleScreen, this.value);
-			case DynamicValueKind.Object3D:
-				return Datas.Pictures.get(Enum.PictureKind.Objects3D, this.value);
-			case DynamicValueKind.Pictures:
-				return Datas.Pictures.get(Enum.PictureKind.Pictures, this.value);
-			case DynamicValueKind.Animations:
-				return Datas.Pictures.get(Enum.PictureKind.Animations, this.value);
-			case DynamicValueKind.SkyBoxes:
-				return Datas.Pictures.get(Enum.PictureKind.Skyboxes, this.value);
-			case DynamicValueKind.Music:
-				return Datas.Songs.get(Enum.SongKind.Music, this.value);
-			case DynamicValueKind.BackgroundSound:
-				return Datas.Songs.get(Enum.SongKind.BackgroundSound, this.value);
-			case DynamicValueKind.Sound:
-				return Datas.Songs.get(Enum.SongKind.Sound, this.value);
-			case DynamicValueKind.MusicEffect:
-				return Datas.Songs.get(Enum.SongKind.MusicEffect, this.value);
+			case DYNAMIC_VALUE_KIND.BARS:
+				return Datas.Pictures.get(PICTURE_KIND.BARS, this.value);
+			case DYNAMIC_VALUE_KIND.ICONS:
+				return Datas.Pictures.get(PICTURE_KIND.ICONS, this.value);
+			case DYNAMIC_VALUE_KIND.AUTOTILES:
+				return Datas.Pictures.get(PICTURE_KIND.AUTOTILES, this.value);
+			case DYNAMIC_VALUE_KIND.CHARACTERS:
+				return Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.value);
+			case DYNAMIC_VALUE_KIND.MOUNTAINS:
+				return Datas.Pictures.get(PICTURE_KIND.MOUNTAINS, this.value);
+			case DYNAMIC_VALUE_KIND.TILESETS:
+				return Datas.Pictures.get(PICTURE_KIND.TILESETS, this.value);
+			case DYNAMIC_VALUE_KIND.WALLS:
+				return Datas.Pictures.get(PICTURE_KIND.WALLS, this.value);
+			case DYNAMIC_VALUE_KIND.BATTLERS:
+				return Datas.Pictures.get(PICTURE_KIND.BATTLERS, this.value);
+			case DYNAMIC_VALUE_KIND.FACESETS:
+				return Datas.Pictures.get(PICTURE_KIND.FACESETS, this.value);
+			case DYNAMIC_VALUE_KIND.WINDOW_SKINS:
+				return Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.value);
+			case DYNAMIC_VALUE_KIND.TITLE_SCREEN:
+				return Datas.Pictures.get(PICTURE_KIND.TITLE_SCREEN, this.value);
+			case DYNAMIC_VALUE_KIND.OBJECT_3D:
+				return Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, this.value);
+			case DYNAMIC_VALUE_KIND.PICTURES:
+				return Datas.Pictures.get(PICTURE_KIND.PICTURES, this.value);
+			case DYNAMIC_VALUE_KIND.ANIMATIONS:
+				return Datas.Pictures.get(PICTURE_KIND.ANIMATIONS, this.value);
+			case DYNAMIC_VALUE_KIND.SKYBOXES:
+				return Datas.Pictures.get(PICTURE_KIND.SKYBOXES, this.value);
+			case DYNAMIC_VALUE_KIND.MUSIC:
+				return Datas.Songs.get(SONG_KIND.MUSIC, this.value);
+			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
+				return Datas.Songs.get(SONG_KIND.BACKGROUND_SOUND, this.value);
+			case DYNAMIC_VALUE_KIND.SOUND:
+				return Datas.Songs.get(SONG_KIND.SOUND, this.value);
+			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
+				return Datas.Songs.get(SONG_KIND.MUSIC_EFFECT, this.value);
 			default:
 				return this.value;
 		}
@@ -497,11 +496,11 @@ class DynamicValue extends System.Base {
 	 */
 	isEqual(value: System.DynamicValue): boolean {
 		// If keyBoard
-		if (this.kind === DynamicValueKind.KeyBoard && value.kind !== DynamicValueKind.KeyBoard) {
+		if (this.kind === DYNAMIC_VALUE_KIND.KEYBOARD && value.kind !== DYNAMIC_VALUE_KIND.KEYBOARD) {
 			return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(this.value));
-		} else if (value.kind === DynamicValueKind.KeyBoard && this.kind !== DynamicValueKind.KeyBoard) {
+		} else if (value.kind === DYNAMIC_VALUE_KIND.KEYBOARD && this.kind !== DYNAMIC_VALUE_KIND.KEYBOARD) {
 			return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(value.value));
-		} else if (this.kind === DynamicValueKind.Anything || value.kind === DynamicValueKind.Anything) {
+		} else if (this.kind === DYNAMIC_VALUE_KIND.ANYTHING || value.kind === DYNAMIC_VALUE_KIND.ANYTHING) {
 			return true;
 		}
 		// If any other value, compare the direct values

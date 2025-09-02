@@ -10,48 +10,50 @@
 */
 
 /**
- *
- * The common class for constants.
- * @class Constants
+ * Common constants used across the RPG Paper Maker engine.
  */
 class Constants {
+	/** Default UI font size in pixels. */
 	public static readonly DEFAULT_FONT_SIZE = 13;
-	public static readonly DEFAULT_FONT_NAME = 'Arial';
-	public static readonly BASIC_SQUARE_SIZE = 32;
-	public static readonly SMALL_FONT_SIZE = 8;
-	public static readonly MEDIUM_FONT_SIZE = 10;
-	public static readonly MEDIUM_SPACE = 5;
-	public static readonly LARGE_SPACE = 10;
-	public static readonly HUGE_SPACE = 20;
-	public static readonly PORTIONS_RAY_FAR = 0;
-	public static readonly PORTION_SIZE = 16;
-	public static readonly MAX_PICTURE_SIZE = 4096;
-	public static readonly NUM_BOOL_TRUE = 1;
-	public static readonly NUM_BOOL_FALSE = 0;
-	public static readonly CLASS_HIDDEN = 'hidden';
-	public static readonly STRING_RGBA = 'rgba';
-	public static readonly STRING_PARENTHESIS_LEFT = '(';
-	public static readonly STRING_PARENTHESIS_RIGHT = ')';
-	public static readonly STRING_BRACKET_LEFT = '[';
-	public static readonly STRING_BRACKET_RIGHT = ']';
-	public static readonly STRING_COMA = ',';
-	public static readonly STRING_COLON = ':';
-	public static readonly STRING_SLASH = '/';
-	public static readonly STRING_NEW_LINE = '\n';
-	public static readonly STRING_EQUAL = '=';
-	public static readonly STRING_DASH = '-';
-	public static readonly STRING_SPACE = ' ';
-	public static readonly STRING_ZERO = '0';
-	public static readonly UNDEFINED = 'undefined';
-	public static readonly NUMBER = 'number';
-	public static readonly STRING = 'string';
-	public static readonly JSON_KEY = 'k';
-	public static readonly JSON_VALUE = 'v';
-	public static readonly EXTENSION_JSON = '.json';
 
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	/** Default font family used across the UI. */
+	public static readonly DEFAULT_FONT_NAME = 'Arial';
+
+	/** Base tile size in pixels. */
+	public static readonly BASIC_SQUARE_SIZE = 32;
+
+	/** Small font size in pixels. */
+	public static readonly SMALL_FONT_SIZE = 8;
+
+	/** Medium font size in pixels. */
+	public static readonly MEDIUM_FONT_SIZE = 10;
+
+	/** Standard medium spacing in UI layouts. */
+	public static readonly MEDIUM_SPACE = 5;
+
+	/** Standard large spacing in UI layouts. */
+	public static readonly LARGE_SPACE = 10;
+
+	/** Standard huge spacing in UI layouts. */
+	public static readonly HUGE_SPACE = 20;
+
+	/** Raycasting distance constant (far). */
+	public static readonly PORTIONS_RAY_FAR = 0;
+
+	/** Size of a map portion in tiles. */
+	public static readonly PORTION_SIZE = 16;
+
+	/**
+	 * Maximum allowed texture/picture size in pixels.
+	 * Prevents loading assets too large for the rendering pipeline.
+	 */
+	public static readonly MAX_PICTURE_SIZE = 4096;
+
+	/** Key name `"k"` used in JSON data. */
+	public static readonly JSON_KEY = 'k';
+
+	/** Value name `"v"` used in JSON data. */
+	public static readonly JSON_VALUE = 'v';
 }
 
 export { Constants };

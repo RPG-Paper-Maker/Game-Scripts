@@ -10,12 +10,19 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Inputs, Mathf, Platform, Utils } from '../Common';
+import {
+	COMMAND_MOVE_KIND,
+	ELEMENT_MAP_KIND,
+	EVENT_COMMAND_KIND,
+	Inputs,
+	Mathf,
+	ORIENTATION,
+	Platform,
+	Utils,
+} from '../Common';
 import { Game, MapObject, ReactionInterpreter, StructSearchResult } from '../Core';
 import { Datas, EventCommand, Manager, Scene, System } from '../index';
 import { Base } from './Base';
-import CommandMoveKind = Enum.CommandMoveKind;
-import Orientation = Enum.Orientation;
 
 /** @class
  *  An event command for moving object.
@@ -32,7 +39,7 @@ class MoveObject extends Base {
 	public isCameraOrientation: boolean;
 	public moves: Function[];
 	public parameters: Record<string, any>[];
-	public kind: CommandMoveKind;
+	public kind: COMMAND_MOVE_KIND;
 
 	constructor(command: any[]) {
 		super();
@@ -56,55 +63,55 @@ class MoveObject extends Base {
 		let permanent: boolean;
 		while (iterator.i < l) {
 			this.kind = command[iterator.i++];
-			if (this.kind >= CommandMoveKind.MoveNorth && this.kind <= CommandMoveKind.MoveBack) {
+			if (this.kind >= COMMAND_MOVE_KIND.MOVE_NORTH && this.kind <= COMMAND_MOVE_KIND.MOVE_BACK) {
 				this.parameters.push({
 					square: !Utils.numToBool(command[iterator.i++]),
 				});
 				switch (this.kind) {
-					case CommandMoveKind.MoveNorth:
+					case COMMAND_MOVE_KIND.MOVE_NORTH:
 						this.moves.push(this.moveNorth);
 						break;
-					case CommandMoveKind.MoveSouth:
+					case COMMAND_MOVE_KIND.MOVE_SOUTH:
 						this.moves.push(this.moveSouth);
 						break;
-					case CommandMoveKind.MoveWest:
+					case COMMAND_MOVE_KIND.MOVE_WEST:
 						this.moves.push(this.moveWest);
 						break;
-					case CommandMoveKind.MoveEast:
+					case COMMAND_MOVE_KIND.MOVE_EAST:
 						this.moves.push(this.moveEast);
 						break;
-					case CommandMoveKind.MoveNorthWest:
+					case COMMAND_MOVE_KIND.MOVE_NORTH_WEST:
 						this.moves.push(this.moveNorthWest);
 						break;
-					case CommandMoveKind.MoveNorthEast:
+					case COMMAND_MOVE_KIND.MOVE_NORTH_EAST:
 						this.moves.push(this.moveNorthEast);
 						break;
-					case CommandMoveKind.MoveSouthWest:
+					case COMMAND_MOVE_KIND.MOVE_SOUTH_WEST:
 						this.moves.push(this.moveSouthWest);
 						break;
-					case CommandMoveKind.MoveSouthEast:
+					case COMMAND_MOVE_KIND.MOVE_SOUTH_EAST:
 						this.moves.push(this.moveSouthEast);
 						break;
-					case CommandMoveKind.MoveRandom:
+					case COMMAND_MOVE_KIND.MOVE_RANDOM:
 						this.moves.push(this.moveRandom);
 						break;
-					case CommandMoveKind.MoveHero:
+					case COMMAND_MOVE_KIND.MOVE_HERO:
 						this.moves.push(this.moveHero);
 						break;
-					case CommandMoveKind.MoveOppositeHero:
+					case COMMAND_MOVE_KIND.MOVE_OPPOSITE_HERO:
 						this.moves.push(this.moveOppositeHero);
 						break;
-					case CommandMoveKind.MoveFront:
+					case COMMAND_MOVE_KIND.MOVE_FRONT:
 						this.moves.push(this.moveFront);
 						break;
-					case CommandMoveKind.MoveBack:
+					case COMMAND_MOVE_KIND.MOVE_BACK:
 						this.moves.push(this.moveBack);
 						break;
-					case CommandMoveKind.Jump:
+					case COMMAND_MOVE_KIND.JUMP:
 						this.moves.push(this.jump);
 						break;
 				}
-			} else if (this.kind === CommandMoveKind.Jump) {
+			} else if (this.kind === COMMAND_MOVE_KIND.JUMP) {
 				const square = !Utils.numToBool(command[iterator.i++]);
 				const x = System.DynamicValue.createValueCommand(command, iterator);
 				const y = System.DynamicValue.createValueCommand(command, iterator);
@@ -124,23 +131,23 @@ class MoveObject extends Base {
 					time: time,
 				});
 				this.moves.push(this.jump);
-			} else if (this.kind === CommandMoveKind.ChangeGraphics) {
+			} else if (this.kind === COMMAND_MOVE_KIND.CHANGE_GRAPHICS) {
 				permanent = Utils.numToBool(command[iterator.i++]);
 				const dontChangeOrientation = Utils.numToBool(command[iterator.i++]);
 				const indexKind = command[iterator.i++];
-				let kind = Enum.ElementMapKind.None;
+				let kind = ELEMENT_MAP_KIND.NONE;
 				switch (indexKind) {
 					case 0:
-						kind = Enum.ElementMapKind.None;
+						kind = ELEMENT_MAP_KIND.NONE;
 						break;
 					case 1:
-						kind = Enum.ElementMapKind.SpritesFix;
+						kind = ELEMENT_MAP_KIND.SPRITES_FIX;
 						break;
 					case 2:
-						kind = Enum.ElementMapKind.SpritesFace;
+						kind = ELEMENT_MAP_KIND.SPRITES_FACE;
 						break;
 					case 3:
-						kind = Enum.ElementMapKind.Object3D;
+						kind = ELEMENT_MAP_KIND.OBJECT_3D;
 						break;
 				}
 				const pictureID = System.DynamicValue.createValueCommand(command, iterator);
@@ -160,47 +167,53 @@ class MoveObject extends Base {
 					height: height,
 				});
 				this.moves.push(this.changeGraphics);
-			} else if (this.kind >= CommandMoveKind.TurnNorth && this.kind <= CommandMoveKind.LookAtHeroOpposite) {
+			} else if (
+				this.kind >= COMMAND_MOVE_KIND.TURN_NORTH &&
+				this.kind <= COMMAND_MOVE_KIND.LOOK_AT_HERO_OPPOSITE
+			) {
 				this.parameters.push({});
 				switch (this.kind) {
-					case CommandMoveKind.TurnNorth:
+					case COMMAND_MOVE_KIND.TURN_NORTH:
 						this.moves.push(this.turnNorth);
 						break;
-					case CommandMoveKind.TurnSouth:
+					case COMMAND_MOVE_KIND.TURN_SOUTH:
 						this.moves.push(this.turnSouth);
 						break;
-					case CommandMoveKind.TurnWest:
+					case COMMAND_MOVE_KIND.TURN_WEST:
 						this.moves.push(this.turnWest);
 						break;
-					case CommandMoveKind.TurnEast:
+					case COMMAND_MOVE_KIND.TURN_EAST:
 						this.moves.push(this.turnEast);
 						break;
-					case CommandMoveKind.Turn90Right:
+					case COMMAND_MOVE_KIND.TURN_90_RIGHT:
 						this.moves.push(this.turn90Right);
 						break;
-					case CommandMoveKind.Turn90Left:
+					case COMMAND_MOVE_KIND.TURN_90_LEFT:
 						this.moves.push(this.turn90Left);
 						break;
-					case CommandMoveKind.LookAtHero:
+					case COMMAND_MOVE_KIND.LOOK_AT_HERO:
 						this.moves.push(this.lookAtHero);
 						break;
-					case CommandMoveKind.LookAtHeroOpposite:
+					case COMMAND_MOVE_KIND.LOOK_AT_HERO_OPPOSITE:
 						this.moves.push(this.lookAtHeroOpposite);
 						break;
 				}
-			} else if (this.kind === CommandMoveKind.ChangeSpeed || this.kind === CommandMoveKind.ChangeFrequency) {
+			} else if (
+				this.kind === COMMAND_MOVE_KIND.CHANGE_SPEED ||
+				this.kind === COMMAND_MOVE_KIND.CHANGE_FREQUENCY
+			) {
 				const permanent = Utils.numToBool(command[iterator.i++]);
 				const value = System.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
 					permanent: permanent,
 					value: value,
 				});
-				if (this.kind === CommandMoveKind.ChangeSpeed) {
+				if (this.kind === COMMAND_MOVE_KIND.CHANGE_SPEED) {
 					this.moves.push(this.changeSpeed);
 				} else {
 					this.moves.push(this.changeFrequency);
 				}
-			} else if (this.kind >= CommandMoveKind.MoveAnimation && this.kind <= CommandMoveKind.KeepPosition) {
+			} else if (this.kind >= COMMAND_MOVE_KIND.MOVE_ANIMATION && this.kind <= COMMAND_MOVE_KIND.KEEP_POSITION) {
 				const onOff = Utils.numToBool(command[iterator.i++]);
 				const permanent = Utils.numToBool(command[iterator.i++]);
 				this.parameters.push({
@@ -208,44 +221,44 @@ class MoveObject extends Base {
 					permanent: permanent,
 				});
 				switch (this.kind) {
-					case CommandMoveKind.MoveAnimation:
+					case COMMAND_MOVE_KIND.MOVE_ANIMATION:
 						this.moves.push(this.moveAnimation);
 						break;
-					case CommandMoveKind.StopAnimation:
+					case COMMAND_MOVE_KIND.STOP_ANIMATION:
 						this.moves.push(this.stopAnimation);
 						break;
-					case CommandMoveKind.ClimbAnimation:
+					case COMMAND_MOVE_KIND.CLIMB_ANIMATION:
 						this.moves.push(this.climbAnimation);
 						break;
-					case CommandMoveKind.FixDirection:
+					case COMMAND_MOVE_KIND.FIX_DIRECTION:
 						this.moves.push(this.directionFix);
 						break;
-					case CommandMoveKind.Through:
+					case COMMAND_MOVE_KIND.THROUGH:
 						this.moves.push(this.through);
 						break;
-					case CommandMoveKind.SetWithCamera:
+					case COMMAND_MOVE_KIND.SET_WITH_CAMERA:
 						this.moves.push(this.setWithCamera);
 						break;
-					case CommandMoveKind.PixelOffset:
+					case COMMAND_MOVE_KIND.PIXEL_OFFSET:
 						this.moves.push(this.pixelOffset);
 						break;
-					case CommandMoveKind.KeepPosition:
+					case COMMAND_MOVE_KIND.KEEP_POSITION:
 						this.moves.push(this.keepPosition);
 						break;
 				}
-			} else if (this.kind >= CommandMoveKind.Wait && this.kind <= CommandMoveKind.Script) {
-				let kind: Enum.EventCommandKind, l: number;
+			} else if (this.kind >= COMMAND_MOVE_KIND.WAIT && this.kind <= COMMAND_MOVE_KIND.SCRIPT) {
+				let kind: EVENT_COMMAND_KIND, l: number;
 				switch (this.kind) {
-					case CommandMoveKind.Wait:
-						kind = Enum.EventCommandKind.Wait;
+					case COMMAND_MOVE_KIND.WAIT:
+						kind = EVENT_COMMAND_KIND.WAIT;
 						l = 2;
 						break;
-					case CommandMoveKind.PlaySound:
-						kind = Enum.EventCommandKind.PlaySound;
+					case COMMAND_MOVE_KIND.PLAY_SOUND:
+						kind = EVENT_COMMAND_KIND.PLAY_SOUND;
 						l = 12;
 						break;
-					case CommandMoveKind.Script:
-						kind = Enum.EventCommandKind.Script;
+					case COMMAND_MOVE_KIND.SCRIPT:
+						kind = EVENT_COMMAND_KIND.SCRIPT;
 						l = Utils.numToBool(command[iterator.i]) ? 3 : 2;
 						break;
 				}
@@ -270,24 +283,24 @@ class MoveObject extends Base {
 	 *  @param {Orientation} orientation - The orientation
 	 *  @returns {Orientation} The current state
 	 */
-	static oppositeOrientation(orientation: Orientation): Orientation {
+	static oppositeOrientation(orientation: ORIENTATION): ORIENTATION {
 		switch (orientation) {
-			case Orientation.South:
-				return Orientation.North;
-			case Orientation.West:
-				return Orientation.East;
-			case Orientation.North:
-				return Orientation.South;
-			case Orientation.East:
-				return Orientation.West;
-			case Orientation.SouthWest:
-				return Orientation.NorthEast;
-			case Orientation.SouthEast:
-				return Orientation.NorthWest;
-			case Orientation.NorthWest:
-				return Orientation.SouthEast;
-			case Orientation.NorthEast:
-				return Orientation.SouthWest;
+			case ORIENTATION.SOUTH:
+				return ORIENTATION.NORTH;
+			case ORIENTATION.WEST:
+				return ORIENTATION.EAST;
+			case ORIENTATION.NORTH:
+				return ORIENTATION.SOUTH;
+			case ORIENTATION.EAST:
+				return ORIENTATION.WEST;
+			case ORIENTATION.SOUTH_WEST:
+				return ORIENTATION.NORTH_EAST;
+			case ORIENTATION.SOUTH_EAST:
+				return ORIENTATION.NORTH_WEST;
+			case ORIENTATION.NORTH_WEST:
+				return ORIENTATION.SOUTH_EAST;
+			case ORIENTATION.NORTH_EAST:
+				return ORIENTATION.SOUTH_WEST;
 		}
 	}
 
@@ -313,7 +326,7 @@ class MoveObject extends Base {
 		};
 	}
 
-	getLockedOrientation(orientation: Enum.Orientation) {
+	getLockedOrientation(orientation: ORIENTATION) {
 		if (this.isCameraOrientation && Inputs.lockedKeys.length > 0) {
 			const currentEvent = ReactionInterpreter.currentReaction.currentReaction.event;
 			if (currentEvent && currentEvent.idEvent === 3 && currentEvent.isSystem) {
@@ -338,7 +351,7 @@ class MoveObject extends Base {
 	 *  @param {Orientation} orientation - The orientation where to move
 	 *  @returns {boolean}
 	 */
-	move(currentState: Record<string, any>, object: MapObject, square: boolean, orientation: Orientation): boolean {
+	move(currentState: Record<string, any>, object: MapObject, square: boolean, orientation: ORIENTATION): boolean {
 		if (object.moveFrequencyTick > 0) {
 			return false;
 		}
@@ -417,8 +430,8 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
-		return object ? this.move(currentState, object, parameters.square, Orientation.North) : Orientation.North;
+	): ORIENTATION | boolean {
+		return object ? this.move(currentState, object, parameters.square, ORIENTATION.NORTH) : ORIENTATION.NORTH;
 	}
 
 	/**
@@ -432,11 +445,11 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			return this.move(currentState, object, parameters.square, Orientation.South);
+			return this.move(currentState, object, parameters.square, ORIENTATION.SOUTH);
 		}
-		return Orientation.South;
+		return ORIENTATION.SOUTH;
 	}
 
 	/**
@@ -450,11 +463,11 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			return this.move(currentState, object, parameters.square, Orientation.West);
+			return this.move(currentState, object, parameters.square, ORIENTATION.WEST);
 		}
-		return Orientation.West;
+		return ORIENTATION.WEST;
 	}
 
 	/**
@@ -468,11 +481,11 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			return this.move(currentState, object, parameters.square, Orientation.East);
+			return this.move(currentState, object, parameters.square, ORIENTATION.EAST);
 		}
-		return Orientation.East;
+		return ORIENTATION.EAST;
 	}
 
 	/**
@@ -486,12 +499,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.previousOrientation = Orientation.North;
+			object.previousOrientation = ORIENTATION.NORTH;
 		}
 		const orientation = this.moveWest(currentState, object, parameters);
-		return object ? orientation : Orientation.North;
+		return object ? orientation : ORIENTATION.NORTH;
 	}
 
 	/**
@@ -505,12 +518,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.previousOrientation = Orientation.North;
+			object.previousOrientation = ORIENTATION.NORTH;
 		}
 		const orientation = this.moveEast(currentState, object, parameters);
-		return object ? orientation : Orientation.North;
+		return object ? orientation : ORIENTATION.NORTH;
 	}
 
 	/**
@@ -524,12 +537,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.previousOrientation = Orientation.South;
+			object.previousOrientation = ORIENTATION.SOUTH;
 		}
 		const orientation = this.moveWest(currentState, object, parameters);
-		return object ? orientation : Orientation.South;
+		return object ? orientation : ORIENTATION.SOUTH;
 	}
 
 	/**
@@ -543,12 +556,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.previousOrientation = Orientation.South;
+			object.previousOrientation = ORIENTATION.SOUTH;
 		}
 		const orientation = this.moveEast(currentState, object, parameters);
-		return object ? orientation : Orientation.South;
+		return object ? orientation : ORIENTATION.SOUTH;
 	}
 
 	/**
@@ -562,15 +575,15 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		switch (currentState.random) {
-			case CommandMoveKind.MoveNorth:
+			case COMMAND_MOVE_KIND.MOVE_NORTH:
 				return this.moveNorth(currentState, object, parameters);
-			case CommandMoveKind.MoveSouth:
+			case COMMAND_MOVE_KIND.MOVE_SOUTH:
 				return this.moveSouth(currentState, object, parameters);
-			case CommandMoveKind.MoveWest:
+			case COMMAND_MOVE_KIND.MOVE_WEST:
 				return this.moveWest(currentState, object, parameters);
-			case CommandMoveKind.MoveEast:
+			case COMMAND_MOVE_KIND.MOVE_EAST:
 				return this.moveEast(currentState, object, parameters);
 		}
 	}
@@ -586,7 +599,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		return this.moveHeroAndOpposite(currentState, object, parameters, false);
 	}
 
@@ -601,7 +614,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		return this.moveHeroAndOpposite(currentState, object, parameters, true);
 	}
 
@@ -618,7 +631,7 @@ class MoveObject extends Base {
 		object: MapObject,
 		parameters: Record<string, any>,
 		opposite: boolean
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			let orientation =
 				currentState.moveHeroOrientation === null
@@ -629,19 +642,19 @@ class MoveObject extends Base {
 				orientation = EventCommand.MoveObject.oppositeOrientation(orientation);
 			}
 			switch (orientation) {
-				case Orientation.SouthWest:
+				case ORIENTATION.SOUTH_WEST:
 					return this.moveSouthWest(currentState, object, parameters);
-				case Orientation.SouthEast:
+				case ORIENTATION.SOUTH_EAST:
 					return this.moveSouthEast(currentState, object, parameters);
-				case Orientation.NorthWest:
+				case ORIENTATION.NORTH_WEST:
 					return this.moveNorthWest(currentState, object, parameters);
-				case Orientation.NorthEast:
+				case ORIENTATION.NORTH_EAST:
 					return this.moveNorthEast(currentState, object, parameters);
 				default:
 					return this.move(currentState, object, parameters.square, orientation);
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -655,14 +668,14 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			const orientation =
 				currentState.moveHeroOrientation === null ? object.orientationEye : currentState.moveHeroOrientation;
 			currentState.moveHeroOrientation = orientation;
 			return this.move(currentState, object, parameters.square, currentState.moveHeroOrientation);
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -676,7 +689,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			const orientation =
 				currentState.moveHeroOrientation === null
@@ -685,7 +698,7 @@ class MoveObject extends Base {
 			currentState.moveHeroOrientation = orientation;
 			return this.move(currentState, object, parameters.square, currentState.moveHeroOrientation);
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -695,7 +708,7 @@ class MoveObject extends Base {
 	 *  @param {Record<string, any>} - parameters The parameters
 	 *  @returns {Orientation}
 	 */
-	jump(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): Orientation | boolean {
+	jump(currentState: Record<string, any>, object: MapObject, parameters: Record<string, any>): ORIENTATION | boolean {
 		if (object) {
 			if (currentState.currentTime === -1) {
 				currentState.currentTime = 0;
@@ -733,7 +746,7 @@ class MoveObject extends Base {
 				return false;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -747,12 +760,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((Orientation.North + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt((ORIENTATION.NORTH + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
 			return true;
 		}
-		return Orientation.North;
+		return ORIENTATION.NORTH;
 	}
 
 	/**
@@ -766,12 +779,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((Orientation.South + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt((ORIENTATION.SOUTH + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
 			return true;
 		}
-		return Orientation.South;
+		return ORIENTATION.SOUTH;
 	}
 
 	/**
@@ -785,12 +798,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((Orientation.West + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt((ORIENTATION.WEST + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
 			return true;
 		}
-		return Orientation.West;
+		return ORIENTATION.WEST;
 	}
 
 	/**
@@ -804,12 +817,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((Orientation.East + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt((ORIENTATION.EAST + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
 			return true;
 		}
-		return Orientation.East;
+		return ORIENTATION.EAST;
 	}
 
 	/**
@@ -823,12 +836,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt((object.orientationEye + 1) % 4);
 			return true;
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -842,12 +855,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt((object.orientationEye - 1) % 4);
 			return true;
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -861,12 +874,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt(object.getOrientationBetween(Game.current.hero));
 			return true;
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -880,12 +893,12 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt((object.getOrientationBetween(Game.current.hero) + 2) % 4);
 			return true;
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -898,7 +911,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.previousGraphicKind = object.currentStateInstance.graphicKind;
@@ -934,7 +947,7 @@ class MoveObject extends Base {
 			// Graphic update
 			object.changeState();
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -948,7 +961,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.speedID = parameters.value.getValue();
@@ -965,7 +978,7 @@ class MoveObject extends Base {
 			object.currentStateInstance.indexY = object.orientationEye;
 			object.changeState();
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -979,7 +992,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.frequencyID = parameters.value.getValue();
@@ -996,7 +1009,7 @@ class MoveObject extends Base {
 			object.currentStateInstance.indexY = object.orientationEye;
 			object.changeState();
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1010,7 +1023,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.moveAnimation = parameters.onOff;
@@ -1024,7 +1037,7 @@ class MoveObject extends Base {
 				options.ma = object.currentStateInstance.moveAnimation;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1038,7 +1051,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.stopAnimation = parameters.onOff;
@@ -1052,7 +1065,7 @@ class MoveObject extends Base {
 				options.sa = object.currentStateInstance.stopAnimation;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1066,7 +1079,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.climbAnimation = parameters.onOff;
@@ -1080,7 +1093,7 @@ class MoveObject extends Base {
 				options.ca = object.currentStateInstance.climbAnimation;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1094,7 +1107,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.directionFix = parameters.onOff;
@@ -1108,7 +1121,7 @@ class MoveObject extends Base {
 				options.df = object.currentStateInstance.directionFix;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1122,7 +1135,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.through = parameters.onOff;
@@ -1138,7 +1151,7 @@ class MoveObject extends Base {
 			// Update bounding box
 			object.updateBB(object.position);
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1152,7 +1165,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.setWithCamera = parameters.onOff;
@@ -1166,7 +1179,7 @@ class MoveObject extends Base {
 				options.swc = object.currentStateInstance.setWithCamera;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1180,7 +1193,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.pixelOffset = parameters.onOff;
@@ -1194,7 +1207,7 @@ class MoveObject extends Base {
 				options.po = object.currentStateInstance.pixelOffset;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1208,7 +1221,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
 			object.currentStateInstance.keepPosition = parameters.onOff;
@@ -1222,7 +1235,7 @@ class MoveObject extends Base {
 				options.kp = object.currentStateInstance.keepPosition;
 			}
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1236,7 +1249,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>
-	): Orientation | boolean {
+	): ORIENTATION | boolean {
 		if (object) {
 			if (currentState.commandState === null) {
 				currentState.commandState = parameters.command.initialize();
@@ -1247,7 +1260,7 @@ class MoveObject extends Base {
 			}
 			return false;
 		}
-		return Orientation.None;
+		return ORIENTATION.NONE;
 	}
 
 	/**
@@ -1255,43 +1268,44 @@ class MoveObject extends Base {
 	 *  @param {MapObject} object - The object to move
 	 *  @returns {Orientation}
 	 */
-	getHeroOrientation(object: MapObject): Orientation {
+	getHeroOrientation(object: MapObject): ORIENTATION {
 		const xDif = object.position.x - Game.current.hero.position.x;
 		const zDif = object.position.z - Game.current.hero.position.z;
-		let orientationX = Orientation.None;
-		let orientationZ = Orientation.None;
+		let orientationX = ORIENTATION.NONE;
+		let orientationZ = ORIENTATION.NONE;
 		if (xDif > 1) {
-			orientationX = Orientation.West;
+			orientationX = ORIENTATION.WEST;
 		} else if (xDif < -1) {
-			orientationX = Orientation.East;
+			orientationX = ORIENTATION.EAST;
 		}
 		if (zDif > 1) {
-			orientationZ = Orientation.North;
+			orientationZ = ORIENTATION.NORTH;
 		} else if (zDif < -1) {
-			orientationZ = Orientation.South;
+			orientationZ = ORIENTATION.SOUTH;
 		}
 		switch (orientationX) {
-			case Orientation.None: {
+			case ORIENTATION.NONE: {
 				return orientationZ;
 			}
-			case Orientation.West: {
+			case ORIENTATION.WEST: {
 				switch (orientationZ) {
-					case Orientation.None:
-						return Orientation.West;
-					case Orientation.North:
-						return Orientation.NorthWest;
-					case Orientation.South:
-						return Orientation.SouthWest;
+					case ORIENTATION.NONE:
+						return ORIENTATION.WEST;
+					case ORIENTATION.NORTH:
+						return ORIENTATION.NORTH_WEST;
+					case ORIENTATION.SOUTH:
+						return ORIENTATION.SOUTH_WEST;
 				}
+				break;
 			}
-			case Orientation.East: {
+			case ORIENTATION.EAST: {
 				switch (orientationZ) {
-					case Orientation.None:
-						return Orientation.East;
-					case Orientation.North:
-						return Orientation.NorthEast;
-					case Orientation.South:
-						return Orientation.SouthEast;
+					case ORIENTATION.NONE:
+						return ORIENTATION.EAST;
+					case ORIENTATION.NORTH:
+						return ORIENTATION.NORTH_EAST;
+					case ORIENTATION.SOUTH:
+						return ORIENTATION.SOUTH_EAST;
 				}
 			}
 		}
@@ -1302,9 +1316,9 @@ class MoveObject extends Base {
 	 *  @param {Record<string, any>} - currentState The current state of the event
 	 *  @returns {Orientation}
 	 */
-	getCurrentOrientation(currentState: Record<string, any>): Orientation {
+	getCurrentOrientation(currentState: Record<string, any>): ORIENTATION {
 		if (this.moves.length === 0) {
-			return Orientation.None;
+			return ORIENTATION.NONE;
 		}
 		return this.moves[currentState.index].call(this, currentState);
 	}

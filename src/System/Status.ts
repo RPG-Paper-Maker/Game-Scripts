@@ -10,7 +10,7 @@
 */
 
 import { Datas, System } from '..';
-import { Enum, Utils } from '../Common';
+import { EFFECT_KIND, STATUS_RESTRICTIONS_KIND, Utils } from '../Common';
 import { Icon } from './Icon';
 
 /** @class
@@ -21,7 +21,7 @@ import { Icon } from './Icon';
 class Status extends Icon {
 	public id: number;
 	public animationID: System.DynamicValue;
-	public restrictionKind: Enum.StatusRestrictionsKind;
+	public restrictionKind: STATUS_RESTRICTIONS_KIND;
 	public priority: System.DynamicValue;
 	public battlerPosition: System.DynamicValue;
 	public isReleaseAtEndBattle: boolean;
@@ -48,7 +48,7 @@ class Status extends Icon {
 		super.read(json);
 		this.id = json.id;
 		this.animationID = System.DynamicValue.readOrNone(json.animationID);
-		this.restrictionKind = Utils.defaultValue(json.restrictionKind, Enum.StatusRestrictionsKind.None);
+		this.restrictionKind = Utils.defaultValue(json.restrictionKind, STATUS_RESTRICTIONS_KIND.NONE);
 		this.priority = System.DynamicValue.readOrDefaultNumber(json.priority);
 		this.battlerPosition = System.DynamicValue.readOrDefaultNumber(json.battlerPosition);
 		this.isReleaseAtEndBattle = Utils.defaultValue(json.isReleaseAtEndBattle, false);
@@ -88,7 +88,7 @@ class Status extends Icon {
 	getEffects(): System.Effect[] {
 		const effects: System.Effect[] = [];
 		for (const effect of this.effects) {
-			if (effect.kind === Enum.EffectKind.PerformSkill) {
+			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
 				effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
 			} else {
 				effects.push(effect);

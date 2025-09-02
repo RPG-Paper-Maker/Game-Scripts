@@ -10,14 +10,12 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Mathf } from '../Common';
+import { CUSTOM_SHAPE_KIND, Mathf, OBJECT_COLLISION_KIND } from '../Common';
 import { Datas, System } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
 import { Object3D } from './Object3D';
 import { Position } from './Position';
-import CustomShapeKind = Enum.CustomShapeKind;
-import ObjectCollisionKind = Enum.ObjectCollisionKind;
 
 /** @class
  *  A 3D object custom in the map.
@@ -66,7 +64,7 @@ class Object3DCustom extends Object3D {
 	 *  @returns {Vector3}
 	 */
 	getCenterVector(): THREE.Vector3 {
-		return Datas.Shapes.get(Enum.CustomShapeKind.OBJ, this.datas.objID).geometry.center.clone();
+		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry.center.clone();
 	}
 
 	/**
@@ -79,7 +77,7 @@ class Object3DCustom extends Object3D {
 	 */
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]] {
 		const localPosition = position.toVector3();
-		const modelGeometry = Datas.Shapes.get(CustomShapeKind.OBJ, this.datas.objID).geometry;
+		const modelGeometry = Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry;
 		const vertices = modelGeometry.vertices;
 		const uvs = modelGeometry.uvs;
 		const scale = this.datas.scale;
@@ -108,7 +106,7 @@ class Object3DCustom extends Object3D {
 
 		// Collisions
 		const objCollision: StructMapElementCollision[] = [];
-		if (this.datas.collisionKind === ObjectCollisionKind.Simplified) {
+		if (this.datas.collisionKind === OBJECT_COLLISION_KIND.SIMPLIFIED) {
 			const obj = this.datas.getObj().geometry;
 			const w = obj.w * scale * position.scaleX;
 			const h = obj.h * scale * position.scaleY;
@@ -143,8 +141,8 @@ class Object3DCustom extends Object3D {
 				),
 				k: true,
 			});
-		} else if (this.datas.collisionKind === ObjectCollisionKind.Custom) {
-			const obj = Datas.Shapes.get(CustomShapeKind.Collisions, this.datas.collisionCustomID).geometry;
+		} else if (this.datas.collisionKind === OBJECT_COLLISION_KIND.CUSTOM) {
+			const obj = Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.datas.collisionCustomID).geometry;
 			const w = obj.w * scale * position.scaleX;
 			const h = obj.h * scale * position.scaleY;
 			const d = obj.d * scale * position.scaleZ;

@@ -10,12 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Utils } from '../Common';
+import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, SHAPE_KIND, Utils } from '../Common';
 import { Datas, System } from '../index';
 import { SpecialElement } from './SpecialElement';
-import ShapeKind = Enum.ShapeKind;
-import ObjectCollisionKind = Enum.ObjectCollisionKind;
-import CustomShapeKind = Enum.CustomShapeKind;
 
 /** @class
  *  A 3D object of the game.
@@ -25,10 +22,10 @@ import CustomShapeKind = Enum.CustomShapeKind;
  */
 class Object3D extends SpecialElement {
 	public id: number;
-	public shapeKind: ShapeKind;
+	public shapeKind: SHAPE_KIND;
 	public objID: number;
 	public mtlID: number;
-	public collisionKind: ObjectCollisionKind;
+	public collisionKind: OBJECT_COLLISION_KIND;
 	public collisionCustomID: number;
 	public scale: number;
 	public widthSquare: number;
@@ -52,10 +49,10 @@ class Object3D extends SpecialElement {
 		super.read(json);
 
 		this.id = json.id;
-		this.shapeKind = Utils.defaultValue(json.sk, ShapeKind.Box);
+		this.shapeKind = Utils.defaultValue(json.sk, SHAPE_KIND.BOX);
 		this.objID = Utils.defaultValue(json.oid, -1);
 		this.mtlID = Utils.defaultValue(json.mid, -1);
-		this.collisionKind = Utils.defaultValue(json.ck, ObjectCollisionKind.None);
+		this.collisionKind = Utils.defaultValue(json.ck, OBJECT_COLLISION_KIND.NONE);
 		this.collisionCustomID = Utils.defaultValue(json.ccid, -1);
 		this.scale = Utils.defaultValue(json.s, 1);
 		this.widthSquare = Utils.defaultValue(json.ws, 1);
@@ -129,7 +126,7 @@ class Object3D extends SpecialElement {
 	 *  @returns {System.Shape}
 	 */
 	getObj(): System.Shape {
-		return Datas.Shapes.get(CustomShapeKind.OBJ, this.objID);
+		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.objID);
 	}
 
 	/**
@@ -137,7 +134,7 @@ class Object3D extends SpecialElement {
 	 *  @returns {System.Shape}
 	 */
 	getCollisionObj(): System.Shape {
-		return Datas.Shapes.get(CustomShapeKind.Collisions, this.collisionCustomID);
+		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.collisionCustomID);
 	}
 }
 

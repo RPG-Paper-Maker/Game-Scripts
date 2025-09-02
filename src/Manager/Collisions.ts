@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Mathf } from '../Common';
+import { Constants, CUSTOM_SHAPE_KIND, Mathf, ORIENTATION } from '../Common';
 import {
 	CollisionSquare,
 	CustomGeometry,
@@ -23,7 +23,6 @@ import {
 	StructMapElementCollision,
 } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
-import ElementMapKind = Enum.ElementMapKind;
 
 /** @class
  *  The collisions manager.
@@ -427,7 +426,7 @@ class Collisions {
 		object: MapObject,
 		bbSettings: number[],
 		reverseTestObjects: boolean = false
-	): [boolean, number, Enum.Orientation] {
+	): [boolean, number, ORIENTATION] {
 		const direction = new THREE.Vector3();
 		direction.subVectors(positionAfter, positionBefore).normalize();
 		const jpositionBefore = Position.createFromVector3(positionBefore);
@@ -458,7 +457,7 @@ class Collisions {
 			k2: number,
 			portion: Portion,
 			mapPortion: MapPortion,
-			result: [boolean, number, Enum.Orientation];
+			result: [boolean, number, ORIENTATION];
 		for (i = startI; i <= endI; i++) {
 			for (j = startJ; j <= endJ; j++) {
 				for (k = startK; k <= endK; k++) {
@@ -520,7 +519,7 @@ class Collisions {
 									}
 								}
 								object.updateMeshBBPosition(object.currentBoundingBox, bbSettings, positionAfter);
-								return [false, null, Enum.Orientation.None];
+								return [false, null, ORIENTATION.NONE];
 							}
 							return [result[0], result[1], result[2]];
 						}
@@ -537,7 +536,7 @@ class Collisions {
 			}
 		}
 		if (block && yMountain === null) {
-			return [true, null, Enum.Orientation.None];
+			return [true, null, ORIENTATION.NONE];
 		}
 
 		// Test objects
@@ -568,7 +567,7 @@ class Collisions {
 			if (yMountain === null && floors.indexOf(positionAfter.y) === -1) {
 				const l = floors.length;
 				if (l === 0) {
-					return [true, null, Enum.Orientation.None];
+					return [true, null, ORIENTATION.NONE];
 				} else {
 					let maxY = null;
 					const limitY = positionAfter.y - Datas.Systems.mountainCollisionHeight.getValue();
@@ -597,7 +596,11 @@ class Collisions {
 								mapPortion.squareNonEmpty[jpositionBefore.x % Constants.PORTION_SIZE][
 									jpositionBefore.z % Constants.PORTION_SIZE
 								];
-							const otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
+							const otherMapPortion = Scene.Map.current.getMapPortion(
+								portion.x,
+								portion.y + 1,
+								portion.z
+							);
 							if (otherMapPortion) {
 								floors = floors.concat(
 									otherMapPortion.squareNonEmpty[jpositionBefore.x % Constants.PORTION_SIZE][
@@ -608,7 +611,7 @@ class Collisions {
 							if (yMountain === null && floors.indexOf(positionBefore.y) === -1) {
 								const l = floors.length;
 								if (l === 0) {
-									return [null, null, Enum.Orientation.None];
+									return [null, null, ORIENTATION.NONE];
 								} else {
 									let maxY = null;
 									const limitY = positionBefore.y - Datas.Systems.mountainCollisionHeight.getValue();
@@ -634,16 +637,16 @@ class Collisions {
 											// If non empty square on front of object, then force move front
 											const positionFront = positionBefore.clone();
 											switch (object.orientationEye) {
-												case Enum.Orientation.North:
+												case ORIENTATION.NORTH:
 													positionFront.setZ(positionFront.z - Datas.Systems.SQUARE_SIZE / 2);
 													break;
-												case Enum.Orientation.South:
+												case ORIENTATION.SOUTH:
 													positionFront.setZ(positionFront.z + Datas.Systems.SQUARE_SIZE / 2);
 													break;
-												case Enum.Orientation.West:
+												case ORIENTATION.WEST:
 													positionFront.setX(positionFront.x - Datas.Systems.SQUARE_SIZE / 2);
 													break;
-												case Enum.Orientation.East:
+												case ORIENTATION.EAST:
 													positionFront.setX(positionFront.x + Datas.Systems.SQUARE_SIZE / 2);
 													break;
 											}
@@ -663,7 +666,7 @@ class Collisions {
 												if (floors.length > 0) {
 													for (const y of floors) {
 														if (y === positionFront.y) {
-															return [false, null, Enum.Orientation.None];
+															return [false, null, ORIENTATION.NONE];
 														}
 													}
 												}
@@ -746,11 +749,7 @@ class Collisions {
 																					positionAfter
 																				);
 																				object.isClimbingUp = climbingUp;
-																				return [
-																					null,
-																					null,
-																					Enum.Orientation.None,
-																				];
+																				return [null, null, ORIENTATION.NONE];
 																			}
 																		}
 																	}
@@ -774,7 +773,7 @@ class Collisions {
 												}
 											}
 										}
-										return [true, null, Enum.Orientation.None];
+										return [true, null, ORIENTATION.NONE];
 									} else {
 										yMountain = maxY;
 									}
@@ -793,16 +792,16 @@ class Collisions {
 			return [
 				this.checkLandsInside(mapPortion, jpositionBefore, jpositionAfter, direction),
 				yMountain,
-				Enum.Orientation.None,
+				ORIENTATION.NONE,
 			];
 		}
-		return [true, null, Enum.Orientation.None];
+		return [true, null, ORIENTATION.NONE];
 	}
 
-	static checkObjectsRay(positionAfter: THREE.Vector3, object: MapObject): [boolean, number, Enum.Orientation] {
+	static checkObjectsRay(positionAfter: THREE.Vector3, object: MapObject): [boolean, number, ORIENTATION] {
 		// Check collision inside & with other objects
 		if (object !== Game.current.hero && object.checkCollisionObject(Game.current.hero)) {
-			return [true, null, Enum.Orientation.None];
+			return [true, null, ORIENTATION.NONE];
 		}
 
 		// Check objects collisions
@@ -812,7 +811,7 @@ class Collisions {
 			for (j = 0; j < 2; j++) {
 				mapPortion = Scene.Map.current.getMapPortion(portion.x + i, portion.y, portion.z + j);
 				if (mapPortion && this.checkObjects(mapPortion, object)) {
-					return [true, null, Enum.Orientation.None];
+					return [true, null, ORIENTATION.NONE];
 				}
 			}
 		}
@@ -840,7 +839,7 @@ class Collisions {
 		object: MapObject,
 		direction: THREE.Vector3,
 		testedCollisions: StructMapElementCollision[]
-	): [boolean, number, Enum.Orientation] {
+	): [boolean, number, ORIENTATION] {
 		// Check sprites and climbing
 		let [isCollision, yMountain, o] = this.checkSprites(mapPortion, jpositionAfter, testedCollisions, object);
 		// Climbing
@@ -857,7 +856,7 @@ class Collisions {
 			object
 		);
 		if (isCollision) {
-			return [isCollision, yMountain, Enum.Orientation.None];
+			return [isCollision, yMountain, ORIENTATION.NONE];
 		}
 
 		// Check other tests
@@ -865,7 +864,7 @@ class Collisions {
 			this.checkLands(mapPortion, jpositionBefore, jpositionAfter, object, direction, testedCollisions) ||
 				this.checkObjects3D(mapPortion, jpositionAfter, positionAfter, testedCollisions, object),
 			yMountain,
-			Enum.Orientation.None,
+			ORIENTATION.NONE,
 		];
 	}
 
@@ -1062,7 +1061,7 @@ class Collisions {
 		jpositionAfter: Position,
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject
-	): [boolean, number, Enum.Orientation] {
+	): [boolean, number, ORIENTATION] {
 		const sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
 		let tested = false;
 		if (sprites !== null) {
@@ -1105,7 +1104,7 @@ class Collisions {
 				}
 			}
 		}
-		return [tested, null, Enum.Orientation.None];
+		return [tested, null, ORIENTATION.NONE];
 	}
 
 	/**
@@ -1195,7 +1194,7 @@ class Collisions {
 		positionAfter: THREE.Vector3
 	): boolean {
 		// Remove previous
-		const mesh = Datas.Shapes.get(Enum.CustomShapeKind.Collisions, objCollision.id).mesh;
+		const mesh = Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, objCollision.id).mesh;
 		if (mesh !== this.currentCustomObject3D) {
 			Scene.Map.current.scene.remove(this.currentCustomObject3D);
 			this.currentCustomObject3D = mesh;
@@ -1528,7 +1527,10 @@ class Collisions {
 			}
 			// Get the intersection point for updating mountain y
 			const plane = new THREE.Plane();
-			const ray = new THREE.Ray(new THREE.Vector3(positionAfter.x, y, positionAfter.z), new THREE.Vector3(0, 1, 0));
+			const ray = new THREE.Ray(
+				new THREE.Vector3(positionAfter.x, y, positionAfter.z),
+				new THREE.Vector3(0, 1, 0)
+			);
 			const newPosition = new THREE.Vector3();
 			plane.setFromCoplanarPoints(pA, pB, pC);
 			ray.intersectPlane(plane, newPosition);

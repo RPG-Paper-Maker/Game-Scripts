@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { SONG_KIND } from '../Common';
 import { MapObject } from '../Core';
 import { EventCommand } from '../index';
 import { Base } from './Base';
@@ -23,7 +23,7 @@ class StopASound extends Base {
 	constructor(command: any[]) {
 		super();
 
-		EventCommand.StopMusic.parseStopSong(this, command, Enum.SongKind.Sound);
+		EventCommand.StopMusic.parseStopSong(this, command, SONG_KIND.SOUND);
 		this.parallel = true;
 	}
 
@@ -46,7 +46,7 @@ class StopASound extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const stopped = EventCommand.StopMusic.stopSong(this, Enum.SongKind.Sound, currentState.time);
+		const stopped = EventCommand.StopMusic.stopSong(this, SONG_KIND.SOUND, currentState.time);
 		return currentState.parallel ? stopped : 1;
 	}
 }

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { CHARACTER_KIND, GROUP_KIND } from '../Common';
 import { Game, MapObject, Player } from '../Core';
 import { Scene, System } from '../index';
 import { Base } from './Base';
@@ -22,15 +22,15 @@ import { Base } from './Base';
 class ModifyTeam extends Base {
 	public kind: number;
 	public instanceLevel: System.DynamicValue;
-	public instanceTeam: Enum.GroupKind;
+	public instanceTeam: GROUP_KIND;
 	public stockVariableID: System.DynamicValue;
-	public instanceKind: Enum.CharacterKind;
+	public instanceKind: CHARACTER_KIND;
 	public instanceID: System.DynamicValue;
 	public enemyInstanceID: System.DynamicValue;
-	public enemyTeam: Enum.GroupKind;
+	public enemyTeam: GROUP_KIND;
 	public modifyKind: number;
 	public modifyInstanceID: System.DynamicValue;
-	public modifyTeam: Enum.GroupKind;
+	public modifyTeam: GROUP_KIND;
 
 	constructor(command: any[]) {
 		super();
@@ -84,14 +84,14 @@ class ModifyTeam extends Base {
 				}
 				const id = this.enemyInstanceID.getValue();
 				let player: Player = null;
-				for (const battler of (<Scene.Battle>Scene.Map.current).battlers[Enum.CharacterKind.Monster]) {
+				for (const battler of (<Scene.Battle>Scene.Map.current).battlers[CHARACTER_KIND.MONSTER]) {
 					if (battler.player.instid === id) {
 						player = battler.player;
 						break;
 					}
 				}
 				if (player !== null) {
-					player.kind = Enum.CharacterKind.Hero;
+					player.kind = CHARACTER_KIND.HERO;
 					Game.current.getTeam(this.enemyTeam).push(player);
 				}
 				break;

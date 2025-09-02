@@ -9,14 +9,13 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { LOOT_KIND, Utils } from '../Common';
 import { Item } from '../Core';
 import { Class } from './Class';
 import { Hero } from './Hero';
 import { Loot } from './Loot';
 import { MonsterAction } from './MonsterAction';
 import { ProgressionTable } from './ProgressionTable';
-import LootKind = Enum.LootKind;
 
 interface StructReward {
 	xp: ProgressionTable;
@@ -115,9 +114,9 @@ class Monster extends Hero {
 	 */
 	getRewardLoots(level: number): Record<string, Item>[] {
 		const list = new Array(3);
-		list[LootKind.Item] = {};
-		list[LootKind.Weapon] = {};
-		list[LootKind.Armor] = {};
+		list[LOOT_KIND.ITEM] = {};
+		list[LOOT_KIND.WEAPON] = {};
+		list[LOOT_KIND.ARMOR] = {};
 		let loot: Item, loots: Record<string, Item>;
 		for (let i = 0, l = this.rewards.loots.length; i < l; i++) {
 			loot = this.rewards.loots[i].currenLoot(level);

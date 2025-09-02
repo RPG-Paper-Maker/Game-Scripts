@@ -9,16 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, AVAILABLE_KIND, Constants, ORIENTATION_WINDOW, ScreenResolution, TARGET_KIND } from '../Common';
 import { Game, Item, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 import { StructPositionChoice } from './Menu';
-import Align = Enum.Align;
-import OrientationWindow = Enum.OrientationWindow;
-import ItemKind = Enum.ItemKind;
-import TargetKind = Enum.TargetKind;
-import AvailableKind = Enum.AvailableKind;
 
 /** @class
  *  A scene in the menu for describing inventory.
@@ -47,21 +42,21 @@ class MenuInventory extends Base {
 		const menuKind: Graphic.Text[] = [];
 		let i: number;
 		for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
-			menuKind[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: Align.Center });
+			menuKind[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
 		}
 
 		// All the windows
 		this.windowTop = new WindowBox(20, 20, 200, 30, {
-			content: new Graphic.Text(this.title, { align: Align.Center }),
+			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
 		this.windowChoicesTabs = new WindowChoices(5, 60, 100, WindowBox.SMALL_SLOT_HEIGHT, menuKind, {
-			orientation: OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: 6,
 		});
 		this.createWindowChoicesList();
 		this.createWindowBoxInformation();
 		this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20, WindowBox.SMALL_SLOT_HEIGHT, {
-			content: new Graphic.Text('Empty', { align: Align.Center }),
+			content: new Graphic.Text('Empty', { align: ALIGN.CENTER }),
 			padding: WindowBox.SMALL_SLOT_PADDING,
 		});
 		this.createWindowBoxUseItem();
@@ -228,14 +223,14 @@ class MenuInventory extends Base {
 					const availableKind = graphic.item.system.availableKind;
 					if (
 						graphic.item.system.isPossible() &&
-						(availableKind === AvailableKind.Always || availableKind === AvailableKind.MainMenu)
+						(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU)
 					) {
-						if (targetKind === TargetKind.Ally || targetKind === TargetKind.AllAllies) {
+						if (targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) {
 							Datas.Systems.soundConfirmation.playSound();
 							this.substep = 1;
 							graphicUse.setSkillItem(graphic.item.system);
-							graphicUse.setAll(targetKind === TargetKind.AllAllies);
-						} else if (targetKind === TargetKind.None) {
+							graphicUse.setAll(targetKind === TARGET_KIND.ALL_ALLIES);
+						} else if (targetKind === TARGET_KIND.NONE) {
 							if (graphic.item.system.use()) {
 								Datas.Systems.soundConfirmation.playSound();
 								this.useItem();

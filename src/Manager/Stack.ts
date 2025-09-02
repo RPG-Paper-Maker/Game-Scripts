@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
+import { CHARACTER_KIND, GROUP_KIND, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Game, MapObject, Picture2D, Player } from '../Core';
 import { Common, Datas, Manager, Scene, System } from '../index';
 
@@ -154,13 +154,7 @@ class Stack {
 		let player: Player;
 		Game.current.teamHeroes = [];
 		for (const hero of heroes) {
-			player = Game.current.instanciateTeam(
-				Enum.GroupKind.Team,
-				Enum.CharacterKind.Hero,
-				hero.heroID,
-				hero.level,
-				1
-			);
+			player = Game.current.instanciateTeam(GROUP_KIND.TEAM, CHARACTER_KIND.HERO, hero.heroID, hero.level, 1);
 			hero.equip(player);
 		}
 		const scene = new Scene.Battle(troopID, true, true, battleMap, 0, 0, null, null);

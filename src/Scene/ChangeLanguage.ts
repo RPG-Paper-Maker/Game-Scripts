@@ -10,7 +10,7 @@
 */
 
 import { Datas, Graphic, Manager } from '..';
-import { Constants, Enum, Inputs, ScreenResolution } from '../Common';
+import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Base } from './Base';
 
@@ -60,7 +60,7 @@ class ChangeLanguage extends Base {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.LARGE_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.language.name(), { align: Enum.Align.Center });
+		const graphic = new Graphic.Text(Datas.Languages.extras.language.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 		};
@@ -78,7 +78,7 @@ class ChangeLanguage extends Base {
 			WindowBox.LARGE_SLOT_HEIGHT
 		);
 		const graphic = new Graphic.Text(Datas.Languages.extras.languageSelectedDescription.name(), {
-			align: Enum.Align.Center,
+			align: ALIGN.CENTER,
 		});
 		const options = {
 			content: graphic,
@@ -124,7 +124,7 @@ class ChangeLanguage extends Base {
 			width,
 			height
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.confirm.name(), { align: Enum.Align.Center });
+		const graphic = new Graphic.Text(Datas.Languages.extras.confirm.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 		};
@@ -162,8 +162,8 @@ class ChangeLanguage extends Base {
 			],
 		};
 		const graphics = [
-			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: Enum.Align.Center }),
-			new Graphic.Text(Datas.Languages.extras.no.name(), { align: Enum.Align.Center }),
+			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Datas.Languages.extras.no.name(), { align: ALIGN.CENTER }),
 		];
 		this.windowChoicesConfirm = new WindowChoices(rect.x, rect.y, rect.width, rect.height, graphics, options);
 	}
@@ -183,7 +183,7 @@ class ChangeLanguage extends Base {
 		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
 				Datas.TitlescreenGameover.titleBackgroundImageID,
-				Enum.PictureKind.TitleScreen,
+				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
 		} else {
@@ -215,6 +215,7 @@ class ChangeLanguage extends Base {
 		switch (this.step) {
 			case 0:
 				this.windowChoicesMain.update();
+				break;
 			case 1:
 				this.windowChoicesConfirm.update();
 				break;

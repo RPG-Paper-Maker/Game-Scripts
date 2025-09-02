@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter, Utils } from '../Common';
+import { Interpreter, INVENTORY_FILTER_KIND, Utils } from '../Common';
 import { Item } from '../Core';
 import { System } from '../index';
 import { Translatable } from './Translatable';
@@ -20,7 +20,7 @@ import { Translatable } from './Translatable';
  *  @param {Record<string, any>} [json=undefined] - Json object describing the item
  */
 class InventoryFilter extends Translatable {
-	public kind: Enum.InventoryFilterKind;
+	public kind: INVENTORY_FILTER_KIND;
 	public itemTypeID: System.DynamicValue;
 	public script: string;
 
@@ -35,12 +35,12 @@ class InventoryFilter extends Translatable {
 	 */
 	read(json: Record<string, any>) {
 		super.read(json);
-		this.kind = Utils.defaultValue(json.kind, Enum.InventoryFilterKind.All);
+		this.kind = Utils.defaultValue(json.kind, INVENTORY_FILTER_KIND.ALL);
 		switch (this.kind) {
-			case Enum.InventoryFilterKind.Custom:
+			case INVENTORY_FILTER_KIND.CUSTOM:
 				this.itemTypeID = System.DynamicValue.readOrDefaultDatabase(json.itemTypeID);
 				break;
-			case Enum.InventoryFilterKind.Script:
+			case INVENTORY_FILTER_KIND.SCRIPT:
 				this.script = Utils.defaultValue(json.script, '');
 				break;
 		}
@@ -53,31 +53,31 @@ class InventoryFilter extends Translatable {
 	 */
 	getFilter(): (item: Item) => boolean {
 		switch (this.kind) {
-			case Enum.InventoryFilterKind.All:
+			case INVENTORY_FILTER_KIND.ALL:
 				return (item: Item): boolean => {
 					return true;
 				};
-			case Enum.InventoryFilterKind.Consumables:
+			case INVENTORY_FILTER_KIND.CONSUMABLES:
 				return (item: Item): boolean => {
 					return item.system.consumable;
 				};
-			case Enum.InventoryFilterKind.Custom:
+			case INVENTORY_FILTER_KIND.CUSTOM:
 				return (item: Item): boolean => {
 					return !item.system.isWeaponArmor() && item.system.type === this.itemTypeID.getValue();
 				};
-			case Enum.InventoryFilterKind.Weapons:
+			case INVENTORY_FILTER_KIND.WEAPONS:
 				return (item: Item): boolean => {
 					return item.system.isWeapon();
 				};
-			case Enum.InventoryFilterKind.Armors:
+			case INVENTORY_FILTER_KIND.ARMORS:
 				return (item: Item): boolean => {
 					return item.system.isArmor();
 				};
-			case Enum.InventoryFilterKind.WeaponsAndAmors:
+			case INVENTORY_FILTER_KIND.WEAPONS_AND_ARMORS:
 				return (item: Item): boolean => {
 					return item.system.isWeaponArmor();
 				};
-			case Enum.InventoryFilterKind.Script:
+			case INVENTORY_FILTER_KIND.SCRIPT:
 				return (item: Item): boolean => {
 					return Interpreter.evaluate(this.script, { additionalName: 'item', additionalValue: item });
 				};

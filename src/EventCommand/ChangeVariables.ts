@@ -9,7 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Mathf, Platform } from '../Common';
+import {
+	CHANGE_VARIABLES_OTHER_CHARACTERISTICS,
+	CHARACTER_KIND,
+	ITEM_KIND,
+	Mathf,
+	Platform,
+	SONG_KIND,
+	VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND,
+} from '../Common';
 import { Game, Item, MapObject, Position, StructSearchResult } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
 import { Base } from './Base';
@@ -31,14 +39,14 @@ class ChangeVariables extends Base {
 	public valueSwitch: System.DynamicValue;
 	public valueMapObject: System.DynamicValue;
 	public valueMapObjectChar: number;
-	public valueItemKind: Enum.ItemKind;
+	public valueITEM_KIND: ITEM_KIND;
 	public valueItemID: System.DynamicValue;
 	public valueTotalCurrencyKind: number;
 	public valueTotalCurrencyID: System.DynamicValue;
 	public valueHeroEnemyInstanceID: System.DynamicValue;
 	public valueStatisticID: System.DynamicValue;
 	public valueEnemyIndex: number;
-	public valueOtherCharacteristicKind: Enum.ChangeVariablesOtherCharacteristics;
+	public valueOtherCHARACTERISTIC_KIND: CHANGE_VARIABLES_OTHER_CHARACTERISTICS;
 
 	constructor(command: any[]) {
 		super();
@@ -75,7 +83,7 @@ class ChangeVariables extends Base {
 				this.valueMapObjectChar = command[iterator.i++];
 				break;
 			case 5: // Number of weapon / armor / item in inventory
-				this.valueItemKind = command[iterator.i++];
+				this.valueITEM_KIND = command[iterator.i++];
 				this.valueItemID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 6: // Total currency
@@ -90,7 +98,7 @@ class ChangeVariables extends Base {
 				this.valueEnemyIndex = command[iterator.i++];
 				break;
 			case 9: // Other characteristics
-				this.valueOtherCharacteristicKind = command[iterator.i++];
+				this.valueOtherCHARACTERISTIC_KIND = command[iterator.i++];
 				break;
 		}
 	}
@@ -145,28 +153,28 @@ class ChangeVariables extends Base {
 								);
 							}
 							switch (this.valueMapObjectChar) {
-								case Enum.VariableMapObjectCharacteristicKind.XSquarePosition:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.X_SQUARE_POSITION:
 									currentState.value = Position.createFromVector3(obj.position).x;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.YSquarePosition:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Y_SQUARE_POSITION:
 									currentState.value = Position.createFromVector3(obj.position).y;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.ZSquarePosition:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Z_SQUARE_POSITION:
 									currentState.value = Position.createFromVector3(obj.position).z;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.XPixelPosition:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.X_PIXEL_POSITION:
 									currentState.value = obj.position.x;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.YPixelPosition:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Y_PIXEL_POSITION:
 									currentState.value = obj.position.y;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.ZPixelPosition:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Z_PIXEL_POSITION:
 									currentState.value = obj.position.z;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.Orientation:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.ORIENTATION:
 									currentState.value = obj.orientation;
 									break;
-								case Enum.VariableMapObjectCharacteristicKind.Terrain:
+								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.TERRAIN:
 									currentState.value = obj.terrain;
 									break;
 							}
@@ -176,7 +184,7 @@ class ChangeVariables extends Base {
 					);
 					break;
 				case 5: // Number of weapon / armor / item in inventory
-					const item = Item.findItem(this.valueItemKind, this.valueItemID.getValue());
+					const item = Item.findItem(this.valueITEM_KIND, this.valueItemID.getValue());
 					currentState.value = item === null ? 0 : item.nb;
 					break;
 				case 6: // Total currency
@@ -206,57 +214,57 @@ class ChangeVariables extends Base {
 				case 8: // Enemy instance ID
 					currentState.value = 0;
 					if (Scene.Map.current.isBattleMap) {
-						currentState.value = (<Scene.Battle>Scene.Map.current).battlers[Enum.CharacterKind.Monster][
+						currentState.value = (<Scene.Battle>Scene.Map.current).battlers[CHARACTER_KIND.MONSTER][
 							this.valueEnemyIndex
 						].player.instid;
 					}
 					break;
 				case 9: // Other characteristics
-					switch (this.valueOtherCharacteristicKind) {
-						case Enum.ChangeVariablesOtherCharacteristics.CurrentMapID:
+					switch (this.valueOtherCHARACTERISTIC_KIND) {
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.CURRENT_MAP_ID:
 							currentState.value = Scene.Map.current.id;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.NumberInTeam:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.NUMBER_IN_TEAM:
 							currentState.value = Game.current.teamHeroes.length;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.NumberInHidden:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.NUMBER_IN_HIDDEN:
 							currentState.value = Game.current.hiddenHeroes.length;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.NumberInReserve:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.NUMBER_IN_RESERVE:
 							currentState.value = Game.current.reserveHeroes.length;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfSteps:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.TOTAL_NUMBER_OF_STEPS:
 							currentState.value = Game.current.steps;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfSeconds:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.TOTAL_NUMBER_OF_SECONDS:
 							currentState.value = Game.current.playTime.getSeconds();
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfSavesDone:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.TOTAL_NUMBER_OF_SAVES_DONE:
 							currentState.value = Game.current.saves;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.TotalNumberOfBattles:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.TOTAL_NUMBER_OF_BATTLES:
 							currentState.value = Game.current.battles;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.CameraXPosition:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.CAMERA_X_POSITION:
 							currentState.value = Scene.Map.current.camera.getThreeCamera().position.x;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.CameraYPosition:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.CAMERA_Y_POSITION:
 							currentState.value = Scene.Map.current.camera.getThreeCamera().position.y;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.CameraZPosition:
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.CAMERA_Z_POSITION:
 							currentState.value = Scene.Map.current.camera.getThreeCamera().position.z;
 							break;
-						case Enum.ChangeVariablesOtherCharacteristics.TotalSecondsCurrentMusic: {
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.TOTAL_SECONDS_CURRENT_MUSIC: {
 							currentState.value = 0;
-							const current = Manager.Songs.current[Enum.SongKind.Music];
+							const current = Manager.Songs.current[SONG_KIND.MUSIC];
 							if (current) {
 								currentState.value = current.seek();
 							}
 							break;
 						}
-						case Enum.ChangeVariablesOtherCharacteristics.TotalSecondsCurrentBackgroundMusic: {
+						case CHANGE_VARIABLES_OTHER_CHARACTERISTICS.TOTAL_SECONDS_CURRENT_BACKGROUND_MUSIC: {
 							currentState.value = 0;
-							const current = Manager.Songs.current[Enum.SongKind.BackgroundSound];
+							const current = Manager.Songs.current[SONG_KIND.BACKGROUND_SOUND];
 							if (current) {
 								currentState.value = current.seek();
 							}

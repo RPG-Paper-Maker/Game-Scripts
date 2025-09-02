@@ -9,13 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter } from '../Common';
+import { ALIGN, CHARACTERISTIC_KIND, Interpreter, ITEM_KIND, ORIENTATION_WINDOW } from '../Common';
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager, Scene, System } from '../index';
 import { MenuBase } from './MenuBase';
-import Align = Enum.Align;
-import OrientationWindow = Enum.OrientationWindow;
-import ItemKind = Enum.ItemKind;
 
 /**
  * The menu scene displaying heroes equipments
@@ -64,7 +61,7 @@ class MenuEquip extends MenuBase {
 	createWindowTop() {
 		const rect = new Rectangle(20, 20, 200, 30);
 		this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
-			content: new Graphic.Text(this.title, { align: Align.Center }),
+			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
 	}
 
@@ -80,7 +77,7 @@ class MenuEquip extends MenuBase {
 			listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
 		}
 		const options = {
-			orientation: OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemMax: 4,
 			padding: [0, 0, 0, 0],
 		};
@@ -155,7 +152,7 @@ class MenuEquip extends MenuBase {
 			for (j = 0, m = characteristics.length; j < m; j++) {
 				characteristic = characteristics[j];
 				if (
-					characteristic.kind === Enum.CharacteristicKind.AllowForbidChange &&
+					characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
 					characteristic.changeEquipmentID.getValue() === Datas.BattleSystems.equipmentsOrder[i]
 				) {
 					isPossible = characteristic.isAllowChangeEquipment;
@@ -189,7 +186,7 @@ class MenuEquip extends MenuBase {
 			characteristics: System.Characteristic[];
 		for (let i = 0, l = Game.current.items.length; i < l; i++) {
 			item = Game.current.items[i];
-			if (item.kind !== ItemKind.Item) {
+			if (item.kind !== ITEM_KIND.ITEM) {
 				systemItem = item.system;
 				type = systemItem.getType();
 				if (type.equipments[idEquipment]) {
@@ -311,7 +308,7 @@ class MenuEquip extends MenuBase {
 
 		// If "don't allow weapon/armor" characteristic now active, remove equipment
 		for (const characteristic of gameItem.system.characteristics) {
-			if (characteristic.kind === Enum.CharacteristicKind.AllowForbidEquip && !characteristic.isAllowEquip) {
+			if (characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP && !characteristic.isAllowEquip) {
 				const weaponArmor = characteristic.isAllowEquipWeapon
 					? Datas.BattleSystems.getWeaponKind(characteristic.equipWeaponTypeID.getValue())
 					: Datas.BattleSystems.getArmorKind(characteristic.equipArmorTypeID.getValue());

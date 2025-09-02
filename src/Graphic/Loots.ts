@@ -10,10 +10,9 @@
 */
 
 import { Graphic } from '..';
-import { Enum, ScreenResolution } from '../Common';
+import { LOOT_KIND, ScreenResolution } from '../Common';
 import { Item } from '../Core';
 import { Base } from './Base';
-import LootKind = Enum.LootKind;
 
 /** @class
  *  The graphic displaying all the items dropped at the end of a battle.
@@ -25,7 +24,7 @@ class Loots extends Base {
 	constructor(loots: Record<string, Item>[], nb: number) {
 		super();
 
-		const order = [LootKind.Weapon, LootKind.Armor, LootKind.Item];
+		const order = [LOOT_KIND.WEAPON, LOOT_KIND.ARMOR, LOOT_KIND.ITEM];
 		this.graphicsLoots = new Array(nb);
 		let list: Record<string, Item>, id: string;
 		for (let i = 0, j = 0, l = order.length; i < l; i++) {

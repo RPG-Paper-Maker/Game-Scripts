@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { ALIGN_VERTICAL, Utils } from '../Common';
 import { Camera, MapObject, Node, ReactionInterpreter } from '../Core';
 import { Datas, Graphic, Manager, Scene, System } from '../index';
 import { Main } from '../main';
@@ -70,7 +70,7 @@ abstract class Base {
 		}
 		this.create();
 		if (Datas.Systems.showFPS) {
-			this.graphicFPS = new Graphic.Text('', { verticalAlign: Enum.AlignVertical.Top });
+			this.graphicFPS = new Graphic.Text('', { verticalAlign: ALIGN_VERTICAL.TOP });
 		}
 	}
 

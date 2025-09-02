@@ -10,7 +10,7 @@
 */
 
 import { Datas, Graphic, Manager, Scene } from '..';
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, Constants, ORIENTATION_WINDOW, ScreenResolution } from '../Common';
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { SpinBox } from '../Core/SpinBox';
 import { StructPositionChoice } from './Menu';
@@ -98,7 +98,7 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
 		const graphic = new Graphic.Text(Datas.Languages.extras.shop.name(), {
-			align: Enum.Align.Center,
+			align: ALIGN.CENTER,
 		});
 		const options = {
 			content: graphic,
@@ -116,12 +116,12 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		const list = [new Graphic.Text(Datas.Languages.extras.buy.name(), { align: Enum.Align.Center })];
+		const list = [new Graphic.Text(Datas.Languages.extras.buy.name(), { align: ALIGN.CENTER })];
 		if (!this.buyOnly) {
-			list.push(new Graphic.Text(Datas.Languages.extras.sell.name(), { align: Enum.Align.Center }));
+			list.push(new Graphic.Text(Datas.Languages.extras.sell.name(), { align: ALIGN.CENTER }));
 		}
 		const options = {
-			orientation: Enum.OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: list.length,
 			padding: WindowBox.NONE_PADDING,
 		};
@@ -142,10 +142,10 @@ class MenuShop extends MenuBase {
 		const list: Graphic.Text[] = [];
 		let i: number;
 		for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
-			list[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: Enum.Align.Center });
+			list[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
 		}
 		const options = {
-			orientation: Enum.OrientationWindow.Horizontal,
+			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: list.length,
 			padding: [0, 0, 0, 0],
 		};
@@ -207,7 +207,7 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
 		const graphic = new Graphic.Text(Datas.Languages.extras.empty.name(), {
-			align: Enum.Align.Center,
+			align: ALIGN.CENTER,
 		});
 		const options = {
 			content: graphic,
@@ -246,7 +246,7 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text('', { align: Enum.Align.Center });
+		const graphic = new Graphic.Text('', { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 			padding: WindowBox.SMALL_SLOT_PADDING,
@@ -294,7 +294,7 @@ class MenuShop extends MenuBase {
 			width,
 			height
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.equipQuestion.name(), { align: Enum.Align.Center });
+		const graphic = new Graphic.Text(Datas.Languages.extras.equipQuestion.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 			padding: WindowBox.SMALL_SLOT_PADDING,
@@ -313,8 +313,8 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
 		const list = [
-			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: Enum.Align.Center }),
-			new Graphic.Text(Datas.Languages.extras.no.name(), { align: Enum.Align.Center }),
+			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Datas.Languages.extras.no.name(), { align: ALIGN.CENTER }),
 		];
 		const options = {
 			nbItemsMax: list.length,

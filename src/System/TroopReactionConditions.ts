@@ -10,7 +10,7 @@
 */
 
 import { Datas, Scene, System } from '..';
-import { Enum, Mathf, Utils } from '../Common';
+import { CHARACTER_KIND, CONDITION_HEROES_KIND, Mathf, OPERATION_KIND, Utils } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
 
@@ -26,13 +26,13 @@ class TroopReactionConditions extends Base {
 	public numberOfTurnTimes: System.DynamicValue;
 	public isHeroesMonsters: boolean;
 	public isHeroes: boolean;
-	public conditionHeroesKind: Enum.ConditionHeroesKind;
+	public conditionHeroesKind: CONDITION_HEROES_KIND;
 	public heroInstanceID: System.DynamicValue;
 	public isStatusID: boolean;
 	public statusID: System.DynamicValue;
 	public isStatisticID: boolean;
 	public statisticID: System.DynamicValue;
-	public statisticOperationKind: Enum.OperationKind;
+	public statisticOPERATION_KIND: OPERATION_KIND;
 	public statisticCompare: System.DynamicValue;
 	public statisticCompareUnit: boolean;
 
@@ -51,13 +51,13 @@ class TroopReactionConditions extends Base {
 		this.numberOfTurnTimes = System.DynamicValue.readOrDefaultNumber(json.numberOfTurnTimes, 1);
 		this.isHeroesMonsters = Utils.defaultValue(json.isHeroesMonsters, false);
 		this.isHeroes = Utils.defaultValue(json.isHeroes, true);
-		this.conditionHeroesKind = Utils.defaultValue(json.conditionHeroesKind, Enum.ConditionHeroesKind.AllTheHeroes);
+		this.conditionHeroesKind = Utils.defaultValue(json.conditionHeroesKind, CONDITION_HEROES_KIND.ALL_THE_HEROES);
 		this.heroInstanceID = System.DynamicValue.readOrDefaultVariable(json.heroInstanceID);
 		this.isStatusID = Utils.defaultValue(json.isStatusID, false);
 		this.statusID = System.DynamicValue.readOrDefaultDatabase(json.statusID);
 		this.isStatisticID = Utils.defaultValue(json.isStatisticID, false);
 		this.statisticID = System.DynamicValue.readOrDefaultDatabase(json.statisticID);
-		this.statisticOperationKind = Utils.defaultValue(json.statisticOperationKind, Enum.OperationKind.EqualTo);
+		this.statisticOPERATION_KIND = Utils.defaultValue(json.statisticOPERATION_KIND, OPERATION_KIND.EQUAL_TO);
 		this.statisticCompare = System.DynamicValue.readOrDefaultNumber(json.statisticCompare);
 		this.statisticCompareUnit = Utils.defaultValue(json.statisticCompareUnit, true);
 	}
@@ -84,7 +84,7 @@ class TroopReactionConditions extends Base {
 		if (this.isHeroesMonsters) {
 			return Player.applySelection(
 				this.conditionHeroesKind,
-				sceneBattle.players[this.isHeroes ? Enum.CharacterKind.Hero : Enum.CharacterKind.Monster],
+				sceneBattle.players[this.isHeroes ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER],
 				this.heroInstanceID.getValue(),
 				(player: Player) => {
 					let test = false;
@@ -110,7 +110,7 @@ class TroopReactionConditions extends Base {
 							throw new Error('No max value for stat ' + stat.name());
 						}
 						const compareValue = this.statisticCompare.getValue();
-						return Mathf.OPERATORS_COMPARE[this.statisticOperationKind](
+						return Mathf.OPERATORS_COMPARE[this.statisticOPERATION_KIND](
 							this.statisticCompareUnit ? statValue / statValueMax : statValue,
 							this.statisticCompareUnit ? compareValue / 100 : compareValue
 						);

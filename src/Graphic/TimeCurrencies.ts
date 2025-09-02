@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Mathf, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, Mathf, ScreenResolution, Utils } from '../Common';
 import { Game } from '../Core';
 import { Datas, Graphic, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying all currencies and play time in scene menu.
@@ -39,8 +38,8 @@ class TimeCurrencies extends Base {
 					Mathf.numberWithCommas(Game.current.currencies[id]),
 					systemCurrency,
 					{
-						side: Align.Right,
-						align: Align.Right,
+						side: ALIGN.RIGHT,
+						align: ALIGN.RIGHT,
 					}
 				);
 				this.currencies.push(graphic);
@@ -50,7 +49,7 @@ class TimeCurrencies extends Base {
 		// Time
 		this.time = Game.current.playTime.getSeconds();
 		this.graphicPlayTime = new Graphic.Text(Utils.getStringDate(this.time), {
-			align: Align.Right,
+			align: ALIGN.RIGHT,
 		});
 
 		// Calculate height

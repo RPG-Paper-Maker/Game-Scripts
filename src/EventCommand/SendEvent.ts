@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { MapObject } from '../Core';
 import { Datas, Manager, System } from '../index';
 import { Base } from './Base';
-import DynamicValueKind = Enum.DynamicValueKind;
 
 /** @class
  *  An event command for sending an event.
@@ -59,14 +58,14 @@ class SendEvent extends Base {
 				: Datas.CommonEvents.getEventUser(this.eventID)
 		).parameters;
 		this.parameters = [];
-		let parameter: System.DynamicValue, paramID: number, k: DynamicValueKind;
+		let parameter: System.DynamicValue, paramID: number, k: DYNAMIC_VALUE_KIND;
 		while (iterator.i < l) {
 			paramID = command[iterator.i++];
 			k = command[iterator.i++];
-			if (k > DynamicValueKind.Unknown && k <= DynamicValueKind.Default) {
+			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
 				// If default value
 				parameter =
-					k === DynamicValueKind.Default ? parameters[paramID].value : System.DynamicValue.create(k, null);
+					k === DYNAMIC_VALUE_KIND.DEFAULT ? parameters[paramID].value : System.DynamicValue.create(k, null);
 			} else {
 				parameter = System.DynamicValue.create(k, command[iterator.i++]);
 			}

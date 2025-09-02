@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Mathf, Utils } from '../Common';
+import { BATTLE_STEP, CHARACTER_KIND, EFFECT_SPECIAL_ACTION_KIND, Mathf, TARGET_KIND, Utils } from '../Common';
 import { Battler, MapObject } from '../Core';
 import { Datas, Scene, System } from '../index';
 import { Base } from './Base';
@@ -76,26 +76,26 @@ class ForceAnAction extends Base {
 		const map = <Scene.Battle>Scene.Map.current;
 		map.forceAnAction = true;
 		// Battler (user)
-		let side: Enum.CharacterKind;
+		let side: CHARACTER_KIND;
 		switch (this.battlerKind) {
 			case 0: // Enemy
-				Scene.Map.current.user = map.battlers[Enum.CharacterKind.Monster][this.battlerEnemyIndex];
-				side = Enum.CharacterKind.Monster;
+				Scene.Map.current.user = map.battlers[CHARACTER_KIND.MONSTER][this.battlerEnemyIndex];
+				side = CHARACTER_KIND.MONSTER;
 				break;
 			case 1: // Hero instance ID
 				const id = this.battlerHeroEnemyInstanceID.getValue();
 				Scene.Map.current.user = null;
-				for (const battler of map.battlers[Enum.CharacterKind.Hero]) {
+				for (const battler of map.battlers[CHARACTER_KIND.HERO]) {
 					if (battler.player.instid === id) {
 						Scene.Map.current.user = battler;
-						side = Enum.CharacterKind.Hero;
+						side = CHARACTER_KIND.HERO;
 						break;
 					}
 				}
-				for (const battler of map.battlers[Enum.CharacterKind.Monster]) {
+				for (const battler of map.battlers[CHARACTER_KIND.MONSTER]) {
 					if (battler.player.instid === id) {
 						Scene.Map.current.user = battler;
-						side = Enum.CharacterKind.Monster;
+						side = CHARACTER_KIND.MONSTER;
 						break;
 					}
 				}
@@ -104,15 +104,15 @@ class ForceAnAction extends Base {
 		// Action
 		switch (this.actionKind) {
 			case 0: // Skill
-				map.battleCommandKind = Enum.EffectSpecialActionKind.OpenSkills;
+				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 				map.skill = Datas.Skills.get(this.actionID.getValue());
 				break;
 			case 1: // Item
-				map.battleCommandKind = Enum.EffectSpecialActionKind.OpenItems;
+				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS;
 				map.skill = Datas.Items.get(this.actionID.getValue());
 				break;
 			case 2: // Do nothing
-				map.battleCommandKind = Enum.EffectSpecialActionKind.None;
+				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.NONE;
 				map.skill = null;
 				break;
 		}
@@ -120,25 +120,19 @@ class ForceAnAction extends Base {
 		let targets: Battler[] = [];
 		map.targets = [];
 		switch (map.skill.targetKind) {
-			case Enum.TargetKind.User:
+			case TARGET_KIND.USER:
 				map.targets = [Scene.Map.current.user];
 				break;
-			case Enum.TargetKind.Enemy:
-				targets =
-					map.battlers[
-						side === Enum.CharacterKind.Hero ? Enum.CharacterKind.Monster : Enum.CharacterKind.Hero
-					];
+			case TARGET_KIND.ENEMY:
+				targets = map.battlers[side === CHARACTER_KIND.HERO ? CHARACTER_KIND.MONSTER : CHARACTER_KIND.HERO];
 				break;
-			case Enum.TargetKind.Ally:
+			case TARGET_KIND.ALLY:
 				targets = map.battlers[side];
 				break;
-			case Enum.TargetKind.AllEnemies:
-				map.targets =
-					map.battlers[
-						side === Enum.CharacterKind.Hero ? Enum.CharacterKind.Monster : Enum.CharacterKind.Hero
-					];
+			case TARGET_KIND.ALL_ENEMIES:
+				map.targets = map.battlers[side === CHARACTER_KIND.HERO ? CHARACTER_KIND.MONSTER : CHARACTER_KIND.HERO];
 				break;
-			case Enum.TargetKind.AllAllies:
+			case TARGET_KIND.ALL_ALLIES:
 				map.targets = map.battlers[side];
 				break;
 			default:
@@ -162,17 +156,17 @@ class ForceAnAction extends Base {
 				case 2: // custom
 					switch (this.targetCustomKind) {
 						case 0: // Enemy
-							map.targets = [map.battlers[Enum.CharacterKind.Monster][this.targetEnemyIndex]];
+							map.targets = [map.battlers[CHARACTER_KIND.MONSTER][this.targetEnemyIndex]];
 							break;
 						case 1: // Hero instance ID
 							const id = this.targetHeroEnemyInstanceID.getValue();
-							for (const battler of map.battlers[Enum.CharacterKind.Hero]) {
+							for (const battler of map.battlers[CHARACTER_KIND.HERO]) {
 								if (battler.player.instid === id) {
 									map.targets = [battler];
 									break;
 								}
 							}
-							for (const battler of map.battlers[Enum.CharacterKind.Monster]) {
+							for (const battler of map.battlers[CHARACTER_KIND.MONSTER]) {
 								if (battler.player.instid === id) {
 									map.targets = [battler];
 									break;
@@ -189,7 +183,7 @@ class ForceAnAction extends Base {
 		map.previousStep = map.step;
 		map.previousSubStep = map.subStep;
 		// Start animation
-		map.changeStep(Enum.BattleStep.Animation);
+		map.changeStep(BATTLE_STEP.ANIMATION);
 		return null;
 	}
 

@@ -10,7 +10,17 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Mathf, Paths, Platform, Utils } from '../Common';
+import {
+	ELEMENT_MAP_KIND,
+	Mathf,
+	OBJECT_MOVING_KIND,
+	ORIENTATION,
+	Paths,
+	PICTURE_KIND,
+	Platform,
+	SHAPE_KIND,
+	Utils,
+} from '../Common';
 import { Datas, EventCommand, Manager, Scene, System } from '../index';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
@@ -23,11 +33,6 @@ import { Object3DCustom } from './Object3DCustom';
 import { Portion } from './Portion';
 import { Position } from './Position';
 import { Sprite } from './Sprite';
-import Orientation = Enum.Orientation;
-import ElementMapKind = Enum.ElementMapKind;
-import PictureKind = Enum.PictureKind;
-import ObjectMovingKind = Enum.ObjectMovingKind;
-import ShapeKind = Enum.ShapeKind;
 
 interface StructSearchResult {
 	object: MapObject;
@@ -57,20 +62,20 @@ class MapObject {
 	public currentBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
 	public boundingBoxSettings: Record<string, any>;
 	public frame: Frame;
-	public orientationEye: Orientation;
-	public orientation: Orientation;
+	public orientationEye: ORIENTATION;
+	public orientation: ORIENTATION;
 	public width: number;
 	public height: number;
 	public moving: boolean = false;
 	public isClimbing: boolean = false;
 	public isClimbingUp: boolean = true;
-	public climbOrientationEye: Enum.Orientation = Enum.Orientation.None;
-	public climbOrientation: Enum.Orientation = Enum.Orientation.None;
+	public climbOrientationEye = ORIENTATION.NONE;
+	public climbOrientation = ORIENTATION.NONE;
 	public moveFrequencyTick: number;
 	public isStartup: boolean;
 	public isInScene: boolean;
 	public receivedOneEvent: boolean;
-	public previousOrientation: Orientation;
+	public previousOrientation: ORIENTATION;
 	public otherMoveCommand: EventCommand.MoveObject;
 	public previousMoveCommand: EventCommand.MoveObject;
 	public yMountain: number;
@@ -104,7 +109,7 @@ class MapObject {
 		this.currentBoundingBox = null;
 		this.boundingBoxSettings = null;
 		this.frame = new Frame(0);
-		this.orientationEye = Orientation.South;
+		this.orientationEye = ORIENTATION.SOUTH;
 		this.orientation = this.orientationEye;
 		this.width = 1;
 		this.height = 1;
@@ -292,7 +297,7 @@ class MapObject {
 		const globalPortion = position.getGlobalPortion();
 		const mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, globalPortion);
 		const json = await Platform.parseFileJSON(
-			Paths.FILE_MAPS + Scene.Map.current.mapFilename + Constants.STRING_SLASH + globalPortion.getFileName()
+			Paths.FILE_MAPS + Scene.Map.current.mapFilename + '/' + globalPortion.getFileName()
 		);
 		const mapPortion = new MapPortion(globalPortion);
 		const moved = mapPortion.getObjFromID(json, objectID);
@@ -525,7 +530,7 @@ class MapObject {
 		let material = null;
 		let objectDatas: System.Object3D;
 		if (this.currentStateInstance !== null) {
-			if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+			if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 				objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
 				material = await Datas.SpecialElements.loadObject3DTexture(objectDatas.id);
 			} else {
@@ -570,7 +575,7 @@ class MapObject {
 			positionTranformation.scaleX = this.currentStateInstance.scaleX.getValue();
 			positionTranformation.scaleY = this.currentStateInstance.scaleY.getValue();
 			positionTranformation.scaleZ = this.currentStateInstance.scaleZ.getValue();
-			if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+			if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 				positionTranformation.x = -1 / 2;
 				positionTranformation.y = 0;
 				positionTranformation.yPixels = 0;
@@ -578,11 +583,11 @@ class MapObject {
 				const objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
 				let object3D: Object3DBox;
 				switch (objectDatas.shapeKind) {
-					case ShapeKind.Box:
+					case SHAPE_KIND.BOX:
 						object3D = Object3DBox.create(objectDatas);
 						result = object3D.createGeometry(positionTranformation);
 						break;
-					case ShapeKind.Custom:
+					case SHAPE_KIND.CUSTOM:
 						object3D = Object3DCustom.create(objectDatas);
 						result = object3D.createGeometry(positionTranformation);
 						break;
@@ -590,9 +595,9 @@ class MapObject {
 				// Correct position offset (left / top)
 				if (
 					!previousStateInstance ||
-					previousStateInstance.graphicKind !== ElementMapKind.Object3D ||
+					previousStateInstance.graphicKind !== ELEMENT_MAP_KIND.OBJECT_3D ||
 					(!Utils.isUndefined(this.currentStateInstance.previousGraphicKind) &&
-						this.currentStateInstance.previousGraphicKind !== ElementMapKind.Object3D)
+						this.currentStateInstance.previousGraphicKind !== ELEMENT_MAP_KIND.OBJECT_3D)
 				) {
 				}
 			} else {
@@ -609,12 +614,12 @@ class MapObject {
 					this.height =
 						texture.image.height /
 						Datas.Systems.SQUARE_SIZE /
-						Datas.Pictures.get(Enum.PictureKind.Characters, this.currentStateInstance.graphicID).getRows();
+						Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID).getRows();
 					this.currentOrientationStop =
 						this.currentStateInstance.indexY >= 4 && this.currentStateInstance.indexY <= 7;
 					this.currentOrientationClimbing = this.currentStateInstance.indexY >= 8;
 					this.isOrientationStopWalk = !Datas.Pictures.get(
-						Enum.PictureKind.Characters,
+						PICTURE_KIND.CHARACTERS,
 						this.currentStateInstance.graphicID
 					).isStopAnimation;
 				}
@@ -665,7 +670,7 @@ class MapObject {
 						? picture.getSquaresForTexture(this.currentStateInstance.rectTileset)
 						: [];
 				}
-				if (this.currentStateInstance.graphicKind === ElementMapKind.Object3D) {
+				if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 					this.boundingBoxSettings.b = [this.boundingBoxSettings.b];
 				}
 				this.updateBB(this.position);
@@ -702,18 +707,14 @@ class MapObject {
 	 *  @param {number} angle - The angle
 	 *  @returns {Vector3}
 	 */
-	getFuturPosition(
-		orientation: Orientation,
-		distance: number,
-		angle: number
-	): [THREE.Vector3, boolean, Enum.Orientation] {
+	getFuturPosition(orientation: ORIENTATION, distance: number, angle: number): [THREE.Vector3, boolean, ORIENTATION] {
 		let position = new THREE.Vector3(this.previousPosition.x, this.previousPosition.y, this.previousPosition.z);
 
 		// The speed depends on the time elapsed since the last update
 		const w = Scene.Map.current.mapProperties.length * Datas.Systems.SQUARE_SIZE;
 		const h = Scene.Map.current.mapProperties.width * Datas.Systems.SQUARE_SIZE;
 		let xPlus: number, zPlus: number, res: number;
-		if (orientation === Orientation.South || this.previousOrientation === Orientation.South) {
+		if (orientation === ORIENTATION.SOUTH || this.previousOrientation === ORIENTATION.SOUTH) {
 			xPlus = distance * Mathf.cos((angle * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin((angle * Math.PI) / 180.0);
 			res = position.z - zPlus;
@@ -725,7 +726,7 @@ class MapObject {
 				position.setX(res);
 			}
 		}
-		if (orientation === Orientation.West || this.previousOrientation === Orientation.West) {
+		if (orientation === ORIENTATION.WEST || this.previousOrientation === ORIENTATION.WEST) {
 			xPlus = distance * Mathf.cos(((angle - 90.0) * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin(((angle - 90.0) * Math.PI) / 180.0);
 			res = position.x + xPlus;
@@ -737,7 +738,7 @@ class MapObject {
 				position.setZ(res);
 			}
 		}
-		if (orientation === Orientation.North || this.previousOrientation === Orientation.North) {
+		if (orientation === ORIENTATION.NORTH || this.previousOrientation === ORIENTATION.NORTH) {
 			xPlus = distance * Mathf.cos((angle * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin((angle * Math.PI) / 180.0);
 			res = position.z + zPlus;
@@ -749,7 +750,7 @@ class MapObject {
 				position.setX(res);
 			}
 		}
-		if (orientation === Orientation.East || this.previousOrientation === Orientation.East) {
+		if (orientation === ORIENTATION.EAST || this.previousOrientation === ORIENTATION.EAST) {
 			xPlus = distance * Mathf.cos(((angle - 90.0) * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin(((angle - 90.0) * Math.PI) / 180.0);
 			res = position.x - xPlus;
@@ -766,8 +767,8 @@ class MapObject {
 		this.updateBBPosition(position);
 		let yMountain = null;
 		let blocked = false;
-		let o = Enum.Orientation.None;
-		let i: number, result: [boolean, number, Enum.Orientation];
+		let o = ORIENTATION.NONE;
+		let i: number, result: [boolean, number, ORIENTATION];
 		const l = this.meshBoundingBox?.length ?? 0;
 		for (i = 0; i < l; i++) {
 			this.currentBoundingBox = this.meshBoundingBox[i];
@@ -887,11 +888,11 @@ class MapObject {
 	 */
 	updateBB(position: THREE.Vector3) {
 		if (
-			this.currentStateInstance.graphicKind !== ElementMapKind.Object3D &&
+			this.currentStateInstance.graphicKind !== ELEMENT_MAP_KIND.OBJECT_3D &&
 			this.currentStateInstance.graphicID !== 0
 		) {
 			this.boundingBoxSettings.squares =
-				Scene.Map.current.collisions[PictureKind.Characters][this.currentStateInstance.graphicID][
+				Scene.Map.current.collisions[PICTURE_KIND.CHARACTERS][this.currentStateInstance.graphicID][
 					this.getStateIndex()
 				];
 		}
@@ -902,14 +903,14 @@ class MapObject {
 		}
 		let box: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
 		switch (this.currentStateInstance.graphicKind) {
-			case ElementMapKind.SpritesFix:
-			case ElementMapKind.SpritesFace: {
+			case ELEMENT_MAP_KIND.SPRITES_FIX:
+			case ELEMENT_MAP_KIND.SPRITES_FACE: {
 				this.boundingBoxSettings.b = [];
 				for (let i = 0, l = this.boundingBoxSettings.squares.length; i < l; i++) {
 					this.boundingBoxSettings.b.push(
 						CollisionSquare.getBB(this.boundingBoxSettings.squares[i], this.width, this.height)
 					);
-					if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFix) {
+					if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX) {
 						box = Manager.Collisions.createBox();
 						Manager.Collisions.applyBoxSpriteTransforms(
 							box,
@@ -945,7 +946,7 @@ class MapObject {
 				}
 				break;
 			}
-			case ElementMapKind.Object3D:
+			case ELEMENT_MAP_KIND.OBJECT_3D:
 				box = Manager.Collisions.createBox();
 				Manager.Collisions.applyBoxSpriteTransforms(box, [
 					position.x + this.boundingBoxSettings.b[0][0],
@@ -982,8 +983,8 @@ class MapObject {
 	 */
 	updateMeshBBPosition(mesh: THREE.Mesh, bbSettings: number[], position: THREE.Vector3) {
 		if (
-			this.currentStateInstance.graphicKind === ElementMapKind.SpritesFix ||
-			this.currentStateInstance.graphicKind === ElementMapKind.Object3D
+			this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX ||
+			this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D
 		) {
 			Manager.Collisions.applyBoxSpriteTransforms(mesh, [
 				position.x + this.currentScale.x * bbSettings[0],
@@ -996,7 +997,7 @@ class MapObject {
 				this.currentAngle.x,
 				this.currentAngle.z,
 			]);
-		} else if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
+		} else if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FACE) {
 			Manager.Collisions.applyOrientedBoxTransforms(mesh, [
 				position.x + this.currentScale.x * bbSettings[0],
 				position.y + this.currentScale.y * bbSettings[1],
@@ -1020,7 +1021,7 @@ class MapObject {
 	 *  account of camera orientation
 	 *  @returns {number[]}
 	 */
-	move(orientation: Orientation, limit: number, angle: number, isCameraOrientation: boolean): number[] {
+	move(orientation: ORIENTATION, limit: number, angle: number, isCameraOrientation: boolean): number[] {
 		if (this.removed || !this.speed) {
 			return [0, 0];
 		}
@@ -1055,7 +1056,7 @@ class MapObject {
 
 		// Update orientation
 		const climbOrientationEye = this.climbOrientationEye;
-		if (o !== Enum.Orientation.None) {
+		if (o !== ORIENTATION.NONE) {
 			this.climbOrientationEye = o;
 		}
 		if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
@@ -1153,9 +1154,9 @@ class MapObject {
 			x = end.x - start.x;
 			z = end.z - start.z;
 			if (x !== 0) {
-				orientation = x > 0 ? Enum.Orientation.East : Enum.Orientation.West;
+				orientation = x > 0 ? ORIENTATION.EAST : ORIENTATION.WEST;
 			} else if (z !== 0) {
-				orientation = z > 0 ? Enum.Orientation.South : Enum.Orientation.North;
+				orientation = z > 0 ? ORIENTATION.SOUTH : ORIENTATION.NORTH;
 			}
 			this.orientationEye = orientation;
 			orientation = this.orientation;
@@ -1180,7 +1181,7 @@ class MapObject {
 	 *  Look a direction.
 	 *  @param {Vector3} orientation - The direction to look at.
 	 */
-	lookAt(oriention: Orientation) {
+	lookAt(oriention: ORIENTATION) {
 		if (this.removed) {
 			return;
 		}
@@ -1450,7 +1451,7 @@ class MapObject {
 	 *  Update moving state.
 	 */
 	updateMovingState() {
-		if (!this.removed && this.currentState && this.currentState.objectMovingKind !== ObjectMovingKind.Fix) {
+		if (!this.removed && this.currentState && this.currentState.objectMovingKind !== OBJECT_MOVING_KIND.FIX) {
 			const interpreter = Scene.Map.current.addReaction(
 				null,
 				this.currentState.route,
@@ -1471,7 +1472,7 @@ class MapObject {
 	 *  @param {number} angle - The camera angle
 	 */
 	updateAngle(angle: number) {
-		if (this.currentStateInstance.graphicKind === ElementMapKind.SpritesFace) {
+		if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FACE) {
 			this.mesh.rotation.y = angle;
 		}
 	}
@@ -1482,19 +1483,19 @@ class MapObject {
 	updateOrientation() {
 		this.orientation = Mathf.mod((Scene.Map.current.orientation - 2) * 3 + this.orientationEye, 4);
 		this.climbOrientation = Mathf.mod((Scene.Map.current.orientation - 2) * 3 + this.climbOrientationEye, 4);
-		if (this.currentStateInstance.graphicKind === Enum.ElementMapKind.Object3D) {
+		if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 			let angle = 0;
 			switch (this.orientationEye) {
-				case Enum.Orientation.South:
+				case ORIENTATION.SOUTH:
 					angle = 0;
 					break;
-				case Enum.Orientation.East:
+				case ORIENTATION.EAST:
 					angle = 90;
 					break;
-				case Enum.Orientation.North:
+				case ORIENTATION.NORTH:
 					angle = 180;
 					break;
-				case Enum.Orientation.West:
+				case ORIENTATION.WEST:
 					angle = 270;
 					break;
 			}
@@ -1508,7 +1509,11 @@ class MapObject {
 	 *  Update the UVs coordinates according to frame and orientation
 	 */
 	updateUVs() {
-		if (this.mesh !== null && !this.isNone() && this.currentStateInstance.graphicKind !== ElementMapKind.Object3D) {
+		if (
+			this.mesh !== null &&
+			!this.isNone() &&
+			this.currentStateInstance.graphicKind !== ELEMENT_MAP_KIND.OBJECT_3D
+		) {
 			const texture = Manager.GL.getMaterialTexture(<THREE.MeshPhongMaterial>this.mesh.material);
 			if (texture) {
 				const textureWidth = texture.image.width;
@@ -1524,7 +1529,7 @@ class MapObject {
 					h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
 					x = (this.frame.value >= Datas.Systems.FRAMES ? Datas.Systems.FRAMES - 1 : this.frame.value) * w;
 					y = this.isClimbing ? this.climbOrientation : this.orientation;
-					const p = Datas.Pictures.get(Enum.PictureKind.Characters, this.currentStateInstance.graphicID);
+					const p = Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
 					if (
 						this.currentOrientationClimbing ||
 						(this.currentStateInstance.climbAnimation && this.isClimbing)
@@ -1593,43 +1598,44 @@ class MapObject {
 	 */
 	isNone(): boolean {
 		return (
-			this.currentStateInstance.graphicKind === ElementMapKind.None || this.currentStateInstance.graphicID === -1
+			this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.NONE ||
+			this.currentStateInstance.graphicID === -1
 		);
 	}
 
 	/**
 	 *  Get the orientation between two objects.
 	 *  @param {Core.MapObject} object
-	 *  @returns {Enum.Orientation}
+	 *  @returns {Orientation}
 	 */
-	getOrientationBetween(object: MapObject): Enum.Orientation {
+	getOrientationBetween(object: MapObject): ORIENTATION {
 		return this.getOrientationBetweenPosition(object.position);
 	}
 
 	/**
 	 *  Get the orientation between an object and a position.
 	 *  @param {Vector3} position
-	 *  @returns {Enum.Orientation}
+	 *  @returns {Orientation}
 	 */
 	getOrientationBetweenPosition(
 		position: THREE.Vector3,
 		force: boolean = false,
 		front: boolean = false
-	): Enum.Orientation {
+	): ORIENTATION {
 		const x = Math.abs(position.x - this.position.x);
 		const z = Math.abs(position.z - this.position.z);
 		let orientation = this.orientationEye;
 		if ((!force && x >= z) || (force && !front)) {
 			if (position.x >= this.position.x) {
-				orientation = Enum.Orientation.East;
+				orientation = ORIENTATION.EAST;
 			} else if (position.x < this.position.x) {
-				orientation = Enum.Orientation.West;
+				orientation = ORIENTATION.WEST;
 			}
 		} else {
 			if (position.z >= this.position.z) {
-				orientation = Enum.Orientation.South;
+				orientation = ORIENTATION.SOUTH;
 			} else if (position.z < this.position.z) {
-				orientation = Enum.Orientation.North;
+				orientation = ORIENTATION.NORTH;
 			}
 		}
 		return orientation;

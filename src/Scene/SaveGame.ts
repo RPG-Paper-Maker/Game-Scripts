@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN } from '../Common';
 import { Game } from '../Core';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { SaveLoadGame } from './SaveLoadGame';
-import Align = Enum.Align;
 
 /** @class
  *  A scene in the menu for saving a game.
@@ -39,8 +38,8 @@ class SaveGame extends SaveLoadGame {
 		await super.load();
 		this.setContents.call(
 			this,
-			new Graphic.Text(Datas.Languages.extras.saveAGame.name(), { align: Align.Center }),
-			new Graphic.Text(Datas.Languages.extras.saveAGameDescription.name(), { align: Align.Center })
+			new Graphic.Text(Datas.Languages.extras.saveAGame.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Datas.Languages.extras.saveAGameDescription.name(), { align: ALIGN.CENTER })
 		);
 		this.loading = false;
 	}

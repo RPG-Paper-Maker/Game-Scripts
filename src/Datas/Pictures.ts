@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Paths, Platform } from '../Common';
+import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Picture2D } from '../Core';
 import { Datas, System } from '../index';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *   All the pictures datas.
@@ -61,7 +60,7 @@ class Pictures {
 			}
 			// Fill the pictures list
 			list = new Array(n + 1);
-			for (j = 0; j < n + 1 + (k === PictureKind.Characters ? 1 : 0); j++) {
+			for (j = 0; j < n + 1 + (k === PICTURE_KIND.CHARACTERS ? 1 : 0); j++) {
 				jsonPicture = jsonList[j];
 				if (jsonPicture) {
 					id = jsonPicture.id;
@@ -70,20 +69,20 @@ class Pictures {
 						picture.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
 								System.Picture.getLocalFolder(picture.kind) +
-								Constants.STRING_SLASH +
+								'/' +
 								picture.name
 						);
 					}
 					if (
-						k === PictureKind.Icons ||
-						k === PictureKind.Pictures ||
-						k === PictureKind.Facesets ||
-						k === PictureKind.Animations ||
-						k === PictureKind.Battlers ||
-						k === PictureKind.Bars
+						k === PICTURE_KIND.ICONS ||
+						k === PICTURE_KIND.PICTURES ||
+						k === PICTURE_KIND.FACESETS ||
+						k === PICTURE_KIND.ANIMATIONS ||
+						k === PICTURE_KIND.BATTLERS ||
+						k === PICTURE_KIND.BARS
 					) {
 						await picture.load();
-						if (k === PictureKind.Bars) {
+						if (k === PICTURE_KIND.BARS) {
 							picture.checkBarBorder();
 						}
 					}
@@ -101,31 +100,31 @@ class Pictures {
 
 	/**
 	 *  Get the corresponding picture.
-	 *  @param {PictureKind} kind - The picture kind
+	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @param {number} id - The picture id
 	 *  @returns {Picture}
 	 */
-	static get(kind: PictureKind, id: number): System.Picture {
-		return kind === PictureKind.None || id === -1
+	static get(kind: PICTURE_KIND, id: number): System.Picture {
+		return kind === PICTURE_KIND.NONE || id === -1
 			? new System.Picture()
 			: Datas.Base.get(id, this.list[kind], 'picture ' + System.Picture.pictureKindToString(kind));
 	}
 
 	/**
 	 *  Get the corresponding picture list by kind.
-	 *  @param {PictureKind} kind - The picture kind
+	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @returns {Picture}
 	 */
-	static getListByKind(kind: PictureKind): System.Picture[] {
+	static getListByKind(kind: PICTURE_KIND): System.Picture[] {
 		return this.list[kind];
 	}
 
 	/** Get a copy of the picture 2D.
-	 *   @param {PictureKind} kind - The picture kind
+	 *   @param {PICTURE_KIND} kind - The picture kind
 	 *   @param {number} id - The picture id
 	 *   @returns {Picture2D}
 	 */
-	static getPictureCopy(kind: PictureKind, id: number): Picture2D {
+	static getPictureCopy(kind: PICTURE_KIND, id: number): Picture2D {
 		const picture = this.get(kind, id);
 		return picture && picture.picture ? picture.picture.createCopy() : new Picture2D();
 	}

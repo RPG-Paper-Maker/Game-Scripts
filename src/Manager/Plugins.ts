@@ -7,7 +7,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Interpreter, Paths, Platform, Utils } from '../Common';
+import { Interpreter, Paths, Platform, Utils } from '../Common';
 import { System } from '../index';
 
 type ClassMethod<T extends NewableFunction, M extends keyof T['prototype']> = (
@@ -48,16 +48,12 @@ class Plugins {
 	 *  @returns {Promise<boolean>}
 	 */
 	static async loadPlugin(pluginJSON: Record<string, any>): Promise<boolean> {
-		const json = await Platform.parseFileJSON(
-			Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH + Paths.FILE_PLUGIN_DETAILS
-		);
+		const json = await Platform.parseFileJSON(Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_DETAILS);
 		const plugin = new System.Plugin(pluginJSON.id, json);
 		// FIX 01 : plugin wasn't unloaded if not enabled.
 		if (Utils.defaultValue(pluginJSON.checked, true)) {
 			this.register(plugin);
-			const code = await Platform.loadFile(
-				Paths.PLUGINS + pluginJSON.name + Constants.STRING_SLASH + Paths.FILE_PLUGIN_CODE
-			);
+			const code = await Platform.loadFile(Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_CODE);
 			Interpreter.evaluate(code, { addReturn: false });
 			return true;
 		}

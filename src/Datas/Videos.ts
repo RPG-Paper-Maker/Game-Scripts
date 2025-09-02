@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Paths, Platform, Utils } from '../Common';
+import { Paths, Platform, Utils } from '../Common';
 import { Datas, System } from '../index';
 
 /** @class
@@ -34,10 +34,7 @@ class Videos {
 			for (const video of this.list) {
 				if (video) {
 					video.base64 = await Platform.loadFile(
-						Platform.ROOT_DIRECTORY.slice(0, -1) +
-							System.Video.getLocalFolder() +
-							Constants.STRING_SLASH +
-							video.name
+						Platform.ROOT_DIRECTORY.slice(0, -1) + System.Video.getLocalFolder() + '/' + video.name
 					);
 				}
 			}

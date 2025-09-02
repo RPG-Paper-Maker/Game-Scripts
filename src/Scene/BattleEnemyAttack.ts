@@ -10,14 +10,20 @@
 */
 
 import { Datas, Graphic, Scene, System } from '..';
-import { Enum, Interpreter, Mathf, Utils } from '../Common';
+import {
+	BATTLE_STEP,
+	CHARACTER_KIND,
+	EFFECT_KIND,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Interpreter,
+	Mathf,
+	MONSTER_ACTION_KIND,
+	MONSTER_ACTION_TARGET_KIND,
+	STATUS_RESTRICTIONS_KIND,
+	TARGET_KIND,
+	Utils,
+} from '../Common';
 import { Battler, Game } from '../Core';
-import CharacterKind = Enum.CharacterKind;
-import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import EffectKind = Enum.EffectKind;
-import MonsterActionKind = Enum.MonsterActionKind;
-import TargetKind = Enum.TargetKind;
-import MonsterActionTargetKind = Enum.MonsterActionTargetKind;
 
 // -------------------------------------------------------
 //
@@ -43,21 +49,21 @@ class BattleEnemyAttack {
 		// Define which monster will attack
 		let exists = false;
 		let i: number, l: number;
-		for (i = 0, l = this.battle.battlers[Enum.CharacterKind.Monster].length; i < l; i++) {
-			if (this.battle.isDefined(Enum.CharacterKind.Monster, i)) {
+		for (i = 0, l = this.battle.battlers[CHARACTER_KIND.MONSTER].length; i < l; i++) {
+			if (this.battle.isDefined(CHARACTER_KIND.MONSTER, i)) {
 				exists = true;
 				break;
 			}
 		}
 		if (!exists) {
-			this.battle.changeStep(Enum.BattleStep.EndTurn);
+			this.battle.changeStep(BATTLE_STEP.END_TURN);
 			return;
 		}
 		i = 0;
 		do {
-			this.battle.user = this.battle.battlers[CharacterKind.Monster][i];
+			this.battle.user = this.battle.battlers[CHARACTER_KIND.MONSTER][i];
 			i++;
-		} while (!this.battle.isDefined(CharacterKind.Monster, i - 1));
+		} while (!this.battle.isDefined(CHARACTER_KIND.MONSTER, i - 1));
 
 		// Define action
 		this.defineAction();
@@ -72,14 +78,14 @@ class BattleEnemyAttack {
 	/**
 	 *  Define the possible action to do.
 	 */
-	definePossibleActions(actions: System.MonsterAction[], restriction: Enum.StatusRestrictionsKind): number {
+	definePossibleActions(actions: System.MonsterAction[], restriction: STATUS_RESTRICTIONS_KIND): number {
 		let priorities = 0;
 		const player = this.battle.user.player;
 		const monster = <System.Monster>player.system;
 		const systemActions = monster.actions;
 
 		// If status can't do anything, do nothing
-		if (this.battle.user.containsRestriction(Enum.StatusRestrictionsKind.CantDoAnything)) {
+		if (this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_DO_ANYTHING)) {
 			return;
 		}
 
@@ -130,41 +136,41 @@ class BattleEnemyAttack {
 			if (action.isConditionScript && !Interpreter.evaluate(action.script.getValue())) {
 				continue;
 			}
-			if (action.actionKind === MonsterActionKind.UseSkill) {
+			if (action.actionKind === MONSTER_ACTION_KIND.USE_SKILL) {
 				const skill = Datas.Skills.get(action.skillID.getValue());
 				if (
 					!skill.isPossible() ||
-					this.battle.user.containsRestriction(Enum.StatusRestrictionsKind.CantUseSkills)
+					this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_USE_SKILLS)
 				) {
 					continue;
 				}
 				if (
-					restriction === Enum.StatusRestrictionsKind.AttackRandomAlly &&
-					skill.targetKind !== Enum.TargetKind.AllEnemies &&
-					skill.targetKind !== Enum.TargetKind.Enemy
+					restriction === STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY &&
+					skill.targetKind !== TARGET_KIND.ALL_ENEMIES &&
+					skill.targetKind !== TARGET_KIND.ENEMY
 				) {
 					continue;
 				}
 				if (
-					restriction === Enum.StatusRestrictionsKind.AttackRandomEnemy &&
-					skill.targetKind !== Enum.TargetKind.AllEnemies &&
-					skill.targetKind !== Enum.TargetKind.Enemy
+					restriction === STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY &&
+					skill.targetKind !== TARGET_KIND.ALL_ENEMIES &&
+					skill.targetKind !== TARGET_KIND.ENEMY
 				) {
 					continue;
 				}
 				if (
-					restriction === Enum.StatusRestrictionsKind.AttackRandomTarget &&
-					skill.targetKind !== Enum.TargetKind.AllEnemies &&
-					skill.targetKind !== Enum.TargetKind.Enemy
+					restriction === STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET &&
+					skill.targetKind !== TARGET_KIND.ALL_ENEMIES &&
+					skill.targetKind !== TARGET_KIND.ENEMY
 				) {
 					continue;
 				}
 			}
-			if (action.actionKind === MonsterActionKind.UseItem) {
+			if (action.actionKind === MONSTER_ACTION_KIND.USE_ITEM) {
 				number = this.battle.user.itemsNumbers[action.itemID.getValue()];
 				if (
 					(!Utils.isUndefined(number) && number === 0) ||
-					this.battle.user.containsRestriction(Enum.StatusRestrictionsKind.CantUseItems)
+					this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_USE_ITEMS)
 				) {
 					continue;
 				}
@@ -180,10 +186,10 @@ class BattleEnemyAttack {
 	/**
 	 *  Define the action to do.
 	 */
-	defineAction(restriction: Enum.StatusRestrictionsKind = Enum.StatusRestrictionsKind.None) {
+	defineAction(restriction: STATUS_RESTRICTIONS_KIND = STATUS_RESTRICTIONS_KIND.NONE) {
 		const actions = [];
 		this.battle.action = this.battle.actionDoNothing;
-		this.battle.battleCommandKind = EffectSpecialActionKind.DoNothing;
+		this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.DO_NOTHING;
 		const priorities = this.definePossibleActions(actions, restriction);
 
 		// If no action
@@ -207,20 +213,20 @@ class BattleEnemyAttack {
 
 		// Define battle command kind
 		switch (this.battle.action.actionKind) {
-			case MonsterActionKind.UseSkill:
+			case MONSTER_ACTION_KIND.USE_SKILL:
 				const effect = Datas.Skills.get(this.battle.action.skillID.getValue()).getEffects()[0];
 				if (effect) {
 					this.battle.battleCommandKind =
-						effect.kind === EffectKind.SpecialActions
+						effect.kind === EFFECT_KIND.SPECIAL_ACTIONS
 							? effect.specialActionKind
-							: EffectSpecialActionKind.OpenSkills;
+							: EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 				} else {
-					this.battle.battleCommandKind = EffectSpecialActionKind.OpenSkills;
+					this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 				}
 				this.battle.attackSkill = Datas.Skills.get(this.battle.action.skillID.getValue());
 				break;
-			case MonsterActionKind.UseItem:
-				this.battle.battleCommandKind = EffectSpecialActionKind.OpenItems;
+			case MONSTER_ACTION_KIND.USE_ITEM:
+				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS;
 
 				// If item, use one
 				const id = this.battle.action.itemID.getValue();
@@ -229,8 +235,8 @@ class BattleEnemyAttack {
 						? this.battle.user.itemsNumbers[id]
 						: this.battle.action.itemNumberMax.getValue()) - 1;
 				break;
-			case MonsterActionKind.DoNothing:
-				this.battle.battleCommandKind = EffectSpecialActionKind.DoNothing;
+			case MONSTER_ACTION_KIND.DO_NOTHING:
+				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.DO_NOTHING;
 				break;
 		}
 	}
@@ -238,112 +244,112 @@ class BattleEnemyAttack {
 	/**
 	 *  Define the targets
 	 */
-	defineTargets(restriction: Enum.StatusRestrictionsKind = Enum.StatusRestrictionsKind.None) {
+	defineTargets(restriction: STATUS_RESTRICTIONS_KIND = STATUS_RESTRICTIONS_KIND.NONE) {
 		if (!this.battle.action) {
 			this.battle.targets = [];
 			return;
 		}
 
 		// Verify if the target is not all allies or all enemies and define side
-		let targetKind: TargetKind, side: CharacterKind;
+		let targetKind: TARGET_KIND, side: CHARACTER_KIND;
 		switch (this.battle.action.actionKind) {
-			case MonsterActionKind.UseSkill:
+			case MONSTER_ACTION_KIND.USE_SKILL:
 				this.battle.skill = Datas.Skills.get(this.battle.action.skillID.getValue());
 				targetKind = this.battle.skill.targetKind;
 				break;
-			case MonsterActionKind.UseItem:
+			case MONSTER_ACTION_KIND.USE_ITEM:
 				this.battle.skill = Datas.Items.get(this.battle.action.itemID.getValue());
 				targetKind = this.battle.skill.targetKind;
 				break;
-			case MonsterActionKind.DoNothing:
+			case MONSTER_ACTION_KIND.DO_NOTHING:
 				this.battle.skill = null;
 				this.battle.targets = [];
 				return;
 		}
 		switch (targetKind) {
-			case TargetKind.None:
+			case TARGET_KIND.NONE:
 				this.battle.targets = [];
 				return;
-			case TargetKind.User:
+			case TARGET_KIND.USER:
 				this.battle.targets = [this.battle.user];
 				return;
-			case TargetKind.Enemy:
+			case TARGET_KIND.ENEMY:
 				switch (restriction) {
-					case Enum.StatusRestrictionsKind.AttackRandomAlly:
-						side = CharacterKind.Monster;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
+						side = CHARACTER_KIND.MONSTER;
 						break;
-					case Enum.StatusRestrictionsKind.AttackRandomEnemy:
-						side = CharacterKind.Hero;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
+						side = CHARACTER_KIND.HERO;
 						break;
-					case Enum.StatusRestrictionsKind.AttackRandomTarget:
-						side = Mathf.random(0, 1) === 0 ? CharacterKind.Monster : CharacterKind.Hero;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
+						side = Mathf.random(0, 1) === 0 ? CHARACTER_KIND.MONSTER : CHARACTER_KIND.HERO;
 						break;
 					default:
-						side = CharacterKind.Hero;
+						side = CHARACTER_KIND.HERO;
 						break;
 				}
 				break;
-			case TargetKind.Ally:
+			case TARGET_KIND.ALLY:
 				switch (restriction) {
-					case Enum.StatusRestrictionsKind.AttackRandomAlly:
-						side = CharacterKind.Monster;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
+						side = CHARACTER_KIND.MONSTER;
 						break;
-					case Enum.StatusRestrictionsKind.AttackRandomEnemy:
-						side = CharacterKind.Hero;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
+						side = CHARACTER_KIND.HERO;
 						break;
-					case Enum.StatusRestrictionsKind.AttackRandomTarget:
-						side = Mathf.random(0, 1) === 0 ? CharacterKind.Monster : CharacterKind.Hero;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
+						side = Mathf.random(0, 1) === 0 ? CHARACTER_KIND.MONSTER : CHARACTER_KIND.HERO;
 						break;
 					default:
-						side = CharacterKind.Monster;
+						side = CHARACTER_KIND.MONSTER;
 						break;
 				}
 				break;
-			case TargetKind.AllEnemies:
+			case TARGET_KIND.ALL_ENEMIES:
 				switch (restriction) {
-					case Enum.StatusRestrictionsKind.AttackRandomAlly:
-						this.battle.targets = this.battle.battlers[CharacterKind.Monster];
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER];
 						return;
-					case Enum.StatusRestrictionsKind.AttackRandomEnemy:
-						this.battle.targets = this.battle.battlers[CharacterKind.Hero];
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO];
 						return;
-					case Enum.StatusRestrictionsKind.AttackRandomTarget:
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
 						this.battle.targets =
 							Mathf.random(0, 1) === 0
-								? this.battle.battlers[CharacterKind.Monster]
-								: this.battle.battlers[CharacterKind.Hero];
+								? this.battle.battlers[CHARACTER_KIND.MONSTER]
+								: this.battle.battlers[CHARACTER_KIND.HERO];
 						return;
 				}
-				this.battle.targets = this.battle.battlers[CharacterKind.Hero];
+				this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO];
 				return;
-			case TargetKind.AllAllies:
+			case TARGET_KIND.ALL_ALLIES:
 				switch (restriction) {
-					case Enum.StatusRestrictionsKind.AttackRandomAlly:
-						this.battle.targets = this.battle.battlers[CharacterKind.Hero];
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO];
 						return;
-					case Enum.StatusRestrictionsKind.AttackRandomEnemy:
-						this.battle.targets = this.battle.battlers[CharacterKind.Monster];
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER];
 						return;
-					case Enum.StatusRestrictionsKind.AttackRandomTarget:
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
 						this.battle.targets =
 							Mathf.random(0, 1) === 0
-								? this.battle.battlers[CharacterKind.Monster]
-								: this.battle.battlers[CharacterKind.Hero];
+								? this.battle.battlers[CHARACTER_KIND.MONSTER]
+								: this.battle.battlers[CHARACTER_KIND.HERO];
 						return;
 				}
-				this.battle.targets = this.battle.battlers[CharacterKind.Monster];
+				this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER];
 				return;
 		}
 
 		// Select one enemy / ally according to target kind
 		const l = this.battle.battlers[side].length;
 		const targetKindAction =
-			restriction === Enum.StatusRestrictionsKind.None
+			restriction === STATUS_RESTRICTIONS_KIND.NONE
 				? this.battle.action.targetKind
-				: MonsterActionTargetKind.Random;
+				: MONSTER_ACTION_TARGET_KIND.RANDOM;
 		let i: number, target: Battler;
 		switch (targetKindAction) {
-			case MonsterActionTargetKind.Random:
+			case MONSTER_ACTION_TARGET_KIND.RANDOM:
 				i = Mathf.random(0, l - 1);
 				while (!this.battle.isDefined(side, i, true)) {
 					i++;
@@ -351,7 +357,7 @@ class BattleEnemyAttack {
 				}
 				target = this.battle.battlers[side][i];
 				break;
-			case MonsterActionTargetKind.WeakEnemies:
+			case MONSTER_ACTION_TARGET_KIND.WEAK_ENEMIES:
 				i = 0;
 				while (!this.battle.isDefined(side, i, true)) {
 					i++;
@@ -380,11 +386,11 @@ class BattleEnemyAttack {
 	 */
 	update() {
 		if (new Date().getTime() - this.battle.time >= 500) {
-			if (this.battle.action.actionKind !== MonsterActionKind.DoNothing) {
+			if (this.battle.action.actionKind !== MONSTER_ACTION_KIND.DO_NOTHING) {
 				this.battle.user.setSelected(true);
 			}
 			if (new Date().getTime() - this.battle.timeEnemyAttack >= 1000) {
-				this.battle.changeStep(Enum.BattleStep.Animation);
+				this.battle.changeStep(BATTLE_STEP.ANIMATION);
 			}
 		}
 	}

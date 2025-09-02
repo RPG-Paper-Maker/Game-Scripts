@@ -10,9 +10,8 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Paths, Platform } from '../Common';
+import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Datas, Manager, System } from '../index';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  All the tilesets datas.
@@ -44,8 +43,8 @@ class Tilesets {
 			tileset = new System.Tileset(jsonTileset);
 			this.list[jsonTileset.id] = tileset;
 		}
-		await this.loadPictures(PictureKind.Characters, Datas.Tilesets.PROPERTY_TEXTURES_CHARACTERS);
-		await this.loadPictures(PictureKind.Battlers, Datas.Tilesets.PROPERTY_TEXTURES_BATTLERS);
+		await this.loadPictures(PICTURE_KIND.CHARACTERS, Datas.Tilesets.PROPERTY_TEXTURES_CHARACTERS);
+		await this.loadPictures(PICTURE_KIND.BATTLERS, Datas.Tilesets.PROPERTY_TEXTURES_BATTLERS);
 	}
 
 	/**
@@ -60,10 +59,10 @@ class Tilesets {
 
 	/**
 	 *  Load pictures.
-	 *  @param {PictureKind} pictureKind - The picture kind
+	 *  @param {PICTURE_KIND} pictureKind - The picture kind
 	 *  @param {string} texturesName - The field name textures
 	 */
-	static async loadPictures(pictureKind: PictureKind, texturesName: string) {
+	static async loadPictures(pictureKind: PICTURE_KIND, texturesName: string) {
 		const pictures = Datas.Pictures.getListByKind(pictureKind);
 		const l = pictures.length;
 		const textures = new Array(l);

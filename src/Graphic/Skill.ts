@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN } from '../Common';
 import { Core, Datas, Graphic, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying the player skills informations in skill menu.
@@ -30,7 +29,7 @@ class Skill extends Base {
 
 		this.system = Datas.Skills.get(skill.id);
 		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system);
-		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: Align.Right });
+		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: ALIGN.RIGHT });
 		this.graphicInformations = new Graphic.SkillItem(this.system);
 	}
 

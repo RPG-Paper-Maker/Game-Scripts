@@ -10,9 +10,8 @@
 */
 
 import { Datas, Graphic } from '..';
-import { Constants, Enum, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, ScreenResolution, Utils } from '../Common';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying all experience + currencies
@@ -25,9 +24,7 @@ class RewardsTop extends Base {
 		super();
 
 		// Experience
-		this.graphicXP = new Graphic.Text(
-			Datas.BattleSystems.getExpStatistic().name() + Constants.STRING_COLON + Constants.STRING_SPACE + xp
-		);
+		this.graphicXP = new Graphic.Text(Datas.BattleSystems.getExpStatistic().name() + ':' + ' ' + xp);
 
 		// Currencies
 		this.graphicCurrencies = [];
@@ -36,7 +33,7 @@ class RewardsTop extends Base {
 				Graphic.TextIcon.createFromSystem(
 					Utils.numToString(currencies[id]),
 					Datas.Systems.getCurrency(parseInt(id)),
-					{ align: Align.Left }
+					{ align: ALIGN.LEFT }
 				)
 			);
 		}
@@ -63,7 +60,7 @@ class RewardsTop extends Base {
 	draw(x: number, y: number, w: number, h: number) {
 		// Calculating offset for centering
 		let offsetWidth = this.graphicXP.textWidth;
-		+ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+		ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
 		let i: number, l: number;
 		for (i = 0, l = this.graphicCurrencies.length; i < l; i++) {
 			offsetWidth +=

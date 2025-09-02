@@ -10,7 +10,7 @@
 */
 
 import { System } from '..';
-import { Enum, Utils } from '../Common';
+import { ITEM_KIND, Utils } from '../Common';
 import { Item, Player } from '../Core';
 import { Base } from './Base';
 
@@ -46,7 +46,7 @@ class HeroTroopBattleTestEquipment extends Base {
 	equip(player: Player) {
 		if (this.kind !== 0) {
 			player.equip[this.id] = new Item(
-				this.kind === 1 ? Enum.ItemKind.Weapon : Enum.ItemKind.Armor,
+				this.kind === 1 ? ITEM_KIND.WEAPON : ITEM_KIND.ARMOR,
 				this.weaponArmorID,
 				1
 			);

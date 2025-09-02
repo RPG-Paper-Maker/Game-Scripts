@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Paths, Platform, Utils } from '../Common';
+import { Paths, Platform, SONG_KIND, Utils } from '../Common';
 import { Datas, System } from '../index';
-import SongKind = Enum.SongKind;
 
 /** @class
  *  All the battle System datas.
@@ -166,9 +165,9 @@ class BattleSystems {
 		);
 
 		// Musics
-		this.battleMusic = new System.PlaySong(SongKind.Music, json.bmusic);
-		this.battleLevelUp = new System.PlaySong(SongKind.Sound, json.blevelup);
-		this.battleVictory = new System.PlaySong(SongKind.Music, json.bvictory);
+		this.battleMusic = new System.PlaySong(SONG_KIND.MUSIC, json.bmusic);
+		this.battleLevelUp = new System.PlaySong(SONG_KIND.SOUND, json.blevelup);
+		this.battleVictory = new System.PlaySong(SONG_KIND.MUSIC, json.bvictory);
 
 		// Options
 		this.cameraMoveInBattle = Utils.defaultValue(json.cmib, true);

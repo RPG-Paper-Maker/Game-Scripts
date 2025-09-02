@@ -9,12 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Inputs, ScreenResolution } from '../Common';
+import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
-import Align = Enum.Align;
 
 /** @class
  *  A scene for the title screen settings.
@@ -41,7 +39,7 @@ class TitleSettings extends Base {
 		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
 				Datas.TitlescreenGameover.titleBackgroundImageID,
-				PictureKind.TitleScreen,
+				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
 		}
@@ -53,7 +51,7 @@ class TitleSettings extends Base {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.LARGE_SLOT_HEIGHT,
 			{
-				content: new Graphic.Text(this.title, { align: Align.Center }),
+				content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 				padding: WindowBox.SMALL_SLOT_PADDING,
 			}
 		);

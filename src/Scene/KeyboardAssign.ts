@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Inputs, ScreenResolution } from '../Common';
+import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
@@ -49,7 +49,7 @@ class KeyboardAssign extends Base {
 		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
 				Datas.TitlescreenGameover.titleBackgroundImageID,
-				Enum.PictureKind.TitleScreen,
+				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
 		}
@@ -62,7 +62,7 @@ class KeyboardAssign extends Base {
 			WindowBox.LARGE_SLOT_HEIGHT,
 			{
 				content: new Graphic.Text(Datas.Languages.extras.keyboardAssignment.name(), {
-					align: Enum.Align.Center,
+					align: ALIGN.CENTER,
 				}),
 				padding: WindowBox.SMALL_SLOT_PADDING,
 			}
@@ -74,7 +74,7 @@ class KeyboardAssign extends Base {
 			WindowBox.LARGE_SLOT_HEIGHT,
 			{
 				content: new Graphic.Text(Datas.Languages.extras.keyboardAssignmentSelectedDescription.name(), {
-					align: Enum.Align.Center,
+					align: ALIGN.CENTER,
 				}),
 				padding: WindowBox.SMALL_SLOT_PADDING,
 			}

@@ -9,11 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Paths, Platform, Utils } from '../Common';
+import { ALIGN, Paths, Platform, SONG_KIND, TITLE_SETTING_KIND, Utils } from '../Common';
 import { Datas, Graphic, Manager, Scene, System } from '../index';
-import SongKind = Enum.SongKind;
-import Align = Enum.Align;
-import TitleSettingKind = Enum.TitleSettingKind;
 
 /** @class
  *  All the titlescreen and gameover datas.
@@ -48,7 +45,7 @@ class TitlescreenGameover {
 		this.isTitleBackgroundImage = Utils.defaultValue(json.itbi, true);
 		this.titleBackgroundImageID = Utils.defaultValue(json.tb, 1);
 		this.titleBackgroundVideoID = Utils.defaultValue(json.tbv, 1);
-		this.titleMusic = new System.PlaySong(SongKind.Music, json.tm);
+		this.titleMusic = new System.PlaySong(SONG_KIND.MUSIC, json.tm);
 		this.titleCommands = [];
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.tc, []),
@@ -71,7 +68,7 @@ class TitlescreenGameover {
 		this.isGameOverBackgroundImage = Utils.defaultValue(json.isGameOverBackgroundImage, true);
 		this.gameOverBackgroundImageID = Utils.defaultValue(json.gameOverBackgroundImage, 1);
 		this.gameOverBackgroundVideoID = Utils.defaultValue(json.gameOverBackgroundVideo, 1);
-		this.gameOverMusic = new System.PlaySong(SongKind.Music, json.gameOverMusic);
+		this.gameOverMusic = new System.PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
 		this.gameOverCommands = [];
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.gameOverCommands, []),
@@ -91,7 +88,7 @@ class TitlescreenGameover {
 		let titleCommand: System.TitleCommand, obj: Graphic.Text;
 		for (let i = 0; i < l; i++) {
 			titleCommand = this.titleCommands[i];
-			obj = new Graphic.Text(titleCommand.name(), { align: Align.Center });
+			obj = new Graphic.Text(titleCommand.name(), { align: ALIGN.CENTER });
 			obj.datas = titleCommand;
 			list[i] = obj;
 		}
@@ -148,9 +145,9 @@ class TitlescreenGameover {
 	 */
 	static getTitleSettingsCommandsAction(id: number): Function {
 		switch (id) {
-			case TitleSettingKind.KeyboardAssigment:
+			case TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT:
 				return Datas.TitlescreenGameover.keyboardAssignment;
-			case TitleSettingKind.Language:
+			case TITLE_SETTING_KIND.LANGUAGE:
 				return Datas.TitlescreenGameover.language;
 		}
 	}
@@ -166,7 +163,7 @@ class TitlescreenGameover {
 		let command: System.GameOverCommand, obj: Graphic.Text;
 		for (let i = 0; i < l; i++) {
 			command = this.gameOverCommands[i];
-			obj = new Graphic.Text(command.name(), { align: Align.Center });
+			obj = new Graphic.Text(command.name(), { align: ALIGN.CENTER });
 			obj.datas = command;
 			list[i] = obj;
 		}

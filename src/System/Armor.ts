@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ITEM_KIND } from '../Common';
 import { Datas } from '../index';
 import { CommonSkillItem } from './CommonSkillItem';
 import { WeaponArmorKind } from './WeaponArmorKind';
@@ -42,10 +42,10 @@ class Armor extends CommonSkillItem {
 
 	/**
 	 *  Get the item kind.
-	 *  @returns {Enum.ItemKind}
+	 *  @returns {ITEM_KIND}
 	 */
-	getKind(): Enum.ItemKind {
-		return Enum.ItemKind.Armor;
+	getKind(): ITEM_KIND {
+		return ITEM_KIND.ARMOR;
 	}
 }
 

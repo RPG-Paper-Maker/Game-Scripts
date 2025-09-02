@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum } from '../Common';
+import { Constants, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
 import { Datas, Manager, Scene, System } from '../index';
 import { Autotile } from './Autotile';
 import { Autotiles } from './Autotiles';
@@ -30,8 +30,6 @@ import { Position } from './Position';
 import { Sprite } from './Sprite';
 import { SpriteWall } from './SpriteWall';
 import { TextureBundle } from './TextureBundle';
-import ElementMapKind = Enum.ElementMapKind;
-import ShapeKind = Enum.ShapeKind;
 
 /** @class
  *  A portion of the map.
@@ -128,7 +126,7 @@ class MapPortion {
 			const position = Position.createFromArray(k);
 			const layer = position.layer;
 			switch (v.k) {
-				case Enum.ElementMapKind.Floors:
+				case ELEMENT_MAP_KIND.FLOORS:
 					const floor = new Floor(v);
 					if (layer > 0) {
 						let j = 0;
@@ -149,7 +147,7 @@ class MapPortion {
 						count++;
 					}
 					break;
-				case Enum.ElementMapKind.Autotiles:
+				case ELEMENT_MAP_KIND.AUTOTILES:
 					const autotile = new Autotile(v);
 					let pictureID = Game.current.textures.autotiles[autotile.autotileID];
 					if (pictureID === undefined) {
@@ -260,7 +258,7 @@ class MapPortion {
 				position = Position.createFromArray(s.k);
 				sprite = new Sprite(s.v);
 				localPosition = position.toVector3();
-				if (sprite.kind === ElementMapKind.SpritesFace) {
+				if (sprite.kind === ELEMENT_MAP_KIND.SPRITES_FACE) {
 					resultUpdate = sprite.updateGeometry(
 						faceGeometry,
 						texture.image.width,
@@ -454,18 +452,18 @@ class MapPortion {
 			if (datas) {
 				let obj3D: Object3D;
 				switch (datas.shapeKind) {
-					case ShapeKind.Box:
+					case SHAPE_KIND.BOX:
 						obj3D = new Object3DBox(v, datas);
 						break;
-					case ShapeKind.Sphere:
+					case SHAPE_KIND.SPHERE:
 						break;
-					case ShapeKind.Cylinder:
+					case SHAPE_KIND.CYLINDER:
 						break;
-					case ShapeKind.Cone:
+					case SHAPE_KIND.CONE:
 						break;
-					case ShapeKind.Capsule:
+					case SHAPE_KIND.CAPSULE:
 						break;
-					case ShapeKind.Custom:
+					case SHAPE_KIND.CUSTOM:
 						obj3D = new Object3DCustom(v, datas);
 						break;
 				}
@@ -499,7 +497,7 @@ class MapPortion {
 						this.boundingBoxesObjects3D,
 						result[1],
 						position,
-						datas.shapeKind === ShapeKind.Custom,
+						datas.shapeKind === SHAPE_KIND.CUSTOM,
 						Scene.Map.current.overflowObjects3D
 					);
 				}
@@ -815,17 +813,17 @@ class MapPortion {
 	 *  Get the object collision according to position.
 	 *  @param {Position} positionSource - The source json position
 	 *  @param {Position} positionTarget - The target json position
-	 *  @param {ElementMapKind} kind - The element map kind
+	 *  @param {ELEMENT_MAP_KIND} kind - The element map kind
 	 *  @returns {StructMapElementCollision[]}
 	 */
 	getObjectCollisionAt(
 		positionSource: Position,
 		positionTarget: Position,
-		kind: ElementMapKind
+		kind: ELEMENT_MAP_KIND
 	): StructMapElementCollision[] {
 		const result: StructMapElementCollision[] = [];
 		switch (kind) {
-			case ElementMapKind.Mountains:
+			case ELEMENT_MAP_KIND.MOUNTAINS:
 				const a = positionTarget.x - positionSource.x;
 				const c = positionTarget.z - positionSource.z;
 				const collisions = this.boundingBoxesMountains[positionSource.toIndex()];

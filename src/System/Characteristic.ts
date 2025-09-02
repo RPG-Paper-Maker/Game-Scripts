@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter, Utils } from '../Common';
+import { CHARACTERISTIC_KIND, INCREASE_DECREASE_KIND, Interpreter, Utils } from '../Common';
 import { Player } from '../Core';
 import { Datas, Scene, System } from '../index';
 import { Base } from './Base';
@@ -23,7 +23,7 @@ import { Statistic } from './Statistic';
  *  characteristic
  */
 class Characteristic extends Base {
-	public kind: Enum.CharacteristicKind;
+	public kind: CHARACTERISTIC_KIND;
 	public isIncreaseDecrease: boolean;
 	public increaseDecreaseKind: number;
 	public statisticValueID: DynamicValue;
@@ -58,29 +58,29 @@ class Characteristic extends Base {
 	 *  characteristic
 	 */
 	read(json: Record<string, any>) {
-		this.kind = Utils.defaultValue(json.k, Enum.CharacteristicKind.IncreaseDecrease);
+		this.kind = Utils.defaultValue(json.k, CHARACTERISTIC_KIND.INCREASE_DECREASE);
 		switch (this.kind) {
-			case Enum.CharacteristicKind.IncreaseDecrease:
+			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
 				this.isIncreaseDecrease = Utils.defaultValue(json.iid, true);
-				this.increaseDecreaseKind = Utils.defaultValue(json.idk, Enum.IncreaseDecreaseKind.StatValue);
+				this.increaseDecreaseKind = Utils.defaultValue(json.idk, INCREASE_DECREASE_KIND.STAT_VALUE);
 				switch (this.increaseDecreaseKind) {
-					case Enum.IncreaseDecreaseKind.StatValue:
+					case INCREASE_DECREASE_KIND.STAT_VALUE:
 						this.statisticValueID = DynamicValue.readOrDefaultDatabase(json.svid);
 						break;
-					case Enum.IncreaseDecreaseKind.ElementRes:
+					case INCREASE_DECREASE_KIND.ELEMENT_RES:
 						this.elementResID = DynamicValue.readOrDefaultDatabase(json.erid);
 						break;
-					case Enum.IncreaseDecreaseKind.StatusRes:
+					case INCREASE_DECREASE_KIND.STATUS_RES:
 						this.statusResID = DynamicValue.readOrDefaultDatabase(json.strid);
 						break;
-					case Enum.IncreaseDecreaseKind.CurrencyGain:
+					case INCREASE_DECREASE_KIND.CURRENCY_GAIN:
 						this.currencyGainID = DynamicValue.readOrDefaultDatabase(json.cgid);
 						break;
-					case Enum.IncreaseDecreaseKind.SkillCost:
+					case INCREASE_DECREASE_KIND.SKILL_COST:
 						this.skillCostID = DynamicValue.readOrDefaultDatabase(json.scid);
 						this.isAllSkillCost = Utils.defaultValue(json.iasc, true);
 						break;
-					case Enum.IncreaseDecreaseKind.Variable:
+					case INCREASE_DECREASE_KIND.VARIABLE:
 						this.variableID = Utils.defaultValue(json.vid, 1);
 						break;
 				}
@@ -88,25 +88,25 @@ class Characteristic extends Base {
 				this.value = DynamicValue.readOrDefaultNumber(json.v);
 				this.unit = Utils.defaultValue(json.u, true);
 				break;
-			case Enum.CharacteristicKind.Script:
+			case CHARACTERISTIC_KIND.SCRIPT:
 				this.script = DynamicValue.readOrDefaultMessage(json.s);
 				break;
-			case Enum.CharacteristicKind.AllowForbidEquip:
+			case CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP:
 				this.isAllowEquip = Utils.defaultValue(json.iae, true);
 				this.isAllowEquipWeapon = Utils.defaultValue(json.iaew, true);
 				this.equipWeaponTypeID = DynamicValue.readOrDefaultDatabase(json.ewtid);
 				this.equipArmorTypeID = DynamicValue.readOrDefaultDatabase(json.eatid);
 				break;
-			case Enum.CharacteristicKind.AllowForbidChange:
+			case CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE:
 				this.isAllowChangeEquipment = Utils.defaultValue(json.iace, true);
 				this.changeEquipmentID = DynamicValue.readOrDefaultDatabase(json.ceid);
 				break;
-			case Enum.CharacteristicKind.BeginEquipment:
+			case CHARACTERISTIC_KIND.BEGIN_EQUIPMENT:
 				this.beginEquipmentID = DynamicValue.readOrDefaultDatabase(json.beid);
 				this.isBeginWeapon = Utils.defaultValue(json.ibw, true);
 				this.beginWeaponArmorID = DynamicValue.readOrDefaultDatabase(json.bwaid);
 				break;
-			case Enum.CharacteristicKind.Element:
+			case CHARACTERISTIC_KIND.ELEMENT:
 				this.elementID = System.DynamicValue.readOrDefaultDatabase(json.eid);
 				break;
 		}
@@ -120,9 +120,9 @@ class Characteristic extends Base {
 	getNewStatValue(gamePlayer: Player): number[] {
 		let statID: number, stat: Statistic, value: number, baseStatValue: number;
 		switch (this.kind) {
-			case Enum.CharacteristicKind.IncreaseDecrease:
+			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
 				switch (this.increaseDecreaseKind) {
-					case Enum.IncreaseDecreaseKind.StatValue:
+					case INCREASE_DECREASE_KIND.STAT_VALUE:
 						statID = this.statisticValueID.getValue();
 						stat = Datas.BattleSystems.getStatistic(statID);
 						value = this.value.getValue() * (this.isIncreaseDecrease ? 1 : -1);
@@ -138,7 +138,7 @@ class Characteristic extends Base {
 							value = this.unit ? Math.round((baseStatValue * value) / 100) : value; // % / Fix
 						}
 						return [statID, value];
-					case Enum.IncreaseDecreaseKind.ElementRes:
+					case INCREASE_DECREASE_KIND.ELEMENT_RES:
 						statID = this.unit
 							? Datas.BattleSystems.getStatisticElementPercent(this.elementResID.getValue())
 							: Datas.BattleSystems.getStatisticElement(this.elementResID.getValue());
@@ -165,19 +165,19 @@ class Characteristic extends Base {
 		let propName: string;
 		let id: number;
 		switch (this.increaseDecreaseKind) {
-			case Enum.IncreaseDecreaseKind.StatusRes:
+			case INCREASE_DECREASE_KIND.STATUS_RES:
 				propName = 'statusRes';
 				id = this.statusResID.getValue();
 				break;
-			case Enum.IncreaseDecreaseKind.ExperienceGain:
+			case INCREASE_DECREASE_KIND.EXPERIENCE_GAIN:
 				propName = 'experienceGain';
 				id = 0;
 				break;
-			case Enum.IncreaseDecreaseKind.CurrencyGain:
+			case INCREASE_DECREASE_KIND.CURRENCY_GAIN:
 				propName = 'currencyGain';
 				id = this.currencyGainID.getValue();
 				break;
-			case Enum.IncreaseDecreaseKind.SkillCost:
+			case INCREASE_DECREASE_KIND.SKILL_COST:
 				propName = 'skillCostRes';
 				id = this.isAllSkillCost ? -1 : this.skillCostID.getValue();
 				break;
@@ -216,33 +216,33 @@ class Characteristic extends Base {
 		const target = Player.getTemporaryPlayer();
 		let result = '';
 		switch (this.kind) {
-			case Enum.CharacteristicKind.IncreaseDecrease:
+			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
 				switch (this.increaseDecreaseKind) {
-					case Enum.IncreaseDecreaseKind.StatValue:
+					case INCREASE_DECREASE_KIND.STAT_VALUE:
 						result += Datas.BattleSystems.getStatistic(
 							Interpreter.evaluate(this.statisticValueID.getValue(), { user: user, target: target })
 						).name();
 						break;
-					case Enum.IncreaseDecreaseKind.ElementRes:
+					case INCREASE_DECREASE_KIND.ELEMENT_RES:
 						result += Datas.BattleSystems.getElement(this.elementResID.getValue()).name() + ' res.';
 						break;
-					case Enum.IncreaseDecreaseKind.StatusRes:
+					case INCREASE_DECREASE_KIND.STATUS_RES:
 						result += Datas.Status.get(this.statusResID.getValue()).name() + ' res.';
 						break;
-					case Enum.IncreaseDecreaseKind.ExperienceGain:
+					case INCREASE_DECREASE_KIND.EXPERIENCE_GAIN:
 						result += Datas.BattleSystems.getExpStatistic().name() + ' gain';
 						break;
-					case Enum.IncreaseDecreaseKind.CurrencyGain:
+					case INCREASE_DECREASE_KIND.CURRENCY_GAIN:
 						result += Datas.Systems.getCurrency(this.currencyGainID.getValue()).name() + ' gain';
 						break;
-					case Enum.IncreaseDecreaseKind.SkillCost:
+					case INCREASE_DECREASE_KIND.SKILL_COST:
 						if (this.isAllSkillCost) {
 							result += 'All skills cost';
 						} else {
 							result += Datas.Skills.get(this.skillCostID.getValue()).name() + ' skill cost';
 						}
 						break;
-					case Enum.IncreaseDecreaseKind.Variable:
+					case INCREASE_DECREASE_KIND.VARIABLE:
 						result += Datas.Variables.get(this.variableID);
 						break;
 				}

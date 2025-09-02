@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { CHARACTER_KIND } from '../Common';
 import { Battler, MapObject } from '../Core';
 import { Scene, System } from '../index';
 import { Base } from './Base';
@@ -64,17 +64,17 @@ class DisplayHideABattler extends Base {
 			let battler: Battler = null;
 			switch (this.battlerKind) {
 				case 0: // Enemy
-					battler = map.battlers[Enum.CharacterKind.Monster][this.battlerEnemyIndex];
+					battler = map.battlers[CHARACTER_KIND.MONSTER][this.battlerEnemyIndex];
 					break;
 				case 1: // Hero instance ID
 					const id = this.battlerHeroEnemyInstanceID.getValue();
-					for (const b of map.battlers[Enum.CharacterKind.Hero]) {
+					for (const b of map.battlers[CHARACTER_KIND.HERO]) {
 						if (b.player.instid === id) {
 							battler = b;
 							break;
 						}
 					}
-					for (const b of map.battlers[Enum.CharacterKind.Monster]) {
+					for (const b of map.battlers[CHARACTER_KIND.MONSTER]) {
 						if (b.player.instid === id) {
 							battler = b;
 							break;

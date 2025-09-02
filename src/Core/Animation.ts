@@ -11,7 +11,7 @@
 
 import { Battler } from '.';
 import { Datas, System } from '..';
-import { Enum } from '../Common';
+import { ANIMATION_EFFECT_CONDITION_KIND, PICTURE_KIND } from '../Common';
 import { Picture2D } from './Picture2D';
 
 /** @class
@@ -27,7 +27,7 @@ class Animation {
 	constructor(id: number, loop: boolean = false) {
 		this.system = Datas.Animations.get(id);
 		if (this.system) {
-			this.picture = Datas.Pictures.getPictureCopy(Enum.PictureKind.Animations, this.system.pictureID);
+			this.picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.ANIMATIONS, this.system.pictureID);
 			this.frame = 0;
 			this.loop = loop;
 		}
@@ -46,7 +46,7 @@ class Animation {
 	/**
 	 *  Draw the animation on top of battler.
 	 */
-	playSounds(conditionKind: Enum.AnimationEffectConditionKind) {
+	playSounds(conditionKind: ANIMATION_EFFECT_CONDITION_KIND) {
 		if (this.system) {
 			this.system.playSounds(this.frame, conditionKind);
 		}

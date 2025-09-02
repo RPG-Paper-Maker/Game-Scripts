@@ -9,12 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution, Utils } from '../Common';
+import { Constants, PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { Frame, Picture2D, Rectangle } from '../Core';
 import { Status } from '../Core/Status';
 import { Core, Datas, Graphic, Manager, System } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  The graphic displaying the player minimal stats informations.
@@ -114,7 +113,7 @@ class Player extends Base {
 		}
 
 		// Faceset
-		this.faceset = Datas.Pictures.getPictureCopy(PictureKind.Facesets, player.getFacesetID());
+		this.faceset = Datas.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, player.getFacesetID());
 		if (this.reverse) {
 			this.faceset.setLeft(Datas.Systems.getCurrentWindowSkin().borderBotLeft[2]);
 		} else {
@@ -124,7 +123,7 @@ class Player extends Base {
 		this.faceset.reverse = this.reverse;
 
 		// Battler
-		this.battler = Datas.Pictures.getPictureCopy(PictureKind.Battlers, player.getBattlerID());
+		this.battler = Datas.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
 		this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
 
 		// Level up

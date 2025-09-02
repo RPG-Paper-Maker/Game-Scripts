@@ -9,16 +9,15 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { SONG_KIND, Utils } from '../Common';
 import { StructIterator } from '../EventCommand';
 import { Manager, System } from '../index';
 import { Base } from './Base';
-import SongKind = Enum.SongKind;
 
 /** @class
  *  A way to play a song.
  *  @extends System.Base
- *  @param {SongKind} kind - The kind of song to play
+ *  @param {SONG_KIND} kind - The kind of song to play
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  play song
  */
@@ -26,7 +25,7 @@ class PlaySong extends Base {
 	static previousMusic: PlaySong = null;
 	static currentPlayingMusic: PlaySong = null;
 
-	kind: SongKind;
+	kind: SONG_KIND;
 	songID: System.DynamicValue;
 	volume: System.DynamicValue;
 	isStart: boolean;
@@ -34,7 +33,7 @@ class PlaySong extends Base {
 	isEnd: boolean;
 	end: System.DynamicValue;
 
-	constructor(kind: SongKind, json?: Record<string, any>) {
+	constructor(kind: SONG_KIND, json?: Record<string, any>) {
 		super();
 
 		this.kind = kind;
@@ -48,7 +47,7 @@ class PlaySong extends Base {
 	 *  @param {StructIterator} iterator - The iterator
 	 *  @returns {System.PlaySong}
 	 */
-	static createValueCommand(command: any[], iterator: StructIterator, kind: Enum.SongKind): System.PlaySong {
+	static createValueCommand(command: any[], iterator: StructIterator, kind: SONG_KIND): System.PlaySong {
 		const song = new System.PlaySong(kind);
 		song.parse(command, iterator);
 		return song;
@@ -128,7 +127,7 @@ class PlaySong extends Base {
 	 *  Initialize (for music effects).
 	 */
 	initialize() {
-		return this.kind === SongKind.MusicEffect
+		return this.kind === SONG_KIND.MUSIC_EFFECT
 			? {
 					parallel: false,
 					timeStop: new Date().getTime(),
@@ -180,15 +179,15 @@ class PlaySong extends Base {
 			start === PlaySong.currentPlayingMusic.start.getValue()
 		) {
 			// If same, be sure to update volume anyway
-			if (Manager.Songs.current[Enum.SongKind.Music]) {
-				Manager.Songs.current[Enum.SongKind.Music].volume(volume);
-				Manager.Songs.volumes[Enum.SongKind.Music] = volume;
+			if (Manager.Songs.current[SONG_KIND.MUSIC]) {
+				Manager.Songs.current[SONG_KIND.MUSIC].volume(volume);
+				Manager.Songs.volumes[SONG_KIND.MUSIC] = volume;
 			}
 			return 1;
 		}
 
 		// Update current and previous played music
-		if (this.kind === SongKind.Music) {
+		if (this.kind === SONG_KIND.MUSIC) {
 			PlaySong.previousMusic = PlaySong.currentPlayingMusic;
 			PlaySong.currentPlayingMusic = this;
 		}

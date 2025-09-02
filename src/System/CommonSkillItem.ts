@@ -9,7 +9,17 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter, Utils } from '../Common';
+import {
+	AVAILABLE_KIND,
+	DAMAGES_KIND,
+	EFFECT_KIND,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Interpreter,
+	ITEM_KIND,
+	SONG_KIND,
+	TARGET_KIND,
+	Utils,
+} from '../Common';
 import { Battler, Player } from '../Core';
 import { Datas, Scene, System } from '../index';
 import { Characteristic } from './Characteristic';
@@ -19,9 +29,6 @@ import { Effect } from './Effect';
 import { Icon } from './Icon';
 import { PlaySong } from './PlaySong';
 import { Translatable } from './Translatable';
-import TargetKind = Enum.TargetKind;
-import AvailableKind = Enum.AvailableKind;
-import SongKind = Enum.SongKind;
 
 /** @class
  *  A common class for skills, items, weapons, armors.
@@ -31,12 +38,12 @@ import SongKind = Enum.SongKind;
 class CommonSkillItem extends Icon {
 	public id: number;
 	public hasType: boolean;
-	public hasTargetKind: boolean;
+	public hasTARGET_KIND: boolean;
 	public type: number;
 	public consumable: boolean;
 	public oneHand: boolean;
 	public description: Translatable;
-	public targetKind: Enum.TargetKind;
+	public targetKind: TARGET_KIND;
 	public targetConditionFormula: DynamicValue;
 	public conditionFormula: DynamicValue;
 	public availableKind: number;
@@ -66,11 +73,11 @@ class CommonSkillItem extends Icon {
 		this.consumable = Utils.defaultValue(json.con, false);
 		this.oneHand = Utils.defaultValue(json.oh, true);
 		this.description = new Translatable(json.d);
-		this.targetKind = Utils.defaultValue(json.tk, TargetKind.None);
+		this.targetKind = Utils.defaultValue(json.tk, TARGET_KIND.NONE);
 		this.targetConditionFormula = DynamicValue.readOrNone(json.tcf);
 		this.conditionFormula = DynamicValue.readOrNone(json.cf);
-		this.availableKind = Utils.defaultValue(json.ak, AvailableKind.Never);
-		this.sound = new PlaySong(SongKind.Sound, json.s);
+		this.availableKind = Utils.defaultValue(json.ak, AVAILABLE_KIND.NEVER);
+		this.sound = new PlaySong(SONG_KIND.SOUND, json.s);
 		this.animationUserID = DynamicValue.readOrNone(json.auid);
 		this.animationTargetID = DynamicValue.readOrNone(json.atid);
 		this.canBeSold = DynamicValue.readOrDefaultSwitch(json.canBeSold);
@@ -102,7 +109,7 @@ class CommonSkillItem extends Icon {
 	getEffects(): System.Effect[] {
 		let effects: System.Effect[] = [];
 		for (const effect of this.effects) {
-			if (effect.kind === Enum.EffectKind.PerformSkill) {
+			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
 				effects = effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
 			} else {
 				effects.push(effect);
@@ -170,7 +177,7 @@ class CommonSkillItem extends Icon {
 				return false;
 			}
 		} else {
-			if (this.targetKind !== Enum.TargetKind.None && !targets.some(fTargetCondition)) {
+			if (this.targetKind !== TARGET_KIND.NONE && !targets.some(fTargetCondition)) {
 				return false;
 			}
 		}
@@ -178,8 +185,8 @@ class CommonSkillItem extends Icon {
 		if (
 			this.effects.some((effect) => {
 				return (
-					effect.kind === Enum.EffectKind.SpecialActions &&
-					effect.specialActionKind === Enum.EffectSpecialActionKind.ApplyWeapons
+					effect.kind === EFFECT_KIND.SPECIAL_ACTIONS &&
+					effect.specialActionKind === EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS
 				);
 			})
 		) {
@@ -221,19 +228,19 @@ class CommonSkillItem extends Icon {
 	 *  Get the target kind string.
 	 *  @returns {string}
 	 */
-	getTargetKindString(): string {
+	getTARGET_KINDString(): string {
 		switch (this.targetKind) {
-			case TargetKind.None:
+			case TARGET_KIND.NONE:
 				return 'None';
-			case TargetKind.User:
+			case TARGET_KIND.USER:
 				return 'The user';
-			case TargetKind.Enemy:
+			case TARGET_KIND.ENEMY:
 				return 'An enemy';
-			case TargetKind.Ally:
+			case TARGET_KIND.ALLY:
 				return 'An ally';
-			case TargetKind.AllEnemies:
+			case TARGET_KIND.ALL_ENEMIES:
 				return 'All enemies';
-			case TargetKind.AllAllies:
+			case TARGET_KIND.ALL_ALLIES:
 				return 'All allies';
 		}
 		return '';
@@ -251,15 +258,15 @@ class CommonSkillItem extends Icon {
 	 *  Get the price.
 	 *  @returns {number}
 	 */
-	getPrice(): Record<string, [Enum.DamagesKind, number]> {
+	getPrice(): Record<string, [DAMAGES_KIND, number]> {
 		return System.Cost.getPrice(this.price);
 	}
 
 	/**
 	 *  Get the item kind.
-	 *  @returns {Enum.ItemKind}
+	 *  @returns {ITEM_KIND}
 	 */
-	getKind(): Enum.ItemKind {
+	getKind(): ITEM_KIND {
 		return null;
 	}
 
@@ -268,7 +275,7 @@ class CommonSkillItem extends Icon {
 	 *  @returns {boolean}
 	 */
 	isWeapon(): boolean {
-		return this.getKind() === Enum.ItemKind.Weapon;
+		return this.getKind() === ITEM_KIND.WEAPON;
 	}
 
 	/**
@@ -276,7 +283,7 @@ class CommonSkillItem extends Icon {
 	 *  @returns {boolean}
 	 */
 	isArmor(): boolean {
-		return this.getKind() === Enum.ItemKind.Armor;
+		return this.getKind() === ITEM_KIND.ARMOR;
 	}
 
 	/**

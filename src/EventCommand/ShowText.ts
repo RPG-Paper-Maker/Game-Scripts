@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Utils } from '../Common';
+import { ALIGN, Utils } from '../Common';
 import { MapObject, WindowBox } from '../Core';
 import { Datas, Graphic, Manager, Scene, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  An event command for displaying text.
@@ -54,7 +53,7 @@ class ShowText extends Base {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
 			{
-				content: new Graphic.Text('', { align: Align.Center }),
+				content: new Graphic.Text('', { align: ALIGN.CENTER }),
 				padding: WindowBox.SMALL_SLOT_PADDING,
 			}
 		);

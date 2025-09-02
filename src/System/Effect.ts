@@ -9,16 +9,20 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Interpreter, Mathf, Utils } from '../Common';
+import {
+	CHARACTER_KIND,
+	DAMAGES_KIND,
+	EFFECT_KIND,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Interpreter,
+	Mathf,
+	Utils,
+} from '../Common';
 import { Battler, Game, Player, ReactionInterpreter } from '../Core';
 import { Status } from '../Core/Status';
 import { Datas, EventCommand, Manager, Scene, System } from '../index';
 import { Base } from './Base';
 import { Statistic } from './Statistic';
-import EffectKind = Enum.EffectKind;
-import DamagesKind = Enum.DamagesKind;
-import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import CharacterKind = Enum.CharacterKind;
 
 /** @class
  *  An effect of a common skill item.
@@ -27,8 +31,8 @@ import CharacterKind = Enum.CharacterKind;
  *  effect
  */
 class Effect extends Base {
-	public kind: EffectKind;
-	public damageKind: DamagesKind;
+	public kind: EFFECT_KIND;
+	public damageKind: DAMAGES_KIND;
 	public damageStatisticID: System.DynamicValue;
 	public damageCurrencyID: System.DynamicValue;
 	public damageVariableID: number;
@@ -55,7 +59,7 @@ class Effect extends Base {
 	public addSkillID: System.DynamicValue;
 	public performSkillID: System.DynamicValue;
 	public commonReaction: EventCommand.CallACommonReaction;
-	public specialActionKind: EffectSpecialActionKind;
+	public specialActionKind: EFFECT_SPECIAL_ACTION_KIND;
 	public scriptFormula: System.DynamicValue;
 	public isTemporarilyChangeTarget: boolean;
 	public temporarilyChangeTargetFormula: System.DynamicValue;
@@ -71,32 +75,32 @@ class Effect extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the effect
 	 */
 	read(json: Record<string, any>) {
-		this.kind = Utils.defaultValue(json.k, EffectKind.Damages);
+		this.kind = Utils.defaultValue(json.k, EFFECT_KIND.DAMAGES);
 		switch (this.kind) {
-			case EffectKind.Damages: {
-				this.damageKind = Utils.defaultValue(json.dk, DamagesKind.Stat);
+			case EFFECT_KIND.DAMAGES: {
+				this.damageKind = Utils.defaultValue(json.dk, DAMAGES_KIND.STAT);
 				switch (this.damageKind) {
-					case DamagesKind.Stat:
+					case DAMAGES_KIND.STAT:
 						this.damageStatisticID = System.DynamicValue.readOrDefaultDatabase(json.dsid);
 						break;
-					case DamagesKind.Currency:
+					case DAMAGES_KIND.CURRENCY:
 						this.damageCurrencyID = System.DynamicValue.readOrDefaultDatabase(json.dcid);
 						break;
-					case DamagesKind.Variable:
+					case DAMAGES_KIND.VARIABLE:
 						this.damageVariableID = Utils.defaultValue(json.dvid, 1);
 						break;
 				}
 				this.damageFormula = System.DynamicValue.readOrDefaultMessage(json.df);
 				this.isDamagesMinimum = Utils.defaultValue(json.idmin, true);
-				this.damagesMinimumFormula = System.DynamicValue.readOrDefaultMessage(json.dmin, Constants.STRING_ZERO);
+				this.damagesMinimumFormula = System.DynamicValue.readOrDefaultMessage(json.dmin, '0');
 				this.isDamagesMaximum = Utils.defaultValue(json.idmax, false);
-				this.damagesMaximumFormula = System.DynamicValue.readOrDefaultMessage(json.dmax, Constants.STRING_ZERO);
+				this.damagesMaximumFormula = System.DynamicValue.readOrDefaultMessage(json.dmax, '0');
 				this.isDamageElement = Utils.defaultValue(json.ide, false);
 				this.damageElementID = System.DynamicValue.readOrDefaultDatabase(json.deid);
 				this.isDamageVariance = Utils.defaultValue(json.idv, false);
-				this.damageVarianceFormula = System.DynamicValue.readOrDefaultMessage(json.dvf, Constants.STRING_ZERO);
+				this.damageVarianceFormula = System.DynamicValue.readOrDefaultMessage(json.dvf, '0');
 				this.isDamageCritical = Utils.defaultValue(json.idc, false);
-				this.damageCriticalFormula = System.DynamicValue.readOrDefaultMessage(json.dcf, Constants.STRING_ZERO);
+				this.damageCriticalFormula = System.DynamicValue.readOrDefaultMessage(json.dcf, '0');
 				this.isDamagePrecision = Utils.defaultValue(json.idp, false);
 				this.damagePrecisionFormula = System.DynamicValue.readOrDefaultMessage(
 					json.dpf,
@@ -107,7 +111,7 @@ class Effect extends Base {
 				this.isDamageDisplayName = Utils.defaultValue(json.iddn, false);
 				break;
 			}
-			case EffectKind.Status:
+			case EFFECT_KIND.STATUS:
 				this.isAddStatus = Utils.defaultValue(json.iast, true);
 				this.statusID = System.DynamicValue.readOrDefaultDatabase(json.sid);
 				this.statusPrecisionFormula = System.DynamicValue.readOrDefaultMessage(
@@ -115,22 +119,22 @@ class Effect extends Base {
 					Utils.numToString(100)
 				);
 				break;
-			case EffectKind.AddRemoveSkill:
+			case EFFECT_KIND.ADD_REMOVE_SKILL:
 				this.isAddSkill = Utils.defaultValue(json.iask, true);
 				this.addSkillID = System.DynamicValue.readOrDefaultDatabase(json.asid);
 				break;
-			case EffectKind.PerformSkill:
+			case EFFECT_KIND.PERFORM_SKILL:
 				this.performSkillID = System.DynamicValue.readOrDefaultDatabase(json.psid);
 				break;
-			case EffectKind.CommonReaction:
+			case EFFECT_KIND.COMMON_REACTION:
 				this.commonReaction = <EventCommand.CallACommonReaction>(
 					(Utils.isUndefined(json.cr) ? null : Manager.Events.getEventCommand(json.cr))
 				);
 				break;
-			case EffectKind.SpecialActions:
-				this.specialActionKind = Utils.defaultValue(json.sak, EffectSpecialActionKind.ApplyWeapons);
+			case EFFECT_KIND.SPECIAL_ACTIONS:
+				this.specialActionKind = Utils.defaultValue(json.sak, EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS);
 				break;
-			case EffectKind.Script:
+			case EFFECT_KIND.SCRIPT:
 				this.scriptFormula = System.DynamicValue.readOrDefaultMessage(json.sf);
 				break;
 		}
@@ -153,7 +157,7 @@ class Effect extends Base {
 		const l = targets.length;
 		let target: Player, battler: Battler, precision: number, critical: number, miss: boolean, crit: boolean;
 		switch (this.kind) {
-			case EffectKind.Damages: {
+			case EFFECT_KIND.DAMAGES: {
 				let damage: number;
 				for (let i = 0; i < l; i++) {
 					battler = targets[i];
@@ -190,7 +194,7 @@ class Effect extends Base {
 				}
 				break;
 			}
-			case EffectKind.Status: {
+			case EFFECT_KIND.STATUS: {
 				let precision: number, id: number;
 				for (let i = 0, l = targets.length; i < l; i++) {
 					battler = targets[i];
@@ -239,7 +243,7 @@ class Effect extends Base {
 		const l = targets.length;
 		let target: Player, battler: Battler;
 		switch (this.kind) {
-			case EffectKind.Damages: {
+			case EFFECT_KIND.DAMAGES: {
 				let damage: number,
 					damageName: string,
 					miss: boolean,
@@ -364,10 +368,10 @@ class Effect extends Base {
 					}
 					if (this.isDamageDisplayName) {
 						switch (this.damageKind) {
-							case Enum.DamagesKind.Stat:
+							case DAMAGES_KIND.STAT:
 								damageName = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue()).name();
 								break;
-							case Enum.DamagesKind.Currency:
+							case DAMAGES_KIND.CURRENCY:
 								damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue()).name();
 								break;
 							default:
@@ -385,7 +389,7 @@ class Effect extends Base {
 
 					// Result accoring to damage kind
 					switch (this.damageKind) {
-						case DamagesKind.Stat:
+						case DAMAGES_KIND.STAT:
 							stat = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue());
 							abbreviation = stat.abbreviation;
 							max = target[stat.getMaxAbbreviation()];
@@ -399,9 +403,9 @@ class Effect extends Base {
 							}
 							result = result || before !== target[abbreviation];
 							break;
-						case DamagesKind.Currency:
+						case DAMAGES_KIND.CURRENCY:
 							currencyID = this.damageCurrencyID.getValue();
-							if (target.kind === CharacterKind.Hero) {
+							if (target.kind === CHARACTER_KIND.HERO) {
 								before = Game.current.currencies[currencyID];
 								Game.current.currencies[currencyID] -= damage;
 								if (Game.current.currencies[currencyID] < 0) {
@@ -410,7 +414,7 @@ class Effect extends Base {
 								result = result || before !== Game.current.currencies[currencyID];
 							}
 							break;
-						case DamagesKind.Variable:
+						case DAMAGES_KIND.VARIABLE:
 							before = Game.current.variables[this.damageVariableID];
 							Game.current.variables[this.damageVariableID] -= damage;
 							result = result || before !== Game.current.variables[this.damageVariableID];
@@ -421,7 +425,7 @@ class Effect extends Base {
 				}
 				break;
 			}
-			case EffectKind.Status: {
+			case EFFECT_KIND.STATUS: {
 				let precision: number, miss: boolean, id: number, previousFirst: Status;
 				this.canSkip = true;
 				for (let i = 0, l = targets.length; i < l; i++) {
@@ -482,7 +486,7 @@ class Effect extends Base {
 				result = true;
 				break;
 			}
-			case EffectKind.AddRemoveSkill:
+			case EFFECT_KIND.ADD_REMOVE_SKILL:
 				for (battler of targets) {
 					const skillID = this.addSkillID.getValue();
 					if (this.isAddSkill) {
@@ -493,9 +497,9 @@ class Effect extends Base {
 				}
 				result = true;
 				break;
-			case EffectKind.PerformSkill:
+			case EFFECT_KIND.PERFORM_SKILL:
 				break;
-			case EffectKind.CommonReaction:
+			case EFFECT_KIND.COMMON_REACTION:
 				const reactionInterpreter = new ReactionInterpreter(
 					null,
 					Datas.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
@@ -513,11 +517,11 @@ class Effect extends Base {
 				}
 				result = true;
 				break;
-			case EffectKind.SpecialActions:
+			case EFFECT_KIND.SPECIAL_ACTIONS:
 				Scene.Map.current.battleCommandKind = this.specialActionKind;
 				result = true;
 				break;
-			case EffectKind.Script:
+			case EFFECT_KIND.SCRIPT:
 				const script = this.scriptFormula.getValue();
 				if (targets.length === 0) {
 					Interpreter.evaluate(script, { addReturn: false, user: user, target: null });
@@ -538,9 +542,9 @@ class Effect extends Base {
 	 */
 	isAnimated(): boolean {
 		return (
-			this.kind === EffectKind.Damages ||
-			this.kind === EffectKind.Status ||
-			this.kind === EffectKind.CommonReaction
+			this.kind === EFFECT_KIND.DAMAGES ||
+			this.kind === EFFECT_KIND.STATUS ||
+			this.kind === EFFECT_KIND.COMMON_REACTION
 		);
 	}
 
@@ -552,7 +556,7 @@ class Effect extends Base {
 		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 		const target = Player.getTemporaryPlayer();
 		switch (this.kind) {
-			case EffectKind.Damages:
+			case EFFECT_KIND.DAMAGES:
 				let damage = Interpreter.evaluate(this.damageFormula.getValue(), { user: user, target: target });
 				damage = Math.round(damage);
 				if (damage === 0) {
@@ -595,13 +599,13 @@ class Effect extends Base {
 				}
 				let damageName = '';
 				switch (this.damageKind) {
-					case DamagesKind.Stat:
+					case DAMAGES_KIND.STAT:
 						damageName = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue()).name();
 						break;
-					case DamagesKind.Currency:
+					case DAMAGES_KIND.CURRENCY:
 						damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue()).name();
 						break;
-					case DamagesKind.Variable:
+					case DAMAGES_KIND.VARIABLE:
 						damageName = Datas.Variables.get(this.damageVariableID);
 						break;
 				}
@@ -613,7 +617,7 @@ class Effect extends Base {
 					(min === max ? min : min + ' - ' + max) +
 					(options.length > 0 ? ' [' + options.join(' - ') + ']' : '')
 				);
-			case EffectKind.Status:
+			case EFFECT_KIND.STATUS:
 				return (
 					(this.isAddStatus ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()) +
 					' ' +
@@ -624,7 +628,7 @@ class Effect extends Base {
 					Interpreter.evaluate(this.statusPrecisionFormula.getValue(), { user: user, target: target }) +
 					'%]'
 				);
-			case EffectKind.AddRemoveSkill:
+			case EFFECT_KIND.ADD_REMOVE_SKILL:
 				return (
 					(this.isAddSkill ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()) +
 					' ' +
@@ -632,7 +636,7 @@ class Effect extends Base {
 					' ' +
 					Datas.Skills.get(this.addSkillID.getValue()).name()
 				);
-			case EffectKind.PerformSkill:
+			case EFFECT_KIND.PERFORM_SKILL:
 				return (
 					Datas.Languages.extras.performSkill.name() +
 					' ' +

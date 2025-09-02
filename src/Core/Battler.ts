@@ -11,7 +11,14 @@
 
 import * as THREE from 'three';
 import { MeshPhongMaterial } from 'three';
-import { Enum, Interpreter } from '../Common';
+import {
+	ALIGN,
+	ALIGN_VERTICAL,
+	BATTLER_STEP,
+	ELEMENT_MAP_KIND,
+	Interpreter,
+	STATUS_RESTRICTIONS_KIND,
+} from '../Common';
 import { ProgressionTable } from '../System';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { Animation } from './Animation';
@@ -48,8 +55,8 @@ class Battler {
 	public frame: Frame;
 	public frameAttacking: Frame;
 	public frameArrow: Frame;
-	public step: Enum.BattlerStep;
-	public lastStep: Enum.BattlerStep;
+	public step: BATTLER_STEP;
+	public lastStep: BATTLER_STEP;
 	public width: number;
 	public height: number;
 	public selected: boolean;
@@ -76,7 +83,7 @@ class Battler {
 	public attacking: boolean;
 	public damages: number;
 	public damagesName: string;
-	public graphicDamageName: Graphic.Text = new Graphic.Text('', { verticalAlign: Enum.AlignVertical.Bot });
+	public graphicDamageName: Graphic.Text = new Graphic.Text('', { verticalAlign: ALIGN_VERTICAL.BOT });
 	public isDamagesMiss: boolean;
 	public isDamagesCritical: boolean;
 	public tempIsDamagesMiss: boolean = null;
@@ -108,8 +115,8 @@ class Battler {
 			loop: false,
 		});
 		this.frameArrow = new Frame(125);
-		this.step = Enum.BattlerStep.Normal;
-		this.lastStep = Enum.BattlerStep.Normal;
+		this.step = BATTLER_STEP.NORMAL;
+		this.lastStep = BATTLER_STEP.NORMAL;
 		this.width = 1;
 		this.height = 1;
 		this.selected = false;
@@ -160,7 +167,7 @@ class Battler {
 			});
 			this.width = copiedTexture.image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersFrames;
 			this.height = copiedTexture.image.height / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersColumns;
-			const sprite = Sprite.create(Enum.ElementMapKind.SpritesFace, [0, 0, this.width, this.height]);
+			const sprite = Sprite.create(ELEMENT_MAP_KIND.SPRITES_FACE, [0, 0, this.width, this.height]);
 			const geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
 			this.mesh = new THREE.Mesh(geometry, material);
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
@@ -198,10 +205,10 @@ class Battler {
 
 	/**
 	 *  Check at least one affected status contains the following restriction.
-	 *  @param {Enum.StatusRestrictionsKind} restriction - The kind of restriction
+	 *  @param {STATUS_RESTRICTIONS_KIND} restriction - The kind of restriction
 	 *  @returns {boolean}
 	 */
-	containsRestriction(restriction: Enum.StatusRestrictionsKind): boolean {
+	containsRestriction(restriction: STATUS_RESTRICTIONS_KIND): boolean {
 		let status: Status;
 		for (let i = 0, l = this.player.status.length; i < l; i++) {
 			status = this.player.status[i];
@@ -258,7 +265,7 @@ class Battler {
 	 */
 	setAttacking() {
 		this.frameAttacking.value = 0;
-		this.step = Enum.BattlerStep.Attack;
+		this.step = BATTLER_STEP.ATTACK;
 		this.updateUVs();
 	}
 
@@ -268,10 +275,10 @@ class Battler {
 	 */
 	isStepAttacking(): boolean {
 		return (
-			this.step === Enum.BattlerStep.Attack ||
-			this.step === Enum.BattlerStep.Skill ||
-			this.step === Enum.BattlerStep.Item ||
-			this.step === Enum.BattlerStep.Escape
+			this.step === BATTLER_STEP.ATTACK ||
+			this.step === BATTLER_STEP.SKILL ||
+			this.step === BATTLER_STEP.ITEM ||
+			this.step === BATTLER_STEP.ESCAPE
 		);
 	}
 
@@ -288,7 +295,7 @@ class Battler {
 	 */
 	setUsingSkill() {
 		this.frameAttacking.value = 0;
-		this.step = Enum.BattlerStep.Skill;
+		this.step = BATTLER_STEP.SKILL;
 		this.updateUVs();
 	}
 
@@ -297,7 +304,7 @@ class Battler {
 	 */
 	setUsingItem() {
 		this.frameAttacking.value = 0;
-		this.step = Enum.BattlerStep.Item;
+		this.step = BATTLER_STEP.ITEM;
 		this.updateUVs();
 	}
 
@@ -306,7 +313,7 @@ class Battler {
 	 */
 	setEscaping() {
 		this.frameAttacking.value = 0;
-		this.step = Enum.BattlerStep.Escape;
+		this.step = BATTLER_STEP.ESCAPE;
 		this.updateUVs();
 	}
 
@@ -315,7 +322,7 @@ class Battler {
 	 */
 	setVictory() {
 		this.frame.value = 0;
-		this.step = Enum.BattlerStep.Victory;
+		this.step = BATTLER_STEP.VICTORY;
 		this.updateUVs();
 	}
 
@@ -333,7 +340,7 @@ class Battler {
 		} else {
 			this.removeStatus(1);
 			if (attacked) {
-				step = Enum.BattlerStep.Attacked;
+				step = BATTLER_STEP.ATTACKED;
 			} else {
 				step = this.step;
 				this.lastStep = step;
@@ -503,9 +510,9 @@ class Battler {
 			const textureHeight = texture.image.height;
 			let frame = 0;
 			switch (this.step) {
-				case Enum.BattlerStep.Attack:
-				case Enum.BattlerStep.Skill:
-				case Enum.BattlerStep.Item:
+				case BATTLER_STEP.ATTACK:
+				case BATTLER_STEP.SKILL:
+				case BATTLER_STEP.ITEM:
 					frame = this.frameAttacking.value;
 					break;
 				default:
@@ -557,7 +564,7 @@ class Battler {
 	 */
 	updateStatusStep() {
 		// Update step if changed
-		let step = Enum.BattlerStep.Normal;
+		let step = BATTLER_STEP.NORMAL;
 		const s = this.player.status[0];
 		if (s) {
 			step = s.system.battlerPosition.getValue();
@@ -615,7 +622,7 @@ class Battler {
 	 *  Draw the status on top of the battler.
 	 */
 	drawStatus() {
-		Status.drawList(this.player.getFirstStatus(), this.damagePosition.x, this.damagePosition.y, Enum.Align.Center);
+		Status.drawList(this.player.getFirstStatus(), this.damagePosition.x, this.damagePosition.y, ALIGN.CENTER);
 	}
 
 	/**

@@ -10,7 +10,7 @@
 */
 
 import { Graphic, Manager } from '..';
-import { Enum, Utils } from '../Common';
+import { ALIGN, Utils } from '../Common';
 import { Base } from './Base';
 
 /** @class
@@ -41,7 +41,7 @@ class SpinBox extends Base {
 		if (this.value !== value) {
 			this.value = value;
 			this.graphicValue = new Graphic.Text(Utils.numToString(value), {
-				align: this.times ? Enum.Align.Right : Enum.Align.Center,
+				align: this.times ? ALIGN.RIGHT : ALIGN.CENTER,
 			});
 			Manager.Stack.requestPaintHUD = true;
 		}

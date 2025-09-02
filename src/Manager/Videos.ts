@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Platform } from '../Common';
+import { Platform } from '../Common';
 
 /** @class
  *  The manager for songs.
@@ -29,7 +29,7 @@ class Videos {
 	 *  @param {EventListener} endedHandler
 	 */
 	static async play(src: string, endedHandler: EventListener = null) {
-		Platform.canvasVideos.classList.remove(Constants.CLASS_HIDDEN);
+		Platform.canvasVideos.classList.remove('hidden');
 		if (!this.paused) {
 			Platform.canvasVideos.src = src;
 		}
@@ -54,7 +54,7 @@ class Videos {
 	 *  Stop the current video.
 	 */
 	static stop() {
-		Platform.canvasVideos.classList.add(Constants.CLASS_HIDDEN);
+		Platform.canvasVideos.classList.add('hidden');
 		Platform.canvasVideos.pause();
 		Platform.canvasVideos.src = '';
 		this.removeEndedEventListener();

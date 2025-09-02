@@ -10,15 +10,13 @@
 */
 
 import * as THREE from 'three';
-import { Constants, Enum, Paths, Platform, Utils } from '../Common';
+import { CHARACTER_KIND, GROUP_KIND, Paths, Platform, Utils } from '../Common';
 import { Datas, Manager, Scene, System } from '../index';
 import { Chrono } from './Chrono';
 import { Item } from './Item';
 import { MapObject } from './MapObject';
 import { Player } from './Player';
 import { Portion } from './Portion';
-import GroupKind = Enum.GroupKind;
-import CharacterKind = Enum.CharacterKind;
 
 /** @class
  *  All the global informations of a particular game.
@@ -457,7 +455,7 @@ class Game {
 		for (const member of Datas.Systems.initialPartyMembers) {
 			this.instanciateTeam(
 				member.teamKind,
-				member.characterKind,
+				member.CHARACTER_KIND,
 				member.heroID.getValue(),
 				member.level.getValue(),
 				member.variableInstanceID.getValue(true)
@@ -485,15 +483,15 @@ class Game {
 
 	/**
 	 *  Instanciate a new character in a group in the game.
-	 *  @param {GroupKind} groupKind - In which group we should instanciate
-	 *  @param {CharacterKind} type - The type of character to instanciate
+	 *  @param {GROUP_KIND} groupKind - In which group we should instanciate
+	 *  @param {CHARACTER_KIND} type - The type of character to instanciate
 	 *  @param {number} id - The ID of the character to instanciate
 	 *  @param {number} level - The player level
 	 *  @param {number} stockID - The ID of the variable where we will stock the
 	 *  instantiate ID
 	 *  @returns {Player}
 	 */
-	instanciateTeam(groupKind: GroupKind, type: CharacterKind, id: number, level: number, stockID: number): Player {
+	instanciateTeam(groupKind: GROUP_KIND, type: CHARACTER_KIND, id: number, level: number, stockID: number): Player {
 		// Stock the instanciation id in a variable
 		this.variables[stockID] = this.charactersInstances;
 
@@ -518,12 +516,7 @@ class Game {
 	 *  @returns {string}
 	 */
 	getPathSave(slot?: number): string {
-		return (
-			Paths.SAVES +
-			Constants.STRING_SLASH +
-			(Utils.isUndefined(slot) ? this.slot : slot) +
-			Constants.EXTENSION_JSON
-		);
+		return Paths.SAVES + '/' + (Utils.isUndefined(slot) ? this.slot : slot) + '.json';
 	}
 
 	/**
@@ -581,7 +574,7 @@ class Game {
 			return hero;
 		}
 		if (Scene.Map.current.isBattleMap) {
-			return Game.getHeroInstanceInTab((<Scene.Battle>Scene.Map.current).players[Enum.CharacterKind.Monster], id);
+			return Game.getHeroInstanceInTab((<Scene.Battle>Scene.Map.current).players[CHARACTER_KIND.MONSTER], id);
 		}
 		return null;
 	}
@@ -598,19 +591,19 @@ class Game {
 
 	/**
 	 *  Get the team according to group kind.
-	 *  @param {GroupKind} kind - The group kind
+	 *  @param {GROUP_KIND} kind - The group kind
 	 *  @returns {Player[]}
 	 */
-	getTeam(kind: GroupKind): Player[] {
+	getTeam(kind: GROUP_KIND): Player[] {
 		switch (kind) {
-			case GroupKind.Team:
+			case GROUP_KIND.TEAM:
 				return this.teamHeroes;
-			case GroupKind.Reserve:
+			case GROUP_KIND.RESERVE:
 				return this.reserveHeroes;
-			case GroupKind.Hidden:
+			case GROUP_KIND.HIDDEN:
 				return this.hiddenHeroes;
-			case GroupKind.Troop:
-				return (<Scene.Battle>Scene.Map.current).players[CharacterKind.Monster];
+			case GROUP_KIND.TROOP:
+				return (<Scene.Battle>Scene.Map.current).players[CHARACTER_KIND.MONSTER];
 		}
 	}
 

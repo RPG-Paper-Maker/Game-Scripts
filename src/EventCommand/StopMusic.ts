@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { SONG_KIND } from '../Common';
 import { MapObject } from '../Core';
 import { EventCommand, Manager, System } from '../index';
 import { Base } from './Base';
-import SongKind = Enum.SongKind;
 
 /** @class
  *  An event command for stopping the music.
@@ -24,7 +23,7 @@ class StopMusic extends Base {
 	constructor(command: any[]) {
 		super();
 
-		EventCommand.StopMusic.parseStopSong(this, command, Enum.SongKind.Music);
+		EventCommand.StopMusic.parseStopSong(this, command, SONG_KIND.MUSIC);
 		this.parallel = true;
 	}
 
@@ -34,12 +33,12 @@ class StopMusic extends Base {
 	 *  @param {any} that - The event command to parse
 	 *  @param {any[]} command - Direct JSON command to parse
 	 */
-	static parseStopSong(that: any, command: any[], kind: Enum.SongKind) {
+	static parseStopSong(that: any, command: any[], kind: SONG_KIND) {
 		const iterator = {
 			i: 0,
 		};
 		that.seconds = System.DynamicValue.createValueCommand(command, iterator);
-		if (kind === Enum.SongKind.Sound) {
+		if (kind === SONG_KIND.SOUND) {
 			that.soundID = System.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
@@ -48,15 +47,15 @@ class StopMusic extends Base {
 	 *  Stop the song.
 	 *  @static
 	 *  @param {any} that - The event command to parse
-	 *  @param {SongKind} kind - The song kind
+	 *  @param {SONG_KIND} kind - The song kind
 	 *  @param {number} time - The date seconds value in the first call of stop
 	 */
-	static stopSong(that: any, kind: SongKind, time: number): number {
+	static stopSong(that: any, kind: SONG_KIND, time: number): number {
 		return Manager.Songs.stopSong(
 			kind,
 			time,
 			that.seconds.getValue(),
-			kind === Enum.SongKind.Sound ? that.soundID.getValue() : -1
+			kind === SONG_KIND.SOUND ? that.soundID.getValue() : -1
 		)
 			? 1
 			: 0;
@@ -81,7 +80,7 @@ class StopMusic extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const stopped = EventCommand.StopMusic.stopSong(this, SongKind.Music, currentState.time);
+		const stopped = EventCommand.StopMusic.stopSong(this, SONG_KIND.MUSIC, currentState.time);
 		return currentState.parallel ? stopped : 1;
 	}
 }

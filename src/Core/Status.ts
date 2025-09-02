@@ -10,7 +10,7 @@
 */
 
 import { Datas, System } from '..';
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Battler } from './Battler';
 import { Picture2D } from './Picture2D';
 
@@ -28,7 +28,7 @@ class Status {
 		this.id = id;
 		this.system = Datas.Status.get(id);
 		this.turn = turn;
-		this.picture = Datas.Pictures.getPictureCopy(Enum.PictureKind.Icons, this.system.pictureID);
+		this.picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.system.pictureID);
 	}
 
 	/**
@@ -48,9 +48,9 @@ class Status {
 	 *  @param {Status[]} statusList
 	 *  @param {number} x - The x position
 	 *  @param {number} y - The y position
-	 *  @param {Enum.Align} [align=Enum.Align.Left]
+	 *  @param {Align} [align=ALIGN.LEFT]
 	 */
-	static drawList(statusList: Status[], x: number, y: number, align: Enum.Align = Enum.Align.Left) {
+	static drawList(statusList: Status[], x: number, y: number, align = ALIGN.LEFT) {
 		const l = statusList.length;
 		let totalWidth = l * ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
 		let s: Status;
@@ -59,10 +59,10 @@ class Status {
 		}
 		let xOffset: number = 0;
 		switch (align) {
-			case Enum.Align.Left:
+			case ALIGN.LEFT:
 				totalWidth = 0;
 				break;
-			case Enum.Align.Center:
+			case ALIGN.CENTER:
 				totalWidth /= 2;
 				break;
 		}

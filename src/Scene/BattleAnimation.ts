@@ -10,13 +10,16 @@
 */
 
 import { Datas, Graphic, Manager, Scene, System } from '..';
-import { Enum } from '../Common';
+import {
+	ANIMATION_EFFECT_CONDITION_KIND,
+	ANIMATION_POSITION_KIND,
+	BATTLE_STEP,
+	CHARACTER_KIND,
+	EFFECT_KIND,
+	EFFECT_SPECIAL_ACTION_KIND,
+	ITEM_KIND,
+} from '../Common';
 import { Animation, Battler, Game, Item } from '../Core';
-import EffectSpecialActionKind = Enum.EffectSpecialActionKind;
-import CharacterKind = Enum.CharacterKind;
-import ItemKind = Enum.ItemKind;
-import AnimationEffectConditionKind = Enum.AnimationEffectConditionKind;
-import AnimationPositionKind = Enum.AnimationPositionKind;
 
 // -------------------------------------------------------
 //
@@ -41,15 +44,15 @@ class BattleAnimation {
 	public initialize() {
 		let content: System.CommonSkillItem;
 		switch (this.battle.battleCommandKind) {
-			case EffectSpecialActionKind.ApplyWeapons:
+			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
 				this.battle.informationText = this.battle.attackSkill.getMessage(this.battle.user);
 				break;
-			case EffectSpecialActionKind.OpenSkills:
+			case EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS:
 				if (this.battle.forceAnAction) {
 					content = this.battle.skill;
 				} else {
 					content =
-						this.battle.attackingGroup === CharacterKind.Hero
+						this.battle.attackingGroup === CHARACTER_KIND.HERO
 							? this.battle.battleStartTurn.active
 								? this.battle.currentSkill
 								: (<Graphic.Skill>this.battle.windowChoicesSkills.getCurrentContent()).system
@@ -57,18 +60,18 @@ class BattleAnimation {
 				}
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
-			case EffectSpecialActionKind.OpenItems:
+			case EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS:
 				if (this.battle.forceAnAction) {
 					content = this.battle.skill;
 				} else {
 					content =
-						this.battle.attackingGroup === CharacterKind.Hero
+						this.battle.attackingGroup === CHARACTER_KIND.HERO
 							? (<Graphic.Item>this.battle.windowChoicesItems.getCurrentContent()).item.system
 							: Datas.Items.get(this.battle.action.itemID.getValue());
 				}
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
-			case EffectSpecialActionKind.None: // If command was a skill without special action
+			case EFFECT_SPECIAL_ACTION_KIND.NONE: // If command was a skill without special action
 				content = <System.Skill>(
 					(<Graphic.TextIcon>(
 						this.battle.windowChoicesBattleCommands.getContent(this.battle.user.lastCommandIndex)
@@ -85,13 +88,13 @@ class BattleAnimation {
 		this.battle.effects = [];
 		let i: number, l: number, effects: System.Effect[];
 		switch (this.battle.battleCommandKind) {
-			case EffectSpecialActionKind.ApplyWeapons:
-				if (this.battle.user.player.kind === CharacterKind.Hero) {
+			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
+				if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
 					const equipments = this.battle.user.player.equip;
 					let j: number, m: number, gameItem: Item, weapon: System.Weapon;
 					for (i = 0, l = equipments.length; i < l; i++) {
 						gameItem = equipments[i];
-						if (gameItem && gameItem.kind === ItemKind.Weapon) {
+						if (gameItem && gameItem.kind === ITEM_KIND.WEAPON) {
 							weapon = gameItem.system;
 							this.battle.animationUser = new Animation(weapon.animationUserID.getValue());
 							this.battle.animationTarget = new Animation(weapon.animationTargetID.getValue());
@@ -112,35 +115,35 @@ class BattleAnimation {
 				}
 				this.battle.user.setAttacking();
 				break;
-			case EffectSpecialActionKind.OpenSkills:
-			case EffectSpecialActionKind.None:
+			case EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS:
+			case EFFECT_SPECIAL_ACTION_KIND.NONE:
 				this.battle.animationUser = new Animation(content.animationUserID.getValue());
 				this.battle.animationTarget = new Animation(content.animationTargetID.getValue());
 				this.battle.effects = content.getEffects();
 				content.cost();
 				this.battle.user.setUsingSkill();
 				break;
-			case EffectSpecialActionKind.OpenItems:
+			case EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS:
 				const graphic = <Graphic.Item>this.battle.windowChoicesItems.getCurrentContent();
 				this.battle.animationUser = new Animation(content.animationUserID.getValue());
 				this.battle.animationTarget = new Animation(content.animationTargetID.getValue());
 				this.battle.effects = content.getEffects();
-				if (this.battle.user.player.kind === CharacterKind.Hero) {
+				if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
 					Game.current.useItem(graphic.item);
 				}
 				this.battle.user.setUsingItem();
 				break;
-			case EffectSpecialActionKind.EndTurn:
+			case EFFECT_SPECIAL_ACTION_KIND.END_TURN:
 				this.battle.time -= Scene.Battle.TIME_ACTION_ANIMATION;
 				let user: Battler;
-				for (i = 0, l = this.battle.battlers[CharacterKind.Hero].length; i < l; i++) {
-					user = this.battle.battlers[CharacterKind.Hero][i];
+				for (i = 0, l = this.battle.battlers[CHARACTER_KIND.HERO].length; i < l; i++) {
+					user = this.battle.battlers[CHARACTER_KIND.HERO][i];
 					user.setActive(false);
 					user.setSelected(false);
 				}
 				this.battle.subStep = 2;
 				break;
-			case EffectSpecialActionKind.DoNothing:
+			case EFFECT_SPECIAL_ACTION_KIND.DO_NOTHING:
 				this.battle.time -= Scene.Battle.TIME_ACTION_ANIMATION;
 				this.battle.subStep = 2;
 				break;
@@ -160,18 +163,18 @@ class BattleAnimation {
 
 	/**
 	 *  Get the animation efect condition kind.
-	 *  @returns {AnimationEffectConditionKind}
+	 *  @returns {ANIMATION_EFFECT_CONDITION_KIND}
 	 */
-	public getCondition(): AnimationEffectConditionKind {
+	public getCondition(): ANIMATION_EFFECT_CONDITION_KIND {
 		for (const target of this.battle.targets) {
 			if (target.tempIsDamagesMiss) {
-				return AnimationEffectConditionKind.Miss;
+				return ANIMATION_EFFECT_CONDITION_KIND.MISS;
 			}
 			if (target.tempIsDamagesCritical) {
-				return AnimationEffectConditionKind.Critical;
+				return ANIMATION_EFFECT_CONDITION_KIND.CRITICAL;
 			}
 		}
-		return AnimationEffectConditionKind.Hit;
+		return ANIMATION_EFFECT_CONDITION_KIND.HIT;
 	}
 
 	/**
@@ -272,7 +275,7 @@ class BattleAnimation {
 							const effect = this.battle.effects[this.battle.currentEffectIndex];
 							effect.execute(true);
 							if (!effect.canSkip && effect.isAnimated()) {
-								if (effect.kind === Enum.EffectKind.Status) {
+								if (effect.kind === EFFECT_KIND.STATUS) {
 									this.battle.currentTargetIndex = -1;
 								}
 								break;
@@ -293,7 +296,7 @@ class BattleAnimation {
 							if (!target.isDamagesMiss) {
 								if (target.lastStatus !== null) {
 									messages.push(
-										target.player.kind === CharacterKind.Hero
+										target.player.kind === CHARACTER_KIND.HERO
 											? target.lastStatus.getMessageAllyAffected(target)
 											: target.lastStatus.getMessageEnemyAffected(target)
 									);
@@ -341,10 +344,10 @@ class BattleAnimation {
 					if (this.battle.isWin()) {
 						this.battle.winning = true;
 						this.battle.activeGroup();
-						this.battle.changeStep(Enum.BattleStep.Victory);
+						this.battle.changeStep(BATTLE_STEP.VICTORY);
 					} else if (this.battle.isLose()) {
 						this.battle.winning = false;
-						this.battle.changeStep(Enum.BattleStep.Victory);
+						this.battle.changeStep(BATTLE_STEP.VICTORY);
 					} else {
 						if (this.battle.forceAnAction) {
 							this.battle.forceAnAction = false;
@@ -354,16 +357,16 @@ class BattleAnimation {
 						} else {
 							// Testing end of turn
 							if (this.battle.battleStartTurn.active) {
-								this.battle.changeStep(Enum.BattleStep.StartTurn);
+								this.battle.changeStep(BATTLE_STEP.START_TURN);
 								return;
 							}
 							if (this.battle.isEndTurn()) {
-								this.battle.changeStep(Enum.BattleStep.EndTurn);
+								this.battle.changeStep(BATTLE_STEP.END_TURN);
 							} else {
-								if (this.battle.attackingGroup === CharacterKind.Hero) {
-									this.battle.changeStep(Enum.BattleStep.Selection); // Attack of heroes
+								if (this.battle.attackingGroup === CHARACTER_KIND.HERO) {
+									this.battle.changeStep(BATTLE_STEP.SELECTION); // Attack of heroes
 								} else {
-									this.battle.changeStep(Enum.BattleStep.EnemyAttack); // Attack of ennemies
+									this.battle.changeStep(BATTLE_STEP.ENEMY_ATTACK); // Attack of ennemies
 								}
 							}
 						}
@@ -415,7 +418,7 @@ class BattleAnimation {
 		}
 		let i: number, l: number;
 		if (this.battle.animationTarget) {
-			if (this.battle.animationTarget.system.positionKind === AnimationPositionKind.ScreenCenter) {
+			if (this.battle.animationTarget.system.positionKind === ANIMATION_POSITION_KIND.SCREEN_CENTER) {
 				this.battle.animationTarget.draw(null);
 			} else {
 				for (i = 0, l = this.battle.targets.length; i < l; i++) {

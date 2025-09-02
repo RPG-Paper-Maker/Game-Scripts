@@ -9,13 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter, Utils } from '../Common';
+import { DAMAGES_KIND, Interpreter, Utils } from '../Common';
 import { Game, Player } from '../Core';
 import { StructIterator } from '../EventCommand';
 import { Datas, Scene, System } from '../index';
 import { Base } from './Base';
 import { DynamicValue } from './DynamicValue';
-import DamagesKind = Enum.DamagesKind;
 
 /** @class
  *  A cost of a common skill item.
@@ -38,20 +37,20 @@ class Cost extends Base {
 	/**
 	 *  Get the price for several costs.
 	 */
-	static getPrice(list: System.Cost[]): Record<string, [DamagesKind, number]> {
+	static getPrice(list: System.Cost[]): Record<string, [DAMAGES_KIND, number]> {
 		const price = {};
-		let cost: System.Cost, value: [DamagesKind, number];
+		let cost: System.Cost, value: [DAMAGES_KIND, number];
 		for (let i = 0, l = list.length; i < l; i++) {
 			cost = list[i];
 			value = [cost.kind, Interpreter.evaluate(cost.valueFormula.getValue())];
 			switch (cost.kind) {
-				case DamagesKind.Stat:
+				case DAMAGES_KIND.STAT:
 					price[cost.statisticID.getValue()] = value;
 					break;
-				case DamagesKind.Currency:
+				case DAMAGES_KIND.CURRENCY:
 					price[cost.currencyID.getValue()] = value;
 					break;
-				case DamagesKind.Variable:
+				case DAMAGES_KIND.VARIABLE:
 					price[cost.variableID] = value;
 					break;
 			}
@@ -64,15 +63,15 @@ class Cost extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the cost
 	 */
 	read(json: Record<string, any>) {
-		this.kind = Utils.defaultValue(json.k, DamagesKind.Stat);
+		this.kind = Utils.defaultValue(json.k, DAMAGES_KIND.STAT);
 		switch (this.kind) {
-			case DamagesKind.Stat:
+			case DAMAGES_KIND.STAT:
 				this.statisticID = DynamicValue.readOrDefaultDatabase(json.sid);
 				break;
-			case DamagesKind.Currency:
+			case DAMAGES_KIND.CURRENCY:
 				this.currencyID = DynamicValue.readOrDefaultDatabase(json.cid);
 				break;
-			case DamagesKind.Variable:
+			case DAMAGES_KIND.VARIABLE:
 				this.variableID = Utils.defaultValue(json.vid, 1);
 				break;
 		}
@@ -87,7 +86,7 @@ class Cost extends Base {
 	parse(command: any[], iterator: StructIterator) {
 		this.kind = command[iterator.i++];
 		switch (this.kind) {
-			case Enum.DamagesKind.Stat:
+			case DAMAGES_KIND.STAT:
 				this.statisticID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
@@ -129,13 +128,13 @@ class Cost extends Base {
 		const target = Player.getTemporaryPlayer();
 		const value = this.getValue(user, target);
 		switch (this.kind) {
-			case DamagesKind.Stat:
+			case DAMAGES_KIND.STAT:
 				user[Datas.BattleSystems.getStatistic(this.statisticID.getValue()).abbreviation] -= value;
 				break;
-			case DamagesKind.Currency:
+			case DAMAGES_KIND.CURRENCY:
 				Game.current.currencies[this.currencyID.getValue()] -= value;
 				break;
-			case DamagesKind.Variable:
+			case DAMAGES_KIND.VARIABLE:
 				Game.current.variables[this.variableID] -= value;
 				break;
 		}
@@ -151,13 +150,13 @@ class Cost extends Base {
 		const value = this.getValue(user, target);
 		let currentValue: number;
 		switch (this.kind) {
-			case DamagesKind.Stat:
+			case DAMAGES_KIND.STAT:
 				currentValue = user[Datas.BattleSystems.getStatistic(this.statisticID.getValue()).abbreviation];
 				break;
-			case DamagesKind.Currency:
+			case DAMAGES_KIND.CURRENCY:
 				currentValue = Game.current.getCurrency(this.currencyID.getValue());
 				break;
-			case DamagesKind.Variable:
+			case DAMAGES_KIND.VARIABLE:
 				currentValue = Game.current.getVariable(this.variableID);
 				break;
 		}
@@ -173,13 +172,13 @@ class Cost extends Base {
 		const target = Player.getTemporaryPlayer();
 		let result = this.getValue(user, target) + ' ';
 		switch (this.kind) {
-			case DamagesKind.Stat:
+			case DAMAGES_KIND.STAT:
 				result += Datas.BattleSystems.getStatistic(this.statisticID.getValue()).name();
 				break;
-			case DamagesKind.Currency:
+			case DAMAGES_KIND.CURRENCY:
 				result += Datas.Systems.getCurrency(this.currencyID.getValue()).name();
 				break;
-			case DamagesKind.Variable:
+			case DAMAGES_KIND.VARIABLE:
 				result += Datas.Variables.get(this.variableID);
 				break;
 		}

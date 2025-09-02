@@ -9,12 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Platform, ScreenResolution, Utils } from '../Common';
+import { ALIGN, ALIGN_VERTICAL, Constants, Platform, ScreenResolution, Utils } from '../Common';
 import { Datas, System } from '../index';
 import { Stack } from '../Manager';
 import { Base } from './Base';
-import Align = Enum.Align;
-import AlignVertical = Enum.AlignVertical;
 
 /** @class
  *  A class for all the texts to display in HUD.
@@ -25,12 +23,12 @@ import AlignVertical = Enum.AlignVertical;
  *  @param {number} [opts.y=0] - The y coords of the text
  *  @param {number} [opts.w=0] - The w coords of the text
  *  @param {number} [opts.h=0] - The h coords of the text
- *  @param {Align} [opts.align=Align.Left] - Alignement of the text
+ *  @param {Align} [opts.align=ALIGN.LEFT] - Alignement of the text
  *  @param {number} [opts.fontSize=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtSize, - RPM.fontSize)]
  *  The font height used for the text
  *  @param {string} [opts.fontName=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtFont, - RPM.fontName)]
  *  The font name used for the text
- *  @param {AlignVertical} [opts.verticalAlign=AlignVertical.Center] - Vertical
+ *  @param {ALIGN_VERTICAL} [opts.verticalAlign=ALIGN_VERTICAL.Center] - Vertical
  *  alignement of the text
  *  @param {SystemColor} [opts.color=RPM.defaultValue(RPM.datasGame.System.dbOptions.vtcText]
  *  The color used for the text
@@ -44,11 +42,11 @@ import AlignVertical = Enum.AlignVertical;
 class Text extends Base {
 	public text: string;
 	public lines: string[];
-	public align: Align;
+	public align: ALIGN;
 	public fontSize: number;
 	public oFontSize: number;
 	public fontName: string;
-	public verticalAlign: AlignVertical;
+	public verticalAlign: ALIGN_VERTICAL;
 	public color: System.Color;
 	public bold: boolean;
 	public italic: boolean;
@@ -67,10 +65,10 @@ class Text extends Base {
 			y = 0,
 			w = 0,
 			h = 0,
-			align = Align.Left,
+			align = ALIGN.LEFT,
 			fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
 			fontName = Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
-			verticalAlign = AlignVertical.Center,
+			verticalAlign = ALIGN_VERTICAL.CENTER,
 			color = Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, System.Color.WHITE),
 			bold = false,
 			italic = false,
@@ -95,8 +93,8 @@ class Text extends Base {
 	}
 
 	wrapText(maxWidth: number) {
-		const text = this.text.replace('\\n', Constants.STRING_NEW_LINE);
-		const lines = text.split(Constants.STRING_NEW_LINE);
+		const text = this.text.replace('\\n', '\n');
+		const lines = text.split('\n');
 		const words: string[] = [];
 		let i: number, j: number, l: number, m: number, tempWords: string[];
 		for (i = 0, l = lines.length; i < l; i++) {
@@ -105,19 +103,20 @@ class Text extends Base {
 				words.push(tempWords[j]);
 			}
 			if (i < l - 1) {
-				words.push(Constants.STRING_NEW_LINE);
+				words.push('\n');
 			}
 		}
 		this.lines = [];
 		let currentLine = words[0];
 		for (let i = 1, l = words.length; i < l; i++) {
 			const word = words[i];
-			if (word === Constants.STRING_NEW_LINE) {
+			if (word === '\n') {
 				this.lines.push(currentLine);
 				currentLine = words[++i];
 				continue;
 			}
-			const width = Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : 2);
+			const width =
+				Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : 2);
 			if (width < maxWidth) {
 				currentLine += ' ' + word;
 			} else {
@@ -154,7 +153,7 @@ class Text extends Base {
 		text += ''; // Be sure that it's string type
 		if (this.text !== text) {
 			this.text = text;
-			this.lines = this.text.split(Constants.STRING_NEW_LINE);
+			this.lines = this.text.split('\n');
 			this.measureText();
 			Stack.requestPaintHUD = true;
 		}
@@ -210,26 +209,26 @@ class Text extends Base {
 		const textWidth = this.textWidth;
 		const textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this.strokeColor === null ? 0 : 2);
 		switch (this.align) {
-			case Align.Left:
+			case ALIGN.LEFT:
 				x += ScreenResolution.getScreenMinXY(1);
 				break;
-			case Align.Right:
+			case ALIGN.RIGHT:
 				x += w - ScreenResolution.getScreenMinXY(1);
 				xBack = x - textWidth;
 				break;
-			case Align.Center:
+			case ALIGN.CENTER:
 				x += w / 2;
 				xBack = x - textWidth / 2;
 				break;
 		}
 		switch (this.verticalAlign) {
-			case AlignVertical.Bot:
+			case ALIGN_VERTICAL.BOT:
 				y += this.fontSize / 3 + h;
 				break;
-			case AlignVertical.Top:
+			case ALIGN_VERTICAL.TOP:
 				y += this.fontSize;
 				break;
-			case AlignVertical.Center:
+			case ALIGN_VERTICAL.CENTER:
 				y += this.fontSize / 3 + h / 2;
 				break;
 		}

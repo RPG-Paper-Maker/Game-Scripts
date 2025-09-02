@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, IO } from './index';
+import { IO } from './index';
 
 let firstError = true;
 
@@ -129,7 +129,7 @@ class Platform {
 	 *  @param {Error} e - The error message
 	 */
 	static showError(e: Error) {
-		Platform.showErrorMessage(e.message + Constants.STRING_NEW_LINE + e.stack, false);
+		Platform.showErrorMessage(e.message + '\n' + e.stack, false);
 	}
 
 	/**

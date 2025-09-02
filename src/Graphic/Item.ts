@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Mathf, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, DAMAGES_KIND, Mathf, ScreenResolution, Utils } from '../Common';
 import { Core, Datas, Graphic, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  The graphic displaying all the items information in the inventory menu.
@@ -48,7 +47,7 @@ class Item extends Base {
 		);
 		this.updateName(nbItem);
 		if (Utils.isUndefined(item.shop)) {
-			this.graphicNb = new Graphic.Text('x' + nbItem, { align: Align.Right });
+			this.graphicNb = new Graphic.Text('x' + nbItem, { align: ALIGN.RIGHT });
 		}
 		this.graphicInformations = new Graphic.SkillItem(this.item.system);
 		this.graphicCurrencies = [];
@@ -62,8 +61,8 @@ class Item extends Base {
 					Mathf.numberWithCommas(
 						showSellPrice ? Math.round((Datas.Systems.priceSoldItem.getValue() * value) / 100) : value
 					),
-					kind === Enum.DamagesKind.Currency ? Datas.Systems.getCurrency(parseInt(id)) : null,
-					{ align: Align.Right },
+					kind === DAMAGES_KIND.CURRENCY ? Datas.Systems.getCurrency(parseInt(id)) : null,
+					{ align: ALIGN.RIGHT },
 					possible ? {} : { color: System.Color.GREY }
 				);
 				this.graphicCurrencies.push(graphic);
@@ -79,9 +78,7 @@ class Item extends Base {
 		nbItem = Utils.isUndefined(nbItem) ? this.item.nb : nbItem;
 		this.graphicName.setText(
 			this.item.system.name() +
-				(!Utils.isUndefined(this.item.shop) && nbItem !== -1
-					? Constants.STRING_SPACE + Constants.STRING_BRACKET_LEFT + nbItem + Constants.STRING_BRACKET_RIGHT
-					: '')
+				(!Utils.isUndefined(this.item.shop) && nbItem !== -1 ? ' ' + '[' + nbItem + ']' : '')
 		);
 	}
 

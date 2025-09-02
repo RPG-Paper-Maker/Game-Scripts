@@ -10,7 +10,7 @@
 */
 
 import { System } from '..';
-import { Enum, Utils } from '../Common';
+import { CHARACTER_KIND, GROUP_KIND, Utils } from '../Common';
 import { Base } from './Base';
 
 /** @class
@@ -21,8 +21,8 @@ import { Base } from './Base';
  */
 class InitialPartyMember extends Base {
 	public level: System.DynamicValue;
-	public teamKind: Enum.GroupKind;
-	public characterKind: Enum.CharacterKind;
+	public teamKind: GROUP_KIND;
+	public CHARACTER_KIND: CHARACTER_KIND;
 	public heroID: System.DynamicValue;
 	public variableInstanceID: System.DynamicValue;
 
@@ -39,7 +39,7 @@ class InitialPartyMember extends Base {
 		this.level = System.DynamicValue.readOrDefaultNumber(json.level, 1);
 		this.teamKind = Utils.defaultValue(json.teamKind, 0);
 		const isHero = Utils.defaultValue(json.isHero, true);
-		this.characterKind = isHero ? Enum.CharacterKind.Hero : Enum.CharacterKind.Monster;
+		this.CHARACTER_KIND = isHero ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
 		this.heroID = System.DynamicValue.readOrDefaultDatabase(isHero ? json.heroID : json.monsterID);
 		this.variableInstanceID = System.DynamicValue.readOrDefaultVariable(json.variableInstanceID);
 	}

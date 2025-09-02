@@ -10,13 +10,12 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Mathf, Utils } from '../Common';
+import { ELEMENT_MAP_KIND, Mathf, Utils } from '../Common';
 import { Core, Datas, Scene } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
-import ElementMapKind = Enum.ElementMapKind;
 
 /** @class
  *  A sprite in the map.
@@ -35,7 +34,7 @@ class Sprite extends MapElement {
 	public static X_AXIS = new THREE.Vector3(1, 0, 0);
 	public static Z_AXIS = new THREE.Vector3(0, 0, 1);
 
-	public kind: ElementMapKind;
+	public kind: ELEMENT_MAP_KIND;
 	public textureRect: number[];
 
 	constructor(json?: Record<string, any>) {
@@ -50,10 +49,10 @@ class Sprite extends MapElement {
 	/**
 	 *  Create a new sprite.
 	 *  @static
-	 *  @param {ElementMapKind} kind - The element map kind
+	 *  @param {ELEMENT_MAP_KIND} kind - The element map kind
 	 *  @param {number[]} texture - Texture UV coords
 	 */
-	static create(kind: ElementMapKind, texture: number[]): Sprite {
+	static create(kind: ELEMENT_MAP_KIND, texture: number[]): Sprite {
 		const sprite = new Sprite();
 		sprite.kind = kind;
 		sprite.textureRect = texture;
@@ -168,7 +167,7 @@ class Sprite extends MapElement {
 		let zPlus = position.layer * 0.05;
 
 		// Apply an offset according to layer position
-		if (this.kind !== Enum.ElementMapKind.SpritesFace && !this.front) {
+		if (this.kind !== ELEMENT_MAP_KIND.SPRITES_FACE && !this.front) {
 			zPlus *= -1;
 		}
 		pos.setX(this.xOffset * Datas.Systems.SQUARE_SIZE);
@@ -277,7 +276,7 @@ class Sprite extends MapElement {
 					w: twidth,
 					h: theight,
 					cr: [0, -size.y / 2, 0],
-					k: this.kind === ElementMapKind.SpritesFix,
+					k: this.kind === ELEMENT_MAP_KIND.SPRITES_FIX,
 				});
 			}
 			const climbing = Scene.Map.current.mapProperties.tileset.picture.getSquaresClimbing(this.textureRect);
@@ -307,7 +306,7 @@ class Sprite extends MapElement {
 					w: twidth,
 					h: theight,
 					cr: [0, -size.y / 2, 0],
-					k: this.kind === ElementMapKind.SpritesFix,
+					k: this.kind === ELEMENT_MAP_KIND.SPRITES_FIX,
 					cl: true,
 				});
 			}
@@ -317,7 +316,7 @@ class Sprite extends MapElement {
 				b: null,
 				w: twidth,
 				h: theight,
-				k: this.kind === ElementMapKind.SpritesFix,
+				k: this.kind === ELEMENT_MAP_KIND.SPRITES_FIX,
 			});
 		}
 
@@ -359,7 +358,7 @@ class Sprite extends MapElement {
 		}
 
 		// Double sprite
-		if (this.kind === ElementMapKind.SpritesDouble || this.kind === ElementMapKind.SpritesQuadra) {
+		if (this.kind === ELEMENT_MAP_KIND.SPRITES_DOUBLE || this.kind === ELEMENT_MAP_KIND.SPRITES_QUADRA) {
 			const vecDoubleA = vecA.clone();
 			const vecDoubleB = vecB.clone();
 			const vecDoubleC = vecC.clone();
@@ -380,7 +379,7 @@ class Sprite extends MapElement {
 			);
 
 			// Quadra sprite
-			if (this.kind === ElementMapKind.SpritesQuadra) {
+			if (this.kind === ELEMENT_MAP_KIND.SPRITES_QUADRA) {
 				const vecQuadra1A = vecA.clone();
 				const vecQuadra1B = vecB.clone();
 				const vecQuadra1C = vecC.clone();

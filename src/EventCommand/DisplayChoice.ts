@@ -9,12 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, ScreenResolution } from '../Common';
 import { MapObject, WindowBox, WindowChoices } from '../Core';
 import { Datas, Graphic, Scene, System } from '../index';
 import { Base } from './Base';
 import { ShowText } from './ShowText';
-import Align = Enum.Align;
 
 /** @class
  *  An event command for displaying a choice.
@@ -44,7 +43,7 @@ class DisplayChoice extends Base {
 		let next: string;
 		while (iterator.i < l) {
 			next = command[iterator.i];
-			if (next === Constants.STRING_DASH) {
+			if (next === '-') {
 				iterator.i++;
 				if (lang !== null) {
 					this.choices.push(lang.name());
@@ -64,7 +63,7 @@ class DisplayChoice extends Base {
 		this.maxWidth = WindowBox.MEDIUM_SLOT_WIDTH;
 		let graphic: Graphic.Text;
 		for (let i = 0; i < l; i++) {
-			graphic = new Graphic.Text(this.choices[i], { align: Align.Center });
+			graphic = new Graphic.Text(this.choices[i], { align: ALIGN.CENTER });
 			this.graphics[i] = graphic;
 			if (graphic.textWidth > this.maxWidth) {
 				this.maxWidth = graphic.textWidth;

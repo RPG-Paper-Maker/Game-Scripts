@@ -10,7 +10,7 @@
 */
 
 import { Datas, Manager, Scene } from '..';
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Base } from './Base';
 
@@ -61,7 +61,7 @@ class GameOver extends Base {
 		if (Datas.TitlescreenGameover.isGameOverBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
 				Datas.TitlescreenGameover.gameOverBackgroundImageID,
-				Enum.PictureKind.GameOver,
+				PICTURE_KIND.GAME_OVER,
 				{ cover: true }
 			);
 		} else {

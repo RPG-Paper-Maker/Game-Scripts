@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Paths, Platform } from '../Common';
+import { CUSTOM_SHAPE_KIND, Paths, Platform } from '../Common';
 import { Datas, System } from '../index';
-import CustomShapeKind = Enum.CustomShapeKind;
 
 /** @class
  *  All the shapes datas.
@@ -68,11 +67,11 @@ class Shapes {
 						shape.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
 								System.Shape.getLocalFolder(shape.kind) +
-								Constants.STRING_SLASH +
+								'/' +
 								shape.name
 						);
 					}
-					if (k === CustomShapeKind.OBJ || k === CustomShapeKind.Collisions) {
+					if (k === CUSTOM_SHAPE_KIND.OBJ || k === CUSTOM_SHAPE_KIND.COLLISIONS) {
 						await shape.load();
 					}
 					if (id !== 0) {
@@ -89,14 +88,14 @@ class Shapes {
 
 	/**
 	 *  Get the corresponding shape
-	 *  @param {CustomShapeKind} kind - The shape kind
+	 *  @param {CustomSHAPE_KIND} kind - The shape kind
 	 *  @param {number} id - The shape id
 	 *  @returns {System.Shape}
 	 */
-	static get(kind: CustomShapeKind, id: number): System.Shape {
-		return kind === CustomShapeKind.None || id === -1
+	static get(kind: CUSTOM_SHAPE_KIND, id: number): System.Shape {
+		return kind === CUSTOM_SHAPE_KIND.NONE || id === -1
 			? new System.Shape()
-			: Datas.Base.get(id, this.list[kind], 'shape ' + System.Shape.customShapeKindToString(kind));
+			: Datas.Base.get(id, this.list[kind], 'shape ' + System.Shape.customSHAPE_KINDToString(kind));
 	}
 }
 

@@ -10,10 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { Enum, Utils } from '../Common';
+import { Utils } from '../Common';
 import { CollisionSquare } from './CollisionSquare';
 import { Position } from './Position';
-import ElementMapKind = Enum.ElementMapKind;
 
 interface StructMapElementCollision {
 	b?: number[];

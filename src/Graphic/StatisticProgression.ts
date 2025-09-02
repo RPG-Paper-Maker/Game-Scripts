@@ -69,7 +69,7 @@ class StatisticProgression extends Base {
 				if (statistic.isRes || this.player[statistic.getBeforeAbbreviation()] === undefined) {
 					continue;
 				}
-				graphic = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
+				graphic = new Graphic.Text(statistic.name() + ':');
 				this.maxLength = Math.max(graphic.textWidth, this.maxLength);
 				this.listStatsNames.push(graphic);
 				txt = '';
@@ -78,13 +78,13 @@ class StatisticProgression extends Base {
 						? this.player[statistic.getBeforeAbbreviation()]
 						: this.player[statistic.abbreviation];
 					if (!statistic.isFix) {
-						txt += Constants.STRING_SLASH + this.player[statistic.getBeforeAbbreviation()];
+						txt += '/' + this.player[statistic.getBeforeAbbreviation()];
 					}
 					txt += ' -> ';
 				}
 				txt += Utils.numToString(this.player[statistic.abbreviation]);
 				if (!statistic.isFix) {
-					txt += Constants.STRING_SLASH + this.player[statistic.getMaxAbbreviation()];
+					txt += '/' + this.player[statistic.getMaxAbbreviation()];
 				}
 				graphic = new Graphic.Text(txt);
 				this.maxProgressionLength = Math.max(graphic.textWidth, this.maxProgressionLength);

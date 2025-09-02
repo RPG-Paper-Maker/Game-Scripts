@@ -9,13 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution } from '../Common';
+import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
 import { Datas, Graphic, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
-import PictureKind = Enum.PictureKind;
-import AlignVertical = Enum.AlignVertical;
 
 /** @class
  *  The graphic for skill or item displaying.
@@ -45,12 +42,12 @@ class SkillItem extends Base {
 			});
 		}
 		this.graphicDescription = new Graphic.Text(system.description.name(), {
-			verticalAlign: AlignVertical.Top,
+			verticalAlign: ALIGN_VERTICAL.TOP,
 		});
-		if (this.system.hasTargetKind) {
+		if (this.system.hasTARGET_KIND) {
 			this.graphicTarget = new Graphic.Text(
-				Datas.Languages.extras.target.name() + ': ' + system.getTargetKindString(),
-				{ align: Align.Right, fontSize: Constants.MEDIUM_FONT_SIZE }
+				Datas.Languages.extras.target.name() + ': ' + system.getTARGET_KINDString(),
+				{ align: ALIGN.RIGHT, fontSize: Constants.MEDIUM_FONT_SIZE }
 			);
 		}
 		this.graphicEffects = [];
@@ -64,7 +61,7 @@ class SkillItem extends Base {
 			}
 			if (effect.isDamageElement) {
 				const element = Datas.BattleSystems.getElement(effect.damageElementID.getValue());
-				graphicIcon = Datas.Pictures.getPictureCopy(PictureKind.Icons, element.pictureID);
+				graphicIcon = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, element.pictureID);
 				graphicIcon.sx = element.pictureIndexX * Datas.Systems.iconsSize;
 				graphicIcon.sy = element.pictureIndexY * Datas.Systems.iconsSize;
 				this.graphicElements.push(graphicIcon);
@@ -108,7 +105,7 @@ class SkillItem extends Base {
 		let offsetY = 0;
 		this.graphicName.draw(x, y, w, 0);
 		offsetY += this.graphicName.getMaxHeight();
-		if (this.system.hasTargetKind) {
+		if (this.system.hasTARGET_KIND) {
 			this.graphicTarget.draw(x, y + offsetY, w, 0);
 		}
 		let offsetX = x + this.graphicName.getWidth() + this.graphicName.space;

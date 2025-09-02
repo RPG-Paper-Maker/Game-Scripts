@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { Frame, Picture2D, Player } from '../Core';
 import { Status } from '../Core/Status';
 import { Datas, Graphic, Manager, System } from '../index';
@@ -49,7 +49,7 @@ class PlayerDescription extends Base {
 		const expStat = Datas.BattleSystems.getExpStatistic();
 
 		// All the graphics
-		this.graphicNameCenter = new Graphic.Text(this.player.name, { align: Enum.Align.Center });
+		this.graphicNameCenter = new Graphic.Text(this.player.name, { align: ALIGN.CENTER });
 		this.graphicName = new Graphic.Text(this.player.name);
 		(this.graphicDescription = new Graphic.Text(system.description.name(), {
 			fontSize: Constants.MEDIUM_FONT_SIZE,
@@ -77,11 +77,11 @@ class PlayerDescription extends Base {
 				if (statistic.isRes) {
 					continue;
 				}
-				graphicName = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
+				graphicName = new Graphic.Text(statistic.name() + ':');
 				this.listStatsNames.push(graphicName);
 				txt = Utils.numToString(this.player[statistic.abbreviation]);
 				if (!statistic.isFix) {
-					txt += Constants.STRING_SLASH + this.player[statistic.getMaxAbbreviation()];
+					txt += '/' + this.player[statistic.getMaxAbbreviation()];
 				}
 				this.listStats.push(new Graphic.Text(txt));
 				j++;
@@ -89,7 +89,7 @@ class PlayerDescription extends Base {
 		}
 
 		// Battler
-		this.battler = Datas.Pictures.getPictureCopy(Enum.PictureKind.Battlers, player.getBattlerID());
+		this.battler = Datas.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
 		this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
 	}
 
@@ -138,7 +138,7 @@ class PlayerDescription extends Base {
 			id = Datas.BattleSystems.statisticsOrder[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
 				statistic = Datas.BattleSystems.getStatistic(id);
-				graphicName = new Graphic.Text(statistic.name() + Constants.STRING_COLON);
+				graphicName = new Graphic.Text(statistic.name() + ':');
 				this.maxLength = Math.max(graphicName.textWidth, this.maxLength);
 				this.listStatsNames.push(graphicName);
 				txt = '';
@@ -147,13 +147,13 @@ class PlayerDescription extends Base {
 						? this.player[statistic.getBeforeAbbreviation()]
 						: this.player[statistic.abbreviation];
 					if (!statistic.isFix) {
-						txt += Constants.STRING_SLASH + this.player[statistic.getBeforeAbbreviation()];
+						txt += '/' + this.player[statistic.getBeforeAbbreviation()];
 					}
 					txt += ' -> ';
 				}
 				txt += this.player[statistic.abbreviation];
 				if (!statistic.isFix) {
-					txt += Constants.STRING_SLASH + this.player[statistic.getMaxAbbreviation()];
+					txt += '/' + this.player[statistic.getMaxAbbreviation()];
 				}
 				this.listStats.push(new Graphic.Text(txt));
 			}

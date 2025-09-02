@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Paths, Platform, ScreenResolution, Utils } from '../Common';
+import { Paths, Platform, ScreenResolution, SONG_KIND, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
 import { Datas, EventCommand, Manager, Scene, System } from '../index';
 
@@ -215,10 +215,10 @@ class Systems {
 		});
 
 		// Sounds
-		this.soundCursor = new System.PlaySong(Enum.SongKind.Sound, json.scu);
-		this.soundConfirmation = new System.PlaySong(Enum.SongKind.Sound, json.sco);
-		this.soundCancel = new System.PlaySong(Enum.SongKind.Sound, json.sca);
-		this.soundImpossible = new System.PlaySong(Enum.SongKind.Sound, json.si);
+		this.soundCursor = new System.PlaySong(SONG_KIND.SOUND, json.scu);
+		this.soundConfirmation = new System.PlaySong(SONG_KIND.SOUND, json.sco);
+		this.soundCancel = new System.PlaySong(SONG_KIND.SOUND, json.sca);
+		this.soundImpossible = new System.PlaySong(SONG_KIND.SOUND, json.si);
 
 		// Window skin options
 		this.dbOptions = <EventCommand.SetDialogBoxOptions>Manager.Events.getEventCommand(json.dbo);

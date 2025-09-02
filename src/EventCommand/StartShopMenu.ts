@@ -10,7 +10,7 @@
 */
 
 import { Manager, Scene, System } from '..';
-import { Enum, Utils } from '../Common';
+import { ITEM_KIND, Utils } from '../Common';
 import { Game, Item, MapObject } from '../Core';
 import { Base } from './Base';
 
@@ -53,9 +53,9 @@ class StartShopMenu extends Base {
 		// Create or load stock according to first time opening or not
 		const shopID = this.shopID.getValue();
 		let stocks: Record<string, number>[] = [];
-		stocks[Enum.ItemKind.Item] = {};
-		stocks[Enum.ItemKind.Weapon] = {};
-		stocks[Enum.ItemKind.Armor] = {};
+		stocks[ITEM_KIND.ITEM] = {};
+		stocks[ITEM_KIND.WEAPON] = {};
+		stocks[ITEM_KIND.ARMOR] = {};
 		let system: System.ShopItem;
 		const list: Item[] = [];
 		let id: number, stock: number, newStock;

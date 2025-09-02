@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Interpreter, Platform, Utils } from '../Common';
+import { Interpreter, Platform, TITLE_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
 import { Datas, Manager, Scene } from '../index';
 import { Translatable } from './Translatable';
-import TitleCommandKind = Enum.TitleCommandKind;
 
 /** @class
  *  A title command of the game.
@@ -22,7 +21,7 @@ import TitleCommandKind = Enum.TitleCommandKind;
  *  title screen command
  */
 class TitleCommand extends Translatable {
-	public kind: TitleCommandKind;
+	public kind: TITLE_COMMAND_KIND;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
@@ -37,7 +36,7 @@ class TitleCommand extends Translatable {
 	read(json: Record<string, any>) {
 		super.read(json);
 
-		this.kind = Utils.defaultValue(json.k, TitleCommandKind.NewGame);
+		this.kind = Utils.defaultValue(json.k, TITLE_COMMAND_KIND.NEW_GAME);
 		this.script = Utils.defaultValue(json.s, '');
 	}
 
@@ -47,18 +46,18 @@ class TitleCommand extends Translatable {
 	 */
 	getAction(): Function {
 		switch (this.kind) {
-			case TitleCommandKind.NewGame:
+			case TITLE_COMMAND_KIND.NEW_GAME:
 				return TitleCommand.startNewGame;
-			case TitleCommandKind.LoadGame:
+			case TITLE_COMMAND_KIND.LOAD_GAME:
 				return TitleCommand.loadGame;
-			case TitleCommandKind.Settings:
+			case TITLE_COMMAND_KIND.SETTINGS:
 				const name = this.name();
 				return () => {
 					return TitleCommand.showSettings(name);
 				};
-			case TitleCommandKind.Exit:
+			case TITLE_COMMAND_KIND.EXIT:
 				return TitleCommand.exit;
-			case TitleCommandKind.Script:
+			case TITLE_COMMAND_KIND.SCRIPT:
 				return this.executeScript;
 		}
 	}

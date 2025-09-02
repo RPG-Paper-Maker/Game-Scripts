@@ -9,12 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, Inputs, ScreenResolution, Utils } from '../Common';
+import { Inputs, ORIENTATION_WINDOW, ScreenResolution, Utils } from '../Common';
 import { Datas, Graphic, Manager } from '../index';
 import { Bitmap } from './Bitmap';
 import { Rectangle } from './Rectangle';
 import { WindowBox } from './WindowBox';
-import OrientationWindow = Enum.OrientationWindow;
 
 /**
  * the choices options used for the window initialization
@@ -33,11 +32,11 @@ interface ChoicesOptions {
 	/**
 	 * The choices list orientation
 	 *
-	 * @type {OrientationWindow}
-	 * @default OrientationWindow.Vertical
+	 * @type {ORIENTATION_WINDOW}
+	 * @default ORIENTATION_WINDOW.Vertical
 	 * @memberof ChoicesOptions
 	 */
-	orientation?: OrientationWindow;
+	orientation?: ORIENTATION_WINDOW;
 
 	/**
 	 * The max number of choices displayed
@@ -101,7 +100,7 @@ class WindowChoices extends Bitmap {
 	public static TIME_WAIT_PRESS = 50;
 	public static TIME_WAIT_MOUSE_ARROW = 200;
 
-	public orientation: OrientationWindow;
+	public orientation: ORIENTATION_WINDOW;
 	public nbItemsMax: number;
 	public padding: number[];
 	public space: number;
@@ -125,7 +124,7 @@ class WindowChoices extends Bitmap {
 		super(x, y, w, h);
 
 		// Parameters
-		this.orientation = Utils.defaultValue(options.orientation, OrientationWindow.Vertical);
+		this.orientation = Utils.defaultValue(options.orientation, ORIENTATION_WINDOW.VERTICAL);
 		this.nbItemsMax = Utils.defaultValue(options.nbItemsMax, 4);
 		this.padding = Utils.defaultValue(options.padding, WindowBox.SMALL_PADDING_BOX);
 		this.space = Utils.defaultValue(options.space, 0);
@@ -171,12 +170,12 @@ class WindowChoices extends Bitmap {
 		for (let i = 0; i < this.listWindows.length; i++) {
 			windowBox = this.listWindows[i];
 			windowBox.setX(
-				this.orientation === OrientationWindow.Horizontal
+				this.orientation === ORIENTATION_WINDOW.HORIZONTAL
 					? this.oX + this.padding[0] + i * this.choiceWidth + i * this.space
 					: this.oX + this.padding[0]
 			);
 			windowBox.setY(
-				this.orientation === OrientationWindow.Horizontal
+				this.orientation === ORIENTATION_WINDOW.HORIZONTAL
 					? this.oY
 					: this.oY + i * this.choiceHeight + i * this.space
 			);
@@ -211,7 +210,7 @@ class WindowChoices extends Bitmap {
 		const totalNb = this.listContents.length;
 		this.size = totalNb > this.nbItemsMax ? this.nbItemsMax : totalNb;
 		let boxWidth: number, boxHeight: number;
-		if (this.orientation === OrientationWindow.Horizontal) {
+		if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
 			boxWidth =
 				(this.choiceWidth + this.space) * this.size -
 				this.space +
@@ -231,7 +230,7 @@ class WindowChoices extends Bitmap {
 		this.listWindows = new Array(totalNb);
 		let window: WindowBox;
 		for (let i = 0; i < totalNb; i++) {
-			if (this.orientation === OrientationWindow.Horizontal) {
+			if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
 				window = new WindowBox(
 					this.oX + this.padding[0] + i * this.choiceWidth + i * this.space,
 					this.oY,
@@ -501,7 +500,7 @@ class WindowChoices extends Bitmap {
 				this.listWindows[this.currentSelectedIndex].selected = false;
 
 				// Go up or go down according to key and orientation
-				if (this.orientation === OrientationWindow.Vertical) {
+				if (this.orientation === ORIENTATION_WINDOW.VERTICAL) {
 					if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
 						this.goDown();
 					} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Up)) {
@@ -532,7 +531,7 @@ class WindowChoices extends Bitmap {
 		if (this.currentSelectedIndex !== -1 && this.isInside(x, y)) {
 			let index: number;
 			// Check which window
-			if (this.orientation === OrientationWindow.Horizontal) {
+			if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
 				index = Math.floor((x - this.x) / ScreenResolution.getScreenX(this.choiceWidth + this.space));
 			} else {
 				index = Math.floor((y - this.y) / ScreenResolution.getScreenY(this.choiceHeight + this.space));

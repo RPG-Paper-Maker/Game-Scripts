@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Mathf, Platform, ScreenResolution, Utils } from '../Common';
+import { Mathf, Platform, ScreenResolution, Utils } from '../Common';
 import { Frame, Game, MapObject, Position, ReactionInterpreter, StructSearchResult } from '../Core';
 import { Datas, Manager, Scene, System } from '../index';
 import { Base } from './Base';
@@ -246,31 +246,11 @@ class TeleportObject extends Base {
 	 */
 	drawHUD(currentState?: Record<string, any>) {
 		if (this.transitionStart === 1 && !currentState.endTransition) {
-			Platform.ctx.fillStyle =
-				Constants.STRING_RGBA +
-				Constants.STRING_PARENTHESIS_LEFT +
-				currentState.startColor.red +
-				Constants.STRING_COMA +
-				currentState.startColor.green +
-				Constants.STRING_COMA +
-				currentState.startColor.blue +
-				Constants.STRING_COMA +
-				currentState.transitionColorAlpha +
-				Constants.STRING_PARENTHESIS_RIGHT;
+			Platform.ctx.fillStyle = `rgba(${currentState.startColor.red},${currentState.startColor.green},${currentState.startColor.blue},${currentState.transitionColorAlpha})`;
 			Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
 		}
 		if (this.transitionEnd === 1 && currentState.transitioning && !currentState.transitionedEnd) {
-			Platform.ctx.fillStyle =
-				Constants.STRING_RGBA +
-				Constants.STRING_PARENTHESIS_LEFT +
-				currentState.endColor.red +
-				Constants.STRING_COMA +
-				currentState.endColor.green +
-				Constants.STRING_COMA +
-				currentState.endColor.blue +
-				Constants.STRING_COMA +
-				currentState.transitionColorAlpha +
-				Constants.STRING_PARENTHESIS_RIGHT;
+			Platform.ctx.fillStyle = `rgba(${currentState.endColor.red},${currentState.endColor.green},${currentState.endColor.blue},${currentState.transitionColorAlpha})`;
 			Platform.ctx.fillRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
 		}
 	}

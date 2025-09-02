@@ -9,10 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN } from '../Common';
 import { Datas, Graphic, System } from '../index';
 import { Base } from './Base';
-import Align = Enum.Align;
 
 /** @class
  *  A class for all keyboard assign to display in screen.
@@ -29,9 +28,9 @@ class Keyboard extends Base {
 
 		this.kb = kb;
 		this.graphicTextName = new Graphic.Text(kb.name());
-		this.graphicTextShort = new Graphic.Text(kb.toString(), { align: Align.Center });
+		this.graphicTextShort = new Graphic.Text(kb.toString(), { align: ALIGN.CENTER });
 		this.graphicTextInformation = new Graphic.Text(Datas.Languages.extras.pressAnyKeys.name(), {
-			align: Align.Center,
+			align: ALIGN.CENTER,
 		});
 	}
 

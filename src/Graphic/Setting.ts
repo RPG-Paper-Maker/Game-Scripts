@@ -9,11 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum } from '../Common';
+import { ALIGN, TITLE_SETTING_KIND } from '../Common';
 import { Datas, Graphic } from '../index';
 import { Base } from './Base';
-import TitleSettingKind = Enum.TitleSettingKind;
-import Align = Enum.Align;
 
 /** @class
  *  A class for all settings to display in screen.
@@ -30,19 +28,19 @@ class Setting extends Base {
 
 		let textLeft: string, textInformation: string;
 		switch (id) {
-			case TitleSettingKind.KeyboardAssigment:
+			case TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT:
 				textLeft = Datas.Languages.extras.keyboardAssignment.name();
 				textInformation = Datas.Languages.extras.keyboardAssignmentDescription.name();
-				this.graphicRight = new Graphic.Text('...', { align: Align.Center });
+				this.graphicRight = new Graphic.Text('...', { align: ALIGN.CENTER });
 				break;
-			case TitleSettingKind.Language:
+			case TITLE_SETTING_KIND.LANGUAGE:
 				textLeft = Datas.Languages.extras.language.name();
 				textInformation = Datas.Languages.extras.languageDescription.name();
-				this.graphicRight = new Graphic.Text('...', { align: Align.Center });
+				this.graphicRight = new Graphic.Text('...', { align: ALIGN.CENTER });
 				break;
 		}
 		this.graphicTextLeft = new Graphic.Text(textLeft);
-		this.graphicTextInformation = new Graphic.Text(textInformation, { align: Align.Center });
+		this.graphicTextInformation = new Graphic.Text(textInformation, { align: ALIGN.CENTER });
 	}
 
 	/**

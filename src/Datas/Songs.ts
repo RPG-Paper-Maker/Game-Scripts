@@ -9,9 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Paths, Platform } from '../Common';
+import { Paths, Platform, SONG_KIND } from '../Common';
 import { Datas, System } from '../index';
-import SongKind = Enum.SongKind;
 
 /** @class
  *   All the songs datas
@@ -36,7 +35,7 @@ class Songs {
 			m: number,
 			n: number,
 			jsonHash: Record<string, any>,
-			k: SongKind,
+			k: SONG_KIND,
 			jsonList: Record<string, any>[],
 			jsonSong: Record<string, any>,
 			id: number,
@@ -69,7 +68,7 @@ class Songs {
 						song.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
 								System.Song.getLocalFolder(song.kind) +
-								Constants.STRING_SLASH +
+								'/' +
 								song.name
 						);
 					}
@@ -85,12 +84,12 @@ class Songs {
 
 	/**
 	 *  Get the corresponding song.
-	 *  @param {SongKind} kind - The song kind
+	 *  @param {SONG_KIND} kind - The song kind
 	 *  @param {number} id - The song id
 	 *  @returns {System.Song}
 	 */
-	static get(kind: SongKind, id: number): System.Song {
-		return kind === SongKind.None || id === -1
+	static get(kind: SONG_KIND, id: number): System.Song {
+		return kind === SONG_KIND.NONE || id === -1
 			? new System.Song()
 			: Datas.Base.get(id, this.list[kind], 'song ' + System.Song.songKindToString(kind));
 	}

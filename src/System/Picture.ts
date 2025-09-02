@@ -9,22 +9,21 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, Enum, Paths, Platform, Utils } from '../Common';
+import { Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { CollisionSquare, Picture2D } from '../Core';
 import { Datas } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  A picture of the game.
  *  @extends {System.Base}
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  picture
- *  @param {PictureKind} [kind=PictureKind.Pictures] - The kind of picture
+ *  @param {PICTURE_KIND} [kind=PICTURE_KIND.Pictures] - The kind of picture
  */
 class Picture extends Base {
 	public id: number;
-	public kind: PictureKind;
+	public kind: PICTURE_KIND;
 	public name: string;
 	public isBR: boolean;
 	public dlc: string;
@@ -40,7 +39,7 @@ class Picture extends Base {
 	public borderLeft: number;
 	public borderRight: number;
 
-	constructor(json?: Record<string, any>, kind: PictureKind = PictureKind.Pictures) {
+	constructor(json?: Record<string, any>, kind: PICTURE_KIND = PICTURE_KIND.PICTURES) {
 		super(json, kind);
 	}
 
@@ -54,42 +53,42 @@ class Picture extends Base {
 
 	/**
 	 *  Get string of picture kind.
-	 *  @param {PictureKind} kind - The picture kind
+	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @returns {string}
 	 */
-	static pictureKindToString(kind: PictureKind): string {
+	static pictureKindToString(kind: PICTURE_KIND): string {
 		switch (kind) {
-			case PictureKind.Bars:
+			case PICTURE_KIND.BARS:
 				return 'bar';
-			case PictureKind.Icons:
+			case PICTURE_KIND.ICONS:
 				return 'icon';
-			case PictureKind.Autotiles:
+			case PICTURE_KIND.AUTOTILES:
 				return 'autotile';
-			case PictureKind.Characters:
+			case PICTURE_KIND.CHARACTERS:
 				return 'character';
-			case PictureKind.Mountains:
+			case PICTURE_KIND.MOUNTAINS:
 				return 'mountain';
-			case PictureKind.Tilesets:
+			case PICTURE_KIND.TILESETS:
 				return 'tileset';
-			case PictureKind.Walls:
+			case PICTURE_KIND.WALLS:
 				return 'wall';
-			case PictureKind.Battlers:
+			case PICTURE_KIND.BATTLERS:
 				return 'battler';
-			case PictureKind.Facesets:
+			case PICTURE_KIND.FACESETS:
 				return 'faceset';
-			case PictureKind.WindowSkins:
+			case PICTURE_KIND.WINDOW_SKINS:
 				return 'window skin';
-			case PictureKind.TitleScreen:
+			case PICTURE_KIND.TITLE_SCREEN:
 				return 'title screen';
-			case PictureKind.Objects3D:
+			case PICTURE_KIND.OBJECTS_3D:
 				return 'object 3D';
-			case PictureKind.Pictures:
+			case PICTURE_KIND.PICTURES:
 				return 'picture';
-			case PictureKind.Animations:
+			case PICTURE_KIND.ANIMATIONS:
 				return 'animation';
-			case PictureKind.Skyboxes:
+			case PICTURE_KIND.SKYBOXES:
 				return 'skybox';
-			case PictureKind.Particles:
+			case PICTURE_KIND.PARTICLES:
 				return 'particles';
 		}
 		return '';
@@ -98,62 +97,59 @@ class Picture extends Base {
 	/**
 	 *  Get the folder associated to a kind of picture.
 	 *  @static
-	 *  @param {PictureKind} kind - The kind of picture
+	 *  @param {PICTURE_KIND} kind - The kind of picture
 	 *  @param {boolean} isBR - Indicate if the picture is a BR
 	 *  @param {string} dlc - The picture DLC name (if exists)
 	 *  @returns {string}
 	 */
-	static getFolder(kind: PictureKind, isBR: boolean, dlc: string): string {
+	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR
-				? Datas.Systems.PATH_BR
-				: dlc
-				? Datas.Systems.PATH_DLCS + Constants.STRING_SLASH + dlc
-				: Platform.ROOT_DIRECTORY) + this.getLocalFolder(kind)
+			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			this.getLocalFolder(kind)
 		);
 	}
 
 	/**
 	 *  Get the local folder associated to a kind of picture.
 	 *  @static
-	 *  @param {PictureKind} kind - The kind of picture
+	 *  @param {PICTURE_KIND} kind - The kind of picture
 	 *  @returns {string}
 	 */
-	static getLocalFolder(kind: PictureKind): string {
+	static getLocalFolder(kind: PICTURE_KIND): string {
 		switch (kind) {
-			case PictureKind.Bars:
+			case PICTURE_KIND.BARS:
 				return Paths.BARS;
-			case PictureKind.Icons:
+			case PICTURE_KIND.ICONS:
 				return Paths.ICONS;
-			case PictureKind.Autotiles:
+			case PICTURE_KIND.AUTOTILES:
 				return Paths.AUTOTILES;
-			case PictureKind.Characters:
+			case PICTURE_KIND.CHARACTERS:
 				return Paths.CHARACTERS;
-			case PictureKind.Mountains:
+			case PICTURE_KIND.MOUNTAINS:
 				return Paths.MOUNTAINS;
-			case PictureKind.Tilesets:
+			case PICTURE_KIND.TILESETS:
 				return Paths.TILESETS;
-			case PictureKind.Walls:
+			case PICTURE_KIND.WALLS:
 				return Paths.WALLS;
-			case PictureKind.Battlers:
+			case PICTURE_KIND.BATTLERS:
 				return Paths.BATTLERS;
-			case PictureKind.Facesets:
+			case PICTURE_KIND.FACESETS:
 				return Paths.FACESETS;
-			case PictureKind.WindowSkins:
+			case PICTURE_KIND.WINDOW_SKINS:
 				return Paths.WINDOW_SKINS;
-			case PictureKind.TitleScreen:
+			case PICTURE_KIND.TITLE_SCREEN:
 				return Paths.TITLE_SCREEN;
-			case PictureKind.Objects3D:
+			case PICTURE_KIND.OBJECTS_3D:
 				return Paths.OBJECTS_3D;
-			case PictureKind.Pictures:
+			case PICTURE_KIND.PICTURES:
 				return Paths.HUD_PICTURES;
-			case PictureKind.Animations:
+			case PICTURE_KIND.ANIMATIONS:
 				return Paths.ANIMATIONS;
-			case PictureKind.Skyboxes:
+			case PICTURE_KIND.SKYBOXES:
 				return Paths.SKYBOXES;
-			case PictureKind.Particles:
+			case PICTURE_KIND.PARTICLES:
 				return Paths.PARTICLES;
-			case PictureKind.GameOver:
+			case PICTURE_KIND.GAME_OVER:
 				return Paths.GAME_OVER;
 		}
 		return '';
@@ -192,7 +188,7 @@ class Picture extends Base {
 	 */
 	getRows(): number {
 		switch (this.kind) {
-			case Enum.PictureKind.Characters:
+			case PICTURE_KIND.CHARACTERS:
 				return 4 + (this.isStopAnimation ? 4 : 0) + (this.isClimbAnimation ? 4 : 0);
 			default:
 				return 1;
@@ -210,9 +206,7 @@ class Picture extends Base {
 		if (this.picture) {
 			return this.picture.path;
 		}
-		return this.id === -1 || !this.name
-			? ''
-			: Picture.getFolder(this.kind, this.isBR, this.dlc) + Constants.STRING_SLASH + this.name;
+		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
 	}
 
 	/**

@@ -9,11 +9,10 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Enum, ScreenResolution, Utils } from '../Common';
+import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
 import { Datas, Manager, System } from '../index';
 import { Base } from './Base';
-import PictureKind = Enum.PictureKind;
 
 /** @class
  *  An event command for displaying a picture.
@@ -67,7 +66,7 @@ class DisplayAPicture extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const currentIndex = this.index.getValue();
-		const picture = Datas.Pictures.getPictureCopy(PictureKind.Pictures, this.pictureID.getValue());
+		const picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue());
 		picture.setX(this.originX + this.x.getValue());
 		picture.setY(this.originY + this.y.getValue());
 		picture.centered = this.centered;

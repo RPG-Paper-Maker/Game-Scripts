@@ -10,7 +10,7 @@
 */
 
 import { Datas, Scene, System } from '..';
-import { Enum, Utils } from '../Common';
+import { DAMAGES_KIND, ITEM_KIND, Utils } from '../Common';
 import { Game, Player } from '../Core';
 import { StructIterator } from '../EventCommand';
 import { Base } from './Base';
@@ -20,7 +20,7 @@ import { Base } from './Base';
  *  @param {number} id - The ID of the skill
  */
 class ShopItem extends Base {
-	public selectionItem: Enum.ItemKind;
+	public selectionItem: ITEM_KIND;
 	public itemID: System.DynamicValue;
 	public weaponID: System.DynamicValue;
 	public armorID: System.DynamicValue;
@@ -48,13 +48,13 @@ class ShopItem extends Base {
 	parse(command: any[], iterator: StructIterator) {
 		this.selectionItem = command[iterator.i++];
 		switch (this.selectionItem) {
-			case Enum.ItemKind.Item:
+			case ITEM_KIND.ITEM:
 				this.itemID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
-			case Enum.ItemKind.Weapon:
+			case ITEM_KIND.WEAPON:
 				this.weaponID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
-			case Enum.ItemKind.Armor:
+			case ITEM_KIND.ARMOR:
 				this.armorID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
@@ -81,11 +81,11 @@ class ShopItem extends Base {
 	 */
 	getItem(): System.CommonSkillItem {
 		switch (this.selectionItem) {
-			case Enum.ItemKind.Item:
+			case ITEM_KIND.ITEM:
 				return Datas.Items.get(this.itemID.getValue());
-			case Enum.ItemKind.Weapon:
+			case ITEM_KIND.WEAPON:
 				return Datas.Weapons.get(this.weaponID.getValue());
-			case Enum.ItemKind.Armor:
+			case ITEM_KIND.ARMOR:
 				return Datas.Armors.get(this.armorID.getValue());
 		}
 	}
@@ -94,7 +94,7 @@ class ShopItem extends Base {
 	 *  Get the price.
 	 *  @returns {number}
 	 */
-	getPrice(): Record<string, [Enum.DamagesKind, number]> {
+	getPrice(): Record<string, [DAMAGES_KIND, number]> {
 		return this.selectionPrice
 			? System.Cost.getPrice(this.specificPrice)
 			: System.Cost.getPrice(this.getItem().price);
@@ -119,13 +119,13 @@ class ShopItem extends Base {
 			const [kind, value] = price[id];
 			let currentValue = 0;
 			switch (kind) {
-				case Enum.DamagesKind.Currency:
+				case DAMAGES_KIND.CURRENCY:
 					currentValue = Game.current.currencies[id];
 					break;
-				case Enum.DamagesKind.Stat:
+				case DAMAGES_KIND.STAT:
 					currentValue = user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation];
 					break;
-				case Enum.DamagesKind.Variable:
+				case DAMAGES_KIND.VARIABLE:
 					currentValue = Game.current.getVariable(parseInt(id));
 					break;
 			}
@@ -149,13 +149,13 @@ class ShopItem extends Base {
 			const [kind, value] = price[id];
 			let currentValue = 0;
 			switch (kind) {
-				case Enum.DamagesKind.Currency:
+				case DAMAGES_KIND.CURRENCY:
 					currentValue = Game.current.currencies[id];
 					break;
-				case Enum.DamagesKind.Stat:
+				case DAMAGES_KIND.STAT:
 					currentValue = user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation];
 					break;
-				case Enum.DamagesKind.Variable:
+				case DAMAGES_KIND.VARIABLE:
 					currentValue = Game.current.getVariable(parseInt(id));
 					break;
 			}
