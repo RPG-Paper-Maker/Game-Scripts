@@ -10,136 +10,172 @@
 */
 
 import { IO } from './index';
+import { JsonObject } from './Types';
 
 let firstError = true;
 
 /**
- * A class replaced according to te platform used (desktop, browser, mobile...)
+ * Provides platform-specific utilities for file access, window management,
+ * rendering contexts, and error reporting.
  *
- * @class Platform
+ * This class is static-only and adapts behavior depending on the runtime
+ * environment (desktop, browser, mobile).
  */
-class Platform {
-	public static readonly ROOT_DIRECTORY: any = './build/';
-	public static readonly IS_DESKTOP = false;
-	public static readonly screenWidth: number = window.screen.width;
-	public static readonly screenHeight: number = window.screen.height;
-	public static readonly DESKTOP: boolean = true;
-	public static readonly WEB_DEV: boolean = false;
-	public static readonly MODE_TEST: string | undefined = undefined;
-	public static readonly MODE_TEST_BATTLE_TROOP = 'battleTroop';
-	public static readonly MODE_TEST_SHOW_TEXT_PREVIEW = 'showTextPreview';
-	public static canvas3D: any = document.getElementById('three-d');
-	public static canvasHUD: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('hud');
-	public static canvasVideos: HTMLVideoElement = <HTMLVideoElement>document.getElementById('video-container');
-	public static canvasRendering: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('rendering');
-	public static ctx: CanvasRenderingContext2D = <CanvasRenderingContext2D>(
-		Platform.canvasHUD.getContext('2d', { willReadFrequently: true })
-	);
-	public static ctxr: CanvasRenderingContext2D = <CanvasRenderingContext2D>(
-		Platform.canvasRendering.getContext('2d', { willReadFrequently: true })
-	);
+export class Platform {
+	// -------------------------------------------------------------------------
+	// Environment flags
+	// -------------------------------------------------------------------------
+
+	/** Root directory for build assets. */
+	static readonly ROOT_DIRECTORY = './build/';
+
+	/** Whether the app runs as a desktop build. */
+	static readonly IS_DESKTOP = true;
+
+	/** Whether the app is running in web development mode. */
+	static readonly WEB_DEV = false;
+
+	/** Active test mode identifier (if any). */
+	static readonly MODE_TEST: string | undefined = undefined;
+
+	/** Mode constant for troop battle test. */
+	static readonly MODE_TEST_BATTLE_TROOP = 'battleTroop';
+
+	/** Mode constant for text preview test. */
+	static readonly MODE_TEST_SHOW_TEXT_PREVIEW = 'showTextPreview';
+
+	// -------------------------------------------------------------------------
+	// Screen & canvas
+	// -------------------------------------------------------------------------
+
+	/** Current screen width in pixels. */
+	static readonly screenWidth: number = window.screen.width;
+
+	/** Current screen height in pixels. */
+	static readonly screenHeight: number = window.screen.height;
+
+	/** Main 3D rendering canvas. */
+	static readonly canvas3D = document.getElementById('three-d') as HTMLCanvasElement;
+
+	/** HUD (2D overlay) canvas. */
+	static readonly canvasHUD = document.getElementById('hud') as HTMLCanvasElement;
+
+	/** Video rendering container element. */
+	static readonly canvasVideos = document.getElementById('video-container') as HTMLVideoElement;
+
+	/** Offscreen rendering canvas. */
+	static readonly canvasRendering = document.getElementById('rendering') as HTMLCanvasElement;
+
+	/** HUD rendering context (2D). */
+	static readonly ctx = Platform.canvasHUD.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+
+	/** Offscreen rendering context (2D). */
+	static readonly ctxr = Platform.canvasRendering.getContext('2d', {
+		willReadFrequently: true,
+	}) as CanvasRenderingContext2D;
+
+	// -------------------------------------------------------------------------
+	// Window management
+	// -------------------------------------------------------------------------
 
 	/**
-	 * Creates an instance of Platform.
-	 * @memberof Platform
+	 * Change the app window title.
+	 * @param title - Title to display.
 	 */
-	constructor() {
-		throw new Error('This class is static.');
+	static setWindowTitle(title: string): void {
+		window.ipcRenderer.send('change-window-title', title);
 	}
 
 	/**
-	 *  Set window title.
-	 *  @static
-	 *  @param {string} title - The title to display
+	 * Change the app window size.
+	 * @param w - Width in pixels.
+	 * @param h - Height in pixels.
+	 * @param fullscreen - Whether to switch to fullscreen.
 	 */
-	static setWindowTitle = function (title: string) {
-		window.ipcRenderer.send('change-window-title', title);
-	};
+	static setWindowSize(w: number, h: number, fullscreen: boolean): void {
+		window.ipcRenderer.send('change-window-size', w, h, fullscreen);
+	}
 
 	/**
-	 *  Set window size.
-	 *  @static
-	 *  @param {number} w - The window width
-	 *  @param {number} h - The window height
-	 *  @param {boolean} f - Indicate if the window is fullscreen
+	 * Quit the application.
 	 */
-	static setWindowSize = function (w: number, h: number, f: boolean) {
-		window.ipcRenderer.send('change-window-size', w, h, f);
-	};
-
-	/**
-	 *  Quit app.
-	 *  @static
-	 */
-	static quit = function () {
+	static quit(): void {
 		window.close();
-	};
+	}
+
+	// -------------------------------------------------------------------------
+	// File I/O
+	// -------------------------------------------------------------------------
 
 	/**
-	 *  Check if a file exists.
-	 *  @static
-	 *  @param {string} path - The path of the file
-	 *  @returns {Promise<boolean>}
+	 * Check if a file exists.
+	 * @param path - File path.
+	 * @returns True if file exists.
 	 */
-	static fileExists = async function (path: string): Promise<boolean> {
-		return await IO.fileExists(path);
-	};
+	static async fileExists(path: string): Promise<boolean> {
+		return IO.fileExists(path);
+	}
 
 	/**
-	 *  Load a file.
-	 *  @static
+	 * Load a file as text.
+	 * @param path - File path.
+	 * @param forcePath - If true, prepends {@link ROOT_DIRECTORY}.
 	 */
 	static async loadFile(path: string, forcePath = false): Promise<string> {
 		if (forcePath) {
 			path = Platform.ROOT_DIRECTORY + '/' + path;
 		}
-		return await IO.openFile(path);
+		return IO.openFile(path);
 	}
 
 	/**
-	 *  Parse a JSON file
-	 *  @static
+	 * Load and parse a JSON file.
+	 * @param path - File path.
 	 */
-	static async parseFileJSON(path: string): Promise<Record<string, any>> {
-		return await IO.parseFileJSON(path);
+	static async parseFileJSON(path: string): Promise<JsonObject> {
+		return IO.parseFileJSON(path);
 	}
 
 	/**
-	 *  Load a save.
-	 *  @static
+	 * Load a save file.
+	 * @param slot - Save slot index.
+	 * @param path - File path.
 	 */
-	static async loadSave(slot: number, path: string): Promise<Record<string, any>> {
+	static async loadSave(_slot: number, path: string): Promise<JsonObject | null> {
 		if (await IO.fileExists(path)) {
-			return await Platform.parseFileJSON(path);
+			return Platform.parseFileJSON(path);
 		}
 		return null;
 	}
 
 	/**
-	 *  Register a save.
-	 *  @static
+	 * Register (write) a save file.
+	 * @param slot - Save slot index.
+	 * @param path - File path.
+	 * @param json - Save data.
 	 */
-	static async registerSave(slot: number, path: string, json: Record<string, any>) {
+	static async registerSave(_slot: number, path: string, json: JsonObject): Promise<void> {
 		await IO.saveFile(path, json);
 	}
 
+	// -------------------------------------------------------------------------
+	// Error handling
+	// -------------------------------------------------------------------------
+
 	/**
-	 *  Show an error object.
-	 *  @static
-	 *  @param {Error} e - The error message
+	 * Show an error object.
+	 * @param e - Error instance.
 	 */
-	static showError(e: Error) {
-		Platform.showErrorMessage(e.message + '\n' + e.stack, false);
+	static showError(e: Error): void {
+		Platform.showErrorMessage(`${e.message}\n${e.stack}`, false);
 	}
 
 	/**
-	 *  Show an error message.
-	 *  @static
-	 *  @param {string} msg - The error message
-	 *  @param {boolean} displayDialog - Indicates if you need to display the
-	 *  dialog box
+	 * Show an error message.
+	 * @param msg - Error message.
+	 * @param displayDialog - Whether to also display a dialog box.
 	 */
-	static showErrorMessage(msg: string, displayDialog: boolean = true) {
+	static showErrorMessage(msg: string, displayDialog = true): void {
 		if (firstError) {
 			firstError = false;
 			window.ipcRenderer.send('window-error', msg);
@@ -150,14 +186,14 @@ class Platform {
 		}
 	}
 
+	// -------------------------------------------------------------------------
+	// Mode helpers
+	// -------------------------------------------------------------------------
+
 	/**
-	 *  Check if there is a specific mode test (app args).
-	 *  @static
-	 *  @returns {boolean}
+	 * Check if the app is running in normal test mode (battles).
 	 */
 	static isModeTestNormal(): boolean {
 		return true;
 	}
 }
-
-export { Platform };

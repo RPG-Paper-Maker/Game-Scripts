@@ -39,7 +39,7 @@ class TitlescreenGameover {
 	 *  @async
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER);
+		const json = (await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER)) as any;
 
 		// Title screen
 		this.isTitleBackgroundImage = Utils.defaultValue(json.itbi, true);

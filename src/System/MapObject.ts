@@ -198,7 +198,7 @@ class MapObject extends Base {
 	): System.Reaction[] {
 		const events = this.events[idEvent];
 		const reactions = [];
-		if (!Utils.isUndefined(events)) {
+		if (events !== undefined) {
 			let test: boolean, event: System.Event, j: number, m: number, reaction: System.Reaction;
 			for (let i = 0, l = events.length; i < l; i++) {
 				test = true;

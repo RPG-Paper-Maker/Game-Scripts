@@ -77,7 +77,7 @@ class MapProperties extends Base {
 
 		// Tileset: if not existing, by default select the first one
 		let datas = Game.current.mapsProperties[this.id];
-		if (Utils.isUndefined(datas)) {
+		if (datas === undefined) {
 			datas = {};
 		}
 		this.tileset = Datas.Tilesets.get(Utils.defaultValue(datas.tileset, json.tileset));
@@ -90,23 +90,23 @@ class MapProperties extends Base {
 			Utils.defaultValue(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue())
 		);
 		let kind = -1;
-		if (!Utils.isUndefined(datas.color)) {
+		if (datas.color !== undefined) {
 			kind = 0;
-		} else if (!Utils.isUndefined(datas.skybox)) {
+		} else if (datas.skybox !== undefined) {
 			kind = 1;
 		}
 		this.isBackgroundColor = kind === 0 ? true : json.isky;
 		this.isBackgroundImage = kind !== -1 ? false : json.isi;
 		if (this.isBackgroundColor) {
-			this.backgroundColorID = Utils.isUndefined(datas.color)
-				? new DynamicValue(json.sky)
-				: DynamicValue.createNumber(datas.color);
+			this.backgroundColorID =
+				datas.color === undefined ? new DynamicValue(json.sky) : DynamicValue.createNumber(datas.color);
 		} else if (this.isBackgroundImage) {
 			this.backgroundImageID = json.ipid;
 		} else {
-			this.backgroundSkyboxID = Utils.isUndefined(datas.skybox)
-				? DynamicValue.readOrDefaultDatabase(json.sbid)
-				: DynamicValue.createNumber(datas.skybox);
+			this.backgroundSkyboxID =
+				datas.skybox === undefined
+					? DynamicValue.readOrDefaultDatabase(json.sbid)
+					: DynamicValue.createNumber(datas.skybox);
 		}
 		const startupReactions = new System.MapObject(json.so);
 		this.startupObject = new MapObject(startupReactions);

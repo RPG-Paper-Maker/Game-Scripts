@@ -114,7 +114,7 @@ class MapObject {
 		this.width = 1;
 		this.height = 1;
 		this.moveFrequencyTick = 0;
-		this.isStartup = Utils.isUndefined(position);
+		this.isStartup = position === undefined;
 		this.isInScene = false;
 		this.receivedOneEvent = false;
 		this.movingState = null;
@@ -346,12 +346,12 @@ class MapObject {
 		} else if (this.isStartup) {
 			mapProp = Game.current.startupProperties[Scene.Map.current.id];
 			mapStatesOpts = [];
-			if (Utils.isUndefined(mapProp)) {
+			if (mapProp === undefined) {
 				mapProp = [];
 			}
 		} else {
 			const obj = Scene.Map.current.mapProperties.allObjects[this.system.id];
-			if (Utils.isUndefined(obj)) {
+			if (obj === undefined) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
 						Scene.Map.current.mapProperties.names.name() +
@@ -389,7 +389,7 @@ class MapObject {
 			stateValue = mapStatesOpts[stateSystem.id - 1];
 			state = stateSystem.copyInstance();
 			this.statesInstance[i] = state;
-			if (!Utils.isUndefined(stateValue)) {
+			if (stateValue !== undefined) {
 				state.graphicID = Utils.defaultValue(stateValue.gid, stateSystem.graphicID);
 				state.graphicKind = Utils.defaultValue(stateValue.gk, stateSystem.graphicKind);
 				state.rectTileset = Utils.defaultValue(stateValue.gt, stateSystem.rectTileset);
@@ -481,7 +481,7 @@ class MapObject {
 			this.states = Game.current.startupStates[Scene.Map.current.id];
 		} else {
 			const pos = Scene.Map.current.mapProperties.allObjects[this.system.id];
-			if (Utils.isUndefined(pos)) {
+			if (pos === undefined) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
 						Scene.Map.current.mapProperties.names.name() +
@@ -596,7 +596,7 @@ class MapObject {
 				if (
 					!previousStateInstance ||
 					previousStateInstance.graphicKind !== ELEMENT_MAP_KIND.OBJECT_3D ||
-					(!Utils.isUndefined(this.currentStateInstance.previousGraphicKind) &&
+					(this.currentStateInstance.previousGraphicKind !== undefined &&
 						this.currentStateInstance.previousGraphicKind !== ELEMENT_MAP_KIND.OBJECT_3D)
 				) {
 				}

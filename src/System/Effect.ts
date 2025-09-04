@@ -102,10 +102,7 @@ class Effect extends Base {
 				this.isDamageCritical = Utils.defaultValue(json.idc, false);
 				this.damageCriticalFormula = System.DynamicValue.readOrDefaultMessage(json.dcf, '0');
 				this.isDamagePrecision = Utils.defaultValue(json.idp, false);
-				this.damagePrecisionFormula = System.DynamicValue.readOrDefaultMessage(
-					json.dpf,
-					Utils.numToString(100)
-				);
+				this.damagePrecisionFormula = System.DynamicValue.readOrDefaultMessage(json.dpf, String(100));
 				this.isDamageStockVariableID = Utils.defaultValue(json.idsv, false);
 				this.damageStockVariableID = Utils.defaultValue(json.dsv, 1);
 				this.isDamageDisplayName = Utils.defaultValue(json.iddn, false);
@@ -114,10 +111,7 @@ class Effect extends Base {
 			case EFFECT_KIND.STATUS:
 				this.isAddStatus = Utils.defaultValue(json.iast, true);
 				this.statusID = System.DynamicValue.readOrDefaultDatabase(json.sid);
-				this.statusPrecisionFormula = System.DynamicValue.readOrDefaultMessage(
-					json.spf,
-					Utils.numToString(100)
-				);
+				this.statusPrecisionFormula = System.DynamicValue.readOrDefaultMessage(json.spf, String(100));
 				break;
 			case EFFECT_KIND.ADD_REMOVE_SKILL:
 				this.isAddSkill = Utils.defaultValue(json.iask, true);
@@ -128,7 +122,7 @@ class Effect extends Base {
 				break;
 			case EFFECT_KIND.COMMON_REACTION:
 				this.commonReaction = <EventCommand.CallACommonReaction>(
-					(Utils.isUndefined(json.cr) ? null : Manager.Events.getEventCommand(json.cr))
+					(json.cr === undefined ? null : Manager.Events.getEventCommand(json.cr))
 				);
 				break;
 			case EFFECT_KIND.SPECIAL_ACTIONS:

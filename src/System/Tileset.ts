@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { PICTURE_KIND, Utils } from '../Common';
+import { PICTURE_KIND } from '../Common';
 import { CollisionSquare, Game } from '../Core';
 import { Datas, System } from '../index';
 import { Base } from './Base';
@@ -52,7 +52,7 @@ class Tileset extends Base {
 	 */
 	getPath(): string {
 		const newID = Game.current.textures.tilesets[this.id];
-		const picture = Utils.isUndefined(newID) ? this.picture : Datas.Pictures.get(PICTURE_KIND.TILESETS, newID);
+		const picture = newID === undefined ? this.picture : Datas.Pictures.get(PICTURE_KIND.TILESETS, newID);
 		return picture ? picture.getPath() : null;
 	}
 }

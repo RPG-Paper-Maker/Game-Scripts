@@ -34,7 +34,7 @@ class ShowTextPreview extends Base {
 
 	async updateCommand() {
 		this.isLoading = true;
-		const json = await Common.Platform.parseFileJSON(Paths.FILE_TEST);
+		const json = (await Common.Platform.parseFileJSON(Paths.FILE_TEST)) as any;
 		const eventCommand = <EventCommand.ShowText>Manager.Events.getEventCommand(json);
 		if (
 			eventCommand !== null &&

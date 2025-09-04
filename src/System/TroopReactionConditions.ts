@@ -106,7 +106,7 @@ class TroopReactionConditions extends Base {
 						const stat = Datas.BattleSystems.getStatistic(this.statisticID.getValue());
 						const statValue = player[stat.abbreviation];
 						const statValueMax = player[stat.getMaxAbbreviation()];
-						if (Utils.isUndefined(statValueMax)) {
+						if (statValueMax === undefined) {
 							throw new Error('No max value for stat ' + stat.name());
 						}
 						const compareValue = this.statisticCompare.getValue();

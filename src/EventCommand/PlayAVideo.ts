@@ -35,11 +35,11 @@ class PlayAVideo extends Base {
 		this.operation = command[iterator.i++];
 		if (this.operation === 0) {
 			this.videoID = command[iterator.i++];
-			this.isStart = Utils.numToBool(command[iterator.i++]);
+			this.isStart = Utils.numberToBool(command[iterator.i++]);
 			if (this.isStart) {
 				this.start = System.DynamicValue.createValueCommand(command, iterator);
 			}
-			this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
+			this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
 		}
 		this.parallel = !this.isWaitEnd;
 	}

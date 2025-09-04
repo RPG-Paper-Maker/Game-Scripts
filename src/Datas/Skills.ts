@@ -29,7 +29,7 @@ class Skills {
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_SKILLS)).skills;
+		const json = (await Platform.parseFileJSON(Paths.FILE_SKILLS)).skills as any;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Skill });
 	}

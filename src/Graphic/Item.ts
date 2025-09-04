@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, Constants, DAMAGES_KIND, Mathf, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, DAMAGES_KIND, Mathf, ScreenResolution } from '../Common';
 import { Core, Datas, Graphic, System } from '../index';
 import { Base } from './Base';
 
@@ -38,7 +38,7 @@ class Item extends Base {
 		this.item = item;
 
 		// All the graphics
-		nbItem = Utils.isUndefined(nbItem) ? item.nb : nbItem;
+		nbItem = nbItem === undefined ? item.nb : nbItem;
 		this.graphicName = Graphic.TextIcon.createFromSystem(
 			'',
 			this.item.system,
@@ -46,12 +46,12 @@ class Item extends Base {
 			possible ? {} : { color: System.Color.GREY }
 		);
 		this.updateName(nbItem);
-		if (Utils.isUndefined(item.shop)) {
+		if (item.shop === undefined) {
 			this.graphicNb = new Graphic.Text('x' + nbItem, { align: ALIGN.RIGHT });
 		}
 		this.graphicInformations = new Graphic.SkillItem(this.item.system);
 		this.graphicCurrencies = [];
-		if (!Utils.isUndefined(item.shop) || showSellPrice) {
+		if (item.shop !== undefined || showSellPrice) {
 			const price = showSellPrice ? item.system.getPrice() : item.shop.getPrice();
 			this.graphicCurrencies = [];
 			let graphic: Graphic.TextIcon;
@@ -75,10 +75,9 @@ class Item extends Base {
 	 *  @param {number} [nbItem=undefined]
 	 */
 	updateName(nbItem?: number) {
-		nbItem = Utils.isUndefined(nbItem) ? this.item.nb : nbItem;
+		nbItem = nbItem === undefined ? this.item.nb : nbItem;
 		this.graphicName.setText(
-			this.item.system.name() +
-				(!Utils.isUndefined(this.item.shop) && nbItem !== -1 ? ' ' + '[' + nbItem + ']' : '')
+			this.item.system.name() + (this.item.shop !== undefined && nbItem !== -1 ? ' ' + '[' + nbItem + ']' : '')
 		);
 	}
 

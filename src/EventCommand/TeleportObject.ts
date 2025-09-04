@@ -71,11 +71,11 @@ class TeleportObject extends Base {
 		// Transition
 		this.direction = command[iterator.i++];
 		this.transitionStart = command[iterator.i++];
-		if (Utils.numToBool(this.transitionStart)) {
+		if (Utils.numberToBool(this.transitionStart)) {
 			this.transitionStartColor = System.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.transitionEnd = command[iterator.i++];
-		if (Utils.numToBool(this.transitionEnd)) {
+		if (Utils.numberToBool(this.transitionEnd)) {
 			this.transitionEndColor = System.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
@@ -221,7 +221,7 @@ class TeleportObject extends Base {
 					if (
 						Scene.Map.current.camera &&
 						Scene.Map.current.camera.system &&
-						!Utils.isUndefined(Scene.Map.current.camera.distance)
+						Scene.Map.current.camera.distance !== undefined
 					) {
 						currentState.distance = Scene.Map.current.camera.distance;
 						Scene.Map.current.camera.distance = 1;

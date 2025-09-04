@@ -9,115 +9,77 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Rectangle } from '../Core';
 import { Constants } from './index';
-import { Platform } from './Platform';
-import { ScreenResolution } from './ScreenResolution';
 
-interface systemJsonList {
+interface SystemJsonList<T = any> {
 	list: Record<string, any>[];
-	listIDs?: any[];
-	listIndexes?: any[];
+	listIDs?: T[];
+	listIndexes?: (T | number)[];
 	indexesIDs?: boolean;
-	listHash?: any[];
-	cons?: any;
-	func?: any;
+	listHash?: Record<string, T>;
+	cons?: new (data: any) => T;
+	func?: (data: any) => T;
 }
 
 /**
- * The static class containing all the utils functions.
- *
- * @class Utils
+ * Static utility class providing helper functions for value handling,
+ * formatting, JSON parsing, and array/object manipulation.
  */
-class Utils {
-	constructor() {
-		throw new Error('This is a static class!');
+export class Utils {
+	/**
+	 * Returns the default value if the given value is `undefined`, otherwise returns the value.
+	 *
+	 * @template T
+	 * @param value - The value to check
+	 * @param defaultValue - The default value to return if `value` is undefined
+	 * @returns The resolved value
+	 */
+	public static defaultValue<T>(value: T | undefined, defaultValue: T): T {
+		return value === undefined ? defaultValue : value;
 	}
 
 	/**
-	 *  Return default value if undefined, else the value.
-	 *  @static
-	 *  @param {any} value - The value
-	 *  @param {any} defaultValue - The default value
-	 *  @returns {any}
+	 * Converts a number (1 or 0) into a boolean.
+	 *
+	 * @param num - The number
+	 * @returns True if `num` is 1, otherwise false
 	 */
-	public static defaultValue<T>(value: T, defaultValue: T): T {
-		return this.isUndefined(value) ? defaultValue : value;
-	}
-
-	/** Check if the value is undefined
-	 *   @static
-	 *   @param {any} value - The value
-	 *   @returns {boolean}
-	 */
-	public static isUndefined(value: any): boolean {
-		return typeof value === 'undefined';
-	}
-
-	/** Check if the value is a number
-	 *   @static
-	 *   @param {any} value - The value
-	 *   @returns {boolean}
-	 */
-	static isNumber(value: any): boolean {
-		return typeof value === 'number';
-	}
-
-	/** Check if the value is a string
-	 *   @static
-	 *   @param {any} value - The value
-	 *   @returns {boolean}
-	 */
-	static isString(value: any): boolean {
-		return typeof value === 'string';
-	}
-
-	/** Convert a number to boolean
-	 *   @static
-	 *   @param {number} num - The number
-	 *   @returns {boolean}
-	 */
-	static numToBool(num: number): boolean {
+	public static numberToBool(num: number): boolean {
 		return num === 1;
 	}
 
-	/** Convert a boolean to number
-	 *   @static
-	 *   @param {boolean} b - The boolean
-	 *   @returns {number}
+	/**
+	 * Converts a boolean into a number (true → 1, false → 0).
+	 *
+	 * @param b - The boolean
+	 * @returns The number representation
 	 */
-	static boolToNum(b: boolean): number {
+	public static boolToNumber(b: boolean): number {
 		return b ? 1 : 0;
 	}
-
-	/** Convert number to string
-	 *   @static
-	 *   @param {number} n - The number
-	 *   @returns {string}
+	/**
+	 * Executes an async function with error handling.
+	 *
+	 * @param func - The async function to execute
+	 * @param that - Optional context (`thisArg`)
+	 * @returns The result of the function, or undefined if it fails
 	 */
-	static numToString(n: number): string {
-		return '' + n;
-	}
-
-	/** Try catch for async functions
-	 *   @static
-	 *   @param {function} func - The async function to apply
-	 *   @returns {Promise<any>}
-	 */
-	static async tryCatch(func: Function, that?: object): Promise<any> {
+	public static async tryCatch<T>(func: (...args: unknown[]) => Promise<T>, that?: object): Promise<T | undefined> {
 		try {
 			return await func.call(that);
 		} catch (e) {
-			window.onerror(null, null, null, null, e);
+			window.onerror?.(null, null, null, null, e as Error);
+			return undefined;
 		}
 	}
 
-	/** Return a string of the date by passing all the seconds
-	 *   @static
-	 *   @param {number} total - Total number of seconds
-	 *   @returns {string}
+	/**
+	 * Converts a total number of seconds into a formatted time string (HH:MM:SS).
+	 *
+	 * @param total - Total number of seconds
+	 * @returns A formatted string
 	 */
-	static getStringDate(total: number): string {
+	public static getStringDate(total: number): string {
 		return (
 			this.formatNumber(Math.floor(total / 3600), 4) +
 			':' +
@@ -127,157 +89,86 @@ class Utils {
 		);
 	}
 
-	/** Return the string of a number and parse with 0 according to a given size
-	 *  @static
-	 *  @param {number} num - Number
-	 *  @param {number} size - Max number to display
-	 *  @returns {string}
+	/**
+	 * Formats a number with leading zeros according to a given size.
+	 *
+	 * @param num - The number
+	 * @param size - The total length
+	 * @returns A formatted string
 	 */
-	static formatNumber(num: number, size: number): string {
-		return ('000000000' + num).substr(-size);
+	public static formatNumber(num: number, size: number): string {
+		return num.toString().padStart(size, '0');
 	}
-
-	/** Return the string of a id + name of a system element.
-	 *  @static
-	 *  @param {number} id
-	 *  @param {string} name
-	 *  @returns {string}
-	 */
-	static getIDName(id: number, name: string): string {
-		return '<> ' + this.formatNumber(id, 4) + ': ' + name;
-	}
-
-	/** Create a new array list initialed with null everywhere
-	 *   @static
-	 *   @param {number} size - The list size
-	 *   @returns {any[]}
-	 */
-	static fillNullList(size: number): any[] {
-		const list = new Array(size);
-		for (let i = 0; i < size; i++) {
-			list[i] = null;
-		}
-		return list;
-	}
-
-	/** Link the fontSize and the fontName to a string that can be used by the
-	 *   canvasHUD
-	 *   @static
-	 *   @param {number} fontSize - The fontSize
-	 *   @param {string} fontName - The fontName
-	 *   @param {boolean} bold - Indicate if the text is bold
-	 *   @param {boolean} italic - Indicate if the text is italic
-	 *   @returns {string}
-	 */
-	static createFont = function (fontSize: number, fontName: string, bold: boolean, italic: boolean) {
-		return (bold ? 'bold ' : '') + (italic ? 'italic ' : '') + fontSize + 'px ' + '"' + fontName + '"';
-	};
 
 	/**
-	 * Read a json list and create a System list sorted by ID, index, and return max ID.
+	 * Returns a formatted string containing an ID and name.
 	 *
-	 * @static
-	 * @param {systemJsonList} json - The json list to read
-	 * @return {*}  {number}
-	 * @memberof Utils
+	 * @param id - The ID
+	 * @param name - The name
+	 * @returns A formatted string
 	 */
-	static readJSONSystemList(json: systemJsonList): number {
-		let jsonElement: any;
+	public static getIDName(id: number, name: string): string {
+		return `<> ${this.formatNumber(id, 4)}: ${name}`;
+	}
+
+	/**
+	 * Builds a font string usable by canvas contexts.
+	 *
+	 * @param fontSize - Font size in pixels
+	 * @param fontName - Font family name
+	 * @param bold - Whether the font is bold
+	 * @param italic - Whether the font is italic
+	 * @returns A CSS-compatible font string
+	 */
+	public static createFont(fontSize: number, fontName: string, bold: boolean, italic: boolean): string {
+		return `${bold ? 'bold ' : ''}${italic ? 'italic ' : ''}${fontSize}px "${fontName}"`;
+	}
+
+	/**
+	 * Reads a JSON system list and populates the provided structures with elements.
+	 *
+	 * @param json - The JSON list definition
+	 * @returns The maximum ID encountered
+	 */
+	public static readJSONSystemList<T>(json: SystemJsonList<T>): number {
+		// TODO replace by Map
 		let maxID = 0;
-		let id: number, element: any;
-		for (let i = 0, l = json.list.length; i < l; i++) {
-			jsonElement = json.list[i];
-			id = jsonElement.id;
-			if (Utils.isUndefined(json.listHash)) {
-				element = Utils.isUndefined(json.cons) ? json.func.call(null, jsonElement) : new json.cons(jsonElement);
-				if (!Utils.isUndefined(json.listIDs)) {
+
+		for (let i = 0; i < json.list.length; i++) {
+			const jsonElement = json.list[i];
+			const id = jsonElement.id;
+			let element: T;
+
+			if (json.listHash === undefined) {
+				element = json.cons ? new json.cons(jsonElement) : json.func!(jsonElement);
+
+				if (json.listIDs) {
 					json.listIDs[jsonElement.id] = element;
 				}
-				if (!Utils.isUndefined(json.listIndexes)) {
+				if (json.listIndexes) {
 					json.listIndexes[i] = json.indexesIDs ? id : element;
 				}
 			} else {
-				json.listHash[jsonElement[Constants.JSON_KEY]] = Utils.isUndefined(json.cons)
-					? json.func.call(null, jsonElement)
-					: new json.cons(jsonElement[Constants.JSON_VALUE]);
+				json.listHash[jsonElement[Constants.JSON_KEY]] = json.cons
+					? new json.cons(jsonElement[Constants.JSON_VALUE])
+					: json.func!(jsonElement);
 			}
+
 			maxID = Math.max(id, maxID);
 		}
+
 		return maxID;
 	}
 
 	/**
-	 *  Get the number of fields of an object
-	 *  @static
-	 *  @param {Object} obj - The object to count fields
-	 *  @returns {number}
-	 */
-	static countFields(obj: Record<string, any>): number {
-		if (obj.__count__ !== undefined) {
-			// Old FF
-			return obj.__count__;
-		}
-		if (Object.keys) {
-			// ES5
-			return Object.keys(obj).length;
-		}
-		// Everything else:
-		let c = 0;
-		for (const p in obj) {
-			if (obj.hasOwnProperty(p)) {
-				c += 1;
-			}
-		}
-		return c;
-	}
-
-	/**
-	 *  Get the index of an object in a array containing a property with a
-	 *  specific value.
-	 *  @static
-	 *  @param {Object[]} array - The array to check
-	 *  @param {string} attr - The attribute of the object to check
-	 *  @param {any} value - The value to check on the object attribute
-	 *  @returns {number}
-	 */
-	static indexOfProp(array: object[], attr: string, value: any): number {
-		for (let i = 0, l = array.length; i < l; i++) {
-			if (array[i][attr] === value) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * Fill the screen with the said color
+	 * Finds the index of an object in an array based on a property value.
 	 *
-	 * @static
-	 * @param {number} r - the red color
-	 * @param {number} g - the green color
-	 * @param {number} b - the blue color
-	 * @param {number} a - the alpha value
-	 * @memberof Utils
+	 * @param array - The array to search
+	 * @param attr - The property name
+	 * @param value - The value to match
+	 * @returns The index if found, otherwise -1
 	 */
-	static fillScreen(r: number, g: number, b: number, a: number) {
-		const color = `rgba(${r},${g},${b},${a})`;
-		const rect = new Rectangle(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
-		Platform.ctx.fillStyle = color;
-		Platform.ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-	}
-
-	/**
-	 * Remove an element from an array.
-	 */
-	static removeFromArray<T>(array: T[], element: T): boolean {
-		const index = array.indexOf(element);
-		if (index === -1) {
-			return false;
-		} else {
-			array.splice(index, 1);
-			return true;
-		}
+	public static indexOfProp<T extends Record<string, unknown>>(array: T[], attr: keyof T, value: unknown): number {
+		return array.findIndex((item) => item[attr] === value);
 	}
 }
-
-export { Utils };

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Platform, Utils } from '../Common';
+import { Platform } from '../Common';
 import { EventCommand, Manager, Scene, System } from '../index';
 import { MapObject, Node } from './index';
 
@@ -161,7 +161,7 @@ class ReactionInterpreter {
 		let value = null;
 
 		// If the value is a string, then it can only be a label call
-		if (Utils.isString(result)) {
+		if (typeof result === 'string') {
 			let tab: [System.DynamicValue, Node];
 			for (let i = 0, l = this.currentReaction.labels.length; i < l; i++) {
 				tab = this.currentReaction.labels[i];

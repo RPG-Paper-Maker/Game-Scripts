@@ -10,7 +10,7 @@
 */
 
 import { Graphic, Manager } from '..';
-import { ALIGN, Utils } from '../Common';
+import { ALIGN } from '../Common';
 import { Base } from './Base';
 
 /** @class
@@ -40,7 +40,7 @@ class SpinBox extends Base {
 	setValue(value: number) {
 		if (this.value !== value) {
 			this.value = value;
-			this.graphicValue = new Graphic.Text(Utils.numToString(value), {
+			this.graphicValue = new Graphic.Text(String(value), {
 				align: this.times ? ALIGN.RIGHT : ALIGN.CENTER,
 			});
 			Manager.Stack.requestPaintHUD = true;

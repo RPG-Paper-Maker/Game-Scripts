@@ -69,8 +69,8 @@ class ChangeAStatistic extends Base {
 		}
 
 		// Option
-		this.canAboveMax = !Utils.numToBool(command[iterator.i++]);
-		this.isApplyToMax = Utils.numToBool(command[iterator.i++]);
+		this.canAboveMax = !Utils.numberToBool(command[iterator.i++]);
+		this.isApplyToMax = Utils.numberToBool(command[iterator.i++]);
 	}
 
 	/**

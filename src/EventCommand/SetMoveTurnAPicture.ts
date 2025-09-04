@@ -37,26 +37,26 @@ class SetMoveTurnAPicture extends Base {
 			i: 0,
 		};
 		this.index = System.DynamicValue.createValueCommand(command, iterator);
-		if (Utils.numToBool(command[iterator.i++])) {
+		if (Utils.numberToBool(command[iterator.i++])) {
 			this.pictureID = System.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
-		if (Utils.numToBool(command[iterator.i++])) {
+		if (Utils.numberToBool(command[iterator.i++])) {
 			this.zoom = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		if (Utils.numToBool(command[iterator.i++])) {
+		if (Utils.numberToBool(command[iterator.i++])) {
 			this.opacity = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		if (Utils.numToBool(command[iterator.i++])) {
+		if (Utils.numberToBool(command[iterator.i++])) {
 			this.x = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		if (Utils.numToBool(command[iterator.i++])) {
+		if (Utils.numberToBool(command[iterator.i++])) {
 			this.y = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		if (Utils.numToBool(command[iterator.i++])) {
+		if (Utils.numberToBool(command[iterator.i++])) {
 			this.angle = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		this.waitEnd = Utils.numToBool(command[iterator.i++]);
+		this.waitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.time = System.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.waitEnd;
 	}

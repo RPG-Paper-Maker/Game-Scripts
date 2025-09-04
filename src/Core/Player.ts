@@ -76,12 +76,12 @@ class Player {
 		name?: string,
 		json?: Record<string, any>
 	) {
-		if (!Utils.isUndefined(kind)) {
+		if (kind !== undefined) {
 			this.kind = kind;
 			this.id = id;
 			this.instid = instanceID;
 			this.system = this.getSystem();
-			this.name = Utils.isUndefined(name) ? this.system.name() : name;
+			this.name = name === undefined ? this.system.name() : name;
 
 			// Skills
 			this.skills = [];
@@ -606,7 +606,7 @@ class Player {
 	 */
 	updateStatValue(statistic: System.Statistic, value: number) {
 		const abr = statistic.isFix ? statistic.abbreviation : statistic.getMaxAbbreviation();
-		if (Utils.isUndefined(this[statistic.getBeforeAbbreviation()])) {
+		if (this[statistic.getBeforeAbbreviation()] !== undefined) {
 			this[statistic.getBeforeAbbreviation()] = this[abr];
 		}
 		this[abr] = value;
@@ -1115,7 +1115,7 @@ class Player {
 				for (id in baseResult[1]) {
 					totalBonus += result[1][id] === null ? 0 : result[1][id];
 				}
-				if (Utils.isUndefined(bestBonus) || bestBonus < totalBonus) {
+				if (bestBonus === undefined || bestBonus < totalBonus) {
 					bestBonus = totalBonus;
 					bestResult = result;
 					bestEquipmentID = equipmentID;
@@ -1130,7 +1130,7 @@ class Player {
 	 *  @param {number} id
 	 */
 	addSkill(id: number) {
-		const index = Utils.indexOfProp(this.skills, 'id', id);
+		const index = Utils.indexOfProp(this.skills as any, 'id', id);
 		if (index === -1) {
 			this.skills.push(new Skill(id));
 		}
@@ -1141,7 +1141,7 @@ class Player {
 	 *  @param {number} id
 	 */
 	removeSkill(id: number) {
-		const index = Utils.indexOfProp(this.skills, 'id', id);
+		const index = Utils.indexOfProp(this.skills as any, 'id', id);
 		if (index !== -1) {
 			this.skills.splice(index, 1);
 		}

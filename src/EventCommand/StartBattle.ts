@@ -49,8 +49,8 @@ class StartBattle extends Base {
 		this.z = null;
 
 		// Options
-		this.canEscape = Utils.numToBool(command[iterator.i++]);
-		this.canGameOver = Utils.numToBool(command[iterator.i++]);
+		this.canEscape = Utils.numberToBool(command[iterator.i++]);
+		this.canGameOver = Utils.numberToBool(command[iterator.i++]);
 
 		// Troop
 		const type = command[iterator.i++];
@@ -86,11 +86,11 @@ class StartBattle extends Base {
 
 		// Transition
 		this.transitionStart = command[iterator.i++];
-		if (Utils.numToBool(this.transitionStart)) {
+		if (Utils.numberToBool(this.transitionStart)) {
 			this.transitionStartColor = System.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.transitionEnd = command[iterator.i++];
-		if (Utils.numToBool(this.transitionEnd)) {
+		if (Utils.numberToBool(this.transitionEnd)) {
 			this.transitionEndColor = System.DynamicValue.createValueCommand(command, iterator);
 		}
 	}

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, Constants, PICTURE_KIND, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Picture2D, Player } from '../Core';
 import { Status } from '../Core/Status';
 import { Datas, Graphic, Manager, System } from '../index';
@@ -56,7 +56,7 @@ class PlayerDescription extends Base {
 		})),
 			(this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants.MEDIUM_FONT_SIZE }));
 		this.graphicLevelName = new Graphic.Text(levelStat.name());
-		this.graphicLevel = new Graphic.Text(Utils.numToString(player[levelStat.abbreviation]));
+		this.graphicLevel = new Graphic.Text(String(player[levelStat.abbreviation]));
 		if (expStat === null) {
 			this.graphicExpName = null;
 		} else {
@@ -79,7 +79,7 @@ class PlayerDescription extends Base {
 				}
 				graphicName = new Graphic.Text(statistic.name() + ':');
 				this.listStatsNames.push(graphicName);
-				txt = Utils.numToString(this.player[statistic.abbreviation]);
+				txt = String(this.player[statistic.abbreviation]);
 				if (!statistic.isFix) {
 					txt += '/' + this.player[statistic.getMaxAbbreviation()];
 				}

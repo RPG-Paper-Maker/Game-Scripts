@@ -27,7 +27,7 @@ class Songs {
 	 *  Read the JSON file associated to songs
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_SONGS)).list;
+		const json = (await Platform.parseFileJSON(Paths.FILE_SONGS)).list as any;
 		const l = json.length;
 		this.list = new Array(l);
 		let i: number,

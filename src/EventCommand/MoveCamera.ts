@@ -46,7 +46,7 @@ class MoveCamera extends Base {
 		};
 
 		// Target
-		if (!Utils.numToBool(command[iterator.i++])) {
+		if (!Utils.numberToBool(command[iterator.i++])) {
 			this.targetID = null;
 		} else {
 			this.targetID = System.DynamicValue.createValueCommand(command, iterator);
@@ -56,17 +56,17 @@ class MoveCamera extends Base {
 		this.operation = command[iterator.i++];
 
 		// Move
-		this.moveTargetOffset = Utils.numToBool(command[iterator.i++]);
-		this.cameraOrientation = Utils.numToBool(command[iterator.i++]);
+		this.moveTargetOffset = Utils.numberToBool(command[iterator.i++]);
+		this.cameraOrientation = Utils.numberToBool(command[iterator.i++]);
 		this.x = System.DynamicValue.createValueCommand(command, iterator);
-		this.xSquare = !Utils.numToBool(command[iterator.i++]);
+		this.xSquare = !Utils.numberToBool(command[iterator.i++]);
 		this.y = System.DynamicValue.createValueCommand(command, iterator);
-		this.ySquare = !Utils.numToBool(command[iterator.i++]);
+		this.ySquare = !Utils.numberToBool(command[iterator.i++]);
 		this.z = System.DynamicValue.createValueCommand(command, iterator);
-		this.zSquare = !Utils.numToBool(command[iterator.i++]);
+		this.zSquare = !Utils.numberToBool(command[iterator.i++]);
 
 		// Rotation
-		this.rotationTargetOffset = Utils.numToBool(command[iterator.i++]);
+		this.rotationTargetOffset = Utils.numberToBool(command[iterator.i++]);
 		this.h = System.DynamicValue.createValueCommand(command, iterator);
 		this.v = System.DynamicValue.createValueCommand(command, iterator);
 
@@ -74,7 +74,7 @@ class MoveCamera extends Base {
 		this.distance = System.DynamicValue.createValueCommand(command, iterator);
 
 		// Options
-		this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
+		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.time = System.DynamicValue.createValueCommand(command, iterator);
 
 		this.parallel = !this.isWaitEnd;

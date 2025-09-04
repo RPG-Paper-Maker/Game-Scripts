@@ -10,7 +10,7 @@
 */
 
 import { Datas, Graphic } from '..';
-import { ALIGN, Constants, ScreenResolution, Utils } from '../Common';
+import { ALIGN, Constants, ScreenResolution } from '../Common';
 import { Base } from './Base';
 
 /** @class
@@ -30,11 +30,9 @@ class RewardsTop extends Base {
 		this.graphicCurrencies = [];
 		for (const id in currencies) {
 			this.graphicCurrencies.push(
-				Graphic.TextIcon.createFromSystem(
-					Utils.numToString(currencies[id]),
-					Datas.Systems.getCurrency(parseInt(id)),
-					{ align: ALIGN.LEFT }
-				)
+				Graphic.TextIcon.createFromSystem(String(currencies[id]), Datas.Systems.getCurrency(parseInt(id)), {
+					align: ALIGN.LEFT,
+				})
 			);
 		}
 	}

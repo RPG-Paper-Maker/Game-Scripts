@@ -70,7 +70,7 @@ class ChangeWeather extends Base {
 				this.yRotationAddition = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
-		this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
+		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.time = System.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.isWaitEnd;
 	}

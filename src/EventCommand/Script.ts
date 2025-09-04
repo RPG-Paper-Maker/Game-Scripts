@@ -29,10 +29,10 @@ class Script extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.isDynamic = Utils.numToBool(command[iterator.i++]);
+		this.isDynamic = Utils.numberToBool(command[iterator.i++]);
 		this.script = this.isDynamic
 			? System.DynamicValue.createValueCommand(command, iterator)
-			: System.DynamicValue.createMessage(Utils.numToString(command[iterator.i]));
+			: System.DynamicValue.createMessage(String(command[iterator.i]));
 	}
 
 	/**
@@ -44,7 +44,7 @@ class Script extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const res = Interpreter.evaluate(this.script.getValue(), { thisObject: object, addReturn: false }) as number;
-		return Utils.isUndefined(res) ? 1 : res;
+		return res === undefined ? 1 : res;
 	}
 }
 

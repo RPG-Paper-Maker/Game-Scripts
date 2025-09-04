@@ -29,7 +29,7 @@ class Heroes {
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_HEROES)).heroes;
+		const json = (await Platform.parseFileJSON(Paths.FILE_HEROES)).heroes as any;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Hero });
 	}

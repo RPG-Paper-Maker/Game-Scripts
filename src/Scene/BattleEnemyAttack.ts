@@ -21,7 +21,6 @@ import {
 	MONSTER_ACTION_TARGET_KIND,
 	STATUS_RESTRICTIONS_KIND,
 	TARGET_KIND,
-	Utils,
 } from '../Common';
 import { Battler, Game } from '../Core';
 
@@ -169,7 +168,7 @@ class BattleEnemyAttack {
 			if (action.actionKind === MONSTER_ACTION_KIND.USE_ITEM) {
 				number = this.battle.user.itemsNumbers[action.itemID.getValue()];
 				if (
-					(!Utils.isUndefined(number) && number === 0) ||
+					(number !== undefined && number === 0) ||
 					this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_USE_ITEMS)
 				) {
 					continue;

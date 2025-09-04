@@ -32,7 +32,7 @@ class Tilesets {
 	 *  Read the JSON file associated to tilesets.
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_TILESETS)).list;
+		const json = (await Platform.parseFileJSON(Paths.FILE_TILESETS)).list as any;
 		const l = json.length;
 		this.list = new Array(l + 1);
 

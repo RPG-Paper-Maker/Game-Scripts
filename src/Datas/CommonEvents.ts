@@ -34,7 +34,7 @@ class CommonEvents {
 	 *  @async
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS);
+		const json = (await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS)) as any;
 
 		// Lists
 		this.eventsSystem = [];

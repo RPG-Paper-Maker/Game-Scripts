@@ -75,7 +75,7 @@ class GL {
 			let camera: Camera;
 			for (let i = 0, l = Stack.content.length; i < l; i++) {
 				camera = Stack.content[i].camera;
-				if (!Utils.isUndefined(camera)) {
+				if (camera !== undefined) {
 					camera.resizeGL();
 				}
 			}

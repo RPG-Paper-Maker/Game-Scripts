@@ -34,7 +34,7 @@ class Plugins {
 	 *  @async
 	 */
 	static async load() {
-		const plugins = Utils.defaultValue((await Platform.parseFileJSON(Paths.FILE_SCRIPTS)).plugins, []);
+		const plugins = Utils.defaultValue((await Platform.parseFileJSON(Paths.FILE_SCRIPTS)).plugins, []) as any;
 		for (let i = 0, l = plugins.length; i < l; i++) {
 			await this.loadPlugin(plugins[i]);
 		}
@@ -48,7 +48,9 @@ class Plugins {
 	 *  @returns {Promise<boolean>}
 	 */
 	static async loadPlugin(pluginJSON: Record<string, any>): Promise<boolean> {
-		const json = await Platform.parseFileJSON(Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_DETAILS);
+		const json = (await Platform.parseFileJSON(
+			Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_DETAILS
+		)) as any;
 		const plugin = new System.Plugin(pluginJSON.id, json);
 		// FIX 01 : plugin wasn't unloaded if not enabled.
 		if (Utils.defaultValue(pluginJSON.checked, true)) {

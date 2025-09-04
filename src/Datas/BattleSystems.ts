@@ -53,7 +53,7 @@ class BattleSystems {
 	 *  Read the JSON file associated to battle System.
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM);
+		const json = (await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM)) as any;
 
 		// Elements
 		this.elements = [];
@@ -189,7 +189,7 @@ class BattleSystems {
 	 */
 	static getExpStatistic(): System.Statistic {
 		const stat = this.statistics[this.idExpStatistic];
-		return Utils.isUndefined(stat) || stat.isRes ? null : stat;
+		return stat === undefined || stat.isRes ? null : stat;
 	}
 
 	/**

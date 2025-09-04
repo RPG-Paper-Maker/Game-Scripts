@@ -42,31 +42,31 @@ class SwitchTexture extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.isTilesetID = Utils.numToBool(command[iterator.i++]);
+		this.isTilesetID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isTilesetID) {
 			this.tilesetID = System.DynamicValue.createValueCommand(command, iterator);
 			this.tilesetPictureID = System.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
-		this.isAutotileID = Utils.numToBool(command[iterator.i++]);
+		this.isAutotileID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isAutotileID) {
 			this.autotileID = System.DynamicValue.createValueCommand(command, iterator);
 			this.autotilePictureID = System.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
-		this.isWallID = Utils.numToBool(command[iterator.i++]);
+		this.isWallID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isWallID) {
 			this.wallID = System.DynamicValue.createValueCommand(command, iterator);
 			this.wallPictureID = System.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
-		this.isObject3DID = Utils.numToBool(command[iterator.i++]);
+		this.isObject3DID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isObject3DID) {
 			this.object3DID = System.DynamicValue.createValueCommand(command, iterator);
 			this.object3DPictureID = System.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
-		this.isMountainID = Utils.numToBool(command[iterator.i++]);
+		this.isMountainID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isMountainID) {
 			this.mountainID = System.DynamicValue.createValueCommand(command, iterator);
 			this.mountainPictureID = System.DynamicValue.createValueCommand(command, iterator);

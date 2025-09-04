@@ -29,7 +29,7 @@ class Troops {
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_TROOPS)).troops;
+		const json = (await Platform.parseFileJSON(Paths.FILE_TROOPS)).troops as any;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Troop });
 	}

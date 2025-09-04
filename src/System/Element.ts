@@ -34,7 +34,7 @@ class Element extends Icon {
 		super.read(json);
 
 		this.efficiency = [];
-		Utils.readJSONSystemList({ list: json.e, listHash: this.efficiency, cons: DynamicValue });
+		Utils.readJSONSystemList({ list: json.e, listHash: this.efficiency as any, cons: DynamicValue });
 	}
 }
 

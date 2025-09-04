@@ -77,15 +77,15 @@ class PlaySong extends Base {
 	 *  @param {StructIterator} iterator
 	 */
 	parse(command: any[], iterator: StructIterator) {
-		const isIDprimitive = Utils.numToBool(command[iterator.i++]);
+		const isIDprimitive = Utils.numberToBool(command[iterator.i++]);
 		const valueID = System.DynamicValue.createValueCommand(command, iterator);
 		const id = System.DynamicValue.createNumber(command[iterator.i++]);
 		const songID = isIDprimitive ? valueID : id;
 		const volume = System.DynamicValue.createValueCommand(command, iterator);
-		const isStart = Utils.numToBool(command[iterator.i++]);
+		const isStart = Utils.numberToBool(command[iterator.i++]);
 		let start = System.DynamicValue.createValueCommand(command, iterator);
 		start = isStart ? start : System.DynamicValue.createNumber(0);
-		const isEnd = Utils.numToBool(command[iterator.i++]);
+		const isEnd = Utils.numberToBool(command[iterator.i++]);
 		let end = System.DynamicValue.createValueCommand(command, iterator);
 		end = isEnd ? end : null;
 		this.updateValues(songID, volume, isStart, start, isEnd, end);
@@ -166,10 +166,10 @@ class PlaySong extends Base {
 	 *  @param {number} [volume=undefined] - The volume to play
 	 */
 	playMusic(start?: number, volume?: number) {
-		if (Utils.isUndefined(start)) {
+		if (start === undefined) {
 			start = this.start ? this.start.getValue() : null;
 		}
-		if (Utils.isUndefined(volume)) {
+		if (volume === undefined) {
 			volume = this.volume.getValue() / 100;
 		}
 

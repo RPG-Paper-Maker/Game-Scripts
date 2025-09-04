@@ -12,86 +12,117 @@
 import { Platform } from './Platform';
 
 /**
- * The static class containing all the files paths.
+ * Centralized registry of engine-relative file and directory paths.
  *
- * @class Paths
+ * All paths are built relative to {@link Platform.ROOT_DIRECTORY}, unless
+ * otherwise noted. This class is static-only.
  */
-class Paths {
-	public static readonly FILES = 'file:///';
-	public static readonly TEST = Platform.ROOT_DIRECTORY + 'Test/';
-	public static readonly FILE_MAPS = Platform.ROOT_DIRECTORY + 'Maps/';
-	public static readonly FILE_MAP_INFOS = '/infos.json';
-	public static readonly FILE_PICTURES = Platform.ROOT_DIRECTORY + 'pictures.json';
-	public static readonly FILE_VIDEOS = Platform.ROOT_DIRECTORY + 'videos.json';
-	public static readonly FILE_FONTS = Platform.ROOT_DIRECTORY + 'fonts.json';
-	public static readonly FILE_SONGS = Platform.ROOT_DIRECTORY + 'songs.json';
-	public static readonly FILE_SHAPES = Platform.ROOT_DIRECTORY + 'shapes.json';
-	public static readonly FILE_COMMON_EVENTS = Platform.ROOT_DIRECTORY + 'commonEvents.json';
-	public static readonly FILE_ITEMS = Platform.ROOT_DIRECTORY + 'items.json';
-	public static readonly FILE_SKILLS = Platform.ROOT_DIRECTORY + 'skills.json';
-	public static readonly FILE_WEAPONS = Platform.ROOT_DIRECTORY + 'weapons.json';
-	public static readonly FILE_ARMORS = Platform.ROOT_DIRECTORY + 'armors.json';
-	public static readonly FILE_HEROES = Platform.ROOT_DIRECTORY + 'heroes.json';
-	public static readonly FILE_MONSTERS = Platform.ROOT_DIRECTORY + 'monsters.json';
-	public static readonly FILE_TROOPS = Platform.ROOT_DIRECTORY + 'troops.json';
-	public static readonly FILE_BATTLE_SYSTEM = Platform.ROOT_DIRECTORY + 'battleSystem.json';
-	public static readonly FILE_TITLE_SCREEN_GAME_OVER = Platform.ROOT_DIRECTORY + 'titlescreenGameover.json';
-	public static readonly FILE_KEYBOARD = Platform.ROOT_DIRECTORY + 'keyboard.json';
-	public static readonly FILE_SYSTEM = Platform.ROOT_DIRECTORY + 'system.json';
-	public static readonly FILE_CLASSES = Platform.ROOT_DIRECTORY + 'classes.json';
-	public static readonly FILE_TILESETS = Platform.ROOT_DIRECTORY + 'tilesets.json';
-	public static readonly FILE_SPECIAL_ELEMENTS = Platform.ROOT_DIRECTORY + 'specialElements.json';
-	public static readonly FILE_VARIABLES = Platform.ROOT_DIRECTORY + 'variables.json';
-	public static readonly FILE_SETTINGS = Platform.ROOT_DIRECTORY + 'settings.json';
-	public static readonly FILE_DLCS = Platform.ROOT_DIRECTORY + 'dlcs.json';
-	public static readonly FILE_ANIMATIONS = Platform.ROOT_DIRECTORY + 'animations.json';
-	public static readonly FILE_STATUS = Platform.ROOT_DIRECTORY + 'status.json';
-	public static readonly FILE_SCRIPTS = Platform.ROOT_DIRECTORY + 'scripts.json';
-	public static readonly FILE_LANGS = Platform.ROOT_DIRECTORY + 'langs.json';
-	public static readonly FILE_PROTECT = Platform.ROOT_DIRECTORY + '.protect';
-	public static readonly FILE_TEST = Paths.TEST + 'test.json';
-	public static readonly FILE_PLUGIN_CODE = 'code.js';
-	public static readonly FILE_PLUGIN_DETAILS = 'details.json';
-	public static readonly PICTURES = '/Images';
-	public static readonly VIDEOS = '/Videos';
-	public static readonly FONTS = '/Fonts';
-	public static readonly HUD = Paths.PICTURES + '/HUD/';
-	public static readonly TEXTURES2D = Paths.PICTURES + '/Textures2D/';
-	public static readonly BARS = Paths.HUD + 'Bars';
-	public static readonly FACESETS = Paths.HUD + 'Facesets';
-	public static readonly ICONS = Paths.HUD + 'Icons';
-	public static readonly WINDOW_SKINS = Paths.HUD + 'WindowSkins';
-	public static readonly TITLE_SCREEN = Paths.HUD + 'TitleScreen';
-	public static readonly GAME_OVER = Paths.HUD + 'GameOver';
-	public static readonly HUD_PICTURES = Paths.HUD + 'Pictures';
-	public static readonly ANIMATIONS = Paths.HUD + 'Animations';
-	public static readonly AUTOTILES = Paths.TEXTURES2D + 'Autotiles';
-	public static readonly CHARACTERS = Paths.TEXTURES2D + 'Characters';
-	public static readonly TILESETS = Paths.TEXTURES2D + 'Tilesets';
-	public static readonly WALLS = Paths.TEXTURES2D + 'Walls';
-	public static readonly BATTLERS = Paths.TEXTURES2D + 'Battlers';
-	public static readonly OBJECTS_3D = Paths.TEXTURES2D + 'Objects3D';
-	public static readonly MOUNTAINS = Paths.TEXTURES2D + 'Mountains';
-	public static readonly SKYBOXES = Paths.TEXTURES2D + 'SkyBoxes';
-	public static readonly PARTICLES = Paths.TEXTURES2D + 'Particles';
-	public static readonly SONGS = '/Songs/';
-	public static readonly MUSICS = Paths.SONGS + 'Musics';
-	public static readonly BACKGROUND_SOUNDS = Paths.SONGS + 'BackgroundSounds';
-	public static readonly SOUNDS = Paths.SONGS + 'Sounds';
-	public static readonly MUSIC_EFFECTS = Paths.SONGS + 'MusicEffects';
-	public static readonly SHAPES = '/Shapes/';
-	public static readonly OBJ = Paths.SHAPES + 'OBJ';
-	public static readonly MTL = Paths.SHAPES + 'MTL';
-	public static readonly OBJ_COLLISIONS = Paths.SHAPES + 'Collisions';
-	public static readonly SCRIPTS =
+export class Paths {
+	// -------------------------------------------------------------------------
+	// Generic
+	// -------------------------------------------------------------------------
+
+	/** Prefix for `file://` URLs (used in desktop contexts). */
+	static readonly FILES = 'file:///';
+
+	/** Root test folder. */
+	static readonly TEST = Platform.ROOT_DIRECTORY + 'Test/';
+
+	/** Test configuration JSON. */
+	static readonly FILE_TEST = Paths.TEST + 'test.json';
+
+	/** Protection flag file. */
+	static readonly FILE_PROTECT = Platform.ROOT_DIRECTORY + '.protect';
+
+	// -------------------------------------------------------------------------
+	// Data JSON files
+	// -------------------------------------------------------------------------
+
+	static readonly FILE_MAPS = Platform.ROOT_DIRECTORY + 'Maps/';
+	static readonly FILE_MAP_INFOS = '/infos.json';
+	static readonly FILE_PICTURES = Platform.ROOT_DIRECTORY + 'pictures.json';
+	static readonly FILE_VIDEOS = Platform.ROOT_DIRECTORY + 'videos.json';
+	static readonly FILE_FONTS = Platform.ROOT_DIRECTORY + 'fonts.json';
+	static readonly FILE_SONGS = Platform.ROOT_DIRECTORY + 'songs.json';
+	static readonly FILE_SHAPES = Platform.ROOT_DIRECTORY + 'shapes.json';
+	static readonly FILE_COMMON_EVENTS = Platform.ROOT_DIRECTORY + 'commonEvents.json';
+	static readonly FILE_ITEMS = Platform.ROOT_DIRECTORY + 'items.json';
+	static readonly FILE_SKILLS = Platform.ROOT_DIRECTORY + 'skills.json';
+	static readonly FILE_WEAPONS = Platform.ROOT_DIRECTORY + 'weapons.json';
+	static readonly FILE_ARMORS = Platform.ROOT_DIRECTORY + 'armors.json';
+	static readonly FILE_HEROES = Platform.ROOT_DIRECTORY + 'heroes.json';
+	static readonly FILE_MONSTERS = Platform.ROOT_DIRECTORY + 'monsters.json';
+	static readonly FILE_TROOPS = Platform.ROOT_DIRECTORY + 'troops.json';
+	static readonly FILE_BATTLE_SYSTEM = Platform.ROOT_DIRECTORY + 'battleSystem.json';
+	static readonly FILE_TITLE_SCREEN_GAME_OVER = Platform.ROOT_DIRECTORY + 'titlescreenGameover.json';
+	static readonly FILE_KEYBOARD = Platform.ROOT_DIRECTORY + 'keyboard.json';
+	static readonly FILE_SYSTEM = Platform.ROOT_DIRECTORY + 'system.json';
+	static readonly FILE_CLASSES = Platform.ROOT_DIRECTORY + 'classes.json';
+	static readonly FILE_TILESETS = Platform.ROOT_DIRECTORY + 'tilesets.json';
+	static readonly FILE_SPECIAL_ELEMENTS = Platform.ROOT_DIRECTORY + 'specialElements.json';
+	static readonly FILE_VARIABLES = Platform.ROOT_DIRECTORY + 'variables.json';
+	static readonly FILE_SETTINGS = Platform.ROOT_DIRECTORY + 'settings.json';
+	static readonly FILE_DLCS = Platform.ROOT_DIRECTORY + 'dlcs.json';
+	static readonly FILE_ANIMATIONS = Platform.ROOT_DIRECTORY + 'animations.json';
+	static readonly FILE_STATUS = Platform.ROOT_DIRECTORY + 'status.json';
+	static readonly FILE_SCRIPTS = Platform.ROOT_DIRECTORY + 'scripts.json';
+	static readonly FILE_LANGS = Platform.ROOT_DIRECTORY + 'langs.json';
+
+	// -------------------------------------------------------------------------
+	// Asset folders
+	// -------------------------------------------------------------------------
+
+	// Media types
+	static readonly PICTURES = '/Images';
+	static readonly VIDEOS = '/Videos';
+	static readonly FONTS = '/Fonts';
+	static readonly SONGS = '/Songs/';
+	static readonly SHAPES = '/Shapes/';
+
+	// HUD and UI
+	static readonly HUD = Paths.PICTURES + '/HUD/';
+	static readonly TEXTURES2D = Paths.PICTURES + '/Textures2D/';
+	static readonly BARS = Paths.HUD + 'Bars';
+	static readonly FACESETS = Paths.HUD + 'Facesets';
+	static readonly ICONS = Paths.HUD + 'Icons';
+	static readonly WINDOW_SKINS = Paths.HUD + 'WindowSkins';
+	static readonly TITLE_SCREEN = Paths.HUD + 'TitleScreen';
+	static readonly GAME_OVER = Paths.HUD + 'GameOver';
+	static readonly HUD_PICTURES = Paths.HUD + 'Pictures';
+	static readonly ANIMATIONS = Paths.HUD + 'Animations';
+
+	// Textures
+	static readonly AUTOTILES = Paths.TEXTURES2D + 'Autotiles';
+	static readonly CHARACTERS = Paths.TEXTURES2D + 'Characters';
+	static readonly TILESETS = Paths.TEXTURES2D + 'Tilesets';
+	static readonly WALLS = Paths.TEXTURES2D + 'Walls';
+	static readonly BATTLERS = Paths.TEXTURES2D + 'Battlers';
+	static readonly OBJECTS_3D = Paths.TEXTURES2D + 'Objects3D';
+	static readonly MOUNTAINS = Paths.TEXTURES2D + 'Mountains';
+	static readonly SKYBOXES = Paths.TEXTURES2D + 'SkyBoxes';
+	static readonly PARTICLES = Paths.TEXTURES2D + 'Particles';
+
+	// Audio
+	static readonly MUSICS = Paths.SONGS + 'Musics';
+	static readonly BACKGROUND_SOUNDS = Paths.SONGS + 'BackgroundSounds';
+	static readonly SOUNDS = Paths.SONGS + 'Sounds';
+	static readonly MUSIC_EFFECTS = Paths.SONGS + 'MusicEffects';
+
+	// Shapes
+	static readonly OBJ = Paths.SHAPES + 'OBJ';
+	static readonly MTL = Paths.SHAPES + 'MTL';
+	static readonly OBJ_COLLISIONS = Paths.SHAPES + 'Collisions';
+
+	// -------------------------------------------------------------------------
+	// Scripts, plugins, shaders, saves
+	// -------------------------------------------------------------------------
+
+	/** Base path for game scripts (adjusted for web builds). */
+	static readonly SCRIPTS =
 		(Platform.WEB_DEV && !Platform.IS_DESKTOP ? '.' + window.location.pathname : '') + 'Scripts/';
-	public static readonly PLUGINS = Platform.ROOT_DIRECTORY + 'Plugins/';
-	public static readonly SHADERS = Paths.SCRIPTS + 'Shaders/';
-	public static readonly SAVES = Platform.ROOT_DIRECTORY + 'Saves';
-
-	constructor() {
-		throw new Error('This is a static class');
-	}
+	static readonly PLUGINS = Platform.ROOT_DIRECTORY + 'Plugins/';
+	static readonly SHADERS = Paths.SCRIPTS + 'Shaders/';
+	static readonly SAVES = Platform.ROOT_DIRECTORY + 'Saves';
+	static readonly FILE_PLUGIN_CODE = 'code.js';
+	static readonly FILE_PLUGIN_DETAILS = 'details.json';
 }
-
-export { Paths };

@@ -58,7 +58,7 @@ class CreateObjectInMap extends Base {
 				this.objectIDPosition = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
-		this.isStockID = Utils.numToBool(command[iterator.i++]);
+		this.isStockID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isStockID) {
 			this.stockID = System.DynamicValue.createValueCommand(command, iterator);
 		}

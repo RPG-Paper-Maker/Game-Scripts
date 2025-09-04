@@ -10,7 +10,7 @@
 */
 
 import { Datas, Graphic, System } from '..';
-import { Constants, ScreenResolution, Utils } from '../Common';
+import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
 
@@ -82,7 +82,7 @@ class StatisticProgression extends Base {
 					}
 					txt += ' -> ';
 				}
-				txt += Utils.numToString(this.player[statistic.abbreviation]);
+				txt += String(this.player[statistic.abbreviation]);
 				if (!statistic.isFix) {
 					txt += '/' + this.player[statistic.getMaxAbbreviation()];
 				}

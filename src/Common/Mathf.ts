@@ -12,304 +12,72 @@
 import * as THREE from 'three';
 
 /**
- * The static class for Math related function.
+ * Static math utilities used across the engine.
  *
- * @class Mathf
+ * This class is non-instantiable: all members are static.
  */
-class Mathf {
-	static OPERATORS_COMPARE = [
-		function (a: number, b: number) {
-			return a === b;
-		},
-		function (a: number, b: number) {
-			return a !== b;
-		},
-		function (a: number, b: number) {
-			return a >= b;
-		},
-		function (a: number, b: number) {
-			return a <= b;
-		},
-		function (a: number, b: number) {
-			return a > b;
-		},
-		function (a: number, b: number) {
-			return a < b;
-		},
-	];
-
-	static OPERATORS_NUMBERS = [
-		function (a: number, b: number) {
-			return b;
-		},
-		function (a: number, b: number) {
-			return a + b;
-		},
-		function (a: number, b: number) {
-			return a - b;
-		},
-		function (a: number, b: number) {
-			return a * b;
-		},
-		function (a: number, b: number) {
-			return a / b;
-		},
-		function (a: number, b: number) {
-			return a % b;
-		},
-	];
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
-
-	/*
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {(T, number, - T[]): boolean} splitCallback - The callback in the
-	 *                                                    Array split method
-	 * @param {any} splitThis? - The context of splitCallback
-	 * @returns {[T[]]} - The fully splitted array from array
+export class Mathf {
+	/**
+	 * Comparison operator table.
+	 * Index mapping is expected by callers:
+	 * 0: ===, 1: !==, 2: >=, 3: <=, 4: >, 5: <
 	 */
-	/*
-    static split<T>(array: T[], splitCallback: (elem: T, i: number, self: T[]) 
-        => boolean, splitThis?: any): T[][]
-    {
-        const newArray: T[][] = [];
-        let newGroup: T[] = [];
-        // forEach is tested to be the fastest among sandboxes including NW.js
-        array.forEach((elem: T, i: number) => {
-            // It's ok to call undefined context with previously bound callbacks
-            if (splitCallback.call(splitThis, elem, i, array)) {
-                newArray.push(newGroup); // It's ok for 1st group to be empty
-                newGroup = [];
-            } else newGroup.push(elem);
-            //
-        });
-        newArray.push(newGroup); // It's ok for the last group to be empty
-        //
-        return newArray;
-    } // split
-    */
+	static readonly OPERATORS_COMPARE: ReadonlyArray<(a: number, b: number) => boolean> = Object.freeze([
+		(a, b) => a === b,
+		(a, b) => a !== b,
+		(a, b) => a >= b,
+		(a, b) => a <= b,
+		(a, b) => a > b,
+		(a, b) => a < b,
+	]);
 
 	/**
-	 * Potential Hotspot/Nullipotent
-	 *
-	 * @static
-	 * @template T
-	 * @param {T[]} array1 - The 1st array to be checked against
-	 * @param {T[]} array2 - The 2nd array to be checked against
-	 * @return {*}  {boolean}
-	 * @memberof Mathf
+	 * Numeric operator table.
+	 * Index mapping is expected by callers:
+	 * 0: assign (return b), 1: +, 2: -, 3: *, 4: /, 5: %
 	 */
-	static isProperSubsetOf<T>(array1: T[], array2: T[]): boolean {
-		return this.isSubsetOf(array1, array2) && !this.isSubsetOf(array2, array1);
-	} // isProperSubsetOf
+	static readonly OPERATORS_NUMBERS: ReadonlyArray<(a: number, b: number) => number> = Object.freeze([
+		(_a, b) => b,
+		(a, b) => a + b,
+		(a, b) => a - b,
+		(a, b) => a * b,
+		(a, b) => a / b,
+		(a, b) => a % b,
+	]);
 
 	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to be checked against
-	 * @param {T[]} array2 - The 2nd array to be checked against
-	 * @returns {boolean} If array1's a proper superset of array2
-	 */
-	static isProperSupersetOf<T>(array1: T[], array2: T[]): boolean {
-		return this.isSupersetOf(array1, array2) && !this.isSupersetOf(array2, array1);
-	} // isProperSupersetOf
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to be checked against
-	 * @param {T[]} array2 - The 2nd array to be checked against
-	 * @returns {boolean} If array1's a superset of array2
-	 */
-	static isSupersetOf<T>(array1: T[], array2: T[]): boolean {
-		return this.isSubsetOf(array2, array1);
-	} // isSupersetOf
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 *
-	 * @static
-	 * @template T
-	 * @param {T[]} array1 -The 1st array to be checked against
-	 * @param {T[]} array2 -The 2nd array to be checked against
-	 * @return {*}  {boolean}
-	 * @memberof Mathf
-	 */
-	static isSubsetOf<T>(array1: T[], array2: T[]): boolean {
-		return this.isEmpty(this.difference(array1, array2));
-	} // isSubsetOf
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have symmetric difference with
-	 * @param {T[]} array2 - The 2nd array to have symmetric difference with
-	 * @returns {T[]} The symmetric difference of array1 and array2
-	 */
-	static symmetricDifference<T>(array1: T[], array2: T[]): T[] {
-		return this.union(this.difference(array1, array2), this.difference(array2, array1));
-	} // symmetricDifference
-
-	/**
-	 * This method changes the original array
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have symmetric difference with
-	 * @param {T[]} array2 - The 2nd array to have symmetric difference with
-	 * @returns {T[]} The symmetric difference of array1 and array2
-	 */
-	static symmetricDifferenceInPlace<T>(array1: T[], array2: T[]): T[] {
-		return this.unionInPlace(this.differenceInPlace(array1, array2), this.difference(array2, array1));
-	} // symmetricDifferenceInPlace
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have union with
-	 * @param {T[]} array2 - The 2nd array to have union with
-	 * @returns {T[]} The union of array1 and array2
-	 */
-	static union<T>(array1: T[], array2: T[]): T[] {
-		return array1.concat(this.difference(array2, array1));
-	} // union
-
-	/**
-	 * This method changes the original array
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have union with
-	 * @param {T[]} array2 - The 2nd array to have union with
-	 * @returns {T[]} The union of array1 and array2
-	 */
-	static unionInPlace<T>(array1: T[], array2: T[]): T[] {
-		array1.push(...this.difference(array2, array1));
-		return array1;
-	} // unionInPlace
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have difference with
-	 * @param {T[]} array2 - The 2nd array to have difference with
-	 * @returns {T[]} The difference of array1 and array2
-	 */
-	static difference<T>(array1: T[], array2: T[]): T[] {
-		return array1.filter((elem: T) => this.excludes(array2, elem, 0));
-	} // difference
-
-	/**
-	 * This method changes the original array
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have difference with
-	 * @param {T[]} array2 - The 2nd array to have difference with
-	 * @returns {T[]} The difference of array1 and array2
-	 */
-	static differenceInPlace<T>(array1: T[], array2: T[]): T[] {
-		for (let i: number = 0; ; i++) {
-			while (array1[i] && array2.includes(array1[i])) array1.splice(i, 1);
-			if (!array1[i]) return array1;
-		}
-	} // differenceInPlace
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have intersection with
-	 * @param {T[]} array2 - The 2nd array to have intersection with
-	 * @returns {T[]} The intersection of array1 and array2
-	 */
-	static intersection<T>(array1: T[], array2: T[]): T[] {
-		// The 2nd argument of includes doesn't match with that of filter
-		return array1.filter((elem: T) => array2.includes(elem));
-		//
-	} // intersection
-
-	/**
-	 * This method changes the original array
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array1 - The 1st array to have intersection with
-	 * @param {T[]} array2 - The 2nd array to have intersection with
-	 * @returns {T[]} The intersection of array1 and array2
-	 */
-	static intersectionInPlace<T>(array1: T[], array2: T[]): T[] {
-		for (let i: number = 0; ; i++) {
-			while (array1[i] && this.excludes(array2, array1[i], 0)) {
-				array1.splice(i, 1);
-			}
-			if (!array1[i]) return array1;
-		}
-	} // intersectionInPlace
-
-	/**
-	 * Potential Hotspot/Nullipotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array - The array to be checked against
-	 * @param {*} elem - The element to be checked against
-	 * @param {index} fromI - The index in this at which to begin searching
-	 * @returns {boolean} If array doesn't have elem
-	 */
-	static excludes<T>(array: T[], elem: T, fromI: number): boolean {
-		return !array.includes(elem, fromI);
-	} // excludes
-
-	/**
-	 * Potential Hotspot/Idempotent
-	 * @author DoubleX @interface
-	 * @param {T[]} array - The array to be cleared
-	 */
-	static clear<T>(array: T[]): void {
-		array.length = 0;
-	}
-
-	/** Check if an array is empty.
-	 *   @static
-	 *   @param {any[]} array - The array to test
-	 *   @returns {boolean}
-	 */
-	static isEmpty<T>(array: T[]): boolean {
-		// Edited to fix the bug of nonempty array with 1st element being null
-		return array.length === 0;
-		//
-	}
-
-	/** Get the cos.
-	 *   @static
-	 *   @param {number} v - The value
-	 *   @returns {number}
+	 * Cosine with rounding to reduce floating errors.
+	 * @param v Angle in radians.
+	 * @returns Cosine(v) rounded to 10 decimals.
 	 */
 	static cos(v: number): number {
-		return parseFloat(Math.cos(v).toFixed(10));
+		return Number(Math.cos(v).toFixed(10));
 	}
 
-	/** Get the sin.
-	 *   @static
-	 *   @param {number} v - The value
-	 *   @returns {number}
+	/**
+	 * Sine with rounding to reduce floating errors.
+	 * @param v Angle in radians.
+	 * @returns Sine(v) rounded to 10 decimals.
 	 */
 	static sin(v: number): number {
-		return parseFloat(Math.sin(v).toFixed(10));
+		return Number(Math.sin(v).toFixed(10));
 	}
 
-	/** Give a modulo without negative value.
-	 *   @static
-	 *   @param {number} x
-	 *   @param {number} m
-	 *   @returns {number}
+	/**
+	 * Mathematical modulo that never returns a negative result.
+	 * @param x Dividend.
+	 * @param m Divisor.
+	 * @returns x mod m in [0, m).
 	 */
 	static mod(x: number, m: number): number {
 		const r = x % m;
 		return r < 0 ? r + m : r;
 	}
 
-	/** Get the list max ID.
-	 *   @static
-	 *   @param {number[]} list - A list containing only IDs
-	 *   @returns {number}
+	/**
+	 * Get the maximum numeric ID in a list.
+	 * @param list Array of numbers (IDs).
+	 * @returns Maximum value found, or 0 for an empty list.
 	 */
 	static getMaxID(list: number[]): number {
 		let max = 0;
@@ -319,32 +87,19 @@ class Mathf {
 		return max;
 	}
 
-	/** Create a random number between min and max.
-	 *   @static
-	 *   @param {number} min
-	 *   @param {number} max
-	 *   @returns {number}
+	/**
+	 * Inclusive random integer in [min, max].
+	 * @param min Minimum value.
+	 * @param max Maximum value.
 	 */
 	static random(min: number, max: number): number {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 
 	/**
-	 * Clamp a number between two values.
-	 * @param {number} value
-	 * @param {number} min
-	 * @param {number} max
-	 * @author Nio Kasgami
-	 */
-	static clamp(value: number, min: number, max: number): number {
-		return value <= min ? min : value >= max ? max : value;
-	}
-
-	/** Get random value according to value and variance
-	 *   @static
-	 *   @param {number} value
-	 *   @param {number} variance
-	 *   @returns {number}
+	 * Returns a random value around `value` within a ±`variance`% range.
+	 * @param value Base value.
+	 * @param variance Percentage variance (e.g., 20 for ±20%).
 	 */
 	static variance(value: number, variance: number): number {
 		const v = Math.round((value * variance) / 100);
@@ -352,30 +107,27 @@ class Mathf {
 	}
 
 	/**
-	 *  Indicate if a point is inside a rectangle.
-	 *  @static
-	 *  @param {Vector2} p - The point to test
-	 *  @param {number} x1 - The x left point of the rectangle
-	 *  @param {number} x2 - The x right point of the rectangle
-	 *  @param {number} y1 - The y top point of the rectangle
-	 *  @param {number} y2 - The y bottom point of the rectangle
-	 *  @returns {boolean}
+	 * Checks if a 2D point lies inside (or on the border of) an axis-aligned rectangle.
+	 * @param p Point to test.
+	 * @param x1 Left X.
+	 * @param x2 Right X.
+	 * @param y1 Top Y.
+	 * @param y2 Bottom Y.
 	 */
 	static isPointOnRectangle(p: THREE.Vector2, x1: number, x2: number, y1: number, y2: number): boolean {
 		return p.x >= x1 && p.x <= x2 && p.y >= y1 && p.y <= y2;
 	}
 
 	/**
-	 *  Indicate if a point is inside a triangle.
-	 *  @static
-	 *  @param {Vector2} p - The point to test
-	 *  @param {Vector2} p0 - One of the point of the triangle
-	 *  @param {Vector2} p1 - One of the point of the triangle
-	 *  @param {Vector2} p2 - One of the point of the triangle
-	 *  @returns {boolean}
+	 * Checks if a 2D point lies inside a triangle defined by (p0, p1, p2).
+	 * Uses an area/sign method equivalent to barycentric containment.
+	 * @param p Point to test.
+	 * @param p0 Triangle vertex.
+	 * @param p1 Triangle vertex.
+	 * @param p2 Triangle vertex.
 	 */
 	static isPointOnTriangle(p: THREE.Vector2, p0: THREE.Vector2, p1: THREE.Vector2, p2: THREE.Vector2): boolean {
-		const a = (1 / 2) * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
+		const a = 0.5 * (-p1.y * p2.x + p0.y * (-p1.x + p2.x) + p0.x * (p1.y - p2.y) + p1.x * p2.y);
 		const sign = a < 0 ? -1 : 1;
 		const s = (p0.y * p2.x - p0.x * p2.y + (p2.y - p0.y) * p.x + (p0.x - p2.x) * p.y) * sign;
 		const t = (p0.x * p1.y - p0.y * p1.x + (p0.y - p1.y) * p.x + (p1.x - p0.x) * p.y) * sign;
@@ -383,11 +135,10 @@ class Mathf {
 	}
 
 	/**
-	 *  Get the orthogonal projection between two vectors.
-	 *  @static
-	 *  @param {Vector3} u
-	 *  @param {Vector3} v
-	 *  @returns {number}
+	 * Orthogonal projection length of vector `u` onto vector `v`.
+	 * @param u Vector being projected.
+	 * @param v Direction vector of the projection.
+	 * @returns The scalar length of the projection of `u` on `v`.
 	 */
 	static orthogonalProjection(u: THREE.Vector3, v: THREE.Vector3): number {
 		const lu = u.length();
@@ -397,106 +148,69 @@ class Mathf {
 	}
 
 	/**
-	 * Convert a value to a percent.
-	 *
-	 * @export
-	 * @param {number} a
-	 * @param {number} b
-	 * @return {number}
-	 */
-	static percentOf(a: number, b: number, large: boolean = false): number {
-		return (a / b) * (large ? 100 : 1);
-	}
-
-	/**
-	 * Convert a value to a rounded percent.
-	 *
-	 * @export
-	 * @param {number} a - The value to convert
-	 * @param {number} b - The target max value
-	 * @param {boolean} large - convert the percent to a small value (0 ~ 1) or a large value (0 ~ 100)
-	 * @return {number}
-	 */
-	static roundedPercentOf(a: number, b: number, large: boolean = false): number {
-		return Math.round(this.percentOf(a, b, large));
-	}
-
-	/**
-	 * Convert a percent to a number
-	 *
-	 * @export
-	 * @param {number} a
-	 * @param {number} b
-	 * @param {boolean} [large=false]
-	 * @return {number}  {number}
-	 */
-	static numberOf(a: number, b: number, large = true): number {
-		if ((a > 1 && !large) || (b > 1 && !large)) {
-			throw new Error('value out of range! (0~1) please enable large mode if you want to use integer!');
-		}
-		return (a * b) / (large ? 100 : 1);
-	}
-
-	/**
-	 * Convert a percent to a rounded number
-	 *
-	 * @export
-	 * @param {number} a
-	 * @param {number} b
-	 * @param {boolean} [large=true]
-	 * @return {number}  {number}
-	 */
-	static roundedNumberOf(a: number, b: number, large = true): number {
-		if ((a > 1 && !large) || (b > 1 && !large)) {
-			throw new Error('value out of range! (0~1) please enable large mode if you want to use integer!');
-		}
-		return Math.round(this.numberOf(a, b));
-	}
-
-	/**
-	 *  Test if hit.
-	 *  @param {number} chance
-	 *  @return {boolean}
+	 * Random percentage test.
+	 * @param chance Percentage in [0, 100].
+	 * @returns `true` with probability = `chance`%.
 	 */
 	static randomPercentTest(chance: number): boolean {
 		return chance > 0 && this.random(0, 100) <= chance;
 	}
 
 	/**
-	 *  Get the number (like currencies values) but with comas included to
-	 *  separate thousands.
-	 *  @param {number} x
-	 *  @return {string}
+	 * Formats a number with commas for thousands (e.g., 1234567 → "1,234,567").
+	 * @param x Number to format.
 	 */
 	static numberWithCommas(x: number): string {
 		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	}
 
+	/**
+	 * Convert radians to degrees.
+	 * @param radians Angle in radians.
+	 */
 	static radiansToDegrees(radians: number): number {
 		return radians * (180 / Math.PI);
 	}
 
+	/**
+	 * Convert degrees to radians.
+	 * @param degrees Angle in degrees.
+	 */
 	static degreesToRadians(degrees: number): number {
 		return degrees * (Math.PI / 180);
 	}
 
+	/**
+	 * Rotates a vertex around an arbitrary axis passing through a center.
+	 * Mutates `vec` in place.
+	 * @param vec Vertex to rotate.
+	 * @param center Rotation center.
+	 * @param angle Angle value (degrees by default).
+	 * @param axis Rotation axis.
+	 * @param isDegree If `true`, interprets `angle` as degrees; otherwise radians.
+	 */
 	static rotateVertex(
 		vec: THREE.Vector3,
 		center: THREE.Vector3,
 		angle: number,
 		axis: THREE.Vector3,
 		isDegree: boolean = true
-	) {
+	): void {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
 		vec.add(center);
 	}
 
-	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler) {
+	/**
+	 * Rotates a vertex around a center using Euler angles.
+	 * Mutates `vec` in place.
+	 * @param vec Vertex to rotate.
+	 * @param center Rotation center.
+	 * @param euler Euler rotation to apply.
+	 */
+	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler): void {
 		vec.sub(center);
 		vec.applyEuler(euler);
 		vec.add(center);
 	}
 }
-
-export { Mathf };

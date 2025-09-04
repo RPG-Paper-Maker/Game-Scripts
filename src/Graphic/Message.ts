@@ -307,13 +307,13 @@ class Message extends Graphic.Base {
 						text = value;
 						break;
 					case TAG_KIND.VARIABLE:
-						text = Utils.numToString(value.getValue());
+						text = String(value.getValue());
 						break;
 					case TAG_KIND.PARAMETER:
-						text = Utils.numToString(value.getValue());
+						text = String(value.getValue());
 						break;
 					case TAG_KIND.PROPERTY:
-						text = Utils.numToString(value.getValue());
+						text = String(value.getValue());
 						break;
 					case TAG_KIND.HERO_NAME:
 						text = Game.current.getHeroByInstanceID(value.getValue()).name;

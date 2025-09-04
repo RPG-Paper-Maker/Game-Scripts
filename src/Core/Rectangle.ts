@@ -9,8 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Anchor2D } from './Anchor2D';
-
 /** @class
  *  The data class for anchors.
  *  @property {number} x
@@ -28,13 +26,9 @@ class Rectangle {
 	public y: number;
 	public width: number;
 	public height: number;
-	public anchor: Anchor2D;
 
 	constructor(x = 0, y = 0, width = 1, height = 1) {
 		this.setCoords(x, y, width, height);
-		const anchorX = Anchor2D.MIDDLE_BOTTOM.x;
-		const anchorY = Anchor2D.MIDDLE_BOTTOM.y;
-		this.anchor = new Anchor2D(anchorX, anchorY);
 	}
 
 	/**
@@ -47,16 +41,6 @@ class Rectangle {
 	}
 
 	/**
-	 *  Move rectangle to x, y.
-	 *  @param {number} x
-	 *  @param {number} y
-	 */
-	public move(x: number, y: number) {
-		this.x = x + this.width * this.anchor.x;
-		this.y = y + this.height * this.anchor.y;
-	}
-
-	/**
 	 *  Resize rectangle with width and height value.
 	 *  @param {number} width
 	 *  @param {number} height
@@ -64,18 +48,6 @@ class Rectangle {
 	public resize(width: number, height: number) {
 		this.width = width;
 		this.height = height;
-	}
-
-	/**
-	 *  Move and resize rectangle.
-	 *  @param {number} x
-	 *  @param {number} y
-	 *  @param {number} width
-	 *  @param {number} height
-	 */
-	public set(x: number, y: number, width: number, height: number) {
-		this.move(x, y);
-		this.resize(width, height);
 	}
 
 	/**
@@ -90,23 +62,6 @@ class Rectangle {
 		this.y = y;
 		this.width = width;
 		this.height = height;
-	}
-
-	/**
-	 *  Set the anchor x, y.
-	 *  @param {number} x
-	 *  @param {number} y
-	 */
-	public setAnchor(x: number, y: number) {
-		this.anchor.set({ x, y });
-	}
-
-	/**
-	 *  Preset anchor.
-	 *  @param {{ x: - number, y: number }} anchorPreset
-	 */
-	public presetAnchor(anchorPreset: { x: number; y: number }) {
-		this.anchor.set(anchorPreset);
 	}
 
 	/**

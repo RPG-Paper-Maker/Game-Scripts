@@ -29,7 +29,7 @@ class Animations {
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations;
+		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations as any;
 		this.list = [];
 		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Animation });
 	}

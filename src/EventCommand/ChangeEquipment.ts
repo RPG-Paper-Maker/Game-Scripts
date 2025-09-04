@@ -35,7 +35,7 @@ class ChangeEquipment extends Base {
 			i: 0,
 		};
 		this.equipmentID = System.DynamicValue.createValueCommand(command, iterator);
-		this.isWeapon = Utils.numToBool(command[iterator.i++]);
+		this.isWeapon = Utils.numberToBool(command[iterator.i++]);
 		this.weaponArmorID = System.DynamicValue.createValueCommand(command, iterator);
 
 		// Selection
@@ -48,7 +48,7 @@ class ChangeEquipment extends Base {
 				this.groupIndex = command[iterator.i++];
 				break;
 		}
-		this.isApplyInInventory = Utils.numToBool(command[iterator.i++]);
+		this.isApplyInInventory = Utils.numberToBool(command[iterator.i++]);
 	}
 
 	/**

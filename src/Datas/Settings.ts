@@ -31,14 +31,14 @@ class Settings {
 	 */
 	static async read() {
 		// Settings
-		const json = await Platform.parseFileJSON(Paths.FILE_SETTINGS);
+		const json = (await Platform.parseFileJSON(Paths.FILE_SETTINGS)) as any;
 		this.kb = [];
-		const jsonObjs = json[Utils.numToString(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)];
+		const jsonObjs = json[String(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)];
 		for (const id in jsonObjs) {
 			this.kb[id] = jsonObjs[id];
 		}
 		this.currentLanguage = Utils.defaultValue(
-			json[Utils.numToString(TITLE_SETTING_KIND.LANGUAGE)],
+			json[String(TITLE_SETTING_KIND.LANGUAGE)],
 			Datas.Languages.getMainLanguageID()
 		);
 	}
@@ -53,8 +53,8 @@ class Settings {
 		for (const id in this.kb) {
 			jsonObjs[id] = this.kb[id];
 		}
-		json[Utils.numToString(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)] = jsonObjs;
-		json[Utils.numToString(TITLE_SETTING_KIND.LANGUAGE)] = this.currentLanguage;
+		json[String(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)] = jsonObjs;
+		json[String(TITLE_SETTING_KIND.LANGUAGE)] = this.currentLanguage;
 		IO.saveFile(Paths.FILE_SETTINGS, json);
 	}
 

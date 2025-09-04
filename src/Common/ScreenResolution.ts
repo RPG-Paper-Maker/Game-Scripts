@@ -10,96 +10,107 @@
 */
 
 /**
- * A static class for having a quick access to screen resolution variables and functions;
+ * Provides quick access to screen resolution variables and transformation
+ * functions.
  *
- * @class ScreenResolution
+ * This class is static-only and is responsible for converting normalized
+ * coordinates to screen pixels (and vice versa).
  */
+export class ScreenResolution {
+	// -------------------------------------------------------------------------
+	// Base resolution
+	// -------------------------------------------------------------------------
 
-class ScreenResolution {
-	public static readonly SCREEN_X: number = 640;
-	public static readonly SCREEN_Y: number = 480;
-	public static CANVAS_WIDTH: number;
-	public static CANVAS_HEIGHT: number;
-	public static WINDOW_X: number;
-	public static WINDOW_Y: number;
+	/** Default screen width in pixels. */
+	static readonly SCREEN_X = 640;
 
-	constructor() {
-		throw new Error('This is a static class');
-	}
+	/** Default screen height in pixels. */
+	static readonly SCREEN_Y = 480;
 
-	/** Get the pixel position transformation according to screen size
-	 *   @static
-	 *   @param {number} x - The position on screen
-	 *   @returns {number}
+	// -------------------------------------------------------------------------
+	// Dynamic resolution values
+	// (set externally at runtime, e.g., when resizing window)
+	// -------------------------------------------------------------------------
+
+	/** Actual canvas width in pixels. */
+	static CANVAS_WIDTH: number;
+
+	/** Actual canvas height in pixels. */
+	static CANVAS_HEIGHT: number;
+
+	/** Horizontal scaling factor (normalized → screen). */
+	static WINDOW_X: number;
+
+	/** Vertical scaling factor (normalized → screen). */
+	static WINDOW_Y: number;
+
+	// -------------------------------------------------------------------------
+	// Conversion methods
+	// -------------------------------------------------------------------------
+
+	/**
+	 * Convert a normalized X coordinate to screen pixels (rounded up).
+	 * @param x - Normalized X position.
 	 */
 	static getScreenX(x: number): number {
 		return Math.ceil(ScreenResolution.getDoubleScreenX(x));
 	}
 
-	/** Get the pixel position transformation according to screen size
-	 *   @static
-	 *   @param {number} y - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a normalized Y coordinate to screen pixels (rounded up).
+	 * @param y - Normalized Y position.
 	 */
 	static getScreenY(y: number): number {
 		return Math.ceil(ScreenResolution.getDoubleScreenY(y));
 	}
 
-	/** Get the pixel position transformation according to screen size (reverse)
-	 *   @static
-	 *   @param {number} x - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a screen X coordinate back to normalized value.
+	 * @param x - Screen X position in pixels.
 	 */
 	static getScreenXReverse(x: number): number {
 		return Math.floor(x / ScreenResolution.WINDOW_X);
 	}
 
-	/** Get the pixel position transformation according to screen size (reverse)
-	 *   @static
-	 *   @param {number} y - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a screen Y coordinate back to normalized value.
+	 * @param y - Screen Y position in pixels.
 	 */
 	static getScreenYReverse(y: number): number {
 		return Math.floor(y / ScreenResolution.WINDOW_Y);
 	}
 
-	/** Get the pixel position transformation according to screen size
-	 *   @static
-	 *   @param {number} xy - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a normalized XY value using the average of width and height
+	 * scaling factors.
+	 * @param xy - Normalized coordinate.
 	 */
 	static getScreenXY(xy: number): number {
 		return ((ScreenResolution.WINDOW_X + ScreenResolution.WINDOW_Y) / 2) * xy;
 	}
 
-	/** Get the min pixel position transformation according to screen size
-	 *   @static
-	 *   @param {number} xy - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a normalized XY value using the smaller of width and height
+	 * scaling factors.
+	 * @param xy - Normalized coordinate.
 	 */
 	static getScreenMinXY(xy: number): number {
 		return xy * Math.min(ScreenResolution.WINDOW_X, ScreenResolution.WINDOW_Y);
 	}
 
-	/** Get the pixel position transformation according to screen size, but
-	 *   without rounding it
-	 *   @static
-	 *   @param {number} x - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a normalized X coordinate to screen pixels (without rounding).
+	 * @param x - Normalized X position.
 	 */
 	static getDoubleScreenX(x: number): number {
 		return ScreenResolution.WINDOW_X * x;
 	}
 
-	/** Get the pixel position transformation according to screen size, but
-	 *   without rounding it
-	 *   @static
-	 *   @param {number} y - The position on screen
-	 *   @returns {number}
+	/**
+	 * Convert a normalized Y coordinate to screen pixels (without rounding).
+	 * @param y - Normalized Y position.
 	 */
 	static getDoubleScreenY(y: number): number {
 		return ScreenResolution.WINDOW_Y * y;
 	}
 }
-
-export { ScreenResolution };

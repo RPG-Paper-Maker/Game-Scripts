@@ -18,6 +18,34 @@ import { MapObject } from './MapObject';
 import { Player } from './Player';
 import { Portion } from './Portion';
 
+type JsonGame = {
+	t: number;
+	inst: number;
+	vars: unknown[];
+	shops: Record<string, Record<string, number>[]>;
+	steps?: number;
+	saves?: number;
+	battles?: number;
+	chronos?: Record<string, unknown>[];
+	itm?: Record<string, unknown>[];
+	cur?: Record<string, unknown>;
+	cure: number[];
+	curu: number[];
+	th?: Record<string, unknown>[];
+	sh?: Record<string, unknown>[];
+	hh?: Record<string, unknown>[];
+	currentMapId: number;
+	heroPosition: [number, number, number];
+	heroStates: number[];
+	heroProp: number[];
+	heroStatesOpts: Record<string, unknown>[];
+	startS: number[];
+	startP: number[];
+	mapsP?: Record<string, unknown>;
+	textures?: Record<string, unknown>;
+	mapsDatas: Record<string, unknown>;
+};
+
 /** @class
  *  All the global informations of a particular game.
  *  @param {number} slot - The number of the slot to load
@@ -96,7 +124,7 @@ class Game {
 	 */
 	async load() {
 		const path = this.getPathSave();
-		const json = await Platform.loadSave(this.slot, path);
+		const json = (await Platform.loadSave(this.slot, path)) as JsonGame;
 		if (json === null) {
 			return;
 		}
@@ -189,7 +217,7 @@ class Game {
 	 *  @async
 	 */
 	async save(slot?: number) {
-		if (!Utils.isUndefined(slot)) {
+		if (slot !== undefined) {
 			this.slot = slot;
 		}
 		let l = this.teamHeroes.length;
@@ -308,7 +336,7 @@ class Game {
 			}
 			// Associate min and mout
 			objectMapMinMout = (i: number) => {
-				return movedObjects[Utils.indexOfProp(movedObjects, 'id', i)];
+				return movedObjects[Utils.indexOfProp(movedObjects as any, 'id', i)];
 			};
 			for (i = 0; i < l; i++) {
 				objPortion[i] = new Array(2);
@@ -516,7 +544,7 @@ class Game {
 	 *  @returns {string}
 	 */
 	getPathSave(slot?: number): string {
-		return Paths.SAVES + '/' + (Utils.isUndefined(slot) ? this.slot : slot) + '.json';
+		return Paths.SAVES + '/' + (slot === undefined ? this.slot : slot) + '.json';
 	}
 
 	/**
@@ -627,23 +655,23 @@ class Game {
 	 */
 	getPortionPosDatas(id: number, i: number, j: number, k: number): Record<string, any> {
 		let datas = this.mapsDatas[id];
-		if (Utils.isUndefined(datas)) {
+		if (datas === undefined) {
 			return {};
 		}
 		datas = datas[i];
-		if (Utils.isUndefined(datas)) {
+		if (datas === undefined) {
 			return {};
 		}
 		datas = datas[j < 0 ? 0 : 1];
-		if (Utils.isUndefined(datas)) {
+		if (datas === undefined) {
 			return {};
 		}
 		datas = datas[Math.abs(j)];
-		if (Utils.isUndefined(datas)) {
+		if (datas === undefined) {
 			return {};
 		}
 		datas = datas[k];
-		if (Utils.isUndefined(datas)) {
+		if (datas === undefined) {
 			return {};
 		}
 		return datas;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
+import { PICTURE_KIND, ScreenResolution } from '../Common';
 import { Core, Datas, Graphic, System } from '../index';
 import { Base } from './Base';
 
@@ -33,7 +33,7 @@ class Statistic extends Base {
 		this.statistic = statistic;
 		this.graphicName = new Graphic.Text(statistic.name() + ':');
 		this.maxStatNamesLength = 0;
-		if (Utils.isUndefined(offsetStat)) {
+		if (offsetStat === undefined) {
 			this.graphicName.measureText();
 			if (this.graphicName.textWidth > this.maxStatNamesLength) {
 				this.maxStatNamesLength = this.graphicName.textWidth;
@@ -41,7 +41,7 @@ class Statistic extends Base {
 		} else {
 			this.maxStatNamesLength = offsetStat;
 		}
-		let txt = Utils.numToString(this.player[statistic.abbreviation]);
+		let txt = String(this.player[statistic.abbreviation]);
 		if (!statistic.isFix) {
 			txt += '/' + this.player[statistic.getMaxAbbreviation()];
 			this.pictureBar = Datas.Pictures.get(PICTURE_KIND.BARS, this.statistic.pictureBarID);
@@ -62,7 +62,7 @@ class Statistic extends Base {
 	 *  Update the graphics
 	 */
 	update() {
-		let txt = Utils.numToString(this.player[this.statistic.abbreviation]);
+		let txt = String(this.player[this.statistic.abbreviation]);
 		if (!this.statistic.isFix) {
 			txt += '/' + this.player[this.statistic.getMaxAbbreviation()];
 		}

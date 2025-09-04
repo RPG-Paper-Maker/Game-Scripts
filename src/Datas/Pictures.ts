@@ -30,7 +30,7 @@ class Pictures {
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_PICTURES)).list;
+		const json = (await Platform.parseFileJSON(Paths.FILE_PICTURES)).list as any;
 		const l = json.length;
 		this.list = new Array(l);
 		let k: number,

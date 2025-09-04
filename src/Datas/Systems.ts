@@ -83,7 +83,7 @@ class Systems {
 	 *  @static
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_SYSTEM);
+		const json = (await Platform.parseFileJSON(Paths.FILE_SYSTEM)) as any;
 
 		// Project name
 		this.projectName = new System.Translatable(json.pn);
@@ -127,7 +127,7 @@ class Systems {
 		this.PATH_BR = Platform.WEB_DEV ? './BR' : Paths.FILES + json.pathBR;
 
 		// Path DLC
-		this.PATH_DLCS = Paths.FILES + (await Platform.parseFileJSON(Paths.FILE_DLCS)).p;
+		this.PATH_DLCS = (Paths.FILES + (await Platform.parseFileJSON(Paths.FILE_DLCS)).p) as any;
 
 		// Hero beginning
 		this.ID_MAP_START_HERO = json.idMapHero;
@@ -412,8 +412,8 @@ class Systems {
 		Platform.canvasHUD.height = h;
 		Platform.canvasHUD.style.width = `${w}px`;
 		Platform.canvasHUD.style.height = `${h}px`;
-		Platform.canvas3D.style.width = w;
-		Platform.canvas3D.style.height = h;
+		Platform.canvas3D.style.width = `${w}px`;
+		Platform.canvas3D.style.height = `${h}px`;
 		Platform.canvasVideos.height = h;
 		ScreenResolution.CANVAS_WIDTH = w;
 		ScreenResolution.CANVAS_HEIGHT = h;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, ScreenResolution, Utils } from '../Common';
+import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
 import { Datas, Graphic, System } from '../index';
 import { Base } from './Base';
@@ -60,7 +60,7 @@ class EquipStats extends Base {
 				}
 				// Value of the stat
 				baseValue = gamePlayer[statistic.abbreviation];
-				txt = Utils.numToString(baseValue);
+				txt = String(baseValue);
 				if (!statistic.isFix) {
 					baseValue = gamePlayer[statistic.getMaxAbbreviation()];
 					txt += '/' + baseValue;
@@ -81,7 +81,7 @@ class EquipStats extends Base {
 				this.listStats.push(graphicValue);
 				if (this.isChanging) {
 					txt = statistic.isFix
-						? Utils.numToString(newValue)
+						? String(newValue)
 						: Math.min(gamePlayer[statistic.abbreviation], newValue) + '/' + newValue;
 					graphicValue = new Graphic.Text(txt);
 					if (newValue > baseValue) {

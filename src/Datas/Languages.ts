@@ -71,7 +71,7 @@ class Languages {
 	 *  @async
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_LANGS);
+		const json = (await Platform.parseFileJSON(Paths.FILE_LANGS)) as any;
 		this.list = [];
 		this.listOrder = [];
 		Utils.readJSONSystemList({

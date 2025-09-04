@@ -139,7 +139,7 @@ class Stack {
 	 *  Push a battle scene for testing troop.
 	 */
 	static async pushBattleTest() {
-		const json = await Common.Platform.parseFileJSON(Paths.FILE_TEST);
+		const json = (await Common.Platform.parseFileJSON(Paths.FILE_TEST)) as any;
 		const troopID = json.troopID;
 		const battleMap = Datas.BattleSystems.getBattleMap(json.battleTroopTestBattleMapID);
 		const heroes: System.HeroTroopBattleTest[] = [];

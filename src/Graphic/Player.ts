@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, PICTURE_KIND, ScreenResolution, Utils } from '../Common';
+import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Picture2D, Rectangle } from '../Core';
 import { Status } from '../Core/Status';
 import { Core, Datas, Graphic, Manager, System } from '../index';
@@ -68,7 +68,7 @@ class Player extends Base {
 		this.graphicName = new Graphic.Text(this.player.name);
 		this.graphicClass = new Graphic.Text(cl.name(), { fontSize: 10 });
 		this.graphicLevelName = new Graphic.Text(levelStat.name());
-		this.graphicLevel = new Graphic.Text(Utils.numToString(this.player[levelStat.abbreviation]));
+		this.graphicLevel = new Graphic.Text(String(this.player[levelStat.abbreviation]));
 		if (expStat === null) {
 			this.graphicExpName = null;
 		} else {
@@ -157,7 +157,7 @@ class Player extends Base {
 		this.graphicName.setText(this.player.name);
 		this.graphicClass.setText(cl.name());
 		this.graphicLevelName.setText(levelStat.name());
-		this.graphicLevel.setText(Utils.numToString(this.player[levelStat.abbreviation]));
+		this.graphicLevel.setText(String(this.player[levelStat.abbreviation]));
 		for (const graphic of this.listStatistics) {
 			graphic.update();
 		}
@@ -167,7 +167,7 @@ class Player extends Base {
 	 *  Update experience graphics.
 	 */
 	updateExperience() {
-		this.graphicLevel.setText(Utils.numToString(this.player[Datas.BattleSystems.getLevelStatistic().abbreviation]));
+		this.graphicLevel.setText(String(this.player[Datas.BattleSystems.getLevelStatistic().abbreviation]));
 		this.graphicExp.setText(this.player.getBarAbbreviation(Datas.BattleSystems.getExpStatistic()));
 	}
 

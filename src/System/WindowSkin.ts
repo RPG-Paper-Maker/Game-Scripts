@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
+import { PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
 import { Datas, System } from '../index';
 
@@ -314,7 +314,7 @@ class WindowSkin extends System.Base {
 	 *  @returns {[number, number]} The x offset and height for after damages
 	 */
 	drawDamagesNumber(damage: number, x: number, y: number, rect: number[], zoom: number): [number, number] {
-		const digits = Utils.numToString(damage).split('').map(Number);
+		const digits = String(damage).split('').map(Number);
 		const width = rect[2] / 10;
 		const height = rect[3];
 		this.picture.stretch = false;

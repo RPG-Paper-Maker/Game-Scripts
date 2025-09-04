@@ -37,9 +37,9 @@ class ChangeChronometer extends Base {
 		this.operation = command[iterator.i++];
 		if (this.operation === 0) {
 			this.time = System.DynamicValue.createValueCommand(command, iterator);
-			this.diplayOnScreen = Utils.numToBool(command[iterator.i++]);
+			this.diplayOnScreen = Utils.numberToBool(command[iterator.i++]);
 		} else {
-			this.stockValue = Utils.numToBool(command[iterator.i++]);
+			this.stockValue = Utils.numberToBool(command[iterator.i++]);
 			if (this.stockValue) {
 				this.stockID = System.DynamicValue.createValueCommand(command, iterator);
 			}
@@ -55,7 +55,7 @@ class ChangeChronometer extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const chronometerID = this.chronometerID.getValue(this.operation === 0);
-		const index = Utils.indexOfProp(Game.current.chronometers, 'id', chronometerID);
+		const index = Utils.indexOfProp(Game.current.chronometers as any, 'id', chronometerID);
 		const chrono = index === -1 ? null : Game.current.chronometers[index];
 		switch (this.operation) {
 			case 0: // Start

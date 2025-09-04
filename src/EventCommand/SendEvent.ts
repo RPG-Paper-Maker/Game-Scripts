@@ -41,14 +41,14 @@ class SendEvent extends Base {
 		switch (this.targetKind) {
 			case 1:
 				this.targetID = System.DynamicValue.createValueCommand(command, iterator);
-				this.senderNoReceiver = Utils.numToBool(command[iterator.i++]);
-				this.onlyTheClosest = Utils.numToBool(command[iterator.i++]);
+				this.senderNoReceiver = Utils.numberToBool(command[iterator.i++]);
+				this.onlyTheClosest = Utils.numberToBool(command[iterator.i++]);
 				break;
 			case 2:
 				this.targetID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
-		this.isSystem = !Utils.numToBool(command[iterator.i++]);
+		this.isSystem = !Utils.numberToBool(command[iterator.i++]);
 		this.eventID = command[iterator.i++];
 
 		// Parameters

@@ -40,23 +40,23 @@ class ChangeMapProperties extends Base {
 			i: 0,
 		};
 		this.mapID = System.DynamicValue.createValueCommand(command, iterator);
-		this.isTilesetID = Utils.numToBool(command[iterator.i++]);
+		this.isTilesetID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isTilesetID) {
 			this.tilesetID = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		this.isMusic = Utils.numToBool(command[iterator.i++]);
+		this.isMusic = Utils.numberToBool(command[iterator.i++]);
 		if (this.isMusic) {
 			this.music = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC);
 		}
-		this.isBackgroundSound = Utils.numToBool(command[iterator.i++]);
+		this.isBackgroundSound = Utils.numberToBool(command[iterator.i++]);
 		if (this.isBackgroundSound) {
 			this.backgroundSound = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.BACKGROUND_SOUND);
 		}
-		this.isCameraPropertiesID = Utils.numToBool(command[iterator.i++]);
+		this.isCameraPropertiesID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isCameraPropertiesID) {
 			this.cameraPropertiesID = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		this.isSky = Utils.numToBool(command[iterator.i++]);
+		this.isSky = Utils.numberToBool(command[iterator.i++]);
 		if (this.isSky) {
 			this.skyKind = command[iterator.i++];
 			this.skyID = System.DynamicValue.createValueCommand(command, iterator);
@@ -88,7 +88,7 @@ class ChangeMapProperties extends Base {
 				mapID = Scene.Map.current.id;
 			}
 			let datas = Game.current.mapsProperties[mapID];
-			if (Utils.isUndefined(datas)) {
+			if (datas === undefined) {
 				datas = {};
 				Game.current.mapsProperties[mapID] = datas;
 			}

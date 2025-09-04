@@ -58,7 +58,7 @@ class DynamicValue extends System.Base {
 				systemValue.value = null;
 				break;
 			case DYNAMIC_VALUE_KIND.MESSAGE:
-				systemValue.value = Utils.numToString(v);
+				systemValue.value = String(v);
 				break;
 			case DYNAMIC_VALUE_KIND.SWITCH:
 				switch (v) {
@@ -149,7 +149,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static createSwitch(b: boolean): System.DynamicValue {
-		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, Utils.boolToNum(b));
+		return System.DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, Utils.boolToNumber(b));
 	}
 
 	/**
@@ -205,7 +205,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrDefaultVariable(json: StructJSON): System.DynamicValue {
-		return Utils.isUndefined(json) ? System.DynamicValue.createVariable(1) : System.DynamicValue.readFromJSON(json);
+		return json === undefined ? System.DynamicValue.createVariable(1) : System.DynamicValue.readFromJSON(json);
 	}
 
 	/**
@@ -216,7 +216,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrDefaultNumber(json: StructJSON, n: number = 0): System.DynamicValue {
-		return Utils.isUndefined(json) ? System.DynamicValue.createNumber(n) : System.DynamicValue.readFromJSON(json);
+		return json === undefined ? System.DynamicValue.createNumber(n) : System.DynamicValue.readFromJSON(json);
 	}
 
 	/**
@@ -227,9 +227,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrDefaultNumberDouble(json: StructJSON, n: number = 0): System.DynamicValue {
-		return Utils.isUndefined(json)
-			? System.DynamicValue.createNumberDouble(n)
-			: System.DynamicValue.readFromJSON(json);
+		return json === undefined ? System.DynamicValue.createNumberDouble(n) : System.DynamicValue.readFromJSON(json);
 	}
 
 	/**
@@ -240,7 +238,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrDefaultDatabase(json: StructJSON, id: number = 1): System.DynamicValue {
-		return Utils.isUndefined(json)
+		return json === undefined
 			? System.DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, id)
 			: System.DynamicValue.readFromJSON(json);
 	}
@@ -253,7 +251,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrDefaultMessage(json: StructJSON, m: string = ''): System.DynamicValue {
-		return Utils.isUndefined(json)
+		return json === undefined
 			? System.DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m)
 			: System.DynamicValue.readFromJSON(json);
 	}
@@ -266,7 +264,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrDefaultSwitch(json: StructJSON, s: boolean = true): System.DynamicValue {
-		return Utils.isUndefined(json) ? System.DynamicValue.createSwitch(s) : System.DynamicValue.readFromJSON(json);
+		return json === undefined ? System.DynamicValue.createSwitch(s) : System.DynamicValue.readFromJSON(json);
 	}
 
 	/**
@@ -276,7 +274,7 @@ class DynamicValue extends System.Base {
 	 *  @returns {System.DynamicValue}
 	 */
 	static readOrNone(json: StructJSON): System.DynamicValue {
-		return Utils.isUndefined(json) ? System.DynamicValue.createNone() : System.DynamicValue.readFromJSON(json);
+		return json === undefined ? System.DynamicValue.createNone() : System.DynamicValue.readFromJSON(json);
 	}
 
 	/**

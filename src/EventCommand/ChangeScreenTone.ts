@@ -42,11 +42,11 @@ class ChangeScreenTone extends Base {
 		this.g = System.DynamicValue.createValueCommand(command, iterator);
 		this.b = System.DynamicValue.createValueCommand(command, iterator);
 		this.grey = System.DynamicValue.createValueCommand(command, iterator);
-		if (Utils.numToBool(command[iterator.i++])) {
-			this.subColor = Utils.numToBool(command[iterator.i++]);
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.subColor = Utils.numberToBool(command[iterator.i++]);
 			this.colorID = System.DynamicValue.createValueCommand(command, iterator);
 		}
-		this.waitEnd = Utils.numToBool(command[iterator.i++]);
+		this.waitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.time = System.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.waitEnd;
 	}

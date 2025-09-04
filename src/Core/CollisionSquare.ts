@@ -188,7 +188,7 @@ class CollisionSquare {
 		this.bot = Utils.defaultValue(json.b, true);
 		this.terrain = Utils.defaultValue(json.terrain, 0);
 		this.climbing = Utils.defaultValue(json.c, false);
-		if (!Utils.isUndefined(rect)) {
+		if (rect !== undefined) {
 			this.rect =
 				rect === null
 					? null

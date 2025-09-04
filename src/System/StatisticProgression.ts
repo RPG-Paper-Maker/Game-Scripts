@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Interpreter, Utils } from '../Common';
+import { Interpreter } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
 import { Class } from './Class';
@@ -62,7 +62,7 @@ class StatisticProgression extends Base {
 		return this.isFix
 			? this.table.getProgressionAt(
 					level,
-					Utils.isUndefined(maxLevel)
+					maxLevel === undefined
 						? user.system.getProperty(Class.PROPERTY_FINAL_LEVEL, user.changedClass)
 						: maxLevel
 			  )

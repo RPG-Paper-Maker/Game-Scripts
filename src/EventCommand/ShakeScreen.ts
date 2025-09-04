@@ -33,7 +33,7 @@ class ShakeScreen extends Base {
 		};
 		this.offset = System.DynamicValue.createValueCommand(command, iterator);
 		this.shakeNumber = System.DynamicValue.createValueCommand(command, iterator);
-		this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
+		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.time = System.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.isWaitEnd;
 	}

@@ -36,7 +36,7 @@ class SpecialElements {
 	 *  Read the JSON file associated to special elements.
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS);
+		const json = (await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS)) as any;
 		this.autotiles = [];
 		Utils.readJSONSystemList({ list: json.autotiles, listIDs: this.autotiles, cons: System.Autotile });
 		this.walls = [];
@@ -103,7 +103,7 @@ class SpecialElements {
 			pictureID = autotile.pictureID;
 		}
 		let texturesAutotile = this.texturesAutotiles[pictureID];
-		if (Utils.isUndefined(texturesAutotile)) {
+		if (texturesAutotile === undefined) {
 			let offset = 0;
 			let result = null;
 			let textureAutotile: TextureBundle = null;
@@ -324,7 +324,7 @@ class SpecialElements {
 			pictureID = wall.pictureID;
 		}
 		let textureWall = this.texturesWalls[pictureID];
-		if (Utils.isUndefined(textureWall)) {
+		if (textureWall === undefined) {
 			if (wall) {
 				const picture = Datas.Pictures.get(PICTURE_KIND.WALLS, pictureID);
 				if (picture) {
@@ -415,7 +415,7 @@ class SpecialElements {
 			pictureID = mountain.pictureID;
 		}
 		let textureMountain = this.texturesMountains[pictureID];
-		if (Utils.isUndefined(textureMountain)) {
+		if (textureMountain === undefined) {
 			textureMountain = null;
 			let offset = 0;
 			let result = null;
@@ -652,7 +652,7 @@ class SpecialElements {
 			pictureID = object3D.pictureID;
 		}
 		let textureObject3D = this.texturesObjects3D[pictureID];
-		if (Utils.isUndefined(textureObject3D)) {
+		if (textureObject3D === undefined) {
 			const picture = Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
 				const path = picture.getPath();

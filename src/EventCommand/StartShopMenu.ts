@@ -10,7 +10,7 @@
 */
 
 import { Manager, Scene, System } from '..';
-import { ITEM_KIND, Utils } from '../Common';
+import { ITEM_KIND } from '../Common';
 import { Game, Item, MapObject } from '../Core';
 import { Base } from './Base';
 
@@ -66,7 +66,7 @@ class StartShopMenu extends Base {
 				id = system.getItem().id;
 				stock = stocks[system.selectionItem][id];
 				if (this.isRestock) {
-					stock = Utils.isUndefined(stock) ? 0 : stock;
+					stock = stock === undefined ? 0 : stock;
 					if (stock !== -1) {
 						newStock = system.getStock();
 						if (newStock === -1) {
@@ -77,7 +77,7 @@ class StartShopMenu extends Base {
 					}
 					stocks[system.selectionItem][id] = stock;
 				} else {
-					if (Utils.isUndefined(stock)) {
+					if (stock === undefined) {
 						stock = system.getStock();
 						stocks[system.selectionItem][id] = stock;
 					}

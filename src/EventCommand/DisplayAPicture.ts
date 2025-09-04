@@ -41,7 +41,7 @@ class DisplayAPicture extends Base {
 		this.pictureID = System.DynamicValue.createValueCommand(command, iterator);
 		iterator.i++;
 		this.index = System.DynamicValue.createValueCommand(command, iterator);
-		this.centered = Utils.numToBool(command[iterator.i++]);
+		this.centered = Utils.numberToBool(command[iterator.i++]);
 		if (this.centered) {
 			this.originX = ScreenResolution.SCREEN_X / 2;
 			this.originY = ScreenResolution.SCREEN_Y / 2;
@@ -54,7 +54,7 @@ class DisplayAPicture extends Base {
 		this.zoom = System.DynamicValue.createValueCommand(command, iterator);
 		this.opacity = System.DynamicValue.createValueCommand(command, iterator);
 		this.angle = System.DynamicValue.createValueCommand(command, iterator);
-		this.stretch = Utils.numToBool(command[iterator.i++]);
+		this.stretch = Utils.numberToBool(command[iterator.i++]);
 	}
 
 	/**

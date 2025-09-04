@@ -70,7 +70,7 @@ class If extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.hasElse = Utils.numToBool(command[iterator.i++]);
+		this.hasElse = Utils.numberToBool(command[iterator.i++]);
 		this.kind = command[iterator.i++];
 		switch (this.kind) {
 			case 0: // Variable / Param / Prop
@@ -83,7 +83,7 @@ class If extends Base {
 				if (this.heroesSelection === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
 					this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);
 				}
-				this.heroesInTeam = Utils.numToBool(command[iterator.i++]);
+				this.heroesInTeam = Utils.numberToBool(command[iterator.i++]);
 				if (this.heroesInTeam) {
 					this.heroesInTeamSelection = command[iterator.i++];
 				}
@@ -133,13 +133,13 @@ class If extends Base {
 				this.weaponID = System.DynamicValue.createValueCommand(command, iterator);
 				this.operationWeapon = command[iterator.i++];
 				this.weaponValue = System.DynamicValue.createValueCommand(command, iterator);
-				this.weaponEquiped = Utils.numToBool(command[iterator.i++]);
+				this.weaponEquiped = Utils.numberToBool(command[iterator.i++]);
 				break;
 			case 5:
 				this.armorID = System.DynamicValue.createValueCommand(command, iterator);
 				this.operationArmor = command[iterator.i++];
 				this.armorValue = System.DynamicValue.createValueCommand(command, iterator);
-				this.armorEquiped = Utils.numToBool(command[iterator.i++]);
+				this.armorEquiped = Utils.numberToBool(command[iterator.i++]);
 				break;
 			case 6:
 				this.keyID = System.DynamicValue.createValueCommand(command, iterator);
@@ -441,7 +441,7 @@ class If extends Base {
 				}
 			}
 			case 10:
-				const index = Utils.indexOfProp(Game.current.chronometers, 'id', this.chronometerID.getValue());
+				const index = Utils.indexOfProp(Game.current.chronometers as any, 'id', this.chronometerID.getValue());
 				if (index === -1) {
 					result = false;
 					break;

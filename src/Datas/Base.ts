@@ -37,11 +37,11 @@ abstract class Base {
 	static get<T>(id: number, list: T[], name: string, isID: boolean = true, errorMessage: string = ''): T {
 		if (id === null) {
 			return null;
-		} else if (Utils.isUndefined(id)) {
+		} else if (id === undefined) {
 			throw new Error();
 		}
 		const v = list[id];
-		if (Utils.isUndefined(v)) {
+		if (v === undefined) {
 			Platform.showErrorMessage(
 				errorMessage === ''
 					? Base.STRING_ERROR_GET_1 +

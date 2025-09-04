@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export * from './Anchor2D';
 export * from './Animation';
 export * from './Autotile';
 export * from './Autotiles';

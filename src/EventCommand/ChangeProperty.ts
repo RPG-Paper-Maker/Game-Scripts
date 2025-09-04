@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mathf, Utils } from '../Common';
+import { Mathf } from '../Common';
 import { Game, MapObject } from '../Core';
 import { Scene, System } from '../index';
 import { Base } from './Base';
@@ -54,7 +54,7 @@ class ChangeProperty extends Base {
 			props = Game.current.heroProperties;
 		} else if (object.isStartup) {
 			props = Game.current.startupProperties[Scene.Map.current.id];
-			if (Utils.isUndefined(props)) {
+			if (props === undefined) {
 				props = [];
 				Game.current.startupProperties[Scene.Map.current.id] = props;
 			}

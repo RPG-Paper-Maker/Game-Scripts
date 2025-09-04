@@ -57,7 +57,7 @@ class Keyboards {
 	 *  @async
 	 */
 	static async read() {
-		const json = await Platform.parseFileJSON(Paths.FILE_KEYBOARD);
+		const json = (await Platform.parseFileJSON(Paths.FILE_KEYBOARD)) as any;
 
 		// Shortcuts
 		const jsonList = json.list;

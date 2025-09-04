@@ -53,9 +53,9 @@ class MoveObject extends Base {
 		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
 
 		// Options
-		this.isIgnore = Utils.numToBool(command[iterator.i++]);
-		this.isWaitEnd = Utils.numToBool(command[iterator.i++]);
-		this.isCameraOrientation = Utils.numToBool(command[iterator.i++]);
+		this.isIgnore = Utils.numberToBool(command[iterator.i++]);
+		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
+		this.isCameraOrientation = Utils.numberToBool(command[iterator.i++]);
 
 		// List of move commands
 		this.moves = [];
@@ -65,7 +65,7 @@ class MoveObject extends Base {
 			this.kind = command[iterator.i++];
 			if (this.kind >= COMMAND_MOVE_KIND.MOVE_NORTH && this.kind <= COMMAND_MOVE_KIND.MOVE_BACK) {
 				this.parameters.push({
-					square: !Utils.numToBool(command[iterator.i++]),
+					square: !Utils.numberToBool(command[iterator.i++]),
 				});
 				switch (this.kind) {
 					case COMMAND_MOVE_KIND.MOVE_NORTH:
@@ -112,7 +112,7 @@ class MoveObject extends Base {
 						break;
 				}
 			} else if (this.kind === COMMAND_MOVE_KIND.JUMP) {
-				const square = !Utils.numToBool(command[iterator.i++]);
+				const square = !Utils.numberToBool(command[iterator.i++]);
 				const x = System.DynamicValue.createValueCommand(command, iterator);
 				const y = System.DynamicValue.createValueCommand(command, iterator);
 				const yPlus = System.DynamicValue.createValueCommand(command, iterator);
@@ -132,8 +132,8 @@ class MoveObject extends Base {
 				});
 				this.moves.push(this.jump);
 			} else if (this.kind === COMMAND_MOVE_KIND.CHANGE_GRAPHICS) {
-				permanent = Utils.numToBool(command[iterator.i++]);
-				const dontChangeOrientation = Utils.numToBool(command[iterator.i++]);
+				permanent = Utils.numberToBool(command[iterator.i++]);
+				const dontChangeOrientation = Utils.numberToBool(command[iterator.i++]);
 				const indexKind = command[iterator.i++];
 				let kind = ELEMENT_MAP_KIND.NONE;
 				switch (indexKind) {
@@ -202,7 +202,7 @@ class MoveObject extends Base {
 				this.kind === COMMAND_MOVE_KIND.CHANGE_SPEED ||
 				this.kind === COMMAND_MOVE_KIND.CHANGE_FREQUENCY
 			) {
-				const permanent = Utils.numToBool(command[iterator.i++]);
+				const permanent = Utils.numberToBool(command[iterator.i++]);
 				const value = System.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
 					permanent: permanent,
@@ -214,8 +214,8 @@ class MoveObject extends Base {
 					this.moves.push(this.changeFrequency);
 				}
 			} else if (this.kind >= COMMAND_MOVE_KIND.MOVE_ANIMATION && this.kind <= COMMAND_MOVE_KIND.KEEP_POSITION) {
-				const onOff = Utils.numToBool(command[iterator.i++]);
-				const permanent = Utils.numToBool(command[iterator.i++]);
+				const onOff = Utils.numberToBool(command[iterator.i++]);
+				const permanent = Utils.numberToBool(command[iterator.i++]);
 				this.parameters.push({
 					onOff: onOff,
 					permanent: permanent,
@@ -259,7 +259,7 @@ class MoveObject extends Base {
 						break;
 					case COMMAND_MOVE_KIND.SCRIPT:
 						kind = EVENT_COMMAND_KIND.SCRIPT;
-						l = Utils.numToBool(command[iterator.i]) ? 3 : 2;
+						l = Utils.numberToBool(command[iterator.i]) ? 3 : 2;
 						break;
 				}
 				const commandList = command.slice(iterator.i, iterator.i + l);

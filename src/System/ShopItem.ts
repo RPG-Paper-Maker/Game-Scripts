@@ -58,7 +58,7 @@ class ShopItem extends Base {
 				this.armorID = System.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
-		this.selectionPrice = Utils.numToBool(command[iterator.i++]);
+		this.selectionPrice = Utils.numberToBool(command[iterator.i++]);
 		if (this.selectionPrice) {
 			this.specificPrice = [];
 			let cost: System.Cost;
@@ -69,7 +69,7 @@ class ShopItem extends Base {
 			}
 			iterator.i++;
 		}
-		this.selectionStock = Utils.numToBool(command[iterator.i++]);
+		this.selectionStock = Utils.numberToBool(command[iterator.i++]);
 		if (this.selectionStock) {
 			this.specificStock = System.DynamicValue.createValueCommand(command, iterator);
 		}

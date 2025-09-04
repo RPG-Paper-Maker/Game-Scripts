@@ -168,9 +168,9 @@ class Map extends Base {
 							this.currentPortion.y + j,
 							this.currentPortion.z + k
 						);
-						const json = await Platform.parseFileJSON(
+						const json = (await Platform.parseFileJSON(
 							Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName()
-						);
+						)) as any;
 						mapPortion.readStatic(json);
 					}
 				}
@@ -194,7 +194,7 @@ class Map extends Base {
 	 */
 	async readMapProperties(minimal: boolean = false) {
 		this.mapProperties = new System.MapProperties();
-		const json = await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS);
+		const json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS)) as any;
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
 				'The battle map ' + this.id + " doesn't " + 'exists. Please check your battle maps.'
@@ -525,7 +525,9 @@ class Map extends Base {
 		const lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			const portion = new Portion(realX, realY, realZ);
-			const json = await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName());
+			const json = (await Platform.parseFileJSON(
+				Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName()
+			)) as any;
 			if (json.hasOwnProperty('lands')) {
 				const mapPortion = new MapPortion(portion);
 				this.setMapPortion(x, y, z, mapPortion, move);
