@@ -79,7 +79,10 @@ class InventoryFilter extends Translatable {
 				};
 			case INVENTORY_FILTER_KIND.SCRIPT:
 				return (item: Item): boolean => {
-					return Interpreter.evaluate(this.script, { additionalName: 'item', additionalValue: item });
+					return Interpreter.evaluate(this.script, {
+						additionalName: 'item',
+						additionalValue: item,
+					}) as boolean;
 				};
 			default:
 				return null;

@@ -12,7 +12,7 @@
 /**
  * Utility methods for working with arrays.
  */
-class ArrayUtils {
+export class ArrayUtils {
 	/**
 	 * Removes an element at the given index.
 	 *
@@ -47,5 +47,3 @@ class ArrayUtils {
 		array.splice(index, 0, value);
 	}
 }
-
-export { ArrayUtils };

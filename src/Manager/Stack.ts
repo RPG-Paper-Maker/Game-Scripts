@@ -197,8 +197,8 @@ class Stack {
 
 		// Repeat keypress as long as not blocking
 		let continuePressed: boolean;
-		for (let i = 0, l = Inputs.keysPressed.length; i < l; i++) {
-			continuePressed = this.onKeyPressedRepeat(Inputs.keysPressed[i]);
+		for (const keyPressed of Inputs.keysPressed) {
+			continuePressed = this.onKeyPressedRepeat(keyPressed);
 			if (!continuePressed) {
 				break;
 			}

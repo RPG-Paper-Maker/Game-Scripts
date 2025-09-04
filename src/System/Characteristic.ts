@@ -220,7 +220,10 @@ class Characteristic extends Base {
 				switch (this.increaseDecreaseKind) {
 					case INCREASE_DECREASE_KIND.STAT_VALUE:
 						result += Datas.BattleSystems.getStatistic(
-							Interpreter.evaluate(this.statisticValueID.getValue(), { user: user, target: target })
+							Interpreter.evaluate(this.statisticValueID.getValue(), {
+								user: user,
+								target: target,
+							}) as number
 						).name();
 						break;
 					case INCREASE_DECREASE_KIND.ELEMENT_RES:

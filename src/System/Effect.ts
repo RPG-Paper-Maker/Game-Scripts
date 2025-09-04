@@ -151,7 +151,7 @@ class Effect extends Base {
 		if (this.isTemporarilyChangeTarget) {
 			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue(), {
 				user: user,
-			});
+			}) as Battler[];
 		}
 		const targets = Scene.Map.current.targets;
 		const l = targets.length;
@@ -172,7 +172,7 @@ class Effect extends Base {
 						precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
 							user: user,
 							target: target,
-						});
+						}) as number;
 						if (!Mathf.randomPercentTest(precision)) {
 							damage = null;
 							miss = true;
@@ -183,7 +183,7 @@ class Effect extends Base {
 							critical = Interpreter.evaluate(this.damageCriticalFormula.getValue(), {
 								user: user,
 								target: target,
-							});
+							}) as number;
 							if (Mathf.randomPercentTest(critical)) {
 								crit = true;
 							}
@@ -203,7 +203,7 @@ class Effect extends Base {
 					precision = Interpreter.evaluate(this.statusPrecisionFormula.getValue(), {
 						user: user,
 						target: battler.player,
-					});
+					}) as number;
 					id = this.statusID.getValue();
 					// Handle resistance
 					if (target.statusRes[id]) {
@@ -236,7 +236,7 @@ class Effect extends Base {
 		if (this.isTemporarilyChangeTarget) {
 			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue(), {
 				user: user,
-			});
+			}) as Battler[];
 		}
 		const targets = Scene.Map.current.targets;
 		let result = false;
@@ -280,7 +280,7 @@ class Effect extends Base {
 						precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
 							user: user,
 							target: target,
-						});
+						}) as number;
 						if (
 							battler.tempIsDamagesMiss ||
 							(battler.tempIsDamagesMiss === null && !Mathf.randomPercentTest(precision))
@@ -290,14 +290,17 @@ class Effect extends Base {
 						}
 					}
 					if (damage !== null) {
-						damage = Interpreter.evaluate(this.damageFormula.getValue(), { user: user, target: target });
+						damage = Interpreter.evaluate(this.damageFormula.getValue(), {
+							user: user,
+							target: target,
+						}) as number;
 						if (this.isDamageVariance) {
 							variance = Math.round(
 								(damage *
-									Interpreter.evaluate(this.damageVarianceFormula.getValue(), {
+									(Interpreter.evaluate(this.damageVarianceFormula.getValue(), {
 										user: user,
 										target: target,
-									})) /
+									}) as number)) /
 									100
 							);
 							damage = Mathf.random(damage - variance, damage + variance);
@@ -328,18 +331,16 @@ class Effect extends Base {
 							critical = Interpreter.evaluate(this.damageCriticalFormula.getValue(), {
 								user: user,
 								target: target,
-							});
+							}) as number;
 							if (
 								battler.tempIsDamagesCritical ||
 								(battler.tempIsDamagesCritical === null && Mathf.randomPercentTest(critical))
 							) {
-								damage = Interpreter.evaluate(
-									Interpreter.evaluate(Datas.BattleSystems.formulaCrit.getValue(), {
-										user: user,
-										target: target,
-										damage: damage,
-									})
-								);
+								damage = Interpreter.evaluate(Datas.BattleSystems.formulaCrit.getValue(), {
+									user: user,
+									target: target,
+									damage: damage,
+								}) as number;
 								crit = true;
 							}
 						}
@@ -349,7 +350,7 @@ class Effect extends Base {
 								Interpreter.evaluate(this.damagesMinimumFormula.getValue(), {
 									user: user,
 									target: target,
-								})
+								}) as number
 							);
 						}
 						if (this.isDamagesMaximum) {
@@ -358,7 +359,7 @@ class Effect extends Base {
 								Interpreter.evaluate(this.damagesMaximumFormula.getValue(), {
 									user: user,
 									target: target,
-								})
+								}) as number
 							);
 						}
 						damage = Math.round(damage);
@@ -447,7 +448,7 @@ class Effect extends Base {
 					precision = Interpreter.evaluate(this.statusPrecisionFormula.getValue(), {
 						user: user,
 						target: battler.player,
-					});
+					}) as number;
 					// Handle resistance
 					if (target.statusRes[id]) {
 						precision /= target.statusRes[id].multiplication;
@@ -557,7 +558,10 @@ class Effect extends Base {
 		const target = Player.getTemporaryPlayer();
 		switch (this.kind) {
 			case EFFECT_KIND.DAMAGES:
-				let damage = Interpreter.evaluate(this.damageFormula.getValue(), { user: user, target: target });
+				let damage = Interpreter.evaluate(this.damageFormula.getValue(), {
+					user: user,
+					target: target,
+				}) as number;
 				damage = Math.round(damage);
 				if (damage === 0) {
 					return '';
@@ -568,10 +572,10 @@ class Effect extends Base {
 				if (this.isDamageVariance) {
 					variance = Math.round(
 						(damage *
-							Interpreter.evaluate(this.damageVarianceFormula.getValue(), {
+							(Interpreter.evaluate(this.damageVarianceFormula.getValue(), {
 								user: user,
 								target: target,
-							})) /
+							}) as number)) /
 							100
 					);
 				}
@@ -587,14 +591,14 @@ class Effect extends Base {
 					precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
 						user: user,
 						target: target,
-					});
+					}) as number;
 					options.push(Datas.Languages.extras.precision.name() + ': ' + precision + '%');
 				}
 				if (this.isDamageCritical) {
 					critical = Interpreter.evaluate(this.damageCriticalFormula.getValue(), {
 						user: user,
 						target: target,
-					});
+					}) as number;
 					options.push(Datas.Languages.extras.critical.name() + ': ' + critical + '%');
 				}
 				let damageName = '';

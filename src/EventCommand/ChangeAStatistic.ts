@@ -116,7 +116,7 @@ class ChangeAStatistic extends Base {
 						target[abr],
 						Interpreter.evaluate(this.vFormula.getValue(), {
 							user: target,
-						})
+						}) as number
 					);
 					break;
 				case 2:

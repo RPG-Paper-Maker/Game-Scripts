@@ -109,7 +109,7 @@ class MainMenuCommand extends Translatable {
 						additionalName: 'menu',
 						additionalValue: t,
 						addReturn: false,
-					});
+					}) as boolean;
 				};
 			default:
 				return null;

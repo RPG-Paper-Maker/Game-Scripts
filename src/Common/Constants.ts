@@ -10,9 +10,9 @@
 */
 
 /**
- * Common constants used across the RPG Paper Maker engine.
+ * Common constants used.
  */
-class Constants {
+export class Constants {
 	/** Default UI font size in pixels. */
 	public static readonly DEFAULT_FONT_SIZE = 13;
 
@@ -55,5 +55,3 @@ class Constants {
 	/** Value name `"v"` used in JSON data. */
 	public static readonly JSON_VALUE = 'v';
 }
-
-export { Constants };

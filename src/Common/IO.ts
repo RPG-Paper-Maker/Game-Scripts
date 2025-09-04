@@ -11,96 +11,75 @@
 
 import { Datas } from '..';
 import { Platform } from './Platform';
+import { JsonObject } from './Types';
 
 /**
- * The Input and Output class who handles loading and saving.
- *
- * @class IO
+ * A static utility class for Input/Output operations:
+ * - Loading text and JSON files
+ * - Checking file existence
+ * - Saving JSON files (desktop only)
  */
-class IO {
-	constructor() {
-		throw new Error('This is a static class');
+export class IO {
+	/**
+	 * Check if a file exists at the given URL.
+	 * @param url - The path of the file.
+	 * @returns A promise resolving to `true` if the file exists, `false` otherwise.
+	 */
+	static async fileExists(url: string): Promise<boolean> {
+		try {
+			const response = await fetch(url, { method: 'HEAD' });
+			return response.ok;
+		} catch {
+			return false;
+		}
 	}
 
 	/**
-	 *  Check if a file exists.
-	 *  @static
-	 *  @param {string} url - The path of the file
-	 *  @returns {Promise<boolean>}
+	 * Load the contents of a text file.
+	 * @param url - The path of the file.
+	 * @returns A promise resolving to the file's contents as a string.
 	 */
-	static fileExists = async function (url: string): Promise<boolean> {
-		return await new Promise((resolve, reject) => {
-			const xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState === 4) {
-					resolve(xhr.status === 200);
-				}
-			};
-			xhr.open('HEAD', url, true);
-			xhr.send();
-		});
-	};
+	static async openFile(url: string): Promise<string> {
+		const response = await fetch(url);
+		if (!response.ok && response.status !== 0) {
+			throw new Error(`Failed to load file: ${url} (status ${response.status})`);
+		}
+		return await response.text();
+	}
 
 	/**
-	 *  Open an existing file.
-	 *  @static
-	 *  @param {string} url - The path of the file
-	 *  @returns {string}
+	 * Load and parse a JSON file.
+	 * If the project is protected (`Datas.Settings.isProtected`), the content will be
+	 * base64-decoded before parsing.
+	 * @param url - The path of the file.
+	 * @returns A promise resolving to the parsed JSON object, or `{}` if parsing fails.
 	 */
-	static openFile = async function (url: string): Promise<string> {
-		return await new Promise((resolve, reject) => {
-			const xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function () {
-				if (xhr.readyState === 4) {
-					if (xhr.status === 200 || xhr.status == 0) {
-						resolve(xhr.responseText);
-					}
-				}
-			};
-			xhr.open('GET', url, true);
-			xhr.send(null);
-		});
-	};
-
-	/**
-	 *  Open and parse an existing file.
-	 *  @static
-	 *  @param {string} url - The path of the file
-	 *  @returns {Promise<Record<string, any>>}
-	 */
-	static parseFileJSON = async function (url: string): Promise<Record<string, any>> {
+	static async parseFileJSON(url: string): Promise<JsonObject> {
 		let content = await Platform.loadFile(url);
 		if (Datas.Settings.isProtected) {
 			content = atob(content);
 		}
 		try {
 			return JSON.parse(content);
-		} catch (e) {
+		} catch {
+			console.warn(`Failed to parse JSON file: ${url}`);
 			return {};
 		}
-	};
+	}
 
 	/**
-	 *  Write a json file.
-	 *  @static
-	 *  @param {string} url - The path of the file
-	 *  @param {Object} obj - An object that can be stringified by JSON
+	 * Save an object to a JSON file (desktop only).
+	 * If the project is protected (`Datas.Settings.isProtected`), the content will be
+	 * base64-encoded before saving.
+	 * @param path - The path of the file to save.
+	 * @param obj - The object to stringify and save.
+	 * @throws If saving fails or running in a browser environment.
 	 */
-	static saveFile = async function (url: string, obj: object) {
-		if (Platform.DESKTOP) {
-			// Cannot be used in browser, need local storage
-			const fs = require('fs').promises;
-			let content = JSON.stringify(obj);
-			if (Datas.Settings.isProtected) {
-				content = btoa(content);
-			}
-			return await fs.writeFile(url, content, (e: Error) => {
-				if (e) {
-					throw e;
-				}
-			});
+	static async saveFile(path: string, obj: object): Promise<void> {
+		let content = JSON.stringify(obj);
+		if (Datas.Settings.isProtected) {
+			content = btoa(content);
 		}
-	};
+		window.ipcRenderer.send('save-file', path, content);
+	}
 }
-
-export { IO };

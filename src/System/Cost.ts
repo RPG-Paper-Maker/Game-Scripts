@@ -42,7 +42,7 @@ class Cost extends Base {
 		let cost: System.Cost, value: [DAMAGES_KIND, number];
 		for (let i = 0, l = list.length; i < l; i++) {
 			cost = list[i];
-			value = [cost.kind, Interpreter.evaluate(cost.valueFormula.getValue())];
+			value = [cost.kind, Interpreter.evaluate(cost.valueFormula.getValue()) as number];
 			switch (cost.kind) {
 				case DAMAGES_KIND.STAT:
 					price[cost.statisticID.getValue()] = value;
@@ -103,7 +103,7 @@ class Cost extends Base {
 	 *  Get value according to user characteristics.
 	 */
 	getValue(user: Player, target: Player) {
-		let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target });
+		let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target }) as number;
 		const baseValue = value;
 		if (user.skillCostRes[-1]) {
 			value *= user.skillCostRes[-1].multiplication;

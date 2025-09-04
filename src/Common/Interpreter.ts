@@ -14,31 +14,52 @@ import { MapObject, Player } from '../Core';
 import { Common, Core, Datas, EventCommand, Graphic, Main, Manager, Scene, System } from '../index';
 
 /**
- *  The interpreter to evaluate formulas or simple scripts without having to import.
- * @class Interpreter
+ * Represents the context available to evaluated formulas.
  */
-class Interpreter {
-	private static common: typeof Common = Common;
-	private static core: typeof Core = Core;
-	private static datas: typeof Datas = Datas;
-	private static eventCommand: typeof EventCommand = EventCommand;
-	private static graphic: typeof Graphic = Graphic;
-	private static manager: typeof Manager = Manager;
-	private static scene: typeof Scene = Scene;
-	private static system: typeof System = System;
-	private static main: typeof Main;
-	private static three: typeof THREE = THREE;
-	private static howl: typeof Howl = Howl;
+interface EvalContext {
+	Common: typeof Common;
+	Core: typeof Core;
+	Datas: typeof Datas;
+	EventCommand: typeof EventCommand;
+	Graphic: typeof Graphic;
+	Manager: typeof Manager;
+	Scene: typeof Scene;
+	System: typeof System;
+	Main: typeof Main;
+	THREE: typeof THREE;
+	Howl: typeof Howl;
+	u?: Player;
+	t?: Player;
+	damage?: number;
+	$object?: MapObject;
+	[key: string]: unknown;
+}
 
-	constructor() {
+/**
+ * A static class for evaluating dynamic formulas or scripts in a sandboxed context.
+ * Provides global access to game modules and injects runtime objects like `user`, `target`, or `thisObject`.
+ */
+export class Interpreter {
+	private constructor() {
 		throw new Error('This is a static class');
 	}
 
 	/**
-	 *  Evaluate a formula.
+	 * Evaluate a formula string within the game's runtime context.
+	 * @param formula - The formula to evaluate. Can be any valid JS expression or statement.
+	 * @param options - Runtime options and context injection.
+	 * @param options.user - The acting battler (user).
+	 * @param options.target - The target battler.
+	 * @param options.damage - Damage value reference.
+	 * @param options.thisObject - The current map object (`this` equivalent).
+	 * @param options.addReturn - Whether to prepend `return` to the formula (default: true).
+	 * @param options.additionalName - Extra variable name to inject into context.
+	 * @param options.additionalValue - Extra variable value to inject.
+	 * @param options.defaultValue - Value to return if formula is `null`.
+	 * @returns The result of the evaluated formula, or `null` on error.
 	 */
 	static evaluate(
-		formula: string,
+		formula: string | null,
 		{
 			user,
 			target,
@@ -55,59 +76,41 @@ class Interpreter {
 			thisObject?: MapObject;
 			addReturn?: boolean;
 			additionalName?: string;
-			additionalValue?: any;
-			defaultValue?: any;
+			additionalValue?: unknown;
+			defaultValue?: unknown;
 		} = {}
-	): any {
-		if (!this.main) {
-			this.main = Main;
-		}
+	): unknown {
 		if (formula === null) {
 			return defaultValue;
 		}
+
+		const context: EvalContext = {
+			Common,
+			Core,
+			Datas,
+			EventCommand,
+			Graphic,
+			Manager,
+			Scene,
+			System,
+			Main,
+			THREE,
+			Howl,
+			u: user,
+			t: target,
+			damage,
+			$object: thisObject,
+			...(additionalName ? { [additionalName]: additionalValue } : {}),
+		};
+
+		const body = (addReturn ? 'return ' : '') + formula;
 		try {
-			return new Function(
-				'Common',
-				'Core',
-				'Datas',
-				'EventCommand',
-				'Graphic',
-				'Manager',
-				'Scene',
-				'System',
-				'Main',
-				'THREE',
-				'Howl',
-				'u',
-				't',
-				'damage',
-				'$object',
-				additionalName,
-				(addReturn ? 'return ' : '') + formula
-			)(
-				this.common,
-				this.core,
-				this.datas,
-				this.eventCommand,
-				this.graphic,
-				this.manager,
-				this.scene,
-				this.system,
-				this.main,
-				this.three,
-				this.howl,
-				user,
-				target,
-				damage,
-				thisObject,
-				additionalValue
-			);
+			const argNames = Object.keys(context);
+			const argValues = Object.values(context);
+			return new Function(...argNames, body)(...argValues);
 		} catch (e) {
-			console.error('Error while interpreting the script: ' + formula);
-			console.error(e);
+			console.error(`Error while interpreting formula: "${body}"`, e);
 			return null;
 		}
 	}
 }
-
-export { Interpreter };

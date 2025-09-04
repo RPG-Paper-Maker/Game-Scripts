@@ -77,16 +77,20 @@ class BattleInitialize {
 		let position: THREE.Vector3, player: Player, battler: Battler, center: THREE.Vector3, offset: THREE.Vector3;
 		for (let i = 0; i < l; i++) {
 			// Battlers
-			center = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersCenterOffset.getValue());
+			center = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersCenterOffset.getValue()) as THREE.Vector3;
 			if (!(center instanceof THREE.Vector3)) {
-				Platform.showErrorMessage('Heroes battlers center offset incorrect return: ' + center);
+				Platform.showErrorMessage(
+					'Heroes battlers center offset incorrect return, should be a THREE.Vecto3: ' + center
+				);
 			}
 			offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset.getValue(), {
 				additionalName: 'i',
 				additionalValue: i,
-			});
+			}) as THREE.Vector3;
 			if (!(offset instanceof THREE.Vector3)) {
-				Platform.showErrorMessage('Heroes battlers offset incorrect return: ' + center);
+				Platform.showErrorMessage(
+					'Heroes battlers offset incorrect return, should be a THREE.Vecto3: ' + center
+				);
 			}
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
 			player = Game.current.teamHeroes[i];
@@ -120,20 +124,22 @@ class BattleInitialize {
 			// Battlers
 			troopMonster = this.battle.troop.list[i];
 			if (troopMonster.isSpecificPosition) {
-				center = Interpreter.evaluate(troopMonster.specificPosition.getValue());
+				center = Interpreter.evaluate(troopMonster.specificPosition.getValue()) as THREE.Vector3;
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Specific position return: ' + center);
 				}
 				offset = new THREE.Vector3();
 			} else {
-				center = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersCenterOffset.getValue());
+				center = Interpreter.evaluate(
+					Datas.BattleSystems.troopsBattlersCenterOffset.getValue()
+				) as THREE.Vector3;
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers center offset incorrect return: ' + center);
 				}
 				offset = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersOffset.getValue(), {
 					additionalName: 'i',
 					additionalValue: i,
-				});
+				}) as THREE.Vector3;
 				if (!(offset instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers offset incorrect return: ' + center);
 				}

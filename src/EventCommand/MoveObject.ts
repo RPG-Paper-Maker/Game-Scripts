@@ -327,13 +327,12 @@ class MoveObject extends Base {
 	}
 
 	getLockedOrientation(orientation: ORIENTATION) {
-		if (this.isCameraOrientation && Inputs.lockedKeys.length > 0) {
+		if (this.isCameraOrientation && Inputs.lockedKeys.size > 0) {
 			const currentEvent = ReactionInterpreter.currentReaction.currentReaction.event;
 			if (currentEvent && currentEvent.idEvent === 3 && currentEvent.isSystem) {
 				const pressedKey = ReactionInterpreter.currentParameters[1].getValue();
-				const value = Inputs.lockedKeys.find(([k]) => k === pressedKey);
-				if (value) {
-					const [, lockedAngle] = value;
+				const lockedAngle = Inputs.lockedKeys.get(pressedKey);
+				if (lockedAngle !== undefined) {
 					const dif = lockedAngle - Scene.Map.current.camera.horizontalAngle;
 					const angleDif = Math.round(dif / 90);
 					return Mathf.mod(orientation + angleDif, 4);

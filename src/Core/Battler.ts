@@ -108,10 +108,10 @@ class Battler {
 		this.midPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
 		this.botPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
 		this.active = true;
-		this.frame = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameDuration), {
+		this.frame = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameDuration) as number, {
 			frames: Datas.Systems.battlersFrames,
 		});
-		this.frameAttacking = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameAttackingDuration), {
+		this.frameAttacking = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameAttackingDuration) as number, {
 			loop: false,
 		});
 		this.frameArrow = new Frame(125);

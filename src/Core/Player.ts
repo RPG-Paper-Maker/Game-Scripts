@@ -336,7 +336,7 @@ class Player {
 	 *  @returns {boolean}
 	 */
 	isDead(): boolean {
-		return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue(), { user: this });
+		return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue(), { user: this }) as boolean;
 	}
 
 	/**

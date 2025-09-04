@@ -857,9 +857,9 @@ class Map extends Base {
 				';}',
 			{ addReturn: false }
 		);
-		let initialVelocity = Interpreter.evaluate(options.initialVelocity);
+		let initialVelocity = Interpreter.evaluate(options.initialVelocity) as number;
 		initialVelocity *= Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
-		const initialYRotation = Interpreter.evaluate(options.initialYRotation);
+		const initialYRotation = Interpreter.evaluate(options.initialYRotation) as number;
 		const portionsRay = options.portionsRay;
 		const particlesNumber = options.finalParticlesNumber;
 		for (let i = 0; i < particlesNumber; i++) {
@@ -972,9 +972,9 @@ class Map extends Base {
 		if (options === null || options.isNone || !points) {
 			return;
 		}
-		let initialVelocity = Interpreter.evaluate(options.initialVelocity);
+		let initialVelocity = Interpreter.evaluate(options.initialVelocity) as number;
 		initialVelocity *= Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
-		const initialYRotation = Interpreter.evaluate(options.initialYRotation);
+		const initialYRotation = Interpreter.evaluate(options.initialYRotation) as number;
 		const portionsRay = options.portionsRay;
 		const positionAttribute = points.geometry.getAttribute('position');
 		const yAxis = new THREE.Vector3(0, 1, 0);

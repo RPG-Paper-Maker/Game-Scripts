@@ -10,6 +10,7 @@
 */
 
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain } from 'electron';
+import { promises as fs } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -52,6 +53,10 @@ function createWindow() {
 			window.center();
 			window.setFullScreen(false);
 		}
+	});
+	ipcMain.on('save-file', async (event, path, content) => {
+		await fs.writeFile(path, content, 'utf-8');
+		return true;
 	});
 	window.loadFile('index.html');
 	window.removeMenu();

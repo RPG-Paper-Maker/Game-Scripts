@@ -406,8 +406,8 @@ class If extends Base {
 				const key = Datas.Keyboards.get(this.keyID.getValue());
 				const b = this.keyValue.getValue();
 				result = !b;
-				for (i = 0, l = Inputs.keysPressed.length; i < l; i++) {
-					if (Datas.Keyboards.isKeyEqual(Inputs.keysPressed[i], key)) {
+				for (const pressedKey of Inputs.keysPressed) {
+					if (Datas.Keyboards.isKeyEqual(pressedKey, key)) {
 						result = b;
 						break;
 					}
@@ -416,7 +416,7 @@ class If extends Base {
 			case 7:
 				result = Interpreter.evaluate(this.script.getValue(), {
 					thisObject: object,
-				});
+				}) as boolean;
 				break;
 			case 8:
 				result = Scene.Battle.escapedLastBattle;

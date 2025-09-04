@@ -66,7 +66,7 @@ class StatisticProgression extends Base {
 						? user.system.getProperty(Class.PROPERTY_FINAL_LEVEL, user.changedClass)
 						: maxLevel
 			  )
-			: Interpreter.evaluate(this.formula.getValue(), { user: user });
+			: (Interpreter.evaluate(this.formula.getValue(), { user: user }) as number);
 	}
 }
 
