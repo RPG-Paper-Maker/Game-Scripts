@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Utils } from '../Common';
-import { Core, Datas, System } from '../index';
+import { Core, Datas, Model } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, Sprite } from './index';
 import { Position } from './Position';
@@ -129,7 +129,7 @@ class Mountain extends MapElement {
 	 *  Get the System special element mountain.
 	 *  @returns {System.SpecialElement}
 	 */
-	getSystem(): System.SpecialElement {
+	getSystem(): Model.SpecialElement {
 		return Datas.SpecialElements.getMountain(this.mountainID);
 	}
 

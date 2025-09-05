@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { Interpreter, Utils } from '../Common';
 import { MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -21,7 +21,7 @@ import { Base } from './Base';
  */
 class Script extends Base {
 	public isDynamic: boolean;
-	public script: System.DynamicValue;
+	public script: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -31,8 +31,8 @@ class Script extends Base {
 		};
 		this.isDynamic = Utils.numberToBool(command[iterator.i++]);
 		this.script = this.isDynamic
-			? System.DynamicValue.createValueCommand(command, iterator)
-			: System.DynamicValue.createMessage(String(command[iterator.i]));
+			? Model.DynamicValue.createValueCommand(command, iterator)
+			: Model.DynamicValue.createMessage(String(command[iterator.i]));
 	}
 
 	/**

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Scene, System } from '..';
+import { Datas, Graphic, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
@@ -55,7 +55,7 @@ class BattleStartTurn {
 		let i: number, l: number, battler: Battler;
 		if (this.step === 0) {
 			const reactions = this.battle.troop.reactions;
-			let reaction: System.TroopReaction;
+			let reaction: Model.TroopReaction;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
 				if (reaction.frequency === TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_BEGIN) {
@@ -145,8 +145,8 @@ class BattleStartTurn {
 		if (this.battle.attackingGroup === CHARACTER_KIND.HERO) {
 			this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 			this.battle.currentEffectIndex = 0;
-			const skills: System.Skill[] = [];
-			let skill: System.Skill;
+			const skills: Model.Skill[] = [];
+			let skill: Model.Skill;
 			for (let i = 0, l = user.player.skills.length; i < l; i++) {
 				skill = Datas.Skills.get(user.player.skills[i].id);
 				if (!skill.isPossible()) {

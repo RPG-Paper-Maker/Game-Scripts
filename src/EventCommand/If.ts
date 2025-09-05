@@ -11,7 +11,7 @@
 
 import { CONDITION_HEROES_KIND, Inputs, Interpreter, ITEM_KIND, Mathf, ORIENTATION, Utils } from '../Common';
 import { Game, Item, MapObject, Player, StructSearchResult } from '../Core';
-import { Datas, Scene, System } from '../index';
+import { Datas, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,47 +22,47 @@ import { Base } from './Base';
 class If extends Base {
 	public hasElse: boolean;
 	public kind: number;
-	public variableParamProp: System.DynamicValue;
+	public variableParamProp: Model.DynamicValue;
 	public variableParamPropOPERATION_KIND: number;
-	public variableParamPropValue: System.DynamicValue;
+	public variableParamPropValue: Model.DynamicValue;
 	public heroesSelection: number;
-	public heroInstanceID: System.DynamicValue;
+	public heroInstanceID: Model.DynamicValue;
 	public heroesInTeam: boolean;
 	public heroesInTeamSelection: number;
 	public heroesKind: number;
-	public heroesNamed: System.DynamicValue;
+	public heroesNamed: Model.DynamicValue;
 	public heroesInTeamValue: number;
-	public heroesSkillID: System.DynamicValue;
+	public heroesSkillID: Model.DynamicValue;
 	public heroesEquipedKind: number;
-	public heroesEquipedWeaponID: System.DynamicValue;
-	public heroesEquipedArmorID: System.DynamicValue;
-	public heroesStatusID: System.DynamicValue;
-	public heroesStatisticID: System.DynamicValue;
+	public heroesEquipedWeaponID: Model.DynamicValue;
+	public heroesEquipedArmorID: Model.DynamicValue;
+	public heroesStatusID: Model.DynamicValue;
+	public heroesStatisticID: Model.DynamicValue;
 	public heroesStatisticOperation: number;
-	public heroesStatisticValue: System.DynamicValue;
-	public currencyID: System.DynamicValue;
+	public heroesStatisticValue: Model.DynamicValue;
+	public currencyID: Model.DynamicValue;
 	public operationCurrency: number;
-	public currencyValue: System.DynamicValue;
-	public itemID: System.DynamicValue;
+	public currencyValue: Model.DynamicValue;
+	public itemID: Model.DynamicValue;
 	public operationItem: number;
-	public itemValue: System.DynamicValue;
-	public weaponID: System.DynamicValue;
+	public itemValue: Model.DynamicValue;
+	public weaponID: Model.DynamicValue;
 	public operationWeapon: number;
-	public weaponValue: System.DynamicValue;
+	public weaponValue: Model.DynamicValue;
 	public weaponEquiped: boolean;
-	public armorID: System.DynamicValue;
+	public armorID: Model.DynamicValue;
 	public operationArmor: number;
-	public armorValue: System.DynamicValue;
+	public armorValue: Model.DynamicValue;
 	public armorEquiped: boolean;
-	public keyID: System.DynamicValue;
-	public keyValue: System.DynamicValue;
-	public objectIDLookingAt: System.DynamicValue;
+	public keyID: Model.DynamicValue;
+	public keyValue: Model.DynamicValue;
+	public objectIDLookingAt: Model.DynamicValue;
 	public orientationLookingAt: ORIENTATION;
-	public chronometerID: System.DynamicValue;
+	public chronometerID: Model.DynamicValue;
 	public chronometerOperation: number;
-	public chronometerSeconds: System.DynamicValue;
-	public script: System.DynamicValue;
-	public objectIDClimbing: System.DynamicValue;
+	public chronometerSeconds: Model.DynamicValue;
+	public script: Model.DynamicValue;
+	public objectIDClimbing: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -74,14 +74,14 @@ class If extends Base {
 		this.kind = command[iterator.i++];
 		switch (this.kind) {
 			case 0: // Variable / Param / Prop
-				this.variableParamProp = System.DynamicValue.createValueCommand(command, iterator);
+				this.variableParamProp = Model.DynamicValue.createValueCommand(command, iterator);
 				this.variableParamPropOPERATION_KIND = command[iterator.i++];
-				this.variableParamPropValue = System.DynamicValue.createValueCommand(command, iterator);
+				this.variableParamPropValue = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // Heroes
 				this.heroesSelection = command[iterator.i++];
 				if (this.heroesSelection === CONDITION_HEROES_KIND.THE_HERO_WITH_INSTANCE_ID) {
-					this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+					this.heroInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				}
 				this.heroesInTeam = Utils.numberToBool(command[iterator.i++]);
 				if (this.heroesInTeam) {
@@ -90,75 +90,75 @@ class If extends Base {
 				this.heroesKind = command[iterator.i++];
 				switch (this.heroesKind) {
 					case 0:
-						this.heroesNamed = System.DynamicValue.createValueCommand(command, iterator);
+						this.heroesNamed = Model.DynamicValue.createValueCommand(command, iterator);
 						break;
 					case 1:
 						this.heroesInTeamValue = command[iterator.i++];
 						break;
 					case 2:
-						this.heroesSkillID = System.DynamicValue.createValueCommand(command, iterator);
+						this.heroesSkillID = Model.DynamicValue.createValueCommand(command, iterator);
 						break;
 					case 3:
 						this.heroesEquipedKind = command[iterator.i++];
 						switch (this.heroesEquipedKind) {
 							case 0:
-								this.heroesEquipedWeaponID = System.DynamicValue.createValueCommand(command, iterator);
+								this.heroesEquipedWeaponID = Model.DynamicValue.createValueCommand(command, iterator);
 								break;
 							case 1:
-								this.heroesEquipedArmorID = System.DynamicValue.createValueCommand(command, iterator);
+								this.heroesEquipedArmorID = Model.DynamicValue.createValueCommand(command, iterator);
 								break;
 						}
 						break;
 					case 4:
-						this.heroesStatusID = System.DynamicValue.createValueCommand(command, iterator);
+						this.heroesStatusID = Model.DynamicValue.createValueCommand(command, iterator);
 						break;
 					case 5:
-						this.heroesStatisticID = System.DynamicValue.createValueCommand(command, iterator);
+						this.heroesStatisticID = Model.DynamicValue.createValueCommand(command, iterator);
 						this.heroesStatisticOperation = command[iterator.i++];
-						this.heroesStatisticValue = System.DynamicValue.createValueCommand(command, iterator);
+						this.heroesStatisticValue = Model.DynamicValue.createValueCommand(command, iterator);
 						break;
 				}
 				break;
 			case 2:
-				this.currencyID = System.DynamicValue.createValueCommand(command, iterator);
+				this.currencyID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.operationCurrency = command[iterator.i++];
-				this.currencyValue = System.DynamicValue.createValueCommand(command, iterator);
+				this.currencyValue = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 3:
-				this.itemID = System.DynamicValue.createValueCommand(command, iterator);
+				this.itemID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.operationItem = command[iterator.i++];
-				this.itemValue = System.DynamicValue.createValueCommand(command, iterator);
+				this.itemValue = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 4:
-				this.weaponID = System.DynamicValue.createValueCommand(command, iterator);
+				this.weaponID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.operationWeapon = command[iterator.i++];
-				this.weaponValue = System.DynamicValue.createValueCommand(command, iterator);
+				this.weaponValue = Model.DynamicValue.createValueCommand(command, iterator);
 				this.weaponEquiped = Utils.numberToBool(command[iterator.i++]);
 				break;
 			case 5:
-				this.armorID = System.DynamicValue.createValueCommand(command, iterator);
+				this.armorID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.operationArmor = command[iterator.i++];
-				this.armorValue = System.DynamicValue.createValueCommand(command, iterator);
+				this.armorValue = Model.DynamicValue.createValueCommand(command, iterator);
 				this.armorEquiped = Utils.numberToBool(command[iterator.i++]);
 				break;
 			case 6:
-				this.keyID = System.DynamicValue.createValueCommand(command, iterator);
-				this.keyValue = System.DynamicValue.createValueCommand(command, iterator);
+				this.keyID = Model.DynamicValue.createValueCommand(command, iterator);
+				this.keyValue = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 7:
-				this.script = System.DynamicValue.createValueCommand(command, iterator);
+				this.script = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 9:
-				this.objectIDLookingAt = System.DynamicValue.createValueCommand(command, iterator);
+				this.objectIDLookingAt = Model.DynamicValue.createValueCommand(command, iterator);
 				this.orientationLookingAt = command[iterator.i++];
 				break;
 			case 10:
-				this.chronometerID = System.DynamicValue.createValueCommand(command, iterator);
+				this.chronometerID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.chronometerOperation = command[iterator.i++];
-				this.chronometerSeconds = System.DynamicValue.createValueCommand(command, iterator);
+				this.chronometerSeconds = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 11:
-				this.objectIDClimbing = System.DynamicValue.createValueCommand(command, iterator);
+				this.objectIDClimbing = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 	}
@@ -198,7 +198,7 @@ class If extends Base {
 			heroesSelection: Player[],
 			id: number,
 			equip: Item,
-			stat: System.Statistic,
+			stat: Model.Statistic,
 			item: Item,
 			value: number,
 			nb: number;

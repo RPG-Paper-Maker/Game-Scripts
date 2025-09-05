@@ -11,7 +11,7 @@
 
 import { CHARACTER_KIND, GROUP_KIND } from '../Common';
 import { Game, MapObject, Player } from '../Core';
-import { Scene, System } from '../index';
+import { Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -21,15 +21,15 @@ import { Base } from './Base';
  */
 class ModifyTeam extends Base {
 	public kind: number;
-	public instanceLevel: System.DynamicValue;
+	public instanceLevel: Model.DynamicValue;
 	public instanceTeam: GROUP_KIND;
-	public stockVariableID: System.DynamicValue;
+	public stockVariableID: Model.DynamicValue;
 	public instanceKind: CHARACTER_KIND;
-	public instanceID: System.DynamicValue;
-	public enemyInstanceID: System.DynamicValue;
+	public instanceID: Model.DynamicValue;
+	public enemyInstanceID: Model.DynamicValue;
 	public enemyTeam: GROUP_KIND;
 	public modifyKind: number;
-	public modifyInstanceID: System.DynamicValue;
+	public modifyInstanceID: Model.DynamicValue;
 	public modifyTeam: GROUP_KIND;
 
 	constructor(command: any[]) {
@@ -41,19 +41,19 @@ class ModifyTeam extends Base {
 		this.kind = command[iterator.i++];
 		switch (this.kind) {
 			case 0: // Create new instance
-				this.instanceLevel = System.DynamicValue.createValueCommand(command, iterator);
+				this.instanceLevel = Model.DynamicValue.createValueCommand(command, iterator);
 				this.instanceTeam = command[iterator.i++];
-				this.stockVariableID = System.DynamicValue.createValueCommand(command, iterator);
+				this.stockVariableID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.instanceKind = command[iterator.i++];
-				this.instanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.instanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // Add enemy
-				this.enemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.enemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.enemyTeam = command[iterator.i++];
 				break;
 			case 2: // Modify (move/remove)
 				this.modifyKind = command[iterator.i++];
-				this.modifyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.modifyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.modifyTeam = command[iterator.i++];
 				break;
 		}

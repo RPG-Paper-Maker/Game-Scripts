@@ -10,14 +10,14 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *  All the status datas.
  *  @static
  */
 class Status {
-	private static list: System.Status[];
+	private static list: Model.Status[];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -31,7 +31,7 @@ class Status {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_STATUS)).status as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Status });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Status });
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Status {
 	 *  @param {number} id
 	 *  @returns {System.Status}
 	 */
-	static get(id: number): System.Status {
+	static get(id: number): Model.Status {
 		return Datas.Base.get(id, this.list, 'status');
 	}
 }

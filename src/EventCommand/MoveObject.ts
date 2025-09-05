@@ -21,7 +21,7 @@ import {
 	Utils,
 } from '../Common';
 import { Game, MapObject, ReactionInterpreter, StructSearchResult } from '../Core';
-import { Datas, EventCommand, Manager, Scene, System } from '../index';
+import { Datas, EventCommand, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -33,7 +33,7 @@ class MoveObject extends Base {
 	public static lockedInputs = false; // TEMP: to remove after adding the locked option
 	public static followGrid = false; // TEMP: to remove after adding the option
 
-	public objectID: System.DynamicValue;
+	public objectID: Model.DynamicValue;
 	public isIgnore: boolean;
 	public isWaitEnd: boolean;
 	public isCameraOrientation: boolean;
@@ -50,7 +50,7 @@ class MoveObject extends Base {
 		const l = command.length;
 
 		// Object ID
-		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
+		this.objectID = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Options
 		this.isIgnore = Utils.numberToBool(command[iterator.i++]);
@@ -113,13 +113,13 @@ class MoveObject extends Base {
 				}
 			} else if (this.kind === COMMAND_MOVE_KIND.JUMP) {
 				const square = !Utils.numberToBool(command[iterator.i++]);
-				const x = System.DynamicValue.createValueCommand(command, iterator);
-				const y = System.DynamicValue.createValueCommand(command, iterator);
-				const yPlus = System.DynamicValue.createValueCommand(command, iterator);
-				const z = System.DynamicValue.createValueCommand(command, iterator);
-				const peakY = System.DynamicValue.createValueCommand(command, iterator);
-				const peakYPlus = System.DynamicValue.createValueCommand(command, iterator);
-				const time = System.DynamicValue.createValueCommand(command, iterator);
+				const x = Model.DynamicValue.createValueCommand(command, iterator);
+				const y = Model.DynamicValue.createValueCommand(command, iterator);
+				const yPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				const z = Model.DynamicValue.createValueCommand(command, iterator);
+				const peakY = Model.DynamicValue.createValueCommand(command, iterator);
+				const peakYPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				const time = Model.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
 					square: square,
 					x: x,
@@ -150,7 +150,7 @@ class MoveObject extends Base {
 						kind = ELEMENT_MAP_KIND.OBJECT_3D;
 						break;
 				}
-				const pictureID = System.DynamicValue.createValueCommand(command, iterator);
+				const pictureID = Model.DynamicValue.createValueCommand(command, iterator);
 				iterator.i++;
 				const indexX = command[iterator.i++];
 				const indexY = command[iterator.i++];
@@ -203,7 +203,7 @@ class MoveObject extends Base {
 				this.kind === COMMAND_MOVE_KIND.CHANGE_FREQUENCY
 			) {
 				const permanent = Utils.numberToBool(command[iterator.i++]);
-				const value = System.DynamicValue.createValueCommand(command, iterator);
+				const value = Model.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
 					permanent: permanent,
 					value: value,
@@ -1295,7 +1295,6 @@ class MoveObject extends Base {
 					case ORIENTATION.SOUTH:
 						return ORIENTATION.SOUTH_WEST;
 				}
-				break;
 			}
 			case ORIENTATION.EAST: {
 				switch (orientationZ) {

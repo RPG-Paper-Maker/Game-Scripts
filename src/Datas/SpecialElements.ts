@@ -12,17 +12,17 @@
 import * as THREE from 'three';
 import { Constants, Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 
 /** @class
  *  All the special elements datas.
  *  @static
  */
 class SpecialElements {
-	public static autotiles: System.Autotile[];
-	public static walls: System.SpecialElement[];
-	public static mountains: System.Mountain[];
-	public static objects: System.Object3D[];
+	public static autotiles: Model.Autotile[];
+	public static walls: Model.SpecialElement[];
+	public static mountains: Model.Mountain[];
+	public static objects: Model.Object3D[];
 	public static texturesAutotiles: TextureBundle[][] = [];
 	public static texturesWalls: THREE.MeshPhongMaterial[] = [];
 	public static texturesObjects3D: THREE.MeshPhongMaterial[] = [];
@@ -38,13 +38,13 @@ class SpecialElements {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS)) as any;
 		this.autotiles = [];
-		Utils.readJSONSystemList({ list: json.autotiles, listIDs: this.autotiles, cons: System.Autotile });
+		Utils.readJSONSystemList({ list: json.autotiles, listIDs: this.autotiles, cons: Model.Autotile });
 		this.walls = [];
-		Utils.readJSONSystemList({ list: json.walls, listIDs: this.walls, cons: System.SpecialElement });
+		Utils.readJSONSystemList({ list: json.walls, listIDs: this.walls, cons: Model.SpecialElement });
 		this.mountains = [];
-		Utils.readJSONSystemList({ list: json.m, listIDs: this.mountains, cons: System.Mountain });
+		Utils.readJSONSystemList({ list: json.m, listIDs: this.mountains, cons: Model.Mountain });
 		this.objects = [];
-		Utils.readJSONSystemList({ list: json.o, listIDs: this.objects, cons: System.Object3D });
+		Utils.readJSONSystemList({ list: json.o, listIDs: this.objects, cons: Model.Object3D });
 	}
 
 	/**
@@ -52,7 +52,7 @@ class SpecialElements {
 	 *  @param {number} id
 	 *  @returns {System.Autotile}
 	 */
-	static getAutotile(id: number): System.Autotile {
+	static getAutotile(id: number): Model.Autotile {
 		return Datas.Base.get(id, this.autotiles, 'autotile');
 	}
 
@@ -61,7 +61,7 @@ class SpecialElements {
 	 *  @param {number} id
 	 *  @returns {System.SpecialElement}
 	 */
-	static getWall(id: number): System.SpecialElement {
+	static getWall(id: number): Model.SpecialElement {
 		return Datas.Base.get(id, this.walls, 'wall');
 	}
 
@@ -70,7 +70,7 @@ class SpecialElements {
 	 *  @param {number} id
 	 *  @returns {System.Mountain}
 	 */
-	static getMountain(id: number): System.Mountain {
+	static getMountain(id: number): Model.Mountain {
 		return Datas.Base.get(id, this.mountains, 'mountain');
 	}
 
@@ -79,7 +79,7 @@ class SpecialElements {
 	 *  @param {number} id
 	 *  @returns {System.Object3D}
 	 */
-	static getObject3D(id: number): System.Object3D {
+	static getObject3D(id: number): Model.Object3D {
 		return Datas.Base.get(id, this.objects, 'object 3D');
 	}
 
@@ -153,7 +153,7 @@ class SpecialElements {
 	static async loadTextureAutotile(
 		textureAutotile: TextureBundle,
 		texture: THREE.Texture,
-		picture: System.Picture,
+		picture: Model.Picture,
 		offset: number,
 		isAnimated: boolean
 	): Promise<any[]> {
@@ -347,7 +347,7 @@ class SpecialElements {
 	 *  @param {number} id - The picture id
 	 *  @returns {THREE.MeshPhongMaterial}
 	 */
-	static async loadTextureWall(picture: System.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadTextureWall(picture: Model.Picture, id: number): Promise<THREE.MeshPhongMaterial> {
 		const picture2D = await Picture2D.create(picture);
 		const texture = new THREE.Texture();
 		const w = picture2D.image.width;
@@ -450,7 +450,7 @@ class SpecialElements {
 	static async loadTextureMountain(
 		textureMountain: TextureBundle,
 		texture: THREE.Texture,
-		picture: System.Picture,
+		picture: Model.Picture,
 		offset: number,
 		id: number
 	): Promise<any[]> {

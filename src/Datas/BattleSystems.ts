@@ -10,39 +10,39 @@
 */
 
 import { Paths, Platform, SONG_KIND, Utils } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *  All the battle System datas.
  *  @static
  */
 class BattleSystems {
-	private static elements: System.Element[];
+	private static elements: Model.Element[];
 	private static elementsOrder: number[];
-	private static statistics: System.Statistic[];
+	private static statistics: Model.Statistic[];
 	public static statisticsOrder: number[];
 	private static statisticsElements: number[];
 	private static statisticsElementsPercent: number[];
 	public static maxStatisticID: number;
-	private static equipments: System.Translatable[];
+	private static equipments: Model.Translatable[];
 	public static equipmentsOrder: number[];
 	public static maxEquipmentID: number;
-	private static weaponsKind: System.WeaponArmorKind[];
-	private static armorsKind: System.WeaponArmorKind[];
+	private static weaponsKind: Model.WeaponArmorKind[];
+	private static armorsKind: Model.WeaponArmorKind[];
 	private static battleCommands: number[];
 	public static battleCommandsOrder: number[];
-	private static battleMaps: System.BattleMap[];
+	private static battleMaps: Model.BattleMap[];
 	public static idLevelStatistic: number;
 	public static idExpStatistic: number;
-	public static formulaIsDead: System.DynamicValue;
-	public static formulaCrit: System.DynamicValue;
-	public static heroesBattlersCenterOffset: System.DynamicValue;
-	public static heroesBattlersOffset: System.DynamicValue;
-	public static troopsBattlersCenterOffset: System.DynamicValue;
-	public static troopsBattlersOffset: System.DynamicValue;
-	public static battleMusic: System.PlaySong;
-	public static battleLevelUp: System.PlaySong;
-	public static battleVictory: System.PlaySong;
+	public static formulaIsDead: Model.DynamicValue;
+	public static formulaCrit: Model.DynamicValue;
+	public static heroesBattlersCenterOffset: Model.DynamicValue;
+	public static heroesBattlersOffset: Model.DynamicValue;
+	public static troopsBattlersCenterOffset: Model.DynamicValue;
+	public static troopsBattlersOffset: Model.DynamicValue;
+	public static battleMusic: Model.PlaySong;
+	public static battleLevelUp: Model.PlaySong;
+	public static battleVictory: Model.PlaySong;
 	public static cameraMoveInBattle: boolean;
 
 	constructor() {
@@ -50,7 +50,7 @@ class BattleSystems {
 	}
 
 	/**
-	 *  Read the JSON file associated to battle System.
+	 *  Read the JSON file associated to battle Model.
 	 */
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM)) as any;
@@ -63,7 +63,7 @@ class BattleSystems {
 			listIDs: this.elements,
 			listIndexes: this.elementsOrder,
 			indexesIDs: true,
-			cons: System.Element,
+			cons: Model.Element,
 		});
 
 		// Statistics
@@ -74,7 +74,7 @@ class BattleSystems {
 			listIDs: this.statistics,
 			listIndexes: this.statisticsOrder,
 			indexesIDs: true,
-			cons: System.Statistic,
+			cons: Model.Statistic,
 		});
 
 		// Add elements res to statistics
@@ -85,8 +85,8 @@ class BattleSystems {
 		for (i = 0, l = this.elementsOrder.length; i < l; i++) {
 			id = this.elementsOrder[i];
 			name = this.elements[id].name();
-			this.statistics[this.maxStatisticID + i * 2 + 1] = System.Statistic.createElementRes(id, name);
-			this.statistics[this.maxStatisticID + i * 2 + 2] = System.Statistic.createElementResPercent(id, name);
+			this.statistics[this.maxStatisticID + i * 2 + 1] = Model.Statistic.createElementRes(id, name);
+			this.statistics[this.maxStatisticID + i * 2 + 2] = Model.Statistic.createElementResPercent(id, name);
 			this.statisticsOrder[index + i * 2] = this.maxStatisticID + i * 2 + 1;
 			this.statisticsOrder[index + i * 2 + 1] = this.maxStatisticID + i * 2 + 2;
 			this.statisticsElements[id] = this.maxStatisticID + i * 2 + 1;
@@ -102,13 +102,13 @@ class BattleSystems {
 			listIDs: this.equipments,
 			listIndexes: this.equipmentsOrder,
 			indexesIDs: true,
-			cons: System.Translatable,
+			cons: Model.Translatable,
 		});
 		this.weaponsKind = [];
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.weaponsKind, []),
 			listIDs: this.weaponsKind,
-			cons: System.WeaponArmorKind,
+			cons: Model.WeaponArmorKind,
 		});
 
 		// Armors kind
@@ -116,7 +116,7 @@ class BattleSystems {
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.armorsKind, []),
 			listIDs: this.armorsKind,
-			cons: System.WeaponArmorKind,
+			cons: Model.WeaponArmorKind,
 		});
 
 		// Battle commands
@@ -137,7 +137,7 @@ class BattleSystems {
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.battleMaps, []),
 			listIDs: this.battleMaps,
-			cons: System.BattleMap,
+			cons: Model.BattleMap,
 		});
 
 		// Ids of specific statistics
@@ -145,29 +145,29 @@ class BattleSystems {
 		this.idExpStatistic = json.xp;
 
 		// Formulas
-		this.formulaIsDead = new System.DynamicValue(json.fisdead);
-		this.formulaCrit = System.DynamicValue.readOrDefaultMessage(json.fc);
-		this.heroesBattlersCenterOffset = System.DynamicValue.readOrDefaultMessage(
+		this.formulaIsDead = new Model.DynamicValue(json.fisdead);
+		this.formulaCrit = Model.DynamicValue.readOrDefaultMessage(json.fc);
+		this.heroesBattlersCenterOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersCenterOffset,
 			'new THREE.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
 		);
-		this.heroesBattlersOffset = System.DynamicValue.readOrDefaultMessage(
+		this.heroesBattlersOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersOffset,
 			'new THREE.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)'
 		);
-		this.troopsBattlersCenterOffset = System.DynamicValue.readOrDefaultMessage(
+		this.troopsBattlersCenterOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersCenterOffset,
 			'new THREE.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
 		);
-		this.troopsBattlersOffset = System.DynamicValue.readOrDefaultMessage(
+		this.troopsBattlersOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersOffset,
 			'new THREE.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)'
 		);
 
 		// Musics
-		this.battleMusic = new System.PlaySong(SONG_KIND.MUSIC, json.bmusic);
-		this.battleLevelUp = new System.PlaySong(SONG_KIND.SOUND, json.blevelup);
-		this.battleVictory = new System.PlaySong(SONG_KIND.MUSIC, json.bvictory);
+		this.battleMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.bmusic);
+		this.battleLevelUp = new Model.PlaySong(SONG_KIND.SOUND, json.blevelup);
+		this.battleVictory = new Model.PlaySong(SONG_KIND.MUSIC, json.bvictory);
 
 		// Options
 		this.cameraMoveInBattle = Utils.defaultValue(json.cmib, true);
@@ -178,7 +178,7 @@ class BattleSystems {
 	 *  @static
 	 *  @returns {System.Statistic}
 	 */
-	static getLevelStatistic(): System.Statistic {
+	static getLevelStatistic(): Model.Statistic {
 		return this.statistics[this.idLevelStatistic];
 	}
 
@@ -187,7 +187,7 @@ class BattleSystems {
 	 *  @static
 	 *  @returns {System.Statistic}
 	 */
-	static getExpStatistic(): System.Statistic {
+	static getExpStatistic(): Model.Statistic {
 		const stat = this.statistics[this.idExpStatistic];
 		return stat === undefined || stat.isRes ? null : stat;
 	}
@@ -197,7 +197,7 @@ class BattleSystems {
 	 *  @param {number} id
 	 *  @returns {System.Element}
 	 */
-	static getElement(id: number): System.Element {
+	static getElement(id: number): Model.Element {
 		return Datas.Base.get(id, this.elements, 'element');
 	}
 
@@ -206,7 +206,7 @@ class BattleSystems {
 	 *  @param {number} id
 	 *  @returns {System.Statistic}
 	 */
-	static getStatistic(id: number): System.Statistic {
+	static getStatistic(id: number): Model.Statistic {
 		return Datas.Base.get(id, this.statistics, 'statistic');
 	}
 
@@ -233,7 +233,7 @@ class BattleSystems {
 	 *  @param {number} id
 	 *  @returns {System.Translatable}
 	 */
-	static getEquipment(id: number): System.Translatable {
+	static getEquipment(id: number): Model.Translatable {
 		return Datas.Base.get(id, this.equipments, 'equipment');
 	}
 
@@ -242,7 +242,7 @@ class BattleSystems {
 	 *  @param {number} id
 	 *  @returns {System.WeaponArmorKind}
 	 */
-	static getWeaponKind(id: number): System.WeaponArmorKind {
+	static getWeaponKind(id: number): Model.WeaponArmorKind {
 		return Datas.Base.get(id, this.weaponsKind, 'weapon kind');
 	}
 
@@ -251,7 +251,7 @@ class BattleSystems {
 	 *  @param {number} id
 	 *  @returns {System.WeaponArmorKind}
 	 */
-	static getArmorKind(id: number): System.WeaponArmorKind {
+	static getArmorKind(id: number): Model.WeaponArmorKind {
 		return Datas.Base.get(id, this.armorsKind, 'armor kind');
 	}
 
@@ -269,7 +269,7 @@ class BattleSystems {
 	 *  @param {number} id
 	 *  @returns {System.BattleMap}
 	 */
-	static getBattleMap(id: number): System.BattleMap {
+	static getBattleMap(id: number): Model.BattleMap {
 		return Datas.Base.get(id, this.battleMaps, 'battle map');
 	}
 }

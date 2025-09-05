@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, System } from '..';
+import { Datas, Model } from '..';
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Battler } from './Battler';
 import { Picture2D } from './Picture2D';
@@ -20,7 +20,7 @@ import { Picture2D } from './Picture2D';
  */
 class Status {
 	public id: number;
-	public system: System.Status;
+	public system: Model.Status;
 	public turn: number;
 	public picture: Picture2D;
 
@@ -34,11 +34,11 @@ class Status {
 	/**
 	 *  Get message and replace target name.
 	 *  @static
-	 *  @param {System.DynamicValue} message
+	 *  @param {Model.DynamicValue} message
 	 *  @param {Battler} target
 	 *  @returns {string}
 	 */
-	static getMessage(message: System.DynamicValue, target: Battler): string {
+	static getMessage(message: Model.DynamicValue, target: Battler): string {
 		return message.getValue().replace('[target]', target.player.name);
 	}
 

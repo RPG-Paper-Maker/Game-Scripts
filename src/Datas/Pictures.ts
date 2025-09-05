@@ -11,14 +11,14 @@
 
 import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Picture2D } from '../Core';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *   All the pictures datas.
  *   @static
  */
 class Pictures {
-	private static list: System.Picture[][];
+	private static list: Model.Picture[][];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -41,8 +41,8 @@ class Pictures {
 			jsonHash: Record<string, any>,
 			jsonList: Record<string, any>[],
 			jsonPicture: Record<string, any>,
-			list: System.Picture[],
-			picture: System.Picture;
+			list: Model.Picture[],
+			picture: Model.Picture;
 		for (let i = 0; i < l; i++) {
 			jsonHash = json[i];
 			k = jsonHash.k;
@@ -64,11 +64,12 @@ class Pictures {
 				jsonPicture = jsonList[j];
 				if (jsonPicture) {
 					id = jsonPicture.id;
-					picture = new System.Picture(jsonPicture, k);
+					picture = new Model.Picture(jsonPicture);
+					picture.kind = k;
 					if (!Platform.IS_DESKTOP && !picture.isBR) {
 						picture.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
-								System.Picture.getLocalFolder(picture.kind) +
+								Model.Picture.getLocalFolder(picture.kind) +
 								'/' +
 								picture.name
 						);
@@ -104,10 +105,10 @@ class Pictures {
 	 *  @param {number} id - The picture id
 	 *  @returns {Picture}
 	 */
-	static get(kind: PICTURE_KIND, id: number): System.Picture {
+	static get(kind: PICTURE_KIND, id: number): Model.Picture {
 		return kind === PICTURE_KIND.NONE || id === -1
-			? new System.Picture()
-			: Datas.Base.get(id, this.list[kind], 'picture ' + System.Picture.pictureKindToString(kind));
+			? new Model.Picture()
+			: Datas.Base.get(id, this.list[kind], 'picture ' + Model.Picture.pictureKindToString(kind));
 	}
 
 	/**
@@ -115,7 +116,7 @@ class Pictures {
 	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @returns {Picture}
 	 */
-	static getListByKind(kind: PICTURE_KIND): System.Picture[] {
+	static getListByKind(kind: PICTURE_KIND): Model.Picture[] {
 		return this.list[kind];
 	}
 

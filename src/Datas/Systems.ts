@@ -11,7 +11,7 @@
 
 import { Paths, Platform, ScreenResolution, SONG_KIND, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
-import { Datas, EventCommand, Manager, Scene, System } from '../index';
+import { Datas, EventCommand, Manager, Model, Scene } from '../index';
 
 /** @class
  *   All the System datas.
@@ -25,43 +25,43 @@ class Systems {
 	public static PATH_DLCS: string;
 	public static ID_MAP_START_HERO: number;
 	public static heroMapPosition: Position;
-	public static projectName: System.Translatable;
+	public static projectName: Model.Translatable;
 	public static antialias: boolean;
 	public static isMouseControls: boolean;
-	public static mountainCollisionHeight: System.DynamicValue;
-	public static mountainCollisionAngle: System.DynamicValue;
-	public static climbingSpeed: System.DynamicValue;
-	public static moveCameraOnBlockView: System.DynamicValue;
-	public static mapFrameDuration: System.DynamicValue;
+	public static mountainCollisionHeight: Model.DynamicValue;
+	public static mountainCollisionAngle: Model.DynamicValue;
+	public static climbingSpeed: Model.DynamicValue;
+	public static moveCameraOnBlockView: Model.DynamicValue;
+	public static mapFrameDuration: Model.DynamicValue;
 	public static battlersFrames: number;
 	public static battlersFrameDuration: string;
 	public static battlersFrameAttackingDuration: string;
 	public static battlersColumns: number;
 	public static autotilesFrames: number;
 	public static autotilesFrameDuration: number;
-	public static priceSoldItem: System.DynamicValue;
+	public static priceSoldItem: Model.DynamicValue;
 	public static enterNameTable: string[][];
 	public static showBB: boolean;
 	public static showFPS: boolean;
-	private static itemsTypes: System.Translatable[];
-	public static inventoryFilters: System.InventoryFilter[];
-	public static mainMenuCommands: System.MainMenuCommand[];
-	public static heroesStatistics: System.DynamicValue[];
-	private static colors: System.Color[];
-	private static currencies: System.Currency[];
-	private static windowSkins: System.WindowSkin[];
-	private static cameraProperties: System.CameraProperties[];
-	private static detections: System.Detection[];
-	private static skyboxes: System.Skybox[];
-	private static fontSizes: System.DynamicValue[];
-	private static fontNames: System.FontName[];
-	private static speeds: System.DynamicValue[];
-	private static frequencies: System.DynamicValue[];
-	public static initialPartyMembers: System.InitialPartyMember[];
-	public static soundCursor: System.PlaySong;
-	public static soundConfirmation: System.PlaySong;
-	public static soundCancel: System.PlaySong;
-	public static soundImpossible: System.PlaySong;
+	private static itemsTypes: Model.Translatable[];
+	public static inventoryFilters: Model.InventoryFilter[];
+	public static mainMenuCommands: Model.MainMenuCommand[];
+	public static heroesStatistics: Model.DynamicValue[];
+	private static colors: Model.Color[];
+	private static currencies: Model.Currency[];
+	private static windowSkins: Model.WindowSkin[];
+	private static cameraProperties: Model.CameraProperties[];
+	private static detections: Model.Detection[];
+	private static skyboxes: Model.Skybox[];
+	private static fontSizes: Model.DynamicValue[];
+	private static fontNames: Model.FontName[];
+	private static speeds: Model.DynamicValue[];
+	private static frequencies: Model.DynamicValue[];
+	public static initialPartyMembers: Model.InitialPartyMember[];
+	public static soundCursor: Model.PlaySong;
+	public static soundConfirmation: Model.PlaySong;
+	public static soundCancel: Model.PlaySong;
+	public static soundImpossible: Model.PlaySong;
 	public static dbOptions: EventCommand.SetDialogBoxOptions;
 	public static facesetsSize: number;
 	public static facesetScalingWidth: number;
@@ -79,14 +79,14 @@ class Systems {
 	}
 
 	/**
-	 *  Read the JSON file associated to System.
+	 *  Read the JSON file associated to Model.
 	 *  @static
 	 */
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SYSTEM)) as any;
 
 		// Project name
-		this.projectName = new System.Translatable(json.pn);
+		this.projectName = new Model.Translatable(json.pn);
 		Platform.setWindowTitle(this.projectName.name());
 
 		// Screen resolution + antialiasing
@@ -109,11 +109,11 @@ class Systems {
 		this.SQUARE_SIZE = json.ss;
 		this.PORTIONS_RAY = Utils.defaultValue(json.portionRayIngame, 3);
 		this.FRAMES = json.frames;
-		this.mountainCollisionHeight = System.DynamicValue.readOrDefaultNumber(json.mch, 4);
-		this.mountainCollisionAngle = System.DynamicValue.readOrDefaultNumberDouble(json.mca, 45);
-		this.climbingSpeed = System.DynamicValue.readOrDefaultNumberDouble(json.cs, 0.25);
-		this.moveCameraOnBlockView = System.DynamicValue.readOrDefaultSwitch(json.mcobv, true);
-		this.mapFrameDuration = System.DynamicValue.readOrDefaultNumber(json.mfd, 150);
+		this.mountainCollisionHeight = Model.DynamicValue.readOrDefaultNumber(json.mch, 4);
+		this.mountainCollisionAngle = Model.DynamicValue.readOrDefaultNumberDouble(json.mca, 45);
+		this.climbingSpeed = Model.DynamicValue.readOrDefaultNumberDouble(json.cs, 0.25);
+		this.moveCameraOnBlockView = Model.DynamicValue.readOrDefaultSwitch(json.mcobv, true);
+		this.mapFrameDuration = Model.DynamicValue.readOrDefaultNumber(json.mfd, 150);
 		this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
 		this.battlersFrameDuration = Utils.defaultValue(json.bfd, 'Common.Mathf.random(250, 300)');
 		this.battlersFrameAttackingDuration = Utils.defaultValue(json.bfad, '200');
@@ -121,7 +121,7 @@ class Systems {
 		this.autotilesFrames = Utils.defaultValue(json.autotilesFrames, 4);
 		this.autotilesFrameDuration = Utils.defaultValue(json.autotilesFrameDuration, 150);
 		this.saveSlots = Utils.defaultValue(json.saveSlots, 4);
-		this.priceSoldItem = System.DynamicValue.readOrDefaultNumberDouble(json.priceSoldItem, 50);
+		this.priceSoldItem = Model.DynamicValue.readOrDefaultNumberDouble(json.priceSoldItem, 50);
 
 		// Path BR
 		this.PATH_BR = Platform.WEB_DEV ? './BR' : Paths.FILES + json.pathBR;
@@ -162,63 +162,63 @@ class Systems {
 		this.speeds = [];
 		this.frequencies = [];
 		this.initialPartyMembers = [];
-		Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this.itemsTypes, cons: System.Translatable });
+		Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this.itemsTypes, cons: Model.Translatable });
 		Utils.readJSONSystemList({
 			list: json.inventoryFilters,
 			listIndexes: this.inventoryFilters,
-			cons: System.InventoryFilter,
+			cons: Model.InventoryFilter,
 		});
 		Utils.readJSONSystemList({
 			list: json.mainMenuCommands,
 			listIndexes: this.mainMenuCommands,
-			cons: System.MainMenuCommand,
+			cons: Model.MainMenuCommand,
 		});
 		Utils.readJSONSystemList({
 			list: json.heroesStatistics,
 			listIndexes: this.heroesStatistics,
 			func: (element: Record<string, any>) => {
-				return System.DynamicValue.readOrDefaultDatabase(element.statisticID);
+				return Model.DynamicValue.readOrDefaultDatabase(element.statisticID);
 			},
 		});
-		Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons: System.Color });
-		Utils.readJSONSystemList({ list: json.currencies, listIDs: this.currencies, cons: System.Currency });
-		Utils.readJSONSystemList({ list: json.wskins, listIDs: this.windowSkins, cons: System.WindowSkin });
-		Utils.readJSONSystemList({ list: json.cp, listIDs: this.cameraProperties, cons: System.CameraProperties });
-		Utils.readJSONSystemList({ list: json.d, listIDs: this.detections, cons: System.Detection });
-		Utils.readJSONSystemList({ list: json.sb, listIDs: this.skyboxes, cons: System.Skybox });
+		Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons: Model.Color });
+		Utils.readJSONSystemList({ list: json.currencies, listIDs: this.currencies, cons: Model.Currency });
+		Utils.readJSONSystemList({ list: json.wskins, listIDs: this.windowSkins, cons: Model.WindowSkin });
+		Utils.readJSONSystemList({ list: json.cp, listIDs: this.cameraProperties, cons: Model.CameraProperties });
+		Utils.readJSONSystemList({ list: json.d, listIDs: this.detections, cons: Model.Detection });
+		Utils.readJSONSystemList({ list: json.sb, listIDs: this.skyboxes, cons: Model.Skybox });
 		Utils.readJSONSystemList({
 			list: json.fs,
 			listIDs: this.fontSizes,
 			func: (element: Record<string, any>) => {
-				return System.DynamicValue.readOrDefaultNumber(element.s, 0);
+				return Model.DynamicValue.readOrDefaultNumber(element.s, 0);
 			},
 		});
-		Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, cons: System.FontName });
+		Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, cons: Model.FontName });
 		Utils.readJSONSystemList({
 			list: json.sf,
 			listIDs: this.speeds,
 			func: (element: Record<string, any>) => {
-				return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
+				return Model.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
 			},
 		});
 		Utils.readJSONSystemList({
 			list: json.f,
 			listIDs: this.frequencies,
 			func: (element: Record<string, any>) => {
-				return System.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
+				return Model.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
 			},
 		});
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.initialPartyMembers, []),
 			listIndexes: this.initialPartyMembers,
-			cons: System.InitialPartyMember,
+			cons: Model.InitialPartyMember,
 		});
 
 		// Sounds
-		this.soundCursor = new System.PlaySong(SONG_KIND.SOUND, json.scu);
-		this.soundConfirmation = new System.PlaySong(SONG_KIND.SOUND, json.sco);
-		this.soundCancel = new System.PlaySong(SONG_KIND.SOUND, json.sca);
-		this.soundImpossible = new System.PlaySong(SONG_KIND.SOUND, json.si);
+		this.soundCursor = new Model.PlaySong(SONG_KIND.SOUND, json.scu);
+		this.soundConfirmation = new Model.PlaySong(SONG_KIND.SOUND, json.sco);
+		this.soundCancel = new Model.PlaySong(SONG_KIND.SOUND, json.sca);
+		this.soundImpossible = new Model.PlaySong(SONG_KIND.SOUND, json.si);
 
 		// Window skin options
 		this.dbOptions = <EventCommand.SetDialogBoxOptions>Manager.Events.getEventCommand(json.dbo);
@@ -250,7 +250,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getItemType(id: number): System.Translatable {
+	static getItemType(id: number): Model.Translatable {
 		return Datas.Base.get(id, this.itemsTypes, 'item type');
 	}
 
@@ -260,7 +260,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {System.Color}
 	 */
-	static getColor(id: number): System.Color {
+	static getColor(id: number): Model.Color {
 		return Datas.Base.get(id, this.colors, 'color');
 	}
 
@@ -270,7 +270,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getCurrency(id: number): System.Currency {
+	static getCurrency(id: number): Model.Currency {
 		return Datas.Base.get(id, this.currencies, 'currency');
 	}
 
@@ -280,7 +280,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getWindowSkin(id: number): System.WindowSkin {
+	static getWindowSkin(id: number): Model.WindowSkin {
 		return Datas.Base.get(id, this.windowSkins, 'window skin');
 	}
 
@@ -290,7 +290,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getCameraProperties(id: number): System.CameraProperties {
+	static getCameraProperties(id: number): Model.CameraProperties {
 		return Datas.Base.get(id, this.cameraProperties, 'camera properties');
 	}
 
@@ -300,7 +300,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getDetection(id: number): System.Detection {
+	static getDetection(id: number): Model.Detection {
 		return Datas.Base.get(id, this.detections, 'detections');
 	}
 
@@ -310,7 +310,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getSkybox(id: number): System.Skybox {
+	static getSkybox(id: number): Model.Skybox {
 		return Datas.Base.get(id, this.skyboxes, 'skybox');
 	}
 
@@ -320,7 +320,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getFontSize(id: number): System.DynamicValue {
+	static getFontSize(id: number): Model.DynamicValue {
 		return Datas.Base.get(id, this.fontSizes, 'font size');
 	}
 
@@ -330,7 +330,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getFontName(id: number): System.FontName {
+	static getFontName(id: number): Model.FontName {
 		return Datas.Base.get(id, this.fontNames, 'font name');
 	}
 
@@ -340,7 +340,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getSpeed(id: number): System.DynamicValue {
+	static getSpeed(id: number): Model.DynamicValue {
 		return Datas.Base.get(id, this.speeds, 'speed');
 	}
 
@@ -350,7 +350,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getFrequency(id: number): System.DynamicValue {
+	static getFrequency(id: number): Model.DynamicValue {
 		return Datas.Base.get(id, this.frequencies, 'frequency');
 	}
 
@@ -391,7 +391,7 @@ class Systems {
 	 *  @static
 	 *  @returns {SystemWindowSkin}
 	 */
-	static getCurrentWindowSkin(): System.WindowSkin {
+	static getCurrentWindowSkin(): Model.WindowSkin {
 		return this.dbOptions.v_windowSkin;
 	}
 

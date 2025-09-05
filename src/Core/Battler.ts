@@ -19,7 +19,7 @@ import {
 	Interpreter,
 	STATUS_RESTRICTIONS_KIND,
 } from '../Common';
-import { ProgressionTable } from '../System';
+import { ProgressionTable } from '../Model';
 import { Datas, Graphic, Manager, Scene } from '../index';
 import { Animation } from './Animation';
 import { Camera } from './Camera';

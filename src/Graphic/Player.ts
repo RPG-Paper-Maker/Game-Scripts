@@ -12,7 +12,7 @@
 import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Picture2D, Rectangle } from '../Core';
 import { Status } from '../Core/Status';
-import { Core, Datas, Graphic, Manager, System } from '../index';
+import { Core, Datas, Graphic, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -92,7 +92,7 @@ class Player extends Base {
 		} else {
 			statistics = Datas.BattleSystems.statisticsOrder;
 		}
-		let id: number, statistic: System.Statistic, graphic: Graphic.Statistic;
+		let id: number, statistic: Model.Statistic, graphic: Graphic.Statistic;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			id = statistics[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
@@ -202,14 +202,14 @@ class Player extends Base {
 	 *  @param {number} equipmentID
 	 *  @param {System.CommonSkillItem} weaponArmor
 	 */
-	updateStatShort(weaponArmor: System.CommonSkillItem) {
+	updateStatShort(weaponArmor: Model.CommonSkillItem) {
 		const totalBonus = this.player.getBestWeaponArmorToReplace(weaponArmor)[0];
 		if (totalBonus > 0) {
-			this.graphicStatShort = new Graphic.Text('^', { color: System.Color.GREEN });
+			this.graphicStatShort = new Graphic.Text('^', { color: Model.Color.GREEN });
 		} else if (totalBonus < 0) {
-			this.graphicStatShort = new Graphic.Text('ˇ', { color: System.Color.RED });
+			this.graphicStatShort = new Graphic.Text('ˇ', { color: Model.Color.RED });
 		} else {
-			this.graphicStatShort = new Graphic.Text('-', { color: System.Color.GREY });
+			this.graphicStatShort = new Graphic.Text('-', { color: Model.Color.GREY });
 		}
 	}
 

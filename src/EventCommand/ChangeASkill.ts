@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject, Player, Skill } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeASkill extends Base {
-	public skillID: System.DynamicValue;
+	public skillID: Model.DynamicValue;
 	public selection: number;
-	public heInstanceID: System.DynamicValue;
+	public heInstanceID: Model.DynamicValue;
 	public groupIndex: number;
 	public operation: number;
 
@@ -32,13 +32,13 @@ class ChangeASkill extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.skillID = System.DynamicValue.createValueCommand(command, iterator);
+		this.skillID = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Selectionnager
 		this.selection = command[iterator.i++];
 		switch (this.selection) {
 			case 0:
-				this.heInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.heInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
 				this.groupIndex = command[iterator.i++];

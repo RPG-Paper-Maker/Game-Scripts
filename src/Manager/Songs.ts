@@ -10,8 +10,8 @@
 */
 
 import { SONG_KIND } from '../Common';
-import { Datas, System } from '../index';
-import { ProgressionTable } from '../System';
+import { Datas, Model } from '../index';
+import { ProgressionTable } from '../Model';
 
 /** @class
  *  The manager for songs.
@@ -39,7 +39,7 @@ class Songs {
 	 *  Initialize all the lists according to SONG_KIND.
 	 */
 	static initialize() {
-		System.PlaySong.currentPlayingMusic = new System.PlaySong(SONG_KIND.MUSIC);
+		Model.PlaySong.currentPlayingMusic = new Model.PlaySong(SONG_KIND.MUSIC);
 		this.volumes[SONG_KIND.MUSIC] = 0;
 		this.volumes[SONG_KIND.BACKGROUND_SOUND] = 0;
 		this.volumes[SONG_KIND.MUSIC_EFFECT] = 0;
@@ -110,7 +110,7 @@ class Songs {
 	 *  @returns {boolean} Indicates if the song is stopped
 	 */
 	static stopSong(kind: SONG_KIND, time: number, seconds: number, id: number = -1, pause: boolean = false): boolean {
-		System.PlaySong.currentPlayingMusic = new System.PlaySong(SONG_KIND.MUSIC);
+		Model.PlaySong.currentPlayingMusic = new Model.PlaySong(SONG_KIND.MUSIC);
 		const current = new Date().getTime();
 		const ellapsedTime = current - time;
 		const currentHowl = kind === SONG_KIND.SOUND ? this.currentSounds[id] : this.current[kind];

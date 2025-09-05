@@ -11,7 +11,7 @@
 
 import { SONG_KIND, Utils } from '../Common';
 import { Game, MapObject } from '../Core';
-import { Scene, System } from '../index';
+import { Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,18 +20,18 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class ChangeMapProperties extends Base {
-	public mapID: System.DynamicValue;
+	public mapID: Model.DynamicValue;
 	public isTilesetID: boolean;
-	public tilesetID: System.DynamicValue;
+	public tilesetID: Model.DynamicValue;
 	public isMusic: boolean;
-	public music: System.PlaySong;
+	public music: Model.PlaySong;
 	public isBackgroundSound: boolean;
-	public backgroundSound: System.PlaySong;
+	public backgroundSound: Model.PlaySong;
 	public isCameraPropertiesID: boolean;
-	public cameraPropertiesID: System.DynamicValue;
+	public cameraPropertiesID: Model.DynamicValue;
 	public isSky: boolean;
 	public skyKind: number;
-	public skyID: System.DynamicValue;
+	public skyID: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -39,27 +39,27 @@ class ChangeMapProperties extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.mapID = System.DynamicValue.createValueCommand(command, iterator);
+		this.mapID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.isTilesetID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isTilesetID) {
-			this.tilesetID = System.DynamicValue.createValueCommand(command, iterator);
+			this.tilesetID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.isMusic = Utils.numberToBool(command[iterator.i++]);
 		if (this.isMusic) {
-			this.music = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC);
+			this.music = Model.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC);
 		}
 		this.isBackgroundSound = Utils.numberToBool(command[iterator.i++]);
 		if (this.isBackgroundSound) {
-			this.backgroundSound = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.BACKGROUND_SOUND);
+			this.backgroundSound = Model.PlaySong.createValueCommand(command, iterator, SONG_KIND.BACKGROUND_SOUND);
 		}
 		this.isCameraPropertiesID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isCameraPropertiesID) {
-			this.cameraPropertiesID = System.DynamicValue.createValueCommand(command, iterator);
+			this.cameraPropertiesID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.isSky = Utils.numberToBool(command[iterator.i++]);
 		if (this.isSky) {
 			this.skyKind = command[iterator.i++];
-			this.skyID = System.DynamicValue.createValueCommand(command, iterator);
+			this.skyID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 

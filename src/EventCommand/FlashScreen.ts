@@ -11,7 +11,7 @@
 
 import { Platform, ScreenResolution, Utils } from '../Common';
 import { MapObject } from '../Core';
-import { Datas, Manager, System } from '../index';
+import { Datas, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class FlashScreen extends Base {
-	public colorID: System.DynamicValue;
+	public colorID: Model.DynamicValue;
 	public isWaitEnd: boolean;
-	public time: System.DynamicValue;
+	public time: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -30,9 +30,9 @@ class FlashScreen extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.colorID = System.DynamicValue.createValueCommand(command, iterator);
+		this.colorID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
-		this.time = System.DynamicValue.createValueCommand(command, iterator);
+		this.time = Model.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.isWaitEnd;
 	}
 

@@ -11,7 +11,7 @@
 
 import { CHARACTER_KIND, GROUP_KIND, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Game, MapObject, Picture2D, Player } from '../Core';
-import { Common, Datas, Manager, Scene, System } from '../index';
+import { Common, Datas, Manager, Model, Scene } from '../index';
 
 /** @class
  *  The game stack that is organizing the game scenes.
@@ -142,11 +142,11 @@ class Stack {
 		const json = (await Common.Platform.parseFileJSON(Paths.FILE_TEST)) as any;
 		const troopID = json.troopID;
 		const battleMap = Datas.BattleSystems.getBattleMap(json.battleTroopTestBattleMapID);
-		const heroes: System.HeroTroopBattleTest[] = [];
+		const heroes: Model.HeroTroopBattleTest[] = [];
 		Utils.readJSONSystemList({
 			list: json.battleTroopTestHeroes,
 			listIndexes: heroes,
-			cons: System.HeroTroopBattleTest,
+			cons: Model.HeroTroopBattleTest,
 		});
 		Game.current = new Game();
 		Game.current.initializeDefault();

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Manager, Scene, System } from '..';
+import { Manager, Model, Scene } from '..';
 import { ITEM_KIND } from '../Common';
 import { Game, Item, MapObject } from '../Core';
 import { Base } from './Base';
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class StartShopMenu extends Base {
-	public buyOnly: System.DynamicValue;
-	public shopID: System.DynamicValue;
-	public items: System.ShopItem[];
+	public buyOnly: Model.DynamicValue;
+	public shopID: Model.DynamicValue;
+	public items: Model.ShopItem[];
 	public isRestock: boolean;
 
 	constructor(command: any[], isRestock: boolean = false) {
@@ -33,13 +33,13 @@ class StartShopMenu extends Base {
 			i: 0,
 		};
 		if (!isRestock) {
-			this.buyOnly = System.DynamicValue.createValueCommand(command, iterator);
+			this.buyOnly = Model.DynamicValue.createValueCommand(command, iterator);
 		}
-		this.shopID = System.DynamicValue.createValueCommand(command, iterator);
+		this.shopID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.items = [];
-		let shopItem: System.ShopItem;
+		let shopItem: Model.ShopItem;
 		while (iterator.i < command.length) {
-			shopItem = new System.ShopItem();
+			shopItem = new Model.ShopItem();
 			shopItem.parse(command, iterator);
 			this.items.push(shopItem);
 		}
@@ -56,7 +56,7 @@ class StartShopMenu extends Base {
 		stocks[ITEM_KIND.ITEM] = {};
 		stocks[ITEM_KIND.WEAPON] = {};
 		stocks[ITEM_KIND.ARMOR] = {};
-		let system: System.ShopItem;
+		let system: Model.ShopItem;
 		const list: Item[] = [];
 		let id: number, stock: number, newStock;
 		if (Game.current.shops[shopID]) {

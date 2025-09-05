@@ -11,7 +11,7 @@
 
 import { ALIGN, CHARACTERISTIC_KIND, Interpreter, ITEM_KIND, ORIENTATION_WINDOW } from '../Common';
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { Datas, Graphic, Manager, Model, Scene } from '../index';
 import { MenuBase } from './MenuBase';
 
 /**
@@ -145,7 +145,7 @@ class MenuEquip extends MenuBase {
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
 		const characteristics = player.getCharacteristics();
 		const list = new Array(l);
-		let j: number, m: number, characteristic: System.Characteristic, isPossible: boolean;
+		let j: number, m: number, characteristic: Model.Characteristic, isPossible: boolean;
 		for (let i = 0; i < l; i++) {
 			// Check if is possible because of characteristics
 			isPossible = true;
@@ -176,14 +176,14 @@ class MenuEquip extends MenuBase {
 		const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
 		const idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
 		const list: Graphic.Base[] = [new Graphic.Text('  [' + Datas.Languages.extras.remove.name() + ']')];
-		let item: Item, systemItem: System.CommonSkillItem;
-		let type: System.WeaponArmorKind, nbItem: number;
+		let item: Item, systemItem: Model.CommonSkillItem;
+		let type: Model.WeaponArmorKind, nbItem: number;
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
 		let j: number,
 			m: number,
-			characteristic: System.Characteristic,
+			characteristic: Model.Characteristic,
 			allow: boolean,
-			characteristics: System.Characteristic[];
+			characteristics: Model.Characteristic[];
 		for (let i = 0, l = Game.current.items.length; i < l; i++) {
 			item = Game.current.items[i];
 			if (item.kind !== ITEM_KIND.ITEM) {

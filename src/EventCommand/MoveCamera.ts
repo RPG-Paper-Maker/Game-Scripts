@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Inputs, Mathf, Utils } from '../Common';
 import { MapObject, StructSearchResult } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -21,22 +21,22 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class MoveCamera extends Base {
-	public targetID: System.DynamicValue;
+	public targetID: Model.DynamicValue;
 	public operation: number;
 	public moveTargetOffset: boolean;
 	public cameraOrientation: boolean;
-	public x: System.DynamicValue;
+	public x: Model.DynamicValue;
 	public xSquare: boolean;
-	public y: System.DynamicValue;
+	public y: Model.DynamicValue;
 	public ySquare: boolean;
-	public z: System.DynamicValue;
+	public z: Model.DynamicValue;
 	public zSquare: boolean;
 	public rotationTargetOffset: boolean;
-	public h: System.DynamicValue;
-	public v: System.DynamicValue;
-	public distance: System.DynamicValue;
+	public h: Model.DynamicValue;
+	public v: Model.DynamicValue;
+	public distance: Model.DynamicValue;
 	public isWaitEnd: boolean;
-	public time: System.DynamicValue;
+	public time: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -49,7 +49,7 @@ class MoveCamera extends Base {
 		if (!Utils.numberToBool(command[iterator.i++])) {
 			this.targetID = null;
 		} else {
-			this.targetID = System.DynamicValue.createValueCommand(command, iterator);
+			this.targetID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 
 		// Operation
@@ -58,24 +58,24 @@ class MoveCamera extends Base {
 		// Move
 		this.moveTargetOffset = Utils.numberToBool(command[iterator.i++]);
 		this.cameraOrientation = Utils.numberToBool(command[iterator.i++]);
-		this.x = System.DynamicValue.createValueCommand(command, iterator);
+		this.x = Model.DynamicValue.createValueCommand(command, iterator);
 		this.xSquare = !Utils.numberToBool(command[iterator.i++]);
-		this.y = System.DynamicValue.createValueCommand(command, iterator);
+		this.y = Model.DynamicValue.createValueCommand(command, iterator);
 		this.ySquare = !Utils.numberToBool(command[iterator.i++]);
-		this.z = System.DynamicValue.createValueCommand(command, iterator);
+		this.z = Model.DynamicValue.createValueCommand(command, iterator);
 		this.zSquare = !Utils.numberToBool(command[iterator.i++]);
 
 		// Rotation
 		this.rotationTargetOffset = Utils.numberToBool(command[iterator.i++]);
-		this.h = System.DynamicValue.createValueCommand(command, iterator);
-		this.v = System.DynamicValue.createValueCommand(command, iterator);
+		this.h = Model.DynamicValue.createValueCommand(command, iterator);
+		this.v = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Zoom
-		this.distance = System.DynamicValue.createValueCommand(command, iterator);
+		this.distance = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Options
 		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
-		this.time = System.DynamicValue.createValueCommand(command, iterator);
+		this.time = Model.DynamicValue.createValueCommand(command, iterator);
 
 		this.parallel = !this.isWaitEnd;
 	}

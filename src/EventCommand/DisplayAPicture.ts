@@ -11,7 +11,7 @@
 
 import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
-import { Datas, Manager, System } from '../index';
+import { Datas, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,16 +20,16 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class DisplayAPicture extends Base {
-	public pictureID: System.DynamicValue;
-	public index: System.DynamicValue;
+	public pictureID: Model.DynamicValue;
+	public index: Model.DynamicValue;
 	public centered: boolean;
 	public originX: number;
 	public originY: number;
-	public x: System.DynamicValue;
-	public y: System.DynamicValue;
-	public zoom: System.DynamicValue;
-	public opacity: System.DynamicValue;
-	public angle: System.DynamicValue;
+	public x: Model.DynamicValue;
+	public y: Model.DynamicValue;
+	public zoom: Model.DynamicValue;
+	public opacity: Model.DynamicValue;
+	public angle: Model.DynamicValue;
 	public stretch: boolean;
 
 	constructor(command: any[]) {
@@ -38,9 +38,9 @@ class DisplayAPicture extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.pictureID = System.DynamicValue.createValueCommand(command, iterator);
+		this.pictureID = Model.DynamicValue.createValueCommand(command, iterator);
 		iterator.i++;
-		this.index = System.DynamicValue.createValueCommand(command, iterator);
+		this.index = Model.DynamicValue.createValueCommand(command, iterator);
 		this.centered = Utils.numberToBool(command[iterator.i++]);
 		if (this.centered) {
 			this.originX = ScreenResolution.SCREEN_X / 2;
@@ -49,11 +49,11 @@ class DisplayAPicture extends Base {
 			this.originX = 0;
 			this.originY = 0;
 		}
-		this.x = System.DynamicValue.createValueCommand(command, iterator);
-		this.y = System.DynamicValue.createValueCommand(command, iterator);
-		this.zoom = System.DynamicValue.createValueCommand(command, iterator);
-		this.opacity = System.DynamicValue.createValueCommand(command, iterator);
-		this.angle = System.DynamicValue.createValueCommand(command, iterator);
+		this.x = Model.DynamicValue.createValueCommand(command, iterator);
+		this.y = Model.DynamicValue.createValueCommand(command, iterator);
+		this.zoom = Model.DynamicValue.createValueCommand(command, iterator);
+		this.opacity = Model.DynamicValue.createValueCommand(command, iterator);
+		this.angle = Model.DynamicValue.createValueCommand(command, iterator);
 		this.stretch = Utils.numberToBool(command[iterator.i++]);
 	}
 

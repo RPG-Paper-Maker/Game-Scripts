@@ -10,7 +10,7 @@
 */
 
 import { ALIGN } from '../Common';
-import { Core, Datas, Graphic, System } from '../index';
+import { Core, Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {Skill} skill - The current selected skill
  */
 class Skill extends Base {
-	public system: System.Skill;
+	public system: Model.Skill;
 	public graphicName: Graphic.TextIcon;
 	public graphicCost: Graphic.Text;
 	public graphicInformations: Graphic.SkillItem;

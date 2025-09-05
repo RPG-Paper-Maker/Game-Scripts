@@ -11,7 +11,7 @@
 
 import { ALIGN_VERTICAL, Utils } from '../Common';
 import { Camera, MapObject, Node, ReactionInterpreter } from '../Core';
-import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { Datas, Graphic, Manager, Model, Scene } from '../index';
 import { Main } from '../main';
 
 /**
@@ -170,18 +170,18 @@ abstract class Base {
 	 * @param {System.Reaction} reaction - The reaction to add
 	 * @param {MapObject} object - The object reacting
 	 * @param {number} state - the state ID
-	 * @param {System.DynamicValue[]} parameters - All the parameters coming with this reaction
-	 * @param {[System.Event, number]} - event the time events values
+	 * @param {Model.DynamicValue[]} parameters - All the parameters coming with this reaction
+	 * @param {[Model.Event, number]} - event the time events values
 	 * @param {boolean} [moving=false] - indicate if the command is of type moving.
 	 * @return {ReactionInterpreter}
 	 */
 	addReaction(
 		sender: MapObject,
-		reaction: System.Reaction,
+		reaction: Model.Reaction,
 		object: MapObject,
 		state: number,
-		parameters: System.DynamicValue[],
-		event: [System.Event, number],
+		parameters: Model.DynamicValue[],
+		event: [Model.Event, number],
 		moving: boolean = false
 	): ReactionInterpreter {
 		if (reaction.getFirstCommand() !== null) {

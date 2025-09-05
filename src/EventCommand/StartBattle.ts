@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { Game, MapObject, Position } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,19 +20,19 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class StartBattle extends Base {
-	public battleMapID: System.DynamicValue;
-	public mapID: System.DynamicValue;
-	public x: System.DynamicValue;
-	public y: System.DynamicValue;
-	public yPlus: System.DynamicValue;
-	public z: System.DynamicValue;
+	public battleMapID: Model.DynamicValue;
+	public mapID: Model.DynamicValue;
+	public x: Model.DynamicValue;
+	public y: Model.DynamicValue;
+	public yPlus: Model.DynamicValue;
+	public z: Model.DynamicValue;
 	public canEscape: boolean;
 	public canGameOver: boolean;
-	public troopID: System.DynamicValue;
+	public troopID: Model.DynamicValue;
 	public transitionStart: number;
-	public transitionStartColor: System.DynamicValue;
+	public transitionStartColor: Model.DynamicValue;
 	public transitionEnd: number;
-	public transitionEndColor: System.DynamicValue;
+	public transitionEndColor: Model.DynamicValue;
 	public battleMapType: number;
 
 	constructor(command: any[]) {
@@ -56,7 +56,7 @@ class StartBattle extends Base {
 		const type = command[iterator.i++];
 		switch (type) {
 			case 0: // Existing troop ID
-				this.troopID = System.DynamicValue.createValueCommand(command, iterator);
+				this.troopID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // If random troop in map properties
 			// TODO
@@ -66,32 +66,32 @@ class StartBattle extends Base {
 		this.battleMapType = command[iterator.i++];
 		switch (this.battleMapType) {
 			case 0: // Existing battle map ID
-				this.battleMapID = System.DynamicValue.createValueCommand(command, iterator);
+				this.battleMapID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // Select
-				this.mapID = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.x = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.y = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.yPlus = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.z = System.DynamicValue.createNumber(command[iterator.i++]);
+				this.mapID = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.x = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.y = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.yPlus = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.z = Model.DynamicValue.createNumber(command[iterator.i++]);
 				break;
 			case 2: // Numbers
-				this.mapID = System.DynamicValue.createValueCommand(command, iterator);
-				this.x = System.DynamicValue.createValueCommand(command, iterator);
-				this.y = System.DynamicValue.createValueCommand(command, iterator);
-				this.yPlus = System.DynamicValue.createValueCommand(command, iterator);
-				this.z = System.DynamicValue.createValueCommand(command, iterator);
+				this.mapID = Model.DynamicValue.createValueCommand(command, iterator);
+				this.x = Model.DynamicValue.createValueCommand(command, iterator);
+				this.y = Model.DynamicValue.createValueCommand(command, iterator);
+				this.yPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				this.z = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 
 		// Transition
 		this.transitionStart = command[iterator.i++];
 		if (Utils.numberToBool(this.transitionStart)) {
-			this.transitionStartColor = System.DynamicValue.createValueCommand(command, iterator);
+			this.transitionStartColor = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.transitionEnd = command[iterator.i++];
 		if (Utils.numberToBool(this.transitionEnd)) {
-			this.transitionEndColor = System.DynamicValue.createValueCommand(command, iterator);
+			this.transitionEndColor = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 
@@ -121,7 +121,7 @@ class StartBattle extends Base {
 			}
 			const battleMap =
 				this.battleMapID === null
-					? System.BattleMap.create(
+					? Model.BattleMap.create(
 							this.mapID.getValue(),
 							new Position(this.x.getValue(), this.y.getValue(), this.z.getValue(), this.yPlus.getValue())
 					  )

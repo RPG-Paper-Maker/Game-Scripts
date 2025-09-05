@@ -11,7 +11,7 @@
 
 import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { MapObject } from '../Core';
-import { Datas, Manager, System } from '../index';
+import { Datas, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -23,10 +23,10 @@ class SendEvent extends Base {
 	public targetKind: number;
 	public senderNoReceiver: boolean;
 	public onlyTheClosest: boolean;
-	public targetID: System.DynamicValue;
+	public targetID: Model.DynamicValue;
 	public isSystem: boolean;
 	public eventID: number;
-	public parameters: System.DynamicValue[];
+	public parameters: Model.DynamicValue[];
 
 	constructor(command: any[]) {
 		super();
@@ -40,12 +40,12 @@ class SendEvent extends Base {
 		this.senderNoReceiver = false;
 		switch (this.targetKind) {
 			case 1:
-				this.targetID = System.DynamicValue.createValueCommand(command, iterator);
+				this.targetID = Model.DynamicValue.createValueCommand(command, iterator);
 				this.senderNoReceiver = Utils.numberToBool(command[iterator.i++]);
 				this.onlyTheClosest = Utils.numberToBool(command[iterator.i++]);
 				break;
 			case 2:
-				this.targetID = System.DynamicValue.createValueCommand(command, iterator);
+				this.targetID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 		this.isSystem = !Utils.numberToBool(command[iterator.i++]);
@@ -58,16 +58,16 @@ class SendEvent extends Base {
 				: Datas.CommonEvents.getEventUser(this.eventID)
 		).parameters;
 		this.parameters = [];
-		let parameter: System.DynamicValue, paramID: number, k: DYNAMIC_VALUE_KIND;
+		let parameter: Model.DynamicValue, paramID: number, k: DYNAMIC_VALUE_KIND;
 		while (iterator.i < l) {
 			paramID = command[iterator.i++];
 			k = command[iterator.i++];
 			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
 				// If default value
 				parameter =
-					k === DYNAMIC_VALUE_KIND.DEFAULT ? parameters[paramID].value : System.DynamicValue.create(k, null);
+					k === DYNAMIC_VALUE_KIND.DEFAULT ? parameters[paramID].value : Model.DynamicValue.create(k, null);
 			} else {
-				parameter = System.DynamicValue.create(k, command[iterator.i++]);
+				parameter = Model.DynamicValue.create(k, command[iterator.i++]);
 			}
 			this.parameters[paramID] = parameter;
 		}
@@ -87,7 +87,7 @@ class SendEvent extends Base {
 			this.targetID ? this.targetID.getValue() : -1,
 			this.isSystem,
 			this.eventID,
-			System.DynamicValue.mapWithParametersProperties(this.parameters),
+			Model.DynamicValue.mapWithParametersProperties(this.parameters),
 			this.senderNoReceiver,
 			this.onlyTheClosest
 		);

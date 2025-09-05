@@ -11,7 +11,7 @@
 
 import { EVENT_COMMAND_KIND } from '../Common';
 import { Game, MapObject, Portion } from '../Core';
-import { Datas, EventCommand, Manager, Scene, System } from '../index';
+import { Datas, EventCommand, Manager, Model, Scene } from '../index';
 
 /** @class
  *  A static class for some events functions.
@@ -203,7 +203,7 @@ class Events {
 		targetID: number,
 		isSystem: boolean,
 		eventID: number,
-		parameters: System.DynamicValue[],
+		parameters: Model.DynamicValue[],
 		senderNoReceiver: boolean,
 		onlyTheClosest: boolean
 	) {
@@ -288,7 +288,7 @@ class Events {
 		targetID: number,
 		isSystem: boolean,
 		eventID: number,
-		parameters: System.DynamicValue[],
+		parameters: Model.DynamicValue[],
 		senderNoReceiver: boolean = false,
 		onlyTheClosest: boolean = false
 	) {
@@ -388,7 +388,7 @@ class Events {
 		targetID: number,
 		isSystem: boolean,
 		eventID: number,
-		parameters: System.DynamicValue[],
+		parameters: Model.DynamicValue[],
 		senderNoReceiver: boolean,
 		onlyTheClosest: boolean,
 		closests: any[][]

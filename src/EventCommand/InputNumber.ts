@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, EventCommand, Manager, Scene, System } from '..';
+import { Datas, EventCommand, Manager, Model, Scene } from '..';
 import { Mathf, ScreenResolution } from '../Common';
 import { Game, MapObject, WindowChoices } from '../Core';
 import { SpinBox } from '../Core/SpinBox';
@@ -21,8 +21,8 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class InputNumber extends Base {
-	public stockVariableID: System.DynamicValue;
-	public digits: System.DynamicValue;
+	public stockVariableID: Model.DynamicValue;
+	public digits: Model.DynamicValue;
 	public showText: EventCommand.ShowText;
 
 	constructor(command: any[]) {
@@ -31,8 +31,8 @@ class InputNumber extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.stockVariableID = System.DynamicValue.createValueCommand(command, iterator);
-		this.digits = System.DynamicValue.createValueCommand(command, iterator);
+		this.stockVariableID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.digits = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

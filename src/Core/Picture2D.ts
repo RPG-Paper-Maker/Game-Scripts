@@ -10,7 +10,7 @@
 */
 
 import { PICTURE_KIND, Platform, ScreenResolution } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Stack } from '../Manager';
 import { Bitmap } from './Bitmap';
 
@@ -78,7 +78,7 @@ class Picture2D extends Bitmap {
 	 *  @param {System.Picture} picture - The picture to load
 	 */
 	static async create(
-		picture: System.Picture,
+		picture: Model.Picture,
 		opts: {
 			x?: number;
 			y?: number;

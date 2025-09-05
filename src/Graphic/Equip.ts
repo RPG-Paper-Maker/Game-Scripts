@@ -11,7 +11,7 @@
 
 import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -37,11 +37,11 @@ class Equip extends Base {
 		// All the graphics
 		this.graphicEquipmentName = new Graphic.Text(
 			Datas.BattleSystems.getEquipment(id).name(),
-			isPossible ? {} : { color: System.Color.GREY }
+			isPossible ? {} : { color: Model.Color.GREY }
 		);
 		this.graphicEquipment = new Graphic.Text(
 			equiped === null ? '-' : equiped.system.name(),
-			isPossible ? {} : { color: System.Color.GREY }
+			isPossible ? {} : { color: Model.Color.GREY }
 		);
 	}
 

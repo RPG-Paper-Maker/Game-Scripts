@@ -10,7 +10,7 @@
 */
 
 import { MapObject } from '../Core';
-import { Manager, System } from '../index';
+import { Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class RemoveAPicture extends Base {
-	public index: System.DynamicValue;
+	public index: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -27,7 +27,7 @@ class RemoveAPicture extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.index = System.DynamicValue.createValueCommand(command, iterator);
+		this.index = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

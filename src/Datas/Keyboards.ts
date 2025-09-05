@@ -10,15 +10,15 @@
 */
 
 import { Paths, Platform } from '../Common';
-import { Datas, Graphic, Scene, System } from '../index';
+import { Datas, Graphic, Model, Scene } from '../index';
 
 /** @class
  *  All the keyBoards datas.
  *  @static
  */
 class Keyboards {
-	private static list: System.Keyboard[];
-	public static listOrdered: System.Keyboard[];
+	private static list: Model.Keyboard[];
+	public static listOrdered: Model.Keyboard[];
 	public static menuControls: Record<string, any> = {};
 	public static controls: Record<string, any> = {};
 
@@ -33,7 +33,7 @@ class Keyboards {
 	 *  @param {System.KeyBoard} abr - The keyBoard to compare to the key
 	 *  @returns {boolean}
 	 */
-	static isKeyEqual(key: string, abr: System.Keyboard): boolean {
+	static isKeyEqual(key: string, abr: Model.Keyboard): boolean {
 		if (abr) {
 			const sc = abr.sc;
 			let m: number;
@@ -64,12 +64,12 @@ class Keyboards {
 		const l = jsonList.length;
 		this.list = new Array(l + 1);
 		this.listOrdered = new Array(l);
-		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: System.Keyboard, sc: string[][];
+		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: Model.Keyboard, sc: string[][];
 		for (let i = 0; i < l; i++) {
 			jsonKey = jsonList[i];
 			id = jsonKey.id;
 			abbreviation = jsonKey.abr;
-			key = new System.Keyboard(jsonKey);
+			key = new Model.Keyboard(jsonKey);
 			sc = Datas.Settings.kb[id];
 			if (sc) {
 				key.sc = sc;
@@ -94,7 +94,7 @@ class Keyboards {
 	 *  @param {number} id
 	 *  @returns {System.Keyboard}
 	 */
-	static get(id: number): System.Keyboard {
+	static get(id: number): Model.Keyboard {
 		return Datas.Base.get(id, this.list, 'keyboard');
 	}
 

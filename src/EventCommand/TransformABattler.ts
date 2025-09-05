@@ -11,7 +11,7 @@
 
 import { CHARACTER_KIND } from '../Common';
 import { Battler, Game, MapObject, Player } from '../Core';
-import { Graphic, Scene, System } from '../index';
+import { Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,9 +22,9 @@ import { Base } from './Base';
 class TransformABattler extends Base {
 	public battlerKind: number;
 	public battlerEnemyIndex: number;
-	public battlerHeroEnemyInstanceID: System.DynamicValue;
-	public monsterID: System.DynamicValue;
-	public level: System.DynamicValue;
+	public battlerHeroEnemyInstanceID: Model.DynamicValue;
+	public monsterID: Model.DynamicValue;
+	public level: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -38,11 +38,11 @@ class TransformABattler extends Base {
 				this.battlerEnemyIndex = command[iterator.i++];
 				break;
 			case 1:
-				this.battlerHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.battlerHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
-		this.monsterID = System.DynamicValue.createValueCommand(command, iterator);
-		this.level = System.DynamicValue.createValueCommand(command, iterator);
+		this.monsterID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.level = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

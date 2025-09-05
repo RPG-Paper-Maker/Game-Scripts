@@ -11,7 +11,7 @@
 
 import { GROUP_KIND } from '../Common';
 import { Game, MapObject, Player } from '../Core';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class ChangeClass extends Base {
-	public classID: System.DynamicValue;
+	public classID: Model.DynamicValue;
 	public selectionKind: number;
-	public selectionHeroEnemyInstanceID: System.DynamicValue;
+	public selectionHeroEnemyInstanceID: Model.DynamicValue;
 	public selectionTeam: GROUP_KIND;
 
 	constructor(command: any[]) {
@@ -31,11 +31,11 @@ class ChangeClass extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.classID = System.DynamicValue.createValueCommand(command, iterator);
+		this.classID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.selectionKind = command[iterator.i++];
 		switch (this.selectionKind) {
 			case 0:
-				this.selectionHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.selectionHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
 				this.selectionTeam = command[iterator.i++];

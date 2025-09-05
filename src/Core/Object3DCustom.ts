@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, Mathf, OBJECT_COLLISION_KIND } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
 import { Object3D } from './Object3D';
@@ -25,9 +25,9 @@ import { Position } from './Position';
  */
 class Object3DCustom extends Object3D {
 	public id: number;
-	public datas: System.Object3D;
+	public datas: Model.Object3D;
 
-	constructor(json?: Record<string, any>, datas?: System.Object3D) {
+	constructor(json?: Record<string, any>, datas?: Model.Object3D) {
 		super();
 
 		this.datas = datas;
@@ -42,7 +42,7 @@ class Object3DCustom extends Object3D {
 	 *  @param {System.Object3D} datas - The object datas
 	 *  @returns {Core.Object3DBox}
 	 */
-	static create(datas: System.Object3D): Object3DCustom {
+	static create(datas: Model.Object3D): Object3DCustom {
 		const object = new Object3DCustom(undefined, datas);
 		object.id = datas.id;
 		return object;

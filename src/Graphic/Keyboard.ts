@@ -10,7 +10,7 @@
 */
 
 import { ALIGN } from '../Common';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -18,12 +18,12 @@ import { Base } from './Base';
  *  @param {System.Keyboard} kb
  */
 class Keyboard extends Base {
-	public kb: System.Keyboard;
+	public kb: Model.Keyboard;
 	public graphicTextName: Graphic.Text;
 	public graphicTextShort: Graphic.Text;
 	public graphicTextInformation: Graphic.Text;
 
-	constructor(kb: System.Keyboard) {
+	constructor(kb: Model.Keyboard) {
 		super();
 
 		this.kb = kb;

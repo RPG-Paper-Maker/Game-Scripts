@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,25 +20,25 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class SetDialogBoxOptions extends Base {
-	public windowSkinID: System.DynamicValue;
-	public x: System.DynamicValue;
-	public y: System.DynamicValue;
-	public w: System.DynamicValue;
-	public h: System.DynamicValue;
-	public pLeft: System.DynamicValue;
-	public pTop: System.DynamicValue;
-	public pRight: System.DynamicValue;
-	public pBottom: System.DynamicValue;
+	public windowSkinID: Model.DynamicValue;
+	public x: Model.DynamicValue;
+	public y: Model.DynamicValue;
+	public w: Model.DynamicValue;
+	public h: Model.DynamicValue;
+	public pLeft: Model.DynamicValue;
+	public pTop: Model.DynamicValue;
+	public pRight: Model.DynamicValue;
+	public pBottom: Model.DynamicValue;
 	public fPosAbove: boolean;
-	public fX: System.DynamicValue;
-	public fY: System.DynamicValue;
+	public fX: Model.DynamicValue;
+	public fY: Model.DynamicValue;
 	public tOutline: boolean;
-	public tcText: System.DynamicValue;
-	public tcOutline: System.DynamicValue;
-	public tcBackground: System.DynamicValue;
-	public tSize: System.DynamicValue;
-	public tFont: System.DynamicValue;
-	public v_windowSkin: System.WindowSkin;
+	public tcText: Model.DynamicValue;
+	public tcOutline: Model.DynamicValue;
+	public tcBackground: Model.DynamicValue;
+	public tSize: Model.DynamicValue;
+	public tFont: Model.DynamicValue;
+	public v_windowSkin: Model.WindowSkin;
 	public v_x: number;
 	public v_y: number;
 	public v_w: number;
@@ -51,9 +51,9 @@ class SetDialogBoxOptions extends Base {
 	public v_fX: number;
 	public v_fY: number;
 	public v_tOutline: boolean;
-	public v_tcText: System.Color;
-	public v_tcOutline: System.Color;
-	public v_tcBackground: System.Color;
+	public v_tcText: Model.Color;
+	public v_tcOutline: Model.Color;
+	public v_tcBackground: Model.Color;
 	public v_tSize: number;
 	public v_tFont: string;
 
@@ -64,58 +64,58 @@ class SetDialogBoxOptions extends Base {
 			i: 0,
 		};
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.windowSkinID = System.DynamicValue.createValueCommand(command, iterator);
+			this.windowSkinID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.x = System.DynamicValue.createValueCommand(command, iterator);
+			this.x = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.y = System.DynamicValue.createValueCommand(command, iterator);
+			this.y = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.w = System.DynamicValue.createValueCommand(command, iterator);
+			this.w = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.h = System.DynamicValue.createValueCommand(command, iterator);
+			this.h = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.pLeft = System.DynamicValue.createValueCommand(command, iterator);
+			this.pLeft = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.pTop = System.DynamicValue.createValueCommand(command, iterator);
+			this.pTop = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.pRight = System.DynamicValue.createValueCommand(command, iterator);
+			this.pRight = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.pBottom = System.DynamicValue.createValueCommand(command, iterator);
+			this.pBottom = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
 			this.fPosAbove = Utils.numberToBool(command[iterator.i++]);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.fX = System.DynamicValue.createValueCommand(command, iterator);
+			this.fX = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.fY = System.DynamicValue.createValueCommand(command, iterator);
+			this.fY = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
 			this.tOutline = !Utils.numberToBool(command[iterator.i++]);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.tcText = System.DynamicValue.createValueCommand(command, iterator);
+			this.tcText = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.tcOutline = System.DynamicValue.createValueCommand(command, iterator);
+			this.tcOutline = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.tcBackground = System.DynamicValue.createValueCommand(command, iterator);
+			this.tcBackground = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.tSize = System.DynamicValue.createValueCommand(command, iterator);
+			this.tSize = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.tFont = System.DynamicValue.createValueCommand(command, iterator);
+			this.tFont = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 

@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Datas, Graphic, Manager, Scene, System } from '..';
+import { Datas, Graphic, Manager, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
@@ -82,7 +82,7 @@ class Battle extends Map {
 	public battleVictory: Scene.BattleVictory;
 
 	// Flags
-	public troop: System.Troop;
+	public troop: Model.Troop;
 	public canGameOver: boolean;
 	public canEscape: boolean;
 	public winning: boolean;
@@ -98,12 +98,12 @@ class Battle extends Map {
 	public kindSelection: CHARACTER_KIND;
 	public selectedUserIndex: number;
 	public selectedTargetIndex: number;
-	public skill: System.CommonSkillItem;
+	public skill: Model.CommonSkillItem;
 
 	//Lists
 	public listSkills: Graphic.Skill[];
 	public listItems: Graphic.Item[];
-	public effects: System.Effect[];
+	public effects: Model.Effect[];
 
 	//Battle Information
 	public graphicPlayers: Graphic.Player[][];
@@ -113,20 +113,20 @@ class Battle extends Map {
 	public time: number;
 	public timeEnemyAttack: number;
 	public turn: number;
-	public currentSkill: System.Skill;
+	public currentSkill: Model.Skill;
 	public informationText: string;
 	public oneTimeTroopReactions: boolean[] = [];
 
 	//Animation
 	public animationUser: Animation;
 	public animationTarget: Animation;
-	public action: System.MonsterAction;
+	public action: Model.MonsterAction;
 
 	//Transition
 	public transitionStart: MAP_TRANSITION_KIND;
-	public transitionStartColor: System.Color;
+	public transitionStartColor: Model.Color;
 	public transitionEnd: MAP_TRANSITION_KIND;
-	public transitionEndColor: System.Color;
+	public transitionEndColor: Model.Color;
 	public transitionColorAlpha: number;
 	public transitionColor: boolean;
 	/**Whether to zoom during a transition */
@@ -146,7 +146,7 @@ class Battle extends Map {
 	public interpreterTroopReaction: ReactionInterpreter;
 
 	public mapCameraDistance: number;
-	public actionDoNothing: System.MonsterAction;
+	public actionDoNothing: Model.MonsterAction;
 
 	//Camera
 	public cameraStep: number;
@@ -169,32 +169,32 @@ class Battle extends Map {
 	public windowLoots: WindowBox;
 
 	// Musics
-	public musicMap: System.PlaySong;
+	public musicMap: Model.PlaySong;
 	public musicMapTime: number;
 
 	public sceneMap: Scene.Map;
 	public loots: Record<string, Item>[];
 	public currencies: Record<string, any>;
 	public xp: number;
-	public battleMap: System.BattleMap;
+	public battleMap: Model.BattleMap;
 	public currentEffectIndex: number;
 	public currentTargetIndex: number;
 	public priorityIndex: number;
 	public lootsNumber: number;
 
 	//Attack
-	public attackSkill: System.Skill;
+	public attackSkill: Model.Skill;
 	public attackingGroup: CHARACTER_KIND;
 
 	constructor(
 		troopID: number,
 		canGameOver: boolean,
 		canEscape: boolean,
-		battleMap: System.BattleMap,
+		battleMap: Model.BattleMap,
 		transitionStart: number,
 		transitionEnd: number,
-		transitionStartColor: System.Color,
-		transitionEndColor: System.Color
+		transitionStartColor: Model.Color,
+		transitionEndColor: Model.Color
 	) {
 		super(battleMap.idMap, true);
 
@@ -224,7 +224,7 @@ class Battle extends Map {
 		if (this.sceneMap) {
 			this.mapCameraDistance = this.sceneMap.camera.distance;
 		}
-		this.actionDoNothing = new System.MonsterAction({});
+		this.actionDoNothing = new Model.MonsterAction({});
 		this.skill = null;
 	}
 
@@ -475,7 +475,7 @@ class Battle extends Map {
 
 		// Reaction troop always frequency
 		if (this.interpreterTroopReaction === null) {
-			let reaction: System.TroopReaction;
+			let reaction: Model.TroopReaction;
 			for (l = this.troop.reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = this.troop.reactions[this.indexTroopReaction];
 				if (

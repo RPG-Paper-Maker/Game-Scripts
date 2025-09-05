@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
-import { EventCommand, Manager, Scene, System } from '../index';
+import { EventCommand, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,10 +20,10 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ShakeScreen extends Base {
-	public offset: System.DynamicValue;
-	public shakeNumber: System.DynamicValue;
+	public offset: Model.DynamicValue;
+	public shakeNumber: Model.DynamicValue;
 	public isWaitEnd: boolean;
-	public time: System.DynamicValue;
+	public time: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -31,10 +31,10 @@ class ShakeScreen extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.offset = System.DynamicValue.createValueCommand(command, iterator);
-		this.shakeNumber = System.DynamicValue.createValueCommand(command, iterator);
+		this.offset = Model.DynamicValue.createValueCommand(command, iterator);
+		this.shakeNumber = Model.DynamicValue.createValueCommand(command, iterator);
 		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
-		this.time = System.DynamicValue.createValueCommand(command, iterator);
+		this.time = Model.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.isWaitEnd;
 	}
 

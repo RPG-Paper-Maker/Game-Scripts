@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Mathf, ORIENTATION, ScreenResolution } from '../Common';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { MapObject } from './MapObject';
 
 /** @class
@@ -23,7 +23,7 @@ import { MapObject } from './MapObject';
 class Camera {
 	public static readonly HIDDING_MOVE_TIME = 250;
 
-	public system: System.CameraProperties;
+	public system: Model.CameraProperties;
 	public perspectiveCamera: THREE.PerspectiveCamera;
 	public orthographicCamera: THREE.OrthographicCamera;
 	public isPerspective: boolean;
@@ -41,7 +41,7 @@ class Camera {
 	public hidingCurrent: number = -1;
 	public forceNoHide: boolean = true;
 
-	constructor(cameraProperties: System.CameraProperties, target: MapObject) {
+	constructor(cameraProperties: Model.CameraProperties, target: MapObject) {
 		this.system = cameraProperties;
 		this.initialize();
 		this.target = target;

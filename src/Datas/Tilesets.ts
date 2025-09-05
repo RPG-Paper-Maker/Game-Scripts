@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Paths, PICTURE_KIND, Platform } from '../Common';
-import { Datas, Manager, System } from '../index';
+import { Datas, Manager, Model } from '../index';
 
 /** @class
  *  All the tilesets datas.
@@ -20,7 +20,7 @@ import { Datas, Manager, System } from '../index';
 class Tilesets {
 	public static PROPERTY_TEXTURES_CHARACTERS = 'texturesCharacters';
 	public static PROPERTY_TEXTURES_BATTLERS = 'texturesBattlers';
-	private static list: System.Tileset[];
+	private static list: Model.Tileset[];
 	public static texturesCharacters: THREE.MeshPhongMaterial[];
 	public static texturesBattlers: THREE.MeshPhongMaterial[];
 
@@ -37,10 +37,10 @@ class Tilesets {
 		this.list = new Array(l + 1);
 
 		// Sorting all the tilesets according to the ID
-		let i: number, jsonTileset: Record<string, any>, tileset: System.Tileset;
+		let i: number, jsonTileset: Record<string, any>, tileset: Model.Tileset;
 		for (i = 0; i < l; i++) {
 			jsonTileset = json[i];
-			tileset = new System.Tileset(jsonTileset);
+			tileset = new Model.Tileset(jsonTileset);
 			this.list[jsonTileset.id] = tileset;
 		}
 		await this.loadPictures(PICTURE_KIND.CHARACTERS, Datas.Tilesets.PROPERTY_TEXTURES_CHARACTERS);
@@ -53,7 +53,7 @@ class Tilesets {
 	 *  @param {number} id
 	 *  @returns {System.Tileset}
 	 */
-	static get(id: number): System.Tileset {
+	static get(id: number): Model.Tileset {
 		return Datas.Base.get(id, this.list, 'tileset');
 	}
 
@@ -67,7 +67,7 @@ class Tilesets {
 		const l = pictures.length;
 		const textures = new Array(l);
 		textures[0] = Manager.GL.loadTextureEmpty();
-		let picture: System.Picture, path: string;
+		let picture: Model.Picture, path: string;
 		for (let i = 1; i < l; i++) {
 			picture = pictures[i];
 			if (picture) {

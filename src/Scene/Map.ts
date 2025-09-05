@@ -35,7 +35,7 @@ import {
 	Position,
 	ReactionInterpreter,
 } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -61,7 +61,7 @@ class Map extends Base {
 	public tempTargets: Battler[];
 	public targets: Battler[];
 	public battleCommandKind: EFFECT_SPECIAL_ACTION_KIND;
-	public mapProperties: System.MapProperties;
+	public mapProperties: Model.MapProperties;
 	public scene: THREE.Scene;
 	public currentPortion: Portion;
 	public previousPortion: Portion;
@@ -193,7 +193,7 @@ class Map extends Base {
 	 *  Read the map properties file.
 	 */
 	async readMapProperties(minimal: boolean = false) {
-		this.mapProperties = new System.MapProperties();
+		this.mapProperties = new Model.MapProperties();
 		const json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS)) as any;
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
@@ -355,7 +355,7 @@ class Map extends Base {
 		const pictures = Datas.Pictures.getListByKind(PICTURE_KIND.CHARACTERS);
 		const l = pictures.length;
 		this.collisions[PICTURE_KIND.CHARACTERS] = new Array(l);
-		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: System.Picture;
+		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: Model.Picture;
 		for (let i = 1; i < l; i++) {
 			material = this.texturesCharacters[i];
 			const texture = Manager.GL.getMaterialTexture(material);
@@ -752,8 +752,8 @@ class Map extends Base {
 	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @param {SpecialElement[]} specials - The specials list
 	 */
-	loadSpecialsCollision(list: number[], kind: PICTURE_KIND, specials: System.SpecialElement[]) {
-		let special: System.SpecialElement, picture: System.Picture;
+	loadSpecialsCollision(list: number[], kind: PICTURE_KIND, specials: Model.SpecialElement[]) {
+		let special: Model.SpecialElement, picture: Model.Picture;
 		for (let i = 0, l = list.length; i < l; i++) {
 			const id = list[i];
 			special = specials[id];
@@ -1056,10 +1056,10 @@ class Map extends Base {
 					5,
 					[
 						null,
-						System.DynamicValue.createNumber(Inputs.mouseX),
-						System.DynamicValue.createNumber(Inputs.mouseY),
-						System.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
-						System.DynamicValue.createSwitch(true),
+						Model.DynamicValue.createNumber(Inputs.mouseX),
+						Model.DynamicValue.createNumber(Inputs.mouseY),
+						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
+						Model.DynamicValue.createSwitch(true),
 					],
 					true,
 					false
@@ -1178,9 +1178,9 @@ class Map extends Base {
 					3,
 					[
 						null,
-						System.DynamicValue.createMessage(key),
-						System.DynamicValue.createSwitch(false),
-						System.DynamicValue.createSwitch(false),
+						Model.DynamicValue.createMessage(key),
+						Model.DynamicValue.createSwitch(false),
+						Model.DynamicValue.createSwitch(false),
 					],
 					true,
 					false
@@ -1204,7 +1204,7 @@ class Map extends Base {
 					0,
 					true,
 					4,
-					[null, System.DynamicValue.createMessage(key)],
+					[null, Model.DynamicValue.createMessage(key)],
 					true,
 					false
 				);
@@ -1229,9 +1229,9 @@ class Map extends Base {
 					3,
 					[
 						null,
-						System.DynamicValue.createMessage(key),
-						System.DynamicValue.createSwitch(true),
-						System.DynamicValue.createSwitch(true),
+						Model.DynamicValue.createMessage(key),
+						Model.DynamicValue.createSwitch(true),
+						Model.DynamicValue.createSwitch(true),
 					],
 					true,
 					false
@@ -1258,9 +1258,9 @@ class Map extends Base {
 					3,
 					[
 						null,
-						System.DynamicValue.createMessage(key),
-						System.DynamicValue.createSwitch(true),
-						System.DynamicValue.createSwitch(false),
+						Model.DynamicValue.createMessage(key),
+						Model.DynamicValue.createSwitch(true),
+						Model.DynamicValue.createSwitch(false),
 					],
 					true,
 					false
@@ -1287,10 +1287,10 @@ class Map extends Base {
 					5,
 					[
 						null,
-						System.DynamicValue.createNumber(x),
-						System.DynamicValue.createNumber(y),
-						System.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
-						System.DynamicValue.createSwitch(false),
+						Model.DynamicValue.createNumber(x),
+						Model.DynamicValue.createNumber(y),
+						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
+						Model.DynamicValue.createSwitch(false),
 					],
 					true,
 					false
@@ -1314,7 +1314,7 @@ class Map extends Base {
 					0,
 					true,
 					7,
-					[null, System.DynamicValue.createNumber(x), System.DynamicValue.createNumber(y)],
+					[null, Model.DynamicValue.createNumber(x), Model.DynamicValue.createNumber(y)],
 					true,
 					false
 				);
@@ -1339,9 +1339,9 @@ class Map extends Base {
 					6,
 					[
 						null,
-						System.DynamicValue.createNumber(x),
-						System.DynamicValue.createNumber(y),
-						System.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
+						Model.DynamicValue.createNumber(x),
+						Model.DynamicValue.createNumber(y),
+						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
 					],
 					true,
 					false

@@ -10,7 +10,7 @@
 */
 
 import { Battler } from '.';
-import { Datas, System } from '..';
+import { Datas, Model } from '..';
 import { ANIMATION_EFFECT_CONDITION_KIND, PICTURE_KIND } from '../Common';
 import { Picture2D } from './Picture2D';
 
@@ -19,7 +19,7 @@ import { Picture2D } from './Picture2D';
  *  @param {number} id - The ID of the status
  */
 class Animation {
-	public system: System.Animation;
+	public system: Model.Animation;
 	public picture: Picture2D;
 	public frame: number;
 	public loop: boolean;

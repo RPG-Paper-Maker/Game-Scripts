@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Manager, Scene, System } from '..';
+import { Manager, Model, Scene } from '..';
 import { MapObject } from '../Core';
 import { Base } from './Base';
 
@@ -19,8 +19,8 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class EnterANameMenu extends Base {
-	public heroInstanceID: System.DynamicValue;
-	public maxCharacters: System.DynamicValue;
+	public heroInstanceID: Model.DynamicValue;
+	public maxCharacters: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -28,8 +28,8 @@ class EnterANameMenu extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.heroInstanceID = System.DynamicValue.createValueCommand(command, iterator);
-		this.maxCharacters = System.DynamicValue.createValueCommand(command, iterator);
+		this.heroInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.maxCharacters = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

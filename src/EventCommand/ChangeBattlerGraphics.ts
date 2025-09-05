@@ -11,7 +11,7 @@
 
 import { CHARACTER_KIND } from '../Common';
 import { Battler, Game, MapObject, Player } from '../Core';
-import { Graphic, Scene, System } from '../index';
+import { Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,11 +22,11 @@ import { Base } from './Base';
 class ChangeBattlerGraphics extends Base {
 	public battlerKind: number;
 	public battlerEnemyIndex: number;
-	public battlerHeroEnemyInstanceID: System.DynamicValue;
-	public facesetID: System.DynamicValue = null;
+	public battlerHeroEnemyInstanceID: Model.DynamicValue;
+	public facesetID: Model.DynamicValue = null;
 	public facesetIndexX: number = 0;
 	public facesetIndexY: number = 0;
-	public battlerID: System.DynamicValue = null;
+	public battlerID: Model.DynamicValue = null;
 
 	constructor(command: any[]) {
 		super();
@@ -40,17 +40,17 @@ class ChangeBattlerGraphics extends Base {
 				this.battlerEnemyIndex = command[iterator.i++];
 				break;
 			case 1:
-				this.battlerHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.battlerHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 		if (command[iterator.i++]) {
-			this.facesetID = System.DynamicValue.createValueCommand(command, iterator);
+			this.facesetID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 			this.facesetIndexX = command[iterator.i++];
 			this.facesetIndexY = command[iterator.i++];
 		}
 		if (command[iterator.i++]) {
-			this.battlerID = System.DynamicValue.createValueCommand(command, iterator);
+			this.battlerID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 

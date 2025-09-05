@@ -11,7 +11,7 @@
 
 import { Platform } from '../Common';
 import { Game, MapObject, StructSearchResult } from '../Core';
-import { EventCommand, Scene, System } from '../index';
+import { EventCommand, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeState extends Base {
-	public mapID: System.DynamicValue;
-	public objectID: System.DynamicValue;
-	public idState: System.DynamicValue;
+	public mapID: Model.DynamicValue;
+	public objectID: Model.DynamicValue;
+	public idState: Model.DynamicValue;
 	public operationKind: number;
 
 	constructor(command: any[]) {
@@ -31,9 +31,9 @@ class ChangeState extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.mapID = System.DynamicValue.createValueCommand(command, iterator);
-		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
-		this.idState = System.DynamicValue.createValueCommand(command, iterator);
+		this.mapID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.objectID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.idState = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operationKind = command[iterator.i++];
 	}
 

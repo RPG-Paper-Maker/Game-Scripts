@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { ITEM_KIND, Utils } from '../Common';
 import { Game, Item, MapObject, Player } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,11 +20,11 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeEquipment extends Base {
-	public equipmentID: System.DynamicValue;
+	public equipmentID: Model.DynamicValue;
 	public isWeapon: boolean;
-	public weaponArmorID: System.DynamicValue;
+	public weaponArmorID: Model.DynamicValue;
 	public selection: number;
-	public heInstanceID: System.DynamicValue;
+	public heInstanceID: Model.DynamicValue;
 	public groupIndex: number;
 	public isApplyInInventory: boolean;
 
@@ -34,15 +34,15 @@ class ChangeEquipment extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.equipmentID = System.DynamicValue.createValueCommand(command, iterator);
+		this.equipmentID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.isWeapon = Utils.numberToBool(command[iterator.i++]);
-		this.weaponArmorID = System.DynamicValue.createValueCommand(command, iterator);
+		this.weaponArmorID = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Selection
 		this.selection = command[iterator.i++];
 		switch (this.selection) {
 			case 0:
-				this.heInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.heInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
 				this.groupIndex = command[iterator.i++];

@@ -11,7 +11,7 @@
 
 import { CHARACTER_KIND } from '../Common';
 import { Battler, MapObject } from '../Core';
-import { Scene, System } from '../index';
+import { Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,8 +22,8 @@ import { Base } from './Base';
 class DisplayHideABattler extends Base {
 	public battlerKind: number;
 	public battlerEnemyIndex: number;
-	public battlerHeroEnemyInstanceID: System.DynamicValue;
-	public hidden: System.DynamicValue;
+	public battlerHeroEnemyInstanceID: Model.DynamicValue;
+	public hidden: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -37,10 +37,10 @@ class DisplayHideABattler extends Base {
 				this.battlerEnemyIndex = command[iterator.i++];
 				break;
 			case 1:
-				this.battlerHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.battlerHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
-		this.hidden = System.DynamicValue.createValueCommand(command, iterator);
+		this.hidden = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

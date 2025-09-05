@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { CHARACTER_KIND, GROUP_KIND, Paths, Platform, Utils } from '../Common';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Chrono } from './Chrono';
 import { Item } from './Item';
 import { MapObject } from './MapObject';
@@ -76,8 +76,8 @@ class Game {
 	public mapsProperties: Record<string, any>;
 	public isEmpty: boolean;
 	public shops: Record<string, Record<string, number>[]>;
-	public battleMusic: System.PlaySong;
-	public victoryMusic: System.PlaySong;
+	public battleMusic: Model.PlaySong;
+	public victoryMusic: Model.PlaySong;
 	public steps: number;
 	public saves: number;
 	public battles: number;
@@ -711,7 +711,7 @@ class Game {
 					1,
 					true,
 					2,
-					[null, System.DynamicValue.createNumber(chrono.id)],
+					[null, Model.DynamicValue.createNumber(chrono.id)],
 					true,
 					false
 				);

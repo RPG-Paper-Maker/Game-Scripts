@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, System } from '..';
+import { Datas, Graphic, Model } from '..';
 import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
@@ -31,7 +31,7 @@ class StatisticProgression extends Base {
 
 		this.player = player;
 		this.listStatsProgression = [];
-		let id: number, statistic: System.Statistic, value: number, txt: string, graphic: Graphic.Text;
+		let id: number, statistic: Model.Statistic, value: number, txt: string, graphic: Graphic.Text;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
@@ -43,9 +43,9 @@ class StatisticProgression extends Base {
 				txt = value >= 0 ? '+' : '-';
 				graphic = new Graphic.Text(txt + value);
 				if (value > 0) {
-					graphic.color = System.Color.GREEN;
+					graphic.color = Model.Color.GREEN;
 				} else if (value < 0) {
-					graphic.color = System.Color.RED;
+					graphic.color = Model.Color.RED;
 				}
 				this.listStatsProgression.push(graphic);
 			}
@@ -61,7 +61,7 @@ class StatisticProgression extends Base {
 		this.listStats = [];
 		this.maxLength = 0;
 		this.maxProgressionLength = 0;
-		let id: number, statistic: System.Statistic, graphic: Graphic.Text, txt: string;
+		let id: number, statistic: Model.Statistic, graphic: Graphic.Text, txt: string;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {

@@ -21,7 +21,7 @@ import {
 	SHAPE_KIND,
 	Utils,
 } from '../Common';
-import { Datas, EventCommand, Manager, Scene, System } from '../index';
+import { Datas, EventCommand, Manager, Model, Scene } from '../index';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
 import { Frame } from './Frame';
@@ -52,7 +52,7 @@ class MapObject {
 	public static SPEED_NORMAL = 0.004666;
 
 	public id: number;
-	public system: System.MapObject;
+	public system: Model.MapObject;
 	public position: THREE.Vector3;
 	public isHero: boolean;
 	public movingState: Record<string, any>;
@@ -79,13 +79,13 @@ class MapObject {
 	public otherMoveCommand: EventCommand.MoveObject;
 	public previousMoveCommand: EventCommand.MoveObject;
 	public yMountain: number;
-	public speed: System.DynamicValue;
-	public frequency: System.DynamicValue;
+	public speed: Model.DynamicValue;
+	public frequency: Model.DynamicValue;
 	public properties: any[];
 	public states: number[];
 	public statesInstance: Record<string, any>[];
-	public timeEventsEllapsed: [System.Event, number][];
-	public currentState: System.State;
+	public timeEventsEllapsed: [Model.Event, number][];
+	public currentState: Model.State;
 	public currentStateInstance: Record<string, any>;
 	public removed: boolean;
 	public upPosition: THREE.Vector3;
@@ -98,7 +98,7 @@ class MapObject {
 	public currentAngle: THREE.Vector3 = new THREE.Vector3();
 	public currentScale: THREE.Vector3 = new THREE.Vector3();
 
-	constructor(system: System.MapObject, position?: THREE.Vector3, isHero: boolean = false) {
+	constructor(system: Model.MapObject, position?: THREE.Vector3, isHero: boolean = false) {
 		this.system = system;
 		this.id = system.id;
 		this.position = position;
@@ -332,7 +332,7 @@ class MapObject {
 	 */
 	read(json: Record<string, any>) {
 		this.position = Position.createFromArray(json.k).toVector3();
-		this.system = new System.MapObject(json.v);
+		this.system = new Model.MapObject(json.v);
 	}
 
 	/**
@@ -374,7 +374,7 @@ class MapObject {
 
 		// Properties
 		this.properties = [];
-		let i: number, l: number, prop: System.Property, propValue: any;
+		let i: number, l: number, prop: Model.Property, propValue: any;
 		for (i = 0, l = this.system.properties.length; i < l; i++) {
 			prop = this.system.properties[i];
 			propValue = mapProp[prop.id - 1];
@@ -383,7 +383,7 @@ class MapObject {
 
 		// States
 		this.statesInstance = [];
-		let stateSystem: System.State, stateValue: any, state: any;
+		let stateSystem: Model.State, stateValue: any, state: any;
 		for (i = 0, l = this.system.states.length; i < l; i++) {
 			stateSystem = this.system.states[i];
 			stateValue = mapStatesOpts[stateSystem.id - 1];
@@ -437,11 +437,11 @@ class MapObject {
 		const removeList = [];
 		let i: number,
 			l: number,
-			events: [System.Event, number],
-			event: System.Event,
+			events: [Model.Event, number],
+			event: Model.Event,
 			timeEllapsed: number,
-			interval: System.DynamicValue,
-			repeat: System.DynamicValue;
+			interval: Model.DynamicValue,
+			repeat: Model.DynamicValue;
 		for (i = 0, l = this.timeEventsEllapsed.length; i < l; i++) {
 			events = this.timeEventsEllapsed[i];
 			event = events[0];
@@ -505,7 +505,7 @@ class MapObject {
 		this.currentOrientationStop = false;
 		this.currentOrientationClimbing = false;
 		this.isOrientationStopWalk = false;
-		let state: System.State;
+		let state: Model.State;
 		for (let i = this.system.states.length - 1; i >= 0; i--) {
 			state = this.system.states[i];
 			if (this.states.indexOf(state.id) !== -1) {
@@ -528,7 +528,7 @@ class MapObject {
 			return;
 		}
 		let material = null;
-		let objectDatas: System.Object3D;
+		let objectDatas: Model.Object3D;
 		if (this.currentStateInstance !== null) {
 			if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 				objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
@@ -684,11 +684,11 @@ class MapObject {
 			this.boundingBoxSettings = null;
 			this.speed =
 				this.currentState === null
-					? System.DynamicValue.createNumberDouble(1)
+					? Model.DynamicValue.createNumberDouble(1)
 					: Datas.Systems.getSpeed(this.currentStateInstance.speedID);
 			this.frequency =
 				this.currentState === null
-					? System.DynamicValue.createNumberDouble(0)
+					? Model.DynamicValue.createNumberDouble(0)
 					: Datas.Systems.getFrequency(this.currentStateInstance.frequencyID);
 			this.width = 0;
 			this.height = 0;
@@ -1317,9 +1317,9 @@ class MapObject {
 		sender: MapObject,
 		isSystem: boolean,
 		eventID: number,
-		parameters: System.DynamicValue[],
+		parameters: Model.DynamicValue[],
 		states: number[],
-		events?: [System.Event, number]
+		events?: [Model.Event, number]
 	): boolean {
 		// Option only one event per frame
 		if ((this.system.isEventFrame && this.receivedOneEvent) || this.removed) {
@@ -1341,7 +1341,7 @@ class MapObject {
 		}
 
 		let test = false;
-		let i: number, j: number, l: number, m: number, state: number, reactions: System.Reaction[];
+		let i: number, j: number, l: number, m: number, state: number, reactions: Model.Reaction[];
 		for (i = 0, l = states.length; i < l; i++) {
 			state = states[i];
 			reactions = this.system.getReactions(isSystem, eventID, states[i], parameters);

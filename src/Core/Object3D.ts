@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { System } from '../index';
+import { Model } from '..';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
@@ -21,7 +21,7 @@ import { Position } from './Position';
  */
 abstract class Object3D extends MapElement {
 	public abstract id: number;
-	public abstract datas: System.Object3D;
+	public abstract datas: Model.Object3D;
 
 	constructor() {
 		super();

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, Scene, System } from '..';
+import { Datas, Manager, Model, Scene } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject } from '../Core';
 import { Base } from './Base';
@@ -22,19 +22,19 @@ import { Base } from './Base';
 class ChangeWeather extends Base {
 	public isNone: boolean;
 	public isColor: boolean;
-	public colorID: System.DynamicValue;
-	public imageID: System.DynamicValue;
-	public numberPerPortion: System.DynamicValue;
-	public portionsRay: System.DynamicValue;
-	public size: System.DynamicValue;
-	public depthTest: System.DynamicValue;
-	public depthWrite: System.DynamicValue;
-	public initialVelocity: System.DynamicValue;
-	public velocityAddition: System.DynamicValue;
-	public initialYRotation: System.DynamicValue;
-	public yRotationAddition: System.DynamicValue;
+	public colorID: Model.DynamicValue;
+	public imageID: Model.DynamicValue;
+	public numberPerPortion: Model.DynamicValue;
+	public portionsRay: Model.DynamicValue;
+	public size: Model.DynamicValue;
+	public depthTest: Model.DynamicValue;
+	public depthWrite: Model.DynamicValue;
+	public initialVelocity: Model.DynamicValue;
+	public velocityAddition: Model.DynamicValue;
+	public initialYRotation: Model.DynamicValue;
+	public yRotationAddition: Model.DynamicValue;
 	public isWaitEnd: boolean;
-	public time: System.DynamicValue;
+	public time: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -51,27 +51,27 @@ class ChangeWeather extends Base {
 				switch (command[iterator.i++]) {
 					case 0:
 						this.isColor = true;
-						this.colorID = System.DynamicValue.createValueCommand(command, iterator);
+						this.colorID = Model.DynamicValue.createValueCommand(command, iterator);
 						break;
 					case 1:
 						this.isColor = false;
-						this.imageID = System.DynamicValue.createValueCommand(command, iterator);
+						this.imageID = Model.DynamicValue.createValueCommand(command, iterator);
 						iterator.i++;
 						break;
 				}
-				this.numberPerPortion = System.DynamicValue.createValueCommand(command, iterator);
-				this.portionsRay = System.DynamicValue.createValueCommand(command, iterator);
-				this.size = System.DynamicValue.createValueCommand(command, iterator);
-				this.depthTest = System.DynamicValue.createValueCommand(command, iterator);
-				this.depthWrite = System.DynamicValue.createValueCommand(command, iterator);
-				this.initialVelocity = System.DynamicValue.createValueCommand(command, iterator);
-				this.velocityAddition = System.DynamicValue.createValueCommand(command, iterator);
-				this.initialYRotation = System.DynamicValue.createValueCommand(command, iterator);
-				this.yRotationAddition = System.DynamicValue.createValueCommand(command, iterator);
+				this.numberPerPortion = Model.DynamicValue.createValueCommand(command, iterator);
+				this.portionsRay = Model.DynamicValue.createValueCommand(command, iterator);
+				this.size = Model.DynamicValue.createValueCommand(command, iterator);
+				this.depthTest = Model.DynamicValue.createValueCommand(command, iterator);
+				this.depthWrite = Model.DynamicValue.createValueCommand(command, iterator);
+				this.initialVelocity = Model.DynamicValue.createValueCommand(command, iterator);
+				this.velocityAddition = Model.DynamicValue.createValueCommand(command, iterator);
+				this.initialYRotation = Model.DynamicValue.createValueCommand(command, iterator);
+				this.yRotationAddition = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
-		this.time = System.DynamicValue.createValueCommand(command, iterator);
+		this.time = Model.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.isWaitEnd;
 	}
 

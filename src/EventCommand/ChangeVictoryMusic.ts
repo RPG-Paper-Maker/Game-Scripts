@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { SONG_KIND } from '../Common';
 import { Game, MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,14 +19,14 @@ import { Base } from './Base';
  *  @extends EventCommand.Base
  */
 class ChangeVictoryMusic extends Base {
-	public song: System.PlaySong;
+	public song: Model.PlaySong;
 
 	constructor(command: any[]) {
 		super();
 		const iterator = {
 			i: 0,
 		};
-		this.song = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC);
+		this.song = Model.PlaySong.createValueCommand(command, iterator, SONG_KIND.MUSIC);
 	}
 
 	/**

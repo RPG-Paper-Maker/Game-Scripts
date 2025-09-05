@@ -20,7 +20,7 @@ import {
 	Platform,
 	Utils,
 } from '../Common';
-import { Core, Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Battler } from './Battler';
 import { Item } from './Item';
 import { Skill } from './Skill';
@@ -40,7 +40,7 @@ class Player {
 	public id: number;
 	public kind: CHARACTER_KIND;
 	public instid: number;
-	public system: System.Hero;
+	public system: Model.Hero;
 	public name: string;
 	public levelingUp: boolean;
 	public skills: Skill[];
@@ -60,8 +60,8 @@ class Player {
 	public experienceGain: Record<string, number>[];
 	public currencyGain: Record<string, number>[];
 	public skillCostRes: Record<string, number>[];
-	public changedClass: System.Class;
-	public elements: System.DynamicValue[];
+	public changedClass: Model.Class;
+	public elements: Model.DynamicValue[];
 	public battlerID: number = null;
 	public facesetID: number = null;
 	public facesetIndexX: number = null;
@@ -244,10 +244,10 @@ class Player {
 	}
 
 	/**
-	 *  Get the player informations System.
+	 *  Get the player informations Model.
 	 *  @returns {System.Hero}
 	 */
-	getSystem(): System.Hero {
+	getSystem(): Model.Hero {
 		switch (this.kind) {
 			case CHARACTER_KIND.HERO:
 				return Datas.Heroes.get(this.id);
@@ -296,7 +296,7 @@ class Player {
 	getSaveStat(): number[] {
 		const l = Datas.BattleSystems.statisticsOrder.length;
 		const list = new Array(l);
-		let statistic: System.Statistic;
+		let statistic: Model.Statistic;
 		for (let i = 0; i < l; i++) {
 			const id = Datas.BattleSystems.statisticsOrder[i];
 			statistic = Datas.BattleSystems.getStatistic(id);
@@ -350,7 +350,7 @@ class Player {
 		// Begin equipment / elements
 		const characteristics = this.system.getCharacteristics(this.changedClass);
 		this.elements = [];
-		let i: number, l: number, characteristic: System.Characteristic, kind: ITEM_KIND, itemID: number, item: Item;
+		let i: number, l: number, characteristic: Model.Characteristic, kind: ITEM_KIND, itemID: number, item: Item;
 		for (i = 0, l = characteristics.length; i < l; i++) {
 			characteristic = characteristics[i];
 			if (characteristic.kind === CHARACTERISTIC_KIND.BEGIN_EQUIPMENT) {
@@ -375,7 +375,7 @@ class Player {
 		for (i = 0, l = statistics.length; i < l; i++) {
 			this[Datas.BattleSystems.getStatistic(statistics[i]).getBeforeAbbreviation()] = undefined;
 		}
-		let j: number, m: number, statistic: System.Statistic, statisticProgression: System.StatisticProgression;
+		let j: number, m: number, statistic: Model.Statistic, statisticProgression: Model.StatisticProgression;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
 			statistic = Datas.BattleSystems.getStatistic(id);
@@ -426,7 +426,7 @@ class Player {
 	 *  @returns {number[][]}
 	 */
 	getEquipmentStatsAndBonus(
-		item?: System.CommonSkillItem,
+		item?: Model.CommonSkillItem,
 		equipmentID?: number
 	): [number[], number[], Record<string, any>] {
 		const statistics = Datas.BattleSystems.statisticsOrder;
@@ -448,7 +448,7 @@ class Player {
 		}
 
 		// Equipment
-		let j: number, m: number, characteristics: System.Characteristic[], statistic: System.Statistic;
+		let j: number, m: number, characteristics: Model.Characteristic[], statistic: Model.Statistic;
 		for (j = 1, m = this.equip.length; j < m; j++) {
 			if (j === equipmentID) {
 				if (!item) {
@@ -492,7 +492,7 @@ class Player {
 		// Update formulas statistics
 		const statisticsProgression = this.system.getStatisticsProgression(this.changedClass);
 		const previewPlayer = Player.getTemporaryPlayer(list);
-		let statisticProgression: System.StatisticProgression;
+		let statisticProgression: Model.StatisticProgression;
 		for (i = 0, l = statisticsProgression.length; i < l; i++) {
 			for (j = 0; j < l; j++) {
 				statisticProgression = statisticsProgression[j];
@@ -500,7 +500,7 @@ class Player {
 					statisticProgression.getValueAtLevel(
 						this.getCurrentLevel(),
 						previewPlayer,
-						this.system.getProperty(System.Class.PROPERTY_FINAL_LEVEL, this.changedClass)
+						this.system.getProperty(Model.Class.PROPERTY_FINAL_LEVEL, this.changedClass)
 					) +
 					bonus[statisticProgression.id] +
 					added[statisticProgression.id];
@@ -520,12 +520,12 @@ class Player {
 	 *  @param {number[]} bonus - The bonus list
 	 */
 	updateCharacteristics(
-		characteristics: System.Characteristic[],
+		characteristics: Model.Characteristic[],
 		list: number[],
 		bonus: number[],
 		res: Record<string, any>
 	) {
-		let characteristic: System.Characteristic, statistic: System.Statistic, base: number;
+		let characteristic: Model.Characteristic, statistic: Model.Statistic, base: number;
 		for (let i = 0, l = characteristics.length; i < l; i++) {
 			characteristic = characteristics[i];
 			if (characteristic.kind === CHARACTERISTIC_KIND.INCREASE_DECREASE) {
@@ -567,7 +567,7 @@ class Player {
 			res = result[2];
 		}
 		const statistics = Datas.BattleSystems.statisticsOrder;
-		let statistic: System.Statistic, value: number;
+		let statistic: Model.Statistic, value: number;
 		for (let i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
 			statistic = Datas.BattleSystems.getStatistic(id);
@@ -593,7 +593,7 @@ class Player {
 	 *  @param {System.Statistic} statistic - The statistic
 	 *  @param {number} bonus - The value
 	 */
-	initStatValue(statistic: System.Statistic, value: number) {
+	initStatValue(statistic: Model.Statistic, value: number) {
 		this[statistic.abbreviation] = value;
 		if (!statistic.isFix) {
 			this[statistic.getMaxAbbreviation()] = value;
@@ -604,7 +604,7 @@ class Player {
 	 *  @param {System.Statistic} statistic - The statistic
 	 *  @param {number} bonus - The value
 	 */
-	updateStatValue(statistic: System.Statistic, value: number) {
+	updateStatValue(statistic: Model.Statistic, value: number) {
 		const abr = statistic.isFix ? statistic.abbreviation : statistic.getMaxAbbreviation();
 		if (this[statistic.getBeforeAbbreviation()] !== undefined) {
 			this[statistic.getBeforeAbbreviation()] = this[abr];
@@ -626,7 +626,7 @@ class Player {
 		for (i = 0, l = statistics.length; i < l; i++) {
 			this[Datas.BattleSystems.getStatistic(statistics[i]).getBeforeAbbreviation()] = undefined;
 		}
-		let j: number, m: number, statistic: System.Statistic, statisticProgression: System.StatisticProgression;
+		let j: number, m: number, statistic: Model.Statistic, statisticProgression: Model.StatisticProgression;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
 			statistic = Datas.BattleSystems.getStatistic(id);
@@ -664,7 +664,7 @@ class Player {
 	 *  @param {System.Statistic} stat - The statistic
 	 *  @returns {string}
 	 */
-	getBarAbbreviation(stat: System.Statistic): string {
+	getBarAbbreviation(stat: Model.Statistic): string {
 		return this[stat.abbreviation] + ' / ' + this[stat.getMaxAbbreviation()];
 	}
 
@@ -675,7 +675,7 @@ class Player {
 	read(json: Record<string, any>) {
 		// Stats
 		const jsonStats = json.stats;
-		let i: number, l: number, statistic: System.Statistic, value: number[];
+		let i: number, l: number, statistic: Model.Statistic, value: number[];
 		for (i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			const id = Datas.BattleSystems.statisticsOrder[i];
 			statistic = Datas.BattleSystems.getStatistic(id);
@@ -769,7 +769,7 @@ class Player {
 	 *  @returns {number}
 	 */
 	getRewardExperience(): number {
-		return (<System.Monster>this.system).getRewardExperience(this.getCurrentLevel());
+		return (<Model.Monster>this.system).getRewardExperience(this.getCurrentLevel());
 	}
 
 	/**
@@ -777,7 +777,7 @@ class Player {
 	 *  @returns {Record<string, any>}
 	 */
 	getRewardCurrencies(): Record<string, number> {
-		return (<System.Monster>this.system).getRewardCurrencies(this.getCurrentLevel());
+		return (<Model.Monster>this.system).getRewardCurrencies(this.getCurrentLevel());
 	}
 
 	/**
@@ -785,7 +785,7 @@ class Player {
 	 *  @returns {Record<string, Item>[]}
 	 */
 	getRewardLoots(): Record<string, Item>[] {
-		return (<System.Monster>this.system).getRewardLoots(this.getCurrentLevel());
+		return (<Model.Monster>this.system).getRewardLoots(this.getCurrentLevel());
 	}
 
 	/**
@@ -1049,7 +1049,7 @@ class Player {
 	removeStartTurnStatus(listStill: Status[]): Status[] {
 		const listHealed: Status[] = [];
 		let test = false;
-		let j: number, m: number, s: Status, release: System.StatusReleaseTurn, testRelease: boolean;
+		let j: number, m: number, s: Status, release: Model.StatusReleaseTurn, testRelease: boolean;
 		for (let i = this.status.length - 1; i >= 0; i--) {
 			s = this.status[i];
 			testRelease = false;
@@ -1094,7 +1094,7 @@ class Player {
 	 *  @returns {[number, number, number[][]]}
 	 */
 	getBestWeaponArmorToReplace(
-		weaponArmor: System.CommonSkillItem
+		weaponArmor: Model.CommonSkillItem
 	): [number, number, [number[], number[], Record<string, any>]] {
 		const equipments = weaponArmor.getType().equipments;
 		const baseResult = this.getEquipmentStatsAndBonus();
@@ -1151,7 +1151,7 @@ class Player {
 	 *  Get characteristics.
 	 *  @returns {System.Characteristic[]}
 	 */
-	getCharacteristics(): System.Characteristic[] {
+	getCharacteristics(): Model.Characteristic[] {
 		let characteristics = this.system.getCharacteristics(this.changedClass);
 		// Also add weapons and armors
 		for (const equipment of this.equip) {
@@ -1166,7 +1166,7 @@ class Player {
 	 *  Get player class (depends on if it was changed).
 	 *  @returns {System.Characteristic[]}
 	 */
-	getClass(): System.Class {
+	getClass(): Model.Class {
 		return Utils.defaultValue(this.changedClass, this.system.class);
 	}
 

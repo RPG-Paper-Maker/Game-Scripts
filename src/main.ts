@@ -58,7 +58,7 @@ export class Main {
 		await Datas.Songs.read();
 		await Datas.Videos.read();
 		await Datas.Shapes.read();
-		Manager.GL.load();
+		await Manager.GL.load();
 		Manager.GL.initialize();
 		Manager.GL.resize();
 		Manager.Collisions.initialize();

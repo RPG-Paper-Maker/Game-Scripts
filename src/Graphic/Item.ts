@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, Constants, DAMAGES_KIND, Mathf, ScreenResolution } from '../Common';
-import { Core, Datas, Graphic, System } from '../index';
+import { Core, Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -43,7 +43,7 @@ class Item extends Base {
 			'',
 			this.item.system,
 			{},
-			possible ? {} : { color: System.Color.GREY }
+			possible ? {} : { color: Model.Color.GREY }
 		);
 		this.updateName(nbItem);
 		if (item.shop === undefined) {
@@ -63,7 +63,7 @@ class Item extends Base {
 					),
 					kind === DAMAGES_KIND.CURRENCY ? Datas.Systems.getCurrency(parseInt(id)) : null,
 					{ align: ALIGN.RIGHT },
-					possible ? {} : { color: System.Color.GREY }
+					possible ? {} : { color: Model.Color.GREY }
 				);
 				this.graphicCurrencies.push(graphic);
 			}

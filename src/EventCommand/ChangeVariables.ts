@@ -19,7 +19,7 @@ import {
 	VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND,
 } from '../Common';
 import { Game, Item, MapObject, Position, StructSearchResult } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -32,19 +32,19 @@ class ChangeVariables extends Base {
 	public nbSelection: number;
 	public operation: number;
 	public valueKind: number;
-	public valueNumber: System.DynamicValue;
-	public valueRandomA: System.DynamicValue;
-	public valueRandomB: System.DynamicValue;
-	public valueMessage: System.DynamicValue;
-	public valueSwitch: System.DynamicValue;
-	public valueMapObject: System.DynamicValue;
+	public valueNumber: Model.DynamicValue;
+	public valueRandomA: Model.DynamicValue;
+	public valueRandomB: Model.DynamicValue;
+	public valueMessage: Model.DynamicValue;
+	public valueSwitch: Model.DynamicValue;
+	public valueMapObject: Model.DynamicValue;
 	public valueMapObjectChar: number;
 	public valueITEM_KIND: ITEM_KIND;
-	public valueItemID: System.DynamicValue;
+	public valueItemID: Model.DynamicValue;
 	public valueTotalCurrencyKind: number;
-	public valueTotalCurrencyID: System.DynamicValue;
-	public valueHeroEnemyInstanceID: System.DynamicValue;
-	public valueStatisticID: System.DynamicValue;
+	public valueTotalCurrencyID: Model.DynamicValue;
+	public valueHeroEnemyInstanceID: Model.DynamicValue;
+	public valueStatisticID: Model.DynamicValue;
 	public valueEnemyIndex: number;
 	public valueOtherCHARACTERISTIC_KIND: CHANGE_VARIABLES_OTHER_CHARACTERISTICS;
 
@@ -66,33 +66,33 @@ class ChangeVariables extends Base {
 		this.valueKind = command[iterator.i++];
 		switch (this.valueKind) {
 			case 0: // Number
-				this.valueNumber = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueNumber = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // Random number
-				this.valueRandomA = System.DynamicValue.createValueCommand(command, iterator);
-				this.valueRandomB = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueRandomA = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueRandomB = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 2: // Message
-				this.valueMessage = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueMessage = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 3: // Switch
-				this.valueSwitch = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueSwitch = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 4: // Map object characteristic
-				this.valueMapObject = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueMapObject = Model.DynamicValue.createValueCommand(command, iterator);
 				this.valueMapObjectChar = command[iterator.i++];
 				break;
 			case 5: // Number of weapon / armor / item in inventory
 				this.valueITEM_KIND = command[iterator.i++];
-				this.valueItemID = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueItemID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 6: // Total currency
 				this.valueTotalCurrencyKind = command[iterator.i++];
-				this.valueTotalCurrencyID = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueTotalCurrencyID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 7: // Hero / enemy stat
-				this.valueHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
-				this.valueStatisticID = System.DynamicValue.createValueCommand(command, iterator);
+				this.valueHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueStatisticID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 8: // Enemy instance ID
 				this.valueEnemyIndex = command[iterator.i++];

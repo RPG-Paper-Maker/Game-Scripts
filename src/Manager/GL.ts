@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Stack } from './Stack';
 
 /** @class
@@ -226,7 +226,7 @@ class GL {
 	 *  @static
 	 *  @param {System.Color} color
 	 */
-	static updateBackgroundColor(color: System.Color) {
+	static updateBackgroundColor(color: Model.Color) {
 		this.renderer.setClearColor(color.getHex(this.screenTone), color.alpha);
 	}
 

@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { GROUP_KIND, Mathf } from '../Common';
 import { Game, MapObject, Player } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -21,12 +21,12 @@ import { Base } from './Base';
  */
 class ChangeExperienceCurve extends Base {
 	public selectionKind: number;
-	public selectionHeroEnemyInstanceID: System.DynamicValue;
+	public selectionHeroEnemyInstanceID: Model.DynamicValue;
 	public selectionTeam: GROUP_KIND;
-	public levelRange: System.DynamicValue;
-	public levelRangeTo: System.DynamicValue;
+	public levelRange: Model.DynamicValue;
+	public levelRangeTo: Model.DynamicValue;
 	public operation: number;
-	public totalExperience: System.DynamicValue;
+	public totalExperience: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -37,16 +37,16 @@ class ChangeExperienceCurve extends Base {
 		this.selectionKind = command[iterator.i++];
 		switch (this.selectionKind) {
 			case 0:
-				this.selectionHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.selectionHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
 				this.selectionTeam = command[iterator.i++];
 				break;
 		}
-		this.levelRange = System.DynamicValue.createValueCommand(command, iterator);
-		this.levelRangeTo = System.DynamicValue.createValueCommand(command, iterator);
+		this.levelRange = Model.DynamicValue.createValueCommand(command, iterator);
+		this.levelRangeTo = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operation = command[iterator.i++];
-		this.totalExperience = System.DynamicValue.createValueCommand(command, iterator);
+		this.totalExperience = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

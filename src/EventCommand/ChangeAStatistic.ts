@@ -11,7 +11,7 @@
 
 import { Interpreter, Mathf, Platform, Utils } from '../Common';
 import { Game, MapObject, Player } from '../Core';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,14 +20,14 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class ChangeAStatistic extends Base {
-	public statisticID: System.DynamicValue;
+	public statisticID: Model.DynamicValue;
 	public selection: number;
-	public heInstanceID: System.DynamicValue;
+	public heInstanceID: Model.DynamicValue;
 	public groupIndex: number;
 	public operation: number;
 	public value: number;
-	public vNumber: System.DynamicValue;
-	public vFormula: System.DynamicValue;
+	public vNumber: Model.DynamicValue;
+	public vFormula: Model.DynamicValue;
 	public vMax: boolean;
 	public canAboveMax: boolean;
 	public isApplyToMax: boolean;
@@ -38,13 +38,13 @@ class ChangeAStatistic extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.statisticID = System.DynamicValue.createValueCommand(command, iterator);
+		this.statisticID = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Selection
 		this.selection = command[iterator.i++];
 		switch (this.selection) {
 			case 0:
-				this.heInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.heInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
 				this.groupIndex = command[iterator.i++];
@@ -58,10 +58,10 @@ class ChangeAStatistic extends Base {
 		this.value = command[iterator.i++];
 		switch (this.value) {
 			case 0:
-				this.vNumber = System.DynamicValue.createValueCommand(command, iterator);
+				this.vNumber = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
-				this.vFormula = System.DynamicValue.createValueCommand(command, iterator);
+				this.vFormula = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 2:
 				this.vMax = true;

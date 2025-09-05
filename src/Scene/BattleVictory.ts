@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Scene, System } from '..';
+import { Datas, Graphic, Manager, Model, Scene } from '..';
 import { CHARACTER_KIND, LOOT_KIND, Platform, ScreenResolution } from '../Common';
 import { Battler, Game, Item, Player, WindowBox } from '../Core';
 import { Status } from '../Core/Status';
@@ -262,7 +262,7 @@ class BattleVictory {
 	prepareEndTransition() {
 		this.battle.transitionEnded = false;
 		Manager.Songs.initializeProgressionMusic(
-			System.PlaySong.currentPlayingMusic.volume.getValue(),
+			Model.PlaySong.currentPlayingMusic.volume.getValue(),
 			0,
 			0,
 			Scene.Battle.TIME_LINEAR_MUSIC_END

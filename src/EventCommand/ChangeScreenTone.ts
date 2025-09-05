@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,14 +20,14 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeScreenTone extends Base {
-	public r: System.DynamicValue;
-	public g: System.DynamicValue;
-	public b: System.DynamicValue;
-	public grey: System.DynamicValue;
+	public r: Model.DynamicValue;
+	public g: Model.DynamicValue;
+	public b: Model.DynamicValue;
+	public grey: Model.DynamicValue;
 	public subColor: boolean;
-	public colorID: System.DynamicValue;
+	public colorID: Model.DynamicValue;
 	public waitEnd: boolean;
-	public time: System.DynamicValue;
+	public time: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -38,16 +38,16 @@ class ChangeScreenTone extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.r = System.DynamicValue.createValueCommand(command, iterator);
-		this.g = System.DynamicValue.createValueCommand(command, iterator);
-		this.b = System.DynamicValue.createValueCommand(command, iterator);
-		this.grey = System.DynamicValue.createValueCommand(command, iterator);
+		this.r = Model.DynamicValue.createValueCommand(command, iterator);
+		this.g = Model.DynamicValue.createValueCommand(command, iterator);
+		this.b = Model.DynamicValue.createValueCommand(command, iterator);
+		this.grey = Model.DynamicValue.createValueCommand(command, iterator);
 		if (Utils.numberToBool(command[iterator.i++])) {
 			this.subColor = Utils.numberToBool(command[iterator.i++]);
-			this.colorID = System.DynamicValue.createValueCommand(command, iterator);
+			this.colorID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.waitEnd = Utils.numberToBool(command[iterator.i++]);
-		this.time = System.DynamicValue.createValueCommand(command, iterator);
+		this.time = Model.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.waitEnd;
 	}
 

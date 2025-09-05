@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { Mathf } from '../Common';
 import { Game, MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ModifyCurrency extends Base {
-	public currencyID: System.DynamicValue;
+	public currencyID: Model.DynamicValue;
 	public operation: number;
-	public value: System.DynamicValue;
+	public value: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -30,9 +30,9 @@ class ModifyCurrency extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.currencyID = System.DynamicValue.createValueCommand(command, iterator);
+		this.currencyID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operation = command[iterator.i++];
-		this.value = System.DynamicValue.createValueCommand(command, iterator);
+		this.value = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

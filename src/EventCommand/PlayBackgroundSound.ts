@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { SONG_KIND } from '../Common';
 import { MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,7 +20,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class PlayBackgroundSound extends Base {
-	public song: System.PlaySong;
+	public song: Model.PlaySong;
 
 	constructor(command: any[]) {
 		super();
@@ -28,7 +28,7 @@ class PlayBackgroundSound extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.song = System.PlaySong.createValueCommand(command, iterator, SONG_KIND.BACKGROUND_SOUND);
+		this.song = Model.PlaySong.createValueCommand(command, iterator, SONG_KIND.BACKGROUND_SOUND);
 	}
 
 	/**

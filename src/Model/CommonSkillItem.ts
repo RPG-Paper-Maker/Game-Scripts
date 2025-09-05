@@ -1,0 +1,306 @@
+/*
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import {
+	AVAILABLE_KIND,
+	DAMAGES_KIND,
+	EFFECT_KIND,
+	EFFECT_SPECIAL_ACTION_KIND,
+	Interpreter,
+	ITEM_KIND,
+	SONG_KIND,
+	TARGET_KIND,
+	Utils,
+} from '../Common';
+import { Battler, Player } from '../Core';
+import { Datas, Model, Scene } from '../index';
+import { Characteristic } from './Characteristic';
+import { Cost } from './Cost';
+import { DynamicValue } from './DynamicValue';
+import { Effect } from './Effect';
+import { Icon } from './Icon';
+import { PlaySong } from './PlaySong';
+import { Translatable } from './Translatable';
+
+/** @class
+ *  A common class for skills, items, weapons, armors.
+ *  @extends Model.Icon
+ *  @param {Record<string, any>} - [json=undefined] Json object describing the common
+ */
+class CommonSkillItem extends Icon {
+	public id: number;
+	public hasType: boolean;
+	public hasTARGET_KIND: boolean;
+	public type: number;
+	public consumable: boolean;
+	public oneHand: boolean;
+	public description: Translatable;
+	public targetKind: TARGET_KIND;
+	public targetConditionFormula: DynamicValue;
+	public conditionFormula: DynamicValue;
+	public availableKind: number;
+	public sound: PlaySong;
+	public animationID: DynamicValue;
+	public animationTargetID: DynamicValue;
+	public canBeSold: Model.DynamicValue;
+	public battleMessage: Model.Translatable;
+	public price: Cost[];
+	public costs: Cost[];
+	public effects: Effect[];
+	public characteristics: Characteristic[];
+	public animationUserID: DynamicValue;
+
+	constructor(json?: Record<string, any>) {
+		super(json);
+	}
+
+	/**
+	 *  Read the JSON associated to the common.
+	 *  @param {Record<string, any>} - json Json object describing the common
+	 */
+	read(json: Record<string, any>) {
+		super.read(json);
+		this.id = json.id;
+		this.type = Utils.defaultValue(json.t, 1);
+		this.consumable = Utils.defaultValue(json.con, false);
+		this.oneHand = Utils.defaultValue(json.oh, true);
+		this.description = new Translatable(json.d);
+		this.targetKind = Utils.defaultValue(json.tk, TARGET_KIND.NONE);
+		this.targetConditionFormula = DynamicValue.readOrNone(json.tcf);
+		this.conditionFormula = DynamicValue.readOrNone(json.cf);
+		this.availableKind = Utils.defaultValue(json.ak, AVAILABLE_KIND.NEVER);
+		this.sound = new PlaySong(SONG_KIND.SOUND, json.s);
+		this.animationUserID = DynamicValue.readOrNone(json.auid);
+		this.animationTargetID = DynamicValue.readOrNone(json.atid);
+		this.canBeSold = DynamicValue.readOrDefaultSwitch(json.canBeSold);
+		this.battleMessage = new Model.Translatable(json.battleMessage);
+		this.price = [];
+		Utils.readJSONSystemList({ list: Utils.defaultValue(json.p, []), listIndexes: this.price, cons: Cost });
+		this.costs = [];
+		Utils.readJSONSystemList({ list: Utils.defaultValue(json.cos, []), listIndexes: this.costs, cons: Cost });
+		for (const cost of this.costs) {
+			cost.skillItem = this;
+		}
+		this.effects = [];
+		Utils.readJSONSystemList({ list: Utils.defaultValue(json.e, []), listIndexes: this.effects, cons: Effect });
+		for (const effect of this.effects) {
+			effect.skillItem = this;
+		}
+		this.characteristics = [];
+		Utils.readJSONSystemList({
+			list: Utils.defaultValue(json.car, []),
+			listIndexes: this.characteristics,
+			cons: Characteristic,
+		});
+	}
+
+	/**
+	 *  Get all the effects, including the ones with perform skill efect.
+	 *  @returns {System.Effect}
+	 */
+	getEffects(): Model.Effect[] {
+		let effects: Model.Effect[] = [];
+		for (const effect of this.effects) {
+			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
+				effects = effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
+			} else {
+				effects.push(effect);
+			}
+		}
+		return effects;
+	}
+
+	/**
+	 *  Use the command if possible.
+	 *  @returns {boolean}
+	 */
+	useCommand(): boolean {
+		const possible = this.isPossible();
+		if (possible) {
+			this.use(false);
+		}
+		return possible;
+	}
+
+	/**
+	 *  Execute the effects and costs.
+	 *  @param {useCost}
+	 *  @returns {boolean}
+	 */
+	use(useCost: boolean = true): boolean {
+		let isDoingSomething = false;
+		for (const effect of this.getEffects()) {
+			isDoingSomething = effect.execute() || isDoingSomething;
+		}
+		if (useCost && isDoingSomething) {
+			for (const cost of this.costs) {
+				cost.use();
+			}
+		}
+		return isDoingSomething;
+	}
+
+	/**
+	 *  Use the costs.
+	 */
+	cost() {
+		for (let i = 0, l = this.costs.length; i < l; i++) {
+			this.costs[i].use();
+		}
+	}
+
+	/** Check if the costs are possible.
+	 *  @returns {boolean}
+	 */
+	isPossible(target?: Player, checkCost: boolean = true): boolean {
+		const targets = Scene.Map.current.getPossibleTargets(this.targetKind);
+		const user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
+
+		// Condition
+		if (!Interpreter.evaluate(this.conditionFormula.getValue())) {
+			return false;
+		}
+		// Target condition : at least one target can be selected
+		const fTargetCondition = (target: Player) => {
+			return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user: user, target: target });
+		};
+		if (target) {
+			if (!fTargetCondition.call(this, target)) {
+				return false;
+			}
+		} else {
+			if (this.targetKind !== TARGET_KIND.NONE && !targets.some(fTargetCondition)) {
+				return false;
+			}
+		}
+		// If attack skill, also test on equipped weapons
+		if (
+			this.effects.some((effect) => {
+				return (
+					effect.kind === EFFECT_KIND.SPECIAL_ACTIONS &&
+					effect.specialActionKind === EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS
+				);
+			})
+		) {
+			if (
+				!Scene.Map.current.user.player.equip.some((item) => {
+					return (
+						item === null ||
+						!item.system.isWeapon() ||
+						!Interpreter.evaluate(item.system.conditionFormula.getValue()) ||
+						(target
+							? Interpreter.evaluate(item.system.targetConditionFormula.getValue(), {
+									user: user,
+									target: target,
+							  })
+							: targets.some((target) => {
+									Interpreter.evaluate(item.system.targetConditionFormula.getValue(), {
+										user: user,
+										target: target,
+									});
+							  }))
+					);
+				})
+			) {
+				return false;
+			}
+		}
+		// Skill cost
+		if (checkCost) {
+			for (let i = 0, l = this.costs.length; i < l; i++) {
+				if (!this.costs[i].isPossible()) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 *  Get the target kind string.
+	 *  @returns {string}
+	 */
+	getTARGET_KINDString(): string {
+		switch (this.targetKind) {
+			case TARGET_KIND.NONE:
+				return 'None';
+			case TARGET_KIND.USER:
+				return 'The user';
+			case TARGET_KIND.ENEMY:
+				return 'An enemy';
+			case TARGET_KIND.ALLY:
+				return 'An ally';
+			case TARGET_KIND.ALL_ENEMIES:
+				return 'All enemies';
+			case TARGET_KIND.ALL_ALLIES:
+				return 'All allies';
+		}
+	}
+
+	/**
+	 *  Get the weapon kind.
+	 *  @returns {System/WeaponArmorKind}
+	 */
+	getType(): Model.WeaponArmorKind {
+		return null;
+	}
+
+	/**
+	 *  Get the price.
+	 *  @returns {number}
+	 */
+	getPrice(): Record<string, [DAMAGES_KIND, number]> {
+		return Model.Cost.getPrice(this.price);
+	}
+
+	/**
+	 *  Get the item kind.
+	 *  @returns {ITEM_KIND}
+	 */
+	getKind(): ITEM_KIND {
+		return null;
+	}
+
+	/**
+	 *  Check if is weapon.
+	 *  @returns {boolean}
+	 */
+	isWeapon(): boolean {
+		return this.getKind() === ITEM_KIND.WEAPON;
+	}
+
+	/**
+	 *  Check if is armor.
+	 *  @returns {boolean}
+	 */
+	isArmor(): boolean {
+		return this.getKind() === ITEM_KIND.ARMOR;
+	}
+
+	/**
+	 *  Check if is weapon or armor.
+	 *  @returns {boolean}
+	 */
+	isWeaponArmor(): boolean {
+		return this.isWeapon() || this.isArmor();
+	}
+
+	/**
+	 *  Get message and replace user / skill / item name.
+	 *  @param {Battler} user
+	 *  @returns {string}
+	 */
+	getMessage(user: Battler): string {
+		return '';
+	}
+}
+
+export { CommonSkillItem };

@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class Wait extends Base {
-	public milliseconds: System.DynamicValue;
+	public milliseconds: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -27,7 +27,7 @@ class Wait extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.milliseconds = System.DynamicValue.createValueCommand(command, iterator);
+		this.milliseconds = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

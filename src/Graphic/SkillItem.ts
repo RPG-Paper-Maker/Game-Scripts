@@ -11,7 +11,7 @@
 
 import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,7 +20,7 @@ import { Base } from './Base';
  *  @param {System.CommonSkillItem} system
  */
 class SkillItem extends Base {
-	public system: System.CommonSkillItem;
+	public system: Model.CommonSkillItem;
 	public graphicElements: Picture2D[];
 	public graphicName: Graphic.TextIcon;
 	public graphicType: Graphic.Text;
@@ -29,7 +29,7 @@ class SkillItem extends Base {
 	public graphicEffects: Graphic.Text[];
 	public graphicCharacteristics: Graphic.Text[];
 
-	constructor(system: System.CommonSkillItem) {
+	constructor(system: Model.CommonSkillItem) {
 		super();
 
 		this.system = system;
@@ -51,7 +51,7 @@ class SkillItem extends Base {
 			);
 		}
 		this.graphicEffects = [];
-		let i: number, l: number, effect: System.Effect, txt: string, graphic: Graphic.Text, graphicIcon: Picture2D;
+		let i: number, l: number, effect: Model.Effect, txt: string, graphic: Graphic.Text, graphicIcon: Picture2D;
 		for (i = 0, l = this.system.effects.length; i < l; i++) {
 			effect = this.system.effects[i];
 			txt = effect.toString();

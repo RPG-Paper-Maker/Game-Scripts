@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Scene, System } from '..';
+import { Datas, Graphic, Manager, Model, Scene } from '..';
 import {
 	AVAILABLE_KIND,
 	BATTLE_STEP,
@@ -82,11 +82,11 @@ class BattleSelection {
 		this.battle.listItems = [];
 
 		// Items
-		let ownedItem: Item, item: System.Item;
+		let ownedItem: Item, item: Model.Item;
 		for (let i = 0, l = Game.current.items.length; i < l; i++) {
 			ownedItem = Game.current.items[i];
 			if (ownedItem.kind === ITEM_KIND.ITEM) {
-				item = <System.Item>ownedItem.system;
+				item = <Model.Item>ownedItem.system;
 				if (
 					item.consumable &&
 					(item.availableKind === AVAILABLE_KIND.BATTLE || item.availableKind === AVAILABLE_KIND.ALWAYS)
@@ -243,7 +243,7 @@ class BattleSelection {
 		// Update skills list
 		const skills = this.battle.user.player.skills;
 		this.battle.listSkills = [];
-		let ownedSkill: Skill, skill: System.Skill;
+		let ownedSkill: Skill, skill: Model.Skill;
 		for (let i = 0, l = skills.length; i < l; i++) {
 			ownedSkill = skills[i];
 			skill = Datas.Skills.get(ownedSkill.id);
@@ -377,7 +377,7 @@ class BattleSelection {
 					this.battle.winning = true;
 					Scene.Battle.escapedLastBattle = true;
 					Manager.Songs.initializeProgressionMusic(
-						System.PlaySong.currentPlayingMusic.volume.getValue(),
+						Model.PlaySong.currentPlayingMusic.volume.getValue(),
 						0,
 						0,
 						Scene.Battle.TIME_LINEAR_MUSIC_END
@@ -392,7 +392,7 @@ class BattleSelection {
 				this.battle.changeStep(BATTLE_STEP.ANIMATION);
 				return;
 			case EFFECT_SPECIAL_ACTION_KIND.NONE: // If any other skill that is not a special action
-				const skill = <System.Skill>(
+				const skill = <Model.Skill>(
 					(<Graphic.TextIcon>this.battle.windowChoicesBattleCommands.getCurrentContent()).system
 				);
 				if (skill.isPossible()) {

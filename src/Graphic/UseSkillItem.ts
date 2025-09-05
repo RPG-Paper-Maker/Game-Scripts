@@ -11,7 +11,7 @@
 
 import { Mathf, ScreenResolution } from '../Common';
 import { Battler, Game, Item, Player } from '../Core';
-import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { Datas, Graphic, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @extends Graphic.Base
  */
 class UseSkillItem extends Base {
-	public skillItem: System.CommonSkillItem;
+	public skillItem: Model.CommonSkillItem;
 	public graphicCharacters: Graphic.Player[];
 	public all: boolean;
 	public indexArrow: number;
@@ -43,7 +43,7 @@ class UseSkillItem extends Base {
 	 *  Set skill item.
 	 *  @param {System.CommonSkillItem} skillItem
 	 */
-	setSkillItem(skillItem: System.CommonSkillItem) {
+	setSkillItem(skillItem: Model.CommonSkillItem) {
 		this.skillItem = skillItem;
 	}
 
@@ -110,7 +110,7 @@ class UseSkillItem extends Base {
 	 *  @param {number} equipmentID
 	 *  @param {System.CommonSkillItem} weaponArmor
 	 */
-	updateStatShort(weaponArmor: System.CommonSkillItem) {
+	updateStatShort(weaponArmor: Model.CommonSkillItem) {
 		for (let i = 0, l = this.graphicCharacters.length; i < l; i++) {
 			this.graphicCharacters[i].updateStatShort(weaponArmor);
 		}

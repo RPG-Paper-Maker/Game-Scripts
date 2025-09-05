@@ -11,7 +11,7 @@
 
 import { Mathf, Platform, ScreenResolution, Utils } from '../Common';
 import { Frame, Game, MapObject, Position, ReactionInterpreter, StructSearchResult } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,18 +22,18 @@ import { Base } from './Base';
 class TeleportObject extends Base {
 	public static TRANSITION_DURATION = 1000;
 
-	public objectID: System.DynamicValue;
-	public objectIDPosition: System.DynamicValue;
-	public mapID: System.DynamicValue;
-	public x: System.DynamicValue;
-	public y: System.DynamicValue;
-	public yPlus: System.DynamicValue;
-	public z: System.DynamicValue;
+	public objectID: Model.DynamicValue;
+	public objectIDPosition: Model.DynamicValue;
+	public mapID: Model.DynamicValue;
+	public x: Model.DynamicValue;
+	public y: Model.DynamicValue;
+	public yPlus: Model.DynamicValue;
+	public z: Model.DynamicValue;
 	public direction: number;
 	public transitionStart: number;
-	public transitionStartColor: System.DynamicValue;
+	public transitionStartColor: Model.DynamicValue;
 	public transitionEnd: number;
-	public transitionEndColor: System.DynamicValue;
+	public transitionEndColor: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -43,28 +43,28 @@ class TeleportObject extends Base {
 		};
 
 		// Object ID
-		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
+		this.objectID = Model.DynamicValue.createValueCommand(command, iterator);
 
 		// Position
 		this.objectIDPosition = null;
 		this.mapID = null;
 		switch (command[iterator.i++]) {
 			case 0:
-				this.mapID = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.x = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.y = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.yPlus = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.z = System.DynamicValue.createNumber(command[iterator.i++]);
+				this.mapID = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.x = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.y = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.yPlus = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.z = Model.DynamicValue.createNumber(command[iterator.i++]);
 				break;
 			case 1:
-				this.mapID = System.DynamicValue.createValueCommand(command, iterator);
-				this.x = System.DynamicValue.createValueCommand(command, iterator);
-				this.y = System.DynamicValue.createValueCommand(command, iterator);
-				this.yPlus = System.DynamicValue.createValueCommand(command, iterator);
-				this.z = System.DynamicValue.createValueCommand(command, iterator);
+				this.mapID = Model.DynamicValue.createValueCommand(command, iterator);
+				this.x = Model.DynamicValue.createValueCommand(command, iterator);
+				this.y = Model.DynamicValue.createValueCommand(command, iterator);
+				this.yPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				this.z = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 2:
-				this.objectIDPosition = System.DynamicValue.createValueCommand(command, iterator);
+				this.objectIDPosition = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 
@@ -72,11 +72,11 @@ class TeleportObject extends Base {
 		this.direction = command[iterator.i++];
 		this.transitionStart = command[iterator.i++];
 		if (Utils.numberToBool(this.transitionStart)) {
-			this.transitionStartColor = System.DynamicValue.createValueCommand(command, iterator);
+			this.transitionStartColor = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.transitionEnd = command[iterator.i++];
 		if (Utils.numberToBool(this.transitionEnd)) {
-			this.transitionEndColor = System.DynamicValue.createValueCommand(command, iterator);
+			this.transitionEndColor = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 

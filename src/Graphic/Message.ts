@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution, TAG_KIND, Utils } from '../Common';
 import { Bitmap, Game, Node, Picture2D, Tree } from '../Core';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 
 /** @class
  *  A class for message show text command.
@@ -190,13 +190,13 @@ class Message extends Graphic.Base {
 			switch (tag) {
 				case TAG_KIND.VARIABLE:
 				case TAG_KIND.HERO_NAME:
-					nodeValue = System.DynamicValue.createVariable(parseInt(value));
+					nodeValue = Model.DynamicValue.createVariable(parseInt(value));
 					break;
 				case TAG_KIND.PARAMETER:
-					nodeValue = System.DynamicValue.createParameter(parseInt(value));
+					nodeValue = Model.DynamicValue.createParameter(parseInt(value));
 					break;
 				case TAG_KIND.PROPERTY:
-					nodeValue = System.DynamicValue.createProperty(parseInt(value));
+					nodeValue = Model.DynamicValue.createProperty(parseInt(value));
 					break;
 			}
 			currentNode.add([tag, nodeValue]);
@@ -240,7 +240,7 @@ class Message extends Graphic.Base {
 			ci: false,
 			cs: Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
 			cf: Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
-			ctc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, System.Color.WHITE),
+			ctc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
 			cbc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null),
 			csc: Utils.defaultValue(Datas.Systems.dbOptions.v_tOutline, false)
 				? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null)
@@ -283,9 +283,9 @@ class Message extends Graphic.Base {
 			align: ALIGN,
 			size: number,
 			font: string,
-			textColor: System.Color,
-			backColor: System.Color,
-			strokeColor: System.Color;
+			textColor: Model.Color,
+			backColor: Model.Color,
+			strokeColor: Model.Color;
 		switch (tag) {
 			case TAG_KIND.NEW_LINE:
 				result.g.push(null);

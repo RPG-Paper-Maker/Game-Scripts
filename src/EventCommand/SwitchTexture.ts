@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, System } from '..';
+import { Model, Scene } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject } from '../Core';
 import { Base } from './Base';
@@ -21,20 +21,20 @@ import { Base } from './Base';
  */
 class SwitchTexture extends Base {
 	public isTilesetID: boolean;
-	public tilesetID: System.DynamicValue;
-	public tilesetPictureID: System.DynamicValue;
+	public tilesetID: Model.DynamicValue;
+	public tilesetPictureID: Model.DynamicValue;
 	public isAutotileID: boolean;
-	public autotileID: System.DynamicValue;
-	public autotilePictureID: System.DynamicValue;
+	public autotileID: Model.DynamicValue;
+	public autotilePictureID: Model.DynamicValue;
 	public isWallID: boolean;
-	public wallID: System.DynamicValue;
-	public wallPictureID: System.DynamicValue;
+	public wallID: Model.DynamicValue;
+	public wallPictureID: Model.DynamicValue;
 	public isObject3DID: boolean;
-	public object3DID: System.DynamicValue;
-	public object3DPictureID: System.DynamicValue;
+	public object3DID: Model.DynamicValue;
+	public object3DPictureID: Model.DynamicValue;
 	public isMountainID: boolean;
-	public mountainID: System.DynamicValue;
-	public mountainPictureID: System.DynamicValue;
+	public mountainID: Model.DynamicValue;
+	public mountainPictureID: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -44,32 +44,32 @@ class SwitchTexture extends Base {
 		};
 		this.isTilesetID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isTilesetID) {
-			this.tilesetID = System.DynamicValue.createValueCommand(command, iterator);
-			this.tilesetPictureID = System.DynamicValue.createValueCommand(command, iterator);
+			this.tilesetID = Model.DynamicValue.createValueCommand(command, iterator);
+			this.tilesetPictureID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
 		this.isAutotileID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isAutotileID) {
-			this.autotileID = System.DynamicValue.createValueCommand(command, iterator);
-			this.autotilePictureID = System.DynamicValue.createValueCommand(command, iterator);
+			this.autotileID = Model.DynamicValue.createValueCommand(command, iterator);
+			this.autotilePictureID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
 		this.isWallID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isWallID) {
-			this.wallID = System.DynamicValue.createValueCommand(command, iterator);
-			this.wallPictureID = System.DynamicValue.createValueCommand(command, iterator);
+			this.wallID = Model.DynamicValue.createValueCommand(command, iterator);
+			this.wallPictureID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
 		this.isObject3DID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isObject3DID) {
-			this.object3DID = System.DynamicValue.createValueCommand(command, iterator);
-			this.object3DPictureID = System.DynamicValue.createValueCommand(command, iterator);
+			this.object3DID = Model.DynamicValue.createValueCommand(command, iterator);
+			this.object3DPictureID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
 		this.isMountainID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isMountainID) {
-			this.mountainID = System.DynamicValue.createValueCommand(command, iterator);
-			this.mountainPictureID = System.DynamicValue.createValueCommand(command, iterator);
+			this.mountainID = Model.DynamicValue.createValueCommand(command, iterator);
+			this.mountainPictureID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
 	}

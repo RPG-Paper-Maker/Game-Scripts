@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, ALIGN_VERTICAL, Constants, Platform, ScreenResolution, Utils } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Stack } from '../Manager';
 import { Base } from './Base';
 
@@ -47,11 +47,11 @@ class Text extends Base {
 	public oFontSize: number;
 	public fontName: string;
 	public verticalAlign: ALIGN_VERTICAL;
-	public color: System.Color;
+	public color: Model.Color;
 	public bold: boolean;
 	public italic: boolean;
-	public backColor: System.Color;
-	public strokeColor: System.Color;
+	public backColor: Model.Color;
+	public strokeColor: Model.Color;
 	public font: string;
 	public textWidth: number;
 	public textHeight: number;
@@ -69,7 +69,7 @@ class Text extends Base {
 			fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
 			fontName = Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
 			verticalAlign = ALIGN_VERTICAL.CENTER,
-			color = Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, System.Color.WHITE),
+			color = Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
 			bold = false,
 			italic = false,
 			backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null),

@@ -10,14 +10,14 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *  All the items datas.
  *  @static
  */
 class Items {
-	private static list: System.Item[];
+	private static list: Model.Item[];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -31,7 +31,7 @@ class Items {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_ITEMS)).items as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Item });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Item });
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Items {
 	 *  @param {number} id
 	 *  @returns {System.Item}
 	 */
-	static get(id: number): System.Item {
+	static get(id: number): Model.Item {
 		return Datas.Base.get(id, this.list, 'item');
 	}
 }

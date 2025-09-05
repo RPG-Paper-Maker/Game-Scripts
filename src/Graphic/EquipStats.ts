@@ -11,7 +11,7 @@
 
 import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -45,7 +45,7 @@ class EquipStats extends Base {
 		let maxLength = 0;
 		let maxLengthValue = 0;
 		let id: number,
-			statistic: System.Statistic,
+			statistic: Model.Statistic,
 			graphicName: Graphic.Text,
 			txt: string,
 			graphicValue: Graphic.Text,
@@ -85,9 +85,9 @@ class EquipStats extends Base {
 						: Math.min(gamePlayer[statistic.abbreviation], newValue) + '/' + newValue;
 					graphicValue = new Graphic.Text(txt);
 					if (newValue > baseValue) {
-						graphicValue.color = System.Color.GREEN;
+						graphicValue.color = Model.Color.GREEN;
 					} else if (newValue < baseValue) {
-						graphicValue.color = System.Color.RED;
+						graphicValue.color = Model.Color.RED;
 					}
 					this.listNewStats.push(graphicValue);
 				}

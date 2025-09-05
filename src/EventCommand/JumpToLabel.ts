@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class JumpToLabel extends Base {
-	public label: System.DynamicValue;
+	public label: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -27,7 +27,7 @@ class JumpToLabel extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.label = System.DynamicValue.createValueCommand(command, iterator);
+		this.label = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

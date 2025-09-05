@@ -10,7 +10,7 @@
 */
 
 import { DAMAGES_KIND, ITEM_KIND } from '../Common';
-import { Datas, Scene, System } from '../index';
+import { Datas, Model, Scene } from '../index';
 import { Game } from './Game';
 import { Player } from './Player';
 
@@ -22,11 +22,11 @@ import { Player } from './Player';
  */
 class Item {
 	public kind: ITEM_KIND;
-	public system: System.CommonSkillItem;
+	public system: Model.CommonSkillItem;
 	public nb: number;
-	public shop: System.ShopItem;
+	public shop: Model.ShopItem;
 
-	constructor(kind: ITEM_KIND, id: number, nb: number, shop?: System.ShopItem) {
+	constructor(kind: ITEM_KIND, id: number, nb: number, shop?: Model.ShopItem) {
 		this.kind = kind;
 		switch (this.kind) {
 			case ITEM_KIND.ITEM:

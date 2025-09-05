@@ -22,7 +22,7 @@ import {
 	Position,
 	StructMapElementCollision,
 } from '../Core';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 
 /** @class
  *  The collisions manager.
@@ -1370,8 +1370,8 @@ class Collisions {
 		object: MapObject
 	): [boolean, number] {
 		const mountain = <Mountain>objCollision.t;
-		const forceAlways = (<System.Mountain>mountain.getSystem()).forceAlways();
-		const forceNever = (<System.Mountain>mountain.getSystem()).forceNever();
+		const forceAlways = (<Model.Mountain>mountain.getSystem()).forceAlways();
+		const forceNever = (<Model.Mountain>mountain.getSystem()).forceNever();
 		let point = new THREE.Vector2(positionAfter.x, positionAfter.z);
 		const x = objCollision.l.x;
 		const y = objCollision.l.y;

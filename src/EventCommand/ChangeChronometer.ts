@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { Chrono, Game, MapObject } from '../Core';
-import { Manager, System } from '../index';
+import { Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,12 +20,12 @@ import { Base } from './Base';
  *  @param {Object} command - Direct JSON command to parse
  */
 class ChangeChronometer extends Base {
-	public chronometerID: System.DynamicValue;
+	public chronometerID: Model.DynamicValue;
 	public operation: number;
-	public time: System.DynamicValue;
+	public time: Model.DynamicValue;
 	public diplayOnScreen: boolean;
 	public stockValue: boolean;
-	public stockID: System.DynamicValue;
+	public stockID: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -33,15 +33,15 @@ class ChangeChronometer extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.chronometerID = System.DynamicValue.createValueCommand(command, iterator);
+		this.chronometerID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operation = command[iterator.i++];
 		if (this.operation === 0) {
-			this.time = System.DynamicValue.createValueCommand(command, iterator);
+			this.time = Model.DynamicValue.createValueCommand(command, iterator);
 			this.diplayOnScreen = Utils.numberToBool(command[iterator.i++]);
 		} else {
 			this.stockValue = Utils.numberToBool(command[iterator.i++]);
 			if (this.stockValue) {
-				this.stockID = System.DynamicValue.createValueCommand(command, iterator);
+				this.stockID = Model.DynamicValue.createValueCommand(command, iterator);
 			}
 		}
 	}

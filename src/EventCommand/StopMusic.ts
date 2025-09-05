@@ -11,7 +11,7 @@
 
 import { SONG_KIND } from '../Common';
 import { MapObject } from '../Core';
-import { EventCommand, Manager, System } from '../index';
+import { EventCommand, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -37,9 +37,9 @@ class StopMusic extends Base {
 		const iterator = {
 			i: 0,
 		};
-		that.seconds = System.DynamicValue.createValueCommand(command, iterator);
+		that.seconds = Model.DynamicValue.createValueCommand(command, iterator);
 		if (kind === SONG_KIND.SOUND) {
-			that.soundID = System.DynamicValue.createValueCommand(command, iterator);
+			that.soundID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 

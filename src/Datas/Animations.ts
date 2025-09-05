@@ -10,14 +10,14 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *  All the animations datas.
  *  @static
  */
 class Animations {
-	private static list: System.Animation[];
+	private static list: Model.Animation[];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -31,7 +31,7 @@ class Animations {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: System.Animation });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Animation });
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Animations {
 	 *  @param {number} id
 	 *  @returns {System.Animation}
 	 */
-	static get(id: number): System.Animation {
+	static get(id: number): Model.Animation {
 		return Datas.Base.get(id, this.list, 'animation');
 	}
 }

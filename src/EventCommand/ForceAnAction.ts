@@ -11,7 +11,7 @@
 
 import { BATTLE_STEP, CHARACTER_KIND, EFFECT_SPECIAL_ACTION_KIND, Mathf, TARGET_KIND, Utils } from '../Common';
 import { Battler, MapObject } from '../Core';
-import { Datas, Scene, System } from '../index';
+import { Datas, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,13 +22,13 @@ import { Base } from './Base';
 class ForceAnAction extends Base {
 	public battlerKind: number;
 	public battlerEnemyIndex: number;
-	public battlerHeroEnemyInstanceID: System.DynamicValue;
+	public battlerHeroEnemyInstanceID: Model.DynamicValue;
 	public actionKind: number;
-	public actionID: System.DynamicValue;
+	public actionID: Model.DynamicValue;
 	public targetKind: number;
 	public targetCustomKind: number;
 	public targetEnemyIndex: number;
-	public targetHeroEnemyInstanceID: System.DynamicValue;
+	public targetHeroEnemyInstanceID: Model.DynamicValue;
 	public useBattlerTurn: boolean;
 
 	constructor(command: any[]) {
@@ -43,12 +43,12 @@ class ForceAnAction extends Base {
 				this.battlerEnemyIndex = command[iterator.i++];
 				break;
 			case 1:
-				this.battlerHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.battlerHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 		this.actionKind = command[iterator.i++];
 		if (this.actionKind !== 2) {
-			this.actionID = System.DynamicValue.createValueCommand(command, iterator);
+			this.actionID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.targetKind = command[iterator.i++];
 		if (this.targetKind === 2) {
@@ -58,7 +58,7 @@ class ForceAnAction extends Base {
 					this.targetEnemyIndex = command[iterator.i++];
 					break;
 				case 1:
-					this.targetHeroEnemyInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+					this.targetHeroEnemyInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 					break;
 			}
 		}

@@ -10,14 +10,14 @@
 */
 
 import { CUSTOM_SHAPE_KIND, Paths, Platform } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *  All the shapes datas.
  *  @static
  */
 class Shapes {
-	private static list: System.Shape[][];
+	private static list: Model.Shape[][];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -38,8 +38,8 @@ class Shapes {
 			jsonList: Record<string, any>[],
 			jsonShape: Record<string, any>,
 			id: number,
-			list: System.Shape[],
-			shape: System.Shape;
+			list: Model.Shape[],
+			shape: Model.Shape;
 		for (let i = 0; i < l; i++) {
 			jsonHash = json[i];
 			k = jsonHash.k;
@@ -62,11 +62,12 @@ class Shapes {
 				jsonShape = jsonList[j];
 				if (jsonShape) {
 					id = jsonShape.id;
-					shape = new System.Shape(jsonShape, k);
+					shape = new Model.Shape(jsonShape);
+					shape.kind = k;
 					if (!Platform.IS_DESKTOP && !shape.isBR) {
 						shape.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
-								System.Shape.getLocalFolder(shape.kind) +
+								Model.Shape.getLocalFolder(shape.kind) +
 								'/' +
 								shape.name
 						);
@@ -92,10 +93,10 @@ class Shapes {
 	 *  @param {number} id - The shape id
 	 *  @returns {System.Shape}
 	 */
-	static get(kind: CUSTOM_SHAPE_KIND, id: number): System.Shape {
+	static get(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
 		return kind === CUSTOM_SHAPE_KIND.NONE || id === -1
-			? new System.Shape()
-			: Datas.Base.get(id, this.list[kind], 'shape ' + System.Shape.customSHAPE_KINDToString(kind));
+			? new Model.Shape()
+			: Datas.Base.get(id, this.list[kind], 'shape ' + Model.Shape.customSHAPE_KINDToString(kind));
 	}
 }
 

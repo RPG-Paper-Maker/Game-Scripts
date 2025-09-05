@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *  All the battle System datas.
@@ -18,11 +18,11 @@ import { Datas, System } from '../index';
  */
 class CommonEvents {
 	public static PROPERTY_STOCKED = 'stocked';
-	private static eventsSystem: System.Event[];
-	private static eventsUser: System.Event[];
-	private static commonReactions: System.CommonReaction[];
-	private static commonObjects: System.MapObject[];
-	public static heroObject: System.MapObject;
+	private static eventsSystem: Model.Event[];
+	private static eventsUser: Model.Event[];
+	private static commonReactions: Model.CommonReaction[];
+	private static commonObjects: Model.MapObject[];
+	public static heroObject: Model.MapObject;
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -41,12 +41,12 @@ class CommonEvents {
 		this.eventsUser = [];
 		this.commonReactions = [];
 		this.commonObjects = [];
-		Utils.readJSONSystemList({ list: json.eventsSystem, listIDs: this.eventsSystem, cons: System.CommonEvent });
-		Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this.eventsUser, cons: System.CommonEvent });
+		Utils.readJSONSystemList({ list: json.eventsSystem, listIDs: this.eventsSystem, cons: Model.CommonEvent });
+		Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this.eventsUser, cons: Model.CommonEvent });
 		Utils.readJSONSystemList({
 			list: json.commonReactors,
 			listIDs: this.commonReactions,
-			cons: System.CommonReaction,
+			cons: Model.CommonReaction,
 		});
 
 		// Common objects
@@ -61,10 +61,10 @@ class CommonEvents {
 		}
 
 		// Now, we can create all the models without problem
-		Utils.readJSONSystemList({ list: reorderedList, listIDs: this.commonObjects, cons: System.MapObject });
+		Utils.readJSONSystemList({ list: reorderedList, listIDs: this.commonObjects, cons: Model.MapObject });
 
 		// Hero object
-		this.heroObject = new System.MapObject();
+		this.heroObject = new Model.MapObject();
 		this.heroObject.read(json.ho);
 	}
 
@@ -106,7 +106,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.Event}
 	 */
-	static getEventSystem(id: number): System.Event {
+	static getEventSystem(id: number): Model.Event {
 		return Datas.Base.get(id, this.eventsSystem, 'event system');
 	}
 
@@ -115,7 +115,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.Event}
 	 */
-	static getEventUser(id: number): System.Event {
+	static getEventUser(id: number): Model.Event {
 		return Datas.Base.get(id, this.eventsUser, 'event user');
 	}
 
@@ -124,7 +124,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.CommonReaction}
 	 */
-	static getCommonReaction(id: number): System.CommonReaction {
+	static getCommonReaction(id: number): Model.CommonReaction {
 		return Datas.Base.get(id, this.commonReactions, 'common reaction');
 	}
 
@@ -133,7 +133,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.MapObject}
 	 */
-	static getCommonObject(id: number): System.MapObject {
+	static getCommonObject(id: number): Model.MapObject {
 		return Datas.Base.get(id, this.commonObjects, 'common object');
 	}
 }

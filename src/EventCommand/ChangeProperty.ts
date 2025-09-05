@@ -11,7 +11,7 @@
 
 import { Mathf } from '../Common';
 import { Game, MapObject } from '../Core';
-import { Scene, System } from '../index';
+import { Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeProperty extends Base {
-	public propertyID: System.DynamicValue;
+	public propertyID: Model.DynamicValue;
 	public operationKind: number;
-	public newValue: System.DynamicValue;
+	public newValue: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -30,9 +30,9 @@ class ChangeProperty extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.propertyID = System.DynamicValue.createValueCommand(command, iterator);
+		this.propertyID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operationKind = command[iterator.i++];
-		this.newValue = System.DynamicValue.createValueCommand(command, iterator);
+		this.newValue = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

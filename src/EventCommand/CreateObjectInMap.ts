@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Scene, System } from '..';
+import { Datas, Model, Scene } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject, Position, StructSearchResult } from '../Core';
 import { Base } from './Base';
@@ -20,15 +20,15 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class CreateObjectInMap extends Base {
-	public modelID: System.DynamicValue;
-	public objectIDPosition: System.DynamicValue;
-	public mapID: System.DynamicValue;
-	public x: System.DynamicValue;
-	public y: System.DynamicValue;
-	public yPlus: System.DynamicValue;
-	public z: System.DynamicValue;
+	public modelID: Model.DynamicValue;
+	public objectIDPosition: Model.DynamicValue;
+	public mapID: Model.DynamicValue;
+	public x: Model.DynamicValue;
+	public y: Model.DynamicValue;
+	public yPlus: Model.DynamicValue;
+	public z: Model.DynamicValue;
 	public isStockID: boolean;
-	public stockID: System.DynamicValue;
+	public stockID: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -36,31 +36,31 @@ class CreateObjectInMap extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.modelID = System.DynamicValue.createValueCommand(command, iterator);
+		this.modelID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.objectIDPosition = null;
 		this.mapID = null;
 		switch (command[iterator.i++]) {
 			case 0:
-				this.mapID = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.x = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.y = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.yPlus = System.DynamicValue.createNumber(command[iterator.i++]);
-				this.z = System.DynamicValue.createNumber(command[iterator.i++]);
+				this.mapID = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.x = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.y = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.yPlus = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.z = Model.DynamicValue.createNumber(command[iterator.i++]);
 				break;
 			case 1:
-				this.mapID = System.DynamicValue.createValueCommand(command, iterator);
-				this.x = System.DynamicValue.createValueCommand(command, iterator);
-				this.y = System.DynamicValue.createValueCommand(command, iterator);
-				this.yPlus = System.DynamicValue.createValueCommand(command, iterator);
-				this.z = System.DynamicValue.createValueCommand(command, iterator);
+				this.mapID = Model.DynamicValue.createValueCommand(command, iterator);
+				this.x = Model.DynamicValue.createValueCommand(command, iterator);
+				this.y = Model.DynamicValue.createValueCommand(command, iterator);
+				this.yPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				this.z = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 2:
-				this.objectIDPosition = System.DynamicValue.createValueCommand(command, iterator);
+				this.objectIDPosition = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 		this.isStockID = Utils.numberToBool(command[iterator.i++]);
 		if (this.isStockID) {
-			this.stockID = System.DynamicValue.createValueCommand(command, iterator);
+			this.stockID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 
@@ -113,7 +113,7 @@ class CreateObjectInMap extends Base {
 			const globalPortion = position.getGlobalPortion();
 			Scene.Map.current.mapProperties.allObjects[id] = position;
 			const newObject = new MapObject(
-				System.MapObject.createFromModelID(this.modelID.getValue(), id),
+				Model.MapObject.createFromModelID(this.modelID.getValue(), id),
 				currentState.position
 			);
 			if (this.isStockID) {

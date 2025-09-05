@@ -11,7 +11,7 @@
 
 import { ALIGN, ScreenResolution } from '../Common';
 import { MapObject, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Scene, System } from '../index';
+import { Datas, Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
 import { ShowText } from './ShowText';
 
@@ -21,8 +21,8 @@ import { ShowText } from './ShowText';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class DisplayChoice extends Base {
-	public cancelAutoIndex: System.DynamicValue;
-	public maxNumberChoices: System.DynamicValue;
+	public cancelAutoIndex: Model.DynamicValue;
+	public maxNumberChoices: Model.DynamicValue;
 	public choices: string[];
 	public windowChoices: WindowChoices;
 	public showText: ShowText;
@@ -35,11 +35,11 @@ class DisplayChoice extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.cancelAutoIndex = System.DynamicValue.createValueCommand(command, iterator);
-		this.maxNumberChoices = System.DynamicValue.createValueCommand(command, iterator);
+		this.cancelAutoIndex = Model.DynamicValue.createValueCommand(command, iterator);
+		this.maxNumberChoices = Model.DynamicValue.createValueCommand(command, iterator);
 		this.choices = [];
 		let l = command.length;
-		let lang: System.Translatable = null;
+		let lang: Model.Translatable = null;
 		let next: string;
 		while (iterator.i < l) {
 			next = command[iterator.i];
@@ -48,7 +48,7 @@ class DisplayChoice extends Base {
 				if (lang !== null) {
 					this.choices.push(lang.name());
 				}
-				lang = new System.Translatable();
+				lang = new Model.Translatable();
 			} else {
 				lang.getCommand(command, iterator);
 			}

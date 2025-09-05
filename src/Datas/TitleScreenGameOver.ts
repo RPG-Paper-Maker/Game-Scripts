@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, Paths, Platform, SONG_KIND, TITLE_SETTING_KIND, Utils } from '../Common';
-import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { Datas, Graphic, Manager, Model, Scene } from '../index';
 
 /** @class
  *  All the titlescreen and gameover datas.
@@ -20,14 +20,14 @@ class TitlescreenGameover {
 	public static isTitleBackgroundImage: boolean;
 	public static titleBackgroundImageID: number;
 	public static titleBackgroundVideoID: number;
-	public static titleMusic: System.PlaySong;
-	public static titleCommands: System.TitleCommand[];
+	public static titleMusic: Model.PlaySong;
+	public static titleCommands: Model.TitleCommand[];
 	public static titleSettings: number[];
 	public static isGameOverBackgroundImage: boolean;
 	public static gameOverBackgroundImageID: number;
 	public static gameOverBackgroundVideoID: number;
-	public static gameOverMusic: System.PlaySong;
-	public static gameOverCommands: System.GameOverCommand[];
+	public static gameOverMusic: Model.PlaySong;
+	public static gameOverCommands: Model.GameOverCommand[];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -45,12 +45,12 @@ class TitlescreenGameover {
 		this.isTitleBackgroundImage = Utils.defaultValue(json.itbi, true);
 		this.titleBackgroundImageID = Utils.defaultValue(json.tb, 1);
 		this.titleBackgroundVideoID = Utils.defaultValue(json.tbv, 1);
-		this.titleMusic = new System.PlaySong(SONG_KIND.MUSIC, json.tm);
+		this.titleMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.tm);
 		this.titleCommands = [];
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.tc, []),
 			listIndexes: this.titleCommands,
-			cons: System.TitleCommand,
+			cons: Model.TitleCommand,
 		});
 		const jsonList = json.ts;
 		const l = jsonList.length;
@@ -68,12 +68,12 @@ class TitlescreenGameover {
 		this.isGameOverBackgroundImage = Utils.defaultValue(json.isGameOverBackgroundImage, true);
 		this.gameOverBackgroundImageID = Utils.defaultValue(json.gameOverBackgroundImage, 1);
 		this.gameOverBackgroundVideoID = Utils.defaultValue(json.gameOverBackgroundVideo, 1);
-		this.gameOverMusic = new System.PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
+		this.gameOverMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
 		this.gameOverCommands = [];
 		Utils.readJSONSystemList({
 			list: Utils.defaultValue(json.gameOverCommands, []),
 			listIndexes: this.gameOverCommands,
-			cons: System.GameOverCommand,
+			cons: Model.GameOverCommand,
 		});
 	}
 
@@ -85,7 +85,7 @@ class TitlescreenGameover {
 	static getTitleCommandsNames(): Graphic.Text[] {
 		const l = this.titleCommands.length;
 		const list = new Array(l);
-		let titleCommand: System.TitleCommand, obj: Graphic.Text;
+		let titleCommand: Model.TitleCommand, obj: Graphic.Text;
 		for (let i = 0; i < l; i++) {
 			titleCommand = this.titleCommands[i];
 			obj = new Graphic.Text(titleCommand.name(), { align: ALIGN.CENTER });
@@ -160,7 +160,7 @@ class TitlescreenGameover {
 	static getGameOverCommandsNames(): Graphic.Text[] {
 		const l = this.gameOverCommands.length;
 		const list = new Array(l);
-		let command: System.GameOverCommand, obj: Graphic.Text;
+		let command: Model.GameOverCommand, obj: Graphic.Text;
 		for (let i = 0; i < l; i++) {
 			command = this.gameOverCommands[i];
 			obj = new Graphic.Text(command.name(), { align: ALIGN.CENTER });

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Scene, System } from '..';
+import { Datas, Graphic, Manager, Model, Scene } from '..';
 import {
 	ANIMATION_EFFECT_CONDITION_KIND,
 	ANIMATION_POSITION_KIND,
@@ -42,7 +42,7 @@ class BattleAnimation {
 	 *  Initialize step.
 	 */
 	public initialize() {
-		let content: System.CommonSkillItem;
+		let content: Model.CommonSkillItem;
 		switch (this.battle.battleCommandKind) {
 			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
 				this.battle.informationText = this.battle.attackSkill.getMessage(this.battle.user);
@@ -72,7 +72,7 @@ class BattleAnimation {
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.NONE: // If command was a skill without special action
-				content = <System.Skill>(
+				content = <Model.Skill>(
 					(<Graphic.TextIcon>(
 						this.battle.windowChoicesBattleCommands.getContent(this.battle.user.lastCommandIndex)
 					)).system
@@ -86,12 +86,12 @@ class BattleAnimation {
 		(<Graphic.Text>this.battle.windowTopInformations.content).setText(this.battle.informationText);
 		this.battle.time = new Date().getTime();
 		this.battle.effects = [];
-		let i: number, l: number, effects: System.Effect[];
+		let i: number, l: number, effects: Model.Effect[];
 		switch (this.battle.battleCommandKind) {
 			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
 				if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
 					const equipments = this.battle.user.player.equip;
-					let j: number, m: number, gameItem: Item, weapon: System.Weapon;
+					let j: number, m: number, gameItem: Item, weapon: Model.Weapon;
 					for (i = 0, l = equipments.length; i < l; i++) {
 						gameItem = equipments[i];
 						if (gameItem && gameItem.kind === ITEM_KIND.WEAPON) {

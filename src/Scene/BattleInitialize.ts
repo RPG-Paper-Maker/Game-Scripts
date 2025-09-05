@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Datas, Graphic, Manager, Scene, System } from '..';
+import { Datas, Graphic, Manager, Model, Scene } from '..';
 import {
 	ALIGN,
 	BATTLE_STEP,
@@ -114,7 +114,7 @@ class BattleInitialize {
 		this.battle.battlers[CHARACTER_KIND.MONSTER] = new Array(l);
 		this.battle.players[CHARACTER_KIND.MONSTER] = new Array(l);
 		this.battle.graphicPlayers[CHARACTER_KIND.MONSTER] = new Array(l);
-		let troopMonster: System.TroopMonster,
+		let troopMonster: Model.TroopMonster,
 			position: THREE.Vector3,
 			player: Player,
 			battler: Battler,
@@ -201,12 +201,12 @@ class BattleInitialize {
 		const l = Datas.BattleSystems.battleCommandsOrder.length;
 		const listContent: Graphic.TextIcon[] = new Array(l);
 		const listCallbacks = new Array(l);
-		let skill: System.Skill;
+		let skill: Model.Skill;
 		for (let i = 0; i < l; i++) {
 			skill = Datas.Skills.get(Datas.BattleSystems.getBattleCommand(Datas.BattleSystems.battleCommandsOrder[i]));
 			listContent[i] = Graphic.TextIcon.createFromSystem(skill.name(), skill);
 			listContent[i].system = skill;
-			listCallbacks[i] = System.CommonSkillItem.prototype.useCommand;
+			listCallbacks[i] = Model.CommonSkillItem.prototype.useCommand;
 		}
 		this.battle.windowChoicesBattleCommands = new WindowChoices(
 			Constants.HUGE_SPACE,
@@ -290,7 +290,7 @@ class BattleInitialize {
 	 *  Initialize musics.
 	 */
 	initializeMusic() {
-		this.battle.musicMap = System.PlaySong.currentPlayingMusic;
+		this.battle.musicMap = Model.PlaySong.currentPlayingMusic;
 		const song = Manager.Songs.current[SONG_KIND.MUSIC];
 		this.battle.musicMapTime = song === null ? 0 : song.seek();
 		if (Game.current.battleMusic.songID.getValue() !== -1) {

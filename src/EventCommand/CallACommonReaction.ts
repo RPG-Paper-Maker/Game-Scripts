@@ -11,7 +11,7 @@
 
 import { DYNAMIC_VALUE_KIND } from '../Common';
 import { MapObject, ReactionInterpreter } from '../Core';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -21,7 +21,7 @@ import { Base } from './Base';
  */
 class CallACommonReaction extends Base {
 	public commonReactionID: number;
-	public parameters: System.DynamicValue[];
+	public parameters: Model.DynamicValue[];
 
 	constructor(command: any[]) {
 		super();
@@ -35,7 +35,7 @@ class CallACommonReaction extends Base {
 		let paramID: number;
 		while (iterator.i < l) {
 			paramID = command[iterator.i++];
-			this.parameters[paramID] = System.DynamicValue.createValueCommand(command, iterator);
+			this.parameters[paramID] = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 
@@ -59,16 +59,16 @@ class CallACommonReaction extends Base {
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (!currentState.interpreter) {
 			const reaction = Datas.CommonEvents.getCommonReaction(this.commonReactionID);
-			const parameters = System.DynamicValue.mapWithParametersProperties(this.parameters);
+			const parameters = Model.DynamicValue.mapWithParametersProperties(this.parameters);
 
 			// Correct parameters for default values
-			let v: System.DynamicValue, parameter: System.DynamicValue, k: DYNAMIC_VALUE_KIND;
+			let v: Model.DynamicValue, parameter: Model.DynamicValue, k: DYNAMIC_VALUE_KIND;
 			for (const id in reaction.parameters) {
 				v = reaction.parameters[id].value;
 				parameter = parameters[id];
 				k = parameter ? parameter.kind : DYNAMIC_VALUE_KIND.NONE;
 				if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
-					parameter = k === DYNAMIC_VALUE_KIND.DEFAULT ? v : System.DynamicValue.create(k, null);
+					parameter = k === DYNAMIC_VALUE_KIND.DEFAULT ? v : Model.DynamicValue.create(k, null);
 				}
 				parameters[id] = parameter;
 			}

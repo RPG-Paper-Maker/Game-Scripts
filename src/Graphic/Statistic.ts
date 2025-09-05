@@ -10,7 +10,7 @@
 */
 
 import { PICTURE_KIND, ScreenResolution } from '../Common';
-import { Core, Datas, Graphic, System } from '../index';
+import { Core, Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -21,13 +21,13 @@ import { Base } from './Base';
  */
 class Statistic extends Base {
 	public player: Core.Player;
-	public statistic: System.Statistic;
+	public statistic: Model.Statistic;
 	public graphicName: Graphic.Text;
 	public graphicValue: Graphic.Text;
-	public pictureBar: System.Picture;
+	public pictureBar: Model.Picture;
 	public maxStatNamesLength: number;
 
-	constructor(player: Core.Player, statistic: System.Statistic, offsetStat?: number) {
+	constructor(player: Core.Player, statistic: Model.Statistic, offsetStat?: number) {
 		super();
 		this.player = player;
 		this.statistic = statistic;

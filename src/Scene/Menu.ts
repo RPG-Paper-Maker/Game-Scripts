@@ -11,7 +11,7 @@
 
 import { ALIGN, ScreenResolution } from '../Common';
 import { ChoicesOptions, Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { Datas, Graphic, Manager, Model, Scene } from '../index';
 import { MenuBase } from './MenuBase';
 
 interface StructPositionChoice {
@@ -69,7 +69,7 @@ class Menu extends MenuBase {
 	createCommandWindow() {
 		const graphics: Graphic.Text[] = [];
 		const actions: Function[] = [];
-		let command: System.MainMenuCommand;
+		let command: Model.MainMenuCommand;
 		for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
 			command = Datas.Systems.mainMenuCommands[i];
 			graphics[i] = new Graphic.Text(command.name(), { align: ALIGN.CENTER });

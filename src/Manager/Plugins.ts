@@ -8,7 +8,7 @@
 */
 
 import { Interpreter, Paths, Platform, Utils } from '../Common';
-import { System } from '../index';
+import { Model } from '../index';
 
 type ClassMethod<T extends NewableFunction, M extends keyof T['prototype']> = (
 	this: T['prototype'],
@@ -21,7 +21,7 @@ type ClassMethod<T extends NewableFunction, M extends keyof T['prototype']> = (
  *  @author Nio Kasgami, Wano, Trico Everfire
  */
 class Plugins {
-	public static plugins: Record<string, System.Plugin> = {};
+	public static plugins: Record<string, Model.Plugin> = {};
 	public static pluginsNames: string[] = [];
 
 	constructor() {
@@ -51,7 +51,7 @@ class Plugins {
 		const json = (await Platform.parseFileJSON(
 			Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_DETAILS
 		)) as any;
-		const plugin = new System.Plugin(pluginJSON.id, json);
+		const plugin = new Model.Plugin(pluginJSON.id, json);
 		// FIX 01 : plugin wasn't unloaded if not enabled.
 		if (Utils.defaultValue(pluginJSON.checked, true)) {
 			this.register(plugin);
@@ -66,7 +66,7 @@ class Plugins {
 	 *  @static
 	 *  @param {System.Plugin} plugin
 	 */
-	static register(plugin: System.Plugin) {
+	static register(plugin: Model.Plugin) {
 		if (this.plugins.hasOwnProperty(plugin.name)) {
 			throw new Error('Duplicate error: ' + plugin + ' is an duplicate of ' + plugin.name);
 		} else {
@@ -104,7 +104,7 @@ class Plugins {
 	 *  @param {string} pluginName
 	 *  @returns {System.Plugin}
 	 */
-	static fetch(pluginName: string): System.Plugin {
+	static fetch(pluginName: string): Model.Plugin {
 		if (!this.plugins.hasOwnProperty(pluginName)) {
 			throw new Error('Unindenfied plugin error: ' + pluginName + " doesn't exist in the current workspace!");
 		} else {
@@ -154,7 +154,7 @@ class Plugins {
 	 *  Merge the two plugins to extends their plugins data.
 	 *  @static
 	 *  @usage This function is used to extends the parameters of other plugins.
-	 *  See Patch System.
+	 *  See Patch Model.
 	 *  @experimental This is a experimental features that is yet to be support
 	 *  in RPM.
 	 *  @param {string} parent

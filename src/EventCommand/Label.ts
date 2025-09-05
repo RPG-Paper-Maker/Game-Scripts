@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { System } from '../index';
+import { Model } from '..';
 import { Base } from './Base';
 
 /** @class
@@ -18,7 +18,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class Label extends Base {
-	public name: System.DynamicValue;
+	public name: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -26,7 +26,7 @@ class Label extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.name = System.DynamicValue.createValueCommand(command, iterator);
+		this.name = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 }
 

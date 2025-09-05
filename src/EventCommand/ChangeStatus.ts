@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { Game, MapObject, Player } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,10 +19,10 @@ import { Base } from './Base';
  */
 class ChangeStatus extends Base {
 	public selection: number;
-	public heInstanceID: System.DynamicValue;
+	public heInstanceID: Model.DynamicValue;
 	public groupIndex: number;
 	public operation: number;
-	public statusID: System.DynamicValue;
+	public statusID: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -35,7 +35,7 @@ class ChangeStatus extends Base {
 		this.selection = command[iterator.i++];
 		switch (this.selection) {
 			case 0:
-				this.heInstanceID = System.DynamicValue.createValueCommand(command, iterator);
+				this.heInstanceID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1:
 				this.groupIndex = command[iterator.i++];
@@ -46,7 +46,7 @@ class ChangeStatus extends Base {
 		this.operation = command[iterator.i++];
 
 		// Status
-		this.statusID = System.DynamicValue.createValueCommand(command, iterator);
+		this.statusID = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

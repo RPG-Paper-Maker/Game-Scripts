@@ -12,7 +12,7 @@
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Picture2D, Player } from '../Core';
 import { Status } from '../Core/Status';
-import { Datas, Graphic, Manager, System } from '../index';
+import { Datas, Graphic, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -69,7 +69,7 @@ class PlayerDescription extends Base {
 		// Adding stats
 		this.listStatsNames = [];
 		this.listStats = [];
-		let id: number, statistic: System.Statistic, graphicName: Graphic.Text, txt: string;
+		let id: number, statistic: Model.Statistic, graphicName: Graphic.Text, txt: string;
 		for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
@@ -98,7 +98,7 @@ class PlayerDescription extends Base {
 	 */
 	initializeStatisticProgression() {
 		this.listStatsProgression = [];
-		let id: number, statistic: System.Statistic, value: number, graphic: Graphic.Text;
+		let id: number, statistic: Model.Statistic, value: number, graphic: Graphic.Text;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
@@ -117,9 +117,9 @@ class PlayerDescription extends Base {
 				value = this.player[statistic.abbreviation] - this.player[statistic.getBeforeAbbreviation()];
 				graphic = new Graphic.Text(txt + value);
 				if (value > 0) {
-					graphic.color = System.Color.GREEN;
+					graphic.color = Model.Color.GREEN;
 				} else if (value < 0) {
-					graphic.color = System.Color.RED;
+					graphic.color = Model.Color.RED;
 				}
 				this.listStatsProgression.push(graphic);
 			}
@@ -133,7 +133,7 @@ class PlayerDescription extends Base {
 		this.listStatsNames = [];
 		this.listStats = [];
 		this.maxLength = 0;
-		let id: number, statistic: System.Statistic, graphicName: Graphic.Text, txt: string;
+		let id: number, statistic: Model.Statistic, graphicName: Graphic.Text, txt: string;
 		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
 			id = Datas.BattleSystems.statisticsOrder[i];
 			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {

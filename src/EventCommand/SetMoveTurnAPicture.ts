@@ -11,7 +11,7 @@
 
 import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
-import { Datas, Manager, System } from '../index';
+import { Datas, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,14 +20,14 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class SetMoveTurnAPicture extends Base {
-	public index: System.DynamicValue;
-	public pictureID: System.DynamicValue;
-	public zoom: System.DynamicValue;
-	public opacity: System.DynamicValue;
-	public x: System.DynamicValue;
-	public y: System.DynamicValue;
-	public angle: System.DynamicValue;
-	public time: System.DynamicValue;
+	public index: Model.DynamicValue;
+	public pictureID: Model.DynamicValue;
+	public zoom: Model.DynamicValue;
+	public opacity: Model.DynamicValue;
+	public x: Model.DynamicValue;
+	public y: Model.DynamicValue;
+	public angle: Model.DynamicValue;
+	public time: Model.DynamicValue;
 	public waitEnd: boolean;
 
 	constructor(command: any[]) {
@@ -36,28 +36,28 @@ class SetMoveTurnAPicture extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.index = System.DynamicValue.createValueCommand(command, iterator);
+		this.index = Model.DynamicValue.createValueCommand(command, iterator);
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.pictureID = System.DynamicValue.createValueCommand(command, iterator);
+			this.pictureID = Model.DynamicValue.createValueCommand(command, iterator);
 			iterator.i++;
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.zoom = System.DynamicValue.createValueCommand(command, iterator);
+			this.zoom = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.opacity = System.DynamicValue.createValueCommand(command, iterator);
+			this.opacity = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.x = System.DynamicValue.createValueCommand(command, iterator);
+			this.x = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.y = System.DynamicValue.createValueCommand(command, iterator);
+			this.y = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
-			this.angle = System.DynamicValue.createValueCommand(command, iterator);
+			this.angle = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.waitEnd = Utils.numberToBool(command[iterator.i++]);
-		this.time = System.DynamicValue.createValueCommand(command, iterator);
+		this.time = Model.DynamicValue.createValueCommand(command, iterator);
 		this.parallel = !this.waitEnd;
 	}
 

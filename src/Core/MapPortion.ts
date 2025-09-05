@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Constants, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
-import { Datas, Manager, Scene, System } from '../index';
+import { Datas, Manager, Model, Scene } from '../index';
 import { Autotile } from './Autotile';
 import { Autotiles } from './Autotiles';
 import { CustomGeometry } from './CustomGeometry';
@@ -540,7 +540,7 @@ class MapPortion {
 			l: number,
 			jsonObject: Record<string, any>,
 			position: Position,
-			object: System.MapObject,
+			object: Model.MapObject,
 			id: number,
 			index: number,
 			localPosition: THREE.Vector3,
@@ -548,7 +548,7 @@ class MapPortion {
 		for (i = 0, l = json.length; i < l; i++) {
 			jsonObject = json[i];
 			position = Position.createFromArray(jsonObject.k);
-			object = new System.MapObject(jsonObject.v);
+			object = new Model.MapObject(jsonObject.v);
 			id = object.id;
 
 			// Check if the object is moving (so no need to add it to the scene)
@@ -666,14 +666,14 @@ class MapPortion {
 		let jsonObject: Record<string, any>,
 			position: Position,
 			jsonObjectValue: Record<string, any>,
-			object: System.MapObject,
+			object: Model.MapObject,
 			localPosition: THREE.Vector3,
 			mapObject: MapObject;
 		for (let i = 0, l = json.length; i < l; i++) {
 			jsonObject = json[i];
 			position = Position.createFromArray(jsonObject.k);
 			jsonObjectValue = jsonObject.v;
-			object = new System.MapObject();
+			object = new Model.MapObject();
 			if (jsonObjectValue.id === id) {
 				object.read(jsonObjectValue);
 				localPosition = position.toVector3();

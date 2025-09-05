@@ -11,7 +11,7 @@
 
 import { ANIMATION_EFFECT_CONDITION_KIND, Utils } from '../Common';
 import { Animation, MapObject, StructSearchResult } from '../Core';
-import { Manager, Scene, System } from '../index';
+import { Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,8 +20,8 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class DisplayAnAnimation extends Base {
-	public objectID: System.DynamicValue;
-	public animationID: System.DynamicValue;
+	public objectID: Model.DynamicValue;
+	public animationID: Model.DynamicValue;
 	public isWaitEnd: boolean;
 
 	constructor(command: any[]) {
@@ -30,8 +30,8 @@ class DisplayAnAnimation extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.objectID = System.DynamicValue.createValueCommand(command, iterator);
-		this.animationID = System.DynamicValue.createValueCommand(command, iterator);
+		this.objectID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.animationID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.parallel = !this.isWaitEnd;
 	}

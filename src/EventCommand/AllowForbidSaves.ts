@@ -10,7 +10,7 @@
 */
 
 import { MapObject } from '../Core';
-import { Scene, System } from '../index';
+import { Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -19,7 +19,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class AllowForbidSaves extends Base {
-	public allow: System.DynamicValue;
+	public allow: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -27,7 +27,7 @@ class AllowForbidSaves extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.allow = System.DynamicValue.createValueCommand(command, iterator);
+		this.allow = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

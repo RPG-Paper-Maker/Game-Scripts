@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Model } from '..';
 import { Item, MapObject } from '../Core';
-import { System } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,9 +20,9 @@ import { Base } from './Base';
  */
 class ModifyInventory extends Base {
 	public ITEM_KIND: number;
-	public itemID: System.DynamicValue;
+	public itemID: Model.DynamicValue;
 	public operation: number;
-	public value: System.DynamicValue;
+	public value: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -31,9 +31,9 @@ class ModifyInventory extends Base {
 			i: 0,
 		};
 		this.ITEM_KIND = command[iterator.i++];
-		this.itemID = System.DynamicValue.createValueCommand(command, iterator);
+		this.itemID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operation = command[iterator.i++];
-		this.value = System.DynamicValue.createValueCommand(command, iterator);
+		this.value = Model.DynamicValue.createValueCommand(command, iterator);
 	}
 
 	/**

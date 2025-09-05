@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -30,7 +30,7 @@ class TextIcon extends Base {
 	public iconID: number;
 	public indexX: number;
 	public indexY: number;
-	public system: System.Base;
+	public system: Model.Base;
 	public side: ALIGN;
 	public align: ALIGN;
 	public space: number;
@@ -59,11 +59,11 @@ class TextIcon extends Base {
 	}
 
 	/**
-	 *  Create a graphic according to a System.Icon.
+	 *  Create a graphic according to a Model.Icon.
 	 *  @static
 	 *  @returns {number}
 	 */
-	static createFromSystem(text: string, icon: System.Icon, options = {}, textOptions = {}): Graphic.TextIcon {
+	static createFromSystem(text: string, icon: Model.Icon, options = {}, textOptions = {}): Graphic.TextIcon {
 		return new Graphic.TextIcon(
 			text,
 			icon === null ? -1 : icon.pictureID,

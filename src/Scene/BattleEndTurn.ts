@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Scene, System } from '..';
+import { Model, Scene } from '..';
 import { BATTLE_STEP, TROOP_REACTION_FREQUENCY_KIND } from '../Common';
 import { ReactionInterpreter } from '../Core';
 
@@ -36,7 +36,7 @@ class BattleEndTurn {
 		// Each end turn troop reaction
 		if (this.step === 0) {
 			const reactions = this.battle.troop.reactions;
-			let reaction: System.TroopReaction, l: number;
+			let reaction: Model.TroopReaction, l: number;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
 				if (reaction.frequency === TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_END) {

@@ -11,7 +11,7 @@
 
 import { ALIGN, Utils } from '../Common';
 import { MapObject, WindowBox } from '../Core';
-import { Datas, Graphic, Manager, Scene, System } from '../index';
+import { Datas, Graphic, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -20,7 +20,7 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ShowText extends Base {
-	public interlocutor: System.DynamicValue;
+	public interlocutor: Model.DynamicValue;
 	public facesetID: number;
 	public facesetIndexX: number;
 	public facesetIndexY: number;
@@ -34,11 +34,11 @@ class ShowText extends Base {
 		const iterator = {
 			i: 0,
 		};
-		this.interlocutor = System.DynamicValue.createValueCommand(command, iterator);
+		this.interlocutor = Model.DynamicValue.createValueCommand(command, iterator);
 		this.facesetID = command[iterator.i++];
 		this.facesetIndexX = command[iterator.i++];
 		this.facesetIndexY = command[iterator.i++];
-		const lang = new System.Translatable();
+		const lang = new Model.Translatable();
 		while (iterator.i < command.length) {
 			lang.getCommand(command, iterator);
 		}

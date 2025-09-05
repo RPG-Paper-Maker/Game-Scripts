@@ -10,7 +10,7 @@
 */
 
 import { Platform } from '../Common';
-import { EventCommand, Manager, Scene, System } from '../index';
+import { EventCommand, Manager, Model, Scene } from '../index';
 import { MapObject, Node } from './index';
 
 /** @class
@@ -20,35 +20,35 @@ import { MapObject, Node } from './index';
  *  state)
  *  @param {MapObject} object - Current map object
  *  @param {number} state - Current state of map object reaction
- *  @param {System.DynamicValue[]} parameters - All the parameters coming with
+ *  @param {Model.DynamicValue[]} parameters - All the parameters coming with
  *  this reaction
- *  @param {[System.Event, number]} - event The current time events
+ *  @param {[Model.Event, number]} - event The current time events
  *  @param {Node} [command=reaction.getFirstCommand()] - The current command (by
  *  default the first reaction command)
  */
 class ReactionInterpreter {
 	public static currentObject: MapObject;
-	public static currentParameters: System.DynamicValue[];
+	public static currentParameters: Model.DynamicValue[];
 	public static currentReaction: ReactionInterpreter;
 	public static blockingHero: boolean;
 
 	public currentSender: MapObject;
-	public currentReaction: System.Reaction;
+	public currentReaction: Model.Reaction;
 	public currentMapObject: MapObject;
 	public currentState: number;
-	public currentParameters: System.DynamicValue[];
+	public currentParameters: Model.DynamicValue[];
 	public currentCommand: Node;
 	public currentCommandState: Record<string, any>;
-	public currentTimeState: [System.Event, number];
+	public currentTimeState: [Model.Event, number];
 	public isInMainMenu: boolean;
 
 	constructor(
 		sender: MapObject,
-		reaction: System.Reaction,
+		reaction: Model.Reaction,
 		object: MapObject,
 		state: number,
-		parameters?: System.DynamicValue[],
-		event?: [System.Event, number],
+		parameters?: Model.DynamicValue[],
+		event?: [Model.Event, number],
 		command: Node = reaction.getFirstCommand()
 	) {
 		this.currentSender = sender;
@@ -84,7 +84,7 @@ class ReactionInterpreter {
 	 *  Update current object and parameters (for variables).
 	 */
 	updateObjectParameters() {
-		// Update for getValue() in System.DynamicValue
+		// Update for getValue() in Model.DynamicValue
 		ReactionInterpreter.currentObject = this.currentMapObject;
 		ReactionInterpreter.currentParameters = this.currentParameters;
 	}
@@ -162,7 +162,7 @@ class ReactionInterpreter {
 
 		// If the value is a string, then it can only be a label call
 		if (typeof result === 'string') {
-			let tab: [System.DynamicValue, Node];
+			let tab: [Model.DynamicValue, Node];
 			for (let i = 0, l = this.currentReaction.labels.length; i < l; i++) {
 				tab = this.currentReaction.labels[i];
 				if (result === tab[0].getValue()) {

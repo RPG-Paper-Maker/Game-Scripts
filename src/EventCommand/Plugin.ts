@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Manager, System } from '..';
+import { Manager, Model } from '..';
 import { MapObject } from '../Core';
 import { Base } from './Base';
 
@@ -21,7 +21,7 @@ import { Base } from './Base';
 class Plugin extends Base {
 	public pluginID: number;
 	public commandID: number;
-	public parameters: System.DynamicValue[];
+	public parameters: Model.DynamicValue[];
 
 	constructor(command: any[]) {
 		super();
@@ -35,7 +35,7 @@ class Plugin extends Base {
 		const l = command.length;
 		this.parameters = [];
 		while (iterator.i < l) {
-			this.parameters.push(System.DynamicValue.createValueCommand(command, iterator));
+			this.parameters.push(Model.DynamicValue.createValueCommand(command, iterator));
 		}
 	}
 

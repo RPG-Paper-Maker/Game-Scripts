@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, System } from '..';
+import { Datas, Manager, Model } from '..';
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
 import { Base } from './Base';
@@ -23,7 +23,7 @@ class PlayAVideo extends Base {
 	public videoID: number;
 	public operation: number;
 	public isStart: boolean;
-	public start: System.DynamicValue;
+	public start: Model.DynamicValue;
 	public isWaitEnd: boolean = true;
 
 	constructor(command: any[]) {
@@ -37,7 +37,7 @@ class PlayAVideo extends Base {
 			this.videoID = command[iterator.i++];
 			this.isStart = Utils.numberToBool(command[iterator.i++]);
 			if (this.isStart) {
-				this.start = System.DynamicValue.createValueCommand(command, iterator);
+				this.start = Model.DynamicValue.createValueCommand(command, iterator);
 			}
 			this.isWaitEnd = Utils.numberToBool(command[iterator.i++]);
 		}

@@ -10,14 +10,14 @@
 */
 
 import { Paths, Platform, SONG_KIND } from '../Common';
-import { Datas, System } from '../index';
+import { Datas, Model } from '../index';
 
 /** @class
  *   All the songs datas
  *   @static
  */
 class Songs {
-	private static list: System.Song[][];
+	private static list: Model.Song[][];
 
 	constructor() {
 		throw new Error('This is a static class!');
@@ -39,8 +39,8 @@ class Songs {
 			jsonList: Record<string, any>[],
 			jsonSong: Record<string, any>,
 			id: number,
-			list: System.Song[],
-			song: System.Song;
+			list: Model.Song[],
+			song: Model.Song;
 		for (i = 0; i < l; i++) {
 			jsonHash = json[i];
 			k = jsonHash.k;
@@ -63,11 +63,12 @@ class Songs {
 				jsonSong = jsonList[j];
 				if (jsonSong) {
 					id = jsonSong.id;
-					song = new System.Song(jsonSong, k);
+					song = new Model.Song(jsonSong);
+					song.kind = k;
 					if (!Platform.IS_DESKTOP && !song.isBR) {
 						song.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
-								System.Song.getLocalFolder(song.kind) +
+								Model.Song.getLocalFolder(song.kind) +
 								'/' +
 								song.name
 						);
@@ -88,10 +89,10 @@ class Songs {
 	 *  @param {number} id - The song id
 	 *  @returns {System.Song}
 	 */
-	static get(kind: SONG_KIND, id: number): System.Song {
+	static get(kind: SONG_KIND, id: number): Model.Song {
 		return kind === SONG_KIND.NONE || id === -1
-			? new System.Song()
-			: Datas.Base.get(id, this.list[kind], 'song ' + System.Song.songKindToString(kind));
+			? new Model.Song()
+			: Datas.Base.get(id, this.list[kind], 'song ' + Model.Song.songKindToString(kind));
 	}
 }
 

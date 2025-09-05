@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Scene, System } from '..';
+import { Datas, Graphic, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
@@ -77,10 +77,10 @@ class BattleEnemyAttack {
 	/**
 	 *  Define the possible action to do.
 	 */
-	definePossibleActions(actions: System.MonsterAction[], restriction: STATUS_RESTRICTIONS_KIND): number {
+	definePossibleActions(actions: Model.MonsterAction[], restriction: STATUS_RESTRICTIONS_KIND): number {
 		let priorities = 0;
 		const player = this.battle.user.player;
-		const monster = <System.Monster>player.system;
+		const monster = <Model.Monster>player.system;
 		const systemActions = monster.actions;
 
 		// If status can't do anything, do nothing
@@ -89,7 +89,7 @@ class BattleEnemyAttack {
 		}
 
 		// List every possible actions
-		let i: number, l: number, action: System.MonsterAction, stat: System.Statistic, number: number;
+		let i: number, l: number, action: Model.MonsterAction, stat: Model.Statistic, number: number;
 		for (i = 0, l = systemActions.length; i < l; i++) {
 			action = systemActions[i];
 			if (
@@ -199,7 +199,7 @@ class BattleEnemyAttack {
 		// Random
 		const random = Mathf.random(0, 100);
 		let step = 0;
-		let value: number, action: System.MonsterAction;
+		let value: number, action: Model.MonsterAction;
 		for (let i = 0, l = actions.length; i < l; i++) {
 			action = actions[i];
 			value = (action.priority.getValue() / priorities) * 100;

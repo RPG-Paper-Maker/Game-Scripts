@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, Mathf, ScreenResolution, Utils } from '../Common';
 import { Game } from '../Core';
-import { Datas, Graphic, System } from '../index';
+import { Datas, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -30,7 +30,7 @@ class TimeCurrencies extends Base {
 
 		// Currencies
 		this.currencies = [];
-		let graphic: Graphic.TextIcon, systemCurrency: System.Currency;
+		let graphic: Graphic.TextIcon, systemCurrency: Model.Currency;
 		for (const id in Game.current.currencies) {
 			systemCurrency = Datas.Systems.getCurrency(parseInt(id));
 			if (systemCurrency.displayInMenu.getValue()) {
