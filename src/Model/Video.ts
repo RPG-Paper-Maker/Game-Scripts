@@ -61,7 +61,7 @@ class Video extends Base {
 		this.id = json.id;
 		this.name = json.name;
 		this.isBR = json.br;
-		this.dlc = Utils.defaultValue(json.d, '');
+		this.dlc = Utils.valueOrDefault(json.d, '');
 	}
 
 	/**

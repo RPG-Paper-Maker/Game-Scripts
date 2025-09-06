@@ -46,7 +46,7 @@ class SkillItem extends Base {
 		});
 		if (this.system.hasTARGET_KIND) {
 			this.graphicTarget = new Graphic.Text(
-				Datas.Languages.extras.target.name() + ': ' + system.getTARGET_KINDString(),
+				Datas.Languages.extras.target.name() + ': ' + system.getTargetKindString(),
 				{ align: ALIGN.RIGHT, fontSize: Constants.MEDIUM_FONT_SIZE }
 			);
 		}

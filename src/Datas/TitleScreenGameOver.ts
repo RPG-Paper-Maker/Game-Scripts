@@ -42,13 +42,13 @@ class TitlescreenGameover {
 		const json = (await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER)) as any;
 
 		// Title screen
-		this.isTitleBackgroundImage = Utils.defaultValue(json.itbi, true);
-		this.titleBackgroundImageID = Utils.defaultValue(json.tb, 1);
-		this.titleBackgroundVideoID = Utils.defaultValue(json.tbv, 1);
+		this.isTitleBackgroundImage = Utils.valueOrDefault(json.itbi, true);
+		this.titleBackgroundImageID = Utils.valueOrDefault(json.tb, 1);
+		this.titleBackgroundVideoID = Utils.valueOrDefault(json.tbv, 1);
 		this.titleMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.tm);
 		this.titleCommands = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.tc, []),
+			list: Utils.valueOrDefault(json.tc, []),
 			listIndexes: this.titleCommands,
 			cons: Model.TitleCommand,
 		});
@@ -58,20 +58,20 @@ class TitlescreenGameover {
 		let obj: Record<string, any>;
 		for (let i = 0, j = 0; i < l; i++) {
 			obj = jsonList[i];
-			if (Utils.defaultValue(obj.checked, true)) {
+			if (Utils.valueOrDefault(obj.checked, true)) {
 				this.titleSettings[j] = obj.id ?? 0;
 				j++;
 			}
 		}
 
 		// Game over
-		this.isGameOverBackgroundImage = Utils.defaultValue(json.isGameOverBackgroundImage, true);
-		this.gameOverBackgroundImageID = Utils.defaultValue(json.gameOverBackgroundImage, 1);
-		this.gameOverBackgroundVideoID = Utils.defaultValue(json.gameOverBackgroundVideo, 1);
+		this.isGameOverBackgroundImage = Utils.valueOrDefault(json.isGameOverBackgroundImage, true);
+		this.gameOverBackgroundImageID = Utils.valueOrDefault(json.gameOverBackgroundImage, 1);
+		this.gameOverBackgroundVideoID = Utils.valueOrDefault(json.gameOverBackgroundVideo, 1);
 		this.gameOverMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
 		this.gameOverCommands = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.gameOverCommands, []),
+			list: Utils.valueOrDefault(json.gameOverCommands, []),
 			listIndexes: this.gameOverCommands,
 			cons: Model.GameOverCommand,
 		});

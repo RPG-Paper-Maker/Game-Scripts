@@ -37,8 +37,8 @@ class InitialPartyMember extends Base {
 	 */
 	read(json: Record<string, any>) {
 		this.level = Model.DynamicValue.readOrDefaultNumber(json.level, 1);
-		this.teamKind = Utils.defaultValue(json.teamKind, 0);
-		const isHero = Utils.defaultValue(json.isHero, true);
+		this.teamKind = Utils.valueOrDefault(json.teamKind, 0);
+		const isHero = Utils.valueOrDefault(json.isHero, true);
 		this.CHARACTER_KIND = isHero ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
 		this.heroID = Model.DynamicValue.readOrDefaultDatabase(isHero ? json.heroID : json.monsterID);
 		this.variableInstanceID = Model.DynamicValue.readOrDefaultVariable(json.variableInstanceID);

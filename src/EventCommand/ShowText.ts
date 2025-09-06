@@ -38,7 +38,7 @@ class ShowText extends Base {
 		this.facesetID = command[iterator.i++];
 		this.facesetIndexX = command[iterator.i++];
 		this.facesetIndexY = command[iterator.i++];
-		const lang = new Model.Translatable();
+		const lang = new Model.Localization();
 		while (iterator.i < command.length) {
 			lang.getCommand(command, iterator);
 		}
@@ -79,16 +79,16 @@ class ShowText extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		this.windowMain.setX(Utils.defaultValue(Datas.Systems.dbOptions.v_x, 0));
-		this.windowMain.setY(Utils.defaultValue(Datas.Systems.dbOptions.v_y, 0));
-		this.windowMain.setW(Utils.defaultValue(Datas.Systems.dbOptions.v_w, 0));
-		this.windowMain.setH(Utils.defaultValue(Datas.Systems.dbOptions.v_h, 0));
+		this.windowMain.setX(Utils.valueOrDefault(Datas.Systems.dbOptions.v_x, 0));
+		this.windowMain.setY(Utils.valueOrDefault(Datas.Systems.dbOptions.v_y, 0));
+		this.windowMain.setW(Utils.valueOrDefault(Datas.Systems.dbOptions.v_w, 0));
+		this.windowMain.setH(Utils.valueOrDefault(Datas.Systems.dbOptions.v_h, 0));
 		this.windowInterlocutor.setX(this.windowMain.oX + WindowBox.MEDIUM_SLOT_HEIGHT / 2);
 		this.windowInterlocutor.setY(this.windowMain.oY - WindowBox.MEDIUM_SLOT_HEIGHT / 2);
-		this.windowMain.padding[0] = Utils.defaultValue(Datas.Systems.dbOptions.v_pLeft, 0);
-		this.windowMain.padding[1] = Utils.defaultValue(Datas.Systems.dbOptions.v_pTop, 0);
-		this.windowMain.padding[2] = Utils.defaultValue(Datas.Systems.dbOptions.v_pRight, 0);
-		this.windowMain.padding[3] = Utils.defaultValue(Datas.Systems.dbOptions.v_pBottom, 0);
+		this.windowMain.padding[0] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pLeft, 0);
+		this.windowMain.padding[1] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pTop, 0);
+		this.windowMain.padding[2] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pRight, 0);
+		this.windowMain.padding[3] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pBottom, 0);
 		this.windowMain.updateDimensions();
 		this.windowMain.content.update();
 		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue());

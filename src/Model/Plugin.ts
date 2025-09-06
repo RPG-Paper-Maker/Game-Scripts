@@ -40,10 +40,10 @@ class Plugin extends Base {
 	 */
 	read(json: Record<string, any>) {
 		this.name = json.name;
-		this.author = Utils.defaultValue(json.author, '');
-		this.version = Utils.defaultValue(json.version, '1.0.0');
+		this.author = Utils.valueOrDefault(json.author, '');
+		this.version = Utils.valueOrDefault(json.version, '1.0.0');
 		this.parameters = {};
-		let jsonList = Utils.defaultValue(json.parameters, []);
+		let jsonList = Utils.valueOrDefault(json.parameters, []);
 		let obj: Model.DynamicValue, jsonObj: Record<string, any>;
 		let i: number, l: number;
 		for (i = 0, l = jsonList.length; i < l; i++) {
@@ -53,7 +53,7 @@ class Plugin extends Base {
 		}
 		this.commands = {};
 		this.commandsNames = [];
-		jsonList = Utils.defaultValue(json.commands, []);
+		jsonList = Utils.valueOrDefault(json.commands, []);
 		for (i = 0, l = jsonList.length; i < l; i++) {
 			jsonObj = jsonList[i];
 			this.commands[jsonObj.name] = null;

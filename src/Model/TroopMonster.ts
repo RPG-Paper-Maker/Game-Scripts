@@ -39,7 +39,7 @@ class TroopMonster extends Base {
 		this.id = json.mid;
 		this.level = Model.DynamicValue.readOrDefaultNumber(json.l, 1);
 		this.hidden = Model.DynamicValue.readOrDefaultSwitch(json.h, false);
-		this.isSpecificPosition = Utils.defaultValue(json.isSpecificPosition, false);
+		this.isSpecificPosition = Utils.valueOrDefault(json.isSpecificPosition, false);
 		this.specificPosition = Model.DynamicValue.readOrDefaultMessage(
 			json.specificPosition,
 			'new THREE.Vector3(0,0,0)'

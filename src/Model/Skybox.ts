@@ -37,12 +37,12 @@ class Skybox extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the skybox
 	 */
 	read(json: Record<string, any>) {
-		this.front = Utils.defaultValue(json.fid, 1);
-		this.back = Utils.defaultValue(json.bid, 1);
-		this.top = Utils.defaultValue(json.tid, 1);
-		this.bot = Utils.defaultValue(json.boid, 1);
-		this.left = Utils.defaultValue(json.lid, 1);
-		this.right = Utils.defaultValue(json.rid, 1);
+		this.front = Utils.valueOrDefault(json.fid, 1);
+		this.back = Utils.valueOrDefault(json.bid, 1);
+		this.top = Utils.valueOrDefault(json.tid, 1);
+		this.bot = Utils.valueOrDefault(json.boid, 1);
+		this.left = Utils.valueOrDefault(json.lid, 1);
+		this.right = Utils.valueOrDefault(json.rid, 1);
 	}
 
 	/**

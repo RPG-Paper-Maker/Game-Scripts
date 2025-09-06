@@ -12,20 +12,20 @@
 import { Model } from '..';
 import { Interpreter, INVENTORY_FILTER_KIND, Utils } from '../Common';
 import { Item } from '../Core';
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  An inventory filter used to filter inventory or shops items.
- *  @extends Translatable
+ *  @extends Localization
  *  @param {Record<string, any>} [json=undefined] - Json object describing the item
  */
-class InventoryFilter extends Translatable {
+class InventoryFilter extends Localization {
 	public kind: INVENTORY_FILTER_KIND;
 	public itemTypeID: Model.DynamicValue;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -34,14 +34,14 @@ class InventoryFilter extends Translatable {
 	 *  inventory filter
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
-		this.kind = Utils.defaultValue(json.kind, INVENTORY_FILTER_KIND.ALL);
+		super.read(json as any);
+		this.kind = Utils.valueOrDefault(json.kind, INVENTORY_FILTER_KIND.ALL);
 		switch (this.kind) {
 			case INVENTORY_FILTER_KIND.CUSTOM:
 				this.itemTypeID = Model.DynamicValue.readOrDefaultDatabase(json.itemTypeID);
 				break;
 			case INVENTORY_FILTER_KIND.SCRIPT:
-				this.script = Utils.defaultValue(json.script, '');
+				this.script = Utils.valueOrDefault(json.script, '');
 				break;
 		}
 	}

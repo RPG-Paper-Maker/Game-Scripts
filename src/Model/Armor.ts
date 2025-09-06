@@ -14,39 +14,27 @@ import { Datas } from '../index';
 import { CommonSkillItem } from './CommonSkillItem';
 import { WeaponArmorKind } from './WeaponArmorKind';
 
-/** @class
- *  An armor of the game.
- *  @extends Model.CommonSkillItem
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  armor
+/**
+ * Represents an armor item in the game.
  */
-class Armor extends CommonSkillItem {
-	constructor(json?: Record<string, any>) {
-		super(json);
+export class Armor extends CommonSkillItem {
+	constructor(json?: any) {
+		super(json as any);
 	}
 
 	/**
-	 *  Read the JSON associated to the armor.
-	 *  @param {Record<string, any>} - json Json object describing the armor
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
-	}
-
-	/** Get the armor type.
-	 *  @returns {System.WeaponArmorKind}
+	 * Gets the armor type (as defined in battle system data).
+	 * @returns The corresponding {@link WeaponArmorKind}.
 	 */
 	getType(): WeaponArmorKind {
 		return Datas.BattleSystems.getArmorKind(this.type);
 	}
 
 	/**
-	 *  Get the item kind.
-	 *  @returns {ITEM_KIND}
+	 * Gets the item kind for this armor.
+	 * @returns {@link ITEM_KIND.ARMOR}.
 	 */
 	getKind(): ITEM_KIND {
 		return ITEM_KIND.ARMOR;
 	}
 }
-
-export { Armor };

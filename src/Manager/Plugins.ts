@@ -34,7 +34,7 @@ class Plugins {
 	 *  @async
 	 */
 	static async load() {
-		const plugins = Utils.defaultValue((await Platform.parseFileJSON(Paths.FILE_SCRIPTS)).plugins, []) as any;
+		const plugins = Utils.valueOrDefault((await Platform.parseFileJSON(Paths.FILE_SCRIPTS)).plugins, []) as any;
 		for (let i = 0, l = plugins.length; i < l; i++) {
 			await this.loadPlugin(plugins[i]);
 		}
@@ -53,7 +53,7 @@ class Plugins {
 		)) as any;
 		const plugin = new Model.Plugin(pluginJSON.id, json);
 		// FIX 01 : plugin wasn't unloaded if not enabled.
-		if (Utils.defaultValue(pluginJSON.checked, true)) {
+		if (Utils.valueOrDefault(pluginJSON.checked, true)) {
 			this.register(plugin);
 			const code = await Platform.loadFile(Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_CODE);
 			Interpreter.evaluate(code, { addReturn: false });

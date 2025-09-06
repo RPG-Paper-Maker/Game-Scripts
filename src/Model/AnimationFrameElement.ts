@@ -14,49 +14,81 @@ import { Utils } from '../Common';
 import { Picture2D } from '../Core';
 import { Base } from './Base';
 
-/** @class
- *  An animation frame element.
- *  @extends Base
- *  @param {Record<string, any>}
+/**
+ * JSON schema for an animation frame element.
+ */
+export type AnimationFrameElementJSON = {
+	x?: number;
+	y?: number;
+	tr?: number;
+	tc?: number;
+	z?: number;
+	a?: number;
+	fv?: boolean;
+	o?: number;
+};
+
+/**
+ * Represents a single element (sprite) of an animation frame.
+ * Each element defines its own position, texture region, transformations
+ * (zoom, angle, flip), and opacity.
  */
 class AnimationFrameElement extends Base {
+	/** X offset from the animation's origin. */
 	public x: number;
+
+	/** Y offset from the animation's origin. */
 	public y: number;
+
+	/** The row index in the texture. */
 	public texRow: number;
+
+	/** The column index in the texture. */
 	public texCol: number;
+
+	/** Zoom factor (1 = 100%). */
 	public zoom: number;
+
+	/** Rotation angle in degrees. */
 	public angle: number;
+
+	/** Whether the element is flipped horizontally. */
 	public flip: boolean;
+
+	/** Opacity factor (1 = fully visible, 0 = invisible). */
 	public opacity: number;
 
-	constructor(json?: Record<string, any>) {
+	/**
+	 * Creates an AnimationFrameElement from JSON.
+	 * @param json - JSON object describing the animation frame element.
+	 */
+	constructor(json?: AnimationFrameElementJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the animation frame element.
-	 *  @param {Record<string, any>} - json Json object describing the animation
-	 *  frame element
+	 * Reads the JSON data associated with this frame element.
+	 * @param json - The JSON object describing the frame element.
 	 */
-	read(json: Record<string, any>) {
-		this.x = Utils.defaultValue(json.x, 0);
-		this.y = Utils.defaultValue(json.y, 0);
-		this.texRow = Utils.defaultValue(json.tr, 0);
-		this.texCol = Utils.defaultValue(json.tc, 0);
-		this.zoom = Utils.defaultValue(json.z, 100) / 100;
-		this.angle = Utils.defaultValue(json.a, 0);
-		this.flip = Utils.defaultValue(json.fv, false);
-		this.opacity = Utils.defaultValue(json.o, 100) / 100;
+	read(json: AnimationFrameElementJSON): void {
+		this.x = Utils.valueOrDefault(json.x, 0);
+		this.y = Utils.valueOrDefault(json.y, 0);
+		this.texRow = Utils.valueOrDefault(json.tr, 0);
+		this.texCol = Utils.valueOrDefault(json.tc, 0);
+		this.zoom = Utils.valueOrDefault(json.z, 100) / 100;
+		this.angle = Utils.valueOrDefault(json.a, 0);
+		this.flip = Utils.valueOrDefault(json.fv, false);
+		this.opacity = Utils.valueOrDefault(json.o, 100) / 100;
 	}
 
 	/**
-	 *  Draw the animation element.
-	 *  @param {Picture2D} picture - The picture associated to the animation
-	 *  @param {Vector2} position - The position on screen for animation
-	 *  @param {number} rows - The number of rows in the animation texture
-	 *  @param {number} cols - The number of columns in the animation texture
+	 * Draws the animation frame element on the screen.
+	 * @param picture - The picture resource used for the animation.
+	 * @param position - The position on screen where the element is drawn.
+	 * @param rows - Total number of rows in the animation texture.
+	 * @param cols - Total number of columns in the animation texture.
 	 */
-	draw(picture: Picture2D, position: THREE.Vector2, rows: number, cols: number) {
+	draw(picture: Picture2D, position: THREE.Vector2, rows: number, cols: number): void {
 		picture.zoom = this.zoom;
 		picture.opacity = this.opacity;
 		picture.angle = this.angle;

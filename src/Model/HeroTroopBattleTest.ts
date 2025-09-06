@@ -34,8 +34,8 @@ class HeroTroopBattleTest extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the hero
 	 */
 	read(json: Record<string, any>) {
-		this.heroID = Utils.defaultValue(json.heroID, 1);
-		this.level = Utils.defaultValue(json.level, 1);
+		this.heroID = Utils.valueOrDefault(json.heroID, 1);
+		this.level = Utils.valueOrDefault(json.level, 1);
 		this.equipments = [];
 		Utils.readJSONSystemList({
 			list: json.equipments,

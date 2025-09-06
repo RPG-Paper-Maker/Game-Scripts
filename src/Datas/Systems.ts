@@ -25,7 +25,7 @@ class Systems {
 	public static PATH_DLCS: string;
 	public static ID_MAP_START_HERO: number;
 	public static heroMapPosition: Position;
-	public static projectName: Model.Translatable;
+	public static projectName: Model.Localization;
 	public static antialias: boolean;
 	public static isMouseControls: boolean;
 	public static mountainCollisionHeight: Model.DynamicValue;
@@ -43,7 +43,7 @@ class Systems {
 	public static enterNameTable: string[][];
 	public static showBB: boolean;
 	public static showFPS: boolean;
-	private static itemsTypes: Model.Translatable[];
+	private static itemsTypes: Model.Localization[];
 	public static inventoryFilters: Model.InventoryFilter[];
 	public static mainMenuCommands: Model.MainMenuCommand[];
 	public static heroesStatistics: Model.DynamicValue[];
@@ -86,7 +86,7 @@ class Systems {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SYSTEM)) as any;
 
 		// Project name
-		this.projectName = new Model.Translatable(json.pn);
+		this.projectName = new Model.Localization(json.pn);
 		Platform.setWindowTitle(this.projectName.name());
 
 		// Screen resolution + antialiasing
@@ -102,25 +102,25 @@ class Systems {
 		this.windowHeight = h;
 		this.isScreenWindow = isScreenWindow;
 		this.updateWindowSize(w, h, !isScreenWindow);
-		this.antialias = Utils.defaultValue(json.aa, false);
-		this.isMouseControls = Utils.defaultValue(json.isMouseControls, true);
+		this.antialias = Utils.valueOrDefault(json.aa, false);
+		this.isMouseControls = Utils.valueOrDefault(json.isMouseControls, true);
 
 		// Other numbers
 		this.SQUARE_SIZE = json.ss;
-		this.PORTIONS_RAY = Utils.defaultValue(json.portionRayIngame, 3);
+		this.PORTIONS_RAY = Utils.valueOrDefault(json.portionRayIngame, 3);
 		this.FRAMES = json.frames;
 		this.mountainCollisionHeight = Model.DynamicValue.readOrDefaultNumber(json.mch, 4);
 		this.mountainCollisionAngle = Model.DynamicValue.readOrDefaultNumberDouble(json.mca, 45);
 		this.climbingSpeed = Model.DynamicValue.readOrDefaultNumberDouble(json.cs, 0.25);
 		this.moveCameraOnBlockView = Model.DynamicValue.readOrDefaultSwitch(json.mcobv, true);
 		this.mapFrameDuration = Model.DynamicValue.readOrDefaultNumber(json.mfd, 150);
-		this.battlersFrames = Utils.defaultValue(json.battlersFrames, 4);
-		this.battlersFrameDuration = Utils.defaultValue(json.bfd, 'Common.Mathf.random(250, 300)');
-		this.battlersFrameAttackingDuration = Utils.defaultValue(json.bfad, '200');
-		this.battlersColumns = Utils.defaultValue(json.battlersColumns, 9);
-		this.autotilesFrames = Utils.defaultValue(json.autotilesFrames, 4);
-		this.autotilesFrameDuration = Utils.defaultValue(json.autotilesFrameDuration, 150);
-		this.saveSlots = Utils.defaultValue(json.saveSlots, 4);
+		this.battlersFrames = Utils.valueOrDefault(json.battlersFrames, 4);
+		this.battlersFrameDuration = Utils.valueOrDefault(json.bfd, 'Common.Mathf.random(250, 300)');
+		this.battlersFrameAttackingDuration = Utils.valueOrDefault(json.bfad, '200');
+		this.battlersColumns = Utils.valueOrDefault(json.battlersColumns, 9);
+		this.autotilesFrames = Utils.valueOrDefault(json.autotilesFrames, 4);
+		this.autotilesFrameDuration = Utils.valueOrDefault(json.autotilesFrameDuration, 150);
+		this.saveSlots = Utils.valueOrDefault(json.saveSlots, 4);
 		this.priceSoldItem = Model.DynamicValue.readOrDefaultNumberDouble(json.priceSoldItem, 50);
 
 		// Path BR
@@ -134,7 +134,7 @@ class Systems {
 		this.heroMapPosition = Position.createFromArray(json.hmp);
 
 		// Debug bounding box
-		this.showBB = Utils.defaultValue(json.bb, false);
+		this.showBB = Utils.valueOrDefault(json.bb, false);
 		if (this.showBB) {
 			Manager.Collisions.BB_MATERIAL.color.setHex(0xff0000);
 			Manager.Collisions.BB_MATERIAL.wireframe = true;
@@ -143,7 +143,7 @@ class Systems {
 		}
 		Manager.Collisions.BB_MATERIAL.visible = this.showBB;
 		Manager.Collisions.BB_MATERIAL_DETECTION.visible = this.showBB;
-		this.showFPS = Utils.defaultValue(json.fps, false);
+		this.showFPS = Utils.valueOrDefault(json.fps, false);
 		this.ignoreAssetsLoadingErrors = true; //TODO
 
 		// Lists
@@ -162,7 +162,7 @@ class Systems {
 		this.speeds = [];
 		this.frequencies = [];
 		this.initialPartyMembers = [];
-		Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this.itemsTypes, cons: Model.Translatable });
+		Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this.itemsTypes, cons: Model.Localization });
 		Utils.readJSONSystemList({
 			list: json.inventoryFilters,
 			listIndexes: this.inventoryFilters,
@@ -209,7 +209,7 @@ class Systems {
 			},
 		});
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.initialPartyMembers, []),
+			list: Utils.valueOrDefault(json.initialPartyMembers, []),
 			listIndexes: this.initialPartyMembers,
 			cons: Model.InitialPartyMember,
 		});
@@ -225,12 +225,12 @@ class Systems {
 		this.dbOptions.update();
 
 		// Faceset options
-		this.facesetsSize = Utils.defaultValue(json.facesetsSize, 128);
-		this.facesetScalingWidth = Utils.defaultValue(json.facesetScalingWidth, 120);
-		this.facesetScalingHeight = Utils.defaultValue(json.facesetScalingHeight, 120);
+		this.facesetsSize = Utils.valueOrDefault(json.facesetsSize, 128);
+		this.facesetScalingWidth = Utils.valueOrDefault(json.facesetScalingWidth, 120);
+		this.facesetScalingHeight = Utils.valueOrDefault(json.facesetScalingHeight, 120);
 
 		// Icons size
-		this.iconsSize = Utils.defaultValue(json.iconsSize, 16);
+		this.iconsSize = Utils.valueOrDefault(json.iconsSize, 16);
 
 		// Enter name menu options
 		this.enterNameTable = json.enterNameTable;
@@ -250,7 +250,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getItemType(id: number): Model.Translatable {
+	static getItemType(id: number): Model.Localization {
 		return Datas.Base.get(id, this.itemsTypes, 'item type');
 	}
 

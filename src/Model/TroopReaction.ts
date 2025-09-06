@@ -37,7 +37,7 @@ class TroopReaction extends Reaction {
 		super.read(json);
 		this.id = json.id;
 		this.conditions = new Model.TroopReactionConditions(json.conditions);
-		this.frequency = Utils.defaultValue(json.frequency, TROOP_REACTION_FREQUENCY_KIND.ONE_TIME);
+		this.frequency = Utils.valueOrDefault(json.frequency, TROOP_REACTION_FREQUENCY_KIND.ONE_TIME);
 	}
 }
 

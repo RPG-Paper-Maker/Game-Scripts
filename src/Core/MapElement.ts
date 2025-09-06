@@ -60,9 +60,9 @@ class MapElement {
 	 *  @param {Record<string, any>} json - Json object describing the map element
 	 */
 	read(json: Record<string, any>) {
-		this.xOffset = Utils.defaultValue(json.xOff, 0);
-		this.yOffset = Utils.defaultValue(json.yOff, 0);
-		this.zOffset = Utils.defaultValue(json.zOff, 0);
+		this.xOffset = Utils.valueOrDefault(json.xOff, 0);
+		this.yOffset = Utils.valueOrDefault(json.yOff, 0);
+		this.zOffset = Utils.valueOrDefault(json.zOff, 0);
 	}
 }
 

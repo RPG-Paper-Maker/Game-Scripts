@@ -96,7 +96,7 @@ class Stack {
 	 *  @returns {SceneGame} The scene in the index of the stack
 	 */
 	static at(i: number): Scene.Base {
-		return Utils.defaultValue(this.content[i], null);
+		return Utils.valueOrDefault(this.content[i], null);
 	}
 
 	/**

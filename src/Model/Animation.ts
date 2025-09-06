@@ -15,76 +15,98 @@ import { Battler, Picture2D } from '../Core';
 import { AnimationFrame } from './AnimationFrame';
 import { Base } from './Base';
 
-/** @class
- *  An animation of a skill / item / weapon or for display animation command.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  animation
+/**
+ * JSON schema for an animation.
  */
-class Animation extends Base {
+export type AnimationJSON = {
+	pid?: number;
+	pk?: number;
+	f?: Record<string, unknown>[];
+	r?: number;
+	c?: number;
+};
+
+/**
+ * Represents an animation of a skill, item, weapon, or display command.
+ */
+export class Animation extends Base {
+	/** The picture ID associated with this animation. */
 	public pictureID: number;
-	public positionKind: number;
-	public frames: AnimationFrame[];
+
+	/** The kind of position where the animation is drawn. */
+	public positionKind: ANIMATION_POSITION_KIND;
+
+	/** The frames composing the animation. */
+	public frames: Map<number, AnimationFrame>;
+
+	/** The max frame ID in the list of frames. */
+	public maxFrameID: number;
+
+	/** Number of rows in the animation texture. */
 	public rows: number;
+
+	/** Number of columns in the animation texture. */
 	public cols: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: AnimationJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the animation
-	 *  @param {Record<string, any>} - json Json object describing the animation
+	 * Reads the JSON data describing the animation.
+	 * @param json - The JSON object describing the animation.
 	 */
-	read(json: Record<string, any>) {
-		this.pictureID = Utils.defaultValue(json.pid, 1);
-		this.positionKind = Utils.defaultValue(json.pk, ANIMATION_POSITION_KIND.MIDDLE);
-		this.frames = [];
-		Utils.readJSONSystemList({ list: json.f, listIDs: this.frames, cons: AnimationFrame });
-		this.rows = Utils.defaultValue(json.r, 5);
-		this.cols = Utils.defaultValue(json.c, 5);
+	read(json: AnimationJSON): void {
+		this.pictureID = Utils.valueOrDefault(json.pid, 1);
+		this.positionKind = Utils.valueOrDefault(json.pk, ANIMATION_POSITION_KIND.MIDDLE);
+		this.frames = Utils.readJSONMap(json.f, AnimationFrame);
+		this.maxFrameID = Utils.getMapMaxID(this.frames);
+		this.rows = Utils.valueOrDefault(json.r, 5);
+		this.cols = Utils.valueOrDefault(json.c, 5);
 	}
 
 	/**
-	 *  Play the sounds according to frame and condition.
-	 *  @param {number} frame - The frame
-	 *  @param {ANIMATION_EFFECT_CONDITION_KIND} condition - The condition
+	 * Plays the sound effects for a given frame according to the condition.
+	 * @param frame - The frame index to play sounds for.
+	 * @param condition - The current animation effect condition.
 	 */
-	playSounds(frame: number, condition: ANIMATION_EFFECT_CONDITION_KIND) {
-		if (frame > 0 && frame < this.frames.length) {
-			this.frames[frame].playSounds(condition);
-		}
+	playSounds(frame: number, condition: ANIMATION_EFFECT_CONDITION_KIND): void {
+		this.frames.get(frame)?.playSounds(condition);
 	}
 
 	/**
-	 *  Draw the animation.
-	 *  @param {Picture2D} picture - The picture associated to the animation
-	 *  @param {number} frame - The frame
-	 *  @param {Battler} battler - The battler target
+	 * Draws the animation for a specific frame and battler target.
+	 * @param picture - The picture associated with the animation.
+	 * @param frame - The frame index to draw.
+	 * @param battler - The target battler for the animation.
 	 */
-	draw(picture: Picture2D, frame: number, battler: Battler) {
-		if (frame > 0 && frame < this.frames.length) {
-			// Change position according to kind
-			let position: THREE.Vector2;
-			switch (this.positionKind) {
-				case ANIMATION_POSITION_KIND.TOP:
-					position = battler.topPosition;
-					break;
-				case ANIMATION_POSITION_KIND.MIDDLE:
-					position = battler.midPosition;
-					break;
-				case ANIMATION_POSITION_KIND.BOTTOM:
-					position = battler.botPosition;
-					break;
-				case ANIMATION_POSITION_KIND.SCREEN_CENTER:
-					position = new THREE.Vector2(0, 0);
-					break;
-			}
-
-			// Draw
-			this.frames[frame].draw(picture, position, this.rows, this.cols);
+	draw(picture: Picture2D, frame: number, battler: Battler): void {
+		const animationFrame = this.frames.get(frame);
+		if (!animationFrame) {
+			return;
 		}
+
+		// Determine position based on position kind
+		let position: THREE.Vector2;
+		switch (this.positionKind) {
+			case ANIMATION_POSITION_KIND.TOP:
+				position = battler.topPosition;
+				break;
+			case ANIMATION_POSITION_KIND.MIDDLE:
+				position = battler.midPosition;
+				break;
+			case ANIMATION_POSITION_KIND.BOTTOM:
+				position = battler.botPosition;
+				break;
+			case ANIMATION_POSITION_KIND.SCREEN_CENTER:
+				position = new THREE.Vector2(0, 0);
+				break;
+			default:
+				position = battler.midPosition;
+				break;
+		}
+
+		// Draw the frame
+		animationFrame.draw(picture, position, this.rows, this.cols);
 	}
 }
-
-export { Animation };

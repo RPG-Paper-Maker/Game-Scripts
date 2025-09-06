@@ -21,15 +21,7 @@ import { Armor } from './Armor';
  */
 class Weapon extends Armor {
 	constructor(json?: Record<string, any>) {
-		super(json);
-	}
-
-	/**
-	 *  Read the JSON associated to the weapon.
-	 *  @param {Record<string, any>} - json Json object describing the weapon
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
+		super(json as any);
 	}
 
 	/**

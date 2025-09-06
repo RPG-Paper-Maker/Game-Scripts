@@ -21,19 +21,42 @@ import {
 	Utils,
 } from '../Common';
 import { Battler, Player } from '../Core';
-import { Datas, Model, Scene } from '../index';
+import { Datas, Scene } from '../index';
 import { Characteristic } from './Characteristic';
 import { Cost } from './Cost';
-import { DynamicValue } from './DynamicValue';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 import { Effect } from './Effect';
-import { Icon } from './Icon';
+import { Icon, IconJSON } from './Icon';
+import { Localization, LocalizationJSON } from './Localization';
 import { PlaySong } from './PlaySong';
-import { Translatable } from './Translatable';
+import { WeaponArmorKind } from './WeaponArmorKind';
 
-/** @class
- *  A common class for skills, items, weapons, armors.
- *  @extends Model.Icon
- *  @param {Record<string, any>} - [json=undefined] Json object describing the common
+/**
+ * JSON schema for a common skill/item/weapon/armor.
+ */
+export type CommonSkillItemJSON = IconJSON & {
+	id: number;
+	t?: number;
+	con?: boolean;
+	oh?: boolean;
+	d?: LocalizationJSON;
+	tk?: TARGET_KIND;
+	tcf?: DynamicValueJSON;
+	cf?: DynamicValueJSON;
+	ak?: AVAILABLE_KIND;
+	s?: any;
+	auid?: DynamicValueJSON;
+	atid?: DynamicValueJSON;
+	canBeSold?: DynamicValueJSON;
+	battleMessage?: LocalizationJSON;
+	p?: any;
+	cos?: any;
+	e?: any;
+	car?: any;
+};
+
+/**
+ * A common class for skills, items, weapons, and armors.
  */
 class CommonSkillItem extends Icon {
 	public id: number;
@@ -42,7 +65,7 @@ class CommonSkillItem extends Icon {
 	public type: number;
 	public consumable: boolean;
 	public oneHand: boolean;
-	public description: Translatable;
+	public description: Localization;
 	public targetKind: TARGET_KIND;
 	public targetConditionFormula: DynamicValue;
 	public conditionFormula: DynamicValue;
@@ -50,67 +73,60 @@ class CommonSkillItem extends Icon {
 	public sound: PlaySong;
 	public animationID: DynamicValue;
 	public animationTargetID: DynamicValue;
-	public canBeSold: Model.DynamicValue;
-	public battleMessage: Model.Translatable;
+	public canBeSold: DynamicValue;
+	public battleMessage: Localization;
 	public price: Cost[];
 	public costs: Cost[];
 	public effects: Effect[];
 	public characteristics: Characteristic[];
 	public animationUserID: DynamicValue;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: CommonSkillItemJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the common.
-	 *  @param {Record<string, any>} - json Json object describing the common
+	 * Reads the JSON data describing the common skill/item/weapon/armor.
+	 * @param json - The JSON object containing all properties.
 	 */
-	read(json: Record<string, any>) {
+	read(json: CommonSkillItemJSON) {
 		super.read(json);
 		this.id = json.id;
-		this.type = Utils.defaultValue(json.t, 1);
-		this.consumable = Utils.defaultValue(json.con, false);
-		this.oneHand = Utils.defaultValue(json.oh, true);
-		this.description = new Translatable(json.d);
-		this.targetKind = Utils.defaultValue(json.tk, TARGET_KIND.NONE);
+		this.type = Utils.valueOrDefault(json.t, 1);
+		this.consumable = Utils.valueOrDefault(json.con, false);
+		this.oneHand = Utils.valueOrDefault(json.oh, true);
+		this.description = new Localization(json.d);
+		this.targetKind = Utils.valueOrDefault(json.tk, TARGET_KIND.NONE);
 		this.targetConditionFormula = DynamicValue.readOrNone(json.tcf);
 		this.conditionFormula = DynamicValue.readOrNone(json.cf);
-		this.availableKind = Utils.defaultValue(json.ak, AVAILABLE_KIND.NEVER);
+		this.availableKind = Utils.valueOrDefault(json.ak, AVAILABLE_KIND.NEVER);
 		this.sound = new PlaySong(SONG_KIND.SOUND, json.s);
 		this.animationUserID = DynamicValue.readOrNone(json.auid);
 		this.animationTargetID = DynamicValue.readOrNone(json.atid);
 		this.canBeSold = DynamicValue.readOrDefaultSwitch(json.canBeSold);
-		this.battleMessage = new Model.Translatable(json.battleMessage);
-		this.price = [];
-		Utils.readJSONSystemList({ list: Utils.defaultValue(json.p, []), listIndexes: this.price, cons: Cost });
-		this.costs = [];
-		Utils.readJSONSystemList({ list: Utils.defaultValue(json.cos, []), listIndexes: this.costs, cons: Cost });
+		this.battleMessage = new Localization(json.battleMessage);
+		this.price = Utils.readJSONList(json.p, Cost);
+		this.costs = Utils.readJSONList(json.cos, Cost);
 		for (const cost of this.costs) {
 			cost.skillItem = this;
 		}
-		this.effects = [];
-		Utils.readJSONSystemList({ list: Utils.defaultValue(json.e, []), listIndexes: this.effects, cons: Effect });
+		this.effects = Utils.readJSONList(json.e, Effect);
 		for (const effect of this.effects) {
 			effect.skillItem = this;
 		}
-		this.characteristics = [];
-		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.car, []),
-			listIndexes: this.characteristics,
-			cons: Characteristic,
-		});
+		this.characteristics = Utils.readJSONList(json.car, Characteristic);
 	}
 
 	/**
-	 *  Get all the effects, including the ones with perform skill efect.
-	 *  @returns {System.Effect}
+	 * Gets all effects, including nested effects from perform skill actions.
+	 * @returns Array of {@link Effect}.
 	 */
-	getEffects(): Model.Effect[] {
-		let effects: Model.Effect[] = [];
+	getEffects(): Effect[] {
+		const effects: Effect[] = [];
 		for (const effect of this.effects) {
 			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
-				effects = effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
+				const skill = Datas.Skills.get(effect.performSkillID.getValue());
+				effects.push(...skill.getEffects());
 			} else {
 				effects.push(effect);
 			}
@@ -119,8 +135,8 @@ class CommonSkillItem extends Icon {
 	}
 
 	/**
-	 *  Use the command if possible.
-	 *  @returns {boolean}
+	 * Uses the command if possible.
+	 * @returns True if the command can be used.
 	 */
 	useCommand(): boolean {
 		const possible = this.isPossible();
@@ -131,11 +147,11 @@ class CommonSkillItem extends Icon {
 	}
 
 	/**
-	 *  Execute the effects and costs.
-	 *  @param {useCost}
-	 *  @returns {boolean}
+	 * Executes effects and costs.
+	 * @param useCost - Whether to apply costs.
+	 * @returns True if any effect was executed.
 	 */
-	use(useCost: boolean = true): boolean {
+	use(useCost = true): boolean {
 		let isDoingSomething = false;
 		for (const effect of this.getEffects()) {
 			isDoingSomething = effect.execute() || isDoingSomething;
@@ -149,20 +165,23 @@ class CommonSkillItem extends Icon {
 	}
 
 	/**
-	 *  Use the costs.
+	 * Applies all costs directly.
 	 */
-	cost() {
-		for (let i = 0, l = this.costs.length; i < l; i++) {
-			this.costs[i].use();
+	cost(): void {
+		for (const cost of this.costs) {
+			cost.use();
 		}
 	}
 
-	/** Check if the costs are possible.
-	 *  @returns {boolean}
+	/**
+	 * Checks if this skill/item is usable.
+	 * @param target - Optional specific target to check.
+	 * @param checkCost - Whether to check the costs.
+	 * @returns True if usable.
 	 */
-	isPossible(target?: Player, checkCost: boolean = true): boolean {
+	isPossible(target?: Player, checkCost = true): boolean {
 		const targets = Scene.Map.current.getPossibleTargets(this.targetKind);
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : null;
+		const user = Scene.Map.current.user.player ?? null;
 
 		// Condition
 		if (!Interpreter.evaluate(this.conditionFormula.getValue())) {
@@ -170,16 +189,14 @@ class CommonSkillItem extends Icon {
 		}
 		// Target condition : at least one target can be selected
 		const fTargetCondition = (target: Player) => {
-			return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user: user, target: target });
+			return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user, target });
 		};
 		if (target) {
-			if (!fTargetCondition.call(this, target)) {
+			if (!fTargetCondition(target)) {
 				return false;
 			}
-		} else {
-			if (this.targetKind !== TARGET_KIND.NONE && !targets.some(fTargetCondition)) {
-				return false;
-			}
+		} else if (this.targetKind !== TARGET_KIND.NONE && !targets.some(fTargetCondition)) {
+			return false;
 		}
 		// If attack skill, also test on equipped weapons
 		if (
@@ -191,32 +208,31 @@ class CommonSkillItem extends Icon {
 			})
 		) {
 			if (
-				!Scene.Map.current.user.player.equip.some((item) => {
-					return (
+				!Scene.Map.current.user.player.equip.some(
+					(item) =>
 						item === null ||
 						!item.system.isWeapon() ||
 						!Interpreter.evaluate(item.system.conditionFormula.getValue()) ||
 						(target
 							? Interpreter.evaluate(item.system.targetConditionFormula.getValue(), {
-									user: user,
-									target: target,
+									user,
+									target,
 							  })
 							: targets.some((target) => {
 									Interpreter.evaluate(item.system.targetConditionFormula.getValue(), {
-										user: user,
-										target: target,
+										user,
+										target,
 									});
 							  }))
-					);
-				})
+				)
 			) {
 				return false;
 			}
 		}
 		// Skill cost
 		if (checkCost) {
-			for (let i = 0, l = this.costs.length; i < l; i++) {
-				if (!this.costs[i].isPossible()) {
+			for (const cost of this.costs) {
+				if (!cost.isPossible()) {
 					return false;
 				}
 			}
@@ -225,10 +241,9 @@ class CommonSkillItem extends Icon {
 	}
 
 	/**
-	 *  Get the target kind string.
-	 *  @returns {string}
+	 * Gets a human-readable string for the target kind.
 	 */
-	getTARGET_KINDString(): string {
+	getTargetKindString(): string {
 		switch (this.targetKind) {
 			case TARGET_KIND.NONE:
 				return 'None';
@@ -246,59 +261,59 @@ class CommonSkillItem extends Icon {
 	}
 
 	/**
-	 *  Get the weapon kind.
-	 *  @returns {System/WeaponArmorKind}
+	 * Gets the weapon or armor type of this item.
+	 * @returns The {@link WeaponArmorKind}, or null if not applicable.
 	 */
-	getType(): Model.WeaponArmorKind {
+	getType(): WeaponArmorKind {
 		return null;
 	}
 
 	/**
-	 *  Get the price.
-	 *  @returns {number}
+	 * Gets the price of this item.
+	 * @returns A record mapping item identifiers to `[DAMAGES_KIND, number]` tuples.
 	 */
 	getPrice(): Record<string, [DAMAGES_KIND, number]> {
-		return Model.Cost.getPrice(this.price);
+		return Cost.getPrice(this.price);
 	}
 
 	/**
-	 *  Get the item kind.
-	 *  @returns {ITEM_KIND}
+	 * Gets the item kind (weapon, armor, consumable, etc.).
+	 * @returns The {@link ITEM_KIND}, or null if undefined.
 	 */
 	getKind(): ITEM_KIND {
 		return null;
 	}
 
 	/**
-	 *  Check if is weapon.
-	 *  @returns {boolean}
+	 * Checks if this item is a weapon.
+	 * @returns True if the item is a weapon, false otherwise.
 	 */
 	isWeapon(): boolean {
 		return this.getKind() === ITEM_KIND.WEAPON;
 	}
 
 	/**
-	 *  Check if is armor.
-	 *  @returns {boolean}
+	 * Checks if this item is an armor.
+	 * @returns True if the item is an armor, false otherwise.
 	 */
 	isArmor(): boolean {
 		return this.getKind() === ITEM_KIND.ARMOR;
 	}
 
 	/**
-	 *  Check if is weapon or armor.
-	 *  @returns {boolean}
+	 * Checks if this item is either a weapon or an armor.
+	 * @returns True if the item is a weapon or armor, false otherwise.
 	 */
 	isWeaponArmor(): boolean {
 		return this.isWeapon() || this.isArmor();
 	}
 
 	/**
-	 *  Get message and replace user / skill / item name.
-	 *  @param {Battler} user
-	 *  @returns {string}
+	 * Gets a message describing the use of this item for a given battler.
+	 * @param _user - The battler using the item.
+	 * @returns The formatted message as a string (empty by default).
 	 */
-	getMessage(user: Battler): string {
+	getMessage(_user: Battler): string {
 		return '';
 	}
 }

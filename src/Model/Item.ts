@@ -21,7 +21,7 @@ import { CommonSkillItem } from './CommonSkillItem';
  */
 class Item extends CommonSkillItem {
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -29,7 +29,7 @@ class Item extends CommonSkillItem {
 	 *  @param {Record<string, any>} - json Json object describing the item
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 	}
 
 	/** Get the item type.

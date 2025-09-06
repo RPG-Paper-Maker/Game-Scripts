@@ -13,42 +13,42 @@ import { Datas, Graphic, Model } from '..';
 import { Paths, Platform, Utils } from '../Common';
 
 interface ExtrasKind {
-	loadAGame: Model.Translatable;
-	loadAGameDescription: Model.Translatable;
-	slot: Model.Translatable;
-	empty: Model.Translatable;
-	saveAGame: Model.Translatable;
-	saveAGameDescription: Model.Translatable;
-	keyboardAssignment: Model.Translatable;
-	keyboardAssignmentDescription: Model.Translatable;
-	keyboardAssignmentSelectedDescription: Model.Translatable;
-	language: Model.Translatable;
-	languageDescription: Model.Translatable;
-	languageSelectedDescription: Model.Translatable;
-	confirm: Model.Translatable;
-	ok: Model.Translatable;
-	yes: Model.Translatable;
-	no: Model.Translatable;
-	add: Model.Translatable;
-	remove: Model.Translatable;
-	shop: Model.Translatable;
-	buy: Model.Translatable;
-	sell: Model.Translatable;
-	owned: Model.Translatable;
-	selectAnAlly: Model.Translatable;
-	victory: Model.Translatable;
-	defeat: Model.Translatable;
-	levelUp: Model.Translatable;
-	precision: Model.Translatable;
-	critical: Model.Translatable;
-	damage: Model.Translatable;
-	heal: Model.Translatable;
-	skill: Model.Translatable;
-	performSkill: Model.Translatable;
-	loading: Model.Translatable;
-	equipQuestion: Model.Translatable;
-	pressAnyKeys: Model.Translatable;
-	target: Model.Translatable;
+	loadAGame: Model.Localization;
+	loadAGameDescription: Model.Localization;
+	slot: Model.Localization;
+	empty: Model.Localization;
+	saveAGame: Model.Localization;
+	saveAGameDescription: Model.Localization;
+	keyboardAssignment: Model.Localization;
+	keyboardAssignmentDescription: Model.Localization;
+	keyboardAssignmentSelectedDescription: Model.Localization;
+	language: Model.Localization;
+	languageDescription: Model.Localization;
+	languageSelectedDescription: Model.Localization;
+	confirm: Model.Localization;
+	ok: Model.Localization;
+	yes: Model.Localization;
+	no: Model.Localization;
+	add: Model.Localization;
+	remove: Model.Localization;
+	shop: Model.Localization;
+	buy: Model.Localization;
+	sell: Model.Localization;
+	owned: Model.Localization;
+	selectAnAlly: Model.Localization;
+	victory: Model.Localization;
+	defeat: Model.Localization;
+	levelUp: Model.Localization;
+	precision: Model.Localization;
+	critical: Model.Localization;
+	damage: Model.Localization;
+	heal: Model.Localization;
+	skill: Model.Localization;
+	performSkill: Model.Localization;
+	loading: Model.Localization;
+	equipQuestion: Model.Localization;
+	pressAnyKeys: Model.Localization;
+	target: Model.Localization;
 }
 
 /**
@@ -84,42 +84,42 @@ class Languages {
 			},
 		});
 		this.extras = {
-			loadAGame: new Model.Translatable(json.lag),
-			loadAGameDescription: new Model.Translatable(json.lagd),
-			slot: new Model.Translatable(json.sl),
-			empty: new Model.Translatable(json.em),
-			saveAGame: new Model.Translatable(json.sag),
-			saveAGameDescription: new Model.Translatable(json.sagd),
-			keyboardAssignment: new Model.Translatable(json.ka),
-			keyboardAssignmentDescription: new Model.Translatable(json.kad),
-			keyboardAssignmentSelectedDescription: new Model.Translatable(json.kasd),
-			language: new Model.Translatable(json.l),
-			languageDescription: new Model.Translatable(json.ld),
-			languageSelectedDescription: new Model.Translatable(json.lsd),
-			confirm: new Model.Translatable(json.co),
-			ok: new Model.Translatable(json.ok),
-			yes: new Model.Translatable(json.ye),
-			no: new Model.Translatable(json.no),
-			add: new Model.Translatable(json.ad),
-			remove: new Model.Translatable(json.re),
-			shop: new Model.Translatable(json.sh),
-			buy: new Model.Translatable(json.bu),
-			sell: new Model.Translatable(json.se),
-			owned: new Model.Translatable(json.ow),
-			selectAnAlly: new Model.Translatable(json.saa),
-			victory: new Model.Translatable(json.vi),
-			defeat: new Model.Translatable(json.de),
-			levelUp: new Model.Translatable(json.lu),
-			precision: new Model.Translatable(json.pr),
-			critical: new Model.Translatable(json.cr),
-			damage: new Model.Translatable(json.da),
-			heal: new Model.Translatable(json.he),
-			skill: new Model.Translatable(json.sk),
-			performSkill: new Model.Translatable(json.ps),
-			loading: new Model.Translatable(json.lo),
-			equipQuestion: new Model.Translatable(json.eq),
-			pressAnyKeys: new Model.Translatable(json.pak),
-			target: new Model.Translatable(json.ta),
+			loadAGame: new Model.Localization(json.lag),
+			loadAGameDescription: new Model.Localization(json.lagd),
+			slot: new Model.Localization(json.sl),
+			empty: new Model.Localization(json.em),
+			saveAGame: new Model.Localization(json.sag),
+			saveAGameDescription: new Model.Localization(json.sagd),
+			keyboardAssignment: new Model.Localization(json.ka),
+			keyboardAssignmentDescription: new Model.Localization(json.kad),
+			keyboardAssignmentSelectedDescription: new Model.Localization(json.kasd),
+			language: new Model.Localization(json.l),
+			languageDescription: new Model.Localization(json.ld),
+			languageSelectedDescription: new Model.Localization(json.lsd),
+			confirm: new Model.Localization(json.co),
+			ok: new Model.Localization(json.ok),
+			yes: new Model.Localization(json.ye),
+			no: new Model.Localization(json.no),
+			add: new Model.Localization(json.ad),
+			remove: new Model.Localization(json.re),
+			shop: new Model.Localization(json.sh),
+			buy: new Model.Localization(json.bu),
+			sell: new Model.Localization(json.se),
+			owned: new Model.Localization(json.ow),
+			selectAnAlly: new Model.Localization(json.saa),
+			victory: new Model.Localization(json.vi),
+			defeat: new Model.Localization(json.de),
+			levelUp: new Model.Localization(json.lu),
+			precision: new Model.Localization(json.pr),
+			critical: new Model.Localization(json.cr),
+			damage: new Model.Localization(json.da),
+			heal: new Model.Localization(json.he),
+			skill: new Model.Localization(json.sk),
+			performSkill: new Model.Localization(json.ps),
+			loading: new Model.Localization(json.lo),
+			equipQuestion: new Model.Localization(json.eq),
+			pressAnyKeys: new Model.Localization(json.pak),
+			target: new Model.Localization(json.ta),
 		};
 	}
 

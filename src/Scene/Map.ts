@@ -100,7 +100,7 @@ class Map extends Base {
 		this.heroOrientation = heroOrientation;
 		if (!minimal) {
 			this.loading = true;
-			Utils.tryCatch(this.load, this);
+			this.load().catch(console.error);
 		}
 	}
 

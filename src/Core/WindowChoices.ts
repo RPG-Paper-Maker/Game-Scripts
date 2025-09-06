@@ -124,13 +124,13 @@ class WindowChoices extends Bitmap {
 		super(x, y, w, h);
 
 		// Parameters
-		this.orientation = Utils.defaultValue(options.orientation, ORIENTATION_WINDOW.VERTICAL);
-		this.nbItemsMax = Utils.defaultValue(options.nbItemsMax, 4);
-		this.padding = Utils.defaultValue(options.padding, WindowBox.SMALL_PADDING_BOX);
-		this.space = Utils.defaultValue(options.space, 0);
-		this.currentSelectedIndex = Utils.defaultValue(options.currentSelectedIndex, -1);
-		this.bordersInsideVisible = Utils.defaultValue(options.bordersInsideVisible, true);
-		this.bordersVisible = Utils.defaultValue(options.bordersVisible, true);
+		this.orientation = Utils.valueOrDefault(options.orientation, ORIENTATION_WINDOW.VERTICAL);
+		this.nbItemsMax = Utils.valueOrDefault(options.nbItemsMax, 4);
+		this.padding = Utils.valueOrDefault(options.padding, WindowBox.SMALL_PADDING_BOX);
+		this.space = Utils.valueOrDefault(options.space, 0);
+		this.currentSelectedIndex = Utils.valueOrDefault(options.currentSelectedIndex, -1);
+		this.bordersInsideVisible = Utils.valueOrDefault(options.bordersInsideVisible, true);
+		this.bordersVisible = Utils.valueOrDefault(options.bordersVisible, true);
 
 		// Initialize values
 		this.offsetSelectedIndex = 0;

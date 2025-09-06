@@ -46,20 +46,20 @@ class TroopReactionConditions extends Base {
 	 *  reaction conditions
 	 */
 	read(json: Record<string, any>) {
-		this.isNumberOfTurn = Utils.defaultValue(json.isNumberOfTurn, false);
+		this.isNumberOfTurn = Utils.valueOrDefault(json.isNumberOfTurn, false);
 		this.numberOfTurnPlus = Model.DynamicValue.readOrDefaultNumber(json.numberOfTurnPlus, 1);
 		this.numberOfTurnTimes = Model.DynamicValue.readOrDefaultNumber(json.numberOfTurnTimes, 1);
-		this.isHeroesMonsters = Utils.defaultValue(json.isHeroesMonsters, false);
-		this.isHeroes = Utils.defaultValue(json.isHeroes, true);
-		this.conditionHeroesKind = Utils.defaultValue(json.conditionHeroesKind, CONDITION_HEROES_KIND.ALL_THE_HEROES);
+		this.isHeroesMonsters = Utils.valueOrDefault(json.isHeroesMonsters, false);
+		this.isHeroes = Utils.valueOrDefault(json.isHeroes, true);
+		this.conditionHeroesKind = Utils.valueOrDefault(json.conditionHeroesKind, CONDITION_HEROES_KIND.ALL_THE_HEROES);
 		this.heroInstanceID = Model.DynamicValue.readOrDefaultVariable(json.heroInstanceID);
-		this.isStatusID = Utils.defaultValue(json.isStatusID, false);
+		this.isStatusID = Utils.valueOrDefault(json.isStatusID, false);
 		this.statusID = Model.DynamicValue.readOrDefaultDatabase(json.statusID);
-		this.isStatisticID = Utils.defaultValue(json.isStatisticID, false);
+		this.isStatisticID = Utils.valueOrDefault(json.isStatisticID, false);
 		this.statisticID = Model.DynamicValue.readOrDefaultDatabase(json.statisticID);
-		this.statisticOPERATION_KIND = Utils.defaultValue(json.statisticOPERATION_KIND, OPERATION_KIND.EQUAL_TO);
+		this.statisticOPERATION_KIND = Utils.valueOrDefault(json.statisticOPERATION_KIND, OPERATION_KIND.EQUAL_TO);
 		this.statisticCompare = Model.DynamicValue.readOrDefaultNumber(json.statisticCompare);
-		this.statisticCompareUnit = Utils.defaultValue(json.statisticCompareUnit, true);
+		this.statisticCompareUnit = Utils.valueOrDefault(json.statisticCompareUnit, true);
 	}
 
 	/**

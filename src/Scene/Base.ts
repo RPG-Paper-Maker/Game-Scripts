@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN_VERTICAL, Utils } from '../Common';
+import { ALIGN_VERTICAL } from '../Common';
 import { Camera, MapObject, Node, ReactionInterpreter } from '../Core';
 import { Datas, Graphic, Manager, Model, Scene } from '../index';
 import { Main } from '../main';
@@ -66,7 +66,7 @@ abstract class Base {
 		this.initialize(...args);
 		if (loading) {
 			this.loading = true;
-			Utils.tryCatch(this.load, this);
+			this.load().catch(console.error);
 		}
 		this.create();
 		if (Datas.Systems.showFPS) {

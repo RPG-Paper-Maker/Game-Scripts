@@ -62,7 +62,7 @@ class Monster extends Hero {
 		// Loots
 		this.rewards.loots = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.loots, []),
+			list: Utils.valueOrDefault(json.loots, []),
 			listIndexes: this.rewards.loots,
 			cons: Loot,
 		});
@@ -70,7 +70,7 @@ class Monster extends Hero {
 		// Actions
 		this.actions = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.a, []),
+			list: Utils.valueOrDefault(json.a, []),
 			listIndexes: this.actions,
 			func: (jsonAction: Record<string, any>) => {
 				const action = new MonsterAction(jsonAction);

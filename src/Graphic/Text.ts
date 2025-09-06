@@ -66,15 +66,15 @@ class Text extends Base {
 			w = 0,
 			h = 0,
 			align = ALIGN.LEFT,
-			fontSize = Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
-			fontName = Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
+			fontSize = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
+			fontName = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
 			verticalAlign = ALIGN_VERTICAL.CENTER,
-			color = Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
+			color = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
 			bold = false,
 			italic = false,
-			backColor = Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null),
-			strokeColor = Utils.defaultValue(Datas.Systems.dbOptions.tOutline, false)
-				? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null)
+			backColor = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcBackground, null),
+			strokeColor = Utils.valueOrDefault(Datas.Systems.dbOptions.tOutline, false)
+				? Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcOutline, null)
 				: null,
 		} = {}
 	) {
@@ -89,7 +89,7 @@ class Text extends Base {
 		this.backColor = backColor;
 		this.strokeColor = strokeColor;
 		this.setFontSize(fontSize);
-		this.setText(Utils.defaultValue(text, ''));
+		this.setText(Utils.valueOrDefault(text, ''));
 	}
 
 	wrapText(maxWidth: number) {

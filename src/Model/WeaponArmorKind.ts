@@ -9,19 +9,19 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  A weapon/armor kind of the game.
- *  @extends Model.Translatable
+ *  @extends Model.Localization
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  weapon / armor kind
  */
-class WeaponArmorKind extends Translatable {
+class WeaponArmorKind extends Localization {
 	public equipments: boolean[];
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -30,7 +30,7 @@ class WeaponArmorKind extends Translatable {
 	 *  armor kind
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 		this.equipments = json.equipment;
 		this.equipments.unshift(false);
 	}

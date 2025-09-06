@@ -37,7 +37,7 @@ class Settings {
 		for (const id in jsonObjs) {
 			this.kb[id] = jsonObjs[id];
 		}
-		this.currentLanguage = Utils.defaultValue(
+		this.currentLanguage = Utils.valueOrDefault(
 			json[String(TITLE_SETTING_KIND.LANGUAGE)],
 			Datas.Languages.getMainLanguageID()
 		);

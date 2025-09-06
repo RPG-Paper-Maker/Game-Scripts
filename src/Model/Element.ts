@@ -23,7 +23,7 @@ class Element extends Icon {
 	public efficiency: DynamicValue[];
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -31,7 +31,7 @@ class Element extends Icon {
 	 *  @param {Record<string, any>} - json Json object describing the element
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 
 		this.efficiency = [];
 		Utils.readJSONSystemList({ list: json.e, listHash: this.efficiency as any, cons: DynamicValue });

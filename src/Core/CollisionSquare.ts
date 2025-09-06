@@ -182,12 +182,12 @@ class CollisionSquare {
 	 */
 	read(json: Record<string, any>) {
 		const rect = json.rec;
-		this.left = Utils.defaultValue(json.l, true);
-		this.right = Utils.defaultValue(json.r, true);
-		this.top = Utils.defaultValue(json.t, true);
-		this.bot = Utils.defaultValue(json.b, true);
-		this.terrain = Utils.defaultValue(json.terrain, 0);
-		this.climbing = Utils.defaultValue(json.c, false);
+		this.left = Utils.valueOrDefault(json.l, true);
+		this.right = Utils.valueOrDefault(json.r, true);
+		this.top = Utils.valueOrDefault(json.t, true);
+		this.bot = Utils.valueOrDefault(json.b, true);
+		this.terrain = Utils.valueOrDefault(json.terrain, 0);
+		this.climbing = Utils.valueOrDefault(json.c, false);
 		if (rect !== undefined) {
 			this.rect =
 				rect === null

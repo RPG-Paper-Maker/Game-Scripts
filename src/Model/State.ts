@@ -70,18 +70,18 @@ class State extends Base {
 			this.indexX = json.x;
 			this.indexY = json.y;
 		}
-		this.objectMovingKind = Utils.defaultValue(json.omk, OBJECT_MOVING_KIND.FIX);
+		this.objectMovingKind = Utils.valueOrDefault(json.omk, OBJECT_MOVING_KIND.FIX);
 		this.route = new Model.Reaction({
 			bh: false,
 			c: [
-				Utils.defaultValue(json.ecr, {
+				Utils.valueOrDefault(json.ecr, {
 					kind: EVENT_COMMAND_KIND.MOVE_OBJECT,
 					command: [DYNAMIC_VALUE_KIND.DATABASE, -1, 1, 1, 0, COMMAND_MOVE_KIND.MOVE_RANDOM, 0],
 				}),
 			],
 		});
-		this.speedID = Utils.defaultValue(json.s, 1);
-		this.frequencyID = Utils.defaultValue(json.f, 1);
+		this.speedID = Utils.valueOrDefault(json.s, 1);
+		this.frequencyID = Utils.valueOrDefault(json.f, 1);
 		this.moveAnimation = json.move;
 		this.stopAnimation = json.stop;
 		this.climbAnimation = json.climb;
@@ -90,7 +90,7 @@ class State extends Base {
 		this.setWithCamera = json.cam;
 		this.pixelOffset = json.pix;
 		this.keepPosition = json.pos;
-		this.detection = Utils.defaultValue(json.ecd, null);
+		this.detection = Utils.valueOrDefault(json.ecd, null);
 		if (this.detection !== null) {
 			this.detection = Manager.Events.getEventCommand(this.detection);
 		}

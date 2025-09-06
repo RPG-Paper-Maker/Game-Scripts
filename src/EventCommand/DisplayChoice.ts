@@ -39,7 +39,7 @@ class DisplayChoice extends Base {
 		this.maxNumberChoices = Model.DynamicValue.createValueCommand(command, iterator);
 		this.choices = [];
 		let l = command.length;
-		let lang: Model.Translatable = null;
+		let lang: Model.Localization = null;
 		let next: string;
 		while (iterator.i < l) {
 			next = command[iterator.i];
@@ -48,7 +48,7 @@ class DisplayChoice extends Base {
 				if (lang !== null) {
 					this.choices.push(lang.name());
 				}
-				lang = new Model.Translatable();
+				lang = new Model.Localization();
 			} else {
 				lang.getCommand(command, iterator);
 			}

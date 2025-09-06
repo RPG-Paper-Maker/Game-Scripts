@@ -12,20 +12,20 @@
 import { Interpreter, Platform, TITLE_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
 import { Datas, Manager, Scene } from '../index';
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  A title command of the game.
- *  @extends Model.Translatable
+ *  @extends Model.Localization
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  title screen command
  */
-class TitleCommand extends Translatable {
+class TitleCommand extends Localization {
 	public kind: TITLE_COMMAND_KIND;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -34,10 +34,10 @@ class TitleCommand extends Translatable {
 	 *  screen command
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 
-		this.kind = Utils.defaultValue(json.k, TITLE_COMMAND_KIND.NEW_GAME);
-		this.script = Utils.defaultValue(json.s, '');
+		this.kind = Utils.valueOrDefault(json.k, TITLE_COMMAND_KIND.NEW_GAME);
+		this.script = Utils.valueOrDefault(json.s, '');
 	}
 
 	/**

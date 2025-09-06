@@ -13,44 +13,55 @@ import { ANIMATION_EFFECT_CONDITION_KIND, SONG_KIND, Utils } from '../Common';
 import { Base } from './Base';
 import { PlaySong } from './PlaySong';
 
-/** @class
- *  An animation frame effect.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  animation frame effect
+/**
+ * JSON schema for an animation frame effect.
  */
-class AnimationFrameEffect extends Base {
-	public isSE: boolean;
-	public se: PlaySong;
+export type AnimationFrameEffectJSON = {
+	ise?: boolean;
+	se?: Record<string, unknown>;
+	c?: ANIMATION_EFFECT_CONDITION_KIND;
+};
+
+/**
+ * Represents an effect triggered during an animation frame,
+ * such as playing a sound effect under specific conditions.
+ */
+export class AnimationFrameEffect extends Base {
+	/**
+	 * The sound effect to be played when conditions are met.
+	 * Only defined if {@link isSE} is true.
+	 */
+	public se: PlaySong | undefined;
+
+	/**
+	 * The condition under which the effect should trigger.
+	 * Defaults to {@link ANIMATION_EFFECT_CONDITION_KIND.NONE}.
+	 */
 	public condition: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: AnimationFrameEffectJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the animation frame effect.
-	 *  @param {Record<string, any>} - json Json object describing the animation
-	 *  frame effect
+	 * Reads the JSON data describing the animation frame effect.
+	 * @param json - The JSON object describing the effect.
 	 */
-	read(json: Record<string, any>) {
-		this.isSE = Utils.defaultValue(json.ise, true);
-		if (this.isSE) {
-			this.se = new PlaySong(SONG_KIND.SOUND, json.se);
+	read(json: AnimationFrameEffectJSON): void {
+		const isSE = Utils.valueOrDefault(json.ise, true);
+		if (isSE) {
+			this.se = new PlaySong(SONG_KIND.SOUND, json.se ?? {});
 		}
-		this.condition = Utils.defaultValue(json.c, ANIMATION_EFFECT_CONDITION_KIND.NONE);
+		this.condition = Utils.valueOrDefault(json.c, ANIMATION_EFFECT_CONDITION_KIND.NONE);
 	}
 
 	/**
-	 *  Play the sound effect according to a condition.
-	 *  @param {ANIMATION_EFFECT_CONDITION_KIND} condition - The animation effect
-	 *  condition kind
+	 * Plays the sound effect if conditions are met.
+	 * @param condition - The current animation effect condition.
 	 */
-	playSE(condition: ANIMATION_EFFECT_CONDITION_KIND) {
-		if (this.isSE && (this.condition === ANIMATION_EFFECT_CONDITION_KIND.NONE || this.condition === condition)) {
+	playSE(condition: ANIMATION_EFFECT_CONDITION_KIND): void {
+		if (this.se && (this.condition === ANIMATION_EFFECT_CONDITION_KIND.NONE || this.condition === condition)) {
 			this.se.playSound();
 		}
 	}
 }
-
-export { AnimationFrameEffect };

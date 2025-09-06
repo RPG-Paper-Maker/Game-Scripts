@@ -155,12 +155,12 @@ class Picture extends Base {
 		this.id = json.id;
 		this.name = json.name;
 		this.isBR = json.br;
-		this.dlc = Utils.defaultValue(json.d, '');
+		this.dlc = Utils.valueOrDefault(json.d, '');
 		this.base64 = json.base64;
-		this.jsonCollisions = Utils.defaultValue(json.col, []);
-		this.collisionsRepeat = Utils.defaultValue(json.rcol, false);
-		this.isStopAnimation = Utils.defaultValue(json.isStopAnimation, false);
-		this.isClimbAnimation = Utils.defaultValue(json.ica, false);
+		this.jsonCollisions = Utils.valueOrDefault(json.col, []);
+		this.collisionsRepeat = Utils.valueOrDefault(json.rcol, false);
+		this.isStopAnimation = Utils.valueOrDefault(json.isStopAnimation, false);
+		this.isClimbAnimation = Utils.valueOrDefault(json.ica, false);
 	}
 
 	/**

@@ -12,16 +12,16 @@
 import { Model } from '..';
 import { Utils } from '../Common';
 import { Skill } from '../Core';
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  A class of the game.
- *  @extends Model.Translatable
+ *  @extends Model.Localization
  *  @extends Model.Base
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  class
  */
-class Class extends Translatable {
+class Class extends Localization {
 	public static PROPERTY_FINAL_LEVEL = 'finalLevel';
 	public static PROPERTY_EXPERIENCE_BASE = 'experienceBase';
 	public static PROPERTY_EXPERIENCE_INFLATION = 'experienceInflation';
@@ -37,7 +37,7 @@ class Class extends Translatable {
 	public skills: Model.ClassSkill[];
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -45,13 +45,13 @@ class Class extends Translatable {
 	 *  @param {Record<string, any>} - json Json object describing the class
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 
 		this.id = json.id;
-		this.initialLevel = Utils.defaultValue(json.iniL, -1);
-		this.finalLevel = Utils.defaultValue(json.mxL, -1);
-		this.experienceBase = Utils.defaultValue(json.eB, -1);
-		this.experienceInflation = Utils.defaultValue(json.eI, -1);
+		this.initialLevel = Utils.valueOrDefault(json.iniL, -1);
+		this.finalLevel = Utils.valueOrDefault(json.mxL, -1);
+		this.experienceBase = Utils.valueOrDefault(json.eB, -1);
+		this.experienceInflation = Utils.valueOrDefault(json.eI, -1);
 		this.experienceTable = {};
 		const jsonExperienceTable = json.eT;
 		let i: number, l: number;
@@ -64,7 +64,7 @@ class Class extends Translatable {
 		// Statistic progression
 		this.characteristics = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.characteristics, []),
+			list: Utils.valueOrDefault(json.characteristics, []),
 			listIndexes: this.characteristics,
 			cons: Model.Characteristic,
 		});
@@ -72,7 +72,7 @@ class Class extends Translatable {
 		// Statistic progression
 		this.statisticsProgression = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.stats, []),
+			list: Utils.valueOrDefault(json.stats, []),
 			listIndexes: this.statisticsProgression,
 			cons: Model.StatisticProgression,
 		});
@@ -80,7 +80,7 @@ class Class extends Translatable {
 		// Skills
 		this.skills = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.skills, []),
+			list: Utils.valueOrDefault(json.skills, []),
 			listIndexes: this.skills,
 			cons: Model.ClassSkill,
 		});

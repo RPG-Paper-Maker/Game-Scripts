@@ -57,12 +57,12 @@ class MapObject extends Base {
 		this.id = json.id;
 		this.name = json.name;
 		this.isEventFrame = json.ooepf;
-		this.canBeTriggeredAnotherObject = Utils.defaultValue(json.canBeTriggeredAnotherObject, true);
+		this.canBeTriggeredAnotherObject = Utils.valueOrDefault(json.canBeTriggeredAnotherObject, true);
 		this.addDefaultValues();
 		this.addInheritanceModel(json.hId);
 
 		// States
-		let jsonList = Utils.defaultValue(json.states, []);
+		let jsonList = Utils.valueOrDefault(json.states, []);
 		let jsonElement: Record<string, any>, id: number, j: number, m: number, i: number, l: number;
 		for (i = 0, l = jsonList.length; i < l; i++) {
 			jsonElement = jsonList[i];
@@ -76,7 +76,7 @@ class MapObject extends Base {
 		}
 
 		// Properties
-		jsonList = Utils.defaultValue(json.p, []);
+		jsonList = Utils.valueOrDefault(json.p, []);
 		let property: Model.Property;
 		for (i = 0, l = jsonList.length; i < l; i++) {
 			jsonElement = jsonList[i];
@@ -91,7 +91,7 @@ class MapObject extends Base {
 		}
 
 		// Events
-		jsonList = Utils.defaultValue(json.events, []);
+		jsonList = Utils.valueOrDefault(json.events, []);
 		let event: Model.Event, list: Model.Event[];
 		for (i = 0, l = jsonList.length; i < l; i++) {
 			jsonElement = jsonList[i];
@@ -137,14 +137,14 @@ class MapObject extends Base {
 			this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
 
 			// States
-			const states = Utils.defaultValue(inheritedObject.states, []);
+			const states = Utils.valueOrDefault(inheritedObject.states, []);
 			let i: number, l: number;
 			for (i = 0, l = states.length; i < l; i++) {
 				this.states.push(states[i]);
 			}
 
 			// Properties
-			const properties = Utils.defaultValue(inheritedObject.properties, []);
+			const properties = Utils.valueOrDefault(inheritedObject.properties, []);
 			for (i = 0, l = properties.length; i < l; i++) {
 				this.properties.push(properties[i]);
 			}

@@ -12,65 +12,67 @@
 import * as THREE from 'three';
 import { ANIMATION_EFFECT_CONDITION_KIND, Utils } from '../Common';
 import { Picture2D } from '../Core';
-import { AnimationFrameEffect } from './AnimationFrameEffect';
-import { AnimationFrameElement } from './AnimationFrameElement';
+import { AnimationFrameEffect, AnimationFrameEffectJSON } from './AnimationFrameEffect';
+import { AnimationFrameElement, AnimationFrameElementJSON } from './AnimationFrameElement';
 import { Base } from './Base';
 
-/** @class
- *  An animation frame.
- *  @extends Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the animation frame
+/**
+ * JSON schema for an animation frame.
  */
-class AnimationFrame extends Base {
+export type AnimationFrameJSON = {
+	e?: AnimationFrameElementJSON[];
+	ef?: AnimationFrameEffectJSON[];
+};
+
+/**
+ * Represents a single frame in an animation, containing
+ * drawable elements and associated effects.
+ */
+export class AnimationFrame extends Base {
+	/**
+	 * The drawable elements of this frame.
+	 */
 	public elements: AnimationFrameElement[];
+
+	/**
+	 * The effects triggered during this frame (e.g., sounds).
+	 */
 	public effects: AnimationFrameEffect[];
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: AnimationFrameJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the animation frame.
-	 *  @param {Record<string, any>} - json Json object describing the animation
-	 *  frame
+	 * Reads the JSON data describing the animation frame.
+	 * @param json - The JSON object describing the frame.
 	 */
-	read(json: Record<string, any>) {
-		this.elements = [];
-		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.e, []),
-			listIndexes: this.elements,
-			cons: AnimationFrameElement,
-		});
-		this.effects = [];
-		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.ef, []),
-			listIndexes: this.effects,
-			cons: AnimationFrameEffect,
-		});
+	read(json: AnimationFrameJSON): void {
+		this.elements = Utils.readJSONList(json.e, AnimationFrameElement);
+		this.effects = Utils.readJSONList(json.ef, AnimationFrameEffect, true);
 	}
 
 	/**
-	 *  Play the sounds according to condition.
-	 *  @param {ANIMATION_EFFECT_CONDITION_KIND} condition - The condition
+	 * Plays the sound effects associated with this frame,
+	 * if their conditions are met.
+	 * @param condition - The current animation effect condition.
 	 */
-	playSounds(condition: ANIMATION_EFFECT_CONDITION_KIND) {
-		for (let i = 0, l = this.effects.length; i < l; i++) {
-			this.effects[i].playSE(condition);
+	playSounds(condition: ANIMATION_EFFECT_CONDITION_KIND): void {
+		for (const effect of this.effects) {
+			effect.playSE(condition);
 		}
 	}
 
 	/**
-	 *  Draw the animation frame.
-	 *  @param {Picture2D} picture - The picture associated to the animation
-	 *  @param {Vector2} position - The position on screen for animation
-	 *  @param {number} rows - The number of rows in the animation texture
-	 *  @param {number} cols - The number of columns in the animation texture
+	 * Draws the animation frame elements.
+	 * @param picture - The picture associated with the animation.
+	 * @param position - The position on screen for the animation.
+	 * @param rows - The number of rows in the animation texture.
+	 * @param cols - The number of columns in the animation texture.
 	 */
-	draw(picture: Picture2D, position: THREE.Vector2, rows: number, cols: number) {
-		for (let i = 0, l = this.elements.length; i < l; i++) {
-			this.elements[i].draw(picture, position, rows, cols);
+	draw(picture: Picture2D, position: THREE.Vector2, rows: number, cols: number): void {
+		for (const element of this.elements) {
+			element?.draw(picture, position, rows, cols);
 		}
 	}
 }
-
-export { AnimationFrame };

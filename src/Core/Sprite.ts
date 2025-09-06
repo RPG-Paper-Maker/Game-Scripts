@@ -461,7 +461,7 @@ class Sprite extends MapElement {
 	 */
 	read(json: Record<string, any>) {
 		super.read(json);
-		this.front = Utils.defaultValue(json.f, true);
+		this.front = Utils.valueOrDefault(json.f, true);
 		this.kind = json.k;
 		this.textureRect = json.t;
 		if (this.textureRect.length === 2) {

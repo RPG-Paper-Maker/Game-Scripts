@@ -717,10 +717,10 @@ class Player {
 		}
 
 		// Faceset and battler
-		this.facesetID = Utils.defaultValue(json.face, null);
-		this.facesetIndexX = Utils.defaultValue(json.faceX, null);
-		this.facesetIndexY = Utils.defaultValue(json.faceY, null);
-		this.battlerID = Utils.defaultValue(json.battler, null);
+		this.facesetID = Utils.valueOrDefault(json.face, null);
+		this.facesetIndexX = Utils.valueOrDefault(json.faceX, null);
+		this.facesetIndexY = Utils.valueOrDefault(json.faceY, null);
+		this.battlerID = Utils.valueOrDefault(json.battler, null);
 
 		this.updateAllStatsValues();
 	}
@@ -1167,7 +1167,7 @@ class Player {
 	 *  @returns {System.Characteristic[]}
 	 */
 	getClass(): Model.Class {
-		return Utils.defaultValue(this.changedClass, this.system.class);
+		return Utils.valueOrDefault(this.changedClass, this.system.class);
 	}
 
 	/**

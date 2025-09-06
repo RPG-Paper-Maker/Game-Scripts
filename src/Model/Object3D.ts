@@ -49,20 +49,20 @@ class Object3D extends SpecialElement {
 		super.read(json);
 
 		this.id = json.id;
-		this.shapeKind = Utils.defaultValue(json.sk, SHAPE_KIND.BOX);
-		this.objID = Utils.defaultValue(json.oid, -1);
-		this.mtlID = Utils.defaultValue(json.mid, -1);
-		this.collisionKind = Utils.defaultValue(json.ck, OBJECT_COLLISION_KIND.NONE);
-		this.collisionCustomID = Utils.defaultValue(json.ccid, -1);
-		this.scale = Utils.defaultValue(json.s, 1);
-		this.widthSquare = Utils.defaultValue(json.ws, 1);
-		this.widthPixel = Utils.defaultValue(json.wp, 0);
-		this.heightSquare = Utils.defaultValue(json.hs, 1);
-		this.heightPixel = Utils.defaultValue(json.hp, 0);
-		this.depthSquare = Utils.defaultValue(json.ds, 1);
-		this.depthPixel = Utils.defaultValue(json.dp, 0);
-		this.stretch = Utils.defaultValue(json.st, false);
-		this.isTopLeft = Utils.defaultValue(json.itl, true);
+		this.shapeKind = Utils.valueOrDefault(json.sk, SHAPE_KIND.BOX);
+		this.objID = Utils.valueOrDefault(json.oid, -1);
+		this.mtlID = Utils.valueOrDefault(json.mid, -1);
+		this.collisionKind = Utils.valueOrDefault(json.ck, OBJECT_COLLISION_KIND.NONE);
+		this.collisionCustomID = Utils.valueOrDefault(json.ccid, -1);
+		this.scale = Utils.valueOrDefault(json.s, 1);
+		this.widthSquare = Utils.valueOrDefault(json.ws, 1);
+		this.widthPixel = Utils.valueOrDefault(json.wp, 0);
+		this.heightSquare = Utils.valueOrDefault(json.hs, 1);
+		this.heightPixel = Utils.valueOrDefault(json.hp, 0);
+		this.depthSquare = Utils.valueOrDefault(json.ds, 1);
+		this.depthPixel = Utils.valueOrDefault(json.dp, 0);
+		this.stretch = Utils.valueOrDefault(json.st, false);
+		this.isTopLeft = Utils.valueOrDefault(json.itl, true);
 	}
 
 	/**

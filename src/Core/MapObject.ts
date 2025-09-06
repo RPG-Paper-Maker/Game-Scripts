@@ -378,7 +378,7 @@ class MapObject {
 		for (i = 0, l = this.system.properties.length; i < l; i++) {
 			prop = this.system.properties[i];
 			propValue = mapProp[prop.id - 1];
-			this.properties[prop.id] = Utils.defaultValue(propValue, prop.initialValue.getValue());
+			this.properties[prop.id] = Utils.valueOrDefault(propValue, prop.initialValue.getValue());
 		}
 
 		// States
@@ -390,21 +390,21 @@ class MapObject {
 			state = stateSystem.copyInstance();
 			this.statesInstance[i] = state;
 			if (stateValue !== undefined) {
-				state.graphicID = Utils.defaultValue(stateValue.gid, stateSystem.graphicID);
-				state.graphicKind = Utils.defaultValue(stateValue.gk, stateSystem.graphicKind);
-				state.rectTileset = Utils.defaultValue(stateValue.gt, stateSystem.rectTileset);
-				state.indexX = Utils.defaultValue(stateValue.gix, stateSystem.indexX);
-				state.indexY = Utils.defaultValue(stateValue.giy, stateSystem.indexY);
-				state.speedID = Utils.defaultValue(stateValue.sid, stateSystem.speedID);
-				state.frequencyID = Utils.defaultValue(stateValue.fid, stateSystem.frequencyID);
-				state.moveAnimation = Utils.defaultValue(stateValue.ma, stateSystem.moveAnimation);
-				state.stopAnimation = Utils.defaultValue(stateValue.sa, stateSystem.stopAnimation);
-				state.climbAnimation = Utils.defaultValue(stateValue.ca, stateSystem.climbAnimation);
-				state.directionFix = Utils.defaultValue(stateValue.df, stateSystem.directionFix);
-				state.through = Utils.defaultValue(stateValue.t, stateSystem.through);
-				state.setWithCamera = Utils.defaultValue(stateValue.swc, stateSystem.setWithCamera);
-				state.pixelOffset = Utils.defaultValue(stateValue.po, stateSystem.pixelOffset);
-				state.keepPosition = Utils.defaultValue(stateValue.kp, stateSystem.keepPosition);
+				state.graphicID = Utils.valueOrDefault(stateValue.gid, stateSystem.graphicID);
+				state.graphicKind = Utils.valueOrDefault(stateValue.gk, stateSystem.graphicKind);
+				state.rectTileset = Utils.valueOrDefault(stateValue.gt, stateSystem.rectTileset);
+				state.indexX = Utils.valueOrDefault(stateValue.gix, stateSystem.indexX);
+				state.indexY = Utils.valueOrDefault(stateValue.giy, stateSystem.indexY);
+				state.speedID = Utils.valueOrDefault(stateValue.sid, stateSystem.speedID);
+				state.frequencyID = Utils.valueOrDefault(stateValue.fid, stateSystem.frequencyID);
+				state.moveAnimation = Utils.valueOrDefault(stateValue.ma, stateSystem.moveAnimation);
+				state.stopAnimation = Utils.valueOrDefault(stateValue.sa, stateSystem.stopAnimation);
+				state.climbAnimation = Utils.valueOrDefault(stateValue.ca, stateSystem.climbAnimation);
+				state.directionFix = Utils.valueOrDefault(stateValue.df, stateSystem.directionFix);
+				state.through = Utils.valueOrDefault(stateValue.t, stateSystem.through);
+				state.setWithCamera = Utils.valueOrDefault(stateValue.swc, stateSystem.setWithCamera);
+				state.pixelOffset = Utils.valueOrDefault(stateValue.po, stateSystem.pixelOffset);
+				state.keepPosition = Utils.valueOrDefault(stateValue.kp, stateSystem.keepPosition);
 			}
 		}
 	}

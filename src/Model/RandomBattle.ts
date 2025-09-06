@@ -40,7 +40,7 @@ class RandomBattle extends Base {
 	read(json: Record<string, any>) {
 		this.troopID = Model.DynamicValue.readOrDefaultDatabase(json.troopID);
 		this.priority = Model.DynamicValue.readOrDefaultNumber(json.priority, 10);
-		this.isEntireMap = Utils.defaultValue(json.isEntireMap, true);
+		this.isEntireMap = Utils.valueOrDefault(json.isEntireMap, true);
 		this.terrains = [];
 		if (!this.isEntireMap) {
 			Utils.readJSONSystemList({

@@ -145,10 +145,10 @@ class GL {
 		opts.texture.flipY = opts.flipY ? true : false;
 		opts.texture.wrapS = THREE.RepeatWrapping;
 		opts.texture.wrapT = THREE.RepeatWrapping;
-		opts.repeat = Utils.defaultValue(opts.repeat, 1.0);
-		opts.opacity = Utils.defaultValue(opts.opacity, 1.0);
-		opts.shadows = Utils.defaultValue(opts.shadows, true);
-		opts.side = Utils.defaultValue(opts.side, THREE.DoubleSide);
+		opts.repeat = Utils.valueOrDefault(opts.repeat, 1.0);
+		opts.opacity = Utils.valueOrDefault(opts.opacity, 1.0);
+		opts.shadows = Utils.valueOrDefault(opts.shadows, true);
+		opts.side = Utils.valueOrDefault(opts.side, THREE.DoubleSide);
 		const fragment = this.SHADER_FIX_FRAGMENT;
 		const vertex = this.SHADER_FIX_VERTEX;
 		const screenTone = this.screenTone;

@@ -24,7 +24,7 @@ class BattleSystems {
 	private static statisticsElements: number[];
 	private static statisticsElementsPercent: number[];
 	public static maxStatisticID: number;
-	private static equipments: Model.Translatable[];
+	private static equipments: Model.Localization[];
 	public static equipmentsOrder: number[];
 	public static maxEquipmentID: number;
 	private static weaponsKind: Model.WeaponArmorKind[];
@@ -59,7 +59,7 @@ class BattleSystems {
 		this.elements = [];
 		this.elementsOrder = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.elements, []),
+			list: Utils.valueOrDefault(json.elements, []),
 			listIDs: this.elements,
 			listIndexes: this.elementsOrder,
 			indexesIDs: true,
@@ -70,7 +70,7 @@ class BattleSystems {
 		this.statistics = [];
 		this.statisticsOrder = [];
 		this.maxStatisticID = Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.statistics, []),
+			list: Utils.valueOrDefault(json.statistics, []),
 			listIDs: this.statistics,
 			listIndexes: this.statisticsOrder,
 			indexesIDs: true,
@@ -98,15 +98,15 @@ class BattleSystems {
 		this.equipments = [];
 		this.equipmentsOrder = [];
 		this.maxEquipmentID = Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.equipments, []),
+			list: Utils.valueOrDefault(json.equipments, []),
 			listIDs: this.equipments,
 			listIndexes: this.equipmentsOrder,
 			indexesIDs: true,
-			cons: Model.Translatable,
+			cons: Model.Localization,
 		});
 		this.weaponsKind = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.weaponsKind, []),
+			list: Utils.valueOrDefault(json.weaponsKind, []),
 			listIDs: this.weaponsKind,
 			cons: Model.WeaponArmorKind,
 		});
@@ -114,7 +114,7 @@ class BattleSystems {
 		// Armors kind
 		this.armorsKind = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.armorsKind, []),
+			list: Utils.valueOrDefault(json.armorsKind, []),
 			listIDs: this.armorsKind,
 			cons: Model.WeaponArmorKind,
 		});
@@ -123,7 +123,7 @@ class BattleSystems {
 		this.battleCommands = [];
 		this.battleCommandsOrder = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.battleCommands, []),
+			list: Utils.valueOrDefault(json.battleCommands, []),
 			listIDs: this.battleCommands,
 			listIndexes: this.battleCommandsOrder,
 			indexesIDs: true,
@@ -135,7 +135,7 @@ class BattleSystems {
 		// Battle maps
 		this.battleMaps = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.battleMaps, []),
+			list: Utils.valueOrDefault(json.battleMaps, []),
 			listIDs: this.battleMaps,
 			cons: Model.BattleMap,
 		});
@@ -170,7 +170,7 @@ class BattleSystems {
 		this.battleVictory = new Model.PlaySong(SONG_KIND.MUSIC, json.bvictory);
 
 		// Options
-		this.cameraMoveInBattle = Utils.defaultValue(json.cmib, true);
+		this.cameraMoveInBattle = Utils.valueOrDefault(json.cmib, true);
 	}
 
 	/**
@@ -231,9 +231,9 @@ class BattleSystems {
 	/**
 	 *  Get the equipment by ID.
 	 *  @param {number} id
-	 *  @returns {System.Translatable}
+	 *  @returns {System.Localization}
 	 */
-	static getEquipment(id: number): Model.Translatable {
+	static getEquipment(id: number): Model.Localization {
 		return Datas.Base.get(id, this.equipments, 'equipment');
 	}
 

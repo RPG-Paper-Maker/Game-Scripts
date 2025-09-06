@@ -35,9 +35,9 @@ class FontName extends Base {
 	 */
 	read(json: Record<string, any>) {
 		this.name = json.name;
-		this.isBasic = Utils.defaultValue(json.isBasic, true);
+		this.isBasic = Utils.valueOrDefault(json.isBasic, true);
 		this.font = Model.DynamicValue.readOrDefaultMessage(json.f, Constants.DEFAULT_FONT_NAME);
-		this.customFontID = Utils.defaultValue(json.customFontID, 1);
+		this.customFontID = Utils.valueOrDefault(json.customFontID, 1);
 	}
 
 	/**

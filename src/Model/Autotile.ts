@@ -31,7 +31,7 @@ class Autotile extends SpecialElement {
 	 */
 	read(json: Record<string, any>) {
 		super.read(json);
-		this.isAnimated = Utils.defaultValue(json.isAnimated, false);
+		this.isAnimated = Utils.valueOrDefault(json.isAnimated, false);
 	}
 }
 

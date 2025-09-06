@@ -32,7 +32,7 @@ class Detection extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the detection
 	 */
 	read(json: Record<string, any>) {
-		const jsonList = Utils.defaultValue(json.b, []);
+		const jsonList = Utils.valueOrDefault(json.b, []);
 		const l = jsonList.length;
 		this.boxes = new Array(l);
 		let jsonElement: Record<string, any>;
@@ -40,12 +40,12 @@ class Detection extends Base {
 			jsonElement = jsonList[i];
 			this.boxes[i] = [
 				Position.createFromArray(jsonElement.k),
-				Utils.defaultValue(jsonElement.v.bls, 1),
-				Utils.defaultValue(jsonElement.v.blp, 0),
-				Utils.defaultValue(jsonElement.v.bhs, 1),
-				Utils.defaultValue(jsonElement.v.bhp, 0),
-				Utils.defaultValue(jsonElement.v.bws, 1),
-				Utils.defaultValue(jsonElement.v.bwp, 0),
+				Utils.valueOrDefault(jsonElement.v.bls, 1),
+				Utils.valueOrDefault(jsonElement.v.blp, 0),
+				Utils.valueOrDefault(jsonElement.v.bhs, 1),
+				Utils.valueOrDefault(jsonElement.v.bhp, 0),
+				Utils.valueOrDefault(jsonElement.v.bws, 1),
+				Utils.valueOrDefault(jsonElement.v.bwp, 0),
 			];
 		}
 	}

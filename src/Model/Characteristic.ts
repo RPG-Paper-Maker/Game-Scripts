@@ -58,11 +58,11 @@ class Characteristic extends Base {
 	 *  characteristic
 	 */
 	read(json: Record<string, any>) {
-		this.kind = Utils.defaultValue(json.k, CHARACTERISTIC_KIND.INCREASE_DECREASE);
+		this.kind = Utils.valueOrDefault(json.k, CHARACTERISTIC_KIND.INCREASE_DECREASE);
 		switch (this.kind) {
 			case CHARACTERISTIC_KIND.INCREASE_DECREASE:
-				this.isIncreaseDecrease = Utils.defaultValue(json.iid, true);
-				this.increaseDecreaseKind = Utils.defaultValue(json.idk, INCREASE_DECREASE_KIND.STAT_VALUE);
+				this.isIncreaseDecrease = Utils.valueOrDefault(json.iid, true);
+				this.increaseDecreaseKind = Utils.valueOrDefault(json.idk, INCREASE_DECREASE_KIND.STAT_VALUE);
 				switch (this.increaseDecreaseKind) {
 					case INCREASE_DECREASE_KIND.STAT_VALUE:
 						this.statisticValueID = DynamicValue.readOrDefaultDatabase(json.svid);
@@ -78,32 +78,32 @@ class Characteristic extends Base {
 						break;
 					case INCREASE_DECREASE_KIND.SKILL_COST:
 						this.skillCostID = DynamicValue.readOrDefaultDatabase(json.scid);
-						this.isAllSkillCost = Utils.defaultValue(json.iasc, true);
+						this.isAllSkillCost = Utils.valueOrDefault(json.iasc, true);
 						break;
 					case INCREASE_DECREASE_KIND.VARIABLE:
-						this.variableID = Utils.defaultValue(json.vid, 1);
+						this.variableID = Utils.valueOrDefault(json.vid, 1);
 						break;
 				}
-				this.operation = Utils.defaultValue(json.o, true);
+				this.operation = Utils.valueOrDefault(json.o, true);
 				this.value = DynamicValue.readOrDefaultNumber(json.v);
-				this.unit = Utils.defaultValue(json.u, true);
+				this.unit = Utils.valueOrDefault(json.u, true);
 				break;
 			case CHARACTERISTIC_KIND.SCRIPT:
 				this.script = DynamicValue.readOrDefaultMessage(json.s);
 				break;
 			case CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP:
-				this.isAllowEquip = Utils.defaultValue(json.iae, true);
-				this.isAllowEquipWeapon = Utils.defaultValue(json.iaew, true);
+				this.isAllowEquip = Utils.valueOrDefault(json.iae, true);
+				this.isAllowEquipWeapon = Utils.valueOrDefault(json.iaew, true);
 				this.equipWeaponTypeID = DynamicValue.readOrDefaultDatabase(json.ewtid);
 				this.equipArmorTypeID = DynamicValue.readOrDefaultDatabase(json.eatid);
 				break;
 			case CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE:
-				this.isAllowChangeEquipment = Utils.defaultValue(json.iace, true);
+				this.isAllowChangeEquipment = Utils.valueOrDefault(json.iace, true);
 				this.changeEquipmentID = DynamicValue.readOrDefaultDatabase(json.ceid);
 				break;
 			case CHARACTERISTIC_KIND.BEGIN_EQUIPMENT:
 				this.beginEquipmentID = DynamicValue.readOrDefaultDatabase(json.beid);
-				this.isBeginWeapon = Utils.defaultValue(json.ibw, true);
+				this.isBeginWeapon = Utils.valueOrDefault(json.ibw, true);
 				this.beginWeaponArmorID = DynamicValue.readOrDefaultDatabase(json.bwaid);
 				break;
 			case CHARACTERISTIC_KIND.ELEMENT:

@@ -238,12 +238,12 @@ class Message extends Graphic.Base {
 			ca: ALIGN.LEFT,
 			cb: false,
 			ci: false,
-			cs: Utils.defaultValue(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
-			cf: Utils.defaultValue(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
-			ctc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
-			cbc: Utils.defaultValue(Datas.Systems.dbOptions.v_tcBackground, null),
-			csc: Utils.defaultValue(Datas.Systems.dbOptions.v_tOutline, false)
-				? Utils.defaultValue(Datas.Systems.dbOptions.v_tcOutline, null)
+			cs: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
+			cf: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
+			ctc: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
+			cbc: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcBackground, null),
+			csc: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tOutline, false)
+				? Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcOutline, null)
 				: null,
 		};
 
@@ -457,11 +457,11 @@ class Message extends Graphic.Base {
 	 */
 	drawFaceset(x: number, y: number, w: number, h: number) {
 		this.faceset.draw({
-			x: x + Utils.defaultValue(ScreenResolution.getScreenMinXY(Datas.Systems.dbOptions.v_fX), 0),
+			x: x + Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Datas.Systems.dbOptions.v_fX), 0),
 			y:
 				y -
 				(ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingHeight) - h) / 2 +
-				Utils.defaultValue(ScreenResolution.getScreenMinXY(Datas.Systems.dbOptions.v_fY), 0),
+				Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Datas.Systems.dbOptions.v_fY), 0),
 			w: Datas.Systems.facesetScalingWidth,
 			h: Datas.Systems.facesetScalingHeight,
 			sx: this.facesetIndexX * Datas.Systems.facesetsSize,

@@ -75,10 +75,10 @@ class Effect extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the effect
 	 */
 	read(json: Record<string, any>) {
-		this.kind = Utils.defaultValue(json.k, EFFECT_KIND.DAMAGES);
+		this.kind = Utils.valueOrDefault(json.k, EFFECT_KIND.DAMAGES);
 		switch (this.kind) {
 			case EFFECT_KIND.DAMAGES: {
-				this.damageKind = Utils.defaultValue(json.dk, DAMAGES_KIND.STAT);
+				this.damageKind = Utils.valueOrDefault(json.dk, DAMAGES_KIND.STAT);
 				switch (this.damageKind) {
 					case DAMAGES_KIND.STAT:
 						this.damageStatisticID = Model.DynamicValue.readOrDefaultDatabase(json.dsid);
@@ -87,34 +87,34 @@ class Effect extends Base {
 						this.damageCurrencyID = Model.DynamicValue.readOrDefaultDatabase(json.dcid);
 						break;
 					case DAMAGES_KIND.VARIABLE:
-						this.damageVariableID = Utils.defaultValue(json.dvid, 1);
+						this.damageVariableID = Utils.valueOrDefault(json.dvid, 1);
 						break;
 				}
 				this.damageFormula = Model.DynamicValue.readOrDefaultMessage(json.df);
-				this.isDamagesMinimum = Utils.defaultValue(json.idmin, true);
+				this.isDamagesMinimum = Utils.valueOrDefault(json.idmin, true);
 				this.damagesMinimumFormula = Model.DynamicValue.readOrDefaultMessage(json.dmin, '0');
-				this.isDamagesMaximum = Utils.defaultValue(json.idmax, false);
+				this.isDamagesMaximum = Utils.valueOrDefault(json.idmax, false);
 				this.damagesMaximumFormula = Model.DynamicValue.readOrDefaultMessage(json.dmax, '0');
-				this.isDamageElement = Utils.defaultValue(json.ide, false);
+				this.isDamageElement = Utils.valueOrDefault(json.ide, false);
 				this.damageElementID = Model.DynamicValue.readOrDefaultDatabase(json.deid);
-				this.isDamageVariance = Utils.defaultValue(json.idv, false);
+				this.isDamageVariance = Utils.valueOrDefault(json.idv, false);
 				this.damageVarianceFormula = Model.DynamicValue.readOrDefaultMessage(json.dvf, '0');
-				this.isDamageCritical = Utils.defaultValue(json.idc, false);
+				this.isDamageCritical = Utils.valueOrDefault(json.idc, false);
 				this.damageCriticalFormula = Model.DynamicValue.readOrDefaultMessage(json.dcf, '0');
-				this.isDamagePrecision = Utils.defaultValue(json.idp, false);
+				this.isDamagePrecision = Utils.valueOrDefault(json.idp, false);
 				this.damagePrecisionFormula = Model.DynamicValue.readOrDefaultMessage(json.dpf, String(100));
-				this.isDamageStockVariableID = Utils.defaultValue(json.idsv, false);
-				this.damageStockVariableID = Utils.defaultValue(json.dsv, 1);
-				this.isDamageDisplayName = Utils.defaultValue(json.iddn, false);
+				this.isDamageStockVariableID = Utils.valueOrDefault(json.idsv, false);
+				this.damageStockVariableID = Utils.valueOrDefault(json.dsv, 1);
+				this.isDamageDisplayName = Utils.valueOrDefault(json.iddn, false);
 				break;
 			}
 			case EFFECT_KIND.STATUS:
-				this.isAddStatus = Utils.defaultValue(json.iast, true);
+				this.isAddStatus = Utils.valueOrDefault(json.iast, true);
 				this.statusID = Model.DynamicValue.readOrDefaultDatabase(json.sid);
 				this.statusPrecisionFormula = Model.DynamicValue.readOrDefaultMessage(json.spf, String(100));
 				break;
 			case EFFECT_KIND.ADD_REMOVE_SKILL:
-				this.isAddSkill = Utils.defaultValue(json.iask, true);
+				this.isAddSkill = Utils.valueOrDefault(json.iask, true);
 				this.addSkillID = Model.DynamicValue.readOrDefaultDatabase(json.asid);
 				break;
 			case EFFECT_KIND.PERFORM_SKILL:
@@ -126,13 +126,13 @@ class Effect extends Base {
 				);
 				break;
 			case EFFECT_KIND.SPECIAL_ACTIONS:
-				this.specialActionKind = Utils.defaultValue(json.sak, EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS);
+				this.specialActionKind = Utils.valueOrDefault(json.sak, EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS);
 				break;
 			case EFFECT_KIND.SCRIPT:
 				this.scriptFormula = Model.DynamicValue.readOrDefaultMessage(json.sf);
 				break;
 		}
-		this.isTemporarilyChangeTarget = Utils.defaultValue(json.itct, false);
+		this.isTemporarilyChangeTarget = Utils.valueOrDefault(json.itct, false);
 		this.temporarilyChangeTargetFormula = Model.DynamicValue.readOrDefaultMessage(json.tctf);
 	}
 

@@ -216,7 +216,7 @@ class BattleAnimation {
 				// Test if animation finished
 				if (
 					(!this.battle.animationUser ||
-						this.battle.animationUser.frame > this.battle.animationUser.system.frames.length) &&
+						this.battle.animationUser.frame > this.battle.animationUser.system.maxFrameID) &&
 					!this.battle.user.isAttacking()
 				) {
 					if (!this.battle.animationTarget) {
@@ -238,7 +238,7 @@ class BattleAnimation {
 				this.battle.animationTarget.update();
 				this.battle.animationTarget.playSounds(this.getCondition());
 				Manager.Stack.requestPaintHUD = true;
-				if (this.battle.animationTarget.frame > this.battle.animationTarget.system.frames.length) {
+				if (this.battle.animationTarget.frame > this.battle.animationTarget.system.maxFrameID) {
 					this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
 					for (i = 0, l = this.battle.targets.length; i < l; i++) {
 						this.battle.targets[i].timeDamage = 0;
@@ -432,7 +432,7 @@ class BattleAnimation {
 			this.battle.reactionInterpretersEffects.length === 0 &&
 			(this.battle.user === null || !this.battle.user.isAttacking()) &&
 			(!this.battle.animationTarget ||
-				this.battle.animationTarget.frame > this.battle.animationTarget.system.frames.length)
+				this.battle.animationTarget.frame > this.battle.animationTarget.system.maxFrameID)
 		) {
 			for (i = 0, l = this.battle.targets.length; i < l; i++) {
 				this.battle.targets[i].drawDamages();

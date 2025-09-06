@@ -33,7 +33,7 @@ class StatusReleaseTurn extends Base {
 	 *  release turn
 	 */
 	read(json: Record<string, any>) {
-		this.operationTurnKind = Utils.defaultValue(json.operationTurnKind, OPERATION_KIND.GREATER_THAN_OR_EQUAL_TO);
+		this.operationTurnKind = Utils.valueOrDefault(json.operationTurnKind, OPERATION_KIND.GREATER_THAN_OR_EQUAL_TO);
 		this.turn = Model.DynamicValue.readOrDefaultNumber(json.turn, 1);
 		this.chance = Model.DynamicValue.readOrDefaultNumberDouble(json.chance);
 	}

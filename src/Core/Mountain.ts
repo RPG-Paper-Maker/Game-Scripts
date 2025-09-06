@@ -62,15 +62,15 @@ class Mountain extends MapElement {
 	read(json: Record<string, any>) {
 		super.read(json);
 
-		this.mountainID = Utils.defaultValue(json.sid, -1);
-		this.widthSquares = Utils.defaultValue(json.ws, 0);
-		this.widthPixels = Utils.defaultValue(json.wp, 0);
-		this.heightSquares = Utils.defaultValue(json.hs, 1);
-		this.heightPixels = Utils.defaultValue(json.hp, 0);
-		this.top = Utils.defaultValue(json.t, false);
-		this.bot = Utils.defaultValue(json.b, false);
-		this.left = Utils.defaultValue(json.l, false);
-		this.right = Utils.defaultValue(json.r, false);
+		this.mountainID = Utils.valueOrDefault(json.sid, -1);
+		this.widthSquares = Utils.valueOrDefault(json.ws, 0);
+		this.widthPixels = Utils.valueOrDefault(json.wp, 0);
+		this.heightSquares = Utils.valueOrDefault(json.hs, 1);
+		this.heightPixels = Utils.valueOrDefault(json.hp, 0);
+		this.top = Utils.valueOrDefault(json.t, false);
+		this.bot = Utils.valueOrDefault(json.b, false);
+		this.left = Utils.valueOrDefault(json.l, false);
+		this.right = Utils.valueOrDefault(json.r, false);
 
 		// Calculate angle
 		const width = this.getWidthTotalPixels();

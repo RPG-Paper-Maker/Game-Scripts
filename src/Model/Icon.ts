@@ -10,33 +10,43 @@
 */
 
 import { Utils } from '../Common';
-import { Translatable } from './Translatable';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  Something at least including an icon.
- *  @extends {System.Translatable}
- *  @param {Object} [json=undefined] - Json object describing the icon
+/**
+ * JSON schema for an icon.
  */
-class Icon extends Translatable {
+export type IconJSON = LocalizationJSON & {
+	pid: number;
+	pictureIndexX?: number;
+	pictureIndexY?: number;
+};
+
+/**
+ * Represents an icon, including picture ID and indices.
+ * Extends {@link Localization} to support translatable names.
+ */
+export class Icon extends Localization {
+	/** The ID of the picture representing this icon. */
 	public pictureID: number;
+
+	/** The X index in the picture sheet. */
 	public pictureIndexX: number;
+
+	/** The Y index in the picture sheet. */
 	public pictureIndexY: number;
 
-	constructor(json) {
+	constructor(json?: IconJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the icon.
-	 *  @param {Record<string, any>} - json Json object describing the icon
+	 * Reads the JSON data describing the icon.
+	 * @param json - The JSON object containing the icon data.
 	 */
-	read(json?: Record<string, any>) {
+	read(json: IconJSON): void {
 		super.read(json);
-
 		this.pictureID = json.pid;
-		this.pictureIndexX = Utils.defaultValue(json.pictureIndexX, 0);
-		this.pictureIndexY = Utils.defaultValue(json.pictureIndexY, 0);
+		this.pictureIndexX = Utils.valueOrDefault(json.pictureIndexX, 0);
+		this.pictureIndexY = Utils.valueOrDefault(json.pictureIndexY, 0);
 	}
 }
-
-export { Icon };

@@ -13,8 +13,8 @@ import { Utils } from '../Common';
 import { Skill } from '../Core';
 import { Datas, Model } from '../index';
 import { Class } from './Class';
+import { Localization } from './Localization';
 import { StatisticProgression } from './StatisticProgression';
-import { Translatable } from './Translatable';
 
 /** @class
  *  An hero of the game.
@@ -22,17 +22,17 @@ import { Translatable } from './Translatable';
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  hero
  */
-class Hero extends Translatable {
+class Hero extends Localization {
 	public class: Model.Class;
 	public idBattler: number;
 	public idFaceset: number;
 	public indexXFaceset: number;
 	public indexYFaceset: number;
 	public classInherit: Class;
-	public description: Model.Translatable;
+	public description: Model.Localization;
 
 	constructor(json: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Hero extends Translatable {
 	 *  @param {Record<string, any>} - json Json object describing the hero
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 		this.class = Datas.Classes.get(
 			json.class,
 			'Could not find the class in ' +
@@ -49,12 +49,12 @@ class Hero extends Translatable {
 				Utils.getIDName(json.id, this.name()) +
 				', please check your Data manager and add a correct class.'
 		);
-		this.idBattler = Utils.defaultValue(json.bid, -1);
-		this.idFaceset = Utils.defaultValue(json.fid, -1);
-		this.indexXFaceset = Utils.defaultValue(json.indexXFaceset, 0);
-		this.indexYFaceset = Utils.defaultValue(json.indexYFaceset, 0);
+		this.idBattler = Utils.valueOrDefault(json.bid, -1);
+		this.idFaceset = Utils.valueOrDefault(json.fid, -1);
+		this.indexXFaceset = Utils.valueOrDefault(json.indexXFaceset, 0);
+		this.indexYFaceset = Utils.valueOrDefault(json.indexYFaceset, 0);
 		this.classInherit = new Class(json.ci);
-		this.description = new Model.Translatable(json.description);
+		this.description = new Model.Localization(json.description);
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Hero extends Translatable {
 	 *  @returns {number}
 	 */
 	getProperty(prop: string, changedClass: Model.Class): any {
-		return Utils.defaultValue(changedClass, this.class).getProperty(prop, this.classInherit);
+		return Utils.valueOrDefault(changedClass, this.class).getProperty(prop, this.classInherit);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class Hero extends Translatable {
 	 *  @returns {Record<string, any>}
 	 */
 	getExperienceTable(changedClass: Model.Class): Record<string, any> {
-		return Utils.defaultValue(changedClass, this.class).getExperienceTable(this.classInherit);
+		return Utils.valueOrDefault(changedClass, this.class).getExperienceTable(this.classInherit);
 	}
 
 	/**
@@ -90,7 +90,7 @@ class Hero extends Translatable {
 	 *  @returns {System.Characteristic[]}
 	 */
 	getCharacteristics(changedClass: Model.Class): Model.Characteristic[] {
-		return Utils.defaultValue(changedClass, this.class).getCharacteristics(this.classInherit);
+		return Utils.valueOrDefault(changedClass, this.class).getCharacteristics(this.classInherit);
 	}
 
 	/**
@@ -99,7 +99,7 @@ class Hero extends Translatable {
 	 *  @returns {System.StatisticProgression[]}
 	 */
 	getStatisticsProgression(changedClass: Model.Class): StatisticProgression[] {
-		return Utils.defaultValue(changedClass, this.class).getStatisticsProgression(this.classInherit);
+		return Utils.valueOrDefault(changedClass, this.class).getStatisticsProgression(this.classInherit);
 	}
 
 	/**
@@ -109,7 +109,7 @@ class Hero extends Translatable {
 	 *  @returns {Skill[]}
 	 */
 	getSkills(level: number, changedClass: Model.Class): Skill[] {
-		return Utils.defaultValue(changedClass, this.class).getSkills(this.classInherit, level);
+		return Utils.valueOrDefault(changedClass, this.class).getSkills(this.classInherit, level);
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Hero extends Translatable {
 	 *  @returns {Skill[]}
 	 */
 	getLearnedSkills(level: number, changedClass: Model.Class): Skill[] {
-		return Utils.defaultValue(changedClass, this.class).getLearnedSkills(this.classInherit, level);
+		return Utils.valueOrDefault(changedClass, this.class).getLearnedSkills(this.classInherit, level);
 	}
 
 	/**

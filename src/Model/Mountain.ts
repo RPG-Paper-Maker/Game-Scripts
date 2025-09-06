@@ -34,7 +34,7 @@ class Mountain extends SpecialElement {
 		super.read(json);
 
 		this.id = json.id;
-		this.collisionKind = Utils.defaultValue(json.mck, MOUNTAIN_COLLISION_KIND.DEFAULT);
+		this.collisionKind = Utils.valueOrDefault(json.mck, MOUNTAIN_COLLISION_KIND.DEFAULT);
 	}
 
 	/**

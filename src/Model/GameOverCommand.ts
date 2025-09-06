@@ -12,20 +12,20 @@
 import { Manager, Model, Scene } from '..';
 import { GAME_OVER_COMMAND_KIND, Interpreter, Platform, Utils } from '../Common';
 import { Game } from '../Core';
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  A game over command of the game.
- *  @extends Model.Translatable
+ *  @extends Model.Localization
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  game over command
  */
-class GameOverCommand extends Translatable {
+class GameOverCommand extends Localization {
 	public kind: GAME_OVER_COMMAND_KIND;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -34,9 +34,9 @@ class GameOverCommand extends Translatable {
 	 *  over command
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
-		this.kind = Utils.defaultValue(json.k, GAME_OVER_COMMAND_KIND.CONTINUE);
-		this.script = Utils.defaultValue(json.s, '');
+		super.read(json as any);
+		this.kind = Utils.valueOrDefault(json.k, GAME_OVER_COMMAND_KIND.CONTINUE);
+		this.script = Utils.valueOrDefault(json.s, '');
 	}
 
 	/**

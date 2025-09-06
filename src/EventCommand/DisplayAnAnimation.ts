@@ -45,7 +45,7 @@ class DisplayAnAnimation extends Base {
 		return {
 			parallel: this.isWaitEnd,
 			animation: animation,
-			frameMax: animation.system.frames.length - 1,
+			frameMax: animation.system.maxFrameID,
 			object: null,
 			waitingObject: false,
 		};

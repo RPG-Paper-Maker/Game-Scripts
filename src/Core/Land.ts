@@ -36,7 +36,7 @@ class Land extends MapElement {
 	 */
 	read(json: Record<string, any>) {
 		super.read(json);
-		this.up = Utils.defaultValue(json.up, true);
+		this.up = Utils.valueOrDefault(json.up, true);
 		this.texture = json.t;
 		if (this.texture.length === 2) {
 			this.texture.push(1);

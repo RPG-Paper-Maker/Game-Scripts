@@ -10,7 +10,7 @@
 */
 
 import { Utils } from '../Common';
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  A statistic of the game.
@@ -18,7 +18,7 @@ import { Translatable } from './Translatable';
  *  @param {Record<string, any>} - [json=undefined] Json object describing the
  *  statistic
  */
-class Statistic extends Translatable {
+class Statistic extends Localization {
 	public suffixName: string;
 	public abbreviation: string;
 	public isFix: boolean;
@@ -26,7 +26,7 @@ class Statistic extends Translatable {
 	public isRes: boolean;
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 		this.suffixName = '';
 	}
 
@@ -67,10 +67,10 @@ class Statistic extends Translatable {
 	 *  @param {Record<string, any>} - json Json object describing the statistic
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 		this.abbreviation = json.abr;
 		this.isFix = json.fix;
-		this.pictureBarID = Utils.defaultValue(json.pid, -1);
+		this.pictureBarID = Utils.valueOrDefault(json.pid, -1);
 	}
 
 	/**

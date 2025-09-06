@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Inputs, Platform, Utils } from './Common';
+import { Inputs, Platform } from './Common';
 import { Datas, Manager } from './index';
 
 /**
@@ -144,7 +144,7 @@ export class Main {
 //
 // -------------------------------------------------------
 
-Utils.tryCatch(Main.initialize);
+Main.initialize().catch(console.error);
 
 // -------------------------------------------------------
 //

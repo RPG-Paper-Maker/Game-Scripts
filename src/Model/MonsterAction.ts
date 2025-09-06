@@ -54,7 +54,7 @@ class MonsterAction extends Base {
 	 *  action
 	 */
 	read(json: Record<string, any>) {
-		this.actionKind = Utils.defaultValue(json.ak, MONSTER_ACTION_KIND.DO_NOTHING);
+		this.actionKind = Utils.valueOrDefault(json.ak, MONSTER_ACTION_KIND.DO_NOTHING);
 		switch (this.actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL:
 				this.skillID = DynamicValue.readOrDefaultNumber(json.sid, 1);
@@ -67,29 +67,29 @@ class MonsterAction extends Base {
 				break;
 		}
 		this.priority = DynamicValue.readOrDefaultNumber(json.p, 10);
-		this.targetKind = Utils.defaultValue(json.tk, MONSTER_ACTION_TARGET_KIND.RANDOM);
-		this.isConditionTurn = Utils.defaultValue(json.ict, false);
+		this.targetKind = Utils.valueOrDefault(json.tk, MONSTER_ACTION_TARGET_KIND.RANDOM);
+		this.isConditionTurn = Utils.valueOrDefault(json.ict, false);
 		if (this.isConditionTurn) {
-			this.operationKindTurn = Utils.defaultValue(json.okt, OPERATION_KIND.EQUAL_TO);
+			this.operationKindTurn = Utils.valueOrDefault(json.okt, OPERATION_KIND.EQUAL_TO);
 			this.turnValueCompare = DynamicValue.readOrDefaultNumber(json.tvc, 0);
 		}
-		this.isConditionStatistic = Utils.defaultValue(json.ics, false);
+		this.isConditionStatistic = Utils.valueOrDefault(json.ics, false);
 		if (this.isConditionStatistic) {
 			this.statisticID = DynamicValue.readOrDefaultDatabase(json.stid);
-			this.operationKindStatistic = Utils.defaultValue(json.oks, OPERATION_KIND.EQUAL_TO);
+			this.operationKindStatistic = Utils.valueOrDefault(json.oks, OPERATION_KIND.EQUAL_TO);
 			this.statisticValueCompare = DynamicValue.readOrDefaultNumber(json.svc, 0);
 		}
-		this.isConditionVariable = Utils.defaultValue(json.icv, false);
+		this.isConditionVariable = Utils.valueOrDefault(json.icv, false);
 		if (this.isConditionVariable) {
-			this.variableID = Utils.defaultValue(json.vid, 1);
-			this.operationKindVariable = Utils.defaultValue(json.okv, OPERATION_KIND.EQUAL_TO);
+			this.variableID = Utils.valueOrDefault(json.vid, 1);
+			this.operationKindVariable = Utils.valueOrDefault(json.okv, OPERATION_KIND.EQUAL_TO);
 			this.variableValueCompare = DynamicValue.readOrDefaultNumber(json.vvc, 0);
 		}
-		this.isConditionStatus = Utils.defaultValue(json.icst, false);
+		this.isConditionStatus = Utils.valueOrDefault(json.icst, false);
 		if (this.isConditionStatus) {
 			this.statusID = DynamicValue.readOrDefaultNumber(json.stsid, 0);
 		}
-		this.isConditionScript = Utils.defaultValue(json.icsc, false);
+		this.isConditionScript = Utils.valueOrDefault(json.icsc, false);
 		if (this.isConditionScript) {
 			this.script = DynamicValue.readOrDefaultMessage(json.s, '');
 		}

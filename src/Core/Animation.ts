@@ -39,7 +39,7 @@ class Animation {
 	update() {
 		this.frame++;
 		if (this.loop) {
-			this.frame = this.frame % this.system.frames.length;
+			this.frame = this.frame % this.system.maxFrameID;
 		}
 	}
 

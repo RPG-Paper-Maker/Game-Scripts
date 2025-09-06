@@ -28,7 +28,7 @@ class Skill extends CommonSkillItem {
 	 *  @param {Record<string, any>} - json Json object describing the skill
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 	}
 
 	/**

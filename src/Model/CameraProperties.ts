@@ -53,13 +53,13 @@ class CameraProperties extends Base {
 		this.targetOffsetX = DynamicValue.readOrDefaultNumber(json.tox, 0);
 		this.targetOffsetY = DynamicValue.readOrDefaultNumber(json.toy, 0);
 		this.targetOffsetZ = DynamicValue.readOrDefaultNumber(json.toz, 0);
-		this.isSquareTargetOffsetX = Utils.defaultValue(json.istox, true);
-		this.isSquareTargetOffsetY = Utils.defaultValue(json.istoy, true);
-		this.isSquareTargetOffsetZ = Utils.defaultValue(json.istoz, true);
+		this.isSquareTargetOffsetX = Utils.valueOrDefault(json.istox, true);
+		this.isSquareTargetOffsetY = Utils.valueOrDefault(json.istoy, true);
+		this.isSquareTargetOffsetZ = Utils.valueOrDefault(json.istoz, true);
 		this.fov = DynamicValue.readOrDefaultNumberDouble(json.fov, 45);
 		this.near = DynamicValue.readOrDefaultNumberDouble(json.n, 1);
 		this.far = DynamicValue.readOrDefaultNumberDouble(json.f, 100000);
-		this.orthographic = Utils.defaultValue(json.o, false);
+		this.orthographic = Utils.valueOrDefault(json.o, false);
 	}
 
 	/**

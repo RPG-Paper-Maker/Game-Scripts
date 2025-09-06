@@ -31,7 +31,7 @@ class SpecialElement extends Base {
 	 *  element
 	 */
 	read(json: Record<string, any>) {
-		this.pictureID = Utils.defaultValue(json.pic, -1);
+		this.pictureID = Utils.valueOrDefault(json.pic, -1);
 	}
 }
 

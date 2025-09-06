@@ -34,8 +34,8 @@ class HeroTroopBattleTestEquipment extends Base {
 	 */
 	read(json: Record<string, any>) {
 		this.id = json.id;
-		this.kind = Utils.defaultValue(json.kind, 0);
-		this.weaponArmorID = Utils.defaultValue(json.weaponArmorID, 1);
+		this.kind = Utils.valueOrDefault(json.kind, 0);
+		this.weaponArmorID = Utils.valueOrDefault(json.weaponArmorID, 1);
 	}
 
 	/**

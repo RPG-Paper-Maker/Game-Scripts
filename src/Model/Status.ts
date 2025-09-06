@@ -37,7 +37,7 @@ class Status extends Icon {
 	public characteristics: Model.Characteristic[];
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -45,19 +45,19 @@ class Status extends Icon {
 	 *  @param {Record<string, any>} - json Json object describing the status
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 		this.id = json.id;
 		this.animationID = Model.DynamicValue.readOrNone(json.animationID);
-		this.restrictionKind = Utils.defaultValue(json.restrictionKind, STATUS_RESTRICTIONS_KIND.NONE);
+		this.restrictionKind = Utils.valueOrDefault(json.restrictionKind, STATUS_RESTRICTIONS_KIND.NONE);
 		this.priority = Model.DynamicValue.readOrDefaultNumber(json.priority);
 		this.battlerPosition = Model.DynamicValue.readOrDefaultNumber(json.battlerPosition);
-		this.isReleaseAtEndBattle = Utils.defaultValue(json.isReleaseAtEndBattle, false);
-		this.isReleaseAfterAttacked = Utils.defaultValue(json.isReleaseAfterAttacked, false);
+		this.isReleaseAtEndBattle = Utils.valueOrDefault(json.isReleaseAtEndBattle, false);
+		this.isReleaseAfterAttacked = Utils.valueOrDefault(json.isReleaseAfterAttacked, false);
 		this.chanceReleaseAfterAttacked = Model.DynamicValue.readOrDefaultNumberDouble(json.chanceReleaseAfterAttacked);
-		this.isReleaseStartTurn = Utils.defaultValue(json.isReleaseStartTurn, false);
+		this.isReleaseStartTurn = Utils.valueOrDefault(json.isReleaseStartTurn, false);
 		this.releaseStartTurn = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.releaseStartTurn, []),
+			list: Utils.valueOrDefault(json.releaseStartTurn, []),
 			listIndexes: this.releaseStartTurn,
 			cons: Model.StatusReleaseTurn,
 		});
@@ -67,13 +67,13 @@ class Status extends Icon {
 		this.messageStatusStillAffected = Model.DynamicValue.readOrDefaultMessage(json.messageStatusStillAffected);
 		this.effects = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.effects, []),
+			list: Utils.valueOrDefault(json.effects, []),
 			listIndexes: this.effects,
 			cons: Model.Effect,
 		});
 		this.characteristics = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.characteristics, []),
+			list: Utils.valueOrDefault(json.characteristics, []),
 			listIndexes: this.characteristics,
 			cons: Model.Characteristic,
 		});

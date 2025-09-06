@@ -34,13 +34,13 @@ class Troop extends Base {
 	read(json: Record<string, any>) {
 		this.list = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.l, []),
+			list: Utils.valueOrDefault(json.l, []),
 			listIndexes: this.list,
 			cons: Model.TroopMonster,
 		});
 		this.reactions = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.reactions, []),
+			list: Utils.valueOrDefault(json.reactions, []),
 			listIndexes: this.reactions,
 			cons: Model.TroopReaction,
 		});

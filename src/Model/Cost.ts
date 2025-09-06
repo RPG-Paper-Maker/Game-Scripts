@@ -63,7 +63,7 @@ class Cost extends Base {
 	 *  @param {Record<string, any>} - json Json object describing the cost
 	 */
 	read(json: Record<string, any>) {
-		this.kind = Utils.defaultValue(json.k, DAMAGES_KIND.STAT);
+		this.kind = Utils.valueOrDefault(json.k, DAMAGES_KIND.STAT);
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
 				this.statisticID = DynamicValue.readOrDefaultDatabase(json.sid);
@@ -72,7 +72,7 @@ class Cost extends Base {
 				this.currencyID = DynamicValue.readOrDefaultDatabase(json.cid);
 				break;
 			case DAMAGES_KIND.VARIABLE:
-				this.variableID = Utils.defaultValue(json.vid, 1);
+				this.variableID = Utils.valueOrDefault(json.vid, 1);
 				break;
 		}
 		this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);

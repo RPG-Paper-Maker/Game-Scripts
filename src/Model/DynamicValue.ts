@@ -15,22 +15,22 @@ import { Game, ReactionInterpreter } from '../Core';
 import { StructIterator } from '../EventCommand';
 import { Datas, Model } from '../index';
 
-interface StructJSON {
+export type DynamicValueJSON = {
 	k: DYNAMIC_VALUE_KIND;
 	v: any;
-	x: StructJSON;
-	y: StructJSON;
-	z: StructJSON;
+	x: DynamicValueJSON;
+	y: DynamicValueJSON;
+	z: DynamicValueJSON;
 	customStructure?: Record<string, any>;
 	customList?: Record<string, any>;
-}
+};
 
 /** @class
  *  The class who handle dynamic value.
  *  @extends {System.Base}
  *  @param {Record<string, any>} - [json=undefined] Json object describing the value
  */
-class DynamicValue extends Model.Base {
+export class DynamicValue extends Model.Base {
 	public kind: DYNAMIC_VALUE_KIND;
 	public value: any;
 	public customStructure: Record<string, Model.DynamicValue>;
@@ -200,44 +200,44 @@ class DynamicValue extends Model.Base {
 	/**
 	 *  Try to read a variable value, if not possible put default value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @param {number} [n=0] - The default value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultVariable(json: StructJSON): Model.DynamicValue {
+	static readOrDefaultVariable(json: DynamicValueJSON): Model.DynamicValue {
 		return json === undefined ? Model.DynamicValue.createVariable(1) : Model.DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a number value, if not possible put default value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @param {number} [n=0] - The default value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultNumber(json: StructJSON, n: number = 0): Model.DynamicValue {
+	static readOrDefaultNumber(json: DynamicValueJSON, n: number = 0): Model.DynamicValue {
 		return json === undefined ? Model.DynamicValue.createNumber(n) : Model.DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a double number value, if not possible put default value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @param {number} [n=0] - The default value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultNumberDouble(json: StructJSON, n: number = 0): Model.DynamicValue {
+	static readOrDefaultNumberDouble(json: DynamicValueJSON, n: number = 0): Model.DynamicValue {
 		return json === undefined ? Model.DynamicValue.createNumberDouble(n) : Model.DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a database value, if not possible put default value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @param {number} [id=1] - The default value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultDatabase(json: StructJSON, id: number = 1): Model.DynamicValue {
+	static readOrDefaultDatabase(json: DynamicValueJSON, id: number = 1): Model.DynamicValue {
 		return json === undefined
 			? Model.DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, id)
 			: Model.DynamicValue.readFromJSON(json);
@@ -246,11 +246,11 @@ class DynamicValue extends Model.Base {
 	/**
 	 *  Try to read a message value, if not possible put default value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @param {string} [m=""] - The default value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultMessage(json: StructJSON, m: string = ''): Model.DynamicValue {
+	static readOrDefaultMessage(json: DynamicValueJSON, m: string = ''): Model.DynamicValue {
 		return json === undefined
 			? Model.DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m)
 			: Model.DynamicValue.readFromJSON(json);
@@ -259,31 +259,31 @@ class DynamicValue extends Model.Base {
 	/**
 	 *  Try to read a switch value, if not possible put default value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @param {boolean} [s=true] - The default value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultSwitch(json: StructJSON, s: boolean = true): Model.DynamicValue {
+	static readOrDefaultSwitch(json: DynamicValueJSON, s: boolean = true): Model.DynamicValue {
 		return json === undefined ? Model.DynamicValue.createSwitch(s) : Model.DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a value, if not possible put none value.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrNone(json: StructJSON): Model.DynamicValue {
+	static readOrNone(json: DynamicValueJSON): Model.DynamicValue {
 		return json === undefined ? Model.DynamicValue.createNone() : Model.DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Read a value of any kind and return it.
 	 *  @static
-	 *  @param {StructJSONDynamicValue} json - The json value
+	 *  @param {DynamicValueJSONDynamicValue} json - The json value
 	 *  @returns {Model.DynamicValue}
 	 */
-	static readFromJSON(json: StructJSON): Model.DynamicValue {
+	static readFromJSON(json: DynamicValueJSON): Model.DynamicValue {
 		const value = new Model.DynamicValue();
 		value.read(json);
 		return value;
@@ -291,7 +291,7 @@ class DynamicValue extends Model.Base {
 
 	/**
 	 *  Read the JSON associated to the value
-	 *  @param {StructJSONDynamicValue} json - Json object describing the value
+	 *  @param {DynamicValueJSONDynamicValue} json - Json object describing the value
 	 */
 	read(json: any) {
 		this.kind = json.k;
@@ -300,7 +300,7 @@ class DynamicValue extends Model.Base {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				this.customStructure = {};
-				const jsonList = Utils.defaultValue(json.customStructure.properties, []);
+				const jsonList = Utils.valueOrDefault(json.customStructure.properties, []);
 				let parameter: Model.DynamicValue, jsonParameter: Record<string, any>;
 				for (let i = 0, l = jsonList.length; i < l; i++) {
 					jsonParameter = jsonList[i];
@@ -311,7 +311,7 @@ class DynamicValue extends Model.Base {
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
 				this.customList = [];
 				Utils.readJSONSystemList({
-					list: Utils.defaultValue(json.customList.list, []),
+					list: Utils.valueOrDefault(json.customList.list, []),
 					listIndexes: this.customList,
 					func: (jsonParameter: Record<string, any>) => {
 						return Model.DynamicValue.readOrDefaultNumber(jsonParameter.value);
@@ -514,5 +514,3 @@ class DynamicValue extends Model.Base {
 		return Model.DynamicValue.create(this.kind, this.value);
 	}
 }
-
-export { DynamicValue, StructJSON };

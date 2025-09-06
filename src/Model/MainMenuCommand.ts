@@ -12,19 +12,19 @@
 import { Manager, Scene } from '..';
 import { Interpreter, MAIN_MENU_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
-import { Translatable } from './Translatable';
+import { Localization } from './Localization';
 
 /** @class
  *  A main menu command in scene main menu.
- *  @extends Translatable
+ *  @extends Localization
  *  @param {Record<string, any>} [json=undefined] - Json object describing the item
  */
-class MainMenuCommand extends Translatable {
+class MainMenuCommand extends Localization {
 	public kind: MAIN_MENU_COMMAND_KIND;
 	public script: string;
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -33,10 +33,10 @@ class MainMenuCommand extends Translatable {
 	 *  menu command.
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
-		this.kind = Utils.defaultValue(json.kind, MAIN_MENU_COMMAND_KIND.INVENTORY);
+		super.read(json as any);
+		this.kind = Utils.valueOrDefault(json.kind, MAIN_MENU_COMMAND_KIND.INVENTORY);
 		if (this.kind === MAIN_MENU_COMMAND_KIND.SCRIPT) {
-			this.script = Utils.defaultValue(json.script, '');
+			this.script = Utils.valueOrDefault(json.script, '');
 		}
 	}
 

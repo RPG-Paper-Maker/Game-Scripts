@@ -26,7 +26,7 @@ import { PlaySong } from './PlaySong';
  */
 class MapProperties extends Base {
 	public id: number;
-	public names: Model.Translatable;
+	public names: Model.Localization;
 	public length: number;
 	public width: number;
 	public height: number;
@@ -69,7 +69,7 @@ class MapProperties extends Base {
 		this.skyboxGeometry = null;
 		this.skyboxMesh = null;
 		this.id = json.id;
-		this.names = new Model.Translatable(json);
+		this.names = new Model.Localization(json as any);
 		this.length = json.l;
 		this.width = json.w;
 		this.height = json.h;
@@ -80,14 +80,14 @@ class MapProperties extends Base {
 		if (datas === undefined) {
 			datas = {};
 		}
-		this.tileset = Datas.Tilesets.get(Utils.defaultValue(datas.tileset, json.tileset));
-		this.music = new PlaySong(SONG_KIND.MUSIC, Utils.defaultValue(datas.music, json.music));
+		this.tileset = Datas.Tilesets.get(Utils.valueOrDefault(datas.tileset, json.tileset));
+		this.music = new PlaySong(SONG_KIND.MUSIC, Utils.valueOrDefault(datas.music, json.music));
 		this.backgroundSound = new PlaySong(
 			SONG_KIND.BACKGROUND_SOUND,
-			Utils.defaultValue(datas.backgroundSound, json.bgs)
+			Utils.valueOrDefault(datas.backgroundSound, json.bgs)
 		);
 		this.cameraProperties = Datas.Systems.getCameraProperties(
-			Utils.defaultValue(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue())
+			Utils.valueOrDefault(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue())
 		);
 		let kind = -1;
 		if (datas.color !== undefined) {
@@ -116,7 +116,7 @@ class MapProperties extends Base {
 		this.randomBattleMapID = Model.DynamicValue.readOrDefaultDatabase(json.randomBattleMapID);
 		this.randomBattles = [];
 		Utils.readJSONSystemList({
-			list: Utils.defaultValue(json.randomBattles, []),
+			list: Utils.valueOrDefault(json.randomBattles, []),
 			listIndexes: this.randomBattles,
 			cons: Model.RandomBattle,
 		});
@@ -124,7 +124,7 @@ class MapProperties extends Base {
 		this.randomBattleVariance = Model.DynamicValue.readOrDefaultNumber(json.randomBattleVariance, 20);
 		this.updateMaxNumberSteps();
 
-		this.isSunLight = Utils.defaultValue(json.isl, true);
+		this.isSunLight = Utils.valueOrDefault(json.isl, true);
 
 		this.readObjects(json);
 	}

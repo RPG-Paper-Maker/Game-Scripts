@@ -22,7 +22,7 @@ class Currency extends Icon {
 	public displayInMenu: Model.DynamicValue;
 
 	constructor(json?: Record<string, any>) {
-		super(json);
+		super(json as any);
 	}
 
 	/**
@@ -30,7 +30,7 @@ class Currency extends Icon {
 	 *  @param {Record<string, any>} - json Json object describing the cost
 	 */
 	read(json: Record<string, any>) {
-		super.read(json);
+		super.read(json as any);
 		this.displayInMenu = Model.DynamicValue.readOrDefaultSwitch(json.dim, true);
 	}
 }
