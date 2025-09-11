@@ -307,16 +307,16 @@ class Message extends Graphic.Base {
 						text = value;
 						break;
 					case TAG_KIND.VARIABLE:
-						text = String(value.getValue());
+						text = String(value.getValue() as number);
 						break;
 					case TAG_KIND.PARAMETER:
-						text = String(value.getValue());
+						text = String(value.getValue() as number);
 						break;
 					case TAG_KIND.PROPERTY:
-						text = String(value.getValue());
+						text = String(value.getValue() as number);
 						break;
 					case TAG_KIND.HERO_NAME:
-						text = Game.current.getHeroByInstanceID(value.getValue()).name;
+						text = Game.current.getHeroByInstanceID(value.getValue() as number).name;
 						break;
 				}
 				const graphic = new Graphic.Text(text, {
@@ -378,7 +378,7 @@ class Message extends Graphic.Base {
 				break;
 			case TAG_KIND.SIZE:
 				size = result.cs;
-				result.cs = Datas.Systems.getFontSize(value).getValue();
+				result.cs = Datas.Systems.getFontSize(value).getValue() as number;
 				break;
 			case TAG_KIND.FONT:
 				font = result.cf;

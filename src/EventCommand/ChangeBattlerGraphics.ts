@@ -85,7 +85,7 @@ class ChangeBattlerGraphics extends Base {
 				}
 				break;
 			case 1: // Hero instance ID
-				const id = this.battlerHeroEnemyInstanceID.getValue();
+				const id = this.battlerHeroEnemyInstanceID.getValue() as number;
 				if (Scene.Map.current.isBattleMap) {
 					for (const [i, b] of map.battlers[CHARACTER_KIND.HERO].entries()) {
 						if (b.player.instid === id) {
@@ -119,10 +119,10 @@ class ChangeBattlerGraphics extends Base {
 		}
 		if (player) {
 			if (this.battlerID) {
-				player.battlerID = this.battlerID.getValue();
+				player.battlerID = this.battlerID.getValue() as number;
 			}
 			if (this.facesetID) {
-				player.facesetID = this.facesetID.getValue();
+				player.facesetID = this.facesetID.getValue() as number;
 				player.facesetIndexX = this.facesetIndexX;
 				player.facesetIndexY = this.facesetIndexY;
 			}

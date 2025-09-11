@@ -93,8 +93,11 @@ class TeleportObject extends Base {
 			transitionedStart: this.transitionStart === 0,
 			transitionedEnd: this.transitionEnd === 0,
 			startColor:
-				this.transitionStart === 1 ? Datas.Systems.getColor(this.transitionStartColor.getValue()) : null,
-			endColor: this.transitionEnd === 1 ? Datas.Systems.getColor(this.transitionEndColor.getValue()) : null,
+				this.transitionStart === 1
+					? Datas.Systems.getColor(this.transitionStartColor.getValue() as number)
+					: null,
+			endColor:
+				this.transitionEnd === 1 ? Datas.Systems.getColor(this.transitionEndColor.getValue() as number) : null,
 			transitionColorAlpha: 0,
 			distance: Scene.Map.current.camera.distance,
 			transitioning: false,
@@ -133,19 +136,19 @@ class TeleportObject extends Base {
 		}
 		// Search object
 		if (!currentState.waitingObject) {
-			const objectID = this.objectID.getValue();
+			const objectID = this.objectID.getValue() as number;
 			if (!currentState.waitingPosition) {
 				// Set object's position
 				if (this.objectIDPosition === null) {
 					currentState.position = new Position(
-						this.x.getValue(),
-						this.y.getValue(),
-						this.z.getValue(),
-						(this.yPlus.getValue() * 100) / Datas.Systems.SQUARE_SIZE
+						this.x.getValue() as number,
+						this.y.getValue() as number,
+						this.z.getValue() as number,
+						((this.yPlus.getValue() as number) * 100) / Datas.Systems.SQUARE_SIZE
 					).toVector3();
 				} else {
 					MapObject.search(
-						this.objectIDPosition.getValue(),
+						this.objectIDPosition.getValue() as number,
 						(result: StructSearchResult) => {
 							currentState.position = result.object.position;
 						},
@@ -161,7 +164,7 @@ class TeleportObject extends Base {
 						// If needs teleport hero in another map
 						let needReload = false;
 						if (this.mapID !== null) {
-							const id = this.mapID.getValue();
+							const id = this.mapID.getValue() as number;
 
 							// If hero set the current map
 							if (result.object.isHero) {

@@ -16,6 +16,7 @@ import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
+import { Rectangle } from './Rectangle';
 import { Sprite } from './Sprite';
 
 /** @class
@@ -24,7 +25,7 @@ import { Sprite } from './Sprite';
  */
 class Land extends MapElement {
 	public up: boolean;
-	public texture: number[];
+	public texture: Rectangle;
 
 	constructor() {
 		super();
@@ -37,11 +38,7 @@ class Land extends MapElement {
 	read(json: Record<string, any>) {
 		super.read(json);
 		this.up = Utils.valueOrDefault(json.up, true);
-		this.texture = json.t;
-		if (this.texture.length === 2) {
-			this.texture.push(1);
-			this.texture.push(1);
-		}
+		this.texture = Rectangle.createFromArray(json.t);
 	}
 
 	/**
@@ -50,7 +47,7 @@ class Land extends MapElement {
 	 *  @returns {number}
 	 */
 	getIndex(width: number): number {
-		return this.texture[0] + this.texture[1] * width;
+		return this.texture.x + this.texture.y * width;
 	}
 
 	/**
@@ -120,23 +117,24 @@ class Land extends MapElement {
 
 		// Collision
 		if (collision !== null) {
-			let rect = collision.rect;
+			const rect = collision.rect;
 			if (!collision.hasAllDirections() || collision.terrain > 0) {
-				if (rect === null) {
-					rect = [0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE];
-				}
-				rect = [a + rect[0], b + 0.5, c + rect[1], rect[2], rect[3], 1, 0];
+				let rectB =
+					rect === null
+						? [0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE]
+						: [rect.x, rect.y, rect.width, rect.height];
+				rectB = [a + rectB[0], b + 0.5, c + rectB[1], rectB[2], rectB[3], 1, 0];
 				objCollision = {
 					p: position,
 					l: localPosition,
-					b: rect,
+					b: rectB,
 					cs: collision,
 				};
 			} else if (rect !== null) {
 				objCollision = {
 					p: position,
 					l: localPosition,
-					b: [a + rect[0], b + 0.5, c + rect[1], rect[2], rect[3], 1, 0],
+					b: [a + rect.x, b + 0.5, c + rect.y, rect.width, rect.height, 1, 0],
 					cs: null,
 				};
 			}

@@ -11,6 +11,7 @@
 
 import { Paths, Platform, SONG_KIND } from '../Common';
 import { Datas, Model } from '../index';
+import { SongJSON } from '../Model';
 
 /** @class
  *   All the songs datas
@@ -36,8 +37,8 @@ class Songs {
 			n: number,
 			jsonHash: Record<string, any>,
 			k: SONG_KIND,
-			jsonList: Record<string, any>[],
-			jsonSong: Record<string, any>,
+			jsonList: SongJSON[],
+			jsonSong: SongJSON,
 			id: number,
 			list: Model.Song[],
 			song: Model.Song;

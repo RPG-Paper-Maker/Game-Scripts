@@ -10,7 +10,7 @@
 */
 
 import { Constants } from './index';
-import { JsonObject } from './Types';
+import { JsonType } from './Types';
 
 interface SystemJsonList<T = any> {
 	list: Record<string, any>[];
@@ -151,8 +151,8 @@ export class Utils {
 	 * JSON entries without an `id` will default to `0` for sorting purposes.
 	 */
 	public static readJSONList<T>(
-		jsonList: JsonObject[] = [],
-		transformFn: (new (data: JsonObject) => T) | ((data: JsonObject) => T),
+		jsonList: JsonType[] = [],
+		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T),
 		ordered = false
 	): T[] {
 		const list = jsonList;
@@ -162,10 +162,10 @@ export class Utils {
 		return list.map((json) => {
 			if (transformFn.prototype && typeof transformFn === 'function') {
 				// Called as constructor
-				return new (transformFn as new (data: JsonObject) => T)(json);
+				return new (transformFn as new (data: JsonType) => T)(json);
 			} else {
 				// Called as regular function
-				return (transformFn as (data: JsonObject) => T)(json);
+				return (transformFn as (data: JsonType) => T)(json);
 			}
 		});
 	}
@@ -174,42 +174,54 @@ export class Utils {
 	 * Converts a list of JSON objects into a `Map<number, T>`,
 	 * using a provided transform function or constructor.
 	 * @template T - The target type to transform each JSON object into.
-	 * @param {JsonObject[]} [jsonList=[]] - An array of JSON objects. Each must contain an `id` field (numeric).
-	 * @param {(new (data: JsonObject) => T) | ((data: JsonObject) => T)} transformFn -
+	 * @param {JsonType[]} [jsonList=[]] - An array of JSON objects. Each must contain an `id` field (numeric).
+	 * @param {(new (data: JsonType) => T) | ((data: JsonType) => T)} transformFn -
 	 *   Either a class constructor or a plain function to transform each JSON object into type `T`.
 	 * @returns {Map<number, T>} A map where:
 	 *   - The key is the `id` property of each JSON object.
 	 *   - The value is the transformed object of type `T`.
 	 */
 	public static readJSONMap<T>(
-		jsonList: JsonObject[] = [],
-		transformFn: (new (data: JsonObject) => T) | ((data: JsonObject) => T)
+		jsonList: JsonType[] = [],
+		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T)
 	): Map<number, T> {
 		return new Map(
 			jsonList.map<[number, T]>((json) => {
 				let item: T;
 				if (typeof transformFn === 'function' && 'prototype' in transformFn) {
 					// Called as constructor
-					item = new (transformFn as new (data: JsonObject) => T)(json);
+					item = new (transformFn as new (data: JsonType) => T)(json);
 				} else {
 					// Called as regular function
-					item = (transformFn as (data: JsonObject) => T)(json);
+					item = (transformFn as (data: JsonType) => T)(json);
 				}
 				return [(json.id as number) ?? 0, item];
 			})
 		);
 	}
 
+	/**
+	 * Get the maximum numeric key in a Map.
+	 * @param {Map<number, unknown>} map - The map to check.
+	 * @returns {number} The maximum key in the map, or 0 if the map is empty.
+	 */
 	public static getMapMaxID(map: Map<number, unknown>): number {
 		return map.size > 0 ? Math.max(...map.keys()) : 0;
 	}
 
+	public static arrayToMap<T>(array: T[]): Map<number, T> {
+		return new Map(array.map((value, index) => [index + 1, value]));
+	}
+
 	/**
-	 * Finds the index of an object in an array based on a property value.
-	 * @param array - The array to search
-	 * @param attr - The property name
-	 * @param value - The value to match
-	 * @returns The index if found, otherwise -1
+	 * Convert an array into a Map where keys start at 1.
+	 *
+	 * Example:
+	 *   ["a", "b"] → Map { 1 => "a", 2 => "b" }
+	 *
+	 * @template T - The type of the array elements.
+	 * @param {T[]} array - The input array.
+	 * @returns {Map<number, T>} A Map with 1-based indexes as keys.
 	 */
 	public static indexOfProp<T extends Record<string, unknown>>(array: T[], attr: keyof T, value: unknown): number {
 		return array.findIndex((item) => item[attr] === value);

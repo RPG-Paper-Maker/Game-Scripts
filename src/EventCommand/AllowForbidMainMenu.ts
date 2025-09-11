@@ -38,7 +38,7 @@ class AllowForbidMainMenu extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		Scene.Map.allowMainMenu = this.allow.getValue();
+		Scene.Map.allowMainMenu = this.allow.getValue() as boolean;
 		return 1;
 	}
 }

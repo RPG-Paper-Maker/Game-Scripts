@@ -34,51 +34,17 @@ export type AnimationFrameElementJSON = {
  * (zoom, angle, flip), and opacity.
  */
 class AnimationFrameElement extends Base {
-	/** X offset from the animation's origin. */
 	public x: number;
-
-	/** Y offset from the animation's origin. */
 	public y: number;
-
-	/** The row index in the texture. */
 	public texRow: number;
-
-	/** The column index in the texture. */
 	public texCol: number;
-
-	/** Zoom factor (1 = 100%). */
 	public zoom: number;
-
-	/** Rotation angle in degrees. */
 	public angle: number;
-
-	/** Whether the element is flipped horizontally. */
 	public flip: boolean;
-
-	/** Opacity factor (1 = fully visible, 0 = invisible). */
 	public opacity: number;
 
-	/**
-	 * Creates an AnimationFrameElement from JSON.
-	 * @param json - JSON object describing the animation frame element.
-	 */
 	constructor(json?: AnimationFrameElementJSON) {
 		super(json);
-	}
-
-	/**
-	 * Reads the JSON data associated with this frame element.
-	 * @param json - The JSON object describing the frame element.
-	 */
-	read(json: AnimationFrameElementJSON): void {
-		this.x = Utils.valueOrDefault(json.x, 0);
-		this.y = Utils.valueOrDefault(json.y, 0);
-		this.texRow = Utils.valueOrDefault(json.tr, 0);
-		this.texCol = Utils.valueOrDefault(json.tc, 0);
-		this.zoom = Utils.valueOrDefault(json.z, 100) / 100;
-		this.angle = Utils.valueOrDefault(json.a, 0);
-		this.flip = Utils.valueOrDefault(json.fv, false);
-		this.opacity = Utils.valueOrDefault(json.o, 100) / 100;
 	}
 
 	/**
@@ -106,6 +72,20 @@ class AnimationFrameElement extends Base {
 			sw: w,
 			sh: h,
 		});
+	}
+
+	/**
+	 * Reads the JSON data associated with this frame element.
+	 */
+	read(json: AnimationFrameElementJSON): void {
+		this.x = Utils.valueOrDefault(json.x, 0);
+		this.y = Utils.valueOrDefault(json.y, 0);
+		this.texRow = Utils.valueOrDefault(json.tr, 0);
+		this.texCol = Utils.valueOrDefault(json.tc, 0);
+		this.zoom = Utils.valueOrDefault(json.z, 100) / 100;
+		this.angle = Utils.valueOrDefault(json.a, 0);
+		this.flip = Utils.valueOrDefault(json.fv, false);
+		this.opacity = Utils.valueOrDefault(json.o, 100) / 100;
 	}
 }
 

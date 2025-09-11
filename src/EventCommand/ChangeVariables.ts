@@ -127,19 +127,22 @@ class ChangeVariables extends Base {
 			// Get value to set
 			switch (this.valueKind) {
 				case 0: // Number
-					currentState.value = this.valueNumber.getValue();
+					currentState.value = this.valueNumber.getValue() as number;
 					break;
 				case 1: // Random number
-					currentState.value = Mathf.random(this.valueRandomA.getValue(), this.valueRandomB.getValue());
+					currentState.value = Mathf.random(
+						this.valueRandomA.getValue() as number,
+						this.valueRandomB.getValue() as number
+					);
 					break;
 				case 2: // Message
-					currentState.value = this.valueMessage.getValue();
+					currentState.value = this.valueMessage.getValue() as number;
 					break;
 				case 3: // Switch
-					currentState.value = this.valueSwitch.getValue();
+					currentState.value = this.valueSwitch.getValue() as number;
 					break;
 				case 4: // Map object characteristic
-					const objectID = this.valueMapObject.getValue();
+					const objectID = this.valueMapObject.getValue() as number;
 					currentState.valid = false;
 					MapObject.search(
 						objectID,
@@ -184,29 +187,39 @@ class ChangeVariables extends Base {
 					);
 					break;
 				case 5: // Number of weapon / armor / item in inventory
-					const item = Item.findItem(this.valueITEM_KIND, this.valueItemID.getValue());
+					const item = Item.findItem(this.valueITEM_KIND, this.valueItemID.getValue() as number);
 					currentState.value = item === null ? 0 : item.nb;
 					break;
 				case 6: // Total currency
 					switch (this.valueTotalCurrencyKind) {
 						case 0: // Owned
-							currentState.value = Game.current.getCurrency(this.valueTotalCurrencyID.getValue());
+							currentState.value = Game.current.getCurrency(
+								this.valueTotalCurrencyID.getValue() as number
+							);
 							break;
 						case 1: // Earned
-							currentState.value = Game.current.getCurrencyEarned(this.valueTotalCurrencyID.getValue());
+							currentState.value = Game.current.getCurrencyEarned(
+								this.valueTotalCurrencyID.getValue() as number
+							);
 							break;
 						case 2: // Used
-							currentState.value = Game.current.getCurrencyUsed(this.valueTotalCurrencyID.getValue());
+							currentState.value = Game.current.getCurrencyUsed(
+								this.valueTotalCurrencyID.getValue() as number
+							);
 							break;
 					}
 					break;
 				case 7: // Hero / enemy stat
 					currentState.value = 0;
-					const id = this.valueHeroEnemyInstanceID.getValue();
+					const id = this.valueHeroEnemyInstanceID.getValue() as number;
 					for (const player of Game.current.teamHeroes) {
 						if (player.instid === id) {
 							currentState.value =
-								player[Datas.BattleSystems.getStatistic(this.valueStatisticID.getValue()).abbreviation];
+								player[
+									Datas.BattleSystems.getStatistic(
+										this.valueStatisticID.getValue() as number
+									).abbreviation
+								];
 							break;
 						}
 					}

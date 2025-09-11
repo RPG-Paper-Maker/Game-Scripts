@@ -11,6 +11,7 @@
 
 import { CUSTOM_SHAPE_KIND, Paths, Platform } from '../Common';
 import { Datas, Model } from '../index';
+import { ShapeJSON } from '../Model';
 
 /** @class
  *  All the shapes datas.
@@ -35,8 +36,8 @@ class Shapes {
 			n: number,
 			jsonHash: Record<string, any>,
 			k: number,
-			jsonList: Record<string, any>[],
-			jsonShape: Record<string, any>,
+			jsonList: ShapeJSON[],
+			jsonShape: ShapeJSON,
 			id: number,
 			list: Model.Shape[],
 			shape: Model.Shape;
@@ -96,7 +97,7 @@ class Shapes {
 	static get(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
 		return kind === CUSTOM_SHAPE_KIND.NONE || id === -1
 			? new Model.Shape()
-			: Datas.Base.get(id, this.list[kind], 'shape ' + Model.Shape.customSHAPE_KINDToString(kind));
+			: Datas.Base.get(id, this.list[kind], 'shape ' + Model.Shape.customShapeKindToString(kind));
 	}
 }
 

@@ -10,70 +10,71 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Datas } from '../index';
 import { Base } from './Base';
 
-/** @class
- *  A video of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  video
+/**
+ * JSON structure for a video.
  */
-class Video extends Base {
+export type VideoJSON = {
+	id?: number;
+	name?: string;
+	br?: boolean;
+	d?: string; // DLC name
+	base64?: string;
+};
+
+/**
+ * A video resource in the game.
+ */
+export class Video extends Base {
 	public id: number;
 	public name: string;
 	public isBR: boolean;
 	public dlc: string;
 	public base64: string;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: VideoJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Get the folder associated to videos.
-	 *  @static
-	 *  @param {boolean} isBR - Indicate if the video is a BR
-	 *  @param {string} dlc - The dlc name
-	 *  @returns {string}
+	 * Get the folder associated to videos.
+	 * @param isBR - Indicate if the video is a BR
+	 * @param dlc - The DLC name
 	 */
 	static getFolder(isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			(isBR ? Datas.Systems.PATH_BR : dlc ? `${Datas.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
 			this.getLocalFolder()
 		);
 	}
 
 	/**
-	 *  Get the local folder associated to videos.
-	 *  @static
-	 *  @returns {string}
+	 * Get the local folder associated to videos.
 	 */
 	static getLocalFolder(): string {
 		return Paths.VIDEOS;
 	}
 
 	/**
-	 *  Read the JSON associated to the video.
-	 *  @param {Record<string, any>} - json Json object describing the video
-	 */
-	read(json: Record<string, any>) {
-		this.id = json.id;
-		this.name = json.name;
-		this.isBR = json.br;
-		this.dlc = Utils.valueOrDefault(json.d, '');
-	}
-
-	/**
-	 *  Get the absolute path associated to this video.
-	 *  @returns {string}
+	 * Get the absolute path associated to this video.
 	 */
 	getPath(): string {
 		if (this.base64) {
 			return this.base64;
 		}
-		return this.id === -1 ? '' : Model.Video.getFolder(this.isBR, this.dlc) + '/' + this.name;
+		return this.id === -1 ? '' : Video.getFolder(this.isBR, this.dlc) + '/' + this.name;
+	}
+
+	/**
+	 * Read JSON into this video.
+	 */
+	read(json: VideoJSON): void {
+		this.id = Utils.valueOrDefault(json.id, -1);
+		this.name = Utils.valueOrDefault(json.name, '');
+		this.isBR = Utils.valueOrDefault(json.br, false);
+		this.dlc = Utils.valueOrDefault(json.d, '');
+		this.base64 = Utils.valueOrDefault(json.base64, '');
 	}
 }
-
-export { Video };

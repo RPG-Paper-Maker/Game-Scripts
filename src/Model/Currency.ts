@@ -10,29 +10,31 @@
 */
 
 import { Model } from '..';
-import { Icon } from './Icon';
+import { DynamicValueJSON } from './DynamicValue';
+import { Icon, IconJSON } from './Icon';
 
-/** @class
- *  A currency of the game.
- *  @extends {System.Icon}
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  currency
+/**
+ * JSON structure describing a currency.
  */
-class Currency extends Icon {
+export type CurrencyJSON = IconJSON & {
+	dim?: DynamicValueJSON;
+};
+
+/**
+ * A currency of the game.
+ */
+export class Currency extends Icon {
 	public displayInMenu: Model.DynamicValue;
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: CurrencyJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the cost.
-	 *  @param {Record<string, any>} - json Json object describing the cost
+	 * Read the JSON associated to the currency.
 	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
+	read(json: CurrencyJSON) {
+		super.read(json);
 		this.displayInMenu = Model.DynamicValue.readOrDefaultSwitch(json.dim, true);
 	}
 }
-
-export { Currency };

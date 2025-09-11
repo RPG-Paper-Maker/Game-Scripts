@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { DYNAMIC_VALUE_KIND } from '../Common';
+import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { MapObject, ReactionInterpreter } from '../Core';
 import { Datas, Model } from '../index';
 import { Base } from './Base';
@@ -63,8 +63,8 @@ class CallACommonReaction extends Base {
 
 			// Correct parameters for default values
 			let v: Model.DynamicValue, parameter: Model.DynamicValue, k: DYNAMIC_VALUE_KIND;
-			for (const id in reaction.parameters) {
-				v = reaction.parameters[id].value;
+			for (const [id, reactionParameter] of reaction.parameters.entries()) {
+				v = reactionParameter.value;
 				parameter = parameters[id];
 				k = parameter ? parameter.kind : DYNAMIC_VALUE_KIND.NONE;
 				if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
@@ -77,7 +77,7 @@ class CallACommonReaction extends Base {
 				Datas.CommonEvents.getCommonReaction(this.commonReactionID),
 				object,
 				state,
-				parameters
+				Utils.arrayToMap(parameters)
 			);
 		}
 		const previousBlocking = ReactionInterpreter.blockingHero;

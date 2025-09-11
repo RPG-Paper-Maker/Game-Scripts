@@ -11,46 +11,49 @@
 
 import { PICTURE_KIND } from '../Common';
 import { CollisionSquare, Game } from '../Core';
-import { Datas, Model } from '../index';
+import { Datas } from '../index';
 import { Base } from './Base';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { Picture } from './Picture';
 
-/** @class
- *  A tileset of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - json Json object describing the tileset
+/**
+ * JSON structure for a tileset.
  */
-class Tileset extends Base {
-	public collisions: CollisionSquare[];
+export type TilesetJSON = {
+	id?: number;
+	pic?: number;
+	bm?: DynamicValueJSON;
+};
+
+/**
+ * A tileset of the game.
+ */
+export class Tileset extends Base {
+	public collisions: CollisionSquare[] | null;
 	public id: number;
-	public battleMap: Model.DynamicValue;
-	public picture: Model.Picture;
+	public battleMap: DynamicValue;
+	public picture: Picture;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: TilesetJSON) {
 		super(json);
-		if (this.collisions === undefined) {
-			this.collisions = null;
-		}
+		this.collisions = null;
 	}
 
 	/**
-	 *  Read the JSON associated to the tileset.
-	 *  @param {Record<string, any>} - json Json object describing the tileset
+	 * Get the path to the picture tileset.
 	 */
-	read(json: Record<string, any>) {
-		this.id = json.id;
-		this.picture = Datas.Pictures.get(PICTURE_KIND.TILESETS, json.pic);
-		this.battleMap = Model.DynamicValue.readOrDefaultDatabase(json.bm, 1);
-	}
-
-	/**
-	 *  Get the path to the picture tileset.
-	 *  @returns {string}
-	 */
-	getPath(): string {
+	getPath(): string | null {
 		const newID = Game.current.textures.tilesets[this.id];
 		const picture = newID === undefined ? this.picture : Datas.Pictures.get(PICTURE_KIND.TILESETS, newID);
 		return picture ? picture.getPath() : null;
 	}
-}
 
-export { Tileset };
+	/**
+	 * Read JSON into this tileset.
+	 */
+	read(json: TilesetJSON): void {
+		this.id = json.id;
+		this.picture = Datas.Pictures.get(PICTURE_KIND.TILESETS, json.pic);
+		this.battleMap = DynamicValue.readOrDefaultDatabase(json.bm, 1);
+	}
+}

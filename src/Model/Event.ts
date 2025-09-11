@@ -9,35 +9,67 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Model } from '../index';
+import { Datas } from '../index';
 import { Base } from './Base';
+import { Parameter, ParameterJSON, ParameterListJSON } from './Parameter';
+import { Reaction, ReactionJSON } from './Reaction';
 
-/** @class
- *  An event that an object can react on.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  object event
+/**
+ * JSON structure describing an event.
  */
-class Event extends Base {
+export type EventJSON = ParameterListJSON & {
+	sys: boolean;
+	id: number;
+	parameters?: Record<string, ParameterJSON>;
+	r: Record<number, ReactionJSON>;
+};
+
+/**
+ * An event that an object can react to.
+ */
+export class Event extends Base {
 	public isSystem: boolean;
 	public idEvent: number;
-	public parameters: Model.Parameter[];
-	public reactions: Record<number, Model.Reaction>;
+	public parameters: Map<number, Parameter>;
+	public reactions: Map<number, Reaction>;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: EventJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the object event
-	 *  @param {Record<string, any>} - json Json object describing the object event
+	 * Check if this event is equal to another.
 	 */
-	read(json: Record<string, any>) {
+	isEqual(event: Event): boolean {
+		if (this.isSystem !== event.isSystem || this.idEvent !== event.idEvent) {
+			return false;
+		}
+		for (const [id, parameter] of this.parameters.entries()) {
+			if (!parameter.isEqual(event.parameters.get(id))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Add reactions to the event.
+	 */
+	addReactions(reactions: Map<number, Reaction>): void {
+		for (const [idState, reaction] of reactions) {
+			this.reactions.set(idState, reaction);
+		}
+	}
+
+	/**
+	 * Read the JSON associated to the event.
+	 */
+	read(json: EventJSON): void {
 		this.isSystem = json.sys;
 		this.idEvent = json.id;
 
 		// Parameters
-		this.parameters = Model.Parameter.readParametersWithDefault(
+		this.parameters = Parameter.readParametersWithDefault(
 			json,
 			(this.isSystem
 				? Datas.CommonEvents.getEventSystem(this.idEvent)
@@ -47,40 +79,11 @@ class Event extends Base {
 
 		// Reactions
 		const jsonReactions = json.r;
-		this.reactions = {};
-		for (const idState in jsonReactions) {
-			const reaction = new Model.Reaction(jsonReactions[idState]);
+		this.reactions = new Map();
+		for (const idState in json.r) {
+			const reaction = new Reaction(jsonReactions[idState]);
 			reaction.event = this;
-			this.reactions[idState] = reaction;
-		}
-	}
-
-	/**
-	 *  Check if this event is equal to another.
-	 *  @param {System.Event} event - The event to compare
-	 *  @returns {boolean}
-	 */
-	isEqual(event: Model.Event): boolean {
-		if (this.isSystem !== event.isSystem || this.idEvent !== event.idEvent) {
-			return false;
-		}
-		for (let i = 1, l = this.parameters.length; i < l; i++) {
-			if (!this.parameters[i].isEqual(event.parameters[i])) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 *  Add reactions to the event.
-	 *  @param {Record<number, Model.Reaction>} - reactions The reactions to add
-	 */
-	addReactions(reactions: Record<number, Model.Reaction>) {
-		for (const idState in reactions) {
-			this.reactions[idState] = reactions[idState];
+			this.reactions.set(Number(idState), reaction);
 		}
 	}
 }
-
-export { Event };

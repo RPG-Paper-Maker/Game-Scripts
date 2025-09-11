@@ -9,31 +9,31 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Localization } from './Localization';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  A weapon/armor kind of the game.
- *  @extends Model.Localization
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  weapon / armor kind
+/**
+ * JSON structure for a weapon/armor kind.
  */
-class WeaponArmorKind extends Localization {
+export type WeaponArmorKindJSON = LocalizationJSON & {
+	equipment: boolean[];
+};
+
+/**
+ * A weapon/armor kind in the game.
+ */
+export class WeaponArmorKind extends Localization {
 	public equipments: boolean[];
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: WeaponArmorKindJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the weapon / armor kind.
-	 *  @param {Record<string, any>} - json Json object describing the weapon /
-	 *  armor kind
+	 * Read JSON into this weapon/armor kind.
 	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
+	read(json: WeaponArmorKindJSON): void {
+		super.read(json);
 		this.equipments = json.equipment;
 		this.equipments.unshift(false);
 	}
 }
-
-export { WeaponArmorKind };

@@ -128,58 +128,60 @@ class SetDialogBoxOptions extends Base {
 	 */
 	update(currentState?: Record<string, any>, object?: MapObject, state?: number): number {
 		if (this.windowSkinID !== undefined) {
-			Datas.Systems.dbOptions.v_windowSkin = Datas.Systems.getWindowSkin(this.windowSkinID.getValue());
+			Datas.Systems.dbOptions.v_windowSkin = Datas.Systems.getWindowSkin(this.windowSkinID.getValue() as number);
 		}
 		if (this.x !== undefined) {
-			Datas.Systems.dbOptions.v_x = this.x.getValue();
+			Datas.Systems.dbOptions.v_x = this.x.getValue() as number;
 		}
 		if (this.y !== undefined) {
-			Datas.Systems.dbOptions.v_y = this.y.getValue();
+			Datas.Systems.dbOptions.v_y = this.y.getValue() as number;
 		}
 		if (this.w !== undefined) {
-			Datas.Systems.dbOptions.v_w = this.w.getValue();
+			Datas.Systems.dbOptions.v_w = this.w.getValue() as number;
 		}
 		if (this.h !== undefined) {
-			Datas.Systems.dbOptions.v_h = this.h.getValue();
+			Datas.Systems.dbOptions.v_h = this.h.getValue() as number;
 		}
 		if (this.pLeft !== undefined) {
-			Datas.Systems.dbOptions.v_pLeft = this.pLeft.getValue();
+			Datas.Systems.dbOptions.v_pLeft = this.pLeft.getValue() as number;
 		}
 		if (this.pTop !== undefined) {
-			Datas.Systems.dbOptions.v_pTop = this.pTop.getValue();
+			Datas.Systems.dbOptions.v_pTop = this.pTop.getValue() as number;
 		}
 		if (this.pRight !== undefined) {
-			Datas.Systems.dbOptions.v_pRight = this.pRight.getValue();
+			Datas.Systems.dbOptions.v_pRight = this.pRight.getValue() as number;
 		}
 		if (this.pBottom !== undefined) {
-			Datas.Systems.dbOptions.v_pBottom = this.pBottom.getValue();
+			Datas.Systems.dbOptions.v_pBottom = this.pBottom.getValue() as number;
 		}
 		if (this.fPosAbove !== undefined) {
 			Datas.Systems.dbOptions.v_fPosAbove = this.fPosAbove;
 		}
 		if (this.fX !== undefined) {
-			Datas.Systems.dbOptions.v_fX = this.fX.getValue();
+			Datas.Systems.dbOptions.v_fX = this.fX.getValue() as number;
 		}
 		if (this.fY !== undefined) {
-			Datas.Systems.dbOptions.v_fY = this.fY.getValue();
+			Datas.Systems.dbOptions.v_fY = this.fY.getValue() as number;
 		}
 		if (this.tOutline !== undefined) {
 			Datas.Systems.dbOptions.v_tOutline = this.tOutline;
 		}
 		if (this.tcText !== undefined) {
-			Datas.Systems.dbOptions.v_tcText = Datas.Systems.getColor(this.tcText.getValue());
+			Datas.Systems.dbOptions.v_tcText = Datas.Systems.getColor(this.tcText.getValue() as number);
 		}
 		if (this.tcOutline !== undefined) {
-			Datas.Systems.dbOptions.v_tcOutline = Datas.Systems.getColor(this.tcOutline.getValue());
+			Datas.Systems.dbOptions.v_tcOutline = Datas.Systems.getColor(this.tcOutline.getValue() as number);
 		}
 		if (this.tcBackground !== undefined) {
-			Datas.Systems.dbOptions.v_tcBackground = Datas.Systems.getColor(this.tcBackground.getValue());
+			Datas.Systems.dbOptions.v_tcBackground = Datas.Systems.getColor(this.tcBackground.getValue() as number);
 		}
 		if (this.tSize !== undefined) {
-			Datas.Systems.dbOptions.v_tSize = Datas.Systems.getFontSize(this.tSize.getValue()).getValue();
+			Datas.Systems.dbOptions.v_tSize = Datas.Systems.getFontSize(
+				this.tSize.getValue() as number
+			).getValue() as number;
 		}
 		if (this.tFont !== undefined) {
-			Datas.Systems.dbOptions.v_tFont = Datas.Systems.getFontName(this.tFont.getValue()).getName();
+			Datas.Systems.dbOptions.v_tFont = Datas.Systems.getFontName(this.tFont.getValue() as number).getName();
 		}
 		return 1;
 	}

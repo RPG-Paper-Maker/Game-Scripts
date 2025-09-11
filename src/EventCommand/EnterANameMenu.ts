@@ -53,7 +53,9 @@ class EnterANameMenu extends Base {
 		if (!Scene.Map.allowMainMenu || currentState.opened) {
 			return 1;
 		}
-		Manager.Stack.push(new Scene.MenuEnterAName(this.heroInstanceID.getValue(), this.maxCharacters.getValue()));
+		Manager.Stack.push(
+			new Scene.MenuEnterAName(this.heroInstanceID.getValue() as number, this.maxCharacters.getValue() as number)
+		);
 		currentState.opened = true;
 		return 0;
 	}

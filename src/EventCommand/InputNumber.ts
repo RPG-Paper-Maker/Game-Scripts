@@ -98,7 +98,7 @@ class InputNumber extends Base {
 	 */
 	initialize(): Record<string, any> {
 		const spinBoxes = [];
-		const digits = this.digits.getValue();
+		const digits = this.digits.getValue() as number;
 		const w = 50;
 		const h = 50;
 		const totalWidth = w * digits;
@@ -145,7 +145,7 @@ class InputNumber extends Base {
 			for (const spinbox of currentState.spinBoxes) {
 				value += spinbox.value;
 			}
-			Game.current.variables[this.stockVariableID.getValue(true)] = parseInt(value);
+			Game.current.variables[this.stockVariableID.getValue(true) as number] = parseInt(value);
 			return 1;
 		}
 		return 0;

@@ -125,8 +125,8 @@ class ChangeState extends Base {
 		return {
 			map: null,
 			object: null,
-			mapID: this.mapID.getValue(),
-			objectID: this.objectID.getValue(),
+			mapID: this.mapID.getValue() as number,
+			objectID: this.objectID.getValue() as number,
 		};
 	}
 
@@ -184,18 +184,18 @@ class ChangeState extends Base {
 						states = currentState.object.isHero
 							? Game.current.heroStates
 							: Game.current.startupStates[Scene.Map.current.id];
-						EventCommand.ChangeState.addStateSpecial(states, this.idState.getValue());
+						EventCommand.ChangeState.addStateSpecial(states, this.idState.getValue() as number);
 						break;
 					case 1: // Adding
-						EventCommand.ChangeState.addStateSpecial(states, this.idState.getValue());
+						EventCommand.ChangeState.addStateSpecial(states, this.idState.getValue() as number);
 						break;
 					case 2: // Deleting
-						EventCommand.ChangeState.removeStateSpecial(states, this.idState.getValue());
+						EventCommand.ChangeState.removeStateSpecial(states, this.idState.getValue() as number);
 						break;
 				}
 			} else {
 				const objectID = currentState.objectID === -1 ? object.system.id : currentState.objectID;
-				const position = currentState.map.mapProperties.allObjects[objectID];
+				const position = currentState.map.mapProperties.allObjects.get(objectID);
 				if (!position) {
 					Platform.showErrorMessage(
 						'Change state command: the object ID ' +
@@ -215,13 +215,17 @@ class ChangeState extends Base {
 				switch (this.operationKind) {
 					case 0: // Replacing
 						EventCommand.ChangeState.removeAll(portionDatas, indexState);
-						EventCommand.ChangeState.addState(portionDatas, indexState, this.idState.getValue());
+						EventCommand.ChangeState.addState(portionDatas, indexState, this.idState.getValue() as number);
 						break;
 					case 1: // Adding
-						EventCommand.ChangeState.addState(portionDatas, indexState, this.idState.getValue());
+						EventCommand.ChangeState.addState(portionDatas, indexState, this.idState.getValue() as number);
 						break;
 					case 2: // Deleting
-						EventCommand.ChangeState.removeState(portionDatas, indexState, this.idState.getValue());
+						EventCommand.ChangeState.removeState(
+							portionDatas,
+							indexState,
+							this.idState.getValue() as number
+						);
 						break;
 				}
 			}

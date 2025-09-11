@@ -12,82 +12,73 @@
 import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { Model } from '../index';
 import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A parameter of a reaction.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  parameter value
+/** JSON structure for a single parameter. */
+export type ParameterJSON = {
+	d?: DynamicValueJSON;
+	v?: DynamicValueJSON;
+	id?: number;
+};
+
+/** JSON structure for a parameter list container. */
+export type ParameterListJSON = {
+	p?: ParameterJSON[];
+};
+
+/**
+ * A parameter of a reaction.
  */
-class Parameter extends Base {
+export class Parameter extends Base {
 	public value: Model.DynamicValue;
 	public kind: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: ParameterJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the parameters.
-	 *  @static
-	 *  @param {Record<string, any>} - json Json object describing the parameters
-	 *  @returns {System.Parameter[]}
+	 * Read a list of parameters.
 	 */
-	static readParameters(json: Record<string, any>): Parameter[] {
-		const list = [];
-		Utils.readJSONSystemList({ list: Utils.valueOrDefault(json.p, []), listIDs: list, cons: Parameter });
-		return list;
+	static readParameters(json: ParameterListJSON): Map<number, Parameter> {
+		return Utils.readJSONMap(json.p, Parameter);
 	}
 
 	/**
-	 *  Read the parameters with default values.
-	 *  @param {Record<string, any>} - json Json object describing the object
-	 *  @param {System.Parameter[]} list - List of all the parameters default
-	 *  @returns {Parameter[]}
+	 * Read parameters with default values applied.
 	 */
-	static readParametersWithDefault(json: Record<string, any>, list: Parameter[]): Parameter[] {
+	static readParametersWithDefault(json: ParameterListJSON, list: Map<number, Parameter>): Map<number, Parameter> {
 		const jsonParameters = json.p;
-		const l = jsonParameters.length;
-		const parameters = new Array(l + 1);
-		let jsonParameter: Record<string, any>, parameter: Parameter;
-		for (let i = 0, l = jsonParameters.length; i < l; i++) {
-			jsonParameter = jsonParameters[i];
-			parameter = new Parameter();
+		const parameters = new Map<number, Parameter>();
+		for (const jsonParameter of jsonParameters) {
+			let parameter = new Parameter();
 			parameter.readDefault(jsonParameter.v);
 			if (parameter.value.kind === DYNAMIC_VALUE_KIND.DEFAULT) {
-				parameter = list[i + 1];
+				parameter = list.get(jsonParameter.id);
 			}
-			parameters[jsonParameter.id] = parameter;
+			parameters.set(jsonParameter.id, parameter);
 		}
 		return parameters;
 	}
 
 	/**
-	 *  Read the JSON associated to the parameter value.
-	 *  @param {Record<string, any>} - json Json object describing the parameter
-	 *  value
-	 */
-	read(json: Record<string, any>) {
-		this.value = new DynamicValue(json.d);
-	}
-
-	/**
-	 *  Read the JSON associated to the parameter default value.
-	 *  @param {Record<string, any>} - json Json object describing the default value
-	 */
-	readDefault(json: Record<string, any>) {
-		this.value = new DynamicValue(json);
-	}
-
-	/**
-	 *  Check if the parameter is equal to another one
-	 *  @param {Parameter} parameter - The parameter to compare
-	 *  @returns {boolean}
+	 * Check if the parameter is equal to another one.
 	 */
 	isEqual(parameter: Parameter): boolean {
 		return this.value === parameter.value && this.kind === parameter.kind;
 	}
-}
 
-export { Parameter };
+	/**
+	 * Read the JSON describing the parameter.
+	 */
+	read(json: ParameterJSON): void {
+		this.value = new DynamicValue(json.d);
+	}
+
+	/**
+	 * Read the JSON describing the default parameter value.
+	 */
+	readDefault(json: DynamicValueJSON): void {
+		this.value = new DynamicValue(json);
+	}
+}

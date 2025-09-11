@@ -10,208 +10,192 @@
 */
 
 import { PICTURE_KIND, ScreenResolution } from '../Common';
-import { Picture2D } from '../Core';
+import { Picture2D, Rectangle } from '../Core';
 import { Datas } from '../index';
 import { Base } from './Base';
 
-/** @class
- *  A window skin of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  window skin
+/**
+ * JSON structure for a window skin.
  */
-class WindowSkin extends Base {
+export type WindowSkinJSON = {
+	pid: number;
+	tl: number[];
+	tr: number[];
+	bl: number[];
+	br: number[];
+	l: number[];
+	r: number[];
+	t: number[];
+	b: number[];
+	back: number[];
+	backs: number[];
+	backr: number[];
+	aem: number[];
+	ats: number[];
+	aud: number[];
+	tn: number[];
+	tc: number[];
+	th: number[];
+	tm: number[];
+};
+
+/**
+ * A window skin in the game.
+ */
+export class WindowSkin extends Base {
 	public pictureID: number;
-	public borderTopLeft: number[];
-	public borderTopRight: number[];
-	public borderBotLeft: number[];
-	public borderBotRight: number[];
-	public borderLeft: number[];
-	public borderRight: number[];
-	public borderTop: number[];
-	public borderBot: number[];
-	public background: number[];
-	public backgroundSelection: number[];
-	public backgroundRepeat: number[];
-	public arrowEndMessage: number[];
-	public arrowTargetSelection: number[];
-	public arrowUpDown: number[];
-	public textNormal: number[];
-	public textCritical: number[];
-	public textHeal: number[];
-	public textMiss: number[];
+	public borderTopLeft: Rectangle;
+	public borderTopRight: Rectangle;
+	public borderBotLeft: Rectangle;
+	public borderBotRight: Rectangle;
+	public borderLeft: Rectangle;
+	public borderRight: Rectangle;
+	public borderTop: Rectangle;
+	public borderBot: Rectangle;
+	public background: Rectangle;
+	public backgroundSelection: Rectangle;
+	public backgroundRepeat: Rectangle;
+	public arrowEndMessage: Rectangle;
+	public arrowTargetSelection: Rectangle;
+	public arrowUpDown: Rectangle;
+	public textNormal: Rectangle;
+	public textCritical: Rectangle;
+	public textHeal: Rectangle;
+	public textMiss: Rectangle;
 	public picture: Picture2D;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: WindowSkinJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the window skin.
-	 *  @param {Record<string, any>} - json Json object describing the window skin
+	 * Update the window skin picture.
 	 */
-	read(json: Record<string, any>) {
-		this.pictureID = json.pid;
-		this.borderTopLeft = json.tl;
-		this.borderTopRight = json.tr;
-		this.borderBotLeft = json.bl;
-		this.borderBotRight = json.br;
-		this.borderLeft = json.l;
-		this.borderRight = json.r;
-		this.borderTop = json.t;
-		this.borderBot = json.b;
-		this.background = json.back;
-		this.backgroundSelection = json.backs;
-		this.backgroundRepeat = json.backr;
-		this.arrowEndMessage = json.aem;
-		this.arrowTargetSelection = json.ats;
-		this.arrowUpDown = json.aud;
-		this.textNormal = json.tn;
-		this.textCritical = json.tc;
-		this.textHeal = json.th;
-		this.textMiss = json.tm;
-	}
-
-	/**
-	 * Update the window skin picture ID.
-	 */
-	async updatePicture() {
+	async updatePicture(): Promise<void> {
 		this.picture = await Picture2D.create(Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.pictureID), {
 			stretch: true,
 		});
 	}
 
 	/**
-	 *  Draw any element of the window skin box with the cut picture.
-	 *  @param {number[]} r - The rect source
-	 *  @param {number} x - The x target
-	 *  @param {number} y - The y target
-	 *  @param {number} [w=r[2]] - The w target
-	 *  @param {number} [h=r[3]] - The h target
-	 *  @param {number} [zoom=1.0] - The zoom to apply of target size
+	 * Draw any element of the window skin box.
 	 */
 	drawElement(
-		r: number[],
+		r: Rectangle,
 		x: number,
 		y: number,
-		w: number = r[2],
-		h: number = r[3],
-		zoom: number = 1.0,
-		positionResize: boolean = true
-	) {
+		w = r.width,
+		h = r.height,
+		zoom = 1.0,
+		positionResize = true
+	): void {
 		this.picture.draw({
 			x: x,
 			y: y,
 			w: w * zoom,
 			h: h * zoom,
-			sx: r[0],
-			sy: r[1],
-			sw: r[2],
-			sh: r[3],
+			sx: r.x,
+			sy: r.y,
+			sw: r.width,
+			sh: r.height,
 			positionResize: positionResize,
 		});
 	}
 
 	/**
-	 *  Draw the background box.
-	 *  @param {number[]} background - The background source rect
-	 *  @param {number[]} rect - The final box rect
+	 * Draw the background box.
 	 */
-	drawBoxBackground(background: number[], rect: number[]) {
+	drawBoxBackground(background: Rectangle, rect: Rectangle): void {
 		if (this.backgroundRepeat) {
-			let y: number, m: number, w: number, h: number;
 			for (
-				let x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] - this.borderTopRight[2] - 1;
+				let x = rect.x + this.borderTopLeft.width, l = rect.x + rect.width - this.borderTopRight.width - 1;
 				x < l;
-				x += background[2]
+				x += background.width
 			) {
 				for (
-					y = rect[1] + this.borderTopLeft[3], m = rect[1] + rect[3] - this.borderBotLeft[3] - 1;
+					let y = rect.y + this.borderTopLeft.height,
+						m = rect.y + rect.height - this.borderBotLeft.height - 1;
 					y < m;
-					y += background[3]
+					y += background.height
 				) {
-					w = x + background[2] < l ? background[2] : l - x + 1;
-					h = y + background[3] < m ? background[3] : m - y + 1;
+					const w = x + background.width < l ? background.width : l - x + 1;
+					const h = y + background.height < m ? background.height : m - y + 1;
 					this.drawElement(background, x, y, w, h);
 				}
 			}
 		} else {
 			this.drawElement(
 				background,
-				rect[0] + this.borderTopLeft[2],
-				rect[1] + this.borderTopLeft[3],
-				rect[2] - this.borderTopLeft[2] - this.borderBotRight[2],
-				rect[3] - this.borderTopLeft[3] - this.borderBotRight[3]
+				rect.x + this.borderTopLeft.width,
+				rect.y + this.borderTopLeft.height,
+				rect.width - this.borderTopLeft.width - this.borderBotRight.width,
+				rect.height - this.borderTopLeft.height - this.borderBotRight.height
 			);
 		}
 	}
 
 	/**
-	 *  Draw the box
-	 *  @param {number[]} rect - The final box rect
-	 *  @param {boolean} selected - Indicate if the box is selected
-	 *  @param {boolean} bordersVisible - Indicate if the borders of the box are visible
+	 * Draw the full box including borders and background.
 	 */
-	drawBox(rect: number[], selected: boolean, bordersVisible: boolean) {
+	drawBox(rect: Rectangle, selected: boolean, bordersVisible: boolean): void {
 		if (bordersVisible) {
 			// Corners
-			this.drawElement(this.borderTopLeft, rect[0], rect[1]);
-			this.drawElement(this.borderTopRight, rect[0] + rect[2] - this.borderTopRight[2], rect[1]);
-			this.drawElement(this.borderBotLeft, rect[0], rect[1] + rect[3] - this.borderBotLeft[3]);
+			this.drawElement(this.borderTopLeft, rect.x, rect.y);
+			this.drawElement(this.borderTopRight, rect.x + rect.width - this.borderTopRight.width, rect.y);
+			this.drawElement(this.borderBotLeft, rect.x, rect.y + rect.height - this.borderBotLeft.height);
 			this.drawElement(
 				this.borderBotRight,
-				rect[0] + rect[2] - this.borderBotRight[2],
-				rect[1] + rect[3] - this.borderBotRight[3]
+				rect.x + rect.width - this.borderBotRight.width,
+				rect.y + rect.height - this.borderBotRight.height
 			);
 
 			// Borders
-			let x = rect[0];
-			let y, l;
+			let x = rect.x;
 			for (
-				y = rect[1] + this.borderTopLeft[3], l = rect[1] + rect[3] - this.borderBotLeft[3] - 1;
+				let y = rect.y + this.borderTopLeft.height, l = rect.y + rect.height - this.borderBotLeft.height - 1;
 				y < l;
-				y += this.borderLeft[3]
+				y += this.borderLeft.height
 			) {
-				if (y + this.borderLeft[3] < l) {
+				if (y + this.borderLeft.height < l) {
 					this.drawElement(this.borderLeft, x, y);
 				} else {
-					this.drawElement(this.borderLeft, x, y, this.borderLeft[2], l - y + 1);
+					this.drawElement(this.borderLeft, x, y, this.borderLeft.width, l - y + 1);
 				}
 			}
-			x = rect[0] + rect[2] - this.borderTopRight[2];
+			x = rect.x + rect.width - this.borderTopRight.width;
 			for (
-				y = rect[1] + this.borderTopLeft[3], l = rect[1] + rect[3] - this.borderBotLeft[3] - 1;
+				let y = rect.y + this.borderTopLeft.height, l = rect.y + rect.height - this.borderBotLeft.height - 1;
 				y < l;
-				y += this.borderRight[3]
+				y += this.borderRight.height
 			) {
-				if (y + this.borderRight[3] < l) {
+				if (y + this.borderRight.height < l) {
 					this.drawElement(this.borderRight, x, y);
 				} else {
-					this.drawElement(this.borderRight, x, y, this.borderRight[2], l - y + 1);
+					this.drawElement(this.borderRight, x, y, this.borderRight.width, l - y + 1);
 				}
 			}
-			y = rect[1];
+			let y = rect.y;
 			for (
-				x = rect[0] + this.borderTopLeft[2], l = rect[0] + rect[2] - this.borderTopRight[2] - 1;
+				let x = rect.x + this.borderTopLeft.width, l = rect.x + rect.width - this.borderTopRight.width - 1;
 				x < l;
-				x += this.borderTop[2]
+				x += this.borderTop.width
 			) {
-				if (x + this.borderTop[2] < l) {
+				if (x + this.borderTop.width < l) {
 					this.drawElement(this.borderTop, x, y);
 				} else {
-					this.drawElement(this.borderTop, x, y, l - x + 1, this.borderTop[3]);
+					this.drawElement(this.borderTop, x, y, l - x + 1, this.borderTop.height);
 				}
 			}
-			y = rect[1] + rect[3] - this.borderBotLeft[3];
+			y = rect.y + rect.height - this.borderBotLeft.height;
 			for (
-				x = rect[0] + this.borderBotLeft[2], l = rect[0] + rect[2] - this.borderBotRight[2] - 1;
+				let x = rect.x + this.borderBotLeft.width, l = rect.x + rect.width - this.borderBotRight.width - 1;
 				x < l;
-				x += this.borderBot[2]
+				x += this.borderBot.width
 			) {
-				if (x + this.borderBot[2] < l) {
+				if (x + this.borderBot.width < l) {
 					this.drawElement(this.borderBot, x, y);
 				} else {
-					this.drawElement(this.borderBot, x, y, l - x + 1, this.borderBot[3]);
+					this.drawElement(this.borderBot, x, y, l - x + 1, this.borderBot.height);
 				}
 			}
 		}
@@ -225,108 +209,90 @@ class WindowSkin extends Base {
 
 	/**
 	 *  Draw the arrow for targets.
-	 *  @param {number} frame - The current frame to draw
-	 *  @param {number} x - The x position
-	 *  @param {number} y - The y position
-	 *  @param {boolean} positionResize - Indicate if the position picture needs
-	 *  to be resize (resolution)
 	 */
-	drawArrowTarget(frame: number, x: number, y: number, positionResize: boolean = false) {
-		const width = this.arrowTargetSelection[2] / Datas.Systems.FRAMES;
+	drawArrowTarget(frame: number, x: number, y: number, positionResize: boolean = false): void {
+		const width = this.arrowTargetSelection.width / Datas.Systems.FRAMES;
 		this.picture.draw({
 			x: x - width / 2,
-			y: y,
+			y,
 			w: width,
-			h: this.arrowTargetSelection[3],
-			sx: this.arrowTargetSelection[0] + frame * width,
-			sy: this.arrowTargetSelection[1],
+			h: this.arrowTargetSelection.height,
+			sx: this.arrowTargetSelection.x + frame * width,
+			sy: this.arrowTargetSelection.y,
 			sw: width,
-			sh: this.arrowTargetSelection[3],
-			positionResize: positionResize,
+			sh: this.arrowTargetSelection.height,
+			positionResize,
 		});
 	}
 
 	/**
 	 *  Draw the arrow for end of messages.
-	 *  @param {number} frame - The current frame to draw
-	 *  @param {number} x - The x position
-	 *  @param {number} y - The y position
 	 */
-	drawArrowMessage(frame: number, x: number, y: number) {
-		const width = this.arrowEndMessage[2] / Datas.Systems.FRAMES;
+	drawArrowMessage(frame: number, x: number, y: number): void {
+		const width = this.arrowEndMessage.width / Datas.Systems.FRAMES;
 		this.picture.draw({
 			x: x - width / 2,
-			y: y,
+			y,
 			w: width,
-			h: this.arrowEndMessage[3],
-			sx: this.arrowEndMessage[0] + frame * width,
-			sy: this.arrowEndMessage[1],
+			h: this.arrowEndMessage.height,
+			sx: this.arrowEndMessage.x + frame * width,
+			sy: this.arrowEndMessage.y,
 			sw: width,
-			sh: this.arrowEndMessage[3],
+			sh: this.arrowEndMessage.height,
 			positionResize: true,
 		});
 	}
 
 	/**
 	 *  Draw the arrow up for spinbox.
-	 *  @param {number} x - The x position
-	 *  @param {number} y - The y position
 	 */
-	drawArrowUp(x: number, y: number) {
+	drawArrowUp(x: number, y: number): void {
 		this.picture.draw({
-			x: x,
-			y: y,
-			w: this.arrowUpDown[2],
-			h: this.arrowUpDown[3] / 2,
-			sx: this.arrowUpDown[0],
-			sy: this.arrowUpDown[1],
-			sw: this.arrowUpDown[2],
-			sh: this.arrowUpDown[3] / 2,
+			x,
+			y,
+			w: this.arrowUpDown.width,
+			h: this.arrowUpDown.height / 2,
+			sx: this.arrowUpDown.x,
+			sy: this.arrowUpDown.y,
+			sw: this.arrowUpDown.width,
+			sh: this.arrowUpDown.height / 2,
 			positionResize: true,
 		});
 	}
 
 	/**
 	 *  Draw the arrow up for spinbox.
-	 *  @param {number} x - The x position
-	 *  @param {number} y - The y position
 	 */
-	drawArrowDown(x: number, y: number) {
+	drawArrowDown(x: number, y: number): void {
 		this.picture.draw({
-			x: x,
-			y: y,
-			w: this.arrowUpDown[2],
-			h: this.arrowUpDown[3] / 2,
-			sx: this.arrowUpDown[0],
-			sy: this.arrowUpDown[1] + this.arrowUpDown[3] / 2,
-			sw: this.arrowUpDown[2],
-			sh: this.arrowUpDown[3] / 2,
+			x,
+			y,
+			w: this.arrowUpDown.width,
+			h: this.arrowUpDown.height / 2,
+			sx: this.arrowUpDown.x,
+			sy: this.arrowUpDown.y + this.arrowUpDown.height / 2,
+			sw: this.arrowUpDown.width,
+			sh: this.arrowUpDown.height / 2,
 			positionResize: true,
 		});
 	}
 
 	/**
 	 *  Draw a damage number.
-	 *  @param {number} damage - The damage number to display
-	 *  @param {number} x - The x position
-	 *  @param {number} y - The y position
-	 *  @param {number[]} rect - The source rect
-	 *  @param {number} zoom - The zoom to apply on damages
-	 *  @returns {[number, number]} The x offset and height for after damages
 	 */
-	drawDamagesNumber(damage: number, x: number, y: number, rect: number[], zoom: number): [number, number] {
+	drawDamagesNumber(damage: number, x: number, y: number, rect: Rectangle, zoom: number): [number, number] {
 		const digits = String(damage).split('').map(Number);
-		const width = rect[2] / 10;
-		const height = rect[3];
+		const width = rect.width / 10;
+		const height = rect.height;
 		this.picture.stretch = false;
 		for (let i = 0, l = digits.length; i < l; i++) {
 			this.picture.draw({
 				x: x + (i - (l - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * zoom),
-				y: y,
+				y,
 				w: width * zoom,
 				h: height * zoom,
-				sx: rect[0] + digits[i] * width,
-				sy: rect[1],
+				sx: rect.x + digits[i] * width,
+				sy: rect.y,
 				sw: width,
 				sh: height,
 				positionResize: false,
@@ -340,14 +306,7 @@ class WindowSkin extends Base {
 	}
 
 	/**
-	 *  Draw a damage number according to the kind of damages.
-	 *  @param {number} damage - The damage number to display
-	 *  @param {number} x - The x position
-	 *  @param {number} y - The y position
-	 *  @param {boolean} isCrit - Indicate if the damages are a critical hit
-	 *  @param {boolean} isMiss - Indicate if the damages are a missed hit
-	 *  @param {number} zoom - The zoom to apply on damages
-	 *  @returns {[number, number]} The x offset and height for after damages
+	 * Draw damage numbers according to type.
 	 */
 	drawDamages(
 		damage: number,
@@ -360,10 +319,10 @@ class WindowSkin extends Base {
 		if (isMiss) {
 			this.drawElement(
 				this.textMiss,
-				x - ScreenResolution.getScreenX(this.textMiss[2] / 2),
+				x - ScreenResolution.getScreenX(this.textMiss.width / 2),
 				y,
-				this.textMiss[2],
-				this.textMiss[3],
+				this.textMiss.width,
+				this.textMiss.height,
 				zoom,
 				false
 			);
@@ -376,6 +335,29 @@ class WindowSkin extends Base {
 			return this.drawDamagesNumber(damage, x, y, this.textNormal, zoom);
 		}
 	}
-}
 
-export { WindowSkin };
+	/**
+	 *  Read the JSON associated to the window skin.
+	 */
+	read(json: WindowSkinJSON) {
+		this.pictureID = json.pid;
+		this.borderTopLeft = Rectangle.createFromArray(json.tl);
+		this.borderTopRight = Rectangle.createFromArray(json.tr);
+		this.borderBotLeft = Rectangle.createFromArray(json.bl);
+		this.borderBotRight = Rectangle.createFromArray(json.br);
+		this.borderLeft = Rectangle.createFromArray(json.l);
+		this.borderRight = Rectangle.createFromArray(json.r);
+		this.borderTop = Rectangle.createFromArray(json.t);
+		this.borderBot = Rectangle.createFromArray(json.b);
+		this.background = Rectangle.createFromArray(json.back);
+		this.backgroundSelection = Rectangle.createFromArray(json.backs);
+		this.backgroundRepeat = Rectangle.createFromArray(json.backr);
+		this.arrowEndMessage = Rectangle.createFromArray(json.aem);
+		this.arrowTargetSelection = Rectangle.createFromArray(json.ats);
+		this.arrowUpDown = Rectangle.createFromArray(json.aud);
+		this.textNormal = Rectangle.createFromArray(json.tn);
+		this.textCritical = Rectangle.createFromArray(json.tc);
+		this.textHeal = Rectangle.createFromArray(json.th);
+		this.textMiss = Rectangle.createFromArray(json.tm);
+	}
+}

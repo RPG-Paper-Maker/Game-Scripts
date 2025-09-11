@@ -33,7 +33,7 @@ class TimeCurrencies extends Base {
 		let graphic: Graphic.TextIcon, systemCurrency: Model.Currency;
 		for (const id in Game.current.currencies) {
 			systemCurrency = Datas.Systems.getCurrency(parseInt(id));
-			if (systemCurrency.displayInMenu.getValue()) {
+			if (systemCurrency.displayInMenu.getValue() as number) {
 				graphic = Graphic.TextIcon.createFromSystem(
 					Mathf.numberWithCommas(Game.current.currencies[id]),
 					systemCurrency,

@@ -59,7 +59,7 @@ class ChangeChronometer extends Base {
 		const chrono = index === -1 ? null : Game.current.chronometers[index];
 		switch (this.operation) {
 			case 0: // Start
-				const time = this.time.getValue() * 1000;
+				const time = (this.time.getValue() as number) * 1000;
 				if (chrono === null) {
 					Game.current.chronometers.push(
 						new Chrono(time, Game.current.getNewChronoID(), true, this.diplayOnScreen)
@@ -87,7 +87,7 @@ class ChangeChronometer extends Base {
 		}
 		// Stock value
 		if (this.operation !== 0 && this.stockValue && chrono !== null) {
-			Game.current.variables[this.stockID.getValue(true)] = chrono.getSeconds();
+			Game.current.variables[this.stockID.getValue(true) as number] = chrono.getSeconds();
 		}
 		return 1;
 	}

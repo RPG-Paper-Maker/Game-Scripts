@@ -65,7 +65,9 @@ class SendEvent extends Base {
 			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
 				// If default value
 				parameter =
-					k === DYNAMIC_VALUE_KIND.DEFAULT ? parameters[paramID].value : Model.DynamicValue.create(k, null);
+					k === DYNAMIC_VALUE_KIND.DEFAULT
+						? parameters.get(paramID).value
+						: Model.DynamicValue.create(k, null);
 			} else {
 				parameter = Model.DynamicValue.create(k, command[iterator.i++]);
 			}
@@ -84,10 +86,10 @@ class SendEvent extends Base {
 		Manager.Events.sendEvent(
 			object,
 			this.targetKind,
-			this.targetID ? this.targetID.getValue() : -1,
+			this.targetID ? (this.targetID.getValue() as number) : -1,
 			this.isSystem,
 			this.eventID,
-			Model.DynamicValue.mapWithParametersProperties(this.parameters),
+			Utils.arrayToMap(Model.DynamicValue.mapWithParametersProperties(this.parameters)),
 			this.senderNoReceiver,
 			this.onlyTheClosest
 		);

@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import { Rectangle } from './Rectangle';
 
 /** @class
  *  Several textures in a single file.
@@ -54,14 +55,14 @@ class TextureBundle {
 	 *  @param {number[]} point
 	 *  @returns {boolean}
 	 */
-	isSup(rect: number[], point: number[]): boolean {
+	isSup(rect: Rectangle, point: number[]): boolean {
 		if (!rect) {
 			return true;
 		}
-		if (rect[1] > point[1]) {
+		if (rect.y > point[1]) {
 			return true;
-		} else if (rect[1] === point[1]) {
-			return rect[0] >= point[0];
+		} else if (rect.y === point[1]) {
+			return rect.x >= point[0];
 		}
 		return false;
 	}
@@ -72,14 +73,14 @@ class TextureBundle {
 	 *  @param {number[]} point
 	 *  @returns {boolean}
 	 */
-	isInf(rect: number[], point: number[]): boolean {
+	isInf(rect: Rectangle, point: number[]): boolean {
 		if (!rect) {
 			return true;
 		}
-		if (rect[1] < point[1]) {
+		if (rect.y < point[1]) {
 			return true;
-		} else if (rect[1] === point[1]) {
-			return rect[0] <= point[0];
+		} else if (rect.y === point[1]) {
+			return rect.x <= point[0];
 		}
 		return false;
 	}
@@ -90,7 +91,7 @@ class TextureBundle {
 	 *  @param {number[]} rect
 	 *  @returns {boolean}
 	 */
-	isInTexture(id: number, rect?: number[]): boolean {
+	isInTexture(id: number, rect?: Rectangle): boolean {
 		if (id >= this.beginID && id <= this.endID) {
 			if (id === this.beginID) {
 				return id === this.endID
@@ -120,12 +121,12 @@ class TextureBundle {
 	 *  @param {number[]} rect
 	 *  @returns {number}
 	 */
-	getOffset(id: number, rect: number[]): number {
+	getOffset(id: number, rect: Rectangle | null): number {
 		let pair: any, point: number[];
 		for (let i = 0, l = this.list.length; i < l; i++) {
 			pair = this.list[i];
 			point = pair[1];
-			if (id === pair[0] && (rect === null || (point[0] === rect[0] && point[1] === rect[1]))) {
+			if (id === pair[0] && (rect === null || (point[0] === rect.x && point[1] === rect.y))) {
 				return i;
 			}
 		}

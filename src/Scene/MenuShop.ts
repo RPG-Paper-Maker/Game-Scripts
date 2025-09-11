@@ -351,7 +351,7 @@ class MenuShop extends MenuBase {
 			item = listToSort[i];
 			if (
 				item.nb !== 0 &&
-				(this.isBuy() || item.system.canBeSold.getValue()) &&
+				(this.isBuy() || (item.system.canBeSold.getValue() as number)) &&
 				Datas.Systems.inventoryFilters[indexTab].getFilter()(item)
 			) {
 				list.push(

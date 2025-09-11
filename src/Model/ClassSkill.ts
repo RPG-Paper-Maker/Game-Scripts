@@ -11,28 +11,26 @@
 
 import { Base } from './Base';
 
-/** @class
- *  A skill to learn for a specific class.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  class skill
+/** JSON structure for a ClassSkill */
+export type ClassSkillJSON = {
+	id: number;
+	l: number;
+};
+
+/**
+ *  Represents a skill that a class can learn at a certain level.
  */
-class ClassSkill extends Base {
+export class ClassSkill extends Base {
 	public id: number;
 	public level: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: ClassSkillJSON) {
 		super(json);
 	}
 
-	/**
-	 *  Read the JSON associated to the class skill.
-	 *  @param {Record<string, any>} - json Json object describing the class skill
-	 */
-	read(json: Record<string, any>) {
+	/** Read the JSON data for the class skill. */
+	read(json: ClassSkillJSON) {
 		this.id = json.id;
 		this.level = json.l;
 	}
 }
-
-export { ClassSkill };

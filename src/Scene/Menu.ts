@@ -73,7 +73,7 @@ class Menu extends MenuBase {
 		for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
 			command = Datas.Systems.mainMenuCommands[i];
 			graphics[i] = new Graphic.Text(command.name(), { align: ALIGN.CENTER });
-			actions[i] = command.getCallback();
+			actions[i] = command.getCallback(this);
 		}
 		const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);
 		const options: ChoicesOptions = {

@@ -11,7 +11,7 @@
 
 import { Datas } from '..';
 import { Platform } from './Platform';
-import { JsonObject } from './Types';
+import { JsonType } from './Types';
 
 /**
  * A static utility class for Input/Output operations:
@@ -54,7 +54,7 @@ export class IO {
 	 * @param url - The path of the file.
 	 * @returns A promise resolving to the parsed JSON object, or `{}` if parsing fails.
 	 */
-	static async parseFileJSON(url: string): Promise<JsonObject> {
+	static async parseFileJSON(url: string): Promise<JsonType> {
 		let content = await Platform.loadFile(url);
 		if (Datas.Settings.isProtected) {
 			content = atob(content);

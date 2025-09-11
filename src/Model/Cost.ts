@@ -10,48 +10,61 @@
 */
 
 import { DAMAGES_KIND, Interpreter, Utils } from '../Common';
+import { MapObjectCommandType } from '../Common/Types';
 import { Game, Player } from '../Core';
 import { StructIterator } from '../EventCommand';
-import { Datas, Model, Scene } from '../index';
+import { Datas, Scene } from '../index';
 import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
+import { CommonSkillItem } from './CommonSkillItem';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A cost of a common skill item.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  cost
+/**
+ * JSON schema for a skill or item cost.
  */
-class Cost extends Base {
-	public kind: number;
-	public statisticID: Model.DynamicValue;
-	public currencyID: Model.DynamicValue;
-	public variableID: number;
-	public valueFormula: Model.DynamicValue;
-	public skillItem: Model.CommonSkillItem;
+export type CostJSON = {
+	k?: number;
+	sid?: DynamicValueJSON;
+	cid?: DynamicValueJSON;
+	vid?: number;
+	vf?: DynamicValueJSON;
+};
 
-	constructor(json?: Record<string, any>) {
+/**
+ * A class for costs.
+ */
+export class Cost extends Base {
+	public kind: DAMAGES_KIND;
+	public statisticID?: DynamicValue;
+	public currencyID?: DynamicValue;
+	public variableID?: number;
+	public valueFormula: DynamicValue;
+	public skillItem: CommonSkillItem;
+
+	constructor(json?: CostJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Get the price for several costs.
+	 * Computes the price mapping for multiple costs.
+	 * @param list - The list of costs.
+	 * @returns A record mapping ID → tuple(kind, value).
 	 */
-	static getPrice(list: Model.Cost[]): Record<string, [DAMAGES_KIND, number]> {
-		const price = {};
-		let cost: Model.Cost, value: [DAMAGES_KIND, number];
-		for (let i = 0, l = list.length; i < l; i++) {
-			cost = list[i];
-			value = [cost.kind, Interpreter.evaluate(cost.valueFormula.getValue()) as number];
+	static getPrice(list: Cost[]): Map<number, [DAMAGES_KIND, number]> {
+		const price = new Map<number, [DAMAGES_KIND, number]>();
+		for (const cost of list) {
+			const value: [DAMAGES_KIND, number] = [
+				cost.kind,
+				Interpreter.evaluate(cost.valueFormula.getValue() as string) as number,
+			];
 			switch (cost.kind) {
 				case DAMAGES_KIND.STAT:
-					price[cost.statisticID.getValue()] = value;
+					price.set(cost.statisticID.getValue() as number, value);
 					break;
 				case DAMAGES_KIND.CURRENCY:
-					price[cost.currencyID.getValue()] = value;
+					price.set(cost.currencyID.getValue() as number, value);
 					break;
 				case DAMAGES_KIND.VARIABLE:
-					price[cost.variableID] = value;
+					price.set(cost.variableID, value);
 					break;
 			}
 		}
@@ -59,51 +72,14 @@ class Cost extends Base {
 	}
 
 	/**
-	 *  Read the JSON associated to the cost.
-	 *  @param {Record<string, any>} - json Json object describing the cost
+	 * Computes the effective cost value for a user and target,
+	 * accounting for resistances and multipliers.
+	 * @param user - The player using the skill/item.
+	 * @param target - The target of the skill/item.
+	 * @returns The computed cost value.
 	 */
-	read(json: Record<string, any>) {
-		this.kind = Utils.valueOrDefault(json.k, DAMAGES_KIND.STAT);
-		switch (this.kind) {
-			case DAMAGES_KIND.STAT:
-				this.statisticID = DynamicValue.readOrDefaultDatabase(json.sid);
-				break;
-			case DAMAGES_KIND.CURRENCY:
-				this.currencyID = DynamicValue.readOrDefaultDatabase(json.cid);
-				break;
-			case DAMAGES_KIND.VARIABLE:
-				this.variableID = Utils.valueOrDefault(json.vid, 1);
-				break;
-		}
-		this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
-	}
-
-	/**
-	 *  Parse command with iterator.
-	 *  @param {any[]} command
-	 *  @param {StructIterator} iterator
-	 */
-	parse(command: any[], iterator: StructIterator) {
-		this.kind = command[iterator.i++];
-		switch (this.kind) {
-			case DAMAGES_KIND.STAT:
-				this.statisticID = Model.DynamicValue.createValueCommand(command, iterator);
-				break;
-			case 1:
-				this.currencyID = Model.DynamicValue.createValueCommand(command, iterator);
-				break;
-			case 2:
-				this.variableID = command[iterator.i++];
-				break;
-		}
-		this.valueFormula = Model.DynamicValue.createValueCommand(command, iterator);
-	}
-
-	/**
-	 *  Get value according to user characteristics.
-	 */
-	getValue(user: Player, target: Player) {
-		let value = Interpreter.evaluate(this.valueFormula.getValue(), { user: user, target: target }) as number;
+	getValue(user: Player, target: Player): number {
+		let value = Interpreter.evaluate(this.valueFormula.getValue() as string, { user, target }) as number;
 		const baseValue = value;
 		if (user.skillCostRes[-1]) {
 			value *= user.skillCostRes[-1].multiplication;
@@ -121,18 +97,18 @@ class Cost extends Base {
 	}
 
 	/**
-	 *  Use the cost.
+	 * Applies the cost to the current user (reducing stats, currency, or variables).
 	 */
-	use() {
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+	use(): void {
+		const user = Scene.Map.current.user?.player ?? Player.getTemporaryPlayer();
 		const target = Player.getTemporaryPlayer();
 		const value = this.getValue(user, target);
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
-				user[Datas.BattleSystems.getStatistic(this.statisticID.getValue()).abbreviation] -= value;
+				user[Datas.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation] -= value;
 				break;
 			case DAMAGES_KIND.CURRENCY:
-				Game.current.currencies[this.currencyID.getValue()] -= value;
+				Game.current.currencies[this.currencyID.getValue() as number] -= value;
 				break;
 			case DAMAGES_KIND.VARIABLE:
 				Game.current.variables[this.variableID] -= value;
@@ -141,20 +117,21 @@ class Cost extends Base {
 	}
 
 	/**
-	 *  Check if the cost is possible.
-	 *  @returns {boolean}
+	 * Checks if the cost can be paid with the current resources.
+	 * @returns True if possible, false otherwise.
 	 */
 	isPossible(): boolean {
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user?.player ?? Player.getTemporaryPlayer();
 		const target = Player.getTemporaryPlayer();
 		const value = this.getValue(user, target);
-		let currentValue: number;
+		let currentValue = 0;
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
-				currentValue = user[Datas.BattleSystems.getStatistic(this.statisticID.getValue()).abbreviation];
+				currentValue =
+					user[Datas.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation];
 				break;
 			case DAMAGES_KIND.CURRENCY:
-				currentValue = Game.current.getCurrency(this.currencyID.getValue());
+				currentValue = Game.current.getCurrency(this.currencyID.getValue() as number);
 				break;
 			case DAMAGES_KIND.VARIABLE:
 				currentValue = Game.current.getVariable(this.variableID);
@@ -164,19 +141,19 @@ class Cost extends Base {
 	}
 
 	/**
-	 *  Get the string representing the cost.
-	 *  @returns {string}
+	 * Returns a string representation of this cost.
+	 * @returns A human-readable string.
 	 */
 	toString(): string {
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user?.player ?? Player.getTemporaryPlayer();
 		const target = Player.getTemporaryPlayer();
-		let result = this.getValue(user, target) + ' ';
+		let result = `${this.getValue(user, target)} `;
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
-				result += Datas.BattleSystems.getStatistic(this.statisticID.getValue()).name();
+				result += Datas.BattleSystems.getStatistic(this.statisticID.getValue() as number).name();
 				break;
 			case DAMAGES_KIND.CURRENCY:
-				result += Datas.Systems.getCurrency(this.currencyID.getValue()).name();
+				result += Datas.Systems.getCurrency(this.currencyID.getValue() as number).name();
 				break;
 			case DAMAGES_KIND.VARIABLE:
 				result += Datas.Variables.get(this.variableID);
@@ -184,6 +161,44 @@ class Cost extends Base {
 		}
 		return result;
 	}
-}
 
-export { Cost };
+	/**
+	 * Reads the JSON data describing this cost.
+	 */
+	read(json: CostJSON): void {
+		this.kind = Utils.valueOrDefault(json.k, DAMAGES_KIND.STAT);
+		switch (this.kind) {
+			case DAMAGES_KIND.STAT:
+				this.statisticID = DynamicValue.readOrDefaultDatabase(json.sid);
+				break;
+			case DAMAGES_KIND.CURRENCY:
+				this.currencyID = DynamicValue.readOrDefaultDatabase(json.cid);
+				break;
+			case DAMAGES_KIND.VARIABLE:
+				this.variableID = Utils.valueOrDefault(json.vid, 1);
+				break;
+		}
+		this.valueFormula = DynamicValue.readOrDefaultMessage(json.vf);
+	}
+
+	/**
+	 * Parses a cost from an event command.
+	 * @param command - The command array.
+	 * @param iterator - The command iterator.
+	 */
+	parse(command: MapObjectCommandType[], iterator: StructIterator): void {
+		this.kind = command[iterator.i++] as DAMAGES_KIND;
+		switch (this.kind) {
+			case DAMAGES_KIND.STAT:
+				this.statisticID = DynamicValue.createValueCommand(command, iterator);
+				break;
+			case 1:
+				this.currencyID = DynamicValue.createValueCommand(command, iterator);
+				break;
+			case 2:
+				this.variableID = command[iterator.i++] as number;
+				break;
+		}
+		this.valueFormula = DynamicValue.createValueCommand(command, iterator);
+	}
+}

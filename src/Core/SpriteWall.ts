@@ -15,6 +15,7 @@ import { Datas } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
+import { Rectangle } from './Rectangle';
 import { Sprite } from './Sprite';
 
 /** @class
@@ -86,7 +87,7 @@ class SpriteWall extends MapElement {
 		center.add(localPosition);
 
 		// Getting UV coordinates
-		const textureRect: number[] = [this.kind, 0, 1, Math.floor(height / Datas.Systems.SQUARE_SIZE)];
+		const textureRect = new Rectangle(this.kind, 0, 1, Math.floor(height / Datas.Systems.SQUARE_SIZE));
 		let x: number = (textureRect[0] * Datas.Systems.SQUARE_SIZE) / width;
 		let y = textureRect[1];
 		let w = Datas.Systems.SQUARE_SIZE / width;
@@ -105,14 +106,14 @@ class SpriteWall extends MapElement {
 
 		// Collision
 		const objCollision: StructMapElementCollision[] = [];
-		let collisions: number[][] = [];
+		let collisions: Rectangle[] = [];
 		const wall = Datas.SpecialElements.getWall(this.id);
 		if (wall) {
 			const picture = Datas.Pictures.get(PICTURE_KIND.WALLS, pictureID);
 			if (picture) {
 				collisions = picture.getSquaresForWall(textureRect);
 			}
-			let rect: number[];
+			let rect: Rectangle;
 			for (let i = 0, l = collisions.length; i < l; i++) {
 				rect = collisions[i];
 				objCollision.push({
@@ -120,10 +121,10 @@ class SpriteWall extends MapElement {
 					l: localPosition,
 					b: [
 						localPosition.x,
-						localPosition.y + Math.floor((textureRect[3] * Datas.Systems.SQUARE_SIZE - rect[1]) / 2),
+						localPosition.y + Math.floor((textureRect.height * Datas.Systems.SQUARE_SIZE - rect.y) / 2),
 						localPosition.z,
-						rect[2],
-						rect[3] - 0.001, // Small offset for climbing collisions stuff
+						rect.width,
+						rect.height - 0.001, // Small offset for climbing collisions stuff
 						1,
 						angle,
 						0,
@@ -142,8 +143,8 @@ class SpriteWall extends MapElement {
 							localPosition.x + x,
 							localPosition.y + Math.floor((textureRect[3] * Datas.Systems.SQUARE_SIZE - y) / 2),
 							localPosition.z,
-							rect[2],
-							rect[3],
+							rect.width,
+							rect.height,
 							1,
 							angle,
 							0,

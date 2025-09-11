@@ -12,15 +12,26 @@
 import { Mathf } from '../Common';
 import { Item } from '../Core';
 import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A loot of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  loot
+/**
+ * JSON structure for a loot entry.
  */
-class Loot extends Base {
+export type LootJSON = {
+	k: number;
+	lid: DynamicValueJSON;
+	n: DynamicValueJSON;
+	p: DynamicValueJSON;
+	i: DynamicValueJSON;
+	f: DynamicValueJSON;
+};
+
+/**
+ * Represents a loot entry in the game.
+ * Loot defines which item can drop, how many, its probability, and
+ * at which levels it is available.
+ */
+export class Loot extends Base {
 	public kind: number;
 	public lootID: DynamicValue;
 	public number: DynamicValue;
@@ -28,15 +39,44 @@ class Loot extends Base {
 	public initial: DynamicValue;
 	public final: DynamicValue;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: LootJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the loot.
-	 *  @param {Record<string, any>} - json Json object describing the loot
+	 * Checks if this loot is available for a given level.
+	 * @param level - The level to check against.
+	 * @returns True if the loot is available, false otherwise.
 	 */
-	read(json: Record<string, any>) {
+	isAvailable(level: number): boolean {
+		return level >= (this.initial.getValue() as number) && level <= (this.final.getValue() as number);
+	}
+
+	/**
+	 * Computes the loot dropped at a specific level.
+	 * Uses probability and count to decide how many items drop.
+	 * @param level - The current level.
+	 * @returns The resulting Item if at least one drops, otherwise null.
+	 */
+	currentLoot(level: number): Item | null {
+		if (!this.isAvailable(level)) {
+			return null;
+		}
+		const proba = this.probability.getValue() as number;
+		const totalNumber = this.number.getValue() as number;
+		let count = 0;
+		for (let i = 0; i < totalNumber; i++) {
+			if (Mathf.random(0, 100) <= proba) {
+				count++;
+			}
+		}
+		return count > 0 ? new Item(this.kind, this.lootID.getValue() as number, count) : null;
+	}
+
+	/**
+	 *  Read the JSON associated to the loot.
+	 */
+	read(json: LootJSON) {
 		this.kind = json.k;
 		this.lootID = new DynamicValue(json.lid);
 		this.number = new DynamicValue(json.n);
@@ -44,38 +84,4 @@ class Loot extends Base {
 		this.initial = new DynamicValue(json.i);
 		this.final = new DynamicValue(json.f);
 	}
-
-	/**
-	 *  Check if a loot is available at a particular level.
-	 *  @param {number} level - The level
-	 *  @returns {boolean}
-	 */
-	isAvailable(level: number): boolean {
-		return level >= this.initial.getValue() && level <= this.final.getValue();
-	}
-
-	/**
-	 *  Get the current loot at a particular level.
-	 *  @param {number} level - The level
-	 *  @returns {Item}
-	 */
-	currenLoot(level: number): Item {
-		if (!this.isAvailable(level)) {
-			return null;
-		}
-
-		// Calculate number with proba
-		const proba = this.probability.getValue();
-		const totalNumber = this.number.getValue();
-		let i: number, rand: number, nb: number;
-		for (i = 0, nb = 0; i < totalNumber; i++) {
-			rand = Mathf.random(0, 100);
-			if (rand <= proba) {
-				nb++;
-			}
-		}
-		return nb > 0 ? new Item(this.kind, this.lootID.getValue(), nb) : null;
-	}
 }
-
-export { Loot };

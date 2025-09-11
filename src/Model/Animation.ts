@@ -30,22 +30,11 @@ export type AnimationJSON = {
  * Represents an animation of a skill, item, weapon, or display command.
  */
 export class Animation extends Base {
-	/** The picture ID associated with this animation. */
 	public pictureID: number;
-
-	/** The kind of position where the animation is drawn. */
 	public positionKind: ANIMATION_POSITION_KIND;
-
-	/** The frames composing the animation. */
 	public frames: Map<number, AnimationFrame>;
-
-	/** The max frame ID in the list of frames. */
 	public maxFrameID: number;
-
-	/** Number of rows in the animation texture. */
 	public rows: number;
-
-	/** Number of columns in the animation texture. */
 	public cols: number;
 
 	constructor(json?: AnimationJSON) {
@@ -54,7 +43,6 @@ export class Animation extends Base {
 
 	/**
 	 * Reads the JSON data describing the animation.
-	 * @param json - The JSON object describing the animation.
 	 */
 	read(json: AnimationJSON): void {
 		this.pictureID = Utils.valueOrDefault(json.pid, 1);

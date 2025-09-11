@@ -181,8 +181,8 @@ class BattleStartTurn {
 			}
 			skill = skills[Mathf.random(0, skills.length - 1)];
 			this.battle.currentSkill = skill;
-			this.battle.animationUser = new Animation(skill.animationUserID.getValue());
-			this.battle.animationTarget = new Animation(skill.animationTargetID.getValue());
+			this.battle.animationUser = new Animation(skill.animationUserID.getValue() as number);
+			this.battle.animationTarget = new Animation(skill.animationTargetID.getValue() as number);
 			let side: CHARACTER_KIND;
 			switch (restriction) {
 				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:

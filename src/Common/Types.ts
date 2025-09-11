@@ -9,4 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-export type JsonObject = Record<string, unknown>;
+export type JsonType = Record<string, unknown>;
+
+export type MapObjectCommandType = number | string | boolean | JsonType;

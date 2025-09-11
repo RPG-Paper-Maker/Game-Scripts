@@ -66,8 +66,8 @@ class SetMoveTurnAPicture extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const time = this.time.getValue() * 1000;
-		const index = this.index.getValue();
+		const time = (this.time.getValue() as number) * 1000;
+		const index = this.index.getValue() as number;
 		let obj: [number, Picture2D], picture: Picture2D;
 		let i: number, l: number;
 		for (i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
@@ -88,7 +88,7 @@ class SetMoveTurnAPicture extends Base {
 				const prevZoom = picture.zoom;
 				const prevOpacity = picture.opacity;
 				const prevAngle = picture.angle;
-				picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue());
+				picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
 				if (prevCentered) {
 					prevX += (prevW - picture.oW) / 2;
 					prevY += (prevH - picture.oH) / 2;
@@ -107,15 +107,15 @@ class SetMoveTurnAPicture extends Base {
 		return {
 			parallel: this.waitEnd,
 			picture: picture,
-			finalDifZoom: this.zoom ? this.zoom.getValue() / 100 - picture.zoom : null,
-			finalDifOpacity: this.opacity ? this.opacity.getValue() / 100 - picture.opacity : null,
+			finalDifZoom: this.zoom ? (this.zoom.getValue() as number) / 100 - picture.zoom : null,
+			finalDifOpacity: this.opacity ? (this.opacity.getValue() as number) / 100 - picture.opacity : null,
 			finalDifX: this.x
-				? (picture.centered ? ScreenResolution.SCREEN_X / 2 : 0) + this.x.getValue() - picture.oX
+				? (picture.centered ? ScreenResolution.SCREEN_X / 2 : 0) + (this.x.getValue() as number) - picture.oX
 				: null,
 			finalDifY: this.y
-				? (picture.centered ? ScreenResolution.SCREEN_Y / 2 : 0) + this.y.getValue() - picture.oY
+				? (picture.centered ? ScreenResolution.SCREEN_Y / 2 : 0) + (this.y.getValue() as number) - picture.oY
 				: null,
-			finalDifAngle: this.angle ? this.angle.getValue() - picture.angle : null,
+			finalDifAngle: this.angle ? (this.angle.getValue() as number) - picture.angle : null,
 			time: time,
 			timeLeft: time,
 		};

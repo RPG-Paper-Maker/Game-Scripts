@@ -14,15 +14,32 @@ import { Constants, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
 import { Datas } from '../index';
 import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A camera properties of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  camera properties
+/**
+ * JSON structure for camera properties.
  */
-class CameraProperties extends Base {
+export type CameraPropertiesJSON = {
+	d?: DynamicValueJSON;
+	ha?: DynamicValueJSON;
+	va?: DynamicValueJSON;
+	tox?: DynamicValueJSON;
+	toy?: DynamicValueJSON;
+	toz?: DynamicValueJSON;
+	istox?: boolean;
+	istoy?: boolean;
+	istoz?: boolean;
+	fov?: DynamicValueJSON;
+	n?: DynamicValueJSON;
+	f?: DynamicValueJSON;
+	o?: boolean;
+};
+
+/**
+ * Represents the configurable properties of a camera in the game.
+ * Defines projection settings, orientation, offsets, and clipping planes.
+ */
+export class CameraProperties extends Base {
 	public distance: DynamicValue;
 	public horizontalAngle: DynamicValue;
 	public verticalAngle: DynamicValue;
@@ -37,16 +54,60 @@ class CameraProperties extends Base {
 	public far: DynamicValue;
 	public orthographic: boolean;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: CameraPropertiesJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the camera properties.
-	 *  @param {Record<string, any>} - json Json object describing the camera
-	 *  properties
+	 * Initializes a given {@link Camera} instance using the current properties.
+	 * Creates either a perspective or orthographic camera depending on settings.
+	 * @param {Camera} camera - The camera to initialize.
 	 */
-	read(json: Record<string, any>) {
+	initializeCamera(camera: Camera) {
+		camera.isPerspective = !this.orthographic;
+		camera.distance =
+			(this.distance.getValue() as number) * (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+		if (camera.isPerspective) {
+			camera.perspectiveCamera = new THREE.PerspectiveCamera(
+				this.fov.getValue() as number,
+				ScreenResolution.CANVAS_WIDTH / ScreenResolution.CANVAS_HEIGHT,
+				this.near.getValue() as number,
+				this.far.getValue() as number
+			);
+		} else {
+			const x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
+			const y = ScreenResolution.CANVAS_HEIGHT * (camera.distance / 1000);
+			camera.orthographicCamera = new THREE.OrthographicCamera(
+				-x,
+				x,
+				y,
+				-y,
+				-this.far.getValue() as number,
+				this.far.getValue() as number
+			);
+		}
+		camera.horizontalAngle = this.horizontalAngle.getValue() as number;
+		camera.verticalAngle = this.verticalAngle.getValue() as number;
+		camera.targetPosition = new THREE.Vector3();
+		let x = this.targetOffsetX.getValue() as number;
+		if (this.isSquareTargetOffsetX) {
+			x *= Datas.Systems.SQUARE_SIZE;
+		}
+		let y = this.targetOffsetY.getValue() as number;
+		if (this.isSquareTargetOffsetY) {
+			y *= Datas.Systems.SQUARE_SIZE;
+		}
+		let z = this.targetOffsetZ.getValue() as number;
+		if (this.isSquareTargetOffsetZ) {
+			z *= Datas.Systems.SQUARE_SIZE;
+		}
+		camera.targetOffset = new THREE.Vector3(x, y, z);
+	}
+
+	/**
+	 * Reads and initializes camera properties from a JSON object.
+	 */
+	read(json: CameraPropertiesJSON): void {
 		this.distance = DynamicValue.readOrDefaultNumberDouble(json.d, 300);
 		this.horizontalAngle = DynamicValue.readOrDefaultNumberDouble(json.ha, -90);
 		this.verticalAngle = DynamicValue.readOrDefaultNumberDouble(json.va, 65);
@@ -61,50 +122,4 @@ class CameraProperties extends Base {
 		this.far = DynamicValue.readOrDefaultNumberDouble(json.f, 100000);
 		this.orthographic = Utils.valueOrDefault(json.o, false);
 	}
-
-	/**
-	 *  Initialize a camera according this System properties
-	 *  @param {Camera} camera - The camera
-	 */
-	initializeCamera(camera: Camera) {
-		camera.isPerspective = !this.orthographic;
-		camera.distance = this.distance.getValue() * (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
-		if (camera.isPerspective) {
-			camera.perspectiveCamera = new THREE.PerspectiveCamera(
-				this.fov.getValue(),
-				ScreenResolution.CANVAS_WIDTH / ScreenResolution.CANVAS_HEIGHT,
-				this.near.getValue(),
-				this.far.getValue()
-			);
-		} else {
-			const x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
-			const y = ScreenResolution.CANVAS_HEIGHT * (camera.distance / 1000);
-			camera.orthographicCamera = new THREE.OrthographicCamera(
-				-x,
-				x,
-				y,
-				-y,
-				-this.far.getValue(),
-				this.far.getValue()
-			);
-		}
-		camera.horizontalAngle = this.horizontalAngle.getValue();
-		camera.verticalAngle = this.verticalAngle.getValue();
-		camera.targetPosition = new THREE.Vector3();
-		let x = this.targetOffsetX.getValue();
-		if (this.isSquareTargetOffsetX) {
-			x *= Datas.Systems.SQUARE_SIZE;
-		}
-		let y = this.targetOffsetY.getValue();
-		if (this.isSquareTargetOffsetY) {
-			y *= Datas.Systems.SQUARE_SIZE;
-		}
-		let z = this.targetOffsetZ.getValue();
-		if (this.isSquareTargetOffsetZ) {
-			z *= Datas.Systems.SQUARE_SIZE;
-		}
-		camera.targetOffset = new THREE.Vector3(x, y, z);
-	}
 }
-
-export { CameraProperties };

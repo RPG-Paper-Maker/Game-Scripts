@@ -20,7 +20,7 @@ import {
 	Platform,
 	Utils,
 } from '../Common';
-import { Game, MapObject, ReactionInterpreter, StructSearchResult } from '../Core';
+import { Game, MapObject, ReactionInterpreter, Rectangle, StructSearchResult } from '../Core';
 import { Datas, EventCommand, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
@@ -330,7 +330,7 @@ class MoveObject extends Base {
 		if (this.isCameraOrientation && Inputs.lockedKeys.size > 0) {
 			const currentEvent = ReactionInterpreter.currentReaction.currentReaction.event;
 			if (currentEvent && currentEvent.idEvent === 3 && currentEvent.isSystem) {
-				const pressedKey = ReactionInterpreter.currentParameters[1].getValue();
+				const pressedKey = ReactionInterpreter.currentParameters[1].getValue() as string;
 				const lockedAngle = Inputs.lockedKeys.get(pressedKey);
 				if (lockedAngle !== undefined) {
 					const dif = lockedAngle - Scene.Map.current.camera.horizontalAngle;
@@ -415,7 +415,7 @@ class MoveObject extends Base {
 	 *  @param {MapObject} object - The object to move
 	 */
 	moveFrequency(object: MapObject) {
-		object.moveFrequencyTick = object.frequency.getValue() * 1000;
+		object.moveFrequencyTick = (object.frequency.getValue() as number) * 1000;
 	}
 
 	/**
@@ -714,12 +714,13 @@ class MoveObject extends Base {
 				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
 				const square = parameters.square ? Datas.Systems.SQUARE_SIZE : 1;
 				currentState.endJump = new THREE.Vector3(
-					parameters.x.getValue() * square + currentState.startJump.x,
-					parameters.y.getValue() * square + parameters.yPlus.getValue() + currentState.startJump.y,
-					parameters.z.getValue() * square + currentState.startJump.z
+					(parameters.x.getValue() as number) * square + currentState.startJump.x,
+					(((parameters.y.getValue() as number) * square + parameters.yPlus.getValue()) as number) +
+						currentState.startJump.y,
+					(parameters.z.getValue() as number) * square + currentState.startJump.z
 				);
-				currentState.peak =
-					parameters.peakY.getValue() * Datas.Systems.SQUARE_SIZE + parameters.peakYPlus.getValue();
+				currentState.peak = ((parameters.peakY.getValue() as number) * Datas.Systems.SQUARE_SIZE +
+					parameters.peakYPlus.getValue()) as number;
 				if (currentState.peak < currentState.endJump.y) {
 					Platform.showErrorMessage(
 						'Move object command: jump peak cannot be lower than final y position offset. Final position=' +
@@ -729,7 +730,7 @@ class MoveObject extends Base {
 							'px'
 					);
 				}
-				currentState.time = parameters.time.getValue() * 1000;
+				currentState.time = (parameters.time.getValue() as number) * 1000;
 			}
 			currentState.currentTime = object.jump(
 				currentState.startJump,
@@ -915,14 +916,14 @@ class MoveObject extends Base {
 			// Change object current state value
 			object.currentStateInstance.previousGraphicKind = object.currentStateInstance.graphicKind;
 			object.currentStateInstance.graphicKind = parameters.kind;
-			object.currentStateInstance.graphicID = parameters.pictureID.getValue();
+			object.currentStateInstance.graphicID = parameters.pictureID.getValue() as number;
 			if (object.currentStateInstance.graphicID === 0) {
-				object.currentStateInstance.rectTileset = [
+				object.currentStateInstance.rectTileset = new Rectangle(
 					parameters.indexX,
 					parameters.indexY,
 					parameters.width,
-					parameters.height,
-				];
+					parameters.height
+				);
 			} else {
 				object.currentStateInstance.indexX = parameters.indexX;
 				object.currentStateInstance.indexY = parameters.dontChangeOrientation
@@ -938,7 +939,9 @@ class MoveObject extends Base {
 				}
 				options.gid = object.currentStateInstance.graphicID;
 				options.gk = object.currentStateInstance.graphicKind;
-				options.gt = object.currentStateInstance.rectTileset;
+				options.gt = object.currentStateInstance.rectTileset
+					? object.currentStateInstance.rectTileset.clone()
+					: object.currentStateInstance.rectTileset;
 				options.gix = object.currentStateInstance.indexX;
 				options.giy = object.currentStateInstance.indexY;
 			}
@@ -963,7 +966,7 @@ class MoveObject extends Base {
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
-			object.currentStateInstance.speedID = parameters.value.getValue();
+			object.currentStateInstance.speedID = parameters.value.getValue() as number;
 
 			// Permanent change
 			if (parameters.permanent) {
@@ -994,7 +997,7 @@ class MoveObject extends Base {
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
-			object.currentStateInstance.frequencyID = parameters.value.getValue();
+			object.currentStateInstance.frequencyID = parameters.value.getValue() as number;
 
 			// Permanent change
 			if (parameters.permanent) {
@@ -1333,7 +1336,7 @@ class MoveObject extends Base {
 		} else if (object.isStartup) {
 			return null;
 		} else {
-			const portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
+			const portion = Scene.Map.current.mapProperties.allObjects.get(object.system.id).getGlobalPortion();
 			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
 			const indexProp = portionDatas.soi.indexOf(object.system.id);
 			if (indexProp === -1) {
@@ -1365,7 +1368,7 @@ class MoveObject extends Base {
 		}
 		if (currentState.parallel && this.moves.length > 0) {
 			if (!currentState.waitingObject) {
-				const objectID = this.objectID.getValue();
+				const objectID = this.objectID.getValue() as number;
 				MapObject.search(
 					objectID,
 					(result: StructSearchResult) => {

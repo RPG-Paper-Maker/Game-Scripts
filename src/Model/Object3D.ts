@@ -11,16 +11,31 @@
 
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, SHAPE_KIND, Utils } from '../Common';
-import { Datas, Model } from '../index';
-import { SpecialElement } from './SpecialElement';
+import { Datas } from '../index';
+import { Shape } from './Shape';
+import { SpecialElement, SpecialElementJSON } from './SpecialElement';
 
-/** @class
- *  A 3D object of the game.
- *  @extends Model.SpecialElement
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  object 3D
- */
-class Object3D extends SpecialElement {
+/** JSON structure describing a 3D object. */
+export type Object3DJSON = SpecialElementJSON & {
+	id: number;
+	sk?: SHAPE_KIND;
+	oid?: number;
+	mid?: number;
+	ck?: OBJECT_COLLISION_KIND;
+	ccid?: number;
+	s?: number;
+	ws?: number;
+	wp?: number;
+	hs?: number;
+	hp?: number;
+	ds?: number;
+	dp?: number;
+	st?: boolean;
+	itl?: boolean;
+};
+
+/** Represents a 3D object. */
+export class Object3D extends SpecialElement {
 	public id: number;
 	public shapeKind: SHAPE_KIND;
 	public objID: number;
@@ -37,17 +52,58 @@ class Object3D extends SpecialElement {
 	public stretch: boolean;
 	public isTopLeft: boolean;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: Object3DJSON) {
 		super(json);
 	}
 
-	/**
-	 *  Read the JSON associated to the object 3D.
-	 *  @param {Record<string, any>} - json Json object describing the object 3D
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
+	/** Width in pixels. */
+	widthPixels(): number {
+		return this.widthSquare * Datas.Systems.SQUARE_SIZE + (this.widthPixel * Datas.Systems.SQUARE_SIZE) / 100;
+	}
 
+	/** Height in pixels. */
+	heightPixels(): number {
+		return this.heightSquare * Datas.Systems.SQUARE_SIZE + (this.heightPixel * Datas.Systems.SQUARE_SIZE) / 100;
+	}
+
+	/** Depth in pixels. */
+	depthPixels(): number {
+		return this.depthSquare * Datas.Systems.SQUARE_SIZE + (this.depthPixel * Datas.Systems.SQUARE_SIZE) / 100;
+	}
+
+	/** Width in squares. */
+	width(): number {
+		return this.widthSquare + (this.widthPixel > 0 ? 1 : 0);
+	}
+
+	/** Height in squares. */
+	height(): number {
+		return this.heightSquare + (this.heightPixel > 0 ? 1 : 0);
+	}
+
+	/** Depth in squares. */
+	depth(): number {
+		return this.depthSquare + (this.depthPixel > 0 ? 1 : 0);
+	}
+
+	/** Size as a vector. */
+	getSizeVector(): THREE.Vector3 {
+		return new THREE.Vector3(this.widthPixels(), this.heightPixels(), this.depthPixels());
+	}
+
+	/** Get shape object. */
+	getObj(): Shape {
+		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.objID);
+	}
+
+	/** Get collision shape object. */
+	getCollisionObj(): Shape {
+		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.collisionCustomID);
+	}
+
+	/** Initialize from JSON data. */
+	read(json: Object3DJSON): void {
+		super.read(json);
 		this.id = json.id;
 		this.shapeKind = Utils.valueOrDefault(json.sk, SHAPE_KIND.BOX);
 		this.objID = Utils.valueOrDefault(json.oid, -1);
@@ -64,78 +120,4 @@ class Object3D extends SpecialElement {
 		this.stretch = Utils.valueOrDefault(json.st, false);
 		this.isTopLeft = Utils.valueOrDefault(json.itl, true);
 	}
-
-	/**
-	 *  Get the width in pixels.
-	 *  @returns {number}
-	 */
-	widthPixels(): number {
-		return this.widthSquare * Datas.Systems.SQUARE_SIZE + (this.widthPixel * Datas.Systems.SQUARE_SIZE) / 100;
-	}
-
-	/**
-	 *  Get the height in pixels.
-	 *  @returns {number}
-	 */
-	heightPixels(): number {
-		return this.heightSquare * Datas.Systems.SQUARE_SIZE + (this.heightPixel * Datas.Systems.SQUARE_SIZE) / 100;
-	}
-
-	/**
-	 *  Get the depth in pixels.
-	 *  @returns {number}
-	 */
-	depthPixels(): number {
-		return this.depthSquare * Datas.Systems.SQUARE_SIZE + (this.depthPixel * Datas.Systems.SQUARE_SIZE) / 100;
-	}
-
-	/**
-	 *  Get the width in squares.
-	 *  @returns {number}
-	 */
-	width(): number {
-		return this.widthSquare + (this.widthPixel > 0 ? 1 : 0);
-	}
-
-	/**
-	 *  Get the height in squares.
-	 *  @returns {number}
-	 */
-	height(): number {
-		return this.heightSquare + (this.heightPixel > 0 ? 1 : 0);
-	}
-
-	/**
-	 *  Get the depth in squares.
-	 *  @returns {number}
-	 */
-	depth(): number {
-		return this.depthSquare + (this.depthPixel > 0 ? 1 : 0);
-	}
-
-	/**
-	 *  Get the size vector.
-	 *  @returns {Vector3}
-	 */
-	getSizeVector(): THREE.Vector3 {
-		return new THREE.Vector3(this.widthPixels(), this.heightPixels(), this.depthPixels());
-	}
-
-	/**
-	 *  Get the shape obj.
-	 *  @returns {System.Shape}
-	 */
-	getObj(): Model.Shape {
-		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.objID);
-	}
-
-	/**
-	 *  Get the collision shape obj.
-	 *  @returns {System.Shape}
-	 */
-	getCollisionObj(): Model.Shape {
-		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.collisionCustomID);
-	}
 }
-
-export { Object3D };

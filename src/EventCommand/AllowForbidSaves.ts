@@ -38,7 +38,7 @@ class AllowForbidSaves extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		Scene.Map.allowSaves = this.allow.getValue();
+		Scene.Map.allowSaves = this.allow.getValue() as boolean;
 		return 1;
 	}
 }

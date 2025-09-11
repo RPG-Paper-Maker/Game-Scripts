@@ -12,48 +12,41 @@
 import { Manager, Scene } from '..';
 import { Interpreter, MAIN_MENU_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
-import { Localization } from './Localization';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  A main menu command in scene main menu.
- *  @extends Localization
- *  @param {Record<string, any>} [json=undefined] - Json object describing the item
+/**
+ * JSON structure describing a main menu command.
  */
-class MainMenuCommand extends Localization {
+export type MainMenuCommandJSON = LocalizationJSON & {
+	kind?: MAIN_MENU_COMMAND_KIND;
+	script?: string;
+};
+
+/**
+ * Represents a main menu command in the scene's main menu.
+ */
+export class MainMenuCommand extends Localization {
 	public kind: MAIN_MENU_COMMAND_KIND;
 	public script: string;
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: MainMenuCommandJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the main menu command.
-	 *  @param {Record<string, any>} - json Json object describing the main
-	 *  menu command.
+	 * Gets the callback function to execute when the command is selected.
+	 * @returns A function returning true if successful, false otherwise.
 	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-		this.kind = Utils.valueOrDefault(json.kind, MAIN_MENU_COMMAND_KIND.INVENTORY);
-		if (this.kind === MAIN_MENU_COMMAND_KIND.SCRIPT) {
-			this.script = Utils.valueOrDefault(json.script, '');
-		}
-	}
-
-	/**
-	 *  Get the callbacks functions when clicking on command.
-	 *  @returns {(item: Core.Item) => boolean}
-	 */
-	getCallback(): () => boolean {
+	getCallback(context: Scene.Menu): (() => boolean) | null {
 		const name = this.name();
 		switch (this.kind) {
 			case MAIN_MENU_COMMAND_KIND.INVENTORY:
-				return function () {
+				return () => {
 					Manager.Stack.push(new Scene.MenuInventory(name));
 					return true;
 				};
 			case MAIN_MENU_COMMAND_KIND.SKILLS:
-				return function () {
+				return () => {
 					if (Game.current.teamHeroes.length > 0) {
 						Manager.Stack.push(new Scene.MenuSkills(name));
 						return true;
@@ -61,7 +54,7 @@ class MainMenuCommand extends Localization {
 					return false;
 				};
 			case MAIN_MENU_COMMAND_KIND.EQUIP:
-				return function () {
+				return () => {
 					if (Game.current.teamHeroes.length > 0) {
 						Manager.Stack.push(new Scene.MenuEquip(name));
 						return true;
@@ -69,7 +62,7 @@ class MainMenuCommand extends Localization {
 					return false;
 				};
 			case MAIN_MENU_COMMAND_KIND.STATES:
-				return function () {
+				return () => {
 					if (Game.current.teamHeroes.length > 0) {
 						Manager.Stack.push(new Scene.MenuDescriptionState(name));
 						return true;
@@ -77,15 +70,15 @@ class MainMenuCommand extends Localization {
 					return false;
 				};
 			case MAIN_MENU_COMMAND_KIND.ORDER:
-				return function () {
+				return () => {
 					if (Game.current.teamHeroes.length > 0) {
-						this.windowChoicesTeam.select(0);
+						context.windowChoicesTeam.select(0);
 						return true;
 					}
 					return false;
 				};
 			case MAIN_MENU_COMMAND_KIND.SAVE:
-				return function () {
+				return () => {
 					if (Scene.Map.allowSaves) {
 						Manager.Stack.push(new Scene.SaveGame());
 						return true;
@@ -93,7 +86,7 @@ class MainMenuCommand extends Localization {
 					return false;
 				};
 			case MAIN_MENU_COMMAND_KIND.QUIT:
-				return function () {
+				return () => {
 					Manager.Stack.push(
 						new Scene.Confirm(() => {
 							Manager.Stack.popAll();
@@ -103,11 +96,10 @@ class MainMenuCommand extends Localization {
 					return true;
 				};
 			case MAIN_MENU_COMMAND_KIND.SCRIPT:
-				const t = this;
-				return function () {
-					return Interpreter.evaluate(t.script, {
+				return () => {
+					return Interpreter.evaluate(this.script, {
 						additionalName: 'menu',
-						additionalValue: t,
+						additionalValue: context,
 						addReturn: false,
 					}) as boolean;
 				};
@@ -115,6 +107,15 @@ class MainMenuCommand extends Localization {
 				return null;
 		}
 	}
-}
 
-export { MainMenuCommand };
+	/**
+	 *  Read the JSON associated to the main menu command.
+	 */
+	read(json: MainMenuCommandJSON): void {
+		super.read(json);
+		this.kind = Utils.valueOrDefault(json.kind, MAIN_MENU_COMMAND_KIND.INVENTORY);
+		if (this.kind === MAIN_MENU_COMMAND_KIND.SCRIPT) {
+			this.script = Utils.valueOrDefault(json.script, '');
+		}
+	}
+}

@@ -73,6 +73,10 @@ class Rectangle {
 	isInside(x: number, y: number): boolean {
 		return x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height;
 	}
+
+	clone() {
+		return new Rectangle(this.x, this.y, this.width, this.height);
+	}
 }
 
 export { Rectangle };

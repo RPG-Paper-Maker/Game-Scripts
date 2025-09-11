@@ -9,42 +9,43 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { Utils } from '../Common';
 import { Base } from './Base';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A troop monster.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  troop monster
+/**
+ * JSON structure for a troop monster.
  */
-class TroopMonster extends Base {
-	public id: number;
-	public level: Model.DynamicValue;
-	public hidden: Model.DynamicValue;
-	public isSpecificPosition: boolean;
-	public specificPosition: Model.DynamicValue;
+export type TroopMonsterJSON = {
+	mid?: number;
+	l?: DynamicValueJSON;
+	h?: DynamicValueJSON;
+	isSpecificPosition?: boolean;
+	specificPosition?: DynamicValueJSON;
+};
 
-	constructor(json?: Record<string, any>) {
+/**
+ * A troop monster definition.
+ */
+export class TroopMonster extends Base {
+	public id: number;
+	public level: DynamicValue;
+	public hidden: DynamicValue;
+	public isSpecificPosition: boolean;
+	public specificPosition: DynamicValue;
+
+	constructor(json?: TroopMonsterJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the troop monster.
-	 *  @param {Record<string, any>} - json Json object describing the troop
-	 *  monster
+	 * Read JSON into this troop monster.
 	 */
-	read(json: Record<string, any>) {
+	read(json: TroopMonsterJSON): void {
 		this.id = json.mid;
-		this.level = Model.DynamicValue.readOrDefaultNumber(json.l, 1);
-		this.hidden = Model.DynamicValue.readOrDefaultSwitch(json.h, false);
+		this.level = DynamicValue.readOrDefaultNumber(json.l, 1);
+		this.hidden = DynamicValue.readOrDefaultSwitch(json.h, false);
 		this.isSpecificPosition = Utils.valueOrDefault(json.isSpecificPosition, false);
-		this.specificPosition = Model.DynamicValue.readOrDefaultMessage(
-			json.specificPosition,
-			'new THREE.Vector3(0,0,0)'
-		);
+		this.specificPosition = DynamicValue.readOrDefaultMessage(json.specificPosition, 'new THREE.Vector3(0,0,0)');
 	}
 }
-
-export { TroopMonster };

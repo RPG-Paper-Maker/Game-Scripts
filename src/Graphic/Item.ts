@@ -55,13 +55,14 @@ class Item extends Base {
 			const price = showSellPrice ? item.system.getPrice() : item.shop.getPrice();
 			this.graphicCurrencies = [];
 			let graphic: Graphic.TextIcon;
-			for (const id in price) {
-				const [kind, value] = price[id];
+			for (const [id, [kind, value]] of price.entries()) {
 				graphic = Graphic.TextIcon.createFromSystem(
 					Mathf.numberWithCommas(
-						showSellPrice ? Math.round((Datas.Systems.priceSoldItem.getValue() * value) / 100) : value
+						showSellPrice
+							? Math.round(((Datas.Systems.priceSoldItem.getValue() as number) * value) / 100)
+							: value
 					),
-					kind === DAMAGES_KIND.CURRENCY ? Datas.Systems.getCurrency(parseInt(id)) : null,
+					kind === DAMAGES_KIND.CURRENCY ? Datas.Systems.getCurrency(id) : null,
 					{ align: ALIGN.RIGHT },
 					possible ? {} : { color: Model.Color.GREY }
 				);

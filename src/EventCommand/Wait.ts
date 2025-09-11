@@ -36,7 +36,7 @@ class Wait extends Base {
 	 */
 	initialize(): Record<string, any> {
 		return {
-			milliseconds: this.milliseconds.getValue() * 1000,
+			milliseconds: (this.milliseconds.getValue() as number) * 1000,
 			currentTime: new Date().getTime(),
 		};
 	}

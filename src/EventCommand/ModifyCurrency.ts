@@ -43,11 +43,11 @@ class ModifyCurrency extends Base {
 	 *   @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const currencyID = this.currencyID.getValue();
+		const currencyID = this.currencyID.getValue() as number;
 		const previousCurrency = Game.current.currencies[currencyID];
 		Game.current.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this.operation](
 			Game.current.currencies[currencyID],
-			this.value.getValue()
+			this.value.getValue() as number
 		);
 		const dif = Game.current.currencies[currencyID] - previousCurrency;
 		if (dif > 0) {

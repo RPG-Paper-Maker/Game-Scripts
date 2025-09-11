@@ -96,19 +96,23 @@ class SwitchTexture extends Base {
 		if (!currentState.loading) {
 			currentState.loading = true;
 			if (this.isTilesetID) {
-				Game.current.textures.tilesets[this.tilesetID.getValue()] = this.tilesetPictureID.getValue();
+				Game.current.textures.tilesets[this.tilesetID.getValue() as number] =
+					this.tilesetPictureID.getValue() as number;
 			}
 			if (this.isAutotileID) {
-				Game.current.textures.autotiles[this.autotileID.getValue()] = this.autotilePictureID.getValue();
+				Game.current.textures.autotiles[this.autotileID.getValue() as number] =
+					this.autotilePictureID.getValue() as number;
 			}
 			if (this.isWallID) {
-				Game.current.textures.walls[this.wallID.getValue()] = this.wallPictureID.getValue();
+				Game.current.textures.walls[this.wallID.getValue() as number] = this.wallPictureID.getValue() as number;
 			}
 			if (this.isObject3DID) {
-				Game.current.textures.objects3D[this.object3DID.getValue()] = this.object3DPictureID.getValue();
+				Game.current.textures.objects3D[this.object3DID.getValue() as number] =
+					this.object3DPictureID.getValue() as number;
 			}
 			if (this.isMountainID) {
-				Game.current.textures.mountains[this.mountainID.getValue()] = this.mountainPictureID.getValue();
+				Game.current.textures.mountains[this.mountainID.getValue() as number] =
+					this.mountainPictureID.getValue() as number;
 			}
 			//Scene.Map.current.close();
 			Scene.Map.current.loading = true;

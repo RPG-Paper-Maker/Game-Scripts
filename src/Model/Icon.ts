@@ -23,16 +23,10 @@ export type IconJSON = LocalizationJSON & {
 
 /**
  * Represents an icon, including picture ID and indices.
- * Extends {@link Localization} to support translatable names.
  */
 export class Icon extends Localization {
-	/** The ID of the picture representing this icon. */
 	public pictureID: number;
-
-	/** The X index in the picture sheet. */
 	public pictureIndexX: number;
-
-	/** The Y index in the picture sheet. */
 	public pictureIndexY: number;
 
 	constructor(json?: IconJSON) {
@@ -41,7 +35,6 @@ export class Icon extends Localization {
 
 	/**
 	 * Reads the JSON data describing the icon.
-	 * @param json - The JSON object containing the icon data.
 	 */
 	read(json: IconJSON): void {
 		super.read(json);

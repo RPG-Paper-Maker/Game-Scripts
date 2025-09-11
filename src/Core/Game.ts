@@ -483,10 +483,10 @@ class Game {
 		for (const member of Datas.Systems.initialPartyMembers) {
 			this.instanciateTeam(
 				member.teamKind,
-				member.CHARACTER_KIND,
-				member.heroID.getValue(),
-				member.level.getValue(),
-				member.variableInstanceID.getValue(true)
+				member.characterKind,
+				member.heroID.getValue() as number as number,
+				member.level.getValue() as number as number,
+				member.variableInstanceID.getValue(true) as number
 			);
 		}
 		this.mapsDatas = {};
@@ -711,7 +711,7 @@ class Game {
 					1,
 					true,
 					2,
-					[null, Model.DynamicValue.createNumber(chrono.id)],
+					Utils.arrayToMap([Model.DynamicValue.createNumber(chrono.id)]),
 					true,
 					false
 				);

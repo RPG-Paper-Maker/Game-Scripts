@@ -85,7 +85,7 @@ class BattleSystems {
 		for (i = 0, l = this.elementsOrder.length; i < l; i++) {
 			id = this.elementsOrder[i];
 			name = this.elements[id].name();
-			this.statistics[this.maxStatisticID + i * 2 + 1] = Model.Statistic.createElementRes(id, name);
+			this.statistics[this.maxStatisticID + i * 2 + 1] = Model.Statistic.createElementRes(id);
 			this.statistics[this.maxStatisticID + i * 2 + 2] = Model.Statistic.createElementResPercent(id, name);
 			this.statisticsOrder[index + i * 2] = this.maxStatisticID + i * 2 + 1;
 			this.statisticsOrder[index + i * 2 + 1] = this.maxStatisticID + i * 2 + 2;

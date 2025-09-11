@@ -12,27 +12,28 @@
 import { Utils } from '../Common';
 import { Base } from './Base';
 
-/** @class
- *  A special element (autotile, wall, object3D, mountain) of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  special element
+/**
+ * JSON schema for a special element (autotile, wall, object3D, mountain).
  */
-class SpecialElement extends Base {
+export type SpecialElementJSON = {
+	pic?: number;
+};
+
+/**
+ * Represents a special element in the game.
+ * A special element is a visual component like an autotile, wall, 3D object, or mountain.
+ */
+export class SpecialElement extends Base {
 	public pictureID: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: SpecialElementJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the special element.
-	 *  @param {Record<string, any>} - json Json object describing the special
-	 *  element
+	 * Reads the JSON data describing the special element.
 	 */
-	read(json: Record<string, any>) {
+	read(json: SpecialElementJSON): void {
 		this.pictureID = Utils.valueOrDefault(json.pic, -1);
 	}
 }
-
-export { SpecialElement };

@@ -12,26 +12,31 @@
 import { Position } from '../Core';
 import { Base } from './Base';
 
-/** @class
- *  A battle map of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  battle map
+/**
+ * JSON schema for a battle map.
  */
-class BattleMap extends Base {
+export type BattleMapJSON = {
+	idm: number;
+	p: number[];
+};
+
+/**
+ * Represents a battle map in the game.
+ * A battle map stores the map ID and a position where the battle takes place.
+ */
+export class BattleMap extends Base {
 	public idMap: number;
 	public position: Position;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: BattleMapJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Create a System battle map.
-	 *  @static
-	 *  @param {number} idMap - The map ID
-	 *  @param {Position} position - The json position
-	 *  @returns {System.BattleMap}
+	 * Creates a new {@link BattleMap} instance.
+	 * @param idMap - The map ID.
+	 * @param position - The battle start position.
+	 * @returns A new battle map instance.
 	 */
 	static create(idMap: number, position: Position): BattleMap {
 		const map = new BattleMap();
@@ -41,13 +46,10 @@ class BattleMap extends Base {
 	}
 
 	/**
-	 *  Read the JSON associated to the battle map.
-	 *  @param {Record<string, any>} - json Json object describing the battle map
+	 * Reads the JSON data describing the battle map.
 	 */
-	read(json: Record<string, any>) {
+	read(json: BattleMapJSON): void {
 		this.idMap = json.idm;
 		this.position = Position.createFromArray(json.p);
 	}
 }
-
-export { BattleMap };

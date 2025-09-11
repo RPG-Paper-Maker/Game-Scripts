@@ -13,14 +13,21 @@ import { Paths, Platform, SONG_KIND, Utils } from '../Common';
 import { Datas } from '../index';
 import { Base } from './Base';
 
-/** @class
- *  A song of the game.
- *  @extends Model.Base
- *  @param {Record<string ,any>} - [json=undefined] Json object describing the
- *  song
- *  @param {SONG_KIND} [kind=SONG_KIND.Music] - The kind of song
+/**
+ * JSON structure describing a song.
  */
-class Song extends Base {
+export type SongJSON = {
+	id: number;
+	name: string;
+	br?: boolean;
+	d?: string;
+	base64?: string;
+};
+
+/**
+ * A song of the game.
+ */
+export class Song extends Base {
 	public id: number;
 	public kind: SONG_KIND;
 	public name: string;
@@ -29,14 +36,12 @@ class Song extends Base {
 	public base64: string;
 	public howl: typeof Howl;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: SongJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Get string of song kind.
-	 *  @param {SONG_KIND} kind - The song kind
-	 *  @returns {string}
+	 * Convert a song kind to its string label.
 	 */
 	static songKindToString(kind: SONG_KIND): string {
 		switch (kind) {
@@ -53,24 +58,17 @@ class Song extends Base {
 	}
 
 	/**
-	 *  Get the folder associated to a kind of song.
-	 *  @static
-	 *  @param {SONG_KIND} kind - The kind of song
-	 *  @param {boolean} isBR - Indicate if the pciture is a BR
-	 *  @param {string} isDLC - Indicate if the pciture is a DLC
-	 *  @returns {string}
+	 * Get the folder path for a given song kind.
 	 */
 	static getFolder(kind: SONG_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			(isBR ? Datas.Systems.PATH_BR : dlc ? `${Datas.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
 			this.getLocalFolder(kind)
 		);
 	}
 
 	/**
-	 *  Get the local folder associated to a kind of song.
-	 *  @param {SONG_KIND} kind - The kind of song
-	 *  @returns {string}
+	 * Get the local subfolder name for a given song kind.
 	 */
 	static getLocalFolder(kind: SONG_KIND): string {
 		switch (kind) {
@@ -87,20 +85,7 @@ class Song extends Base {
 	}
 
 	/**
-	 *  Read the JSON associated to the song.
-	 *  @param {Record<string, any>} - json Json object describing the song
-	 */
-	read(json: Record<string, any>) {
-		this.id = json.id;
-		this.name = json.name;
-		this.isBR = json.br;
-		this.dlc = Utils.valueOrDefault(json.d, '');
-		this.base64 = json.base64;
-	}
-
-	/**
-	 *  Get the absolute path associated to this song.
-	 *  @returns {string}
+	 * Get the absolute path of the song.
 	 */
 	getPath(): string {
 		if (this.base64) {
@@ -109,13 +94,13 @@ class Song extends Base {
 		if (this.howl) {
 			return this.howl._src;
 		}
-		return Song.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+		return `${Song.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
 	}
 
 	/**
-	 *  Load the song.
+	 * Load the song into memory.
 	 */
-	load() {
+	load(): void {
 		if (this.id !== -1 && !this.howl) {
 			this.howl = new Howl({
 				src: [this.getPath()],
@@ -128,6 +113,15 @@ class Song extends Base {
 			}
 		}
 	}
-}
 
-export { Song };
+	/**
+	 * Read the JSON data into this song.
+	 */
+	read(json: SongJSON): void {
+		this.id = json.id;
+		this.name = json.name;
+		this.isBR = json.br;
+		this.dlc = Utils.valueOrDefault(json.d, '');
+		this.base64 = json.base64;
+	}
+}

@@ -10,29 +10,29 @@
 */
 
 import { Model } from '..';
-import { Reaction } from './Reaction';
+import { Parameter, ParameterListJSON } from './Parameter';
+import { Reaction, ReactionJSON } from './Reaction';
 
-/** @class
- *  A common reaction.
- *  @extends Model.Reaction
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  common reaction
+/**
+ * JSON structure describing a common reaction.
  */
-class CommonReaction extends Reaction {
-	public parameters: Model.Parameter[];
+export type CommonReactionJSON = ReactionJSON & ParameterListJSON;
 
-	constructor(json?: Record<string, any>) {
+/**
+ * A common reaction.
+ */
+export class CommonReaction extends Reaction {
+	public parameters: Map<number, Parameter>;
+
+	constructor(json?: CommonReactionJSON) {
 		super(json);
 	}
 
-	/** Read the JSON associated to the common reaction.
-	 *  @param {Record<string, any>} - json Json object describing the common
-	 *  reaction
+	/**
+	 * Read the JSON associated to the common reaction.
 	 */
-	read(json: Record<string, any>) {
+	read(json: CommonReactionJSON): void {
 		super.read(json);
 		this.parameters = Model.Parameter.readParameters(json);
 	}
 }
-
-export { CommonReaction };

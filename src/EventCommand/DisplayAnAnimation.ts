@@ -41,7 +41,7 @@ class DisplayAnAnimation extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const animation = new Animation(this.animationID.getValue());
+		const animation = new Animation(this.animationID.getValue() as number);
 		return {
 			parallel: this.isWaitEnd,
 			animation: animation,
@@ -61,7 +61,7 @@ class DisplayAnAnimation extends Base {
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (currentState.parallel) {
 			if (!currentState.waitingObject) {
-				const objectID = this.objectID.getValue();
+				const objectID = this.objectID.getValue() as number;
 				MapObject.search(
 					objectID,
 					(result: StructSearchResult) => {

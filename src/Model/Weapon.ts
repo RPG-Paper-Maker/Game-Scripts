@@ -13,32 +13,26 @@ import { ITEM_KIND } from '../Common';
 import { Datas, Model } from '../index';
 import { Armor } from './Armor';
 
-/** @class
- *  A weapon of the game.
- *  @extends Model.Armor
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  weapon
+/**
+ * Represents a weapon in the game.
+ * Weapons are a specialization of {@link Armor}, but always return
+ * {@link ITEM_KIND.WEAPON} as their item kind.
  */
-class Weapon extends Armor {
-	constructor(json?: Record<string, any>) {
-		super(json as any);
-	}
-
+export class Weapon extends Armor {
 	/**
-	 *  Get the weapon kind.
-	 *  @returns {System/WeaponArmorKind}
+	 * Retrieves the weapon type (kind) from the battle system database.
+	 * @returns {Model.WeaponArmorKind} The weapon kind associated with this weapon.
 	 */
 	getType(): Model.WeaponArmorKind {
 		return Datas.BattleSystems.getWeaponKind(this.type);
 	}
 
 	/**
-	 *  Get the item kind.
-	 *  @returns {ITEM_KIND}
+	 * Retrieves the item kind for this object.
+	 * Always returns {@link ITEM_KIND.WEAPON}.
+	 * @returns {ITEM_KIND} The constant value {@link ITEM_KIND.WEAPON}.
 	 */
 	getKind(): ITEM_KIND {
 		return ITEM_KIND.WEAPON;
 	}
 }
-
-export { Weapon };

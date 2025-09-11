@@ -12,6 +12,7 @@
 import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Picture2D } from '../Core';
 import { Datas, Model } from '../index';
+import { PictureJSON } from '../Model';
 
 /** @class
  *   All the pictures datas.
@@ -39,8 +40,8 @@ class Pictures {
 			n: number,
 			id: number,
 			jsonHash: Record<string, any>,
-			jsonList: Record<string, any>[],
-			jsonPicture: Record<string, any>,
+			jsonList: PictureJSON[],
+			jsonPicture: PictureJSON,
 			list: Model.Picture[],
 			picture: Model.Picture;
 		for (let i = 0; i < l; i++) {

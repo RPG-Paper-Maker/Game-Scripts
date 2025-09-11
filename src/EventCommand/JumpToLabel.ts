@@ -38,7 +38,7 @@ class JumpToLabel extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		return this.label.getValue();
+		return this.label.getValue() as number;
 	}
 }
 

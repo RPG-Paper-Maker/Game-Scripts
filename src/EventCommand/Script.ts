@@ -43,7 +43,10 @@ class Script extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const res = Interpreter.evaluate(this.script.getValue(), { thisObject: object, addReturn: false }) as number;
+		const res = Interpreter.evaluate(this.script.getValue() as string, {
+			thisObject: object,
+			addReturn: false,
+		}) as number;
 		return res === undefined ? 1 : res;
 	}
 }

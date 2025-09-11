@@ -168,7 +168,7 @@ class If extends Base {
 	 *  @returns {number}
 	 */
 	getHeroInstanceID(): number {
-		return this.heroInstanceID ? this.heroInstanceID.getValue() : 0;
+		return this.heroInstanceID ? (this.heroInstanceID.getValue() as number) : 0;
 	}
 
 	/**
@@ -205,8 +205,8 @@ class If extends Base {
 		switch (this.kind) {
 			case 0: // Variable / Param / Prop
 				result = Mathf.OPERATORS_COMPARE[this.variableParamPropOPERATION_KIND](
-					this.variableParamProp.getValue(),
-					this.variableParamPropValue.getValue()
+					this.variableParamProp.getValue() as number,
+					this.variableParamPropValue.getValue() as number
 				);
 				break;
 			case 1:
@@ -218,7 +218,7 @@ class If extends Base {
 				}
 				switch (this.heroesKind) {
 					case 0:
-						const name = this.heroesNamed.getValue();
+						const name = this.heroesNamed.getValue() as string;
 						result = Player.applySelection(
 							this.heroesSelection,
 							heroesSelection,
@@ -246,7 +246,7 @@ class If extends Base {
 						);
 						break;
 					case 2:
-						id = this.heroesSkillID.getValue();
+						id = this.heroesSkillID.getValue() as number;
 						result = Player.applySelection(
 							this.heroesSelection,
 							heroesSelection,
@@ -264,7 +264,7 @@ class If extends Base {
 					case 3:
 						switch (this.heroesEquipedKind) {
 							case 0:
-								id = this.heroesEquipedWeaponID.getValue();
+								id = this.heroesEquipedWeaponID.getValue() as number;
 								result = Player.applySelection(
 									this.heroesSelection,
 									heroesSelection,
@@ -281,7 +281,7 @@ class If extends Base {
 								);
 								break;
 							case 1:
-								id = this.heroesEquipedArmorID.getValue();
+								id = this.heroesEquipedArmorID.getValue() as number;
 								result = Player.applySelection(
 									this.heroesSelection,
 									heroesSelection,
@@ -300,7 +300,7 @@ class If extends Base {
 						}
 						break;
 					case 4:
-						id = this.heroesStatusID.getValue();
+						id = this.heroesStatusID.getValue() as number;
 						result = Player.applySelection(
 							this.heroesSelection,
 							heroesSelection,
@@ -316,8 +316,8 @@ class If extends Base {
 						);
 						break;
 					case 5:
-						stat = Datas.BattleSystems.getStatistic(this.heroesStatisticID.getValue());
-						value = this.heroesStatisticValue.getValue();
+						stat = Datas.BattleSystems.getStatistic(this.heroesStatisticID.getValue() as number);
+						value = this.heroesStatisticValue.getValue() as number;
 						result = Player.applySelection(
 							this.heroesSelection,
 							heroesSelection,
@@ -334,13 +334,13 @@ class If extends Base {
 				break;
 			case 2:
 				result = Mathf.OPERATORS_COMPARE[this.operationCurrency](
-					Game.current.currencies[this.currencyID.getValue()],
-					this.currencyValue.getValue()
+					Game.current.currencies[this.currencyID.getValue() as number],
+					this.currencyValue.getValue() as number
 				);
 				break;
 			case 3:
 				nb = 0;
-				id = this.itemID.getValue();
+				id = this.itemID.getValue() as number;
 				for (i = 0, l = Game.current.items.length; i < l; i++) {
 					item = Game.current.items[i];
 					if (item.kind === ITEM_KIND.ITEM && item.system.id === id) {
@@ -348,11 +348,11 @@ class If extends Base {
 						break;
 					}
 				}
-				result = Mathf.OPERATORS_COMPARE[this.operationItem](nb, this.itemValue.getValue());
+				result = Mathf.OPERATORS_COMPARE[this.operationItem](nb, this.itemValue.getValue() as number);
 				break;
 			case 4:
 				nb = 0;
-				id = this.weaponID.getValue();
+				id = this.weaponID.getValue() as number;
 				for (i = 0, l = Game.current.items.length; i < l; i++) {
 					item = Game.current.items[i];
 					if (item.kind === ITEM_KIND.WEAPON && item.system.id === id) {
@@ -374,11 +374,11 @@ class If extends Base {
 						}
 					}
 				}
-				result = Mathf.OPERATORS_COMPARE[this.operationWeapon](nb, this.weaponValue.getValue());
+				result = Mathf.OPERATORS_COMPARE[this.operationWeapon](nb, this.weaponValue.getValue() as number);
 				break;
 			case 5:
 				nb = 0;
-				id = this.armorID.getValue();
+				id = this.armorID.getValue() as number;
 				for (i = 0, l = Game.current.items.length; i < l; i++) {
 					item = Game.current.items[i];
 					if (item.kind === ITEM_KIND.ARMOR && item.system.id === id) {
@@ -400,11 +400,11 @@ class If extends Base {
 						}
 					}
 				}
-				result = Mathf.OPERATORS_COMPARE[this.operationArmor](nb, this.armorValue.getValue());
+				result = Mathf.OPERATORS_COMPARE[this.operationArmor](nb, this.armorValue.getValue() as number);
 				break;
 			case 6:
-				const key = Datas.Keyboards.get(this.keyID.getValue());
-				const b = this.keyValue.getValue();
+				const key = Datas.Keyboards.get(this.keyID.getValue() as number);
+				const b = this.keyValue.getValue() as boolean;
 				result = !b;
 				for (const pressedKey of Inputs.keysPressed) {
 					if (Datas.Keyboards.isKeyEqual(pressedKey, key)) {
@@ -414,7 +414,7 @@ class If extends Base {
 				}
 				break;
 			case 7:
-				result = Interpreter.evaluate(this.script.getValue(), {
+				result = Interpreter.evaluate(this.script.getValue() as string, {
 					thisObject: object,
 				}) as boolean;
 				break;
@@ -423,7 +423,7 @@ class If extends Base {
 				break;
 			case 9: {
 				if (!currentState.waitingObject) {
-					const objectID = this.objectIDLookingAt.getValue();
+					const objectID = this.objectIDLookingAt.getValue() as number;
 					MapObject.search(
 						objectID,
 						(result: StructSearchResult) => {
@@ -441,7 +441,11 @@ class If extends Base {
 				}
 			}
 			case 10:
-				const index = Utils.indexOfProp(Game.current.chronometers as any, 'id', this.chronometerID.getValue());
+				const index = Utils.indexOfProp(
+					Game.current.chronometers as any,
+					'id',
+					this.chronometerID.getValue() as number
+				);
 				if (index === -1) {
 					result = false;
 					break;
@@ -449,13 +453,13 @@ class If extends Base {
 					const chrono = Game.current.chronometers[index];
 					result = Mathf.OPERATORS_COMPARE[this.chronometerOperation](
 						chrono.getSeconds(),
-						this.chronometerSeconds.getValue()
+						this.chronometerSeconds.getValue() as number
 					);
 				}
 				break;
 			case 11: {
 				if (!currentState.waitingObject) {
-					const objectID = this.objectIDClimbing.getValue();
+					const objectID = this.objectIDClimbing.getValue() as number;
 					MapObject.search(
 						objectID,
 						(result: StructSearchResult) => {

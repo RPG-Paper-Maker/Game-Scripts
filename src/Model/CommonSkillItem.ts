@@ -22,13 +22,13 @@ import {
 } from '../Common';
 import { Battler, Player } from '../Core';
 import { Datas, Scene } from '../index';
-import { Characteristic } from './Characteristic';
-import { Cost } from './Cost';
+import { Characteristic, CharacteristicJSON } from './Characteristic';
+import { Cost, CostJSON } from './Cost';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
-import { Effect } from './Effect';
+import { Effect, EffectJSON } from './Effect';
 import { Icon, IconJSON } from './Icon';
 import { Localization, LocalizationJSON } from './Localization';
-import { PlaySong } from './PlaySong';
+import { PlaySong, PlaySongJSON } from './PlaySong';
 import { WeaponArmorKind } from './WeaponArmorKind';
 
 /**
@@ -44,15 +44,15 @@ export type CommonSkillItemJSON = IconJSON & {
 	tcf?: DynamicValueJSON;
 	cf?: DynamicValueJSON;
 	ak?: AVAILABLE_KIND;
-	s?: any;
+	s?: PlaySongJSON;
 	auid?: DynamicValueJSON;
 	atid?: DynamicValueJSON;
 	canBeSold?: DynamicValueJSON;
 	battleMessage?: LocalizationJSON;
-	p?: any;
-	cos?: any;
-	e?: any;
-	car?: any;
+	p?: CostJSON[];
+	cos?: CostJSON[];
+	e?: EffectJSON[];
+	car?: CharacteristicJSON[];
 };
 
 /**
@@ -125,7 +125,7 @@ class CommonSkillItem extends Icon {
 		const effects: Effect[] = [];
 		for (const effect of this.effects) {
 			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
-				const skill = Datas.Skills.get(effect.performSkillID.getValue());
+				const skill = Datas.Skills.get(effect.performSkillID.getValue() as number);
 				effects.push(...skill.getEffects());
 			} else {
 				effects.push(effect);
@@ -184,12 +184,12 @@ class CommonSkillItem extends Icon {
 		const user = Scene.Map.current.user.player ?? null;
 
 		// Condition
-		if (!Interpreter.evaluate(this.conditionFormula.getValue())) {
+		if (!Interpreter.evaluate(this.conditionFormula.getValue() as string)) {
 			return false;
 		}
 		// Target condition : at least one target can be selected
 		const fTargetCondition = (target: Player) => {
-			return Interpreter.evaluate(this.targetConditionFormula.getValue(), { user, target });
+			return Interpreter.evaluate(this.targetConditionFormula.getValue() as string, { user, target });
 		};
 		if (target) {
 			if (!fTargetCondition(target)) {
@@ -212,14 +212,14 @@ class CommonSkillItem extends Icon {
 					(item) =>
 						item === null ||
 						!item.system.isWeapon() ||
-						!Interpreter.evaluate(item.system.conditionFormula.getValue()) ||
+						!Interpreter.evaluate(item.system.conditionFormula.getValue() as string) ||
 						(target
-							? Interpreter.evaluate(item.system.targetConditionFormula.getValue(), {
+							? Interpreter.evaluate(item.system.targetConditionFormula.getValue() as string, {
 									user,
 									target,
 							  })
 							: targets.some((target) => {
-									Interpreter.evaluate(item.system.targetConditionFormula.getValue(), {
+									Interpreter.evaluate(item.system.targetConditionFormula.getValue() as string, {
 										user,
 										target,
 									});
@@ -272,7 +272,7 @@ class CommonSkillItem extends Icon {
 	 * Gets the price of this item.
 	 * @returns A record mapping item identifiers to `[DAMAGES_KIND, number]` tuples.
 	 */
-	getPrice(): Record<string, [DAMAGES_KIND, number]> {
+	getPrice(): Map<number, [DAMAGES_KIND, number]> {
 		return Cost.getPrice(this.price);
 	}
 

@@ -43,10 +43,10 @@ class ChangeProperty extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const propertyID = this.propertyID.getValue();
+		const propertyID = this.propertyID.getValue() as number;
 		const newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](
 			object.properties[propertyID],
-			this.newValue.getValue()
+			this.newValue.getValue() as number
 		);
 		object.properties[propertyID] = newValue;
 		let props: number[];
@@ -59,7 +59,7 @@ class ChangeProperty extends Base {
 				Game.current.startupProperties[Scene.Map.current.id] = props;
 			}
 		} else {
-			const portion = Scene.Map.current.mapProperties.allObjects[object.system.id].getGlobalPortion();
+			const portion = Scene.Map.current.mapProperties.allObjects.get(object.system.id).getGlobalPortion();
 			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
 			const indexProp = portionDatas.pi.indexOf(object.system.id);
 			if (indexProp === -1) {

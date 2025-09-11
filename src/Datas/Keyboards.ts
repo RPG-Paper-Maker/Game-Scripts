@@ -11,6 +11,7 @@
 
 import { Paths, Platform } from '../Common';
 import { Datas, Graphic, Model, Scene } from '../index';
+import { KeyboardJSON } from '../Model';
 
 /** @class
  *  All the keyBoards datas.
@@ -69,7 +70,7 @@ class Keyboards {
 			jsonKey = jsonList[i];
 			id = jsonKey.id;
 			abbreviation = jsonKey.abr;
-			key = new Model.Keyboard(jsonKey);
+			key = new Model.Keyboard(jsonKey as KeyboardJSON);
 			sc = Datas.Settings.kb[id];
 			if (sc) {
 				key.sc = sc;

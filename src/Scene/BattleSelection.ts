@@ -249,9 +249,9 @@ class BattleSelection {
 			skill = Datas.Skills.get(ownedSkill.id);
 			if (
 				(skill.availableKind === AVAILABLE_KIND.ALWAYS || skill.availableKind === AVAILABLE_KIND.BATTLE) &&
-				Interpreter.evaluate(skill.conditionFormula.getValue(), { user: this.battle.user.player }) &&
+				Interpreter.evaluate(skill.conditionFormula.getValue() as string, { user: this.battle.user.player }) &&
 				this.battle.battlers[CHARACTER_KIND.MONSTER].every((battler) => {
-					return Interpreter.evaluate(skill.conditionFormula.getValue(), {
+					return Interpreter.evaluate(skill.conditionFormula.getValue() as string, {
 						user: this.battle.user.player,
 						target: battler.player,
 					});
@@ -377,7 +377,7 @@ class BattleSelection {
 					this.battle.winning = true;
 					Scene.Battle.escapedLastBattle = true;
 					Manager.Songs.initializeProgressionMusic(
-						Model.PlaySong.currentPlayingMusic.volume.getValue(),
+						Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
 						0,
 						0,
 						Scene.Battle.TIME_LINEAR_MUSIC_END
@@ -415,7 +415,7 @@ class BattleSelection {
 			for (const battler of battlers) {
 				if (
 					!battler.hidden &&
-					Interpreter.evaluate(this.battle.skill.targetConditionFormula.getValue(), {
+					Interpreter.evaluate(this.battle.skill.targetConditionFormula.getValue() as string, {
 						user: this.battle.user.player,
 						target: battler.player,
 					})

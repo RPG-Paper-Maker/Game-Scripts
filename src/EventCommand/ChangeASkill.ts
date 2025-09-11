@@ -57,11 +57,11 @@ class ChangeASkill extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const skillID = this.skillID.getValue();
+		const skillID = this.skillID.getValue() as number;
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:
-				targets = [Game.current.getHeroByInstanceID(this.heInstanceID.getValue())];
+				targets = [Game.current.getHeroByInstanceID(this.heInstanceID.getValue() as number)];
 				break;
 			case 1:
 				targets = Game.current.getTeam(this.groupIndex);

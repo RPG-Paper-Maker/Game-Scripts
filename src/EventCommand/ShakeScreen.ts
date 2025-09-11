@@ -57,9 +57,9 @@ class ShakeScreen extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const t = this.time.getValue();
+		const t = this.time.getValue() as number;
 		const time = t * 1000;
-		let shakeNumber = this.shakeNumber.getValue() * 2;
+		let shakeNumber = (this.shakeNumber.getValue() as number) * 2;
 		const totalShakes = shakeNumber * t;
 
 		// Should be pair to have perfect cycles
@@ -69,7 +69,7 @@ class ShakeScreen extends Base {
 			shakeNumber = (floor !== 0 && totalShakes - floor < ceil - totalShakes ? floor : ceil) / t;
 		}
 		const shakeTime = (1 / (shakeNumber * 2)) * 1000;
-		const offset = this.offset.getValue();
+		const offset = this.offset.getValue() as number;
 		return {
 			parallel: this.isWaitEnd,
 			offset: offset,

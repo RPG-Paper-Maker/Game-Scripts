@@ -81,7 +81,7 @@ class ChangeAStatistic extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const statisticID = this.statisticID.getValue();
+		const statisticID = this.statisticID.getValue() as number;
 		const stat = Datas.BattleSystems.getStatistic(statisticID);
 		const isChangingExperience = Datas.BattleSystems.idExpStatistic === statisticID;
 		const isChangingLevel = Datas.BattleSystems.idLevelStatistic === statisticID;
@@ -89,7 +89,7 @@ class ChangeAStatistic extends Base {
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:
-				const t = Game.current.getHeroByInstanceID(this.heInstanceID.getValue());
+				const t = Game.current.getHeroByInstanceID(this.heInstanceID.getValue() as number);
 				if (t === null) {
 					Platform.showErrorMessage(
 						"Can't get any hero/enemy with instance ID " +
@@ -109,12 +109,15 @@ class ChangeAStatistic extends Base {
 			before = target[abr];
 			switch (this.value) {
 				case 0:
-					target[abr] = Mathf.OPERATORS_NUMBERS[this.operation](target[abr], this.vNumber.getValue());
+					target[abr] = Mathf.OPERATORS_NUMBERS[this.operation](
+						target[abr],
+						this.vNumber.getValue() as number
+					);
 					break;
 				case 1:
 					target[abr] = Mathf.OPERATORS_NUMBERS[this.operation](
 						target[abr],
-						Interpreter.evaluate(this.vFormula.getValue(), {
+						Interpreter.evaluate(this.vFormula.getValue() as string, {
 							user: target,
 						}) as number
 					);

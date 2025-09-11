@@ -9,34 +9,37 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { OPERATION_KIND, Utils } from '../Common';
 import { Base } from './Base';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A possible status release turn condition hero.
- *  @extends Model.Base
- *  @param {Record<string, any>} - json Json object describing the object state
+/**
+ * JSON structure for a status release turn condition.
  */
-class StatusReleaseTurn extends Base {
-	public operationTurnKind: OPERATION_KIND;
-	public turn: Model.DynamicValue;
-	public chance: Model.DynamicValue;
+export type StatusReleaseTurnJSON = {
+	operationTurnKind?: OPERATION_KIND;
+	turn?: DynamicValueJSON;
+	chance?: DynamicValueJSON;
+};
 
-	constructor(json?: Record<string, any>) {
+/**
+ * A possible status release turn condition for a hero.
+ */
+export class StatusReleaseTurn extends Base {
+	public operationTurnKind: OPERATION_KIND;
+	public turn: DynamicValue;
+	public chance: DynamicValue;
+
+	constructor(json?: StatusReleaseTurnJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the status release turn.
-	 *  @param {Record<string, any>} - json Json object describing the status
-	 *  release turn
+	 * Read JSON into this status release turn.
 	 */
-	read(json: Record<string, any>) {
+	read(json: StatusReleaseTurnJSON): void {
 		this.operationTurnKind = Utils.valueOrDefault(json.operationTurnKind, OPERATION_KIND.GREATER_THAN_OR_EQUAL_TO);
-		this.turn = Model.DynamicValue.readOrDefaultNumber(json.turn, 1);
-		this.chance = Model.DynamicValue.readOrDefaultNumberDouble(json.chance);
+		this.turn = DynamicValue.readOrDefaultNumber(json.turn, 1);
+		this.chance = DynamicValue.readOrDefaultNumberDouble(json.chance);
 	}
 }
-
-export { StatusReleaseTurn };

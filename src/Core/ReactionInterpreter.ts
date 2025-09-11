@@ -28,7 +28,7 @@ import { MapObject, Node } from './index';
  */
 class ReactionInterpreter {
 	public static currentObject: MapObject;
-	public static currentParameters: Model.DynamicValue[];
+	public static currentParameters: Map<number, Model.DynamicValue>;
 	public static currentReaction: ReactionInterpreter;
 	public static blockingHero: boolean;
 
@@ -36,7 +36,7 @@ class ReactionInterpreter {
 	public currentReaction: Model.Reaction;
 	public currentMapObject: MapObject;
 	public currentState: number;
-	public currentParameters: Model.DynamicValue[];
+	public currentParameters: Map<number, Model.DynamicValue>;
 	public currentCommand: Node;
 	public currentCommandState: Record<string, any>;
 	public currentTimeState: [Model.Event, number];
@@ -47,7 +47,7 @@ class ReactionInterpreter {
 		reaction: Model.Reaction,
 		object: MapObject,
 		state: number,
-		parameters?: Model.DynamicValue[],
+		parameters?: Map<number, Model.DynamicValue>,
 		event?: [Model.Event, number],
 		command: Node = reaction.getFirstCommand()
 	) {
@@ -165,7 +165,7 @@ class ReactionInterpreter {
 			let tab: [Model.DynamicValue, Node];
 			for (let i = 0, l = this.currentReaction.labels.length; i < l; i++) {
 				tab = this.currentReaction.labels[i];
-				if (result === tab[0].getValue()) {
+				if (result === (tab[0].getValue() as string)) {
 					value = tab[1].next;
 				}
 			}

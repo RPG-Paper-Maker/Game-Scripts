@@ -60,15 +60,15 @@ class ChangeExperienceCurve extends Base {
 		let targets: Player[];
 		switch (this.selectionKind) {
 			case 0:
-				targets = [Game.current.getHeroByInstanceID(this.selectionHeroEnemyInstanceID.getValue())];
+				targets = [Game.current.getHeroByInstanceID(this.selectionHeroEnemyInstanceID.getValue() as number)];
 				break;
 			case 1:
 				targets = Game.current.getTeam(this.selectionTeam);
 				break;
 		}
-		const level = this.levelRange.getValue();
-		const levelTo = this.levelRangeTo.getValue();
-		const totalExperience = this.totalExperience.getValue();
+		const level = this.levelRange.getValue() as number;
+		const levelTo = this.levelRangeTo.getValue() as number;
+		const totalExperience = this.totalExperience.getValue() as number;
 		let i: number, value: number;
 		for (const target of targets) {
 			for (i = level; i <= levelTo; i++) {

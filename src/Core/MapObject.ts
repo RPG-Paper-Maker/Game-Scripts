@@ -22,6 +22,7 @@ import {
 	Utils,
 } from '../Common';
 import { Datas, EventCommand, Manager, Model, Scene } from '../index';
+import { DynamicValue, StateInstance } from '../Model';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
 import { Frame } from './Frame';
@@ -32,6 +33,7 @@ import { Object3DBox } from './Object3DBox';
 import { Object3DCustom } from './Object3DCustom';
 import { Portion } from './Portion';
 import { Position } from './Position';
+import { Rectangle } from './Rectangle';
 import { Sprite } from './Sprite';
 
 interface StructSearchResult {
@@ -83,10 +85,10 @@ class MapObject {
 	public frequency: Model.DynamicValue;
 	public properties: any[];
 	public states: number[];
-	public statesInstance: Record<string, any>[];
+	public statesInstance: StateInstance[];
 	public timeEventsEllapsed: [Model.Event, number][];
 	public currentState: Model.State;
-	public currentStateInstance: Record<string, any>;
+	public currentStateInstance: StateInstance;
 	public removed: boolean;
 	public upPosition: THREE.Vector3;
 	public halfPosition: THREE.Vector3;
@@ -187,7 +189,7 @@ class MapObject {
 		}
 
 		// Check if direct
-		const position = Scene.Map.current.mapProperties.allObjects[objectID];
+		const position = Scene.Map.current.mapProperties.allObjects.get(objectID);
 		if (!position && Scene.Map.current.isBattleMap && Scene.Map.current.id === Game.current.currentMapID) {
 			// Ignore if is in battle and same map
 			return null;
@@ -198,7 +200,7 @@ class MapObject {
 				"Can't find object with ID" +
 					objectID +
 					' in map ' +
-					Scene.Map.current.mapProperties.names.name() +
+					Scene.Map.current.mapProperties.name() +
 					'. Please check where ' +
 					'this ID is used and remove it.'
 			);
@@ -284,7 +286,7 @@ class MapObject {
 	 *  @returns {Promise<StructSearchResult>}
 	 */
 	static async searchOutMap(objectID: number): Promise<StructSearchResult> {
-		const position = Scene.Map.current.mapProperties.allObjects[objectID];
+		const position = Scene.Map.current.mapProperties.allObjects.get(objectID);
 		if (!position && Scene.Map.current.isBattleMap && Scene.Map.current.id === Game.current.currentMapID) {
 			// Ignore if is in battle and same map
 			return null;
@@ -350,11 +352,11 @@ class MapObject {
 				mapProp = [];
 			}
 		} else {
-			const obj = Scene.Map.current.mapProperties.allObjects[this.system.id];
+			const obj = Scene.Map.current.mapProperties.allObjects.get(this.system.id);
 			if (obj === undefined) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
-						Scene.Map.current.mapProperties.names.name() +
+						Scene.Map.current.mapProperties.name() +
 						' and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.'
 				);
 			}
@@ -378,7 +380,7 @@ class MapObject {
 		for (i = 0, l = this.system.properties.length; i < l; i++) {
 			prop = this.system.properties[i];
 			propValue = mapProp[prop.id - 1];
-			this.properties[prop.id] = Utils.valueOrDefault(propValue, prop.initialValue.getValue());
+			this.properties[prop.id] = Utils.valueOrDefault(propValue, prop.initialValue.getValue() as number);
 		}
 
 		// States
@@ -392,7 +394,9 @@ class MapObject {
 			if (stateValue !== undefined) {
 				state.graphicID = Utils.valueOrDefault(stateValue.gid, stateSystem.graphicID);
 				state.graphicKind = Utils.valueOrDefault(stateValue.gk, stateSystem.graphicKind);
-				state.rectTileset = Utils.valueOrDefault(stateValue.gt, stateSystem.rectTileset);
+				state.rectTileset = stateValue.gt
+					? Rectangle.createFromArray(stateValue.gt)
+					: stateSystem.rectTileset.clone();
 				state.indexX = Utils.valueOrDefault(stateValue.gix, stateSystem.indexX);
 				state.indexY = Utils.valueOrDefault(stateValue.giy, stateSystem.indexY);
 				state.speedID = Utils.valueOrDefault(stateValue.sid, stateSystem.speedID);
@@ -446,10 +450,10 @@ class MapObject {
 			events = this.timeEventsEllapsed[i];
 			event = events[0];
 			timeEllapsed = events[1];
-			interval = event.parameters[1].value;
-			if (new Date().getTime() - timeEllapsed >= interval.getValue() * 1000) {
-				repeat = event.parameters[2].value;
-				if (this.receiveEvent(this, true, 1, [null, interval, repeat], this.states, events)) {
+			interval = event.parameters.get(1).value;
+			if (new Date().getTime() - timeEllapsed >= (interval.getValue() as number) * 1000) {
+				repeat = event.parameters.get(2).value;
+				if (this.receiveEvent(this, true, 1, Utils.arrayToMap([interval, repeat]), this.states, events)) {
 					if (!repeat.getValue()) {
 						removeList.push(i);
 					}
@@ -480,11 +484,11 @@ class MapObject {
 			}
 			this.states = Game.current.startupStates[Scene.Map.current.id];
 		} else {
-			const pos = Scene.Map.current.mapProperties.allObjects[this.system.id];
+			const pos = Scene.Map.current.mapProperties.allObjects.get(this.system.id);
 			if (pos === undefined) {
 				Platform.showErrorMessage(
 					'Object linking issue. Please go to map ' +
-						Scene.Map.current.mapProperties.names.name() +
+						Scene.Map.current.mapProperties.name() +
 						' and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.'
 				);
 			}
@@ -567,14 +571,14 @@ class MapObject {
 			this.updateOrientation();
 			let result: [CustomGeometry, [number, StructMapElementCollision[]]];
 			const positionTranformation = Position.createFromVector3(this.position);
-			positionTranformation.centerX = this.currentStateInstance.centerX.getValue();
-			positionTranformation.centerZ = this.currentStateInstance.centerZ.getValue();
-			positionTranformation.angleX = this.currentStateInstance.angleX.getValue();
-			positionTranformation.angleY = this.currentStateInstance.angleY.getValue();
-			positionTranformation.angleZ = this.currentStateInstance.angleZ.getValue();
-			positionTranformation.scaleX = this.currentStateInstance.scaleX.getValue();
-			positionTranformation.scaleY = this.currentStateInstance.scaleY.getValue();
-			positionTranformation.scaleZ = this.currentStateInstance.scaleZ.getValue();
+			positionTranformation.centerX = this.currentStateInstance.centerX.getValue() as number;
+			positionTranformation.centerZ = this.currentStateInstance.centerZ.getValue() as number;
+			positionTranformation.angleX = this.currentStateInstance.angleX.getValue() as number;
+			positionTranformation.angleY = this.currentStateInstance.angleY.getValue() as number;
+			positionTranformation.angleZ = this.currentStateInstance.angleZ.getValue() as number;
+			positionTranformation.scaleX = this.currentStateInstance.scaleX.getValue() as number;
+			positionTranformation.scaleY = this.currentStateInstance.scaleY.getValue() as number;
+			positionTranformation.scaleZ = this.currentStateInstance.scaleZ.getValue() as number;
 			if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 				positionTranformation.x = -1 / 2;
 				positionTranformation.y = 0;
@@ -603,10 +607,10 @@ class MapObject {
 			} else {
 				let x: number, y: number;
 				if (this.currentStateInstance.graphicID === 0) {
-					x = this.currentStateInstance.rectTileset[0];
-					y = this.currentStateInstance.rectTileset[1];
-					this.width = this.currentStateInstance.rectTileset[2];
-					this.height = this.currentStateInstance.rectTileset[3];
+					x = this.currentStateInstance.rectTileset.x;
+					y = this.currentStateInstance.rectTileset.y;
+					this.width = this.currentStateInstance.rectTileset.width;
+					this.height = this.currentStateInstance.rectTileset.height;
 				} else {
 					x = 0;
 					y = 0;
@@ -624,7 +628,10 @@ class MapObject {
 					).isStopAnimation;
 				}
 
-				const sprite = Sprite.create(this.currentStateInstance.graphicKind, [x, y, this.width, this.height]);
+				const sprite = Sprite.create(
+					this.currentStateInstance.graphicKind,
+					new Rectangle(x, y, this.width, this.height)
+				);
 				result = sprite.createGeometry(
 					this.width,
 					this.height,
@@ -1028,7 +1035,7 @@ class MapObject {
 
 		// Set position
 		let speed =
-			this.speed.getValue() *
+			(this.speed.getValue() as number) *
 			MapObject.SPEED_NORMAL *
 			Manager.Stack.averageElapsedTime *
 			Datas.Systems.SQUARE_SIZE;
@@ -1220,7 +1227,7 @@ class MapObject {
 				}
 			}
 			// Add to moved objects of the original portion if not done yet
-			const originalPortion = Scene.Map.current.mapProperties.allObjects[this.system.id].getGlobalPortion();
+			const originalPortion = Scene.Map.current.mapProperties.allObjects.get(this.system.id).getGlobalPortion();
 			objects = Game.current.getPortionDatas(Scene.Map.current.id, originalPortion);
 			movedObjects = objects.m;
 			if (movedObjects && movedObjects.indexOf(this) === -1) {
@@ -1243,7 +1250,7 @@ class MapObject {
 		if (!this.isHero) {
 			const afterPortion = Position.createFromVector3(this.position).getGlobalPortion();
 			const objects = Game.current.getPortionDatas(Scene.Map.current.id, afterPortion);
-			const originalPortion = Scene.Map.current.mapProperties.allObjects[this.system.id].getGlobalPortion();
+			const originalPortion = Scene.Map.current.mapProperties.allObjects.get(this.system.id).getGlobalPortion();
 			if (!originalPortion.equals(afterPortion)) {
 				objects.mout.push(this);
 			} else {
@@ -1317,7 +1324,7 @@ class MapObject {
 		sender: MapObject,
 		isSystem: boolean,
 		eventID: number,
-		parameters: Model.DynamicValue[],
+		parameters: Map<number, DynamicValue>,
 		states: number[],
 		events?: [Model.Event, number]
 	): boolean {
@@ -1380,7 +1387,9 @@ class MapObject {
 			if (this.moving) {
 				// If moving, update frame
 				if (this.currentStateInstance.moveAnimation) {
-					frame = this.frame.update(Datas.Systems.mapFrameDuration.getValue() / this.speed.getValue());
+					frame = this.frame.update(
+						(Datas.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
+					);
 				}
 
 				// Update mesh position
@@ -1388,7 +1397,9 @@ class MapObject {
 				this.mesh.position.set(this.position.x, this.position.y + offset, this.position.z);
 			} else {
 				if (this.currentStateInstance.stopAnimation && !this.isClimbing) {
-					frame = this.frame.update(Datas.Systems.mapFrameDuration.getValue() / this.speed.getValue());
+					frame = this.frame.update(
+						(Datas.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
+					);
 				} else {
 					frame = this.frame.value !== this.currentStateInstance.indexX;
 					this.frame.value = this.currentStateInstance.indexX;
@@ -1457,7 +1468,7 @@ class MapObject {
 				this.currentState.route,
 				this,
 				this.currentState.id,
-				[null],
+				new Map(),
 				null,
 				true
 			);
@@ -1522,8 +1533,8 @@ class MapObject {
 				if (this.currentStateInstance.graphicID === 0) {
 					w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
 					h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
-					x = (this.currentStateInstance.rectTileset[0] * Datas.Systems.SQUARE_SIZE) / textureWidth;
-					y = (this.currentStateInstance.rectTileset[1] * Datas.Systems.SQUARE_SIZE) / textureHeight;
+					x = (this.currentStateInstance.rectTileset.x * Datas.Systems.SQUARE_SIZE) / textureWidth;
+					y = (this.currentStateInstance.rectTileset.y * Datas.Systems.SQUARE_SIZE) / textureHeight;
 				} else {
 					w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
 					h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;

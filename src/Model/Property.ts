@@ -9,31 +9,46 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { Base } from './Base';
+import { DynamicValue } from './DynamicValue';
 
-/** @class
- *  A property of an object.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  property
+/*
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { DynamicValueJSON } from './DynamicValue';
+
+/**
+ * JSON structure describing a property.
  */
-class Property extends Base {
-	public id: number;
-	public initialValue: Model.DynamicValue;
+export type PropertyJSON = {
+	id: number;
+	iv?: DynamicValueJSON;
+};
 
-	constructor(json?: Record<string, any>) {
+/**
+ * Represents a property of an object.
+ */
+export class Property extends Base {
+	public id: number;
+	public initialValue: DynamicValue;
+
+	constructor(json?: PropertyJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the property.
-	 *  @param {Record<string, any>} - json Json object describing the property
+	 * Initialize this property from JSON data.
 	 */
-	read(json: Record<string, any>) {
+	read(json: PropertyJSON): void {
 		this.id = json.id;
-		this.initialValue = Model.DynamicValue.readOrNone(json.iv);
+		this.initialValue = DynamicValue.readOrNone(json.iv);
 	}
 }
-
-export { Property };

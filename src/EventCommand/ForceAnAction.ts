@@ -83,7 +83,7 @@ class ForceAnAction extends Base {
 				side = CHARACTER_KIND.MONSTER;
 				break;
 			case 1: // Hero instance ID
-				const id = this.battlerHeroEnemyInstanceID.getValue();
+				const id = this.battlerHeroEnemyInstanceID.getValue() as number;
 				Scene.Map.current.user = null;
 				for (const battler of map.battlers[CHARACTER_KIND.HERO]) {
 					if (battler.player.instid === id) {
@@ -105,11 +105,11 @@ class ForceAnAction extends Base {
 		switch (this.actionKind) {
 			case 0: // Skill
 				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
-				map.skill = Datas.Skills.get(this.actionID.getValue());
+				map.skill = Datas.Skills.get(this.actionID.getValue() as number);
 				break;
 			case 1: // Item
 				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS;
-				map.skill = Datas.Items.get(this.actionID.getValue());
+				map.skill = Datas.Items.get(this.actionID.getValue() as number);
 				break;
 			case 2: // Do nothing
 				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.NONE;
@@ -159,7 +159,7 @@ class ForceAnAction extends Base {
 							map.targets = [map.battlers[CHARACTER_KIND.MONSTER][this.targetEnemyIndex]];
 							break;
 						case 1: // Hero instance ID
-							const id = this.targetHeroEnemyInstanceID.getValue();
+							const id = this.targetHeroEnemyInstanceID.getValue() as number;
 							for (const battler of map.battlers[CHARACTER_KIND.HERO]) {
 								if (battler.player.instid === id) {
 									map.targets = [battler];

@@ -94,17 +94,20 @@ class BattleEnemyAttack {
 			action = systemActions[i];
 			if (
 				action.isConditionTurn &&
-				!Mathf.OPERATORS_COMPARE[action.operationKindTurn](this.battle.turn, action.turnValueCompare.getValue())
+				!Mathf.OPERATORS_COMPARE[action.operationKindTurn](
+					this.battle.turn,
+					action.turnValueCompare.getValue() as number
+				)
 			) {
 				continue;
 			}
 			if (action.isConditionStatistic) {
-				stat = Datas.BattleSystems.getStatistic(action.statisticID.getValue());
+				stat = Datas.BattleSystems.getStatistic(action.statisticID.getValue() as number);
 				if (stat.isFix) {
 					if (
 						!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
 							player[stat.abbreviation],
-							action.statisticValueCompare.getValue()
+							action.statisticValueCompare.getValue() as number
 						)
 					) {
 						continue;
@@ -113,7 +116,7 @@ class BattleEnemyAttack {
 					if (
 						!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
 							(player[stat.abbreviation] / player[stat.getMaxAbbreviation()]) * 100,
-							action.statisticValueCompare.getValue()
+							action.statisticValueCompare.getValue() as number
 						)
 					) {
 						continue;
@@ -124,19 +127,19 @@ class BattleEnemyAttack {
 				action.isConditionVariable &&
 				!Mathf.OPERATORS_COMPARE[action.operationKindVariable](
 					Game.current.variables[action.variableID],
-					action.variableValueCompare.getValue()
+					action.variableValueCompare.getValue() as number
 				)
 			) {
 				continue;
 			}
-			if (action.isConditionStatus && !player.hasStatus(action.statusID.getValue())) {
+			if (action.isConditionStatus && !player.hasStatus(action.statusID.getValue() as number)) {
 				continue;
 			}
-			if (action.isConditionScript && !Interpreter.evaluate(action.script.getValue())) {
+			if (action.isConditionScript && !Interpreter.evaluate(action.script.getValue() as string)) {
 				continue;
 			}
 			if (action.actionKind === MONSTER_ACTION_KIND.USE_SKILL) {
-				const skill = Datas.Skills.get(action.skillID.getValue());
+				const skill = Datas.Skills.get(action.skillID.getValue() as number);
 				if (
 					!skill.isPossible() ||
 					this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_USE_SKILLS)
@@ -166,7 +169,7 @@ class BattleEnemyAttack {
 				}
 			}
 			if (action.actionKind === MONSTER_ACTION_KIND.USE_ITEM) {
-				number = this.battle.user.itemsNumbers[action.itemID.getValue()];
+				number = this.battle.user.itemsNumbers[action.itemID.getValue() as number];
 				if (
 					(number !== undefined && number === 0) ||
 					this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_USE_ITEMS)
@@ -177,7 +180,7 @@ class BattleEnemyAttack {
 
 			// Push to possible actions if passing every conditions
 			actions.push(action);
-			priorities += action.priority.getValue();
+			priorities += action.priority.getValue() as number;
 		}
 		return priorities;
 	}
@@ -202,7 +205,7 @@ class BattleEnemyAttack {
 		let value: number, action: Model.MonsterAction;
 		for (let i = 0, l = actions.length; i < l; i++) {
 			action = actions[i];
-			value = (action.priority.getValue() / priorities) * 100;
+			value = ((action.priority.getValue() as number) / priorities) * 100;
 			if (random >= step && random <= value + step) {
 				this.battle.action = action;
 				break;
@@ -213,7 +216,7 @@ class BattleEnemyAttack {
 		// Define battle command kind
 		switch (this.battle.action.actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL:
-				const effect = Datas.Skills.get(this.battle.action.skillID.getValue()).getEffects()[0];
+				const effect = Datas.Skills.get(this.battle.action.skillID.getValue() as number).getEffects()[0];
 				if (effect) {
 					this.battle.battleCommandKind =
 						effect.kind === EFFECT_KIND.SPECIAL_ACTIONS
@@ -222,17 +225,17 @@ class BattleEnemyAttack {
 				} else {
 					this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 				}
-				this.battle.attackSkill = Datas.Skills.get(this.battle.action.skillID.getValue());
+				this.battle.attackSkill = Datas.Skills.get(this.battle.action.skillID.getValue() as number);
 				break;
 			case MONSTER_ACTION_KIND.USE_ITEM:
 				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS;
 
 				// If item, use one
-				const id = this.battle.action.itemID.getValue();
+				const id = this.battle.action.itemID.getValue() as number;
 				this.battle.user.itemsNumbers[id] =
 					(this.battle.user.itemsNumbers[id]
 						? this.battle.user.itemsNumbers[id]
-						: this.battle.action.itemNumberMax.getValue()) - 1;
+						: (this.battle.action.itemNumberMax.getValue() as number)) - 1;
 				break;
 			case MONSTER_ACTION_KIND.DO_NOTHING:
 				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.DO_NOTHING;
@@ -253,11 +256,11 @@ class BattleEnemyAttack {
 		let targetKind: TARGET_KIND, side: CHARACTER_KIND;
 		switch (this.battle.action.actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL:
-				this.battle.skill = Datas.Skills.get(this.battle.action.skillID.getValue());
+				this.battle.skill = Datas.Skills.get(this.battle.action.skillID.getValue() as number);
 				targetKind = this.battle.skill.targetKind;
 				break;
 			case MONSTER_ACTION_KIND.USE_ITEM:
-				this.battle.skill = Datas.Items.get(this.battle.action.itemID.getValue());
+				this.battle.skill = Datas.Items.get(this.battle.action.itemID.getValue() as number);
 				targetKind = this.battle.skill.targetKind;
 				break;
 			case MONSTER_ACTION_KIND.DO_NOTHING:

@@ -54,8 +54,8 @@ class StopMusic extends Base {
 		return Manager.Songs.stopSong(
 			kind,
 			time,
-			that.seconds.getValue(),
-			kind === SONG_KIND.SOUND ? that.soundID.getValue() : -1
+			that.seconds.getValue() as number,
+			kind === SONG_KIND.SOUND ? (that.soundID.getValue() as number) : -1
 		)
 			? 1
 			: 0;

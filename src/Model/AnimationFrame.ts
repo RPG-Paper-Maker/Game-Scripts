@@ -29,27 +29,11 @@ export type AnimationFrameJSON = {
  * drawable elements and associated effects.
  */
 export class AnimationFrame extends Base {
-	/**
-	 * The drawable elements of this frame.
-	 */
 	public elements: AnimationFrameElement[];
-
-	/**
-	 * The effects triggered during this frame (e.g., sounds).
-	 */
 	public effects: AnimationFrameEffect[];
 
 	constructor(json?: AnimationFrameJSON) {
 		super(json);
-	}
-
-	/**
-	 * Reads the JSON data describing the animation frame.
-	 * @param json - The JSON object describing the frame.
-	 */
-	read(json: AnimationFrameJSON): void {
-		this.elements = Utils.readJSONList(json.e, AnimationFrameElement);
-		this.effects = Utils.readJSONList(json.ef, AnimationFrameEffect, true);
 	}
 
 	/**
@@ -74,5 +58,13 @@ export class AnimationFrame extends Base {
 		for (const element of this.elements) {
 			element?.draw(picture, position, rows, cols);
 		}
+	}
+
+	/**
+	 * Reads the JSON data describing the animation frame.
+	 */
+	read(json: AnimationFrameJSON): void {
+		this.elements = Utils.readJSONList(json.e, AnimationFrameElement);
+		this.effects = Utils.readJSONList(json.ef, AnimationFrameEffect, true);
 	}
 }

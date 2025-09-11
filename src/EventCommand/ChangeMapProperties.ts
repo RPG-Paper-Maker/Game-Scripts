@@ -83,7 +83,7 @@ class ChangeMapProperties extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (!currentState.loading) {
-			let mapID = this.mapID.getValue();
+			let mapID = this.mapID.getValue() as number;
 			if (mapID === -1) {
 				mapID = Scene.Map.current.id;
 			}
@@ -93,7 +93,7 @@ class ChangeMapProperties extends Base {
 				Game.current.mapsProperties[mapID] = datas;
 			}
 			if (this.isTilesetID) {
-				datas.tileset = this.tilesetID.getValue();
+				datas.tileset = this.tilesetID.getValue() as number;
 			}
 			if (this.isMusic) {
 				datas.music = this.music.toJson();
@@ -102,16 +102,16 @@ class ChangeMapProperties extends Base {
 				datas.backgroundSound = this.backgroundSound.toJson();
 			}
 			if (this.isCameraPropertiesID) {
-				datas.camera = this.cameraPropertiesID.getValue();
+				datas.camera = this.cameraPropertiesID.getValue() as number;
 			}
 			if (this.isSky) {
 				switch (this.skyKind) {
 					case 0:
-						datas.color = this.skyID.getValue();
+						datas.color = this.skyID.getValue() as number;
 						delete datas.skybox;
 						break;
 					case 1:
-						datas.skybox = this.skyID.getValue();
+						datas.skybox = this.skyID.getValue() as number;
 						delete datas.color;
 						break;
 				}

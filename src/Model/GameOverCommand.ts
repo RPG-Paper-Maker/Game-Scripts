@@ -12,38 +12,31 @@
 import { Manager, Model, Scene } from '..';
 import { GAME_OVER_COMMAND_KIND, Interpreter, Platform, Utils } from '../Common';
 import { Game } from '../Core';
-import { Localization } from './Localization';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  A game over command of the game.
- *  @extends Model.Localization
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  game over command
+/**
+ * JSON structure describing a game over command.
  */
-class GameOverCommand extends Localization {
+export type GameOverCommandJSON = LocalizationJSON & {
+	k?: GAME_OVER_COMMAND_KIND;
+	s?: string;
+};
+
+/**
+ * A game over command of the game.
+ */
+export class GameOverCommand extends Localization {
 	public kind: GAME_OVER_COMMAND_KIND;
 	public script: string;
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: GameOverCommandJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the game over command.
-	 *  @param {Record<string, any>} json - Json object describing the game
-	 *  over command
+	 * Get the action function according to kind.
 	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-		this.kind = Utils.valueOrDefault(json.k, GAME_OVER_COMMAND_KIND.CONTINUE);
-		this.script = Utils.valueOrDefault(json.s, '');
-	}
-
-	/**
-	 *  Get the action function according to kind.
-	 *  @returns {Function}
-	 */
-	getAction(): Function {
+	getAction(): () => boolean {
 		switch (this.kind) {
 			case GAME_OVER_COMMAND_KIND.CONTINUE:
 				return this.continue;
@@ -57,23 +50,21 @@ class GameOverCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for continuying the game (load last save).
-	 *  @returns {boolean}
+	 * Callback function for continuing the game (load last save).
 	 */
 	continue(): boolean {
 		if (Game.current.slot === -1) {
-			// If slot = -1, then run new game (no save)
+			// No save slot → start new game
 			Model.TitleCommand.startNewGame();
 		} else {
-			// Else, run the last save slot
-			(<Scene.GameOver>Manager.Stack.top).continue();
+			// Resume from the last save slot
+			(Manager.Stack.top as Scene.GameOver).continue().catch(console.error);
 		}
 		return true;
 	}
 
 	/**
-	 *  Callback function for going back to title screen.
-	 *  @returns {boolean}
+	 * Callback function for going back to title screen.
 	 */
 	titleScreen(): boolean {
 		Manager.Stack.popAll();
@@ -82,8 +73,7 @@ class GameOverCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for closing the window.
-	 *  @returns {boolean}
+	 * Callback function for closing the window.
 	 */
 	exit(): boolean {
 		Platform.quit();
@@ -91,13 +81,19 @@ class GameOverCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for closing the window.
-	 *  @returns {boolean}
+	 * Callback function for executing a custom script.
 	 */
 	executeScript(): boolean {
 		Interpreter.evaluate(this.script, { addReturn: false });
 		return true;
 	}
-}
 
-export { GameOverCommand };
+	/**
+	 * Read the JSON associated to the game over command.
+	 */
+	read(json: GameOverCommandJSON): void {
+		super.read(json);
+		this.kind = Utils.valueOrDefault(json.k, GAME_OVER_COMMAND_KIND.CONTINUE);
+		this.script = Utils.valueOrDefault(json.s, '');
+	}
+}

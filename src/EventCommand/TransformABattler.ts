@@ -73,7 +73,7 @@ class TransformABattler extends Base {
 					side = CHARACTER_KIND.MONSTER;
 					break;
 				case 1: // Hero instance ID
-					const id = this.battlerHeroEnemyInstanceID.getValue();
+					const id = this.battlerHeroEnemyInstanceID.getValue() as number;
 					for (const [i, b] of map.battlers[CHARACTER_KIND.HERO].entries()) {
 						if (b.player.instid === id) {
 							battler = b;
@@ -95,12 +95,12 @@ class TransformABattler extends Base {
 			if (battler) {
 				const player = new Player(
 					battler.player.kind,
-					this.monsterID.getValue(),
+					this.monsterID.getValue() as number,
 					Game.current.charactersInstances++,
 					[],
 					[]
 				);
-				player.instanciate(this.level.getValue());
+				player.instanciate(this.level.getValue() as number);
 				const newBattler = new Battler(
 					player,
 					battler.isEnemy,

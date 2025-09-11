@@ -56,7 +56,7 @@ class BattleAnimation {
 							? this.battle.battleStartTurn.active
 								? this.battle.currentSkill
 								: (<Graphic.Skill>this.battle.windowChoicesSkills.getCurrentContent()).system
-							: Datas.Skills.get(this.battle.action.skillID.getValue());
+							: Datas.Skills.get(this.battle.action.skillID.getValue() as number);
 				}
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
@@ -67,7 +67,7 @@ class BattleAnimation {
 					content =
 						this.battle.attackingGroup === CHARACTER_KIND.HERO
 							? (<Graphic.Item>this.battle.windowChoicesItems.getCurrentContent()).item.system
-							: Datas.Items.get(this.battle.action.itemID.getValue());
+							: Datas.Items.get(this.battle.action.itemID.getValue() as number);
 				}
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
@@ -96,8 +96,8 @@ class BattleAnimation {
 						gameItem = equipments[i];
 						if (gameItem && gameItem.kind === ITEM_KIND.WEAPON) {
 							weapon = gameItem.system;
-							this.battle.animationUser = new Animation(weapon.animationUserID.getValue());
-							this.battle.animationTarget = new Animation(weapon.animationTargetID.getValue());
+							this.battle.animationUser = new Animation(weapon.animationUserID.getValue() as number);
+							this.battle.animationTarget = new Animation(weapon.animationTargetID.getValue() as number);
 							effects = weapon.getEffects();
 							for (j = 0, m = effects.length; j < m; j++) {
 								this.battle.effects.push(effects[j]);
@@ -106,8 +106,10 @@ class BattleAnimation {
 					}
 				}
 				if (this.battle.effects.length === 0) {
-					this.battle.animationUser = new Animation(Datas.Skills.get(1).animationUserID.getValue());
-					this.battle.animationTarget = new Animation(Datas.Skills.get(1).animationTargetID.getValue());
+					this.battle.animationUser = new Animation(Datas.Skills.get(1).animationUserID.getValue() as number);
+					this.battle.animationTarget = new Animation(
+						Datas.Skills.get(1).animationTargetID.getValue() as number
+					);
 					const effects = this.battle.attackSkill.getEffects();
 					for (i = 1, l = effects.length; i < l; i++) {
 						this.battle.effects.push(effects[i]);
@@ -117,16 +119,16 @@ class BattleAnimation {
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS:
 			case EFFECT_SPECIAL_ACTION_KIND.NONE:
-				this.battle.animationUser = new Animation(content.animationUserID.getValue());
-				this.battle.animationTarget = new Animation(content.animationTargetID.getValue());
+				this.battle.animationUser = new Animation(content.animationUserID.getValue() as number);
+				this.battle.animationTarget = new Animation(content.animationTargetID.getValue() as number);
 				this.battle.effects = content.getEffects();
 				content.cost();
 				this.battle.user.setUsingSkill();
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS:
 				const graphic = <Graphic.Item>this.battle.windowChoicesItems.getCurrentContent();
-				this.battle.animationUser = new Animation(content.animationUserID.getValue());
-				this.battle.animationTarget = new Animation(content.animationTargetID.getValue());
+				this.battle.animationUser = new Animation(content.animationUserID.getValue() as number);
+				this.battle.animationTarget = new Animation(content.animationTargetID.getValue() as number);
 				this.battle.effects = content.getEffects();
 				if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
 					Game.current.useItem(graphic.item);

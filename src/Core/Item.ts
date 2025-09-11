@@ -207,23 +207,22 @@ class Item {
 		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 
 		// Update value
-		for (const id in price) {
-			let [kind, value] = price[id];
-			value *= times;
+		for (const [id, [kind, value]] of price.entries()) {
+			const totalValue = value * times;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
-					Game.current.currencies[id] -= value;
-					if (value > 0) {
-						Game.current.currenciesUsed[id] += value;
+					Game.current.currencies[id] -= totalValue;
+					if (totalValue > 0) {
+						Game.current.currenciesUsed[id] += totalValue;
 					} else {
-						Game.current.currenciesEarned[id] -= value;
+						Game.current.currenciesEarned[id] -= totalValue;
 					}
 					break;
 				case DAMAGES_KIND.STAT:
-					user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation] -= value;
+					user[Datas.BattleSystems.getStatistic(id).abbreviation] -= totalValue;
 					break;
 				case DAMAGES_KIND.VARIABLE:
-					Game.current.variables[parseInt(id)] -= value;
+					Game.current.variables[id] -= totalValue;
 					break;
 			}
 		}
@@ -256,9 +255,8 @@ class Item {
 		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
 
 		// Update currency
-		for (const id in price) {
-			const [kind, value] = price[id];
-			const p = Math.round((value * Datas.Systems.priceSoldItem.getValue()) / 100) * times;
+		for (const [id, [kind, value]] of price.entries()) {
+			const p = Math.round((value * (Datas.Systems.priceSoldItem.getValue() as number)) / 100) * times;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
 					Game.current.currencies[id] += p;
@@ -269,10 +267,10 @@ class Item {
 					}
 					break;
 				case DAMAGES_KIND.STAT:
-					user[Datas.BattleSystems.getStatistic(parseInt(id)).abbreviation] += p;
+					user[Datas.BattleSystems.getStatistic(id).abbreviation] += p;
 					break;
 				case DAMAGES_KIND.VARIABLE:
-					Game.current.variables[parseInt(id)] += p;
+					Game.current.variables[id] += p;
 					break;
 			}
 		}

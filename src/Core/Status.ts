@@ -39,7 +39,7 @@ class Status {
 	 *  @returns {string}
 	 */
 	static getMessage(message: Model.DynamicValue, target: Battler): string {
-		return message.getValue().replace('[target]', target.player.name);
+		return (message.getValue() as string).replace('[target]', target.player.name);
 	}
 
 	/**

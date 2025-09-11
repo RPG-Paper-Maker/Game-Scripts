@@ -570,12 +570,12 @@ class Collisions {
 					return [true, null, ORIENTATION.NONE];
 				} else {
 					let maxY = null;
-					const limitY = positionAfter.y - Datas.Systems.mountainCollisionHeight.getValue();
+					const limitY = positionAfter.y - (Datas.Systems.mountainCollisionHeight.getValue() as number);
 					let temp: number;
 					for (i = 0; i < l; i++) {
 						temp = floors[i];
 						if (
-							temp <= positionAfter.y + Datas.Systems.mountainCollisionHeight.getValue() &&
+							temp <= positionAfter.y + (Datas.Systems.mountainCollisionHeight.getValue() as number) &&
 							temp >= limitY
 						) {
 							if (maxY === null) {
@@ -614,13 +614,15 @@ class Collisions {
 									return [null, null, ORIENTATION.NONE];
 								} else {
 									let maxY = null;
-									const limitY = positionBefore.y - Datas.Systems.mountainCollisionHeight.getValue();
+									const limitY =
+										positionBefore.y - (Datas.Systems.mountainCollisionHeight.getValue() as number);
 									let temp: number;
 									for (i = 0; i < l; i++) {
 										temp = floors[i];
 										if (
 											temp <=
-												positionBefore.y + Datas.Systems.mountainCollisionHeight.getValue() &&
+												positionBefore.y +
+													(Datas.Systems.mountainCollisionHeight.getValue() as number) &&
 											temp >= limitY
 										) {
 											if (maxY === null) {
@@ -1073,11 +1075,11 @@ class Collisions {
 					if (this.checkIntersectionSprite(objCollision.b, objCollision.k, object, objCollision.cr)) {
 						if (objCollision.cl) {
 							const speed =
-								object.speed.getValue() *
+								(object.speed.getValue() as number) *
 								MapObject.SPEED_NORMAL *
 								Manager.Stack.averageElapsedTime *
 								Datas.Systems.SQUARE_SIZE *
-								Datas.Systems.climbingSpeed.getValue();
+								(Datas.Systems.climbingSpeed.getValue() as number);
 							const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
 							const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
 							const y = object.isClimbingUp
@@ -1388,7 +1390,10 @@ class Collisions {
 		if (w === 0) {
 			const pass =
 				forceNever ||
-				-(!forceAlways && y + h <= positionAfter.y + Datas.Systems.mountainCollisionHeight.getValue());
+				-(
+					!forceAlways &&
+					y + h <= positionAfter.y + (Datas.Systems.mountainCollisionHeight.getValue() as number)
+				);
 			if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE, z, z + Datas.Systems.SQUARE_SIZE)) {
 				return pass ? [false, positionAfter.y - y - h === 0 ? null : y + h] : [true, null];
 			} else {
@@ -1553,7 +1558,10 @@ class Collisions {
 			}
 
 			// If angle limit, block
-			if (forceAlways || (!forceNever && mountain.angle > Datas.Systems.mountainCollisionAngle.getValue())) {
+			if (
+				forceAlways ||
+				(!forceNever && mountain.angle > (Datas.Systems.mountainCollisionAngle.getValue() as number))
+			) {
 				// Check if floor existing on top of the mountain angle
 				isFloor =
 					jposition.y === jpositionAfter.y
@@ -1563,7 +1571,8 @@ class Collisions {
 			}
 			return [
 				!forceNever &&
-					Math.abs(newPosition.y - positionAfter.y) > Datas.Systems.mountainCollisionHeight.getValue(),
+					Math.abs(newPosition.y - positionAfter.y) >
+						(Datas.Systems.mountainCollisionHeight.getValue() as number),
 				newPosition.y,
 			];
 		}

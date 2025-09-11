@@ -67,7 +67,7 @@ class DisplayHideABattler extends Base {
 					battler = map.battlers[CHARACTER_KIND.MONSTER][this.battlerEnemyIndex];
 					break;
 				case 1: // Hero instance ID
-					const id = this.battlerHeroEnemyInstanceID.getValue();
+					const id = this.battlerHeroEnemyInstanceID.getValue() as number;
 					for (const b of map.battlers[CHARACTER_KIND.HERO]) {
 						if (b.player.instid === id) {
 							battler = b;
@@ -83,7 +83,7 @@ class DisplayHideABattler extends Base {
 					break;
 			}
 			if (battler) {
-				battler.updateHidden(this.hidden.getValue());
+				battler.updateHidden(this.hidden.getValue() as boolean);
 			}
 		}
 		return 1;

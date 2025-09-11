@@ -16,6 +16,7 @@ import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
+import { Rectangle } from './Rectangle';
 
 /** @class
  *  A sprite in the map.
@@ -35,7 +36,7 @@ class Sprite extends MapElement {
 	public static Z_AXIS = new THREE.Vector3(0, 0, 1);
 
 	public kind: ELEMENT_MAP_KIND;
-	public textureRect: number[];
+	public textureRect: Rectangle;
 
 	constructor(json?: Record<string, any>) {
 		super();
@@ -52,7 +53,7 @@ class Sprite extends MapElement {
 	 *  @param {ELEMENT_MAP_KIND} kind - The element map kind
 	 *  @param {number[]} texture - Texture UV coords
 	 */
-	static create(kind: ELEMENT_MAP_KIND, texture: number[]): Sprite {
+	static create(kind: ELEMENT_MAP_KIND, texture: Rectangle): Sprite {
 		const sprite = new Sprite();
 		sprite.kind = kind;
 		sprite.textureRect = texture;
@@ -210,8 +211,8 @@ class Sprite extends MapElement {
 		const center = new THREE.Vector3();
 		const pos = new THREE.Vector3();
 		const size = new THREE.Vector3(
-			this.textureRect[2] * Datas.Systems.SQUARE_SIZE * position.scaleX,
-			this.textureRect[3] * Datas.Systems.SQUARE_SIZE * position.scaleY,
+			this.textureRect.width * Datas.Systems.SQUARE_SIZE * position.scaleX,
+			this.textureRect.height * Datas.Systems.SQUARE_SIZE * position.scaleY,
 			1.0
 		);
 
@@ -229,10 +230,10 @@ class Sprite extends MapElement {
 		}
 
 		// Getting UV coordinates
-		let x = (this.textureRect[0] * Datas.Systems.SQUARE_SIZE) / width;
-		let y = (this.textureRect[1] * Datas.Systems.SQUARE_SIZE) / height;
-		let w = (this.textureRect[2] * Datas.Systems.SQUARE_SIZE) / width;
-		let h = (this.textureRect[3] * Datas.Systems.SQUARE_SIZE) / height;
+		let x = (this.textureRect.x * Datas.Systems.SQUARE_SIZE) / width;
+		let y = (this.textureRect.y * Datas.Systems.SQUARE_SIZE) / height;
+		let w = (this.textureRect.width * Datas.Systems.SQUARE_SIZE) / width;
+		let h = (this.textureRect.height * Datas.Systems.SQUARE_SIZE) / height;
 		const coefX = MapElement.COEF_TEX / width;
 		const coefY = MapElement.COEF_TEX / height;
 		x += coefX;
@@ -247,8 +248,8 @@ class Sprite extends MapElement {
 
 		// Collision
 		const objCollision: StructMapElementCollision[] = [];
-		const twidth = Math.floor((this.textureRect[2] * position.scaleX) / 2);
-		const theight = Math.floor((this.textureRect[3] * position.scaleY) / 2);
+		const twidth = Math.floor((this.textureRect.width * position.scaleX) / 2);
+		const theight = Math.floor((this.textureRect.height * position.scaleY) / 2);
 		if (tileset) {
 			const collisions = Scene.Map.current.mapProperties.tileset.picture.getSquaresForTexture(this.textureRect);
 			for (const rect of collisions) {
@@ -258,16 +259,17 @@ class Sprite extends MapElement {
 					b: [
 						localPosition.x -
 							twidth * Datas.Systems.SQUARE_SIZE -
-							((this.textureRect[2] * position.scaleX) % 2) * Math.round(Datas.Systems.SQUARE_SIZE / 2) +
-							rect[0] +
-							Math.round((rect[2] * position.scaleX) / 2),
+							((this.textureRect.width * position.scaleX) % 2) *
+								Math.round(Datas.Systems.SQUARE_SIZE / 2) +
+							rect.x +
+							Math.round((rect.width * position.scaleX) / 2),
 						localPosition.y +
-							this.textureRect[3] * position.scaleY * Datas.Systems.SQUARE_SIZE -
-							rect[1] -
-							Math.round((rect[3] * position.scaleY) / 2),
+							this.textureRect.height * position.scaleY * Datas.Systems.SQUARE_SIZE -
+							rect.y -
+							Math.round((rect.height * position.scaleY) / 2),
 						localPosition.z,
-						rect[2] * position.scaleX,
-						rect[3] * position.scaleY,
+						rect.width * position.scaleX,
+						rect.height * position.scaleY,
 						1,
 						position.angleY,
 						position.angleX,
@@ -287,12 +289,13 @@ class Sprite extends MapElement {
 					b: [
 						localPosition.x -
 							twidth * Datas.Systems.SQUARE_SIZE -
-							((this.textureRect[2] * position.scaleX) % 2) * Math.round(Datas.Systems.SQUARE_SIZE / 2) +
+							((this.textureRect.width * position.scaleX) % 2) *
+								Math.round(Datas.Systems.SQUARE_SIZE / 2) +
 							(x + this.xOffset) * Datas.Systems.SQUARE_SIZE * position.scaleX +
 							Math.round((Datas.Systems.SQUARE_SIZE * position.scaleX * position.scaleX) / 2),
 						localPosition.y +
 							this.yOffset * Datas.Systems.SQUARE_SIZE +
-							this.textureRect[3] * position.scaleY * Datas.Systems.SQUARE_SIZE -
+							this.textureRect.height * position.scaleY * Datas.Systems.SQUARE_SIZE -
 							y * Datas.Systems.SQUARE_SIZE * position.scaleY -
 							Math.round((Datas.Systems.SQUARE_SIZE * position.scaleY * position.scaleY) / 2),
 						localPosition.z,
@@ -463,11 +466,7 @@ class Sprite extends MapElement {
 		super.read(json);
 		this.front = Utils.valueOrDefault(json.f, true);
 		this.kind = json.k;
-		this.textureRect = json.t;
-		if (this.textureRect.length === 2) {
-			this.textureRect.push(1);
-			this.textureRect.push(1);
-		}
+		this.textureRect = Rectangle.createFromArray(json.t);
 	}
 }
 

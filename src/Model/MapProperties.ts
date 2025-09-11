@@ -11,27 +11,54 @@
 
 import * as THREE from 'three';
 import { Constants, MAP_TRANSITION_KIND, Mathf, PICTURE_KIND, SONG_KIND, Utils } from '../Common';
-import { Game, Position } from '../Core';
-import { MapObject } from '../Core/MapObject';
-import { Datas, Manager, Model, Scene } from '../index';
-import { Base } from './Base';
+import { Game, MapObject, Position } from '../Core';
+import { Datas, Manager, Scene } from '../index';
 import { CameraProperties } from './CameraProperties';
 import { Color } from './Color';
-import { DynamicValue } from './DynamicValue';
-import { PlaySong } from './PlaySong';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { Localization, LocalizationJSON } from './Localization';
+import { MapObjectJSON, MapObject as ModelMapObject } from './MapObject';
+import { PlaySong, PlaySongJSON } from './PlaySong';
+import { RandomBattle, RandomBattleJSON } from './RandomBattle';
+import { Tileset } from './Tileset';
 
-/** @class
- *  The properties of a map.
- *  @extends Model.Base
+/**
+ * JSON structure describing map properties.
  */
-class MapProperties extends Base {
+export type MapPropertiesJSON = LocalizationJSON & {
+	id: number;
+	l: number;
+	w: number;
+	h: number;
+	d: number;
+	tileset: number;
+	music: PlaySongJSON;
+	bgs: PlaySongJSON;
+	cp: DynamicValueJSON;
+	isky: boolean;
+	isi: boolean;
+	sky?: DynamicValueJSON;
+	ipid?: number;
+	sbid?: DynamicValueJSON;
+	so: MapObjectJSON;
+	randomBattleMapID: DynamicValueJSON;
+	randomBattles?: RandomBattleJSON[];
+	randomBattleNumberStep?: DynamicValueJSON;
+	randomBattleVariance?: DynamicValueJSON;
+	isl?: boolean;
+	objs: { id: number; p: number[] }[];
+};
+
+/**
+ * Represents the properties of a map.
+ */
+export class MapProperties extends Localization {
 	public id: number;
-	public names: Model.Localization;
 	public length: number;
 	public width: number;
 	public height: number;
 	public depth: number;
-	public tileset: Model.Tileset;
+	public tileset: Tileset;
 	public music: PlaySong;
 	public backgroundSound: PlaySong;
 	public cameraProperties: CameraProperties;
@@ -42,44 +69,159 @@ class MapProperties extends Base {
 	public backgroundImageID: number;
 	public backgroundSkyboxID: DynamicValue;
 	public startupObject: MapObject;
-	public randomBattleMapID: Model.DynamicValue;
-	public randomBattles: Model.RandomBattle[];
-	public randomBattleNumberStep: Model.DynamicValue;
-	public randomBattleVariance: Model.DynamicValue;
+	public randomBattleMapID: DynamicValue;
+	public randomBattles: RandomBattle[];
+	public randomBattleNumberStep: DynamicValue;
+	public randomBattleVariance: DynamicValue;
 	public skyboxGeometry: THREE.BoxGeometry;
 	public skyboxMesh: THREE.Mesh;
 	public maxNumberSteps: number;
 	public isSunLight: boolean;
-	public allObjects: Position[];
+	public allObjects: Map<number, Position>;
 	public maxObjectsID: number;
 
-	constructor() {
-		super();
-
-		this.skyboxGeometry = null;
-		this.skyboxMesh = null;
+	constructor(json?: MapPropertiesJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the map properties.
-	 *  @param {Record<string, any>} - json Json object describing the map
-	 *  properties
+	 * Load and initialize the startup object state.
 	 */
-	read(json: Record<string, any>) {
+	async load(): Promise<void> {
+		await this.startupObject.changeState();
+	}
+
+	/**
+	 * Update the background (color, image, or skybox).
+	 */
+	updateBackground(): void {
+		if (this.isBackgroundImage) {
+			this.updateBackgroundImage();
+		} else if (!this.isBackgroundColor) {
+			this.updateBackgroundSkybox();
+		}
+		this.updateBackgroundColor();
+	}
+
+	/**
+	 * Update the background color.
+	 */
+	updateBackgroundColor(): void {
+		this.backgroundColor = Datas.Systems.getColor(
+			this.isBackgroundColor ? (this.backgroundColorID.getValue() as number) : 1
+		);
+	}
+
+	/**
+	 * Update the background image.
+	 */
+	updateBackgroundImage(): void {
+		const texture = Manager.GL.textureLoader.load(
+			Datas.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath()
+		);
+		texture.magFilter = THREE.NearestFilter;
+		texture.minFilter = THREE.NearestFilter;
+		Scene.Map.current.scene.background = texture;
+	}
+
+	/**
+	 * Update the background skybox.
+	 */
+	updateBackgroundSkybox(): void {
+		const size = (10000 * Datas.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
+		this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
+		this.skyboxMesh = new THREE.Mesh(
+			this.skyboxGeometry,
+			Datas.Systems.getSkybox(this.backgroundSkyboxID.getValue() as number).createTextures()
+		);
+		Scene.Map.current.scene.add(this.skyboxMesh);
+	}
+
+	/**
+	 * Update the max steps numbers for starting a random battle.
+	 */
+	updateMaxNumberSteps(): void {
+		for (const battle of this.randomBattles) {
+			battle.resetCurrentNumberSteps();
+		}
+		this.maxNumberSteps = Mathf.variance(
+			this.randomBattleNumberStep.getValue() as number,
+			this.randomBattleVariance.getValue() as number
+		);
+	}
+
+	/**
+	 * Check if a random battle can be started.
+	 */
+	checkRandomBattle(): void {
+		let triggered = false;
+		for (const battle of this.randomBattles) {
+			battle.updateCurrentNumberSteps();
+			if (battle.currentNumberSteps >= this.maxNumberSteps) {
+				triggered = true;
+			}
+		}
+		if (!triggered) {
+			return;
+		}
+		const rand = Mathf.random(0, 100);
+		const battles = this.randomBattles.filter(
+			(b) => b.currentPriority > 0 && b.currentNumberSteps >= this.maxNumberSteps
+		);
+		const total = battles.reduce((sum, b) => sum + b.currentPriority, 0);
+
+		let cumulative = 0;
+		let chosen: RandomBattle | null = null;
+		for (const battle of battles) {
+			cumulative += ((battle.priority.getValue() as number) / total) * 100;
+			if (rand <= cumulative) {
+				chosen = battle;
+				break;
+			}
+		}
+		if (chosen) {
+			this.updateMaxNumberSteps();
+			const battleMap = Datas.BattleSystems.getBattleMap(this.randomBattleMapID.getValue() as number);
+			Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
+			Manager.Stack.push(
+				new Scene.Battle(
+					chosen.troopID.getValue() as number,
+					true,
+					true,
+					battleMap,
+					MAP_TRANSITION_KIND.ZOOM,
+					MAP_TRANSITION_KIND.ZOOM,
+					null,
+					null
+				)
+			);
+		}
+	}
+
+	/**
+	 * Cleanup background elements.
+	 */
+	close(): void {
+		if (this.skyboxMesh !== null) {
+			Scene.Map.current.scene.remove(this.skyboxMesh);
+		}
+	}
+
+	/**
+	 * Initialize this map properties from JSON data.
+	 */
+	read(json: MapPropertiesJSON): void {
+		super.read(json);
 		this.skyboxGeometry = null;
 		this.skyboxMesh = null;
 		this.id = json.id;
-		this.names = new Model.Localization(json as any);
 		this.length = json.l;
 		this.width = json.w;
 		this.height = json.h;
 		this.depth = json.d;
 
-		// Tileset: if not existing, by default select the first one
-		let datas = Game.current.mapsProperties[this.id];
-		if (datas === undefined) {
-			datas = {};
-		}
+		// Tileset & stored map data
+		const datas = Game.current.mapsProperties[this.id] ?? {};
 		this.tileset = Datas.Tilesets.get(Utils.valueOrDefault(datas.tileset, json.tileset));
 		this.music = new PlaySong(SONG_KIND.MUSIC, Utils.valueOrDefault(datas.music, json.music));
 		this.backgroundSound = new PlaySong(
@@ -87,8 +229,10 @@ class MapProperties extends Base {
 			Utils.valueOrDefault(datas.backgroundSound, json.bgs)
 		);
 		this.cameraProperties = Datas.Systems.getCameraProperties(
-			Utils.valueOrDefault(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue())
+			Utils.valueOrDefault(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue() as number)
 		);
+
+		// Background
 		let kind = -1;
 		if (datas.color !== undefined) {
 			kind = 0;
@@ -108,161 +252,34 @@ class MapProperties extends Base {
 					? DynamicValue.readOrDefaultDatabase(json.sbid)
 					: DynamicValue.createNumber(datas.skybox);
 		}
-		const startupReactions = new Model.MapObject(json.so);
+
+		// Startup object
+		const startupReactions = new ModelMapObject(json.so);
 		this.startupObject = new MapObject(startupReactions);
-		this.startupObject.changeState();
 
 		// Random battles
-		this.randomBattleMapID = Model.DynamicValue.readOrDefaultDatabase(json.randomBattleMapID);
-		this.randomBattles = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.randomBattles, []),
-			listIndexes: this.randomBattles,
-			cons: Model.RandomBattle,
-		});
-		this.randomBattleNumberStep = Model.DynamicValue.readOrDefaultNumber(json.randomBattleNumberStep, 300);
-		this.randomBattleVariance = Model.DynamicValue.readOrDefaultNumber(json.randomBattleVariance, 20);
+		this.randomBattleMapID = DynamicValue.readOrDefaultDatabase(json.randomBattleMapID);
+		this.randomBattles = Utils.readJSONList(json.randomBattles, RandomBattle);
+		this.randomBattleNumberStep = DynamicValue.readOrDefaultNumber(json.randomBattleNumberStep, 300);
+		this.randomBattleVariance = DynamicValue.readOrDefaultNumber(json.randomBattleVariance, 20);
 		this.updateMaxNumberSteps();
 
 		this.isSunLight = Utils.valueOrDefault(json.isl, true);
-
 		this.readObjects(json);
 	}
 
 	/**
 	 *  Initialize the map objects.
 	 */
-	readObjects(json: Record<string, any>) {
+	private readObjects(json: MapPropertiesJSON): void {
 		const { objs } = json;
-		const l = objs.length;
-		this.allObjects = new Array(l + 1);
-		let jsonObject: Record<string, any>;
+		this.allObjects = new Map();
 		this.maxObjectsID = 1;
-		for (let i = 0; i < l; i++) {
-			jsonObject = objs[i];
-			this.allObjects[jsonObject.id] = Position.createFromArray(jsonObject.p);
+		for (const jsonObject of objs) {
+			this.allObjects.set(jsonObject.id, Position.createFromArray(jsonObject.p));
 			if (jsonObject.id > this.maxObjectsID) {
 				this.maxObjectsID = jsonObject.id;
 			}
 		}
 	}
-
-	/**
-	 *  Update the background.
-	 */
-	updateBackground() {
-		if (this.isBackgroundImage) {
-			this.updateBackgroundImage();
-		} else if (!this.isBackgroundColor) {
-			this.updateBackgroundSkybox();
-		}
-		this.updateBackgroundColor();
-	}
-
-	/**
-	 *  Update the background color.
-	 */
-	updateBackgroundColor() {
-		this.backgroundColor = Datas.Systems.getColor(this.isBackgroundColor ? this.backgroundColorID.getValue() : 1);
-	}
-
-	/**
-	 *  Update the background image.
-	 */
-	updateBackgroundImage() {
-		const texture = Manager.GL.textureLoader.load(
-			Datas.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath()
-		);
-		texture.magFilter = THREE.NearestFilter;
-		texture.minFilter = THREE.NearestFilter;
-		Scene.Map.current.scene.background = texture;
-	}
-
-	/**
-	 *  Update the background skybox.
-	 */
-	updateBackgroundSkybox() {
-		const size = (10000 * Datas.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
-		this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
-		this.skyboxMesh = new THREE.Mesh(
-			this.skyboxGeometry,
-			Datas.Systems.getSkybox(this.backgroundSkyboxID.getValue()).createTextures()
-		);
-		Scene.Map.current.scene.add(this.skyboxMesh);
-	}
-
-	/**
-	 *  Update the max steps numbers for starting a random battle.
-	 */
-	updateMaxNumberSteps() {
-		for (const battle of this.randomBattles) {
-			battle.resetCurrentNumberSteps();
-		}
-		this.maxNumberSteps = Mathf.variance(
-			this.randomBattleNumberStep.getValue(),
-			this.randomBattleVariance.getValue()
-		);
-	}
-
-	/**
-	 *  Check if a random battle can be started.
-	 */
-	checkRandomBattle() {
-		let randomBattle: Model.RandomBattle;
-		let test = false;
-		for (randomBattle of this.randomBattles) {
-			randomBattle.updateCurrentNumberSteps();
-			if (randomBattle.currentNumberSteps >= this.maxNumberSteps) {
-				test = true;
-			}
-		}
-		if (test) {
-			randomBattle = null;
-			const rand = Mathf.random(0, 100);
-			let priority = 0;
-			// Remove 0 priority or not reached current steps
-			const battles = [];
-			let total = 0;
-			for (randomBattle of this.randomBattles) {
-				randomBattle.updateCurrentPriority();
-				if (randomBattle.currentPriority > 0 && randomBattle.currentNumberSteps >= this.maxNumberSteps) {
-					battles.push(randomBattle);
-					total += randomBattle.currentPriority;
-				}
-			}
-			for (randomBattle of battles) {
-				priority += (randomBattle.priority.getValue() / total) * 100;
-				if (rand <= priority) {
-					break;
-				} else {
-					randomBattle = null;
-				}
-			}
-			if (randomBattle !== null) {
-				this.updateMaxNumberSteps();
-				const battleMap = Datas.BattleSystems.getBattleMap(this.randomBattleMapID.getValue());
-				Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
-				Manager.Stack.push(
-					new Scene.Battle(
-						randomBattle.troopID.getValue(),
-						true,
-						true,
-						battleMap,
-						MAP_TRANSITION_KIND.ZOOM,
-						MAP_TRANSITION_KIND.ZOOM,
-						null,
-						null
-					)
-				);
-			}
-		}
-	}
-
-	close() {
-		if (this.skyboxMesh !== null) {
-			Scene.Map.current.scene.remove(this.skyboxMesh);
-		}
-	}
 }
-
-export { MapProperties };

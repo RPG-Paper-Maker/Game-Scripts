@@ -153,7 +153,7 @@ class MenuEquip extends MenuBase {
 				characteristic = characteristics[j];
 				if (
 					characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
-					characteristic.changeEquipmentID.getValue() === Datas.BattleSystems.equipmentsOrder[i]
+					(characteristic.changeEquipmentID.getValue() as number) === Datas.BattleSystems.equipmentsOrder[i]
 				) {
 					isPossible = characteristic.isAllowChangeEquipment;
 				}
@@ -195,7 +195,7 @@ class MenuEquip extends MenuBase {
 						allow = player.canEquipWeaponArmor(item);
 						if (
 							allow &&
-							Interpreter.evaluate(systemItem.conditionFormula.getValue(), {
+							Interpreter.evaluate(systemItem.conditionFormula.getValue() as string, {
 								user: Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex],
 							})
 						) {
@@ -310,8 +310,8 @@ class MenuEquip extends MenuBase {
 		for (const characteristic of gameItem.system.characteristics) {
 			if (characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP && !characteristic.isAllowEquip) {
 				const weaponArmor = characteristic.isAllowEquipWeapon
-					? Datas.BattleSystems.getWeaponKind(characteristic.equipWeaponTypeID.getValue())
-					: Datas.BattleSystems.getArmorKind(characteristic.equipArmorTypeID.getValue());
+					? Datas.BattleSystems.getWeaponKind(characteristic.equipWeaponTypeID.getValue() as number)
+					: Datas.BattleSystems.getArmorKind(characteristic.equipArmorTypeID.getValue() as number);
 				for (const [id, equipment] of weaponArmor.equipments.entries()) {
 					if (equipment) {
 						this.removeAnEquipment(id);

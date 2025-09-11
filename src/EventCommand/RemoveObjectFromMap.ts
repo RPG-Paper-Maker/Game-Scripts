@@ -49,7 +49,7 @@ class RemoveObjectFromMap extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const objectID = this.objectID.getValue();
+		const objectID = this.objectID.getValue() as number;
 		if (!currentState.started) {
 			currentState.started = true;
 			MapObject.search(

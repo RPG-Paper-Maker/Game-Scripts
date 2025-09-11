@@ -9,91 +9,96 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Model } from '..';
+import { Datas } from '..';
 import { EFFECT_KIND, STATUS_RESTRICTIONS_KIND, Utils } from '../Common';
-import { Icon } from './Icon';
+import { Characteristic, CharacteristicJSON } from './Characteristic';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { Effect, EffectJSON } from './Effect';
+import { Icon, IconJSON } from './Icon';
+import { StatusReleaseTurn, StatusReleaseTurnJSON } from './StatusReleaseTurn';
 
-/** @class
- *  A possible status hero.
- *  @extends Model.Base
- *  @param {Record<string, any>} - json Json object describing the object state
+/**
+ * JSON structure for a status.
  */
-class Status extends Icon {
+export type StatusJSON = IconJSON & {
+	id?: number;
+	animationID?: DynamicValueJSON;
+	restrictionKind?: STATUS_RESTRICTIONS_KIND;
+	priority?: DynamicValueJSON;
+	battlerPosition?: DynamicValueJSON;
+	isReleaseAtEndBattle?: boolean;
+	isReleaseAfterAttacked?: boolean;
+	chanceReleaseAfterAttacked?: DynamicValueJSON;
+	isReleaseStartTurn?: boolean;
+	releaseStartTurn?: StatusReleaseTurnJSON[];
+	messageAllyAffected?: DynamicValueJSON;
+	messageEnemyAffected?: DynamicValueJSON;
+	messageStatusHealed?: DynamicValueJSON;
+	messageStatusStillAffected?: DynamicValueJSON;
+	effects?: EffectJSON[];
+	characteristics?: CharacteristicJSON[];
+};
+
+/**
+ * A possible status applied to a hero.
+ */
+export class Status extends Icon {
 	public id: number;
-	public animationID: Model.DynamicValue;
+	public animationID: DynamicValue;
 	public restrictionKind: STATUS_RESTRICTIONS_KIND;
-	public priority: Model.DynamicValue;
-	public battlerPosition: Model.DynamicValue;
+	public priority: DynamicValue;
+	public battlerPosition: DynamicValue;
 	public isReleaseAtEndBattle: boolean;
 	public isReleaseAfterAttacked: boolean;
-	public chanceReleaseAfterAttacked: Model.DynamicValue;
+	public chanceReleaseAfterAttacked: DynamicValue;
 	public isReleaseStartTurn: boolean;
-	public releaseStartTurn: Model.StatusReleaseTurn[];
-	public messageAllyAffected: Model.DynamicValue;
-	public messageEnemyAffected: Model.DynamicValue;
-	public messageStatusHealed: Model.DynamicValue;
-	public messageStatusStillAffected: Model.DynamicValue;
-	public effects: Model.Effect[];
-	public characteristics: Model.Characteristic[];
+	public releaseStartTurn: StatusReleaseTurn[];
+	public messageAllyAffected: DynamicValue;
+	public messageEnemyAffected: DynamicValue;
+	public messageStatusHealed: DynamicValue;
+	public messageStatusStillAffected: DynamicValue;
+	public effects: Effect[];
+	public characteristics: Characteristic[];
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: StatusJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the status.
-	 *  @param {Record<string, any>} - json Json object describing the status
+	 * Get all effects, including those from perform skill effects.
 	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-		this.id = json.id;
-		this.animationID = Model.DynamicValue.readOrNone(json.animationID);
-		this.restrictionKind = Utils.valueOrDefault(json.restrictionKind, STATUS_RESTRICTIONS_KIND.NONE);
-		this.priority = Model.DynamicValue.readOrDefaultNumber(json.priority);
-		this.battlerPosition = Model.DynamicValue.readOrDefaultNumber(json.battlerPosition);
-		this.isReleaseAtEndBattle = Utils.valueOrDefault(json.isReleaseAtEndBattle, false);
-		this.isReleaseAfterAttacked = Utils.valueOrDefault(json.isReleaseAfterAttacked, false);
-		this.chanceReleaseAfterAttacked = Model.DynamicValue.readOrDefaultNumberDouble(json.chanceReleaseAfterAttacked);
-		this.isReleaseStartTurn = Utils.valueOrDefault(json.isReleaseStartTurn, false);
-		this.releaseStartTurn = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.releaseStartTurn, []),
-			listIndexes: this.releaseStartTurn,
-			cons: Model.StatusReleaseTurn,
-		});
-		this.messageAllyAffected = Model.DynamicValue.readOrDefaultMessage(json.messageAllyAffected);
-		this.messageEnemyAffected = Model.DynamicValue.readOrDefaultMessage(json.messageEnemyAffected);
-		this.messageStatusHealed = Model.DynamicValue.readOrDefaultMessage(json.messageStatusHealed);
-		this.messageStatusStillAffected = Model.DynamicValue.readOrDefaultMessage(json.messageStatusStillAffected);
-		this.effects = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.effects, []),
-			listIndexes: this.effects,
-			cons: Model.Effect,
-		});
-		this.characteristics = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.characteristics, []),
-			listIndexes: this.characteristics,
-			cons: Model.Characteristic,
-		});
-	}
-
-	/**
-	 *  Get all the effects, including the ones with perform skill efect.
-	 *  @returns {System.Effect}
-	 */
-	getEffects(): Model.Effect[] {
-		const effects: Model.Effect[] = [];
+	getEffects(): Effect[] {
+		const effects: Effect[] = [];
 		for (const effect of this.effects) {
 			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
-				effects.concat(Datas.Skills.get(effect.performSkillID.getValue()).getEffects());
+				effects.concat(Datas.Skills.get(effect.performSkillID.getValue() as number).getEffects());
 			} else {
 				effects.push(effect);
 			}
 		}
 		return effects;
 	}
-}
 
-export { Status };
+	/**
+	 * Read JSON into this status.
+	 */
+	read(json: StatusJSON): void {
+		super.read(json);
+		this.id = json.id;
+		this.animationID = DynamicValue.readOrNone(json.animationID);
+		this.restrictionKind = Utils.valueOrDefault(json.restrictionKind, STATUS_RESTRICTIONS_KIND.NONE);
+		this.priority = DynamicValue.readOrDefaultNumber(json.priority);
+		this.battlerPosition = DynamicValue.readOrDefaultNumber(json.battlerPosition);
+		this.isReleaseAtEndBattle = Utils.valueOrDefault(json.isReleaseAtEndBattle, false);
+		this.isReleaseAfterAttacked = Utils.valueOrDefault(json.isReleaseAfterAttacked, false);
+		this.chanceReleaseAfterAttacked = DynamicValue.readOrDefaultNumberDouble(json.chanceReleaseAfterAttacked);
+		this.isReleaseStartTurn = Utils.valueOrDefault(json.isReleaseStartTurn, false);
+		this.releaseStartTurn = Utils.readJSONList(json.releaseStartTurn, StatusReleaseTurn);
+		this.messageAllyAffected = DynamicValue.readOrDefaultMessage(json.messageAllyAffected);
+		this.messageEnemyAffected = DynamicValue.readOrDefaultMessage(json.messageEnemyAffected);
+		this.messageStatusHealed = DynamicValue.readOrDefaultMessage(json.messageStatusHealed);
+		this.messageStatusStillAffected = DynamicValue.readOrDefaultMessage(json.messageStatusStillAffected);
+		this.effects = Utils.readJSONList(json.effects, Effect);
+		this.characteristics = Utils.readJSONList(json.characteristics, Characteristic);
+	}
+}

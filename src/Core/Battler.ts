@@ -167,7 +167,7 @@ class Battler {
 			});
 			this.width = copiedTexture.image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersFrames;
 			this.height = copiedTexture.image.height / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersColumns;
-			const sprite = Sprite.create(ELEMENT_MAP_KIND.SPRITES_FACE, [0, 0, this.width, this.height]);
+			const sprite = Sprite.create(ELEMENT_MAP_KIND.SPRITES_FACE, new Rectangle(0, 0, this.width, this.height));
 			const geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
 			this.mesh = new THREE.Mesh(geometry, material);
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
@@ -475,7 +475,10 @@ class Battler {
 		const status = this.player.status[0];
 		if (previousFirst != status) {
 			if (status) {
-				this.currentStatusAnimation = new Animation(status.system.animationID.getValue(), true);
+				this.currentStatusAnimation = new Animation(
+					status.system.animationID.getValue() as number as number,
+					true
+				);
 			} else {
 				this.currentStatusAnimation = null;
 			}
@@ -567,7 +570,7 @@ class Battler {
 		let step = BATTLER_STEP.NORMAL;
 		const s = this.player.status[0];
 		if (s) {
-			step = s.system.battlerPosition.getValue();
+			step = s.system.battlerPosition.getValue() as number as number;
 		}
 		if (this.step !== step) {
 			this.step = step;

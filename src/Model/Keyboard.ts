@@ -9,31 +9,25 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Localization } from './Localization';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  A key shortcut of the game.
- *  @extends {System.Localization}
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  keyboard
+/**
+ * Represents a key shortcut in the game.
  */
-class Keyboard extends Localization {
+export type KeyboardJSON = LocalizationJSON & {
+	id: number;
+	sc: string[][];
+};
+
+/**
+ *  A key shortcut of the game.
+ */
+export class Keyboard extends Localization {
 	public id: number;
 	public sc: string[][];
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
-	}
-
-	/**
-	 *  Read the JSON associated to the keyboard.
-	 *  @param {Record<string, any>} - json Json object describing the keyboard
-	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-
-		this.id = json.id;
-		this.sc = json.sc;
+	constructor(json?: KeyboardJSON) {
+		super(json);
 	}
 
 	/**
@@ -65,6 +59,13 @@ class Keyboard extends Localization {
 			.join(' | ')
 			.toUpperCase();
 	}
-}
 
-export { Keyboard };
+	/**
+	 *  Read the JSON associated to the keyboard.
+	 */
+	read(json: KeyboardJSON) {
+		super.read(json);
+		this.id = json.id;
+		this.sc = json.sc;
+	}
+}

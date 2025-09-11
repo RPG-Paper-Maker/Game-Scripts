@@ -91,7 +91,7 @@ class ShowText extends Base {
 		this.windowMain.padding[3] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pBottom, 0);
 		this.windowMain.updateDimensions();
 		this.windowMain.content.update();
-		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue());
+		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue() as string);
 		return {
 			clicked: false,
 			frame: 0,
@@ -117,7 +117,7 @@ class ShowText extends Base {
 			currentState.frameTick = 0;
 			Manager.Stack.requestPaintHUD = true;
 		}
-		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue());
+		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue() as string);
 		return 0;
 	}
 

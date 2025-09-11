@@ -9,57 +9,71 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { EVENT_COMMAND_KIND } from '../Common';
+import { MapObjectCommandType } from '../Common/Types';
 import { Node, Tree } from '../Core';
-import { EventCommand, Manager, Model } from '../index';
+import { EventCommand, Manager } from '../index';
 import { Base } from './Base';
+import { DynamicValue } from './DynamicValue';
+import { Event } from './Event';
 
-/** @class
- *  A reaction to an event.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  object reaction
+/**
+ * JSON structure describing a reaction command node.
  */
-class Reaction extends Base {
-	public labels: [Model.DynamicValue, Node][];
+export type ReactionCommandJSON = {
+	kind: EVENT_COMMAND_KIND;
+	command: MapObjectCommandType[];
+	children?: ReactionCommandJSON[];
+};
+
+/**
+ * JSON structure describing a reaction.
+ */
+export type ReactionJSON = {
+	id?: number;
+	bh: boolean;
+	c: ReactionCommandJSON[];
+};
+
+/**
+ * A reaction to an event.
+ */
+export class Reaction extends Base {
+	public labels: [DynamicValue, Node][];
 	public idEvent: number;
 	public blockingHero: boolean;
 	public commands: Tree;
-	public event: Model.Event;
+	public event: Event;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: ReactionJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the object reaction.
-	 *  @param {Record<string, any>} - json Json object describing the object
-	 *  reaction
+	 * Get the first node command of the reaction.
 	 */
-	read(json: Record<string, any>) {
-		this.labels = [];
-		this.idEvent = json.id;
-
-		// Options
-		this.blockingHero = json.bh;
-
-		// Read commands
-		const jsonCommands = json.c;
-		const commands = new Tree('root');
-		this.readChildrenJSON(jsonCommands, commands.root);
-		this.commands = commands;
+	getFirstCommand(): Node {
+		return this.commands.root.firstChild;
 	}
 
 	/**
-	 *  Read the JSON children associated to the object reaction.
-	 *  @param {Record<string, any>} - jsonCommands Json object describing the
-	 *  object
-	 *  @param {Node} commands - All the commands (final result)
+	 * Read the JSON associated to the reaction.
 	 */
-	readChildrenJSON(jsonCommands: Record<string, any>, commands: Node) {
+	read(json: ReactionJSON): void {
+		this.labels = [];
+		this.idEvent = json.id;
+		this.blockingHero = json.bh;
+		this.commands = new Tree('root');
+		this.readChildrenJSON(json.c, this.commands.root);
+	}
+
+	/**
+	 * Recursively read the JSON children associated to the reaction.
+	 */
+	readChildrenJSON(jsonCommands: ReactionCommandJSON[], parent: Node): void {
 		let showText: EventCommand.ShowText = null;
-		let command: EventCommand.Base, node: Node;
-		for (let i = 0, l = jsonCommands.length; i < l; i++) {
-			command = Manager.Events.getEventCommand(jsonCommands[i]);
+		for (const jsonCommand of jsonCommands) {
+			const command = Manager.Events.getEventCommand(jsonCommand);
 
 			// Comment
 			if (command instanceof EventCommand.Comment) {
@@ -67,7 +81,7 @@ class Reaction extends Base {
 			}
 
 			// Add node
-			node = commands.add(command);
+			const node = parent.add(command);
 
 			// If text before choice, make a link
 			if (command instanceof EventCommand.ShowText) {
@@ -81,19 +95,9 @@ class Reaction extends Base {
 			} else {
 				showText = null;
 			}
-			if (jsonCommands[i].children) {
-				this.readChildrenJSON(jsonCommands[i].children, node);
+			if (jsonCommand.children) {
+				this.readChildrenJSON(jsonCommand.children, node);
 			}
 		}
 	}
-
-	/**
-	 *  Get the first node command of the reaction.
-	 *  @returns {Node}
-	 */
-	getFirstCommand(): Node {
-		return this.commands.root.firstChild;
-	}
 }
-
-export { Reaction };

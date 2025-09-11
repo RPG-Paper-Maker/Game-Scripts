@@ -59,13 +59,13 @@ class ChangeEquipment extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const equipmentID = this.equipmentID.getValue();
+		const equipmentID = this.equipmentID.getValue() as number;
 		const kind = this.isWeapon ? ITEM_KIND.WEAPON : ITEM_KIND.ARMOR;
-		const weaponArmorID = this.weaponArmorID.getValue();
+		const weaponArmorID = this.weaponArmorID.getValue() as number;
 		let targets: Player[];
 		switch (this.selection) {
 			case 0:
-				targets = [Game.current.getHeroByInstanceID(this.heInstanceID.getValue())];
+				targets = [Game.current.getHeroByInstanceID(this.heInstanceID.getValue() as number)];
 				break;
 			case 1:
 				targets = Game.current.getTeam(this.groupIndex);

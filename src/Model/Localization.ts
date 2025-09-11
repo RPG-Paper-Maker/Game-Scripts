@@ -24,20 +24,11 @@ export type LocalizationJSON = {
  * depending on the current game language.
  */
 export class Localization extends Base {
-	/** The list of names, indexed by language ID. */
 	public names: Map<number, string>;
 
 	constructor(json?: LocalizationJSON) {
 		super(json);
 		this.names ??= new Map();
-	}
-
-	/**
-	 * Reads the JSON data describing the translatable name.
-	 * @param json - The JSON object containing the names in several languages.
-	 */
-	read(json: LocalizationJSON): void {
-		this.names = new Map(Object.entries(json.names).map(([key, value]) => [Number(key), value]));
 	}
 
 	/**
@@ -57,5 +48,13 @@ export class Localization extends Base {
 		const id = Number(command[iterator.i++]);
 		const name = String(command[iterator.i++]);
 		this.names.set(id, name);
+	}
+
+	/**
+	 * Reads the JSON data describing the translatable name.
+	 * @param json - The JSON object containing the names in several languages.
+	 */
+	read(json: LocalizationJSON): void {
+		this.names = new Map(Object.entries(json.names).map(([key, value]) => [Number(key), value]));
 	}
 }

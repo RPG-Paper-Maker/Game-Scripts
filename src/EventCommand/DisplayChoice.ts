@@ -92,7 +92,7 @@ class DisplayChoice extends Base {
 			currentState.index = this.windowChoices.currentSelectedIndex;
 		} else if (Scene.MenuBase.checkCancel(isKey, options)) {
 			Datas.Systems.soundCancel.playSound();
-			currentState.index = this.cancelAutoIndex.getValue() - 1;
+			currentState.index = (this.cancelAutoIndex.getValue() as number) - 1;
 		}
 	}
 
@@ -111,7 +111,7 @@ class DisplayChoice extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const maxItems = this.maxNumberChoices.getValue();
+		const maxItems = this.maxNumberChoices.getValue() as number;
 		this.windowChoices = new WindowChoices(
 			(ScreenResolution.SCREEN_X - this.maxWidth) / 2,
 			ScreenResolution.SCREEN_Y -

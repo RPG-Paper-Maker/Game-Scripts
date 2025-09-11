@@ -10,48 +10,41 @@
 */
 
 import { MOUNTAIN_COLLISION_KIND, Utils } from '../Common';
-import { SpecialElement } from './SpecialElement';
+import { SpecialElement, SpecialElementJSON } from './SpecialElement';
 
-/** @class
- *  A mountain of the game.
- *  @extends Model.SpecialElement
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  mountain
+/**
+ * JSON structure describing a mountain.
  */
-class Mountain extends SpecialElement {
+export type MountainJSON = SpecialElementJSON & {
+	id: number;
+	mck?: MOUNTAIN_COLLISION_KIND;
+};
+
+/**
+ * Represents a mountain element.
+ */
+export class Mountain extends SpecialElement {
 	public id: number;
 	public collisionKind: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: MountainJSON) {
 		super(json);
 	}
 
-	/**
-	 *  Read the JSON associated to the mountain.
-	 *  @param {Record<string, any>} - json Json object describing the mountain
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
-
-		this.id = json.id;
-		this.collisionKind = Utils.valueOrDefault(json.mck, MOUNTAIN_COLLISION_KIND.DEFAULT);
-	}
-
-	/**
-	 *  Check if the collision is always forced.
-	 *  @returns {boolean}
-	 */
+	/** True if collision is always forced. */
 	forceAlways(): boolean {
 		return this.collisionKind === MOUNTAIN_COLLISION_KIND.ALWAYS;
 	}
 
-	/**
-	 *  Check if the collision is never forced
-	 *  @returns {boolean}
-	 */
+	/** True if collision is never forced. */
 	forceNever(): boolean {
 		return this.collisionKind === MOUNTAIN_COLLISION_KIND.NEVER;
 	}
-}
 
-export { Mountain };
+	/** Initialize this mountain from JSON data. */
+	read(json: MountainJSON): void {
+		super.read(json);
+		this.id = json.id;
+		this.collisionKind = Utils.valueOrDefault(json.mck, MOUNTAIN_COLLISION_KIND.DEFAULT);
+	}
+}

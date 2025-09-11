@@ -64,10 +64,10 @@ class Floor extends Land {
 					position,
 					width,
 					height,
-					(this.texture[0] * Datas.Systems.SQUARE_SIZE) / width,
-					(this.texture[1] * Datas.Systems.SQUARE_SIZE) / height,
-					(this.texture[2] * Datas.Systems.SQUARE_SIZE) / width,
-					(this.texture[3] * Datas.Systems.SQUARE_SIZE) / height,
+					(this.texture.x * Datas.Systems.SQUARE_SIZE) / width,
+					(this.texture.y * Datas.Systems.SQUARE_SIZE) / height,
+					(this.texture.width * Datas.Systems.SQUARE_SIZE) / width,
+					(this.texture.height * Datas.Systems.SQUARE_SIZE) / height,
 					count
 			  );
 	}

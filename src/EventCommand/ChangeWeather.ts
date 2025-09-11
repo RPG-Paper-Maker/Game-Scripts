@@ -80,7 +80,7 @@ class ChangeWeather extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const time = this.time.getValue() * 1000;
+		const time = (this.time.getValue() as number) * 1000;
 		const result: Record<string, any> = {
 			parallel: this.isWaitEnd,
 			time: time,
@@ -96,21 +96,21 @@ class ChangeWeather extends Base {
 			return result;
 		}
 		if (this.isColor) {
-			result.color = Datas.Systems.getColor(this.colorID.getValue());
+			result.color = Datas.Systems.getColor(this.colorID.getValue() as number);
 		} else {
-			result.imageID = this.imageID.getValue();
+			result.imageID = this.imageID.getValue() as number;
 		}
-		result.numberPerPortion = this.numberPerPortion.getValue();
-		result.portionsRay = this.portionsRay.getValue();
+		result.numberPerPortion = this.numberPerPortion.getValue() as number;
+		result.portionsRay = this.portionsRay.getValue() as number;
 		result.finalParticlesNumber =
 			result.numberPerPortion * (result.portionsRay * 8 + 1) * (result.portionsRay * 2 + 1);
-		result.size = this.size.getValue();
-		result.depthTest = this.depthTest.getValue();
-		result.depthWrite = this.depthWrite.getValue();
-		result.initialVelocity = this.initialVelocity.getValue();
-		result.velocityAddition = this.velocityAddition.getValue();
-		result.initialYRotation = this.initialYRotation.getValue();
-		result.yRotationAddition = this.yRotationAddition.getValue();
+		result.size = this.size.getValue() as number;
+		result.depthTest = this.depthTest.getValue() as number;
+		result.depthWrite = this.depthWrite.getValue() as number;
+		result.initialVelocity = this.initialVelocity.getValue() as number;
+		result.velocityAddition = this.velocityAddition.getValue() as number;
+		result.initialYRotation = this.initialYRotation.getValue() as number;
+		result.yRotationAddition = this.yRotationAddition.getValue() as number;
 		return result;
 	}
 

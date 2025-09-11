@@ -14,52 +14,40 @@ import { MapObject, Position } from '../Core';
 import { Datas, Manager } from '../index';
 import { Base } from './Base';
 
-/** @class
- *  A detection of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  detection
+/**
+ * JSON structure describing a detection.
  */
-class Detection extends Base {
+export type DetectionJSON = {
+	b?: {
+		k: number[];
+		v: {
+			bls?: number;
+			blp?: number;
+			bhs?: number;
+			bhp?: number;
+			bws?: number;
+			bwp?: number;
+		};
+	}[];
+};
+
+/**
+ * A detection of the game.
+ */
+export class Detection extends Base {
 	boxes: [Position, number, number, number, number, number, number][];
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: DetectionJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the detection.
-	 *  @param {Record<string, any>} - json Json object describing the detection
-	 */
-	read(json: Record<string, any>) {
-		const jsonList = Utils.valueOrDefault(json.b, []);
-		const l = jsonList.length;
-		this.boxes = new Array(l);
-		let jsonElement: Record<string, any>;
-		for (let i = 0; i < l; i++) {
-			jsonElement = jsonList[i];
-			this.boxes[i] = [
-				Position.createFromArray(jsonElement.k),
-				Utils.valueOrDefault(jsonElement.v.bls, 1),
-				Utils.valueOrDefault(jsonElement.v.blp, 0),
-				Utils.valueOrDefault(jsonElement.v.bhs, 1),
-				Utils.valueOrDefault(jsonElement.v.bhp, 0),
-				Utils.valueOrDefault(jsonElement.v.bws, 1),
-				Utils.valueOrDefault(jsonElement.v.bwp, 0),
-			];
-		}
-	}
-
-	/**
-	 *  Check the collision between sender and object.
-	 *  @param {MapObject} sender - The object that sent test collision
-	 *  @param {MapObject} object - The object to test the collision
-	 *  @returns {boolean}
+	 * Check the collision between sender and object.
 	 */
 	checkCollision(sender: MapObject, object: MapObject): boolean {
 		const boundingBoxes = this.getBoundingBoxes(sender);
-		for (let i = 0, l = boundingBoxes.length; i < l; i++) {
-			Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions.getBBBoxDetection(), boundingBoxes[i]);
+		for (const boundingBox of boundingBoxes) {
+			Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions.getBBBoxDetection(), boundingBox);
 			if (object.checkCollisionDetection()) {
 				return true;
 			}
@@ -68,34 +56,21 @@ class Detection extends Base {
 	}
 
 	/**
-	 *  Get the sender bounding box.
-	 *  @param {MapObject} sender - The object that sent test collision
-	 *  @returns {number[][]}
+	 * Get the sender bounding boxes.
 	 */
 	getBoundingBoxes(sender: MapObject): number[][] {
 		const orientation = sender.orientationEye;
 		const localPosition = sender.position;
-		const l = this.boxes.length;
-		const list = new Array(l);
-		let box: [Position, number, number, number, number, number, number],
-			p: Position,
-			x: number,
-			z: number,
-			length: number,
-			height: number,
-			width: number,
-			px: number,
-			pz: number;
-		for (let i = 0; i < l; i++) {
-			box = this.boxes[i];
-			p = box[0];
-			length = box[1] * Datas.Systems.SQUARE_SIZE + (box[2] / 100) * Datas.Systems.SQUARE_SIZE;
-			height = box[3] * Datas.Systems.SQUARE_SIZE + (box[4] / 100) * Datas.Systems.SQUARE_SIZE;
-			width = box[5] * Datas.Systems.SQUARE_SIZE + (box[6] / 100) * Datas.Systems.SQUARE_SIZE;
-
-			// Update position according to sender orientation
-			px = (p.x - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterX() + length / 2;
-			pz = (p.z - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterZ() + width / 2;
+		const list = new Array(this.boxes.length);
+		for (let i = 0; i < this.boxes.length; i++) {
+			const [p, bls, blp, bhs, bhp, bws, bwp] = this.boxes[i];
+			const length = bls * Datas.Systems.SQUARE_SIZE + (blp / 100) * Datas.Systems.SQUARE_SIZE;
+			const height = bhs * Datas.Systems.SQUARE_SIZE + (bhp / 100) * Datas.Systems.SQUARE_SIZE;
+			const width = bws * Datas.Systems.SQUARE_SIZE + (bwp / 100) * Datas.Systems.SQUARE_SIZE;
+			const px = (p.x - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterX() + length / 2;
+			const pz = (p.z - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterZ() + width / 2;
+			let x: number;
+			let z: number;
 			switch (orientation) {
 				case ORIENTATION.SOUTH:
 					x = px;
@@ -132,6 +107,23 @@ class Detection extends Base {
 		}
 		return list;
 	}
-}
 
-export { Detection };
+	/**
+	 * Read the JSON associated to the detection.
+	 */
+	read(json: DetectionJSON): void {
+		const jsonList = Utils.valueOrDefault(json.b, []);
+		this.boxes = new Array(jsonList.length);
+		for (const [index, { k, v }] of jsonList.entries()) {
+			this.boxes[index] = [
+				Position.createFromArray(k),
+				Utils.valueOrDefault(v.bls, 1),
+				Utils.valueOrDefault(v.blp, 0),
+				Utils.valueOrDefault(v.bhs, 1),
+				Utils.valueOrDefault(v.bhp, 0),
+				Utils.valueOrDefault(v.bws, 1),
+				Utils.valueOrDefault(v.bwp, 0),
+			];
+		}
+	}
+}

@@ -10,34 +10,49 @@
 */
 
 import { Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Datas } from '../index';
 import { Base } from './Base';
+import { DynamicValue } from './DynamicValue';
+import { Event, EventJSON } from './Event';
+import { Property, PropertyJSON } from './Property';
+import { Reaction } from './Reaction';
+import { State, StateJSON } from './State';
 
-/** @class
- *  An object in the map.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  object
+/**
+ * JSON structure describing a map object.
  */
-class MapObject extends Base {
+export type MapObjectJSON = {
+	id?: number;
+	name?: string;
+	ooepf?: boolean;
+	canBeTriggeredAnotherObject?: boolean;
+	hId?: number;
+	states?: StateJSON[];
+	p?: PropertyJSON[];
+	events?: EventJSON[];
+};
+
+/**
+ * Represents an object on the map.
+ */
+export class MapObject extends Base {
 	public id: number;
 	public name: string;
 	public isEventFrame: boolean;
 	public canBeTriggeredAnotherObject: boolean;
-	public states: Model.State[];
-	public properties: Model.Property[];
-	public events: Record<number, Model.Event[]>;
-	public timeEvents: Model.Event[];
+	public states: State[];
+	public properties: Property[];
+	public events: Map<number, Event[]>;
+	public timeEvents: Event[];
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: MapObjectJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Create a system map object from a model ID.
-	 *  @static
-	 *  @param {Record<string, any>} modelID
-	 *  @param {Record<string, any>} id
+	 * Creates a system map object from a model ID.
+	 * @param modelID - Model ID to inherit from.
+	 * @param id - Unique ID to assign to the created object.
 	 */
 	static createFromModelID(modelID: number, id: number): MapObject {
 		const mapObject = new MapObject();
@@ -50,130 +65,13 @@ class MapObject extends Base {
 	}
 
 	/**
-	 *  Read the JSON associated to the object
-	 *  @param {Record<string, any>} - json Json object describing the object
+	 * Get all the "time" (model) events for this object.
 	 */
-	read(json: Record<string, any>) {
-		this.id = json.id;
-		this.name = json.name;
-		this.isEventFrame = json.ooepf;
-		this.canBeTriggeredAnotherObject = Utils.valueOrDefault(json.canBeTriggeredAnotherObject, true);
-		this.addDefaultValues();
-		this.addInheritanceModel(json.hId);
-
-		// States
-		let jsonList = Utils.valueOrDefault(json.states, []);
-		let jsonElement: Record<string, any>, id: number, j: number, m: number, i: number, l: number;
-		for (i = 0, l = jsonList.length; i < l; i++) {
-			jsonElement = jsonList[i];
-			id = jsonElement.id;
-			for (j = 0, m = this.states.length; j < m; j++) {
-				if (this.states[j].id === id) {
-					break;
-				}
-			}
-			this.states[j] = new Model.State(jsonElement);
-		}
-
-		// Properties
-		jsonList = Utils.valueOrDefault(json.p, []);
-		let property: Model.Property;
-		for (i = 0, l = jsonList.length; i < l; i++) {
-			jsonElement = jsonList[i];
-			property = new Model.Property(jsonElement);
-			id = property.id;
-			for (j = 0, m = this.properties.length; j < m; j++) {
-				if (this.properties[j].id === id) {
-					break;
-				}
-			}
-			this.properties[j] = property;
-		}
-
-		// Events
-		jsonList = Utils.valueOrDefault(json.events, []);
-		let event: Model.Event, list: Model.Event[];
-		for (i = 0, l = jsonList.length; i < l; i++) {
-			jsonElement = jsonList[i];
-			event = new Model.Event(jsonElement);
-			if (this.events.hasOwnProperty(event.idEvent)) {
-				list = this.events[event.idEvent];
-				for (j = 0, m = list.length; j < m; j++) {
-					if (list[j].isEqual(event)) {
-						break;
-					}
-				}
-				if (j < list.length) {
-					list[j].addReactions(event.reactions);
-				} else {
-					list.push(event);
-				}
-			} else {
-				this.events[event.idEvent] = [event];
-			}
-		}
-		this.timeEvents = this.getTimeEvents();
-	}
-
-	/**
-	 *  Add default values.
-	 */
-	addDefaultValues() {
-		this.states = [];
-		this.properties = [];
-		this.events = {};
-	}
-
-	/**
-	 *  Add inheritance values according to a model ID.
-	 *  @param {number} modelID
-	 */
-	addInheritanceModel(modelID: number) {
-		if (modelID !== -1) {
-			const inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
-
-			// Only one event per frame inheritance is a priority
-			this.isEventFrame = inheritedObject.isEventFrame;
-			this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
-
-			// States
-			const states = Utils.valueOrDefault(inheritedObject.states, []);
-			let i: number, l: number;
-			for (i = 0, l = states.length; i < l; i++) {
-				this.states.push(states[i]);
-			}
-
-			// Properties
-			const properties = Utils.valueOrDefault(inheritedObject.properties, []);
-			for (i = 0, l = properties.length; i < l; i++) {
-				this.properties.push(properties[i]);
-			}
-
-			// Events
-			const events = inheritedObject.events;
-			let eventsList: Model.Event[], realEventsList: Model.Event[];
-			for (const idEvent in events) {
-				eventsList = events[idEvent];
-				realEventsList = [];
-				for (i = 0, l = eventsList.length; i < l; i++) {
-					realEventsList.push(eventsList[i]);
-				}
-				this.events[idEvent] = realEventsList;
-			}
-		}
-	}
-
-	/**
-	 *  Get all the time events.
-	 *  @returns {System.Event[]}
-	 */
-	getTimeEvents(): Model.Event[] {
-		const completeList = this.events[1];
+	getTimeEvents(): Event[] {
+		const completeList = this.events.get(1);
 		const list = [];
 		if (completeList) {
-			let event: Model.Event;
-			for (let i = 0, l = completeList.length; i < l; i++) {
-				event = completeList[i];
+			for (const event of completeList) {
 				if (event.isSystem) {
 					list.push(event);
 				}
@@ -183,44 +81,120 @@ class MapObject extends Base {
 	}
 
 	/**
-	 *  Get the reactions corresponding to a given event and parameters.
-	 *  @param {boolean} isSystem - Boolean indicating if it is an event System
-	 *  @param {number} idEvent - ID of the event
-	 *  @param {number} state - The ID of the state
-	 *  @param {Model.DynamicValue[]} parameters - List of all the parameters
-	 *  @returns {System.Reaction[]}
+	 * Get the reactions corresponding to a given event and parameters.
+	 * @param isSystem - Whether the event is a system event.
+	 * @param idEvent - Event ID to search for.
+	 * @param state - The state ID for which to retrieve reactions.
+	 * @param parameters - Map of parameter id → {@link DynamicValue}.
+	 * @returns Array of matching {@link Model.Reaction} objects.
 	 */
-	getReactions(
-		isSystem: boolean,
-		idEvent: number,
-		state: number,
-		parameters: Model.DynamicValue[]
-	): Model.Reaction[] {
-		const events = this.events[idEvent];
-		const reactions = [];
-		if (events !== undefined) {
-			let test: boolean, event: Model.Event, j: number, m: number, reaction: Model.Reaction;
-			for (let i = 0, l = events.length; i < l; i++) {
-				test = true;
-				event = events[i];
-				if (event.isSystem === isSystem) {
-					for (j = 1, m = parameters.length; j < m; j++) {
-						if (event.parameters[j] && !event.parameters[j].value.isEqual(parameters[j])) {
-							test = false;
-							break;
-						}
-					}
-					if (test) {
-						reaction = events[i].reactions[state];
-						if (reaction) {
-							reactions.push(reaction);
-						}
-					}
-				}
+	getReactions(isSystem: boolean, idEvent: number, state: number, parameters: Map<number, DynamicValue>): Reaction[] {
+		const events = this.events.get(idEvent);
+		if (!events) {
+			return [];
+		}
+		const reactions: Reaction[] = [];
+		for (const event of events) {
+			if (event.isSystem !== isSystem) {
+				continue;
+			}
+			const allMatch = Array.from(parameters.entries()).every(([id, value]) => {
+				const param = event.parameters.get(id);
+				return !param || param.value.isEqual(value);
+			});
+			if (!allMatch) {
+				continue;
+			}
+			const reaction = event.reactions.get(state);
+			if (reaction) {
+				reactions.push(reaction);
 			}
 		}
 		return reactions;
 	}
-}
 
-export { MapObject };
+	/**
+	 * Initialize collections with default values.
+	 */
+	addDefaultValues(): void {
+		this.states = [];
+		this.properties = [];
+		this.events = new Map();
+	}
+
+	/**
+	 * Inherit values from a given model ID.
+	 * @param modelID - The ID of the model to inherit from. If -1, nothing is inherited.
+	 */
+	addInheritanceModel(modelID: number): void {
+		if (modelID === -1) {
+			return;
+		}
+		const inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
+
+		// Only one event per frame inheritance is a priority
+		this.isEventFrame = inheritedObject.isEventFrame;
+		this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
+
+		// States & properties
+		this.states.push(...Utils.valueOrDefault(inheritedObject.states, []));
+		this.properties.push(...Utils.valueOrDefault(inheritedObject.properties, []));
+
+		// Events (clone arrays to avoid mutating the inherited object)
+		this.events = new Map();
+		for (const [idEvent, eventsList] of inheritedObject.events.entries()) {
+			this.events.set(Number(idEvent), [...eventsList]);
+		}
+	}
+
+	/**
+	 * Reads and initializes the object from its JSON representation.
+	 */
+	read(json: MapObjectJSON): void {
+		this.id = json.id;
+		this.name = json.name;
+		this.isEventFrame = json.ooepf;
+		this.canBeTriggeredAnotherObject = Utils.valueOrDefault(json.canBeTriggeredAnotherObject, true);
+		this.addDefaultValues();
+		this.addInheritanceModel(json.hId);
+
+		// States
+		for (const stateJson of Utils.valueOrDefault(json.states, [])) {
+			const state = new State(stateJson);
+			const index = this.states.findIndex((s) => s.id === state.id);
+			if (index === -1) {
+				this.states.push(state);
+			} else {
+				this.states[index] = state;
+			}
+		}
+
+		// Properties
+		for (const propertyJson of Utils.valueOrDefault(json.p, [])) {
+			const property = new Property(propertyJson);
+			const index = this.properties.findIndex((p) => p.id === property.id);
+			if (index === -1) {
+				this.properties.push(property);
+			} else {
+				this.properties[index] = property;
+			}
+		}
+
+		// Events
+		for (const eventJson of Utils.valueOrDefault(json.events, [])) {
+			const event = new Event(eventJson);
+			let list = this.events.get(event.idEvent);
+			if (!list) {
+				list = [];
+				this.events.set(event.idEvent, list);
+			}
+			const existing = list.find((e) => e.isEqual(event));
+			if (existing) {
+				existing.addReactions(event.reactions);
+			} else {
+				list.push(event);
+			}
+		}
+		this.timeEvents = this.getTimeEvents();
+	}
+}

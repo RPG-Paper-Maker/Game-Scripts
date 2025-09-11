@@ -19,153 +19,152 @@ import {
 	Utils,
 } from '../Common';
 import { Battler, Game, Player, ReactionInterpreter } from '../Core';
-import { Status } from '../Core/Status';
-import { Datas, EventCommand, Manager, Model, Scene } from '../index';
+import { Datas, EventCommand, Manager, Scene } from '../index';
 import { Base } from './Base';
-import { Statistic } from './Statistic';
+import { CommonSkillItem } from './CommonSkillItem';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  An effect of a common skill item.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  effect
+/**
+ * JSON schema for a skill or item effect.
  */
-class Effect extends Base {
+export type EffectJSON = {
+	k?: number;
+	dk?: number;
+	dsid?: DynamicValueJSON;
+	dcid?: DynamicValueJSON;
+	dvid?: number;
+	df?: DynamicValueJSON;
+	idmin?: boolean;
+	dmin?: DynamicValueJSON;
+	idmax?: boolean;
+	dmax?: DynamicValueJSON;
+	ide?: boolean;
+	deid?: DynamicValueJSON;
+	idv?: boolean;
+	dvf?: DynamicValueJSON;
+	idc?: boolean;
+	dcf?: DynamicValueJSON;
+	idp?: boolean;
+	dpf?: DynamicValueJSON;
+	idsv?: boolean;
+	dsv?: number;
+	iddn?: boolean;
+	iast?: boolean;
+	sid?: DynamicValueJSON;
+	spf?: DynamicValueJSON;
+	iask?: boolean;
+	asid?: DynamicValueJSON;
+	psid?: DynamicValueJSON;
+	cr?: DynamicValueJSON;
+	sak?: number;
+	sf?: DynamicValueJSON;
+	itct?: boolean;
+	tctf?: DynamicValueJSON;
+};
+
+/**
+ * Represents an effect of a skill or item.
+ * Can be damages, status changes, skill additions/removals,
+ * common reactions, special actions, or script effects.
+ */
+export class Effect extends Base {
+	/** Kind of effect (damage, status, etc.). */
 	public kind: EFFECT_KIND;
-	public damageKind: DAMAGES_KIND;
-	public damageStatisticID: Model.DynamicValue;
-	public damageCurrencyID: Model.DynamicValue;
-	public damageVariableID: number;
-	public damageFormula: Model.DynamicValue;
-	public isDamagesMinimum: boolean;
-	public damagesMinimumFormula: Model.DynamicValue;
-	public isDamagesMaximum: boolean;
-	public damagesMaximumFormula: Model.DynamicValue;
-	public isDamageElement: boolean;
-	public damageElementID: Model.DynamicValue;
-	public isDamageVariance: boolean;
-	public damageVarianceFormula: Model.DynamicValue;
-	public isDamageCritical: boolean;
-	public damageCriticalFormula: Model.DynamicValue;
-	public isDamagePrecision: boolean;
-	public damagePrecisionFormula: Model.DynamicValue;
-	public isDamageStockVariableID: boolean;
-	public damageStockVariableID: number;
-	public isDamageDisplayName: boolean;
-	public isAddStatus: boolean;
-	public statusID: Model.DynamicValue;
-	public statusPrecisionFormula: Model.DynamicValue;
-	public isAddSkill: boolean;
-	public addSkillID: Model.DynamicValue;
-	public performSkillID: Model.DynamicValue;
-	public commonReaction: EventCommand.CallACommonReaction;
-	public specialActionKind: EFFECT_SPECIAL_ACTION_KIND;
-	public scriptFormula: Model.DynamicValue;
-	public isTemporarilyChangeTarget: boolean;
-	public temporarilyChangeTargetFormula: Model.DynamicValue;
-	public skillItem: Model.CommonSkillItem;
+
+	// === Damage-related fields ===
+	public damageKind?: DAMAGES_KIND;
+	public damageStatisticID?: DynamicValue;
+	public damageCurrencyID?: DynamicValue;
+	public damageVariableID?: number;
+	public damageFormula?: DynamicValue;
+	public isDamagesMinimum?: boolean;
+	public damagesMinimumFormula?: DynamicValue;
+	public isDamagesMaximum?: boolean;
+	public damagesMaximumFormula?: DynamicValue;
+	public isDamageElement?: boolean;
+	public damageElementID?: DynamicValue;
+	public isDamageVariance?: boolean;
+	public damageVarianceFormula?: DynamicValue;
+	public isDamageCritical?: boolean;
+	public damageCriticalFormula?: DynamicValue;
+	public isDamagePrecision?: boolean;
+	public damagePrecisionFormula?: DynamicValue;
+	public isDamageStockVariableID?: boolean;
+	public damageStockVariableID?: number;
+	public isDamageDisplayName?: boolean;
+
+	// === Status-related fields ===
+	public isAddStatus?: boolean;
+	public statusID?: DynamicValue;
+	public statusPrecisionFormula?: DynamicValue;
+
+	// === Skill-related fields ===
+	public isAddSkill?: boolean;
+	public addSkillID?: DynamicValue;
+	public performSkillID?: DynamicValue;
+
+	// === Common reaction ===
+	public commonReaction?: EventCommand.CallACommonReaction;
+
+	// === Special action ===
+	public specialActionKind?: EFFECT_SPECIAL_ACTION_KIND;
+
+	// === Script effect ===
+	public scriptFormula?: DynamicValue;
+
+	// === Target change ===
+	public isTemporarilyChangeTarget?: boolean;
+	public temporarilyChangeTargetFormula?: DynamicValue;
+
+	/** Parent skill/item. */
+	public skillItem: CommonSkillItem;
+
+	/** Indicates if this effect can be skipped (used in HUD). */
 	public canSkip = false;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: EffectJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the effect.
-	 *  @param {Record<string, any>} - json Json object describing the effect
+	 * Checks if the effect is animated (for HUD/battle display).
 	 */
-	read(json: Record<string, any>) {
-		this.kind = Utils.valueOrDefault(json.k, EFFECT_KIND.DAMAGES);
-		switch (this.kind) {
-			case EFFECT_KIND.DAMAGES: {
-				this.damageKind = Utils.valueOrDefault(json.dk, DAMAGES_KIND.STAT);
-				switch (this.damageKind) {
-					case DAMAGES_KIND.STAT:
-						this.damageStatisticID = Model.DynamicValue.readOrDefaultDatabase(json.dsid);
-						break;
-					case DAMAGES_KIND.CURRENCY:
-						this.damageCurrencyID = Model.DynamicValue.readOrDefaultDatabase(json.dcid);
-						break;
-					case DAMAGES_KIND.VARIABLE:
-						this.damageVariableID = Utils.valueOrDefault(json.dvid, 1);
-						break;
-				}
-				this.damageFormula = Model.DynamicValue.readOrDefaultMessage(json.df);
-				this.isDamagesMinimum = Utils.valueOrDefault(json.idmin, true);
-				this.damagesMinimumFormula = Model.DynamicValue.readOrDefaultMessage(json.dmin, '0');
-				this.isDamagesMaximum = Utils.valueOrDefault(json.idmax, false);
-				this.damagesMaximumFormula = Model.DynamicValue.readOrDefaultMessage(json.dmax, '0');
-				this.isDamageElement = Utils.valueOrDefault(json.ide, false);
-				this.damageElementID = Model.DynamicValue.readOrDefaultDatabase(json.deid);
-				this.isDamageVariance = Utils.valueOrDefault(json.idv, false);
-				this.damageVarianceFormula = Model.DynamicValue.readOrDefaultMessage(json.dvf, '0');
-				this.isDamageCritical = Utils.valueOrDefault(json.idc, false);
-				this.damageCriticalFormula = Model.DynamicValue.readOrDefaultMessage(json.dcf, '0');
-				this.isDamagePrecision = Utils.valueOrDefault(json.idp, false);
-				this.damagePrecisionFormula = Model.DynamicValue.readOrDefaultMessage(json.dpf, String(100));
-				this.isDamageStockVariableID = Utils.valueOrDefault(json.idsv, false);
-				this.damageStockVariableID = Utils.valueOrDefault(json.dsv, 1);
-				this.isDamageDisplayName = Utils.valueOrDefault(json.iddn, false);
-				break;
-			}
-			case EFFECT_KIND.STATUS:
-				this.isAddStatus = Utils.valueOrDefault(json.iast, true);
-				this.statusID = Model.DynamicValue.readOrDefaultDatabase(json.sid);
-				this.statusPrecisionFormula = Model.DynamicValue.readOrDefaultMessage(json.spf, String(100));
-				break;
-			case EFFECT_KIND.ADD_REMOVE_SKILL:
-				this.isAddSkill = Utils.valueOrDefault(json.iask, true);
-				this.addSkillID = Model.DynamicValue.readOrDefaultDatabase(json.asid);
-				break;
-			case EFFECT_KIND.PERFORM_SKILL:
-				this.performSkillID = Model.DynamicValue.readOrDefaultDatabase(json.psid);
-				break;
-			case EFFECT_KIND.COMMON_REACTION:
-				this.commonReaction = <EventCommand.CallACommonReaction>(
-					(json.cr === undefined ? null : Manager.Events.getEventCommand(json.cr))
-				);
-				break;
-			case EFFECT_KIND.SPECIAL_ACTIONS:
-				this.specialActionKind = Utils.valueOrDefault(json.sak, EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS);
-				break;
-			case EFFECT_KIND.SCRIPT:
-				this.scriptFormula = Model.DynamicValue.readOrDefaultMessage(json.sf);
-				break;
-		}
-		this.isTemporarilyChangeTarget = Utils.valueOrDefault(json.itct, false);
-		this.temporarilyChangeTargetFormula = Model.DynamicValue.readOrDefaultMessage(json.tctf);
+	isAnimated(): boolean {
+		return (
+			this.kind === EFFECT_KIND.DAMAGES ||
+			this.kind === EFFECT_KIND.STATUS ||
+			this.kind === EFFECT_KIND.COMMON_REACTION
+		);
 	}
 
 	/**
-	 *  Get if effect is miss in battler temp variables.
+	 * Precomputes whether this effect hits/misses and if it is critical.
+	 * Updates temporary miss/crit flags on each battler.
 	 */
-	getMissAndCrit() {
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+	getMissAndCrit(): void {
+		const user = Scene.Map.current.user?.player ?? Player.getTemporaryPlayer();
 		Scene.Map.current.tempTargets = Scene.Map.current.targets;
 		if (this.isTemporarilyChangeTarget) {
-			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue(), {
-				user: user,
+			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue() as string, {
+				user,
 			}) as Battler[];
 		}
 		const targets = Scene.Map.current.targets;
-		const l = targets.length;
-		let target: Player, battler: Battler, precision: number, critical: number, miss: boolean, crit: boolean;
 		switch (this.kind) {
 			case EFFECT_KIND.DAMAGES: {
-				let damage: number;
-				for (let i = 0; i < l; i++) {
-					battler = targets[i];
-					target = battler.player;
-					miss = false;
-					crit = false;
+				let damage = 0;
+				for (const battler of targets) {
+					const target = battler.player;
+					let miss = false;
+					let crit = false;
 					if (this.skillItem && !this.skillItem.isPossible(target, false)) {
 						continue;
 					}
 					damage = 0;
 					if (this.isDamagePrecision) {
-						precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
-							user: user,
-							target: target,
+						const precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue() as string, {
+							user,
+							target,
 						}) as number;
 						if (!Mathf.randomPercentTest(precision)) {
 							damage = null;
@@ -174,9 +173,9 @@ class Effect extends Base {
 					}
 					if (damage !== null) {
 						if (this.isDamageCritical) {
-							critical = Interpreter.evaluate(this.damageCriticalFormula.getValue(), {
-								user: user,
-								target: target,
+							const critical = Interpreter.evaluate(this.damageCriticalFormula.getValue() as string, {
+								user,
+								target,
 							}) as number;
 							if (Mathf.randomPercentTest(critical)) {
 								crit = true;
@@ -189,16 +188,14 @@ class Effect extends Base {
 				break;
 			}
 			case EFFECT_KIND.STATUS: {
-				let precision: number, id: number;
-				for (let i = 0, l = targets.length; i < l; i++) {
-					battler = targets[i];
-					target = battler.player;
-					miss = false;
-					precision = Interpreter.evaluate(this.statusPrecisionFormula.getValue(), {
-						user: user,
-						target: battler.player,
+				for (const battler of targets) {
+					const target = battler.player;
+					let miss = false;
+					let precision = Interpreter.evaluate(this.statusPrecisionFormula.getValue() as string, {
+						user,
+						target,
 					}) as number;
-					id = this.statusID.getValue();
+					const id = this.statusID.getValue() as number;
 					// Handle resistance
 					if (target.statusRes[id]) {
 						precision /= target.statusRes[id].multiplication;
@@ -209,441 +206,569 @@ class Effect extends Base {
 					}
 					battler.tempIsDamagesMiss = miss;
 				}
+				break;
 			}
 			default: {
 				for (const battler of targets) {
 					battler.tempIsDamagesMiss = null;
 					battler.tempIsDamagesCritical = null;
 				}
+				break;
 			}
 		}
 	}
 
 	/**
-	 *  Execute the effect.
-	 *  @returns {boolean}
+	 * Executes the effect logic on all targets.
+	 * @param forceReaction - Whether to force common reactions immediately.
+	 * @returns True if the effect had an impact, false otherwise.
 	 */
 	execute(forceReaction = false): boolean {
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
+		const user = Scene.Map.current.user?.player ?? Player.getTemporaryPlayer();
 		this.canSkip = false;
 		Scene.Map.current.tempTargets = Scene.Map.current.targets;
 		if (this.isTemporarilyChangeTarget) {
-			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue(), {
-				user: user,
+			Scene.Map.current.targets = Interpreter.evaluate(this.temporarilyChangeTargetFormula.getValue() as string, {
+				user,
 			}) as Battler[];
 		}
-		const targets = Scene.Map.current.targets;
 		let result = false;
-		const l = targets.length;
-		let target: Player, battler: Battler;
 		switch (this.kind) {
-			case EFFECT_KIND.DAMAGES: {
-				let damage: number,
-					damageName: string,
-					miss: boolean,
-					crit: boolean,
-					precision: number,
-					variance: number,
-					fixRes: number,
-					percentRes: number,
-					element: number,
-					critical: number,
-					stat: Statistic,
-					abbreviation: string,
-					max: number,
-					before: number,
-					currencyID: number,
-					targetElement: Model.DynamicValue,
-					systemElement: Model.Element,
-					efficiency: Model.DynamicValue;
-				for (let i = 0; i < l; i++) {
-					battler = targets[i];
-					target = battler.player;
-					if (this.skillItem && !this.skillItem.isPossible(target, false)) {
-						battler.tempIsDamagesMiss = null;
-						battler.tempIsDamagesCritical = null;
-						continue;
-					}
-					damage = 0;
-					damageName = '';
-					miss = false;
-					crit = false;
-
-					// Calculate damages
-					if (this.isDamagePrecision) {
-						precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
-							user: user,
-							target: target,
-						}) as number;
-						if (
-							battler.tempIsDamagesMiss ||
-							(battler.tempIsDamagesMiss === null && !Mathf.randomPercentTest(precision))
-						) {
-							damage = null;
-							miss = true;
-						}
-					}
-					if (damage !== null) {
-						damage = Interpreter.evaluate(this.damageFormula.getValue(), {
-							user: user,
-							target: target,
-						}) as number;
-						if (this.isDamageVariance) {
-							variance = Math.round(
-								(damage *
-									(Interpreter.evaluate(this.damageVarianceFormula.getValue(), {
-										user: user,
-										target: target,
-									}) as number)) /
-									100
-							);
-							damage = Mathf.random(damage - variance, damage + variance);
-						}
-						if (this.isDamageElement) {
-							element = this.damageElementID.getValue();
-							systemElement = Datas.BattleSystems.getElement(element);
-							// If target also has elements
-							for (targetElement of target.elements) {
-								efficiency = systemElement.efficiency[targetElement.getValue()];
-								damage *= efficiency ? efficiency.getValue() : 1;
-							}
-							fixRes =
-								target[
-									Datas.BattleSystems.getStatistic(Datas.BattleSystems.getStatisticElement(element))
-										.abbreviation
-								];
-							percentRes =
-								target[
-									Datas.BattleSystems.getStatistic(
-										Datas.BattleSystems.getStatisticElementPercent(element)
-									).abbreviation
-								];
-							damage -= (damage * percentRes) / 100;
-							damage -= fixRes;
-						}
-						if (this.isDamageCritical) {
-							critical = Interpreter.evaluate(this.damageCriticalFormula.getValue(), {
-								user: user,
-								target: target,
-							}) as number;
-							if (
-								battler.tempIsDamagesCritical ||
-								(battler.tempIsDamagesCritical === null && Mathf.randomPercentTest(critical))
-							) {
-								damage = Interpreter.evaluate(Datas.BattleSystems.formulaCrit.getValue(), {
-									user: user,
-									target: target,
-									damage: damage,
-								}) as number;
-								crit = true;
-							}
-						}
-						if (this.isDamagesMinimum) {
-							damage = Math.max(
-								damage,
-								Interpreter.evaluate(this.damagesMinimumFormula.getValue(), {
-									user: user,
-									target: target,
-								}) as number
-							);
-						}
-						if (this.isDamagesMaximum) {
-							damage = Math.min(
-								damage,
-								Interpreter.evaluate(this.damagesMaximumFormula.getValue(), {
-									user: user,
-									target: target,
-								}) as number
-							);
-						}
-						damage = Math.round(damage);
-					}
-					if (this.isDamageStockVariableID) {
-						Game.current.variables[this.damageStockVariableID] = damage === null ? 0 : damage;
-					}
-					if (this.isDamageDisplayName) {
-						switch (this.damageKind) {
-							case DAMAGES_KIND.STAT:
-								damageName = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue()).name();
-								break;
-							case DAMAGES_KIND.CURRENCY:
-								damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue()).name();
-								break;
-							default:
-								break;
-						}
-					}
-
-					// For diplaying result in HUD
-					if (Scene.Map.current.isBattleMap) {
-						battler.damages = damage;
-						battler.damagesName = damageName;
-						battler.isDamagesMiss = miss;
-						battler.isDamagesCritical = crit;
-					}
-
-					// Result accoring to damage kind
-					switch (this.damageKind) {
-						case DAMAGES_KIND.STAT:
-							stat = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue());
-							abbreviation = stat.abbreviation;
-							max = target[stat.getMaxAbbreviation()];
-							before = target[abbreviation];
-							target[abbreviation] -= damage;
-							if (target[abbreviation] < 0) {
-								target[abbreviation] = 0;
-							}
-							if (!stat.isFix) {
-								target[abbreviation] = Math.min(target[abbreviation], max);
-							}
-							result = result || before !== target[abbreviation];
-							break;
-						case DAMAGES_KIND.CURRENCY:
-							currencyID = this.damageCurrencyID.getValue();
-							if (target.kind === CHARACTER_KIND.HERO) {
-								before = Game.current.currencies[currencyID];
-								Game.current.currencies[currencyID] -= damage;
-								if (Game.current.currencies[currencyID] < 0) {
-									Game.current.currencies[currencyID] = 0;
-								}
-								result = result || before !== Game.current.currencies[currencyID];
-							}
-							break;
-						case DAMAGES_KIND.VARIABLE:
-							before = Game.current.variables[this.damageVariableID];
-							Game.current.variables[this.damageVariableID] -= damage;
-							result = result || before !== Game.current.variables[this.damageVariableID];
-							break;
-					}
-					battler.tempIsDamagesMiss = null;
-					battler.tempIsDamagesCritical = null;
-				}
+			case EFFECT_KIND.DAMAGES:
+				result = this.executeDamages(user);
 				break;
-			}
-			case EFFECT_KIND.STATUS: {
-				let precision: number, miss: boolean, id: number, previousFirst: Status;
-				this.canSkip = true;
-				for (let i = 0, l = targets.length; i < l; i++) {
-					battler = targets[i];
-					target = battler.player;
-					id = this.statusID.getValue();
-					if (!this.isAddStatus && !target.hasStatus(id)) {
-						battler.damages = null;
-						battler.isDamagesMiss = false;
-						battler.isDamagesCritical = false;
-						battler.lastStatus = null;
-						battler.lastStatusHealed = null;
-						battler.tempIsDamagesMiss = null;
-						battler.tempIsDamagesCritical = null;
-						continue;
-					} else {
-						this.canSkip = false;
-					}
-					precision = Interpreter.evaluate(this.statusPrecisionFormula.getValue(), {
-						user: user,
-						target: battler.player,
-					}) as number;
-					// Handle resistance
-					if (target.statusRes[id]) {
-						precision /= target.statusRes[id].multiplication;
-						precision -= target.statusRes[id].addition;
-					}
-					if (
-						battler.tempIsDamagesMiss === false ||
-						(battler.tempIsDamagesMiss === null && Mathf.randomPercentTest(precision))
-					) {
-						miss = false;
-						previousFirst = battler.player.status[0];
 
-						// Add or remove status
-						if (this.isAddStatus) {
-							battler.lastStatusHealed = null;
-							battler.lastStatus = target.addStatus(id);
-						} else {
-							battler.lastStatusHealed = target.removeStatus(id);
-							battler.lastStatus = null;
-						}
-
-						// If first status changed, change animation
-						battler.updateAnimationStatus(previousFirst);
-					} else {
-						miss = true;
-					}
-					// For diplaying result in HUD
-					if (Scene.Map.current.isBattleMap) {
-						battler.damages = null;
-						battler.isDamagesMiss = miss;
-						battler.isDamagesCritical = false;
-					}
-					battler.tempIsDamagesMiss = null;
-					battler.tempIsDamagesCritical = null;
-				}
-				result = true;
+			case EFFECT_KIND.STATUS:
+				result = this.executeStatus(user);
 				break;
-			}
+
 			case EFFECT_KIND.ADD_REMOVE_SKILL:
-				for (battler of targets) {
-					const skillID = this.addSkillID.getValue();
-					if (this.isAddSkill) {
-						battler.player.addSkill(skillID);
-					} else {
-						battler.player.removeSkill(skillID);
-					}
-				}
-				result = true;
+				result = this.executeAddRemoveSkill();
 				break;
 			case EFFECT_KIND.PERFORM_SKILL:
 				break;
 			case EFFECT_KIND.COMMON_REACTION:
-				const reactionInterpreter = new ReactionInterpreter(
-					null,
-					Datas.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
-					null,
-					null,
-					this.commonReaction.parameters
-				);
-				Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
-				Manager.Stack.top.reactionInterpreters.push(reactionInterpreter);
-				if (forceReaction) {
-					Manager.Stack.top.updateInterpreters();
-					if (Manager.Stack.top.reactionInterpretersEffects.length === 0) {
-						this.canSkip = true;
-					}
-				}
-				result = true;
+				result = this.executeCommonReaction(forceReaction);
 				break;
 			case EFFECT_KIND.SPECIAL_ACTIONS:
-				Scene.Map.current.battleCommandKind = this.specialActionKind;
-				result = true;
+				result = this.executeSpecialAction();
 				break;
-			case EFFECT_KIND.SCRIPT:
-				const script = this.scriptFormula.getValue();
-				if (targets.length === 0) {
-					Interpreter.evaluate(script, { addReturn: false, user: user, target: null });
-				}
-				for (const target of targets) {
-					Interpreter.evaluate(script, { addReturn: false, user: user, target: target.player });
-				}
-				result = true;
+			case EFFECT_KIND.SCRIPT: {
+				result = this.executeScript(user);
 				break;
+			}
 		}
 		Scene.Map.current.targets = Scene.Map.current.tempTargets;
 		return result;
 	}
 
 	/**
-	 *  Check if the effect is animated.
-	 *  @returns {boolean}
+	 * Executes a damage effect on all current battle targets.
+	 * @param user - The player performing the attack or skill.
+	 * @returns `true` if at least one target’s state was modified, otherwise `false`.
 	 */
-	isAnimated(): boolean {
-		return (
-			this.kind === EFFECT_KIND.DAMAGES ||
-			this.kind === EFFECT_KIND.STATUS ||
-			this.kind === EFFECT_KIND.COMMON_REACTION
-		);
-	}
+	executeDamages(user: Player): boolean {
+		let result = false;
+		for (const battler of Scene.Map.current.targets) {
+			const target = battler.player;
+			if (this.skillItem && !this.skillItem.isPossible(target, false)) {
+				battler.tempIsDamagesMiss = null;
+				battler.tempIsDamagesCritical = null;
+				continue;
+			}
+			let damage = 0;
+			let damageName = '';
+			let miss = false;
+			let crit = false;
 
-	/**
-	 *  Get the string representation of the effect.
-	 *  @returns {string}
-	 */
-	toString(): string {
-		const user = Scene.Map.current.user ? Scene.Map.current.user.player : Player.getTemporaryPlayer();
-		const target = Player.getTemporaryPlayer();
-		switch (this.kind) {
-			case EFFECT_KIND.DAMAGES:
-				let damage = Interpreter.evaluate(this.damageFormula.getValue(), {
-					user: user,
-					target: target,
+			// Calculate damages
+			if (this.isDamagePrecision) {
+				const precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue() as string, {
+					user,
+					target,
 				}) as number;
-				damage = Math.round(damage);
-				if (damage === 0) {
-					return '';
+				if (
+					battler.tempIsDamagesMiss ||
+					(battler.tempIsDamagesMiss === null && !Mathf.randomPercentTest(precision))
+				) {
+					damage = null;
+					miss = true;
 				}
-				let precision = 100;
-				let critical = 0;
-				let variance = 0;
+			}
+			if (damage !== null) {
+				damage = Interpreter.evaluate(this.damageFormula.getValue() as string, {
+					user,
+					target,
+				}) as number;
 				if (this.isDamageVariance) {
-					variance = Math.round(
+					const variance = Math.round(
 						(damage *
-							(Interpreter.evaluate(this.damageVarianceFormula.getValue(), {
-								user: user,
-								target: target,
+							(Interpreter.evaluate(this.damageVarianceFormula.getValue() as string, {
+								user,
+								target,
 							}) as number)) /
 							100
 					);
+					damage = Mathf.random(damage - variance, damage + variance);
 				}
-				let min = damage - variance;
-				let max = damage + variance;
-				if (damage < 0) {
-					const temp = min;
-					min = -max;
-					max = -temp;
-				}
-				const options = [];
-				if (this.isDamagePrecision) {
-					precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue(), {
-						user: user,
-						target: target,
-					}) as number;
-					options.push(Datas.Languages.extras.precision.name() + ': ' + precision + '%');
+				if (this.isDamageElement) {
+					const element = this.damageElementID.getValue() as number;
+					const modelElement = Datas.BattleSystems.getElement(element);
+					// If target also has elements
+					for (const targetElement of target.elements) {
+						const efficiency = modelElement.efficiency.get(targetElement.getValue() as number);
+						damage *= efficiency ? (efficiency.getValue() as number) : 1;
+					}
+					const fixRes =
+						target[
+							Datas.BattleSystems.getStatistic(Datas.BattleSystems.getStatisticElement(element))
+								.abbreviation
+						];
+					const percentRes =
+						target[
+							Datas.BattleSystems.getStatistic(Datas.BattleSystems.getStatisticElementPercent(element))
+								.abbreviation
+						];
+					damage -= (damage * percentRes) / 100;
+					damage -= fixRes;
 				}
 				if (this.isDamageCritical) {
-					critical = Interpreter.evaluate(this.damageCriticalFormula.getValue(), {
-						user: user,
-						target: target,
+					const critical = Interpreter.evaluate(this.damageCriticalFormula.getValue() as string, {
+						user,
+						target,
 					}) as number;
-					options.push(Datas.Languages.extras.critical.name() + ': ' + critical + '%');
+					if (
+						battler.tempIsDamagesCritical ||
+						(battler.tempIsDamagesCritical === null && Mathf.randomPercentTest(critical))
+					) {
+						damage = Interpreter.evaluate(Datas.BattleSystems.formulaCrit.getValue() as string, {
+							user,
+							target,
+							damage,
+						}) as number;
+						crit = true;
+					}
 				}
-				let damageName = '';
+				if (this.isDamagesMinimum) {
+					damage = Math.max(
+						damage,
+						Interpreter.evaluate(this.damagesMinimumFormula.getValue() as string, {
+							user,
+							target,
+						}) as number
+					);
+				}
+				if (this.isDamagesMaximum) {
+					damage = Math.min(
+						damage,
+						Interpreter.evaluate(this.damagesMaximumFormula.getValue() as string, {
+							user,
+							target,
+						}) as number
+					);
+				}
+				damage = Math.round(damage);
+			}
+			if (this.isDamageStockVariableID) {
+				Game.current.variables[this.damageStockVariableID] = damage === null ? 0 : damage;
+			}
+			if (this.isDamageDisplayName) {
 				switch (this.damageKind) {
 					case DAMAGES_KIND.STAT:
-						damageName = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue()).name();
+						damageName = Datas.BattleSystems.getStatistic(
+							this.damageStatisticID.getValue() as number
+						).name();
 						break;
 					case DAMAGES_KIND.CURRENCY:
-						damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue()).name();
+						damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue() as number).name();
 						break;
-					case DAMAGES_KIND.VARIABLE:
-						damageName = Datas.Variables.get(this.damageVariableID);
+					default:
 						break;
 				}
-				return (
-					(damage > 0 ? Datas.Languages.extras.damage.name() : Datas.Languages.extras.heal.name()) +
-					' ' +
-					damageName +
-					': ' +
-					(min === max ? min : min + ' - ' + max) +
-					(options.length > 0 ? ' [' + options.join(' - ') + ']' : '')
-				);
+			}
+
+			// For diplaying result in HUD
+			if (Scene.Map.current.isBattleMap) {
+				battler.damages = damage;
+				battler.damagesName = damageName;
+				battler.isDamagesMiss = miss;
+				battler.isDamagesCritical = crit;
+			}
+
+			// Result accoring to damage kind
+			switch (this.damageKind) {
+				case DAMAGES_KIND.STAT: {
+					const stat = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue() as number);
+					const abbreviation = stat.abbreviation;
+					const max = target[stat.getMaxAbbreviation()];
+					const before = target[abbreviation];
+					target[abbreviation] -= damage;
+					if (target[abbreviation] < 0) {
+						target[abbreviation] = 0;
+					}
+					if (!stat.isFix) {
+						target[abbreviation] = Math.min(target[abbreviation], max);
+					}
+					result = result || before !== target[abbreviation];
+					break;
+				}
+				case DAMAGES_KIND.CURRENCY: {
+					const currencyID = this.damageCurrencyID.getValue() as number;
+					if (target.kind === CHARACTER_KIND.HERO) {
+						const before = Game.current.currencies[currencyID];
+						Game.current.currencies[currencyID] -= damage;
+						if (Game.current.currencies[currencyID] < 0) {
+							Game.current.currencies[currencyID] = 0;
+						}
+						result = result || before !== Game.current.currencies[currencyID];
+					}
+					break;
+				}
+				case DAMAGES_KIND.VARIABLE: {
+					const before = Game.current.variables[this.damageVariableID];
+					Game.current.variables[this.damageVariableID] -= damage;
+					result = result || before !== Game.current.variables[this.damageVariableID];
+					break;
+				}
+			}
+			battler.tempIsDamagesMiss = null;
+			battler.tempIsDamagesCritical = null;
+		}
+		return result;
+	}
+
+	/**
+	 * Executes a status effect (add or remove) on all current battle targets.
+	 * @param user - The player applying the status effect.
+	 * @returns Always `true`, since the action itself was executed (even if missed).
+	 */
+	executeStatus(user: Player): boolean {
+		this.canSkip = true;
+		for (const battler of Scene.Map.current.targets) {
+			const target = battler.player;
+			const id = this.statusID.getValue() as number;
+			if (!this.isAddStatus && !target.hasStatus(id)) {
+				battler.damages = null;
+				battler.isDamagesMiss = false;
+				battler.isDamagesCritical = false;
+				battler.lastStatus = null;
+				battler.lastStatusHealed = null;
+				battler.tempIsDamagesMiss = null;
+				battler.tempIsDamagesCritical = null;
+				continue;
+			} else {
+				this.canSkip = false;
+			}
+			let precision = Interpreter.evaluate(this.statusPrecisionFormula.getValue() as string, {
+				user,
+				target,
+			}) as number;
+			// Handle resistance
+			if (target.statusRes[id]) {
+				precision /= target.statusRes[id].multiplication;
+				precision -= target.statusRes[id].addition;
+			}
+			let miss = true;
+			if (
+				battler.tempIsDamagesMiss === false ||
+				(battler.tempIsDamagesMiss === null && Mathf.randomPercentTest(precision))
+			) {
+				miss = false;
+				const previousFirst = battler.player.status[0];
+
+				// Add or remove status
+				if (this.isAddStatus) {
+					battler.lastStatusHealed = null;
+					battler.lastStatus = target.addStatus(id);
+				} else {
+					battler.lastStatusHealed = target.removeStatus(id);
+					battler.lastStatus = null;
+				}
+
+				// If first status changed, change animation
+				battler.updateAnimationStatus(previousFirst);
+			}
+			// For diplaying result in HUD
+			if (Scene.Map.current.isBattleMap) {
+				battler.damages = null;
+				battler.isDamagesMiss = miss;
+				battler.isDamagesCritical = false;
+			}
+			battler.tempIsDamagesMiss = null;
+			battler.tempIsDamagesCritical = null;
+		}
+		return true;
+	}
+
+	/**
+	 * Executes an add/remove skill effect on all current battle targets.
+	 * Depending on `isAddSkill`, the corresponding skill is either learned or
+	 * forgotten by each target.
+	 * @returns Always `true`, since the action is always applied.
+	 */
+	executeAddRemoveSkill(): boolean {
+		for (const battler of Scene.Map.current.targets) {
+			const skillID = this.addSkillID.getValue() as number;
+			if (this.isAddSkill) {
+				battler.player.addSkill(skillID);
+			} else {
+				battler.player.removeSkill(skillID);
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Executes a common reaction event.
+	 * Pushes a `ReactionInterpreter` into the manager stack to handle the
+	 * common reaction. If `forceReaction` is true, the interpreters are
+	 * updated immediately, and `canSkip` may be set if no reactions remain.
+	 * @param forceReaction - Whether to immediately execute the common reaction.
+	 * @returns Always `true`, since the action was initiated.
+	 */
+	executeCommonReaction(forceReaction: boolean): boolean {
+		const reactionInterpreter = new ReactionInterpreter(
+			null,
+			Datas.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
+			null,
+			null,
+			Utils.arrayToMap(this.commonReaction.parameters)
+		);
+		Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
+		Manager.Stack.top.reactionInterpreters.push(reactionInterpreter);
+		if (forceReaction) {
+			Manager.Stack.top.updateInterpreters();
+			if (Manager.Stack.top.reactionInterpretersEffects.length === 0) {
+				this.canSkip = true;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Executes a special action in the battle system.
+	 * @returns Always `true`, since the action was applied.
+	 */
+	executeSpecialAction(): boolean {
+		Scene.Map.current.battleCommandKind = this.specialActionKind;
+		return true;
+	}
+
+	/**
+	 * Executes a script effect for the skill or item.
+	 * @param user - The player executing the script.
+	 * @returns Always `true`, since the script was executed.
+	 */
+	executeScript(user: Player): boolean {
+		const script = this.scriptFormula.getValue() as string;
+		if (Scene.Map.current.targets.length === 0) {
+			Interpreter.evaluate(script, { addReturn: false, user, target: null });
+		}
+		for (const battler of Scene.Map.current.targets) {
+			Interpreter.evaluate(script, { addReturn: false, user, target: battler.player });
+		}
+		return true;
+	}
+
+	/**
+	 * Returns a human-readable string describing the effect.
+	 */
+	toString(): string {
+		const user = Scene.Map.current.user?.player ?? Player.getTemporaryPlayer();
+		const target = Player.getTemporaryPlayer();
+		switch (this.kind) {
+			case EFFECT_KIND.DAMAGES:
+				return this.toStringDamages(user, target);
 			case EFFECT_KIND.STATUS:
-				return (
-					(this.isAddStatus ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()) +
-					' ' +
-					Datas.Status.get(this.statusID.getValue()).name() +
-					' [' +
-					Datas.Languages.extras.precision.name() +
-					': ' +
-					Interpreter.evaluate(this.statusPrecisionFormula.getValue(), { user: user, target: target }) +
-					'%]'
-				);
+				return this.toStringStatus(user, target);
 			case EFFECT_KIND.ADD_REMOVE_SKILL:
-				return (
-					(this.isAddSkill ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()) +
-					' ' +
-					Datas.Languages.extras.skill.name() +
-					' ' +
-					Datas.Skills.get(this.addSkillID.getValue()).name()
-				);
+				return this.toStringAddRemoveSkill();
 			case EFFECT_KIND.PERFORM_SKILL:
-				return (
-					Datas.Languages.extras.performSkill.name() +
-					' ' +
-					Datas.Skills.get(this.performSkillID.getValue()).name()
-				);
+				return this.toStringPerformSkill();
 			default:
 				return '';
 		}
 	}
-}
 
-export { Effect };
+	/**
+	 * Builds a human-readable string describing a damage effect.
+	 * Evaluates the damage formula and applies variance, precision, and critical
+	 * chance if configured.
+	 * @param user - The player using the skill or item.
+	 * @param target - The target player affected by the damage.
+	 * @returns A formatted string describing the damage (or heal) effect,
+	 *          or an empty string if the result is zero damage.
+	 */
+	toStringDamages(user: Player, target: Player): string {
+		let damage = Interpreter.evaluate(this.damageFormula.getValue() as string, {
+			user,
+			target,
+		}) as number;
+		damage = Math.round(damage);
+		if (damage === 0) {
+			return '';
+		}
+		let precision = 100;
+		let critical = 0;
+		let variance = 0;
+		if (this.isDamageVariance) {
+			variance = Math.round(
+				(damage *
+					(Interpreter.evaluate(this.damageVarianceFormula.getValue() as string, {
+						user,
+						target,
+					}) as number)) /
+					100
+			);
+		}
+		let min = damage - variance;
+		let max = damage + variance;
+		if (damage < 0) {
+			const temp = min;
+			min = -max;
+			max = -temp;
+		}
+		const options = [];
+		if (this.isDamagePrecision) {
+			precision = Interpreter.evaluate(this.damagePrecisionFormula.getValue() as string, {
+				user,
+				target,
+			}) as number;
+			options.push(`${Datas.Languages.extras.precision.name()}: ${precision}%`);
+		}
+		if (this.isDamageCritical) {
+			critical = Interpreter.evaluate(this.damageCriticalFormula.getValue() as string, {
+				user,
+				target,
+			}) as number;
+			options.push(`${Datas.Languages.extras.critical.name()}: ${critical}%`);
+		}
+		let damageName = '';
+		switch (this.damageKind) {
+			case DAMAGES_KIND.STAT:
+				damageName = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue() as number).name();
+				break;
+			case DAMAGES_KIND.CURRENCY:
+				damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue() as number).name();
+				break;
+			case DAMAGES_KIND.VARIABLE:
+				damageName = Datas.Variables.get(this.damageVariableID);
+				break;
+		}
+		return `${
+			damage > 0 ? Datas.Languages.extras.damage.name() : Datas.Languages.extras.heal.name()
+		} ${damageName}: ${min === max ? min : min + ' - ' + max}${
+			options.length > 0 ? ` [${options.join(' - ')}]` : ''
+		}`;
+	}
+
+	/**
+	 * Builds a human-readable string describing a status effect.
+	 * Includes whether the effect adds or removes a status, the status name,
+	 * and the precision percentage.
+	 * @param user - The player applying the status effect.
+	 * @param target - The target player affected by the status effect.
+	 * @returns A formatted string describing the status effect.
+	 */
+	toStringStatus(user: Player, target: Player): string {
+		return `${
+			this.isAddStatus ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()
+		} ${Datas.Status.get(
+			this.statusID.getValue() as number
+		).name()} [${Datas.Languages.extras.precision.name()}: ${Interpreter.evaluate(
+			this.statusPrecisionFormula.getValue() as string,
+			{ user, target }
+		)}%]`;
+	}
+
+	/**
+	 * Builds a human-readable string describing an add/remove skill effect.
+	 * Indicates whether the effect adds or removes a skill and includes the
+	 * name of the skill.
+	 * @returns A formatted string describing the add/remove skill effect.
+	 */
+	toStringAddRemoveSkill(): string {
+		return `${
+			this.isAddSkill ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()
+		} ${Datas.Languages.extras.skill.name()} ${Datas.Skills.get(this.addSkillID.getValue() as number).name()}`;
+	}
+
+	/**
+	 * Builds a human-readable string describing a perform skill effect.
+	 * Indicates which skill will be performed.
+	 *
+	 * @returns A formatted string describing the perform skill effect.
+	 */
+	toStringPerformSkill(): string {
+		return `${Datas.Languages.extras.performSkill.name()} ${Datas.Skills.get(
+			this.performSkillID.getValue() as number
+		).name()}`;
+	}
+
+	/**
+	 * Reads the JSON data describing this effect.
+	 * @param json - The JSON object containing the effect data.
+	 */
+	read(json: EffectJSON): void {
+		this.kind = Utils.valueOrDefault(json.k, EFFECT_KIND.DAMAGES);
+		switch (this.kind) {
+			case EFFECT_KIND.DAMAGES: {
+				this.damageKind = Utils.valueOrDefault(json.dk, DAMAGES_KIND.STAT);
+				switch (this.damageKind) {
+					case DAMAGES_KIND.STAT:
+						this.damageStatisticID = DynamicValue.readOrDefaultDatabase(json.dsid);
+						break;
+					case DAMAGES_KIND.CURRENCY:
+						this.damageCurrencyID = DynamicValue.readOrDefaultDatabase(json.dcid);
+						break;
+					case DAMAGES_KIND.VARIABLE:
+						this.damageVariableID = Utils.valueOrDefault(json.dvid, 1);
+						break;
+				}
+				this.damageFormula = DynamicValue.readOrDefaultMessage(json.df);
+				this.isDamagesMinimum = Utils.valueOrDefault(json.idmin, true);
+				this.damagesMinimumFormula = DynamicValue.readOrDefaultMessage(json.dmin, '0');
+				this.isDamagesMaximum = Utils.valueOrDefault(json.idmax, false);
+				this.damagesMaximumFormula = DynamicValue.readOrDefaultMessage(json.dmax, '0');
+				this.isDamageElement = Utils.valueOrDefault(json.ide, false);
+				this.damageElementID = DynamicValue.readOrDefaultDatabase(json.deid);
+				this.isDamageVariance = Utils.valueOrDefault(json.idv, false);
+				this.damageVarianceFormula = DynamicValue.readOrDefaultMessage(json.dvf, '0');
+				this.isDamageCritical = Utils.valueOrDefault(json.idc, false);
+				this.damageCriticalFormula = DynamicValue.readOrDefaultMessage(json.dcf, '0');
+				this.isDamagePrecision = Utils.valueOrDefault(json.idp, false);
+				this.damagePrecisionFormula = DynamicValue.readOrDefaultMessage(json.dpf, '100');
+				this.isDamageStockVariableID = Utils.valueOrDefault(json.idsv, false);
+				this.damageStockVariableID = Utils.valueOrDefault(json.dsv, 1);
+				this.isDamageDisplayName = Utils.valueOrDefault(json.iddn, false);
+				break;
+			}
+			case EFFECT_KIND.STATUS:
+				this.isAddStatus = Utils.valueOrDefault(json.iast, true);
+				this.statusID = DynamicValue.readOrDefaultDatabase(json.sid);
+				this.statusPrecisionFormula = DynamicValue.readOrDefaultMessage(json.spf, '100');
+				break;
+			case EFFECT_KIND.ADD_REMOVE_SKILL:
+				this.isAddSkill = Utils.valueOrDefault(json.iask, true);
+				this.addSkillID = DynamicValue.readOrDefaultDatabase(json.asid);
+				break;
+			case EFFECT_KIND.PERFORM_SKILL:
+				this.performSkillID = DynamicValue.readOrDefaultDatabase(json.psid);
+				break;
+			case EFFECT_KIND.COMMON_REACTION:
+				this.commonReaction =
+					json.cr === undefined
+						? null
+						: (Manager.Events.getEventCommand(json.cr as any) as EventCommand.CallACommonReaction);
+				break;
+			case EFFECT_KIND.SPECIAL_ACTIONS:
+				this.specialActionKind = Utils.valueOrDefault(json.sak, EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS);
+				break;
+			case EFFECT_KIND.SCRIPT:
+				this.scriptFormula = DynamicValue.readOrDefaultMessage(json.sf);
+				break;
+		}
+		this.isTemporarilyChangeTarget = Utils.valueOrDefault(json.itct, false);
+		this.temporarilyChangeTargetFormula = DynamicValue.readOrDefaultMessage(json.tctf);
+	}
+}

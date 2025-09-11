@@ -11,131 +11,101 @@
 
 import { Utils } from '../Common';
 import { Skill } from '../Core';
-import { Datas, Model } from '../index';
-import { Class } from './Class';
-import { Localization } from './Localization';
+import { Datas } from '../index';
+import { Characteristic } from './Characteristic';
+import { Class, ClassJSON } from './Class';
+import { Localization, LocalizationJSON } from './Localization';
 import { StatisticProgression } from './StatisticProgression';
 
-/** @class
- *  An hero of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  hero
+/**
+ * JSON structure describing a hero.
  */
-class Hero extends Localization {
-	public class: Model.Class;
+export type HeroJSON = LocalizationJSON & {
+	id?: number;
+	name?: string;
+	class: number;
+	bid?: number;
+	fid?: number;
+	indexXFaceset?: number;
+	indexYFaceset?: number;
+	ci?: ClassJSON;
+	description?: LocalizationJSON;
+};
+
+/**
+ * A hero of the game.
+ */
+export class Hero extends Localization {
+	public class: Class;
 	public idBattler: number;
 	public idFaceset: number;
 	public indexXFaceset: number;
 	public indexYFaceset: number;
 	public classInherit: Class;
-	public description: Model.Localization;
+	public description: Localization;
 
-	constructor(json: Record<string, any>) {
-		super(json as any);
+	constructor(json: HeroJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the hero.
-	 *  @param {Record<string, any>} - json Json object describing the hero
-	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-		this.class = Datas.Classes.get(
-			json.class,
-			'Could not find the class in ' +
-				(this.isMonster() ? 'monster' : 'hero') +
-				' ' +
-				Utils.getIDName(json.id, this.name()) +
-				', please check your Data manager and add a correct class.'
-		);
-		this.idBattler = Utils.valueOrDefault(json.bid, -1);
-		this.idFaceset = Utils.valueOrDefault(json.fid, -1);
-		this.indexXFaceset = Utils.valueOrDefault(json.indexXFaceset, 0);
-		this.indexYFaceset = Utils.valueOrDefault(json.indexYFaceset, 0);
-		this.classInherit = new Class(json.ci);
-		this.description = new Model.Localization(json.description);
-	}
-
-	/**
-	 *  Check if this hero is a monster.
-	 *  @returns {boolean}
+	 * Check if this hero is a monster.
 	 */
 	isMonster(): boolean {
-		return this instanceof Model.Monster;
+		return false;
 	}
 
 	/**
-	 *  Get the property according to class inherit and this hero.
-	 *  @param {string} prop - The property name
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {number}
+	 * Get a property from class (or changedClass) considering inheritance.
 	 */
-	getProperty(prop: string, changedClass: Model.Class): any {
-		return Utils.valueOrDefault(changedClass, this.class).getProperty(prop, this.classInherit);
+	getProperty(prop: string, changedClass?: Class): number {
+		return (changedClass ?? this.class).getProperty(prop, this.classInherit);
 	}
 
 	/**
-	 *  Get the experience table according to class inherit and this hero.
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {Record<string, any>}
+	 * Get the experience table.
 	 */
-	getExperienceTable(changedClass: Model.Class): Record<string, any> {
-		return Utils.valueOrDefault(changedClass, this.class).getExperienceTable(this.classInherit);
+	getExperienceTable(changedClass?: Class): Record<number, number> {
+		return (changedClass ?? this.class).getExperienceTable(this.classInherit);
 	}
 
 	/**
-	 *  Get the characteristics according to class inherit and this hero.
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {System.Characteristic[]}
+	 * Get the characteristics.
 	 */
-	getCharacteristics(changedClass: Model.Class): Model.Characteristic[] {
-		return Utils.valueOrDefault(changedClass, this.class).getCharacteristics(this.classInherit);
+	getCharacteristics(changedClass?: Class): Characteristic[] {
+		return (changedClass ?? this.class).getCharacteristics(this.classInherit);
 	}
 
 	/**
-	 *  Get the statistics progression according to class inherit and this hero.
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {System.StatisticProgression[]}
+	 * Get the statistics progression.
 	 */
-	getStatisticsProgression(changedClass: Model.Class): StatisticProgression[] {
-		return Utils.valueOrDefault(changedClass, this.class).getStatisticsProgression(this.classInherit);
+	getStatisticsProgression(changedClass?: Class): StatisticProgression[] {
+		return (changedClass ?? this.class).getStatisticsProgression(this.classInherit);
 	}
 
 	/**
-	 *  Get the skills according to class inherit and this hero.
-	 *  @param {number} level
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {Skill[]}
+	 * Get the skills available at a given level.
 	 */
-	getSkills(level: number, changedClass: Model.Class): Skill[] {
-		return Utils.valueOrDefault(changedClass, this.class).getSkills(this.classInherit, level);
+	getSkills(level: number, changedClass?: Class): Skill[] {
+		return (changedClass ?? this.class).getSkills(this.classInherit, level);
 	}
 
 	/**
-	 *  Get the learned skill at a specific level according to class inherit and
-	 *  this hero.
-	 *  @param {number} level
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {Skill[]}
+	 * Get the learned skills at a given level.
 	 */
-	getLearnedSkills(level: number, changedClass: Model.Class): Skill[] {
-		return Utils.valueOrDefault(changedClass, this.class).getLearnedSkills(this.classInherit, level);
+	getLearnedSkills(level: number, changedClass?: Class): Skill[] {
+		return (changedClass ?? this.class).getLearnedSkills(this.classInherit, level);
 	}
 
 	/**
-	 *  Create the experience list according to base and inflation.
-	 *  @param {System.Class} changedClass - The class if it was changed from original
-	 *  @returns {number[]}
+	 * Create the experience list according to base and inflation.
 	 */
-	createExpList(changedClass: Model.Class): number[] {
+	createExpList(changedClass: Class): number[] {
 		const finalLevel = this.getProperty(Class.PROPERTY_FINAL_LEVEL, changedClass);
 		const experienceBase = this.getProperty(Class.PROPERTY_EXPERIENCE_BASE, changedClass);
 		const experienceInflation = this.getProperty(Class.PROPERTY_EXPERIENCE_INFLATION, changedClass);
 		const experienceTable = this.getExperienceTable(changedClass);
-		const expList = new Array(finalLevel + 1);
-
-		// Basis
+		const expList = new Array<number>(finalLevel + 1);
 		const pow = 2.4 + experienceInflation / 100;
 		expList[1] = 0;
 		for (let i = 2; i <= finalLevel; i++) {
@@ -147,6 +117,25 @@ class Hero extends Localization {
 		}
 		return expList;
 	}
-}
 
-export { Hero };
+	/**
+	 * Read the JSON associated to the hero.
+	 */
+	read(json: HeroJSON): void {
+		super.read(json);
+
+		this.class = Datas.Classes.get(
+			json.class,
+			`Could not find the class in ${this.isMonster() ? 'monster' : 'hero'} ${Utils.getIDName(
+				json.id,
+				this.name()
+			)}, please check your Data manager and add a correct class.`
+		);
+		this.idBattler = Utils.valueOrDefault(json.bid, -1);
+		this.idFaceset = Utils.valueOrDefault(json.fid, -1);
+		this.indexXFaceset = Utils.valueOrDefault(json.indexXFaceset, 0);
+		this.indexYFaceset = Utils.valueOrDefault(json.indexYFaceset, 0);
+		this.classInherit = new Class(json.ci);
+		this.description = new Localization(json.description);
+	}
+}

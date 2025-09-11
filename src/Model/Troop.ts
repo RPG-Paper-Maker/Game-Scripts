@@ -9,42 +9,49 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { Utils } from '../Common';
 import { Base } from './Base';
+import { TroopMonster } from './TroopMonster';
+import { TroopReaction } from './TroopReaction';
 
-/** @class
- *  A troop of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  troop
+/*
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+import { TroopMonsterJSON } from './TroopMonster';
+import { TroopReactionJSON } from './TroopReaction';
+
+/**
+ * JSON structure for a troop.
  */
-class Troop extends Base {
-	public list: Model.TroopMonster[];
-	public reactions: Model.TroopReaction[];
+export type TroopJSON = {
+	l?: TroopMonsterJSON[];
+	reactions?: TroopReactionJSON[];
+};
 
-	constructor(json?: Record<string, any>) {
+/**
+ * A troop definition in the game, containing monsters and reactions.
+ */
+export class Troop extends Base {
+	public list: TroopMonster[];
+	public reactions: TroopReaction[];
+
+	constructor(json?: TroopJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the troop.
-	 *  @param {Record<string, any>} - json Json object describing the troop
+	 * Read JSON into this troop.
 	 */
-	read(json: Record<string, any>) {
-		this.list = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.l, []),
-			listIndexes: this.list,
-			cons: Model.TroopMonster,
-		});
-		this.reactions = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.reactions, []),
-			listIndexes: this.reactions,
-			cons: Model.TroopReaction,
-		});
+	read(json: TroopJSON): void {
+		this.list = Utils.readJSONList(json.l, TroopMonster);
+		this.reactions = Utils.readJSONList(json.reactions, TroopReaction);
 	}
 }
-
-export { Troop };

@@ -11,12 +11,26 @@
 
 import { Utils } from '../Common';
 import { Datas } from '../index';
+import { Rectangle } from './Rectangle';
 
-/** @class
- *  A collision settings in a texture square.
+/**
+ * JSON structure describing a collision square in a texture.
  */
-class CollisionSquare {
-	public rect: number[];
+export type CollisionSquareJSON = {
+	rec?: [number, number, number, number] | null;
+	l?: boolean;
+	r?: boolean;
+	t?: boolean;
+	b?: boolean;
+	terrain?: number;
+	c?: boolean;
+};
+
+/**
+ * Represents collision settings inside a texture square.
+ */
+export class CollisionSquare {
+	public rect: Rectangle | null;
 	public left: boolean;
 	public right: boolean;
 	public top: boolean;
@@ -25,7 +39,7 @@ class CollisionSquare {
 	public climbing: boolean;
 
 	constructor() {
-		this.rect = [0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE];
+		this.rect = new Rectangle(0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE);
 		this.left = true;
 		this.right = true;
 		this.top = true;
@@ -35,34 +49,31 @@ class CollisionSquare {
 	}
 
 	/**
-	 *  Union of the collision squares.
-	 *  @static
-	 *  @param {number[][]} squares - All the squares and their corresponding
-	 *  rects
-	 *  @param {number} l - The squares numbers
-	 *  @param {number} w - The number of squares width
-	 *  @param {number} h - The number of squares height
-	 *  @returns {number[][]}
+	 * Merge contiguous collision squares into larger rectangles.
+	 * @param squares Array of rectangles (or null) representing squares.
+	 * @param l Total number of squares.
+	 * @param w Width in squares.
+	 * @param h Height in squares.
+	 * @returns Merged rectangles.
 	 */
-	static unionSquares(squares: number[][], l: number, w: number, h: number): number[][] {
-		const boolGrid = new Array(l);
+	static unionSquares(squares: (Rectangle | null)[], l: number, w: number, h: number): Rectangle[] {
+		const boolGrid = new Array<boolean>(l);
 		const result = [];
-		let i: number, j: number, k: number, square: number[];
-		for (j = 0; j < h; j++) {
-			k = j * w;
-			for (i = 0; i < w; i++) {
-				square = squares[i + k];
+		for (let j = 0; j < h; j++) {
+			const k = j * w;
+			for (let i = 0; i < w; i++) {
+				const square = squares[i + k];
 				if (square !== null) {
 					if (
-						square[0] === 0 ||
-						square[1] === 0 ||
-						square[0] + square[2] === Datas.Systems.SQUARE_SIZE ||
-						square[1] + square[3] === Datas.Systems.SQUARE_SIZE
+						square.x === 0 ||
+						square.y === 0 ||
+						square.x + square.width === Datas.Systems.SQUARE_SIZE ||
+						square.y + square.height === Datas.Systems.SQUARE_SIZE
 					) {
 						boolGrid[i + k] = true;
 					} else {
-						square[0] = square[0] + Datas.Systems.SQUARE_SIZE * i;
-						square[1] = square[1] + Datas.Systems.SQUARE_SIZE * j;
+						square.x += Datas.Systems.SQUARE_SIZE * i;
+						square.y += Datas.Systems.SQUARE_SIZE * j;
 						result.push(square);
 						boolGrid[i + k] = false;
 					}
@@ -71,40 +82,26 @@ class CollisionSquare {
 				}
 			}
 		}
-		let s: number[],
-			a: number,
-			b: number,
-			c: boolean,
-			tempW: number,
-			tempH: number,
-			kk: number,
-			m: number,
-			temp: number,
-			tempArray: number[];
-		for (j = 0; j < h; j++) {
-			k = j * w;
-			for (i = 0; i < w; i++) {
+		for (let j = 0; j < h; j++) {
+			const k = j * w;
+			for (let i = 0; i < w; i++) {
 				if (boolGrid[i + k]) {
-					s = squares[i + k];
-					square = [s[0], s[1], s[2], s[3]];
-					square[0] = square[0] + Datas.Systems.SQUARE_SIZE * i;
-					square[1] = square[1] + Datas.Systems.SQUARE_SIZE * j;
+					const s = squares[i + k];
+					const square = s.clone();
+					square.x += Datas.Systems.SQUARE_SIZE * i;
+					square.y += Datas.Systems.SQUARE_SIZE * j;
 					boolGrid[i + k] = false;
-					tempW = -1;
-					for (a = i + 1; a < w && tempW === -1; a++) {
-						c = false;
+					let tempW = -1;
+					for (let a = i + 1; a < w && tempW === -1; a++) {
+						let c = false;
 						if (boolGrid[a + k]) {
-							if (
-								squares[a + k - 1][0] + squares[a + k - 1][2] === Datas.Systems.SQUARE_SIZE &&
-								squares[a + k][0] === 0
-							) {
-								if (
-									squares[a + k][1] === squares[a + k - 1][1] &&
-									squares[a + k][3] === squares[a + k - 1][3]
-								) {
+							const previous = squares[a + k - 1];
+							const current = squares[a + k];
+							if (previous.x + previous.width === Datas.Systems.SQUARE_SIZE && current.x === 0) {
+								if (current.y === previous.y && current.height === previous.height) {
 									c = true;
 									boolGrid[a + k] = false;
-									square[2] = square[2] + squares[a + k][2];
+									square.width += current.width;
 								}
 							}
 						}
@@ -112,34 +109,29 @@ class CollisionSquare {
 							tempW = a - i + (c ? 1 : 0);
 						}
 					}
-					tempH = -1;
-					for (b = j + 1; b < h && tempH === -1; b++) {
-						kk = b * w;
-						c = true;
-						for (a = i; a < i + tempW; a++) {
+					let tempH = -1;
+					for (let b = j + 1; b < h && tempH === -1; b++) {
+						const kk = b * w;
+						let c = true;
+						for (let a = i; a < i + tempW; a++) {
+							const previous = squares[a + kk - w];
+							const current = squares[a + kk];
 							if (
-								!(
-									boolGrid[a + kk] &&
-									squares[a + kk - w][1] + squares[a + kk - w][3] === Datas.Systems.SQUARE_SIZE &&
-									squares[a + kk][1] === 0 &&
-									squares[a + kk][0] === squares[a + kk - w][0] &&
-									squares[a + kk][2] === squares[a + kk - w][2]
-								)
+								!boolGrid[a + kk] ||
+								previous.y + previous.height !== Datas.Systems.SQUARE_SIZE ||
+								current.y !== 0 ||
+								current.x !== previous.x ||
+								current.width !== previous.width
 							) {
 								c = false;
 							}
 						}
 						if (c) {
-							for (m = i; m < i + tempW; m++) {
+							for (let m = i; m < i + tempW; m++) {
 								boolGrid[m + kk] = false;
 							}
-							tempArray = squares[i + kk];
-							if (tempArray === null) {
-								temp = 0;
-							} else {
-								temp = tempArray[3];
-							}
-							square[3] = square[3] + temp;
+							const tempArray = squares[i + kk];
+							square.height += tempArray === null ? 0 : tempArray.height;
 							boolGrid[i + kk] = false;
 						}
 						if (!c || b + 1 >= h) {
@@ -154,19 +146,15 @@ class CollisionSquare {
 	}
 
 	/**
-	 *  Get the BB according to rect and size.
-	 *  @static
-	 *  @param {number[]} rect - The rect
-	 *  @param {number} w - The number of squares width
-	 *  @param {number} h - The number of squares height
+	 * Compute bounding box values from rect and grid size.
 	 */
-	static getBB(rect: number[], w: number, h: number): number[] {
+	static getBB(rect: Rectangle, w: number, h: number): number[] {
 		return [
-			(rect[0] - (w * Datas.Systems.SQUARE_SIZE - rect[0] - rect[2])) / 2,
-			h * Datas.Systems.SQUARE_SIZE - rect[1] - rect[3] / 2,
+			(rect.x - (w * Datas.Systems.SQUARE_SIZE - rect.x - rect.width)) / 2,
+			h * Datas.Systems.SQUARE_SIZE - rect.y - rect.height / 2,
 			0,
-			rect[2],
-			rect[3],
+			rect.width,
+			rect.height,
 			1,
 			0,
 			0,
@@ -175,12 +163,16 @@ class CollisionSquare {
 	}
 
 	/**
-	 * Read the JSON associated to the collision square.
-	 *
-	 * @param {Record<string, any>} json  - Json object describing the collision square
-	 * @memberof CollisionSquare
+	 * Whether the square allows passage from all directions.
 	 */
-	read(json: Record<string, any>) {
+	hasAllDirections(): boolean {
+		return this.left && this.right && this.top && this.bot;
+	}
+
+	/**
+	 * Load collision square data from JSON.
+	 */
+	read(json: CollisionSquareJSON) {
 		const rect = json.rec;
 		this.left = Utils.valueOrDefault(json.l, true);
 		this.right = Utils.valueOrDefault(json.r, true);
@@ -192,22 +184,12 @@ class CollisionSquare {
 			this.rect =
 				rect === null
 					? null
-					: [
+					: new Rectangle(
 							Math.round((rect[0] * Datas.Systems.SQUARE_SIZE) / 100),
 							Math.round((rect[1] * Datas.Systems.SQUARE_SIZE) / 100),
 							Math.round((rect[2] * Datas.Systems.SQUARE_SIZE) / 100),
-							Math.round((rect[3] * Datas.Systems.SQUARE_SIZE) / 100),
-					  ];
+							Math.round((rect[3] * Datas.Systems.SQUARE_SIZE) / 100)
+					  );
 		}
 	}
-
-	/**
-	 *  Indicate if all the direction are OK.
-	 *  @returns {boolean}
-	 */
-	hasAllDirections(): boolean {
-		return this.left && this.right && this.top && this.bot;
-	}
 }
-
-export { CollisionSquare };

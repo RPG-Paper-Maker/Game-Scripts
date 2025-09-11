@@ -86,23 +86,23 @@ class MoveCamera extends Base {
 	 */
 	initialize(): Record<string, any> {
 		Scene.Map.current.camera.update();
-		const time = this.time.getValue() * 1000;
+		const time = (this.time.getValue() as number) * 1000;
 		const operation = Mathf.OPERATORS_NUMBERS[this.operation];
 		const finalX = operation(
 			Scene.Map.current.camera.getThreeCamera().position.x,
-			this.x.getValue() * (this.xSquare ? Datas.Systems.SQUARE_SIZE : 1)
+			(this.x.getValue() as number) * (this.xSquare ? Datas.Systems.SQUARE_SIZE : 1)
 		);
 		const finalY = operation(
 			Scene.Map.current.camera.getThreeCamera().position.y,
-			this.y.getValue() * (this.ySquare ? Datas.Systems.SQUARE_SIZE : 1)
+			(this.y.getValue() as number) * (this.ySquare ? Datas.Systems.SQUARE_SIZE : 1)
 		);
 		const finalZ = operation(
 			Scene.Map.current.camera.getThreeCamera().position.z,
-			this.z.getValue() * (this.zSquare ? Datas.Systems.SQUARE_SIZE : 1)
+			(this.z.getValue() as number) * (this.zSquare ? Datas.Systems.SQUARE_SIZE : 1)
 		);
-		const finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue());
-		const finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue());
-		const finalDistance = operation(Scene.Map.current.camera.distance, this.distance.getValue());
+		const finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue() as number);
+		const finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue() as number);
+		const finalDistance = operation(Scene.Map.current.camera.distance, this.distance.getValue() as number);
 		return {
 			parallel: this.isWaitEnd,
 			initialH: Scene.Map.current.camera.horizontalAngle,
@@ -112,7 +112,7 @@ class MoveCamera extends Base {
 			finalDifDistance: finalDistance - Scene.Map.current.camera.distance,
 			time: time,
 			timeLeft: time,
-			targetID: this.targetID === null ? null : this.targetID.getValue(),
+			targetID: this.targetID === null ? null : (this.targetID.getValue() as number),
 			target: null,
 		};
 	}

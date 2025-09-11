@@ -10,7 +10,7 @@
 */
 
 import { IO } from './index';
-import { JsonObject } from './Types';
+import { JsonType } from './Types';
 
 let firstError = true;
 
@@ -132,7 +132,7 @@ export class Platform {
 	 * Load and parse a JSON file.
 	 * @param path - File path.
 	 */
-	static async parseFileJSON(path: string): Promise<JsonObject> {
+	static async parseFileJSON(path: string): Promise<JsonType> {
 		return IO.parseFileJSON(path);
 	}
 
@@ -141,7 +141,7 @@ export class Platform {
 	 * @param slot - Save slot index.
 	 * @param path - File path.
 	 */
-	static async loadSave(_slot: number, path: string): Promise<JsonObject | null> {
+	static async loadSave(_slot: number, path: string): Promise<JsonType | null> {
 		if (await IO.fileExists(path)) {
 			return Platform.parseFileJSON(path);
 		}
@@ -154,7 +154,7 @@ export class Platform {
 	 * @param path - File path.
 	 * @param json - Save data.
 	 */
-	static async registerSave(_slot: number, path: string, json: JsonObject): Promise<void> {
+	static async registerSave(_slot: number, path: string, json: JsonType): Promise<void> {
 		await IO.saveFile(path, json);
 	}
 

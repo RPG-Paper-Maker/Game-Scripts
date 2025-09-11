@@ -21,6 +21,7 @@ import {
 	Utils,
 } from '../Common';
 import { Datas, Graphic, Model } from '../index';
+import { CharacteristicResType } from '../Model';
 import { Battler } from './Battler';
 import { Item } from './Item';
 import { Skill } from './Skill';
@@ -336,7 +337,7 @@ class Player {
 	 *  @returns {boolean}
 	 */
 	isDead(): boolean {
-		return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue(), { user: this }) as boolean;
+		return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue() as string, { user: this }) as boolean;
 	}
 
 	/**
@@ -355,14 +356,14 @@ class Player {
 			characteristic = characteristics[i];
 			if (characteristic.kind === CHARACTERISTIC_KIND.BEGIN_EQUIPMENT) {
 				kind = characteristic.isBeginWeapon ? ITEM_KIND.WEAPON : ITEM_KIND.ARMOR;
-				itemID = characteristic.beginWeaponArmorID.getValue();
+				itemID = characteristic.beginWeaponArmorID.getValue() as number;
 				item = Item.findItem(kind, itemID);
 				if (item) {
 					item.nb++;
 				} else {
 					item = new Item(kind, itemID, 0);
 				}
-				this.equip[characteristic.beginEquipmentID.getValue()] = item;
+				this.equip[characteristic.beginEquipmentID.getValue() as number] = item;
 			} else if (characteristic.kind === CHARACTERISTIC_KIND.ELEMENT) {
 				this.elements.push(characteristic.elementID);
 			}
@@ -434,7 +435,7 @@ class Player {
 		const list = new Array(l + 1);
 		const bonus = new Array(l + 1);
 		const added = new Array(l + 1);
-		const res: Record<string, any> = {
+		const res: CharacteristicResType = {
 			statusRes: [],
 			experienceGain: [],
 			currencyGain: [],
@@ -523,7 +524,7 @@ class Player {
 		characteristics: Model.Characteristic[],
 		list: number[],
 		bonus: number[],
-		res: Record<string, any>
+		res: CharacteristicResType
 	) {
 		let characteristic: Model.Characteristic, statistic: Model.Statistic, base: number;
 		for (let i = 0, l = characteristics.length; i < l; i++) {
@@ -776,7 +777,7 @@ class Player {
 	 *  Get the currencies reward.
 	 *  @returns {Record<string, any>}
 	 */
-	getRewardCurrencies(): Record<string, number> {
+	getRewardCurrencies(): Map<number, number> {
 		return (<Model.Monster>this.system).getRewardCurrencies(this.getCurrentLevel());
 	}
 
@@ -784,7 +785,7 @@ class Player {
 	 *  Get the loots reward.
 	 *  @returns {Record<string, Item>[]}
 	 */
-	getRewardLoots(): Record<string, Item>[] {
+	getRewardLoots(): Map<number, Item>[] {
 		return (<Model.Monster>this.system).getRewardLoots(this.getCurrentLevel());
 	}
 
@@ -960,7 +961,7 @@ class Player {
 	 */
 	addStatus(id: number): Status {
 		const status = new Status(id);
-		const priority = status.system.priority.getValue();
+		const priority = status.system.priority.getValue() as number;
 		let i: number, s: Status, p: number;
 		for (i = this.status.length - 1; i >= 0; i--) {
 			s = this.status[i];
@@ -971,8 +972,8 @@ class Player {
 		}
 		for (i = this.status.length - 1; i >= 0; i--) {
 			// Add according to priority
-			p = s.system.priority.getValue();
-			if (s <= priority) {
+			p = s.system.priority.getValue() as number;
+			if (p <= priority) {
 				break;
 			}
 		}
@@ -1029,7 +1030,7 @@ class Player {
 			s = this.status[i];
 			if (
 				s.system.isReleaseAfterAttacked &&
-				Mathf.randomPercentTest(s.system.chanceReleaseAfterAttacked.getValue())
+				Mathf.randomPercentTest(s.system.chanceReleaseAfterAttacked.getValue() as number)
 			) {
 				s = this.status[0];
 				this.status.splice(i, 1);
@@ -1058,8 +1059,8 @@ class Player {
 				for (j = 0, m = s.system.releaseStartTurn.length; j < m; j++) {
 					release = s.system.releaseStartTurn[j];
 					if (
-						Mathf.OPERATORS_COMPARE[release.operationTurnKind](s.turn, release.turn.getValue()) &&
-						Mathf.randomPercentTest(release.chance.getValue())
+						Mathf.OPERATORS_COMPARE[release.operationTurnKind](s.turn, release.turn.getValue() as number) &&
+						Mathf.randomPercentTest(release.chance.getValue() as number)
 					) {
 						this.status.splice(i, 1);
 						listHealed.push(s);
@@ -1227,10 +1228,10 @@ class Player {
 				characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
 				((weaponArmor.kind === ITEM_KIND.WEAPON &&
 					characteristic.isAllowEquipWeapon &&
-					weaponArmor.system.type === characteristic.equipWeaponTypeID.getValue()) ||
+					weaponArmor.system.type === (characteristic.equipWeaponTypeID.getValue() as number)) ||
 					(weaponArmor.kind === ITEM_KIND.ARMOR &&
 						!characteristic.isAllowEquipWeapon &&
-						weaponArmor.system.type === characteristic.equipArmorTypeID.getValue())) &&
+						weaponArmor.system.type === (characteristic.equipArmorTypeID.getValue() as number))) &&
 				!characteristic.isAllowEquip
 			) {
 				return false;
@@ -1243,7 +1244,7 @@ class Player {
 					weaponArmor.kind === ITEM_KIND.WEAPON
 						? Datas.BattleSystems.getWeaponKind(weaponArmor.system.type)
 						: Datas.BattleSystems.getArmorKind(weaponArmor.system.type);
-				if (type.equipments[characteristic.changeEquipmentID.getValue()]) {
+				if (type.equipments[characteristic.changeEquipmentID.getValue() as number]) {
 					return false;
 				}
 			}

@@ -9,85 +9,76 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { Interpreter, INVENTORY_FILTER_KIND, Utils } from '../Common';
 import { Item } from '../Core';
-import { Localization } from './Localization';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  An inventory filter used to filter inventory or shops items.
- *  @extends Localization
- *  @param {Record<string, any>} [json=undefined] - Json object describing the item
+/**
+ * JSON structure describing an inventory filter.
  */
-class InventoryFilter extends Localization {
+export type InventoryFilterJSON = LocalizationJSON & {
+	kind?: INVENTORY_FILTER_KIND;
+	itemTypeID?: DynamicValueJSON;
+	script?: string;
+};
+
+/**
+ * An inventory filter used to filter inventory or shop items.
+ */
+export class InventoryFilter extends Localization {
 	public kind: INVENTORY_FILTER_KIND;
-	public itemTypeID: Model.DynamicValue;
+	public itemTypeID: DynamicValue;
 	public script: string;
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: InventoryFilterJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the inventory filter.
-	 *  @param {Record<string, any>} - json Json object describing the
-	 *  inventory filter
+	 * Get a filtering function for items.
 	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
+	getFilter(): (item: Item) => boolean {
+		switch (this.kind) {
+			case INVENTORY_FILTER_KIND.ALL:
+				return () => true;
+			case INVENTORY_FILTER_KIND.CONSUMABLES:
+				return (item) => item.system.consumable;
+			case INVENTORY_FILTER_KIND.CUSTOM: {
+				const typeID = this.itemTypeID?.getValue() as number;
+				return (item) => !item.system.isWeaponArmor() && item.system.type === typeID;
+			}
+			case INVENTORY_FILTER_KIND.WEAPONS:
+				return (item) => item.system.isWeapon();
+			case INVENTORY_FILTER_KIND.ARMORS:
+				return (item) => item.system.isArmor();
+			case INVENTORY_FILTER_KIND.WEAPONS_AND_ARMORS:
+				return (item) => item.system.isWeaponArmor();
+			case INVENTORY_FILTER_KIND.SCRIPT: {
+				return (item) =>
+					(Interpreter.evaluate(this.script, {
+						additionalName: 'item',
+						additionalValue: item,
+					}) as boolean) ?? false;
+			}
+			default:
+				return () => false;
+		}
+	}
+
+	/**
+	 * Read the JSON associated to the inventory filter.
+	 */
+	read(json: InventoryFilterJSON): void {
+		super.read(json);
 		this.kind = Utils.valueOrDefault(json.kind, INVENTORY_FILTER_KIND.ALL);
 		switch (this.kind) {
 			case INVENTORY_FILTER_KIND.CUSTOM:
-				this.itemTypeID = Model.DynamicValue.readOrDefaultDatabase(json.itemTypeID);
+				this.itemTypeID = DynamicValue.readOrDefaultDatabase(json.itemTypeID);
 				break;
 			case INVENTORY_FILTER_KIND.SCRIPT:
 				this.script = Utils.valueOrDefault(json.script, '');
 				break;
 		}
 	}
-
-	/**
-	 *  Get the filter function taking the item to filter and return true if
-	 *  pass filter.
-	 *  @returns {(item: Core.Item) => boolean}
-	 */
-	getFilter(): (item: Item) => boolean {
-		switch (this.kind) {
-			case INVENTORY_FILTER_KIND.ALL:
-				return (item: Item): boolean => {
-					return true;
-				};
-			case INVENTORY_FILTER_KIND.CONSUMABLES:
-				return (item: Item): boolean => {
-					return item.system.consumable;
-				};
-			case INVENTORY_FILTER_KIND.CUSTOM:
-				return (item: Item): boolean => {
-					return !item.system.isWeaponArmor() && item.system.type === this.itemTypeID.getValue();
-				};
-			case INVENTORY_FILTER_KIND.WEAPONS:
-				return (item: Item): boolean => {
-					return item.system.isWeapon();
-				};
-			case INVENTORY_FILTER_KIND.ARMORS:
-				return (item: Item): boolean => {
-					return item.system.isArmor();
-				};
-			case INVENTORY_FILTER_KIND.WEAPONS_AND_ARMORS:
-				return (item: Item): boolean => {
-					return item.system.isWeaponArmor();
-				};
-			case INVENTORY_FILTER_KIND.SCRIPT:
-				return (item: Item): boolean => {
-					return Interpreter.evaluate(this.script, {
-						additionalName: 'item',
-						additionalValue: item,
-					}) as boolean;
-				};
-			default:
-				return null;
-		}
-	}
 }
-
-export { InventoryFilter };

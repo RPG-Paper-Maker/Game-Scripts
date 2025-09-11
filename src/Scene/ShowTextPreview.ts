@@ -40,7 +40,7 @@ class ShowTextPreview extends Base {
 			eventCommand !== null &&
 			(this.eventCommand === null ||
 				(<Graphic.Text>this.eventCommand.windowInterlocutor.content).text !==
-					eventCommand.interlocutor.getValue() ||
+					(eventCommand.interlocutor.getValue() as string) ||
 				this.eventCommand.message !== eventCommand.message ||
 				this.eventCommand.facesetID !== eventCommand.facesetID)
 		) {

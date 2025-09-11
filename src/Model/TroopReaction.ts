@@ -9,36 +9,38 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { TROOP_REACTION_FREQUENCY_KIND, Utils } from '../Common';
-import { Reaction } from './Reaction';
+import { Reaction, ReactionJSON } from './Reaction';
+import { TroopReactionConditions, TroopReactionConditionsJSON } from './TroopReactionConditions';
 
-/** @class
- *  A troop reaction conditions of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  troop reaction conditions
+/**
+ * JSON structure for a troop reaction.
  */
-class TroopReaction extends Reaction {
+export type TroopReactionJSON = ReactionJSON & {
+	id: number;
+	conditions?: TroopReactionConditionsJSON;
+	frequency?: TROOP_REACTION_FREQUENCY_KIND;
+};
+
+/**
+ * A troop reaction definition with conditions and frequency.
+ */
+export class TroopReaction extends Reaction {
 	public id: number;
-	public conditions: Model.TroopReactionConditions;
+	public conditions: TroopReactionConditions;
 	public frequency: TROOP_REACTION_FREQUENCY_KIND;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: TroopReactionJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the troop reaction conditions.
-	 *  @param {Record<string, any>} - json Json object describing the troop
-	 *  reaction conditions
+	 * Read JSON into this troop reaction.
 	 */
-	read(json: Record<string, any>) {
+	read(json: TroopReactionJSON): void {
 		super.read(json);
 		this.id = json.id;
-		this.conditions = new Model.TroopReactionConditions(json.conditions);
+		this.conditions = new TroopReactionConditions(json.conditions);
 		this.frequency = Utils.valueOrDefault(json.frequency, TROOP_REACTION_FREQUENCY_KIND.ONE_TIME);
 	}
 }
-
-export { TroopReaction };

@@ -77,13 +77,15 @@ class BattleInitialize {
 		let position: THREE.Vector3, player: Player, battler: Battler, center: THREE.Vector3, offset: THREE.Vector3;
 		for (let i = 0; i < l; i++) {
 			// Battlers
-			center = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersCenterOffset.getValue()) as THREE.Vector3;
+			center = Interpreter.evaluate(
+				Datas.BattleSystems.heroesBattlersCenterOffset.getValue() as string
+			) as THREE.Vector3;
 			if (!(center instanceof THREE.Vector3)) {
 				Platform.showErrorMessage(
 					'Heroes battlers center offset incorrect return, should be a THREE.Vecto3: ' + center
 				);
 			}
-			offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset.getValue(), {
+			offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset.getValue() as string, {
 				additionalName: 'i',
 				additionalValue: i,
 			}) as THREE.Vector3;
@@ -124,19 +126,19 @@ class BattleInitialize {
 			// Battlers
 			troopMonster = this.battle.troop.list[i];
 			if (troopMonster.isSpecificPosition) {
-				center = Interpreter.evaluate(troopMonster.specificPosition.getValue()) as THREE.Vector3;
+				center = Interpreter.evaluate(troopMonster.specificPosition.getValue() as string) as THREE.Vector3;
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Specific position return: ' + center);
 				}
 				offset = new THREE.Vector3();
 			} else {
 				center = Interpreter.evaluate(
-					Datas.BattleSystems.troopsBattlersCenterOffset.getValue()
+					Datas.BattleSystems.troopsBattlersCenterOffset.getValue() as string
 				) as THREE.Vector3;
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers center offset incorrect return: ' + center);
 				}
-				offset = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersOffset.getValue(), {
+				offset = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersOffset.getValue() as string, {
 					additionalName: 'i',
 					additionalValue: i,
 				}) as THREE.Vector3;
@@ -146,10 +148,10 @@ class BattleInitialize {
 			}
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
 			player = new Player(CHARACTER_KIND.MONSTER, troopMonster.id, Game.current.charactersInstances++, [], []);
-			player.instanciate(troopMonster.level.getValue());
+			player.instanciate(troopMonster.level.getValue() as number);
 			battler = new Battler(player, true, Position.createFromVector3(position), position, this.battle.camera);
 			player.battler = battler;
-			battler.updateHidden(troopMonster.hidden.getValue());
+			battler.updateHidden(troopMonster.hidden.getValue() as boolean);
 			this.battle.battlers[CHARACTER_KIND.MONSTER][i] = battler;
 			this.battle.players[CHARACTER_KIND.MONSTER][i] = player;
 
@@ -293,7 +295,7 @@ class BattleInitialize {
 		this.battle.musicMap = Model.PlaySong.currentPlayingMusic;
 		const song = Manager.Songs.current[SONG_KIND.MUSIC];
 		this.battle.musicMapTime = song === null ? 0 : song.seek();
-		if (Game.current.battleMusic.songID.getValue() !== -1) {
+		if ((Game.current.battleMusic.songID.getValue() as number) !== -1) {
 			Game.current.battleMusic.playMusic();
 		}
 	}

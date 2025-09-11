@@ -72,9 +72,9 @@ class ModifyTeam extends Base {
 				Game.current.instanciateTeam(
 					this.instanceTeam,
 					this.instanceKind,
-					this.instanceID.getValue(),
-					this.instanceLevel.getValue(),
-					this.stockVariableID.getValue(true)
+					this.instanceID.getValue() as number,
+					this.instanceLevel.getValue() as number,
+					this.stockVariableID.getValue(true) as number
 				);
 				break;
 			case 1: {
@@ -82,7 +82,7 @@ class ModifyTeam extends Base {
 				if (!Scene.Map.current.isBattleMap) {
 					return;
 				}
-				const id = this.enemyInstanceID.getValue();
+				const id = this.enemyInstanceID.getValue() as number;
 				let player: Player = null;
 				for (const battler of (<Scene.Battle>Scene.Map.current).battlers[CHARACTER_KIND.MONSTER]) {
 					if (battler.player.instid === id) {
@@ -100,7 +100,7 @@ class ModifyTeam extends Base {
 				// Modify (move/remove)
 				const groups = Game.current.getGroups();
 				let selectedGroup = null;
-				const id = this.modifyInstanceID.getValue();
+				const id = this.modifyInstanceID.getValue() as number;
 				let player: Player;
 				// Find group and player associated to instance ID
 				for (const group of groups) {

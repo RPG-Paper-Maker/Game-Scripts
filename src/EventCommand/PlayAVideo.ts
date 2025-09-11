@@ -70,7 +70,7 @@ class PlayAVideo extends Base {
 					case 0:
 						Manager.Videos.play(
 							Datas.Videos.get(this.videoID).getPath() +
-								(this.isStart ? '#t=' + this.start.getValue() : ''),
+								(this.isStart ? '#t=' + (this.start.getValue() as number) : ''),
 							() => {
 								Manager.Videos.stop();
 								currentState.finished = true;

@@ -13,16 +13,23 @@ import { Interpreter } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
 import { Class } from './Class';
-import { DynamicValue } from './DynamicValue';
-import { ProgressionTable } from './ProgressionTable';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { ProgressionTable, ProgressionTableJSON } from './ProgressionTable';
 
-/** @class
- *  A statistic progression of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  statistic progression
+/** JSON data for initializing a StatisticProgression */
+export type StatisticProgressionJSON = {
+	id: number;
+	m?: DynamicValueJSON;
+	if?: boolean;
+	t?: ProgressionTableJSON;
+	r?: DynamicValueJSON;
+	f?: DynamicValueJSON;
+};
+
+/**
+ * Represents a statistic progression for a class or player.
  */
-class StatisticProgression extends Base {
+export class StatisticProgression extends Base {
 	public id: number;
 	public maxValue: DynamicValue;
 	public isFix: boolean;
@@ -30,16 +37,32 @@ class StatisticProgression extends Base {
 	public random: DynamicValue;
 	public formula: DynamicValue;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: StatisticProgressionJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the statistic progression
-	 *  @param {Record<string, any>} - json Json object describing the statistic
-	 *  progression
+	 * Gets the progression value at a specific level.
+	 * @param level - The level to get the value for
+	 * @param user - The player using this statistic
+	 * @param maxLevel - Optional maximum level (defaults to the class final level)
+	 * @returns The value of the statistic at the specified level
 	 */
-	read(json: Record<string, any>) {
+	getValueAtLevel(level: number, user: Player, maxLevel?: number): number {
+		return this.isFix
+			? this.table.getProgressionAt(
+					level,
+					maxLevel === undefined
+						? user.system.getProperty(Class.PROPERTY_FINAL_LEVEL, user.changedClass)
+						: maxLevel
+			  )
+			: (Interpreter.evaluate(this.formula.getValue() as string, { user: user }) as number);
+	}
+
+	/**
+	 * Reads the JSON data to initialize this statistic progression.
+	 */
+	read(json: StatisticProgressionJSON): void {
 		this.id = json.id;
 		this.maxValue = new DynamicValue(json.m);
 		this.isFix = json.if;
@@ -50,24 +73,4 @@ class StatisticProgression extends Base {
 			this.formula = new DynamicValue(json.f);
 		}
 	}
-
-	/**
-	 *  Get the value progresion at level
-	 *  @param {number} level - The level
-	 *  @param {Player} user - The user
-	 *  @param {number} [maxLevel=undefined] - The max level
-	 *  @returns {number}
-	 */
-	getValueAtLevel(level: number, user: Player, maxLevel?: number): number {
-		return this.isFix
-			? this.table.getProgressionAt(
-					level,
-					maxLevel === undefined
-						? user.system.getProperty(Class.PROPERTY_FINAL_LEVEL, user.changedClass)
-						: maxLevel
-			  )
-			: (Interpreter.evaluate(this.formula.getValue(), { user: user }) as number);
-	}
 }
-
-export { StatisticProgression };

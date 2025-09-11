@@ -87,7 +87,7 @@ class Player extends Base {
 			l = Datas.Systems.heroesStatistics.length;
 			statistics = new Array(l);
 			for (i = 0; i < l; i++) {
-				statistics[i] = Datas.Systems.heroesStatistics[i].getValue();
+				statistics[i] = Datas.Systems.heroesStatistics[i].getValue() as number;
 			}
 		} else {
 			statistics = Datas.BattleSystems.statisticsOrder;

@@ -11,417 +11,285 @@
 
 import * as THREE from 'three';
 import { DYNAMIC_VALUE_KIND, PICTURE_KIND, Platform, SONG_KIND, Utils } from '../Common';
+import { MapObjectCommandType } from '../Common/Types';
 import { Game, ReactionInterpreter } from '../Core';
 import { StructIterator } from '../EventCommand';
-import { Datas, Model } from '../index';
+import { Datas } from '../index';
+import { Base } from './Base';
 
+/**
+ * JSON structure describing a dynamic value.
+ */
 export type DynamicValueJSON = {
 	k: DYNAMIC_VALUE_KIND;
-	v: any;
-	x: DynamicValueJSON;
-	y: DynamicValueJSON;
-	z: DynamicValueJSON;
-	customStructure?: Record<string, any>;
-	customList?: Record<string, any>;
+	v: unknown;
+	x?: DynamicValueJSON;
+	y?: DynamicValueJSON;
+	z?: DynamicValueJSON;
+	customStructure?: {
+		properties: { name: string; value: DynamicValueJSON }[];
+	};
+	customList?: {
+		list: { value: DynamicValueJSON }[];
+	};
 };
 
-/** @class
- *  The class who handle dynamic value.
- *  @extends {System.Base}
- *  @param {Record<string, any>} - [json=undefined] Json object describing the value
+/**
+ * A dynamic value (variable, parameter, constant, etc.).
  */
-export class DynamicValue extends Model.Base {
+export class DynamicValue extends Base {
 	public kind: DYNAMIC_VALUE_KIND;
-	public value: any;
-	public customStructure: Record<string, Model.DynamicValue>;
-	public customList: Model.DynamicValue[];
-	public x: Model.DynamicValue;
-	public y: Model.DynamicValue;
-	public z: Model.DynamicValue;
+	public value: unknown;
+	public customStructure: Record<string, DynamicValue>;
+	public customList: DynamicValue[];
+	public x: DynamicValue;
+	public y: DynamicValue;
+	public z: DynamicValue;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: DynamicValueJSON) {
 		super(json);
 	}
 
-	/**
-	 *  Create a new value from kind and value.
-	 *  @static
-	 *  @param {DYNAMIC_VALUE_KIND} [k=DYNAMIC_VALUE_KIND.NONE] - The kind of value
-	 *  @param {any} [v=0] - The value
-	 *  @returns {SystemValue}
-	 */
-	static create(k: DYNAMIC_VALUE_KIND = DYNAMIC_VALUE_KIND.NONE, v: any = 0): Model.DynamicValue {
-		const systemValue = new Model.DynamicValue();
-		systemValue.kind = k;
+	/** Create a new value from kind and value. */
+	static create(k: DYNAMIC_VALUE_KIND = DYNAMIC_VALUE_KIND.NONE, v: unknown = 0): DynamicValue {
+		const modelValue = new DynamicValue();
+		modelValue.kind = k;
 		switch (k) {
 			case DYNAMIC_VALUE_KIND.NONE:
-				systemValue.value = null;
+				modelValue.value = null;
 				break;
 			case DYNAMIC_VALUE_KIND.MESSAGE:
-				systemValue.value = String(v);
+				modelValue.value = String(v);
 				break;
 			case DYNAMIC_VALUE_KIND.SWITCH:
-				switch (v) {
-					case 1:
-						systemValue.value = true;
-						break;
-					case 0:
-						systemValue.value = false;
-						break;
-					default:
-						systemValue.value = v;
-						break;
-				}
+				modelValue.value = v === 1 ? true : v === 0 ? false : v;
 				break;
 			default:
-				systemValue.value = v;
+				modelValue.value = v;
 				break;
 		}
-		return systemValue;
+		return modelValue;
 	}
 
-	/**
-	 *  Create a new value from a command and iterator.
-	 *  @static
-	 *  @param {any[]} command - The list describing the command
-	 *  @param {StructIterator} iterator - The iterator
-	 *  @returns {Model.DynamicValue}
-	 */
-	static createValueCommand(command: any[], iterator: StructIterator): Model.DynamicValue {
-		const k = command[iterator.i++];
+	/** Create a new value from a command and iterator. */
+	static createValueCommand(command: MapObjectCommandType[], iterator: StructIterator): DynamicValue {
+		const k = command[iterator.i++] as DYNAMIC_VALUE_KIND;
 		const v = command[iterator.i++];
-		return Model.DynamicValue.create(k, v);
+		return DynamicValue.create(k, v);
 	}
 
 	/**
 	 *  Create a none value.
-	 *  @static
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createNone(): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.NONE, null);
+	static createNone(): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.NONE, null);
 	}
 
 	/**
 	 *  Create a new value number.
-	 *  @static
-	 *  @param {number} n - The number
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createNumber(n: number): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, n);
+	static createNumber(n: number): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, n);
 	}
 
 	/**
 	 *  Create a new value message.
-	 *  @static
-	 *  @param {string} m - The message
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createMessage(m: string): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m);
+	static createMessage(m: string): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m);
 	}
 
 	/**
 	 *  Create a new value decimal number.
-	 *  @static
-	 *  @param {number} n - The number
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createNumberDouble(n: number): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DOUBLE, n);
+	static createNumberDouble(n: number): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER_DOUBLE, n);
 	}
 
 	/**
 	 *  Create a new value keyBoard.
-	 *  @static
-	 *  @param {number} k - The key number
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createKeyBoard(k: number): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.KEYBOARD, k);
+	static createKeyBoard(k: number): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.KEYBOARD, k);
 	}
 
 	/**
 	 *  Create a new value switch.
-	 *  @static
-	 *  @param {boolean} b - The value of the switch
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createSwitch(b: boolean): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, Utils.boolToNumber(b));
+	static createSwitch(b: boolean): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.SWITCH, Utils.boolToNumber(b));
 	}
 
 	/**
 	 *  Create a new value variable.
-	 *  @static
-	 *  @param {number} id - The variable ID
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createVariable(id: number): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.VARIABLE, id);
+	static createVariable(id: number): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.VARIABLE, id);
 	}
 
 	/**
 	 *  Create a new value parameter.
-	 *  @static
-	 *  @param {number} id - The parameter ID
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createParameter(id: number): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.PARAMETER, id);
+	static createParameter(id: number): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.PARAMETER, id);
 	}
 
 	/**
 	 *  Create a new value property.
-	 *  @static
-	 *  @param {number} id - The property id
-	 *  @returns {Model.DynamicValue}
 	 */
-	static createProperty(id: number): Model.DynamicValue {
-		return Model.DynamicValue.create(DYNAMIC_VALUE_KIND.PROPERTY, id);
+	static createProperty(id: number): DynamicValue {
+		return DynamicValue.create(DYNAMIC_VALUE_KIND.PROPERTY, id);
 	}
 
-	/**
-	 *  Map a list of parameters so it gets the current properties and
-	 *  parameters values.
-	 *  @static
-	 *  @param {Model.DynamicValue[]} parameters
-	 *  @returns {Model.DynamicValue[]}
-	 */
-	static mapWithParametersProperties(parameters: Model.DynamicValue[]): Model.DynamicValue[] {
+	/** Map parameters so they get resolved values instead of references. */
+	static mapWithParametersProperties(parameters: DynamicValue[]): DynamicValue[] {
 		return parameters.map((value) => {
 			return value.kind === DYNAMIC_VALUE_KIND.PARAMETER || DYNAMIC_VALUE_KIND.PROPERTY
-				? Model.DynamicValue.create(DYNAMIC_VALUE_KIND.UNKNOWN, value.getValue())
+				? DynamicValue.create(DYNAMIC_VALUE_KIND.UNKNOWN, value.getValue() as number)
 				: value;
 		});
 	}
 
 	/**
 	 *  Try to read a variable value, if not possible put default value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @param {number} [n=0] - The default value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultVariable(json: DynamicValueJSON): Model.DynamicValue {
-		return json === undefined ? Model.DynamicValue.createVariable(1) : Model.DynamicValue.readFromJSON(json);
+	static readOrDefaultVariable(json?: DynamicValueJSON): DynamicValue {
+		return json === undefined ? DynamicValue.createVariable(1) : DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a number value, if not possible put default value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @param {number} [n=0] - The default value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultNumber(json: DynamicValueJSON, n: number = 0): Model.DynamicValue {
-		return json === undefined ? Model.DynamicValue.createNumber(n) : Model.DynamicValue.readFromJSON(json);
+	static readOrDefaultNumber(json?: DynamicValueJSON, n = 0): DynamicValue {
+		return json === undefined ? DynamicValue.createNumber(n) : DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a double number value, if not possible put default value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @param {number} [n=0] - The default value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultNumberDouble(json: DynamicValueJSON, n: number = 0): Model.DynamicValue {
-		return json === undefined ? Model.DynamicValue.createNumberDouble(n) : Model.DynamicValue.readFromJSON(json);
+	static readOrDefaultNumberDouble(json?: DynamicValueJSON, n = 0): DynamicValue {
+		return json === undefined ? DynamicValue.createNumberDouble(n) : DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a database value, if not possible put default value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @param {number} [id=1] - The default value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultDatabase(json: DynamicValueJSON, id: number = 1): Model.DynamicValue {
+	static readOrDefaultDatabase(json?: DynamicValueJSON, id = 1): DynamicValue {
 		return json === undefined
-			? Model.DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, id)
-			: Model.DynamicValue.readFromJSON(json);
+			? DynamicValue.create(DYNAMIC_VALUE_KIND.DATABASE, id)
+			: DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a message value, if not possible put default value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @param {string} [m=""] - The default value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultMessage(json: DynamicValueJSON, m: string = ''): Model.DynamicValue {
+	static readOrDefaultMessage(json?: DynamicValueJSON, m = ''): DynamicValue {
 		return json === undefined
-			? Model.DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m)
-			: Model.DynamicValue.readFromJSON(json);
+			? DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, m)
+			: DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a switch value, if not possible put default value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @param {boolean} [s=true] - The default value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrDefaultSwitch(json: DynamicValueJSON, s: boolean = true): Model.DynamicValue {
-		return json === undefined ? Model.DynamicValue.createSwitch(s) : Model.DynamicValue.readFromJSON(json);
+	static readOrDefaultSwitch(json?: DynamicValueJSON, s = true): DynamicValue {
+		return json === undefined ? DynamicValue.createSwitch(s) : DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Try to read a value, if not possible put none value.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readOrNone(json: DynamicValueJSON): Model.DynamicValue {
-		return json === undefined ? Model.DynamicValue.createNone() : Model.DynamicValue.readFromJSON(json);
+	static readOrNone(json?: DynamicValueJSON): DynamicValue {
+		return json === undefined ? DynamicValue.createNone() : DynamicValue.readFromJSON(json);
 	}
 
 	/**
 	 *  Read a value of any kind and return it.
-	 *  @static
-	 *  @param {DynamicValueJSONDynamicValue} json - The json value
-	 *  @returns {Model.DynamicValue}
 	 */
-	static readFromJSON(json: DynamicValueJSON): Model.DynamicValue {
-		const value = new Model.DynamicValue();
+	static readFromJSON(json: DynamicValueJSON): DynamicValue {
+		const value = new DynamicValue();
 		value.read(json);
 		return value;
 	}
 
 	/**
-	 *  Read the JSON associated to the value
-	 *  @param {DynamicValueJSONDynamicValue} json - Json object describing the value
+	 *  Get the value.
 	 */
-	read(json: any) {
-		this.kind = json.k;
-		this.value = json.v;
-
-		switch (this.kind) {
-			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
-				this.customStructure = {};
-				const jsonList = Utils.valueOrDefault(json.customStructure.properties, []);
-				let parameter: Model.DynamicValue, jsonParameter: Record<string, any>;
-				for (let i = 0, l = jsonList.length; i < l; i++) {
-					jsonParameter = jsonList[i];
-					parameter = Model.DynamicValue.readOrDefaultNumber(jsonParameter.value);
-					this.customStructure[jsonParameter.name] = parameter;
-				}
-				break;
-			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
-				this.customList = [];
-				Utils.readJSONSystemList({
-					list: Utils.valueOrDefault(json.customList.list, []),
-					listIndexes: this.customList,
-					func: (jsonParameter: Record<string, any>) => {
-						return Model.DynamicValue.readOrDefaultNumber(jsonParameter.value);
-					},
-				});
-				break;
-			case DYNAMIC_VALUE_KIND.VECTOR2:
-				this.x = Model.DynamicValue.readFromJSON(json.x);
-				this.y = Model.DynamicValue.readFromJSON(json.y);
-				break;
-			case DYNAMIC_VALUE_KIND.VECTOR3:
-				this.x = Model.DynamicValue.readFromJSON(json.x);
-				this.y = Model.DynamicValue.readFromJSON(json.y);
-				this.z = Model.DynamicValue.readFromJSON(json.z);
-				break;
-			default:
-				break;
-		}
-	}
-
-	/**
-	 *  Get the json value.
-	 *  @returns {Record<string, any>}
-	 */
-	toJson(): Record<string, any> {
-		const json: Record<string, any> = {};
-		json.k = this.kind;
-		json.v = this.value;
-		return json;
-	}
-
-	/**
-	 *  Get the value
-	 *  @returns {any}
-	 */
-	getValue<T>(forceVariable: boolean = false, deep: boolean = false): any {
+	getValue(forceVariable: boolean = false, deep: boolean = false): unknown {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				if (!Game.current) {
 					Platform.showErrorMessage('Trying to access a variable value without any game loaded.');
 				}
-				return forceVariable ? this.value : Game.current.variables[this.value];
+				return forceVariable ? this.value : Game.current.variables[this.value as number];
 			case DYNAMIC_VALUE_KIND.PARAMETER:
-				return ReactionInterpreter.currentParameters[this.value].getValue();
+				return ReactionInterpreter.currentParameters[this.value as number].getValue() as number;
 			case DYNAMIC_VALUE_KIND.PROPERTY:
-				return ReactionInterpreter.currentObject.properties[this.value];
+				return ReactionInterpreter.currentObject.properties[this.value as number];
 			case DYNAMIC_VALUE_KIND.CLASS:
-				return Datas.Classes.get(this.value);
+				return Datas.Classes.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.HERO:
-				return Datas.Heroes.get(this.value);
+				return Datas.Heroes.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.MONSTER:
-				return Datas.Monsters.get(this.value);
+				return Datas.Monsters.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.TROOP:
-				return Datas.Troops.get(this.value);
+				return Datas.Troops.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.ITEM:
-				return Datas.Items.get(this.value);
+				return Datas.Items.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.WEAPON:
-				return Datas.Weapons.get(this.value);
+				return Datas.Weapons.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.ARMOR:
-				return Datas.Armors.get(this.value);
+				return Datas.Armors.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.SKILL:
-				return Datas.Skills.get(this.value);
+				return Datas.Skills.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.ANIMATION:
-				return Datas.Animations.get(this.value);
+				return Datas.Animations.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.STATUS:
-				return Datas.Status.get(this.value);
+				return Datas.Status.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.TILESET:
-				return Datas.Tilesets.get(this.value);
+				return Datas.Tilesets.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.FONT_SIZE:
-				return Datas.Systems.getFontSize(this.value);
+				return Datas.Systems.getFontSize(this.value as number);
 			case DYNAMIC_VALUE_KIND.FONT_NAME:
-				return Datas.Systems.getFontName(this.value);
+				return Datas.Systems.getFontName(this.value as number);
 			case DYNAMIC_VALUE_KIND.COLOR:
-				return Datas.Systems.getColor(this.value);
+				return Datas.Systems.getColor(this.value as number);
 			case DYNAMIC_VALUE_KIND.WINDOW_SKIN:
-				return Datas.Systems.getWindowSkin(this.value);
+				return Datas.Systems.getWindowSkin(this.value as number);
 			case DYNAMIC_VALUE_KIND.CURRENCY:
-				return Datas.Systems.getCurrency(this.value);
+				return Datas.Systems.getCurrency(this.value as number);
 			case DYNAMIC_VALUE_KIND.SPEED:
-				return Datas.Systems.getSpeed(this.value);
+				return Datas.Systems.getSpeed(this.value as number);
 			case DYNAMIC_VALUE_KIND.DETECTION:
-				return Datas.Systems.getDetection(this.value);
+				return Datas.Systems.getDetection(this.value as number);
 			case DYNAMIC_VALUE_KIND.CAMERA_PROPERTY:
-				return Datas.Systems.getCameraProperties(this.value);
+				return Datas.Systems.getCameraProperties(this.value as number);
 			case DYNAMIC_VALUE_KIND.FREQUENCY:
-				return Datas.Systems.getFrequency(this.value);
+				return Datas.Systems.getFrequency(this.value as number);
 			case DYNAMIC_VALUE_KIND.SKYBOX:
-				return Datas.Systems.getSkybox(this.value);
+				return Datas.Systems.getSkybox(this.value as number);
 			case DYNAMIC_VALUE_KIND.BATTLE_MAP:
-				return Datas.BattleSystems.getBattleMap(this.value);
+				return Datas.BattleSystems.getBattleMap(this.value as number);
 			case DYNAMIC_VALUE_KIND.ELEMENT:
-				return Datas.BattleSystems.getElement(this.value);
+				return Datas.BattleSystems.getElement(this.value as number);
 			case DYNAMIC_VALUE_KIND.COMMON_STATISTIC:
-				return Datas.BattleSystems.getStatistic(this.value);
+				return Datas.BattleSystems.getStatistic(this.value as number);
 			case DYNAMIC_VALUE_KIND.WEAPONS_KIND:
-				return Datas.BattleSystems.getWeaponKind(this.value);
+				return Datas.BattleSystems.getWeaponKind(this.value as number);
 			case DYNAMIC_VALUE_KIND.ARMORS_KIND:
-				return Datas.BattleSystems.getArmorKind(this.value);
+				return Datas.BattleSystems.getArmorKind(this.value as number);
 			case DYNAMIC_VALUE_KIND.COMMON_BATTLE_COMMAND:
-				return Datas.BattleSystems.getBattleCommand(this.value);
+				return Datas.BattleSystems.getBattleCommand(this.value as number);
 			case DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT:
-				return Datas.BattleSystems.getEquipment(this.value);
+				return Datas.BattleSystems.getEquipment(this.value as number);
 			case DYNAMIC_VALUE_KIND.EVENT:
-				return Datas.CommonEvents.getEventUser(this.value);
+				return Datas.CommonEvents.getEventUser(this.value as number);
 			case DYNAMIC_VALUE_KIND.STATE:
 				return this.value;
 			case DYNAMIC_VALUE_KIND.COMMON_REACTION:
-				return Datas.CommonEvents.getCommonReaction(this.value);
+				return Datas.CommonEvents.getCommonReaction(this.value as number);
 			case DYNAMIC_VALUE_KIND.MODEL:
-				return Datas.CommonEvents.getCommonObject(this.value);
+				return Datas.CommonEvents.getCommonObject(this.value as number);
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				if (deep) {
 					const obj = {};
@@ -433,84 +301,113 @@ export class DynamicValue extends Model.Base {
 				return this.customStructure;
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
 				if (deep) {
-					const list = [];
-					for (const v of this.customList) {
-						list.push(v.getValue(forceVariable, true));
-					}
-					return list;
+					return this.customList.map((v) => v.getValue(forceVariable, true));
 				}
 				return this.customList;
 			case DYNAMIC_VALUE_KIND.VECTOR2:
-				return new THREE.Vector2(this.x.getValue(), this.y.getValue());
+				return new THREE.Vector2(this.x.getValue() as number as number, this.y.getValue() as number as number);
 			case DYNAMIC_VALUE_KIND.VECTOR3:
-				return new THREE.Vector3(this.x.getValue(), this.y.getValue(), this.z.getValue());
+				return new THREE.Vector3(
+					this.x.getValue() as number as number,
+					this.y.getValue() as number as number,
+					this.z.getValue() as number as number
+				);
 			case DYNAMIC_VALUE_KIND.BARS:
-				return Datas.Pictures.get(PICTURE_KIND.BARS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.BARS, this.value as number);
 			case DYNAMIC_VALUE_KIND.ICONS:
-				return Datas.Pictures.get(PICTURE_KIND.ICONS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.ICONS, this.value as number);
 			case DYNAMIC_VALUE_KIND.AUTOTILES:
-				return Datas.Pictures.get(PICTURE_KIND.AUTOTILES, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.AUTOTILES, this.value as number);
 			case DYNAMIC_VALUE_KIND.CHARACTERS:
-				return Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.value as number);
 			case DYNAMIC_VALUE_KIND.MOUNTAINS:
-				return Datas.Pictures.get(PICTURE_KIND.MOUNTAINS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.MOUNTAINS, this.value as number);
 			case DYNAMIC_VALUE_KIND.TILESETS:
-				return Datas.Pictures.get(PICTURE_KIND.TILESETS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.TILESETS, this.value as number);
 			case DYNAMIC_VALUE_KIND.WALLS:
-				return Datas.Pictures.get(PICTURE_KIND.WALLS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.WALLS, this.value as number);
 			case DYNAMIC_VALUE_KIND.BATTLERS:
-				return Datas.Pictures.get(PICTURE_KIND.BATTLERS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.BATTLERS, this.value as number);
 			case DYNAMIC_VALUE_KIND.FACESETS:
-				return Datas.Pictures.get(PICTURE_KIND.FACESETS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.FACESETS, this.value as number);
 			case DYNAMIC_VALUE_KIND.WINDOW_SKINS:
-				return Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.value as number);
 			case DYNAMIC_VALUE_KIND.TITLE_SCREEN:
-				return Datas.Pictures.get(PICTURE_KIND.TITLE_SCREEN, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.TITLE_SCREEN, this.value as number);
 			case DYNAMIC_VALUE_KIND.OBJECT_3D:
-				return Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, this.value as number);
 			case DYNAMIC_VALUE_KIND.PICTURES:
-				return Datas.Pictures.get(PICTURE_KIND.PICTURES, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.PICTURES, this.value as number);
 			case DYNAMIC_VALUE_KIND.ANIMATIONS:
-				return Datas.Pictures.get(PICTURE_KIND.ANIMATIONS, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.ANIMATIONS, this.value as number);
 			case DYNAMIC_VALUE_KIND.SKYBOXES:
-				return Datas.Pictures.get(PICTURE_KIND.SKYBOXES, this.value);
+				return Datas.Pictures.get(PICTURE_KIND.SKYBOXES, this.value as number);
 			case DYNAMIC_VALUE_KIND.MUSIC:
-				return Datas.Songs.get(SONG_KIND.MUSIC, this.value);
+				return Datas.Songs.get(SONG_KIND.MUSIC, this.value as number);
 			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
-				return Datas.Songs.get(SONG_KIND.BACKGROUND_SOUND, this.value);
+				return Datas.Songs.get(SONG_KIND.BACKGROUND_SOUND, this.value as number);
 			case DYNAMIC_VALUE_KIND.SOUND:
-				return Datas.Songs.get(SONG_KIND.SOUND, this.value);
+				return Datas.Songs.get(SONG_KIND.SOUND, this.value as number);
 			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
-				return Datas.Songs.get(SONG_KIND.MUSIC_EFFECT, this.value);
+				return Datas.Songs.get(SONG_KIND.MUSIC_EFFECT, this.value as number);
 			default:
 				return this.value;
 		}
 	}
 
-	/**
-	 *  Check if a value is equal to another one
-	 *  @param {Model.DynamicValue} value - The value to compare
-	 *  @returns {boolean}
-	 */
-	isEqual(value: Model.DynamicValue): boolean {
+	/** Check if a value is equal to another one. */
+	isEqual(value: DynamicValue): boolean {
 		// If keyBoard
 		if (this.kind === DYNAMIC_VALUE_KIND.KEYBOARD && value.kind !== DYNAMIC_VALUE_KIND.KEYBOARD) {
-			return Datas.Keyboards.isKeyEqual(value.value, Datas.Keyboards.get(this.value));
+			return Datas.Keyboards.isKeyEqual(value.value as string, Datas.Keyboards.get(this.value as number));
 		} else if (value.kind === DYNAMIC_VALUE_KIND.KEYBOARD && this.kind !== DYNAMIC_VALUE_KIND.KEYBOARD) {
-			return Datas.Keyboards.isKeyEqual(this.value, Datas.Keyboards.get(value.value));
+			return Datas.Keyboards.isKeyEqual(this.value as string, Datas.Keyboards.get(value.value as number));
 		} else if (this.kind === DYNAMIC_VALUE_KIND.ANYTHING || value.kind === DYNAMIC_VALUE_KIND.ANYTHING) {
 			return true;
 		}
 		// If any other value, compare the direct values
-		return this.getValue() === value.getValue();
+		return (this.getValue() as number) === (value.getValue() as number);
 	}
 
-	/**
-	 *  Create a copy of the value.
-	 *  @param {Model.DynamicValue} v
-	 *  @returns {Model.DynamicValue}
-	 */
-	createCopy(): Model.DynamicValue {
-		return Model.DynamicValue.create(this.kind, this.value);
+	/** Create a copy of the value. */
+	createCopy(): DynamicValue {
+		return DynamicValue.create(this.kind, this.value);
+	}
+
+	/** Read the JSON. */
+	read(json: DynamicValueJSON) {
+		this.kind = json.k;
+		this.value = json.v;
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+				this.customStructure = {};
+				for (const { name, value } of Utils.valueOrDefault(json.customStructure?.properties, [])) {
+					this.customStructure[name] = DynamicValue.readOrDefaultNumber(value);
+				}
+				break;
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				this.customList = Utils.readJSONList(
+					json.customList.list,
+					(jsonParameter: { value: DynamicValueJSON }) =>
+						DynamicValue.readOrDefaultNumber(jsonParameter.value)
+				);
+				break;
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+				this.x = DynamicValue.readFromJSON(json.x);
+				this.y = DynamicValue.readFromJSON(json.y);
+				break;
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				this.x = DynamicValue.readFromJSON(json.x);
+				this.y = DynamicValue.readFromJSON(json.y);
+				this.z = DynamicValue.readFromJSON(json.z);
+				break;
+			default:
+				break;
+		}
+	}
+
+	/** Convert to JSON. */
+	toJson(): DynamicValueJSON {
+		return { k: this.kind, v: this.value };
 	}
 }

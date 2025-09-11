@@ -27,32 +27,11 @@ export type AnimationFrameEffectJSON = {
  * such as playing a sound effect under specific conditions.
  */
 export class AnimationFrameEffect extends Base {
-	/**
-	 * The sound effect to be played when conditions are met.
-	 * Only defined if {@link isSE} is true.
-	 */
 	public se: PlaySong | undefined;
-
-	/**
-	 * The condition under which the effect should trigger.
-	 * Defaults to {@link ANIMATION_EFFECT_CONDITION_KIND.NONE}.
-	 */
 	public condition: number;
 
 	constructor(json?: AnimationFrameEffectJSON) {
 		super(json);
-	}
-
-	/**
-	 * Reads the JSON data describing the animation frame effect.
-	 * @param json - The JSON object describing the effect.
-	 */
-	read(json: AnimationFrameEffectJSON): void {
-		const isSE = Utils.valueOrDefault(json.ise, true);
-		if (isSE) {
-			this.se = new PlaySong(SONG_KIND.SOUND, json.se ?? {});
-		}
-		this.condition = Utils.valueOrDefault(json.c, ANIMATION_EFFECT_CONDITION_KIND.NONE);
 	}
 
 	/**
@@ -63,5 +42,16 @@ export class AnimationFrameEffect extends Base {
 		if (this.se && (this.condition === ANIMATION_EFFECT_CONDITION_KIND.NONE || this.condition === condition)) {
 			this.se.playSound();
 		}
+	}
+
+	/**
+	 * Reads the JSON data describing the animation frame effect.
+	 */
+	read(json: AnimationFrameEffectJSON): void {
+		const isSE = Utils.valueOrDefault(json.ise, true);
+		if (isSE) {
+			this.se = new PlaySong(SONG_KIND.SOUND, json.se ?? {});
+		}
+		this.condition = Utils.valueOrDefault(json.c, ANIMATION_EFFECT_CONDITION_KIND.NONE);
 	}
 }

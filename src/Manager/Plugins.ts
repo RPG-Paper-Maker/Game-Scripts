@@ -82,7 +82,7 @@ class Plugins {
 	 *  @param {string} commandName
 	 *  @param {Function} command
 	 */
-	static registerCommand(pluginName: string, commandName: string, command: Function) {
+	static registerCommand(pluginName: string, commandName: string, command: (...args: unknown[]) => void) {
 		this.fetch(pluginName).commands[commandName] = command;
 	}
 
@@ -95,7 +95,7 @@ class Plugins {
 	 */
 	static executeCommand(pluginID: number, commandID: number, args: any[]) {
 		const plugin = this.fetch(this.pluginsNames[pluginID]);
-		plugin.commands[plugin.commandsNames[commandID]].apply(this, args);
+		plugin.commands[plugin.commandsNames.get(commandID)].apply(this, args);
 	}
 
 	/**

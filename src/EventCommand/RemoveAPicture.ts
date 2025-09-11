@@ -38,7 +38,7 @@ class RemoveAPicture extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const currentIndex = this.index.getValue();
+		const currentIndex = this.index.getValue() as number;
 		for (let i = 0, l = Manager.Stack.displayedPictures.length; i < l; i++) {
 			if (currentIndex === Manager.Stack.displayedPictures[i][0]) {
 				Manager.Stack.displayedPictures.splice(i, 1);

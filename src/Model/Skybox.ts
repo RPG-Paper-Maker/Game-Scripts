@@ -14,13 +14,22 @@ import { PICTURE_KIND, Utils } from '../Common';
 import { Datas, Manager } from '../index';
 import { Base } from './Base';
 
-/** @class
- *  A skybox of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  skybox
+/**
+ * JSON structure describing a skybox.
  */
-class Skybox extends Base {
+type SkyboxJSON = {
+	fid?: number;
+	bid?: number;
+	tid?: number;
+	boid?: number;
+	lid?: number;
+	rid?: number;
+};
+
+/**
+ * A skybox of the game.
+ */
+export class Skybox extends Base {
 	public front: number;
 	public back: number;
 	public top: number;
@@ -28,26 +37,12 @@ class Skybox extends Base {
 	public left: number;
 	public right: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: SkyboxJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the skybox.
-	 *  @param {Record<string, any>} - json Json object describing the skybox
-	 */
-	read(json: Record<string, any>) {
-		this.front = Utils.valueOrDefault(json.fid, 1);
-		this.back = Utils.valueOrDefault(json.bid, 1);
-		this.top = Utils.valueOrDefault(json.tid, 1);
-		this.bot = Utils.valueOrDefault(json.boid, 1);
-		this.left = Utils.valueOrDefault(json.lid, 1);
-		this.right = Utils.valueOrDefault(json.rid, 1);
-	}
-
-	/**
-	 *  Create the textures for the background
-	 *  @returns {THREE.MeshPhongMaterial[]}
+	 * Create the textures for the skybox.
 	 */
 	createTextures(): THREE.MeshPhongMaterial[] {
 		return [this.left, this.right, this.top, this.bot, this.front, this.back].map((side) => {
@@ -62,6 +57,16 @@ class Skybox extends Base {
 			});
 		});
 	}
-}
 
-export { Skybox };
+	/**
+	 *  Read the JSON associated to the skybox.
+	 */
+	read(json: SkyboxJSON) {
+		this.front = Utils.valueOrDefault(json.fid, 1);
+		this.back = Utils.valueOrDefault(json.bid, 1);
+		this.top = Utils.valueOrDefault(json.tid, 1);
+		this.bot = Utils.valueOrDefault(json.boid, 1);
+		this.left = Utils.valueOrDefault(json.lid, 1);
+		this.right = Utils.valueOrDefault(json.rid, 1);
+	}
+}

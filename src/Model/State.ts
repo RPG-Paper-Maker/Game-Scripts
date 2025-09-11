@@ -10,23 +10,87 @@
 */
 
 import { COMMAND_MOVE_KIND, DYNAMIC_VALUE_KIND, EVENT_COMMAND_KIND, OBJECT_MOVING_KIND, Utils } from '../Common';
-import { EventCommand, Manager, Model } from '../index';
+import { Rectangle } from '../Core';
+import { EventCommand, Manager } from '../index';
 import { Base } from './Base';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { Reaction, ReactionCommandJSON } from './Reaction';
 
-/** @class
- *  A possible state of an object.
- *  @extends Model.Base
- *  @param {Record<string, any>} - json Json object describing the object state
+/**
+ * JSON structure describing a state.
  */
-class State extends Base {
+export type StateJSON = {
+	id: number;
+	gid: number;
+	gk: number;
+	rt?: number[];
+	x?: number;
+	y?: number;
+	omk?: OBJECT_MOVING_KIND;
+	ecr?: ReactionCommandJSON;
+	s?: number;
+	f?: number;
+	move: boolean;
+	stop: boolean;
+	climb: boolean;
+	dir: boolean;
+	through: boolean;
+	cam: boolean;
+	pix: boolean;
+	pos: boolean;
+	ecd?: ReactionCommandJSON;
+	cx?: DynamicValueJSON;
+	cz?: DynamicValueJSON;
+	ax?: DynamicValueJSON;
+	ay?: DynamicValueJSON;
+	az?: DynamicValueJSON;
+	sx?: DynamicValueJSON;
+	sy?: DynamicValueJSON;
+	sz?: DynamicValueJSON;
+};
+
+/**
+ * Structure of a plain state copy (returned by copyInstance).
+ */
+export type StateInstance = {
+	graphicID: number;
+	graphicKind: number;
+	previousGraphicKind?: number;
+	rectTileset: Rectangle | null;
+	indexX: number;
+	indexY: number;
+	speedID: number;
+	frequencyID: number;
+	moveAnimation: boolean;
+	stopAnimation: boolean;
+	climbAnimation: boolean;
+	directionFix: boolean;
+	through: boolean;
+	setWithCamera: boolean;
+	pixelOffset: boolean;
+	keepPosition: boolean;
+	centerX: DynamicValue;
+	centerZ: DynamicValue;
+	angleX: DynamicValue;
+	angleY: DynamicValue;
+	angleZ: DynamicValue;
+	scaleX: DynamicValue;
+	scaleY: DynamicValue;
+	scaleZ: DynamicValue;
+};
+
+/**
+ * Represents a possible state of an object.
+ */
+export class State extends Base {
 	public id: number;
 	public graphicID: number;
 	public graphicKind: number;
-	public rectTileset: number[];
+	public rectTileset: Rectangle;
 	public indexX: number;
 	public indexY: number;
 	public objectMovingKind: OBJECT_MOVING_KIND;
-	public route: Model.Reaction;
+	public route: Reaction;
 	public speedID: number;
 	public frequencyID: number;
 	public moveAnimation: boolean;
@@ -37,82 +101,28 @@ class State extends Base {
 	public setWithCamera: boolean;
 	public pixelOffset: boolean;
 	public keepPosition: boolean;
-	public detection: EventCommand.Base;
-	public centerX: Model.DynamicValue;
-	public centerZ: Model.DynamicValue;
-	public angleX: Model.DynamicValue;
-	public angleY: Model.DynamicValue;
-	public angleZ: Model.DynamicValue;
-	public scaleX: Model.DynamicValue;
-	public scaleY: Model.DynamicValue;
-	public scaleZ: Model.DynamicValue;
+	public detection: EventCommand.Base | null = null;
+	public centerX: DynamicValue;
+	public centerZ: DynamicValue;
+	public angleX: DynamicValue;
+	public angleY: DynamicValue;
+	public angleZ: DynamicValue;
+	public scaleX: DynamicValue;
+	public scaleY: DynamicValue;
+	public scaleZ: DynamicValue;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: StateJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the object state.
-	 *  @param {Record<string, any>} - json Json object describing the object
-	 *  state
+	 * Create a new plain object instance of this state.
 	 */
-	read(json: Record<string, any>) {
-		this.id = json.id;
-		this.graphicID = json.gid;
-		this.graphicKind = json.gk;
-		if (this.graphicID === 0) {
-			this.rectTileset = json.rt;
-			if (this.rectTileset.length === 2) {
-				this.rectTileset.push(1);
-				this.rectTileset.push(1);
-			}
-		} else {
-			this.indexX = json.x;
-			this.indexY = json.y;
-		}
-		this.objectMovingKind = Utils.valueOrDefault(json.omk, OBJECT_MOVING_KIND.FIX);
-		this.route = new Model.Reaction({
-			bh: false,
-			c: [
-				Utils.valueOrDefault(json.ecr, {
-					kind: EVENT_COMMAND_KIND.MOVE_OBJECT,
-					command: [DYNAMIC_VALUE_KIND.DATABASE, -1, 1, 1, 0, COMMAND_MOVE_KIND.MOVE_RANDOM, 0],
-				}),
-			],
-		});
-		this.speedID = Utils.valueOrDefault(json.s, 1);
-		this.frequencyID = Utils.valueOrDefault(json.f, 1);
-		this.moveAnimation = json.move;
-		this.stopAnimation = json.stop;
-		this.climbAnimation = json.climb;
-		this.directionFix = json.dir;
-		this.through = json.through;
-		this.setWithCamera = json.cam;
-		this.pixelOffset = json.pix;
-		this.keepPosition = json.pos;
-		this.detection = Utils.valueOrDefault(json.ecd, null);
-		if (this.detection !== null) {
-			this.detection = Manager.Events.getEventCommand(this.detection);
-		}
-		this.centerX = Model.DynamicValue.readOrDefaultNumberDouble(json.cx, 50);
-		this.centerZ = Model.DynamicValue.readOrDefaultNumberDouble(json.cz, 50);
-		this.angleX = Model.DynamicValue.readOrDefaultNumberDouble(json.ax, 0);
-		this.angleY = Model.DynamicValue.readOrDefaultNumberDouble(json.ay, 0);
-		this.angleZ = Model.DynamicValue.readOrDefaultNumberDouble(json.az, 0);
-		this.scaleX = Model.DynamicValue.readOrDefaultNumberDouble(json.sx, 1);
-		this.scaleY = Model.DynamicValue.readOrDefaultNumberDouble(json.sy, 1);
-		this.scaleZ = Model.DynamicValue.readOrDefaultNumberDouble(json.sz, 1);
-	}
-
-	/**
-	 *  Create a new instance of the System object state.
-	 *  @returns {Object}
-	 */
-	copyInstance(): Record<string, any> {
+	copyInstance(): StateInstance {
 		return {
 			graphicID: this.graphicID,
 			graphicKind: this.graphicKind,
-			rectTileset: this.rectTileset,
+			rectTileset: this.rectTileset ? this.rectTileset.clone() : null,
 			indexX: this.indexX,
 			indexY: this.indexY,
 			speedID: this.speedID,
@@ -135,6 +145,49 @@ class State extends Base {
 			scaleZ: this.scaleZ.createCopy(),
 		};
 	}
-}
 
-export { State };
+	/**
+	 * Initialize this state from JSON data.
+	 */
+	read(json: StateJSON): void {
+		this.id = json.id;
+		this.graphicID = json.gid;
+		this.graphicKind = json.gk;
+		if (this.graphicID === 0) {
+			this.rectTileset = Rectangle.createFromArray(json.rt);
+		} else {
+			this.indexX = json.x;
+			this.indexY = json.y;
+		}
+		this.objectMovingKind = Utils.valueOrDefault(json.omk, OBJECT_MOVING_KIND.FIX);
+		this.route = new Reaction({
+			bh: false,
+			c: [
+				Utils.valueOrDefault(json.ecr, {
+					kind: EVENT_COMMAND_KIND.MOVE_OBJECT,
+					command: [DYNAMIC_VALUE_KIND.DATABASE, -1, 1, 1, 0, COMMAND_MOVE_KIND.MOVE_RANDOM, 0],
+				}),
+			],
+		});
+		this.speedID = Utils.valueOrDefault(json.s, 1);
+		this.frequencyID = Utils.valueOrDefault(json.f, 1);
+		this.moveAnimation = json.move;
+		this.stopAnimation = json.stop;
+		this.climbAnimation = json.climb;
+		this.directionFix = json.dir;
+		this.through = json.through;
+		this.setWithCamera = json.cam;
+		this.pixelOffset = json.pix;
+		this.keepPosition = json.pos;
+		const jsonDetection = Utils.valueOrDefault(json.ecd, null);
+		this.detection = jsonDetection === null ? null : Manager.Events.getEventCommand(jsonDetection);
+		this.centerX = DynamicValue.readOrDefaultNumberDouble(json.cx, 50);
+		this.centerZ = DynamicValue.readOrDefaultNumberDouble(json.cz, 50);
+		this.angleX = DynamicValue.readOrDefaultNumberDouble(json.ax, 0);
+		this.angleY = DynamicValue.readOrDefaultNumberDouble(json.ay, 0);
+		this.angleZ = DynamicValue.readOrDefaultNumberDouble(json.az, 0);
+		this.scaleX = DynamicValue.readOrDefaultNumberDouble(json.sx, 1);
+		this.scaleY = DynamicValue.readOrDefaultNumberDouble(json.sy, 1);
+		this.scaleZ = DynamicValue.readOrDefaultNumberDouble(json.sz, 1);
+	}
+}

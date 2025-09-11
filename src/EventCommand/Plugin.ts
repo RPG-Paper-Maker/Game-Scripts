@@ -49,7 +49,7 @@ class Plugin extends Base {
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const parameters = [];
 		for (let i = 0, l = this.parameters.length; i < l; i++) {
-			parameters[i] = this.parameters[i].getValue();
+			parameters[i] = this.parameters[i].getValue() as number;
 		}
 		Manager.Plugins.executeCommand(this.pluginID, this.commandID, parameters);
 		return 1;

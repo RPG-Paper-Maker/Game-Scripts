@@ -14,47 +14,35 @@ import { Battler } from '../Core';
 import { Datas } from '../index';
 import { CommonSkillItem } from './CommonSkillItem';
 
-/** @class
- *  An item of the game.
- *  @extends CommonSkillItem
- *  @param {Record<string, any>} - [json=undefined] Json object describing the item
+/**
+ * Represents a consumable or usable item in the game.
+ * Items are skill-like objects that can be used in battle or on the map.
  */
-class Item extends CommonSkillItem {
-	constructor(json?: Record<string, any>) {
-		super(json as any);
-	}
-
+export class Item extends CommonSkillItem {
 	/**
-	 *  Read the JSON associated to the item.
-	 *  @param {Record<string, any>} - json Json object describing the item
-	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-	}
-
-	/** Get the item type.
-	 *  @returns {string}
+	 * Retrieves the display type name of this item (e.g., "Potion", "Elixir").
+	 * @returns {string} The localized item type name.
 	 */
 	getStringType(): string {
 		return Datas.Systems.getItemType(this.type).name();
 	}
 
 	/**
-	 *  Get the item kind.
-	 *  @returns {ITEM_KIND}
+	 * Retrieves the kind of this object.
+	 * Always returns {@link ITEM_KIND.ITEM}.
+	 * @returns {ITEM_KIND} The constant value {@link ITEM_KIND.ITEM}.
 	 */
 	getKind(): ITEM_KIND {
 		return ITEM_KIND.ITEM;
 	}
 
 	/**
-	 *  Get message and replace user / item name.
-	 *  @param {Battler} user
-	 *  @returns {string}
+	 * Builds the battle message shown when this item is used.
+	 * Replaces placeholders `[user]` and `[item]` in the template.
+	 * @param {Battler} user - The battler using the item.
+	 * @returns {string} The formatted battle message.
 	 */
 	getMessage(user: Battler): string {
 		return this.battleMessage.name().replace('[user]', user.player.name).replace('[item]', this.name());
 	}
 }
-
-export { Item };

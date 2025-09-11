@@ -10,26 +10,23 @@
 */
 
 import { Base } from './Base';
-import { Parameter } from './Parameter';
+import { Parameter, ParameterListJSON } from './Parameter';
 
-/** @class
- *   An event that can be called.
- *   @param {Record<string, any>} - [json] json object describing the event
+/**
+ * Represents an event that can be called with parameters.
  */
-class CommonEvent extends Base {
-	parameters: Parameter[];
+export class CommonEvent extends Base {
+	/** The list of parameters associated with this event. */
+	public parameters: Map<number, Parameter>;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: ParameterListJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the event.
-	 *  @param {Record<string, any>} - json Json object describing the event
+	 * Reads the JSON data describing the event.
 	 */
-	read(json: Record<string, any>) {
+	read(json: ParameterListJSON): void {
 		this.parameters = Parameter.readParameters(json);
 	}
 }
-
-export { CommonEvent };

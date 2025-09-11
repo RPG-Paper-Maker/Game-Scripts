@@ -51,7 +51,7 @@ class StartShopMenu extends Base {
 	 */
 	initialize(): Record<string, any> {
 		// Create or load stock according to first time opening or not
-		const shopID = this.shopID.getValue();
+		const shopID = this.shopID.getValue() as number;
 		let stocks: Record<string, number>[] = [];
 		stocks[ITEM_KIND.ITEM] = {};
 		stocks[ITEM_KIND.WEAPON] = {};
@@ -103,7 +103,7 @@ class StartShopMenu extends Base {
 			: {
 					opened: false,
 					shopID: shopID,
-					buyOnly: this.buyOnly.getValue(),
+					buyOnly: this.buyOnly.getValue() as number,
 					stock: list,
 			  };
 	}

@@ -12,60 +12,29 @@
 import { Interpreter, Platform, TITLE_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
 import { Datas, Manager, Scene } from '../index';
-import { Localization } from './Localization';
+import { Localization, LocalizationJSON } from './Localization';
 
-/** @class
- *  A title command of the game.
- *  @extends Model.Localization
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  title screen command
+/**
+ * JSON structure for a title screen command.
  */
-class TitleCommand extends Localization {
+export type TitleCommandJSON = LocalizationJSON & {
+	k?: TITLE_COMMAND_KIND;
+	s?: string;
+};
+
+/**
+ * A title command of the game.
+ */
+export class TitleCommand extends Localization {
 	public kind: TITLE_COMMAND_KIND;
 	public script: string;
 
-	constructor(json?: Record<string, any>) {
-		super(json as any);
+	constructor(json?: TitleCommandJSON) {
+		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the title screen command.
-	 *  @param {Record<string, any>} - json Json object describing the title
-	 *  screen command
-	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-
-		this.kind = Utils.valueOrDefault(json.k, TITLE_COMMAND_KIND.NEW_GAME);
-		this.script = Utils.valueOrDefault(json.s, '');
-	}
-
-	/**
-	 *  Get the action function according to kind.
-	 *  @returns {Function}
-	 */
-	getAction(): Function {
-		switch (this.kind) {
-			case TITLE_COMMAND_KIND.NEW_GAME:
-				return TitleCommand.startNewGame;
-			case TITLE_COMMAND_KIND.LOAD_GAME:
-				return TitleCommand.loadGame;
-			case TITLE_COMMAND_KIND.SETTINGS:
-				const name = this.name();
-				return () => {
-					return TitleCommand.showSettings(name);
-				};
-			case TITLE_COMMAND_KIND.EXIT:
-				return TitleCommand.exit;
-			case TITLE_COMMAND_KIND.SCRIPT:
-				return this.executeScript;
-		}
-	}
-
-	/**
-	 *  Callback function for start a new game.
-	 *  @static
-	 *  @returns {boolean}
+	 * Start a new game.
 	 */
 	static startNewGame(): boolean {
 		// Stop video and songs if existing
@@ -84,8 +53,7 @@ class TitleCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for loading an existing game.
-	 *  @returns {boolean}
+	 * Load an existing game.
 	 */
 	static loadGame(): boolean {
 		Manager.Stack.push(new Scene.LoadGame());
@@ -93,8 +61,7 @@ class TitleCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for loading an existing game.
-	 *   @returns {boolean}
+	 * Show settings screen.
 	 */
 	static showSettings(title: string): boolean {
 		Manager.Stack.push(new Scene.TitleSettings(title));
@@ -102,8 +69,7 @@ class TitleCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for closing the window.
-	 *  @returns {boolean}
+	 * Exit the game.
 	 */
 	static exit(): boolean {
 		Platform.quit();
@@ -111,13 +77,39 @@ class TitleCommand extends Localization {
 	}
 
 	/**
-	 *  Callback function for closing the window.
-	 *  @returns {boolean}
+	 * Get the action function according to the command kind.
+	 */
+	getAction(): () => boolean {
+		switch (this.kind) {
+			case TITLE_COMMAND_KIND.NEW_GAME:
+				return TitleCommand.startNewGame;
+			case TITLE_COMMAND_KIND.LOAD_GAME:
+				return TitleCommand.loadGame;
+			case TITLE_COMMAND_KIND.SETTINGS: {
+				const name = this.name();
+				return () => TitleCommand.showSettings(name);
+			}
+			case TITLE_COMMAND_KIND.EXIT:
+				return TitleCommand.exit;
+			case TITLE_COMMAND_KIND.SCRIPT:
+				return this.executeScript;
+		}
+	}
+
+	/**
+	 * Execute custom script.
 	 */
 	executeScript(): boolean {
 		Interpreter.evaluate(this.script, { addReturn: false });
 		return true;
 	}
-}
 
-export { TitleCommand };
+	/**
+	 * Read JSON into this title command.
+	 */
+	read(json: TitleCommandJSON) {
+		super.read(json);
+		this.kind = Utils.valueOrDefault(json.k, TITLE_COMMAND_KIND.NEW_GAME);
+		this.script = Utils.valueOrDefault(json.s, '');
+	}
+}

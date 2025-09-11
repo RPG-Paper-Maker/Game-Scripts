@@ -11,16 +11,40 @@
 
 import { MONSTER_ACTION_KIND, MONSTER_ACTION_TARGET_KIND, OPERATION_KIND, Utils } from '../Common';
 import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 import { Monster } from './Monster';
 
-/** @class
- *  A monster action of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  monster action
+/**
+ * JSON structure describing a monster action.
  */
-class MonsterAction extends Base {
+export type MonsterActionJSON = {
+	ak?: number;
+	sid?: DynamicValueJSON;
+	iid?: DynamicValueJSON;
+	inm?: DynamicValueJSON;
+	p?: DynamicValueJSON;
+	tk?: number;
+	ict?: boolean;
+	okt?: number;
+	tvc?: DynamicValueJSON;
+	ics?: boolean;
+	stid?: DynamicValueJSON;
+	oks?: number;
+	svc?: DynamicValueJSON;
+	icv?: boolean;
+	vid?: number;
+	okv?: number;
+	vvc?: DynamicValueJSON;
+	icst?: boolean;
+	stsid?: DynamicValueJSON;
+	icsc?: boolean;
+	s?: DynamicValueJSON;
+};
+
+/**
+ * Represents a monster action.
+ */
+export class MonsterAction extends Base {
 	public actionKind: number;
 	public skillID: DynamicValue;
 	public itemID: DynamicValue;
@@ -44,16 +68,14 @@ class MonsterAction extends Base {
 	public script: DynamicValue;
 	public monster: Monster;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: MonsterActionJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the monster action.
-	 *  @param {Record<string, any>} - json Json object describing the monster
-	 *  action
+	 * Initialize this monster action from JSON data.
 	 */
-	read(json: Record<string, any>) {
+	read(json: MonsterActionJSON): void {
 		this.actionKind = Utils.valueOrDefault(json.ak, MONSTER_ACTION_KIND.DO_NOTHING);
 		switch (this.actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL:
@@ -95,5 +117,3 @@ class MonsterAction extends Base {
 		}
 	}
 }
-
-export { MonsterAction };

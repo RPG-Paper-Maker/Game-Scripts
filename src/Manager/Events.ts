@@ -11,7 +11,8 @@
 
 import { EVENT_COMMAND_KIND } from '../Common';
 import { Game, MapObject, Portion } from '../Core';
-import { Datas, EventCommand, Manager, Model, Scene } from '../index';
+import { Datas, EventCommand, Manager, Scene } from '../index';
+import { DynamicValue, ReactionCommandJSON } from '../Model';
 
 /** @class
  *  A static class for some events functions.
@@ -27,7 +28,7 @@ class Events {
 	 *  @param {Record<string, any>} - json
 	 *  @returns {EventCommand.Base}
 	 */
-	static getEventCommand(json: Record<string, any>): EventCommand.Base {
+	static getEventCommand(json: ReactionCommandJSON): EventCommand.Base {
 		const command = json.command;
 		switch (json.kind) {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
@@ -203,7 +204,7 @@ class Events {
 		targetID: number,
 		isSystem: boolean,
 		eventID: number,
-		parameters: Model.DynamicValue[],
+		parameters: Map<number, DynamicValue>,
 		senderNoReceiver: boolean,
 		onlyTheClosest: boolean
 	) {
@@ -288,7 +289,7 @@ class Events {
 		targetID: number,
 		isSystem: boolean,
 		eventID: number,
-		parameters: Model.DynamicValue[],
+		parameters: Map<number, DynamicValue>,
 		senderNoReceiver: boolean = false,
 		onlyTheClosest: boolean = false
 	) {
@@ -388,7 +389,7 @@ class Events {
 		targetID: number,
 		isSystem: boolean,
 		eventID: number,
-		parameters: Model.DynamicValue[],
+		parameters: Map<number, DynamicValue>,
 		senderNoReceiver: boolean,
 		onlyTheClosest: boolean,
 		closests: any[][]

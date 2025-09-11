@@ -51,11 +51,11 @@ class ChangeClass extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const newClass = Datas.Classes.get(this.classID.getValue());
+		const newClass = Datas.Classes.get(this.classID.getValue() as number);
 		let targets: Player[];
 		switch (this.selectionKind) {
 			case 0:
-				targets = [Game.current.getHeroByInstanceID(this.selectionHeroEnemyInstanceID.getValue())];
+				targets = [Game.current.getHeroByInstanceID(this.selectionHeroEnemyInstanceID.getValue() as number)];
 				break;
 			case 1:
 				targets = Game.current.getTeam(this.selectionTeam);

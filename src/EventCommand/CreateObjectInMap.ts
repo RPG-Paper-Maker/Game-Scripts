@@ -84,21 +84,21 @@ class CreateObjectInMap extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		// Do nothing if not in the current map
-		if (this.objectIDPosition === null && this.mapID.getValue() !== Scene.Map.current.id) {
+		if (this.objectIDPosition === null && (this.mapID.getValue() as number) !== Scene.Map.current.id) {
 			return 1;
 		}
 		if (!currentState.waitingPosition) {
 			// Set object's position
 			if (this.objectIDPosition === null) {
 				currentState.position = new Position(
-					this.x.getValue(),
-					this.y.getValue(),
-					this.z.getValue(),
-					(this.yPlus.getValue() * 100) / Datas.Systems.SQUARE_SIZE
+					this.x.getValue() as number,
+					this.y.getValue() as number,
+					this.z.getValue() as number,
+					((this.yPlus.getValue() as number) * 100) / Datas.Systems.SQUARE_SIZE
 				).toVector3();
 			} else {
 				MapObject.search(
-					this.objectIDPosition.getValue(),
+					this.objectIDPosition.getValue() as number,
 					(result: StructSearchResult) => {
 						currentState.position = result.object.position.clone();
 					},
@@ -111,13 +111,13 @@ class CreateObjectInMap extends Base {
 			const id = ++Scene.Map.current.mapProperties.maxObjectsID;
 			const position = Position.createFromVector3(currentState.position);
 			const globalPortion = position.getGlobalPortion();
-			Scene.Map.current.mapProperties.allObjects[id] = position;
+			Scene.Map.current.mapProperties.allObjects.set(id, position);
 			const newObject = new MapObject(
-				Model.MapObject.createFromModelID(this.modelID.getValue(), id),
+				Model.MapObject.createFromModelID(this.modelID.getValue() as number, id),
 				currentState.position
 			);
 			if (this.isStockID) {
-				Game.current.variables[this.stockID.getValue(true)] = id;
+				Game.current.variables[this.stockID.getValue(true) as number] = id;
 			}
 			Game.current.getPortionDatas(Scene.Map.current.id, globalPortion).m.push(newObject);
 			Game.current.getPortionDatas(Scene.Map.current.id, globalPortion).min.push(newObject);

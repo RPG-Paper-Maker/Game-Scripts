@@ -12,37 +12,43 @@
 import { Model } from '..';
 import { CHARACTER_KIND, GROUP_KIND, Utils } from '../Common';
 import { Base } from './Base';
+import { DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  An initial party member of the game.
- *  @extends Model.Base
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  initial party member
+/**
+ * JSON structure describing an initial party member.
  */
-class InitialPartyMember extends Base {
+export type InitialPartyMemberJSON = {
+	level?: DynamicValueJSON;
+	teamKind?: GROUP_KIND;
+	isHero?: boolean;
+	heroID?: DynamicValueJSON;
+	monsterID?: DynamicValueJSON;
+	variableInstanceID?: DynamicValueJSON;
+};
+
+/**
+ * An initial party member of the game.
+ */
+export class InitialPartyMember extends Base {
 	public level: Model.DynamicValue;
 	public teamKind: GROUP_KIND;
-	public CHARACTER_KIND: CHARACTER_KIND;
+	public characterKind: CHARACTER_KIND;
 	public heroID: Model.DynamicValue;
 	public variableInstanceID: Model.DynamicValue;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: InitialPartyMemberJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the initial party member.
-	 *  @param {Record<string, any>} - json Json object describing the initial
-	 *  party member
+	 * Read the JSON associated to the initial party member.
 	 */
-	read(json: Record<string, any>) {
+	read(json: InitialPartyMemberJSON): void {
 		this.level = Model.DynamicValue.readOrDefaultNumber(json.level, 1);
-		this.teamKind = Utils.valueOrDefault(json.teamKind, 0);
+		this.teamKind = Utils.valueOrDefault(json.teamKind, GROUP_KIND.TEAM);
 		const isHero = Utils.valueOrDefault(json.isHero, true);
-		this.CHARACTER_KIND = isHero ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
+		this.characterKind = isHero ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
 		this.heroID = Model.DynamicValue.readOrDefaultDatabase(isHero ? json.heroID : json.monsterID);
 		this.variableInstanceID = Model.DynamicValue.readOrDefaultVariable(json.variableInstanceID);
 	}
 }
-
-export { InitialPartyMember };

@@ -9,111 +9,78 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model } from '..';
 import { Base } from './Base';
-import { DynamicValue } from './DynamicValue';
+import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
-/** @class
- *  A progression table.
- *  @extends Model.Base
- *  @param {number} [id=undefined] - The ID
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  progression table
+/**
+ * JSON structure describing a progression table.
+ */
+export type ProgressionTableJSON = {
+	i: DynamicValueJSON;
+	f: DynamicValueJSON;
+	e: number;
+	t?: { k: number; v: number }[];
+};
+
+/**
+ * Represents a progression table.
  */
 class ProgressionTable extends Base {
 	public id: number;
 	public initialValue: DynamicValue;
 	public finalValue: DynamicValue;
 	public equation: number;
-	public table: Record<string, any>;
+	public table: Map<number, number>;
 	public start: number;
 	public change: number;
 	public duration: number;
 
-	constructor(id?: number, json?: Record<string, any>) {
+	constructor(id?: number, json?: ProgressionTableJSON) {
 		super(json);
 		this.id = id;
 	}
 
-	/**
-	 *  Create a new System progression table.
-	 *  @static
-	 *  @param {Model.DynamicValue} i - The initial value
-	 *  @param {Model.DynamicValue} f - The final value
-	 *  @param {number} equation - The equation kind
-	 *  @returns {ProgressionTable}
-	 */
-	static create(i: Model.DynamicValue, f: Model.DynamicValue, equation: number): ProgressionTable {
+	/** Create a progression table from dynamic values. */
+	static create(i: DynamicValue, f: DynamicValue, equation: number): ProgressionTable {
 		const progression = new ProgressionTable();
 		progression.initialize(i, f, equation);
 		return progression;
 	}
 
-	/**
-	 *  Create a new System progression table from numbers values.
-	 *  @static
-	 *  @param {number} i - The initial value
-	 *  @param {number} f - The final value
-	 *  @param {number} equation - The equation kind
-	 *  @returns {ProgressionTable}
-	 */
+	/** Create a progression table from numbers. */
 	static createFromNumbers(i: number, f: number, equation: number): ProgressionTable {
 		return this.create(DynamicValue.createNumber(i), DynamicValue.createNumber(f), equation);
 	}
 
-	/**
-	 *  Read the JSON associated to the progression table.
-	 *  @param {Record<string, any>} - json Json object describing the progression table
-	 */
-	read(json: Record<string, any>) {
-		this.initialValue = new DynamicValue(json.i);
-		this.finalValue = new DynamicValue(json.f);
-		this.equation = json.e;
-		this.table = {};
-		const jsonTable = json.t;
-		if (jsonTable) {
-			for (let i = 0, l = jsonTable.length; i < l; i++) {
-				this.table[jsonTable[i].k] = jsonTable[i].v;
-			}
-		}
-	}
-
-	/**
-	 *  Initialize this progression table.
-	 *  @param {Model.DynamicValue} i - The initial value
-	 *  @param {Model.DynamicValue} f - The final value
-	 *  @param {number} equation - The equation kind
-	 */
-	initialize(i: Model.DynamicValue, f: Model.DynamicValue, equation: number) {
+	/** Initialize this progression table. */
+	initialize(i: DynamicValue, f: DynamicValue, equation: number): void {
 		this.initialValue = i;
 		this.finalValue = f;
 		this.equation = equation;
-		this.table = [];
+		this.table = new Map();
 	}
 
 	/**
-	 *  Get the progression at a current value.
-	 *  @param {number} current - The current value
-	 *  @param {number} f - The final value
-	 *  @param {boolean} [decimal=false] - Indicate if the return should have
-	 *  decimal or not
-	 *  @returns {number}
+	 * Get progression at a given step.
+	 * @param current - Current step
+	 * @param f - Final step
+	 * @param decimal - Whether to keep decimals
 	 */
-	getProgressionAt(current: number, f: number, decimal: boolean = false): number {
+	getProgressionAt(current: number, f: number, decimal = false): number {
 		// Check if specific value
-		const table = this.table[current];
-		if (table) {
-			return table;
+		const cached = this.table.get(current);
+		if (cached) {
+			return cached;
 		}
 
 		// Update change and duration
-		this.start = this.initialValue.getValue();
-		this.change = this.finalValue.getValue() - this.initialValue.getValue();
+		this.start = this.initialValue.getValue() as number;
+		this.change = (this.finalValue.getValue() as number) - (this.initialValue.getValue() as number);
 		this.duration = f - 1;
 
 		// Check according to equation
 		const x = current - 1;
-		let result: number;
+		let result = 0;
 		switch (this.equation) {
 			case 0:
 				result = this.easingLinear(x);
@@ -142,106 +109,74 @@ class ProgressionTable extends Base {
 			case 4:
 				result = this.easingQuinticOut(x);
 				break;
-			default:
-				result = 0;
-				break;
 		}
-		if (!decimal) {
-			result = Math.floor(result);
-		}
-		return result;
+		return decimal ? result : Math.floor(result);
 	}
 
-	/**
-	 *  The easing linear function
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing linear. */
 	easingLinear(x: number): number {
 		return (this.change * x) / this.duration + this.start;
 	}
 
-	/**
-	 *  The easing quadratic in function.
-	 *   @param {number} x
-	 *   @returns {number}
-	 */
+	/** Easing quadratic in. */
 	easingQuadraticIn(x: number): number {
 		x /= this.duration;
 		return this.change * x * x + this.start;
 	}
 
-	/**
-	 *  The easing quadratic out function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing quadratic out. */
 	easingQuadraticOut(x: number): number {
 		x /= this.duration;
 		return -this.change * x * (x - 2) + this.start;
 	}
 
-	/**
-	 *  The easing cubic in function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing cubic in. */
 	easingCubicIn(x: number): number {
 		x /= this.duration;
 		return this.change * x * x * x + this.start;
 	}
 
-	/**
-	 *  The easing cubic out function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing cubic out. */
 	easingCubicOut(x: number): number {
-		x /= this.duration;
-		x--;
+		x = x / this.duration - 1;
 		return this.change * (x * x * x + 1) + this.start;
 	}
 
-	/**
-	 *  The easing quartic in function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing quartic in. */
 	easingQuarticIn(x: number): number {
 		x /= this.duration;
 		return this.change * x * x * x * x + this.start;
 	}
 
-	/**
-	 *  The easing quartic out function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing quartic out. */
 	easingQuarticOut(x: number): number {
-		x /= this.duration;
-		x--;
+		x = x / this.duration - 1;
 		return -this.change * (x * x * x * x - 1) + this.start;
 	}
 
-	/**
-	 *  The easing quintic in function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing quintic in. */
 	easingQuinticIn(x: number): number {
 		x /= this.duration;
 		return this.change * x * x * x * x * x + this.start;
 	}
 
-	/**
-	 *  The easing quintic out function.
-	 *  @param {number} x
-	 *  @returns {number}
-	 */
+	/** Easing quintic out. */
 	easingQuinticOut(x: number): number {
-		x /= this.duration;
-		x--;
+		x = x / this.duration - 1;
 		return this.change * (x * x * x * x * x + 1) + this.start;
+	}
+
+	/** Initialize this table from JSON. */
+	read(json: ProgressionTableJSON): void {
+		this.initialValue = new DynamicValue(json.i);
+		this.finalValue = new DynamicValue(json.f);
+		this.equation = json.e;
+		this.table = new Map();
+		if (json.t) {
+			for (const entry of json.t) {
+				this.table.set(entry.k, entry.v);
+			}
+		}
 	}
 }
 

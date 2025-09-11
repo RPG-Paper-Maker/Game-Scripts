@@ -34,6 +34,7 @@ import {
 	Portion,
 	Position,
 	ReactionInterpreter,
+	Rectangle,
 } from '../Core';
 import { Datas, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -68,7 +69,7 @@ class Map extends Base {
 	public mapPortions: MapPortion[];
 	public textureTileset: THREE.MeshPhongMaterial;
 	public texturesCharacters: THREE.MeshPhongMaterial[];
-	public collisions: number[][][][];
+	public collisions: Rectangle[][][][];
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
 	public heroOrientation: ORIENTATION;
@@ -193,14 +194,14 @@ class Map extends Base {
 	 *  Read the map properties file.
 	 */
 	async readMapProperties(minimal: boolean = false) {
-		this.mapProperties = new Model.MapProperties();
 		const json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS)) as any;
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
 				'The battle map ' + this.id + " doesn't " + 'exists. Please check your battle maps.'
 			);
 		}
-		this.mapProperties.read(json);
+		this.mapProperties = new Model.MapProperties(json);
+		await this.mapProperties.load();
 		if (!minimal) {
 			this.mapProperties.updateBackground();
 		}
@@ -1054,13 +1055,12 @@ class Map extends Base {
 					0,
 					true,
 					5,
-					[
-						null,
+					Utils.arrayToMap([
 						Model.DynamicValue.createNumber(Inputs.mouseX),
 						Model.DynamicValue.createNumber(Inputs.mouseY),
 						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
 						Model.DynamicValue.createSwitch(true),
-					],
+					]),
 					true,
 					false
 				);
@@ -1122,7 +1122,7 @@ class Map extends Base {
 		super.update();
 
 		// Update camera hiding
-		if (Game.current !== null && Datas.Systems.moveCameraOnBlockView.getValue()) {
+		if (Game.current !== null && (Datas.Systems.moveCameraOnBlockView.getValue() as number)) {
 			this.camera.forceNoHide = false;
 			this.camera.hidingDistance = -1;
 			const pointer = Manager.GL.toScreenPosition(
@@ -1176,12 +1176,11 @@ class Map extends Base {
 					0,
 					true,
 					3,
-					[
-						null,
+					Utils.arrayToMap([
 						Model.DynamicValue.createMessage(key),
 						Model.DynamicValue.createSwitch(false),
 						Model.DynamicValue.createSwitch(false),
-					],
+					]),
 					true,
 					false
 				);
@@ -1204,7 +1203,7 @@ class Map extends Base {
 					0,
 					true,
 					4,
-					[null, Model.DynamicValue.createMessage(key)],
+					Utils.arrayToMap([Model.DynamicValue.createMessage(key)]),
 					true,
 					false
 				);
@@ -1227,12 +1226,11 @@ class Map extends Base {
 					0,
 					true,
 					3,
-					[
-						null,
+					Utils.arrayToMap([
 						Model.DynamicValue.createMessage(key),
 						Model.DynamicValue.createSwitch(true),
 						Model.DynamicValue.createSwitch(true),
-					],
+					]),
 					true,
 					false
 				);
@@ -1256,12 +1254,11 @@ class Map extends Base {
 					0,
 					true,
 					3,
-					[
-						null,
+					Utils.arrayToMap([
 						Model.DynamicValue.createMessage(key),
 						Model.DynamicValue.createSwitch(true),
 						Model.DynamicValue.createSwitch(false),
-					],
+					]),
 					true,
 					false
 				);
@@ -1285,13 +1282,12 @@ class Map extends Base {
 					0,
 					true,
 					5,
-					[
-						null,
+					Utils.arrayToMap([
 						Model.DynamicValue.createNumber(x),
 						Model.DynamicValue.createNumber(y),
 						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
 						Model.DynamicValue.createSwitch(false),
-					],
+					]),
 					true,
 					false
 				);
@@ -1314,7 +1310,7 @@ class Map extends Base {
 					0,
 					true,
 					7,
-					[null, Model.DynamicValue.createNumber(x), Model.DynamicValue.createNumber(y)],
+					Utils.arrayToMap([Model.DynamicValue.createNumber(x), Model.DynamicValue.createNumber(y)]),
 					true,
 					false
 				);
@@ -1337,12 +1333,11 @@ class Map extends Base {
 					0,
 					true,
 					6,
-					[
-						null,
+					Utils.arrayToMap([
 						Model.DynamicValue.createNumber(x),
 						Model.DynamicValue.createNumber(y),
 						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
-					],
+					]),
 					true,
 					false
 				);

@@ -10,17 +10,28 @@
 */
 
 import { Paths, PICTURE_KIND, Platform, Utils } from '../Common';
-import { CollisionSquare, Picture2D } from '../Core';
+import { CollisionSquare, CollisionSquareJSON, Picture2D, Rectangle } from '../Core';
 import { Datas } from '../index';
 import { Base } from './Base';
 
-/** @class
- *  A picture of the game.
- *  @extends {System.Base}
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  picture
- *  @param {PICTURE_KIND} [kind=PICTURE_KIND.Pictures] - The kind of picture
- */
+export type PictureJSON = {
+	id: number;
+	name: string;
+	br: boolean;
+	d?: string;
+	base64?: string;
+	col?: CollisionJSON[];
+	rcol?: boolean;
+	isStopAnimation?: boolean;
+	ica?: boolean;
+};
+
+export type CollisionJSON = {
+	k: [number, number];
+	v: CollisionSquareJSON;
+};
+
+/** Represents a picture in the game. */
 class Picture extends Base {
 	public id: number;
 	public kind: PICTURE_KIND;
@@ -28,7 +39,7 @@ class Picture extends Base {
 	public isBR: boolean;
 	public dlc: string;
 	public base64: string;
-	public jsonCollisions: Record<string, any>[];
+	public jsonCollisions: CollisionJSON[];
 	public collisionsRepeat: boolean;
 	public collisions: CollisionSquare[];
 	public picture: Picture2D;
@@ -39,15 +50,11 @@ class Picture extends Base {
 	public borderLeft: number;
 	public borderRight: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: PictureJSON) {
 		super(json);
 	}
 
-	/**
-	 *  Get string of picture kind.
-	 *  @param {PICTURE_KIND} kind - The picture kind
-	 *  @returns {string}
-	 */
+	/** Convert a picture kind to a string. */
 	static pictureKindToString(kind: PICTURE_KIND): string {
 		switch (kind) {
 			case PICTURE_KIND.BARS:
@@ -86,14 +93,7 @@ class Picture extends Base {
 		return '';
 	}
 
-	/**
-	 *  Get the folder associated to a kind of picture.
-	 *  @static
-	 *  @param {PICTURE_KIND} kind - The kind of picture
-	 *  @param {boolean} isBR - Indicate if the picture is a BR
-	 *  @param {string} dlc - The picture DLC name (if exists)
-	 *  @returns {string}
-	 */
+	/** Get the folder path for a picture kind. */
 	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
 			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
@@ -101,12 +101,7 @@ class Picture extends Base {
 		);
 	}
 
-	/**
-	 *  Get the local folder associated to a kind of picture.
-	 *  @static
-	 *  @param {PICTURE_KIND} kind - The kind of picture
-	 *  @returns {string}
-	 */
+	/** Get the local folder name for a picture kind. */
 	static getLocalFolder(kind: PICTURE_KIND): string {
 		switch (kind) {
 			case PICTURE_KIND.BARS:
@@ -147,50 +142,22 @@ class Picture extends Base {
 		return '';
 	}
 
-	/**
-	 *  Read the JSON associated to the picture.
-	 *  @param {Object} json - Json object describing the picture
-	 */
-	read(json: Record<string, any>) {
-		this.id = json.id;
-		this.name = json.name;
-		this.isBR = json.br;
-		this.dlc = Utils.valueOrDefault(json.d, '');
-		this.base64 = json.base64;
-		this.jsonCollisions = Utils.valueOrDefault(json.col, []);
-		this.collisionsRepeat = Utils.valueOrDefault(json.rcol, false);
-		this.isStopAnimation = Utils.valueOrDefault(json.isStopAnimation, false);
-		this.isClimbAnimation = Utils.valueOrDefault(json.ica, false);
-	}
-
-	/**
-	 *  Read the JSON associated to the picture.
-	 *  @async
-	 */
-	async load() {
+	/** Load the picture image. */
+	async load(): Promise<void> {
 		this.picture = await Picture2D.create(this);
 		if (this.base64) {
 			this.base64 = '';
 		}
 	}
 
-	/**
-	 *  Get the number of rows for the picture (used for characters).
-	 *  @returns {number}
-	 */
+	/** Get number of rows (for characters). */
 	getRows(): number {
-		switch (this.kind) {
-			case PICTURE_KIND.CHARACTERS:
-				return 4 + (this.isStopAnimation ? 4 : 0) + (this.isClimbAnimation ? 4 : 0);
-			default:
-				return 1;
-		}
+		return this.kind === PICTURE_KIND.CHARACTERS
+			? 4 + (this.isStopAnimation ? 4 : 0) + (this.isClimbAnimation ? 4 : 0)
+			: 1;
 	}
 
-	/**
-	 *  Get the absolute path associated to this picture.
-	 *  @returns {string}
-	 */
+	/** Get absolute path of the picture. */
 	getPath(): string {
 		if (this.base64) {
 			return this.base64;
@@ -198,57 +165,34 @@ class Picture extends Base {
 		if (this.picture) {
 			return this.picture.path;
 		}
-		return this.id === -1 || !this.name ? '' : Picture.getFolder(this.kind, this.isBR, this.dlc) + '/' + this.name;
+		return this.id === -1 || !this.name ? '' : `${Picture.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`;
 	}
 
-	/**
-	 *  Read collisions according to image size.
-	 *  @param {HTMLImageElement} image - The image texture
-	 */
-	readCollisionsImage(image: HTMLImageElement) {
+	/** Read collisions from image. */
+	readCollisionsImage(image: HTMLImageElement): void {
 		this.width = Math.floor(image.width / Datas.Systems.SQUARE_SIZE);
 		this.height = Math.floor(image.height / Datas.Systems.SQUARE_SIZE);
 		this.readCollisions();
 	}
 
-	/**
-	 *  Read collisions, we assume that this.width and this.height had been
-	 *  edited.
-	 */
-	readCollisions() {
+	/** Read collision data (requires width & height set). */
+	readCollisions(): void {
 		if (!this.jsonCollisions) {
 			return;
 		}
-
-		// Initialize
 		const w = this.width / Datas.Systems.FRAMES;
 		const h = this.height / this.getRows();
-		this.collisions = new Array(this.width * this.height);
-		let i: number, l: number;
-		for (i = 0, l = this.width * this.height; i < l; i++) {
-			this.collisions[i] = null;
-		}
-
-		// Insert collision
-		let j: number,
-			k: number,
-			jsonTab: Record<string, any>,
-			jsonKey: number[],
-			jsonVal: Record<string, any>,
-			index: number,
-			collision: CollisionSquare;
-		for (i = 0, l = this.jsonCollisions.length; i < l; i++) {
-			jsonTab = this.jsonCollisions[i];
-			jsonKey = jsonTab.k;
-			jsonVal = jsonTab.v;
-			index = jsonKey[0] + jsonKey[1] * this.width;
-			collision = new CollisionSquare();
-			collision.read(jsonVal);
+		this.collisions = Array(this.width * this.height).fill(null);
+		for (const jsonTab of this.jsonCollisions) {
+			const [x, y] = jsonTab.k;
+			const index = x + y * this.width;
+			const collision = new CollisionSquare();
+			collision.read(jsonTab.v);
 			this.collisions[index] = collision;
 			if (this.collisionsRepeat) {
-				for (j = 0; j < Datas.Systems.FRAMES; j++) {
-					for (k = 0; k < 4; k++) {
-						this.collisions[jsonKey[0] + j * w + (jsonKey[1] + k * h) * this.width] = collision;
+				for (let j = 0; j < Datas.Systems.FRAMES; j++) {
+					for (let k = 0; k < 4; k++) {
+						this.collisions[x + j * w + (y + k * h) * this.width] = collision;
 					}
 				}
 			}
@@ -256,126 +200,113 @@ class Picture extends Base {
 		this.jsonCollisions = null;
 	}
 
-	/**
-	 *  Get a specific collision square according to texture.
-	 *  @param {number[]} pos - Texture position
-	 *  @returns {CollisionSquare}
-	 */
-	getCollisionAt(pos: number[]): CollisionSquare {
-		return this.getCollisionAtPos(pos[0], pos[1]);
+	/** Get collision at a texture position. */
+	getCollisionAt(rectangle: Rectangle): CollisionSquare | undefined {
+		return this.getCollisionAtPos(rectangle.x, rectangle.y);
 	}
 
-	/**
-	 *  Get a specific collision square according to texture.
-	 *  @param {number} x - Texture x position
-	 *  @param {number} y - Texture y position
-	 *  @returns {CollisionSquare}
-	 */
-	getCollisionAtPos(x: number, y: number): CollisionSquare {
+	/** Get collision at x, y position. */
+	getCollisionAtPos(x: number, y: number): CollisionSquare | undefined {
 		return this.collisions[x + y * this.width];
 	}
 
-	/**
-	 *  Get a specific collision square according to index.
-	 *  @param {number} index - The index positions
-	 *  @returns {CollisionSquare}
-	 */
-	getCollisionAtIndex(index: number): CollisionSquare {
+	/** Get collision by index. */
+	getCollisionAtIndex(index: number): CollisionSquare | undefined {
 		return this.getCollisionAtPos(index % this.width, Math.floor(index / this.width));
 	}
 
 	/**
-	 *  Get a specific collision for wall.
-	 *  @param {number[]} texture - Texture position
-	 *  @returns {number[][]}
+	 * Computes collision rectangles for a wall texture.
+	 * Validates the left, middle, and right wall columns according
+	 * to the expected 3×SQUARE_SIZE template. Returns merged collision
+	 * rectangles for the given region.
+	 * @param texture - Rectangle defining the texture region.
+	 * @returns Array of merged collision rectangles.
 	 */
-	getSquaresForWall(texture: number[]): number[][] {
-		const w = texture[2];
-		const h = texture[3];
+	getSquaresForWall(texture: Rectangle): Rectangle[] {
+		const w = texture.width;
+		const h = texture.height;
 		const l = w * h;
-		const squares = new Array(l);
-		let x: number, y: number, leftSquare: CollisionSquare, rightSquare: CollisionSquare, square: CollisionSquare;
+		const squares = new Array<Rectangle | null>(l);
 		for (let i = 0; i < l; i++) {
-			x = texture[0] + (i % w);
-			y = texture[1] + Math.floor(i / w);
+			const x = texture.x + (i % w);
+			const y = texture.y + Math.floor(i / w);
 			if (x === 3) {
-				leftSquare = this.getCollisionAtPos(0, y);
-				rightSquare = this.getCollisionAtPos(2, y);
+				const leftSquare = this.getCollisionAtPos(0, y);
+				const rightSquare = this.getCollisionAtPos(2, y);
 				if (leftSquare === null && rightSquare === null) {
 					squares[i] = null;
 				} else if (leftSquare === null || rightSquare === null) {
-					square = leftSquare === null ? rightSquare : leftSquare;
+					const square = leftSquare === null ? rightSquare : leftSquare;
 					if (!square) {
 						Platform.showErrorMessage(
-							'Your wall image ' +
-								this.name +
-								' is not using a correct template. Your image ' +
-								'should be this size: WIDTH: 3 * SQUARE_SIZE, ' +
-								'HEIGHT: as you wish. There should be left wall, ' +
-								'middle wall, and right wall for the 3 width ' +
-								'squares.'
+							`Your wall image ${this.name} is not using a correct template. 
+							Your image should be this size: WIDTH: 3 * SQUARE_SIZE, HEIGHT: as you wish. 
+							There should be left wall, middle wall, and right wall for the 3 width squares.`
 						);
 						return;
 					}
 					squares[i] = square.rect;
 				} else {
-					squares[i] = [0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE];
+					squares[i] = new Rectangle(0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE);
 				}
 			} else {
-				square = this.getCollisionAtPos(x, y);
-				squares[i] = square ? square.rect : null;
+				const square = this.getCollisionAtPos(x, y);
+				squares[i] = square?.rect ?? null;
 			}
 		}
 		return CollisionSquare.unionSquares(squares, l, w, h);
 	}
 
 	/**
-	 *  Get a specific collision square according to texture.
-	 *  @param {number[]} texture - Texture position
-	 *  @returns {number[][]}
+	 * Computes collision rectangles for a texture region.
+	 * Iterates over each cell of the given rectangle and collects
+	 * collision data, merging them into larger rectangles.
+	 * @param texture - Rectangle defining the texture region.
+	 * @returns Array of merged collision rectangles.
 	 */
-	getSquaresForTexture(texture: number[]): number[][] {
-		const w = texture[2];
-		const h = texture[3];
+	getSquaresForTexture(texture: Rectangle): (Rectangle | null)[] {
+		const w = texture.width;
+		const h = texture.height;
 		const l = w * h;
-		const squares = new Array(l);
-		let square: CollisionSquare;
+		const squares = new Array<Rectangle | null>(l);
 		for (let i = 0; i < l; i++) {
-			square = this.getCollisionAtPos(texture[0] + (i % w), texture[1] + Math.floor(i / w));
-			squares[i] = square ? square.rect : null;
+			const square = this.getCollisionAtPos(texture.x + (i % w), texture.y + Math.floor(i / w));
+			squares[i] = square?.rect ?? null;
 		}
 		return CollisionSquare.unionSquares(squares, l, w, h);
 	}
 
 	/**
-	 *  Get a specific collision square according to texture
-	 *  @param {THREE.Image} image - The image texture
-	 *  @returns {number[][][]}
+	 * Compute collision rectangles for all animation states of a character image.
+	 * Divides the texture into frames and directions (up, down, left, right),
+	 * then computes the collision squares for each state.
+	 * @param image - Character spritesheet image.
+	 * @returns Array of collision rectangles per state (frames × 4 directions).
 	 */
-	getSquaresForStates(image: any): number[][] {
+	getSquaresForStates(image: HTMLImageElement): Rectangle[][] {
 		const w = Math.floor(image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.FRAMES);
 		const h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / this.getRows());
-		const states = new Array(Datas.Systems.FRAMES * 4);
-		let j: number;
+		const states = new Array<(Rectangle | null)[]>(Datas.Systems.FRAMES * 4);
 		for (let i = 0; i < Datas.Systems.FRAMES; i++) {
-			for (j = 0; j < 4; j++) {
-				states[i + j * Datas.Systems.FRAMES] = this.getSquaresForTexture([i * w, j * h, w, h]);
+			for (let j = 0; j < 4; j++) {
+				states[i + j * Datas.Systems.FRAMES] = this.getSquaresForTexture(new Rectangle(i * w, j * h, w, h));
 			}
 		}
 		return states;
 	}
 
 	/**
-	 *  Check the borders to cut for filled bar.
+	 * Detects left and right transparent borders of a bar image
+	 * and sets `borderLeft` / `borderRight` for scaling purposes.
 	 */
-	checkBarBorder() {
+	checkBarBorder(): void {
 		if (this.picture.image) {
 			Platform.ctxr.drawImage(this.picture.image, 0, 0);
-			let x = this.picture.image.width / 2;
-			let y = 0;
 			let isTransparent = true;
-			for (; x < this.picture.image.width; x++) {
-				for (y = 0; y < this.picture.image.height; y++) {
+			let x: number;
+			for (x = this.picture.image.width / 2; x < this.picture.image.width; x++) {
+				for (let y = 0; y < this.picture.image.height; y++) {
 					if (Platform.ctxr.getImageData(x, y, 1, 1).data[3] !== 0) {
 						isTransparent = false;
 						break;
@@ -388,7 +319,7 @@ class Picture extends Base {
 			this.borderLeft = x - this.picture.image.width / 2;
 			isTransparent = true;
 			for (x = this.picture.image.width - 1; x >= 0; x--) {
-				for (y = 0; y < this.picture.image.height; y++) {
+				for (let y = 0; y < this.picture.image.height; y++) {
 					if (Platform.ctxr.getImageData(x, y, 1, 1).data[3] !== 0) {
 						isTransparent = false;
 						break;
@@ -402,20 +333,37 @@ class Picture extends Base {
 		}
 	}
 
-	getSquaresClimbing(texture: number[]): [number, number][] {
-		const w = texture[2];
-		const h = texture[3];
+	/**
+	 * Gets the relative positions of all climbing squares in a texture region.
+	 * @param texture Rectangle defining the texture area.
+	 * @returns Array of [x, y] positions of climbing squares.
+	 */
+	getSquaresClimbing(texture: Rectangle): [number, number][] {
+		const w = texture.width;
+		const h = texture.height;
 		const squares = [];
-		let square: CollisionSquare, x: number, y: number;
 		for (let i = w * h - 1; i >= 0; i--) {
-			x = i % w;
-			y = Math.floor(i / w);
-			square = this.getCollisionAtPos(texture[0] + x, texture[1] + y);
+			const x = i % w;
+			const y = Math.floor(i / w);
+			const square = this.getCollisionAtPos(texture[0] + x, texture[1] + y);
 			if (square && square.climbing) {
 				squares.push([x, y]);
 			}
 		}
 		return squares;
+	}
+
+	/** Read JSON data to initialize the picture. */
+	read(json: PictureJSON): void {
+		this.id = json.id;
+		this.name = json.name;
+		this.isBR = json.br;
+		this.dlc = Utils.valueOrDefault(json.d, '');
+		this.base64 = json.base64;
+		this.jsonCollisions = Utils.valueOrDefault(json.col, []);
+		this.collisionsRepeat = Utils.valueOrDefault(json.rcol, false);
+		this.isStopAnimation = Utils.valueOrDefault(json.isStopAnimation, false);
+		this.isClimbAnimation = Utils.valueOrDefault(json.ica, false);
 	}
 }
 

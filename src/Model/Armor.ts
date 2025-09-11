@@ -18,10 +18,6 @@ import { WeaponArmorKind } from './WeaponArmorKind';
  * Represents an armor item in the game.
  */
 export class Armor extends CommonSkillItem {
-	constructor(json?: any) {
-		super(json as any);
-	}
-
 	/**
 	 * Gets the armor type (as defined in battle system data).
 	 * @returns The corresponding {@link WeaponArmorKind}.

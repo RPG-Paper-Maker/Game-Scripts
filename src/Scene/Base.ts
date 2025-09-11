@@ -180,7 +180,7 @@ abstract class Base {
 		reaction: Model.Reaction,
 		object: MapObject,
 		state: number,
-		parameters: Model.DynamicValue[],
+		parameters: Map<number, Model.DynamicValue>,
 		event: [Model.Event, number],
 		moving: boolean = false
 	): ReactionInterpreter {

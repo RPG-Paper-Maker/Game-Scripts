@@ -44,7 +44,7 @@ class ModifyInventory extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const item = new Item(this.ITEM_KIND, this.itemID.getValue(), this.value.getValue());
+		const item = new Item(this.ITEM_KIND, this.itemID.getValue() as number, this.value.getValue() as number);
 
 		// Doing the coresponding operation
 		switch (this.operation) {

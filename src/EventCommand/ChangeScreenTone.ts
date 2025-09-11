@@ -56,20 +56,21 @@ class ChangeScreenTone extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const time = this.time.getValue() * 1000;
-		const color = this.colorID ? Datas.Systems.getColor(this.colorID.getValue()) : null;
+		const time = (this.time.getValue() as number) * 1000;
+		const color = this.colorID ? Datas.Systems.getColor(this.colorID.getValue() as number) : null;
 		return {
 			parallel: this.waitEnd,
 			finalDifRed:
-				Math.max(Math.min((this.r.getValue() + (color ? color.red : 0)) / 255, 1), -1) -
+				Math.max(Math.min(((this.r.getValue() as number) + (color ? color.red : 0)) / 255, 1), -1) -
 				Manager.GL.screenTone.x,
 			finalDifGreen:
-				Math.max(Math.min((this.g.getValue() + (color ? color.green : 0)) / 255, 1), -1) -
+				Math.max(Math.min(((this.g.getValue() as number) + (color ? color.green : 0)) / 255, 1), -1) -
 				Manager.GL.screenTone.y,
 			finalDifBlue:
-				Math.max(Math.min((this.b.getValue() + (color ? color.blue : 0)) / 255, 1), -1) -
+				Math.max(Math.min(((this.b.getValue() as number) + (color ? color.blue : 0)) / 255, 1), -1) -
 				Manager.GL.screenTone.z,
-			finalDifGrey: Math.max(Math.min(1 - this.grey.getValue() / 100, 1), -1) - Manager.GL.screenTone.w,
+			finalDifGrey:
+				Math.max(Math.min(1 - (this.grey.getValue() as number) / 100, 1), -1) - Manager.GL.screenTone.w,
 			time: time,
 			timeLeft: time,
 		};

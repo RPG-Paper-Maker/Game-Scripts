@@ -41,8 +41,8 @@ class FlashScreen extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		const time = this.time.getValue() * 1000;
-		const color = Datas.Systems.getColor(this.colorID.getValue());
+		const time = (this.time.getValue() as number) * 1000;
+		const color = Datas.Systems.getColor(this.colorID.getValue() as number);
 		return {
 			parallel: this.isWaitEnd,
 			time: time,

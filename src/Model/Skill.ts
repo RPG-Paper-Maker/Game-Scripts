@@ -12,48 +12,28 @@
 import { Battler } from '../Core';
 import { CommonSkillItem } from './CommonSkillItem';
 
-/** @class
- *  A skill of the game.
- *  @extends Model.CommonSkillItem
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  skill
+/**
+ * Represents a skill in the game.
+ * Skills share most of their behavior with items and weapons,
+ * and are modeled as {@link CommonSkillItem}.
  */
-class Skill extends CommonSkillItem {
-	constructor(json) {
-		super(json);
-	}
-
+export class Skill extends CommonSkillItem {
 	/**
-	 *  Read the JSON associated to the skill.
-	 *  @param {Record<string, any>} - json Json object describing the skill
-	 */
-	read(json: Record<string, any>) {
-		super.read(json as any);
-	}
-
-	/**
-	 *  Get the string representation of costs.
-	 *  @returns {string}
+	 * Builds a human-readable string representing this skill's costs
+	 * (e.g., "10 MP 5 TP").
+	 * @returns {string} The formatted cost string.
 	 */
 	getCostString(): string {
-		let result = '';
-		for (let i = 0, l = this.costs.length; i < l; i++) {
-			result += this.costs[i].toString();
-			if (i === l - 1) {
-				result += ' ';
-			}
-		}
-		return result;
+		return this.costs.map((cost) => cost.toString()).join(' ') + (this.costs.length > 0 ? ' ' : '');
 	}
 
 	/**
-	 *  Get message and replace user / skill name.
-	 *  @param {Battler} user
-	 *  @returns {string}
+	 * Builds the battle message shown when this skill is used.
+	 * Replaces placeholders `[user]` and `[skill]` in the template.
+	 * @param {Battler} user - The battler using the skill.
+	 * @returns {string} The formatted battle message.
 	 */
 	getMessage(user: Battler): string {
 		return this.battleMessage.name().replace('[user]', user.player.name).replace('[skill]', this.name());
 	}
 }
-
-export { Skill };

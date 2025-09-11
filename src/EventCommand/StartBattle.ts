@@ -122,22 +122,29 @@ class StartBattle extends Base {
 			const battleMap =
 				this.battleMapID === null
 					? Model.BattleMap.create(
-							this.mapID.getValue(),
-							new Position(this.x.getValue(), this.y.getValue(), this.z.getValue(), this.yPlus.getValue())
+							this.mapID.getValue() as number,
+							new Position(
+								this.x.getValue() as number,
+								this.y.getValue() as number,
+								this.z.getValue() as number,
+								this.yPlus.getValue() as number
+							)
 					  )
-					: Datas.BattleSystems.getBattleMap(this.battleMapID.getValue());
+					: Datas.BattleSystems.getBattleMap(this.battleMapID.getValue() as number);
 			Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
 
 			// Defining the battle state instance
 			const sceneBattle = new Scene.Battle(
-				this.troopID.getValue(),
+				this.troopID.getValue() as number,
 				this.canGameOver,
 				this.canEscape,
 				battleMap,
 				this.transitionStart,
 				this.transitionEnd,
-				this.transitionStartColor ? Datas.Systems.getColor(this.transitionStartColor.getValue()) : null,
-				this.transitionEndColor ? Datas.Systems.getColor(this.transitionEndColor.getValue()) : null
+				this.transitionStartColor
+					? Datas.Systems.getColor(this.transitionStartColor.getValue() as number)
+					: null,
+				this.transitionEndColor ? Datas.Systems.getColor(this.transitionEndColor.getValue() as number) : null
 			);
 
 			// Keep instance of battle state for results

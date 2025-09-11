@@ -92,7 +92,7 @@ class BattleVictory {
 		this.battle.priorityIndex = 0;
 
 		// Music
-		if (Game.current.victoryMusic.songID.getValue() !== -1) {
+		if ((Game.current.victoryMusic.songID.getValue() as number) !== -1) {
 			Game.current.victoryMusic.playMusic();
 		}
 
@@ -131,19 +131,14 @@ class BattleVictory {
 			l: number,
 			m: number,
 			player: Player,
-			id: string,
-			list: Record<string, Item>[],
-			loots: Record<string, Item>,
-			currencies: Record<string, number>,
+			currencies: Map<number, number>,
 			hero: Battler,
-			baseCurrency: number,
 			currency: number;
 		for (i = 0, l = battlers.length; i < l; i++) {
 			player = battlers[i].player;
 			this.battle.xp += player.getRewardExperience();
 			currencies = player.getRewardCurrencies();
-			for (id in currencies) {
-				baseCurrency = currencies[id];
+			for (const [id, baseCurrency] of currencies.entries()) {
 				currency = baseCurrency;
 				// Get team currency bonus
 				for (hero of this.battle.battlers[CHARACTER_KIND.HERO]) {
@@ -162,10 +157,10 @@ class BattleVictory {
 					this.battle.currencies[id] = currency;
 				}
 			}
-			list = player.getRewardLoots();
+			const list = player.getRewardLoots();
 			for (j = 0, m = list.length; j < m; j++) {
-				loots = list[j];
-				for (id in loots) {
+				const loots = list[j];
+				for (const [id] of loots.entries()) {
 					if (this.battle.loots[j].hasOwnProperty(id)) {
 						this.battle.loots[j][id].nb += loots[id].nb;
 					} else {
@@ -176,7 +171,7 @@ class BattleVictory {
 			}
 		}
 		for (i = 0, l = this.battle.loots.length; i < l; i++) {
-			for (id in this.battle.loots[i]) {
+			for (const id in this.battle.loots[i]) {
 				this.battle.loots[i][id] = new Item(i, parseInt(id), this.battle.loots[i][id].nb);
 			}
 		}
@@ -250,7 +245,7 @@ class BattleVictory {
 		this.battle.musicMap.playMusic(this.battle.musicMapTime, 0);
 		Manager.Songs.initializeProgressionMusic(
 			0,
-			this.battle.musicMap.volume.getValue(),
+			this.battle.musicMap.volume.getValue() as number,
 			0,
 			Scene.Battle.TIME_LINEAR_MUSIC_START
 		);
@@ -262,7 +257,7 @@ class BattleVictory {
 	prepareEndTransition() {
 		this.battle.transitionEnded = false;
 		Manager.Songs.initializeProgressionMusic(
-			Model.PlaySong.currentPlayingMusic.volume.getValue(),
+			Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
 			0,
 			0,
 			Scene.Battle.TIME_LINEAR_MUSIC_END

@@ -10,29 +10,33 @@
 */
 
 import { Utils } from '../Common';
-import { SpecialElement } from './SpecialElement';
+import { SpecialElement, SpecialElementJSON } from './SpecialElement';
 
-/** @class
- *  Abn autotile of the game.
- *  @extends Model.SpecialElement
- *  @param {Record<string, any>} - [json=undefined] Json object describing the
- *  autotile
+/**
+ * JSON schema for an autotile element.
  */
-class Autotile extends SpecialElement {
+export type AutotileJSON = SpecialElementJSON & {
+	isAnimated?: boolean;
+};
+
+/**
+ * Represents an autotile in the game.
+ * An autotile is a special kind of tile used for auto-generated patterns (e.g., water, ground),
+ * which can optionally be animated.
+ */
+export class Autotile extends SpecialElement {
 	public isAnimated: boolean;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: AutotileJSON) {
 		super(json);
 	}
 
 	/**
-	 *  Read the JSON associated to the autotile.
-	 *  @param {Record<string, any>} - json Json object describing the mountain
+	 * Reads the JSON data describing the autotile.
+	 * @param json - The JSON object containing the autotile data.
 	 */
-	read(json: Record<string, any>) {
+	read(json: AutotileJSON): void {
 		super.read(json);
 		this.isAnimated = Utils.valueOrDefault(json.isAnimated, false);
 	}
 }
-
-export { Autotile };

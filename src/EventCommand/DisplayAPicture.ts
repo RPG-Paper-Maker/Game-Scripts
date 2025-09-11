@@ -65,14 +65,14 @@ class DisplayAPicture extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const currentIndex = this.index.getValue();
-		const picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue());
-		picture.setX(this.originX + this.x.getValue());
-		picture.setY(this.originY + this.y.getValue());
+		const currentIndex = this.index.getValue() as number;
+		const picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
+		picture.setX(this.originX + (this.x.getValue() as number));
+		picture.setY(this.originY + (this.y.getValue() as number));
 		picture.centered = this.centered;
-		picture.zoom = this.zoom.getValue() / 100;
-		picture.opacity = this.opacity.getValue() / 100;
-		picture.angle = this.angle.getValue();
+		picture.zoom = (this.zoom.getValue() as number) / 100;
+		picture.opacity = (this.opacity.getValue() as number) / 100;
+		picture.angle = this.angle.getValue() as number;
 		if (this.stretch) {
 			picture.stretch = true;
 			picture.setW(picture.image.width);
