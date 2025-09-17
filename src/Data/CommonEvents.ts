@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
  *  All the battle System datas.
@@ -72,7 +72,7 @@ class CommonEvents {
 	 *  Reorder the models in the right order for inheritance.
 	 *  @param {Record<string, any>} - jsonObject The json corresponding to the
 	 *  current object to analyze
-	 *  @pa Datasects
+	 *  @pa Dataects
 	 *  @param {number} objectsLength - The number of objects to identify
 	 */
 	static modelReOrder(
@@ -81,7 +81,7 @@ class CommonEvents {
 		jsonObjects: Record<string, any>[],
 		objectsLength: number
 	) {
-		if (jsonObject && !jsonObject.hasOwnProperty(Datas.CommonEvents.PROPERTY_STOCKED)) {
+		if (jsonObject && !jsonObject.hasOwnProperty(Data.CommonEvents.PROPERTY_STOCKED)) {
 			// If id = -1, we can add to the list
 			const id = jsonObject.hId;
 			if (id !== -1) {
@@ -107,7 +107,7 @@ class CommonEvents {
 	 *  @returns {System.Event}
 	 */
 	static getEventSystem(id: number): Model.Event {
-		return Datas.Base.get(id, this.eventsSystem, 'event system');
+		return Data.Base.get(id, this.eventsSystem, 'event system');
 	}
 
 	/**
@@ -116,7 +116,7 @@ class CommonEvents {
 	 *  @returns {System.Event}
 	 */
 	static getEventUser(id: number): Model.Event {
-		return Datas.Base.get(id, this.eventsUser, 'event user');
+		return Data.Base.get(id, this.eventsUser, 'event user');
 	}
 
 	/**
@@ -125,7 +125,7 @@ class CommonEvents {
 	 *  @returns {System.CommonReaction}
 	 */
 	static getCommonReaction(id: number): Model.CommonReaction {
-		return Datas.Base.get(id, this.commonReactions, 'common reaction');
+		return Data.Base.get(id, this.commonReactions, 'common reaction');
 	}
 
 	/**
@@ -134,7 +134,7 @@ class CommonEvents {
 	 *  @returns {System.MapObject}
 	 */
 	static getCommonObject(id: number): Model.MapObject {
-		return Datas.Base.get(id, this.commonObjects, 'common object');
+		return Data.Base.get(id, this.commonObjects, 'common object');
 	}
 }
 

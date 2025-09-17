@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, ALIGN_VERTICAL, Constants, Platform, ScreenResolution, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Stack } from '../Manager';
 import { Base } from './Base';
 
@@ -66,15 +66,15 @@ class Text extends Base {
 			w = 0,
 			h = 0,
 			align = ALIGN.LEFT,
-			fontSize = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
-			fontName = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
+			fontSize = Utils.valueOrDefault(Data.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
+			fontName = Utils.valueOrDefault(Data.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
 			verticalAlign = ALIGN_VERTICAL.CENTER,
-			color = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
+			color = Utils.valueOrDefault(Data.Systems.dbOptions.v_tcText, Model.Color.WHITE),
 			bold = false,
 			italic = false,
-			backColor = Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcBackground, null),
-			strokeColor = Utils.valueOrDefault(Datas.Systems.dbOptions.tOutline, false)
-				? Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcOutline, null)
+			backColor = Utils.valueOrDefault(Data.Systems.dbOptions.v_tcBackground, null),
+			strokeColor = Utils.valueOrDefault(Data.Systems.dbOptions.tOutline, false)
+				? Utils.valueOrDefault(Data.Systems.dbOptions.v_tcOutline, null)
 				: null,
 		} = {}
 	) {

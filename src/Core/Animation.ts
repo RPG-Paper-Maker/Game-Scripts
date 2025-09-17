@@ -10,7 +10,7 @@
 */
 
 import { Battler } from '.';
-import { Datas, Model } from '..';
+import { Data, Model } from '..';
 import { ANIMATION_EFFECT_CONDITION_KIND, PICTURE_KIND } from '../Common';
 import { Picture2D } from './Picture2D';
 
@@ -25,9 +25,9 @@ class Animation {
 	public loop: boolean;
 
 	constructor(id: number, loop: boolean = false) {
-		this.system = Datas.Animations.get(id);
+		this.system = Data.Animations.get(id);
 		if (this.system) {
-			this.picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.ANIMATIONS, this.system.pictureID);
+			this.picture = Data.Pictures.getPictureCopy(PICTURE_KIND.ANIMATIONS, this.system.pictureID);
 			this.frame = 0;
 			this.loop = loop;
 		}

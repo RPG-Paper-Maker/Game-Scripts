@@ -11,7 +11,7 @@
 
 import { PICTURE_KIND } from '../Common';
 import { CollisionSquare, Game } from '../Core';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 import { Picture } from './Picture';
@@ -44,7 +44,7 @@ export class Tileset extends Base {
 	 */
 	getPath(): string | null {
 		const newID = Game.current.textures.tilesets[this.id];
-		const picture = newID === undefined ? this.picture : Datas.Pictures.get(PICTURE_KIND.TILESETS, newID);
+		const picture = newID === undefined ? this.picture : Data.Pictures.get(PICTURE_KIND.TILESETS, newID);
 		return picture ? picture.getPath() : null;
 	}
 
@@ -53,7 +53,7 @@ export class Tileset extends Base {
 	 */
 	read(json: TilesetJSON): void {
 		this.id = json.id;
-		this.picture = Datas.Pictures.get(PICTURE_KIND.TILESETS, json.pic);
+		this.picture = Data.Pictures.get(PICTURE_KIND.TILESETS, json.pic);
 		this.battleMap = DynamicValue.readOrDefaultDatabase(json.bm, 1);
 	}
 }

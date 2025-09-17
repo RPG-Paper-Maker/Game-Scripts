@@ -11,7 +11,7 @@
 
 import { Constants, Mathf, ScreenResolution } from '../Common';
 import { Game } from '../Core';
-import { Datas, Graphic } from '../index';
+import { Data, Graphic } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -47,7 +47,7 @@ class ShopCurrencies extends Base {
 		for (const id in Game.current.currencies) {
 			graphic = Graphic.TextIcon.createFromSystem(
 				Mathf.numberWithCommas(Game.current.currencies[id]),
-				Datas.Systems.getCurrency(parseInt(id))
+				Data.Systems.getCurrency(parseInt(id))
 			);
 			this.currencies.push(graphic);
 		}

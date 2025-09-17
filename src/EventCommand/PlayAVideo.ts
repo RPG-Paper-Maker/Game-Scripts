@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, Model } from '..';
+import { Data, Manager, Model } from '..';
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
 import { Base } from './Base';
@@ -69,7 +69,7 @@ class PlayAVideo extends Base {
 				switch (this.operation) {
 					case 0:
 						Manager.Videos.play(
-							Datas.Videos.get(this.videoID).getPath() +
+							Data.Videos.get(this.videoID).getPath() +
 								(this.isStart ? '#t=' + (this.start.getValue() as number) : ''),
 							() => {
 								Manager.Videos.stop();

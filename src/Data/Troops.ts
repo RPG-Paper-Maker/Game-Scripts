@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
  *  All the troops datas.
@@ -41,7 +41,7 @@ class Troops {
 	 *  @returns {System.Troop}
 	 */
 	static get(id: number): Model.Troop {
-		return Datas.Base.get(id, this.list, 'troop');
+		return Data.Base.get(id, this.list, 'troop');
 	}
 }
 

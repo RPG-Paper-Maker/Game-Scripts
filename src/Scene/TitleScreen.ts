@@ -11,7 +11,7 @@
 
 import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager } from '../index';
+import { Data, Graphic, Manager } from '../index';
 import { Base } from './Base';
 
 /**
@@ -60,33 +60,33 @@ class TitleScreen extends Base {
 		Manager.Stack.displayedPictures = [];
 
 		// Creating background
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
-				Datas.TitlescreenGameover.titleBackgroundImageID,
+				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
 		} else {
-			await Manager.Videos.play(Datas.Videos.get(Datas.TitlescreenGameover.titleBackgroundVideoID).getPath());
+			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath());
 		}
 
 		// Windows
-		const commandsNb = Datas.TitlescreenGameover.titleCommands.length;
+		const commandsNb = Data.TitlescreenGameover.titleCommands.length;
 		this.windowChoicesCommands = new WindowChoices(
 			ScreenResolution.SCREEN_X / 2 - WindowBox.MEDIUM_SLOT_WIDTH / 2,
 			ScreenResolution.SCREEN_Y - Constants.HUGE_SPACE - commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT,
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
-			Datas.TitlescreenGameover.getTitleCommandsNames(),
+			Data.TitlescreenGameover.getTitleCommandsNames(),
 			{
 				nbItemsMax: commandsNb,
-				listCallbacks: Datas.TitlescreenGameover.getTitleCommandsActions(),
+				listCallbacks: Data.TitlescreenGameover.getTitleCommandsActions(),
 				padding: [0, 0, 0, 0],
 			}
 		);
 
 		// Play title screen song
-		Datas.TitlescreenGameover.titleMusic.playMusic();
+		Data.TitlescreenGameover.titleMusic.playMusic();
 
 		this.loading = false;
 	}
@@ -97,7 +97,7 @@ class TitleScreen extends Base {
 	translate() {
 		for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
 			(<Graphic.Text>this.windowChoicesCommands.listContents[i]).setText(
-				Datas.TitlescreenGameover.titleCommands[i].name()
+				Data.TitlescreenGameover.titleCommands[i].name()
 			);
 		}
 	}
@@ -144,7 +144,7 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	drawHUD() {
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground.draw();
 		}
 		this.windowChoicesCommands.draw();

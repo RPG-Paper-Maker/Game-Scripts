@@ -10,7 +10,7 @@
 */
 
 import { SONG_KIND } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { ProgressionTable } from '../Model';
 
 /** @class
@@ -84,7 +84,7 @@ class Songs {
 		if (this.current[kind] !== null) {
 			this.current[kind].stop();
 		}
-		const song = Datas.Songs.get(kind, id);
+		const song = Data.Songs.get(kind, id);
 		if (song) {
 			song.load();
 			const howl = song.howl;
@@ -167,7 +167,7 @@ class Songs {
 		if (id === -1) {
 			return;
 		}
-		const sound = Datas.Songs.get(SONG_KIND.SOUND, id);
+		const sound = Data.Songs.get(SONG_KIND.SOUND, id);
 		if (sound) {
 			const howl = new Howl({
 				src: [sound.getPath()],

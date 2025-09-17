@@ -11,7 +11,7 @@
 
 import { ALIGN, Utils } from '../Common';
 import { MapObject, WindowBox } from '../Core';
-import { Datas, Graphic, Manager, Model, Scene } from '../index';
+import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -79,16 +79,16 @@ class ShowText extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		this.windowMain.setX(Utils.valueOrDefault(Datas.Systems.dbOptions.v_x, 0));
-		this.windowMain.setY(Utils.valueOrDefault(Datas.Systems.dbOptions.v_y, 0));
-		this.windowMain.setW(Utils.valueOrDefault(Datas.Systems.dbOptions.v_w, 0));
-		this.windowMain.setH(Utils.valueOrDefault(Datas.Systems.dbOptions.v_h, 0));
+		this.windowMain.setX(Utils.valueOrDefault(Data.Systems.dbOptions.v_x, 0));
+		this.windowMain.setY(Utils.valueOrDefault(Data.Systems.dbOptions.v_y, 0));
+		this.windowMain.setW(Utils.valueOrDefault(Data.Systems.dbOptions.v_w, 0));
+		this.windowMain.setH(Utils.valueOrDefault(Data.Systems.dbOptions.v_h, 0));
 		this.windowInterlocutor.setX(this.windowMain.oX + WindowBox.MEDIUM_SLOT_HEIGHT / 2);
 		this.windowInterlocutor.setY(this.windowMain.oY - WindowBox.MEDIUM_SLOT_HEIGHT / 2);
-		this.windowMain.padding[0] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pLeft, 0);
-		this.windowMain.padding[1] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pTop, 0);
-		this.windowMain.padding[2] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pRight, 0);
-		this.windowMain.padding[3] = Utils.valueOrDefault(Datas.Systems.dbOptions.v_pBottom, 0);
+		this.windowMain.padding[0] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pLeft, 0);
+		this.windowMain.padding[1] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pTop, 0);
+		this.windowMain.padding[2] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pRight, 0);
+		this.windowMain.padding[3] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pBottom, 0);
 		this.windowMain.updateDimensions();
 		this.windowMain.content.update();
 		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue() as string);
@@ -113,7 +113,7 @@ class ShowText extends Base {
 		}
 		currentState.frameTick += Manager.Stack.elapsedTime;
 		if (currentState.frameTick >= currentState.frameDuration) {
-			currentState.frame = (currentState.frame + 1) % Datas.Systems.FRAMES;
+			currentState.frame = (currentState.frame + 1) % Data.Systems.FRAMES;
 			currentState.frameTick = 0;
 			Manager.Stack.requestPaintHUD = true;
 		}
@@ -147,7 +147,7 @@ class ShowText extends Base {
 			this.windowInterlocutor.draw();
 		}
 		if (currentState) {
-			Datas.Systems.getCurrentWindowSkin().drawArrowMessage(
+			Data.Systems.getCurrentWindowSkin().drawArrowMessage(
 				currentState.frame,
 				this.windowMain.oX + this.windowMain.oW / 2,
 				this.windowMain.oY + (this.windowMain.oH - 40)

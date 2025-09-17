@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, Model, Scene } from '..';
+import { Data, Manager, Model, Scene } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject } from '../Core';
 import { Base } from './Base';
@@ -96,7 +96,7 @@ class ChangeWeather extends Base {
 			return result;
 		}
 		if (this.isColor) {
-			result.color = Datas.Systems.getColor(this.colorID.getValue() as number);
+			result.color = Data.Systems.getColor(this.colorID.getValue() as number);
 		} else {
 			result.imageID = this.imageID.getValue() as number;
 		}

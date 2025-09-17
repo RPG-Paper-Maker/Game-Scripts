@@ -11,7 +11,7 @@
 
 import { ALIGN, ScreenResolution } from '../Common';
 import { Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 
 /**
@@ -55,7 +55,7 @@ class Confirm extends Base {
 			width,
 			height
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.confirm.name(), { align: ALIGN.CENTER });
+		const graphic = new Graphic.Text(Data.Languages.extras.confirm.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 		};
@@ -89,8 +89,8 @@ class Confirm extends Base {
 			],
 		};
 		const graphics = [
-			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
-			new Graphic.Text(Datas.Languages.extras.no.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.no.name(), { align: ALIGN.CENTER }),
 		];
 		this.windowChoicesConfirm = new WindowChoices(rect.x, rect.y, rect.width, rect.height, graphics, options);
 	}

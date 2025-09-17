@@ -21,7 +21,7 @@ import {
 	Utils,
 } from '../Common';
 import { Game, MapObject, ReactionInterpreter, Rectangle, StructSearchResult } from '../Core';
-import { Datas, EventCommand, Manager, Model, Scene } from '../index';
+import { Data, EventCommand, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -363,7 +363,7 @@ class MoveObject extends Base {
 				: Scene.Map.current.camera.horizontalAngle
 			: -90.0;
 		if (currentState.position === null && square) {
-			currentState.position = object.getFuturPosition(orientation, Datas.Systems.SQUARE_SIZE, angle)[0];
+			currentState.position = object.getFuturPosition(orientation, Data.Systems.SQUARE_SIZE, angle)[0];
 		}
 		if (object.previousMoveCommand === null && object.previousOrientation === null) {
 			object.previousMoveCommand = this;
@@ -381,7 +381,7 @@ class MoveObject extends Base {
 		}
 		const distances = object.move(
 			orientation,
-			Datas.Systems.SQUARE_SIZE - currentState.distance,
+			Data.Systems.SQUARE_SIZE - currentState.distance,
 			angle,
 			this.isCameraOrientation
 		);
@@ -389,8 +389,8 @@ class MoveObject extends Base {
 		currentState.normalDistance += distances[1];
 		if (
 			!square ||
-			(square && currentState.normalDistance >= Datas.Systems.SQUARE_SIZE) ||
-			(square && currentState.distance >= Datas.Systems.SQUARE_SIZE) ||
+			(square && currentState.normalDistance >= Data.Systems.SQUARE_SIZE) ||
+			(square && currentState.distance >= Data.Systems.SQUARE_SIZE) ||
 			distances[0] === 0
 		) {
 			if (distances[0] === 0 && square && !this.isIgnore) {
@@ -712,14 +712,14 @@ class MoveObject extends Base {
 			if (currentState.currentTime === -1) {
 				currentState.currentTime = 0;
 				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
-				const square = parameters.square ? Datas.Systems.SQUARE_SIZE : 1;
+				const square = parameters.square ? Data.Systems.SQUARE_SIZE : 1;
 				currentState.endJump = new THREE.Vector3(
 					(parameters.x.getValue() as number) * square + currentState.startJump.x,
 					(((parameters.y.getValue() as number) * square + parameters.yPlus.getValue()) as number) +
 						currentState.startJump.y,
 					(parameters.z.getValue() as number) * square + currentState.startJump.z
 				);
-				currentState.peak = ((parameters.peakY.getValue() as number) * Datas.Systems.SQUARE_SIZE +
+				currentState.peak = ((parameters.peakY.getValue() as number) * Data.Systems.SQUARE_SIZE +
 					parameters.peakYPlus.getValue()) as number;
 				if (currentState.peak < currentState.endJump.y) {
 					Platform.showErrorMessage(
@@ -1337,14 +1337,14 @@ class MoveObject extends Base {
 			return null;
 		} else {
 			const portion = Scene.Map.current.mapProperties.allObjects.get(object.system.id).getGlobalPortion();
-			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
-			const indexProp = portionDatas.soi.indexOf(object.system.id);
+			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
+			const indexProp = portionData.soi.indexOf(object.system.id);
 			if (indexProp === -1) {
 				statesOptions = [];
-				portionDatas.soi.push(object.system.id);
-				portionDatas.so.push(statesOptions);
+				portionData.soi.push(object.system.id);
+				portionData.so.push(statesOptions);
 			} else {
-				statesOptions = portionDatas.so[indexProp];
+				statesOptions = portionData.so[indexProp];
 			}
 		}
 		let options = statesOptions[object.currentState.id - 1];

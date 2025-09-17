@@ -40,7 +40,7 @@ async function modifyImportsInFile(filePath) {
 			.replace(/export \* as (.+) from ['"](.+)['"]/g, 'export * as $1 from "./$1/index.js"')
 			.replace(/import ({ .+ }|\* as .+) from ['"](..?\/)(.+)['"]/g, `import $1 from '$2$3.js'`)
 			.replace(
-				/import ({ .+ }|\* as .+) from ['"](..?\/?\.?\.?\/)(Graphic|Core|Datas|EventCommand|Manager|Scene|Common|Model|Libs|Utils).js['"]/g,
+				/import ({ .+ }|\* as .+) from ['"](..?\/?\.?\.?\/)(Graphic|Core|Data|EventCommand|Manager|Scene|Common|Model|Libs|Utils).js['"]/g,
 				`import $1 from '$2$3/index.js'`
 			)
 			.replace(/import ({ .+ }|\* as .+) from ['"](..?)['"]/g, 'import $1 from "$2/index.js"');

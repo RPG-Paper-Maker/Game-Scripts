@@ -60,14 +60,14 @@ class ChangeProperty extends Base {
 			}
 		} else {
 			const portion = Scene.Map.current.mapProperties.allObjects.get(object.system.id).getGlobalPortion();
-			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
-			const indexProp = portionDatas.pi.indexOf(object.system.id);
+			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
+			const indexProp = portionData.pi.indexOf(object.system.id);
 			if (indexProp === -1) {
 				props = [];
-				portionDatas.pi.push(object.system.id);
-				portionDatas.p.push(props);
+				portionData.pi.push(object.system.id);
+				portionData.p.push(props);
 			} else {
-				props = portionDatas.p[indexProp];
+				props = portionData.p[indexProp];
 			}
 		}
 		props[propertyID - 1] = newValue;

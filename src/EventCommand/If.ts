@@ -11,7 +11,7 @@
 
 import { CONDITION_HEROES_KIND, Inputs, Interpreter, ITEM_KIND, Mathf, ORIENTATION, Utils } from '../Common';
 import { Game, Item, MapObject, Player, StructSearchResult } from '../Core';
-import { Datas, Model, Scene } from '../index';
+import { Data, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -316,7 +316,7 @@ class If extends Base {
 						);
 						break;
 					case 5:
-						stat = Datas.BattleSystems.getStatistic(this.heroesStatisticID.getValue() as number);
+						stat = Data.BattleSystems.getStatistic(this.heroesStatisticID.getValue() as number);
 						value = this.heroesStatisticValue.getValue() as number;
 						result = Player.applySelection(
 							this.heroesSelection,
@@ -403,11 +403,11 @@ class If extends Base {
 				result = Mathf.OPERATORS_COMPARE[this.operationArmor](nb, this.armorValue.getValue() as number);
 				break;
 			case 6:
-				const key = Datas.Keyboards.get(this.keyID.getValue() as number);
+				const key = Data.Keyboards.get(this.keyID.getValue() as number);
 				const b = this.keyValue.getValue() as boolean;
 				result = !b;
 				for (const pressedKey of Inputs.keysPressed) {
-					if (Datas.Keyboards.isKeyEqual(pressedKey, key)) {
+					if (Data.Keyboards.isKeyEqual(pressedKey, key)) {
 						result = b;
 						break;
 					}

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Model } from '..';
+import { Data, Graphic, Model } from '..';
 import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
@@ -32,10 +32,10 @@ class StatisticProgression extends Base {
 		this.player = player;
 		this.listStatsProgression = [];
 		let id: number, statistic: Model.Statistic, value: number, txt: string, graphic: Graphic.Text;
-		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Datas.BattleSystems.statisticsOrder[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsOrder[i];
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes || this.player[statistic.getBeforeAbbreviation()] === undefined) {
 					continue;
 				}
@@ -62,10 +62,10 @@ class StatisticProgression extends Base {
 		this.maxLength = 0;
 		this.maxProgressionLength = 0;
 		let id: number, statistic: Model.Statistic, graphic: Graphic.Text, txt: string;
-		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Datas.BattleSystems.statisticsOrder[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsOrder[i];
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes || this.player[statistic.getBeforeAbbreviation()] === undefined) {
 					continue;
 				}

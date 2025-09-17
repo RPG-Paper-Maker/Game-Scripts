@@ -11,7 +11,7 @@
 
 import { Mathf, ScreenResolution } from '../Common';
 import { Battler, Game, Item, Player } from '../Core';
-import { Datas, Graphic, Manager, Model, Scene } from '../index';
+import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -101,7 +101,7 @@ class UseSkillItem extends Base {
 			} while (!this.skillItem.isPossible(target));
 			Scene.Map.current.targets = [new Battler(target)];
 			Manager.Stack.requestPaintHUD = true;
-			Datas.Systems.soundCursor.playSound();
+			Data.Systems.soundCursor.playSound();
 		}
 	}
 
@@ -169,9 +169,9 @@ class UseSkillItem extends Base {
 	 *  @param {number} key - The key ID pressed
 	 */
 	onKeyPressedAndRepeat(key: string) {
-		if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
+		if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Right)) {
 			this.goRight();
-		} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
+		} else if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Left)) {
 			this.goLeft();
 		}
 	}
@@ -197,7 +197,7 @@ class UseSkillItem extends Base {
 					this.indexArrow = i;
 					Scene.Map.current.targets = [new Battler(target)];
 					Manager.Stack.requestPaintHUD = true;
-					Datas.Systems.soundCursor.playSound();
+					Data.Systems.soundCursor.playSound();
 				}
 			}
 		}
@@ -211,7 +211,7 @@ class UseSkillItem extends Base {
 	 *  @param {number} h - The h size
 	 */
 	drawArrowAtIndex(index: number, x: number, y: number, h: number) {
-		Datas.Systems.getCurrentWindowSkin().drawArrowTarget(
+		Data.Systems.getCurrentWindowSkin().drawArrowTarget(
 			this.graphicCharacters[index].battlerFrame.value,
 			x + ScreenResolution.getScreenMinXY(32 + index * 85),
 			y + h - ScreenResolution.getScreenMinXY(20)

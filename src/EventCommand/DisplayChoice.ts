@@ -11,7 +11,7 @@
 
 import { ALIGN, ScreenResolution } from '../Common';
 import { MapObject, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Model, Scene } from '../index';
+import { Data, Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
 import { ShowText } from './ShowText';
 
@@ -88,10 +88,10 @@ class DisplayChoice extends Base {
 	 */
 	action(currentState: Record<string, any>, isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-			Datas.Systems.soundConfirmation.playSound();
+			Data.Systems.soundConfirmation.playSound();
 			currentState.index = this.windowChoices.currentSelectedIndex;
 		} else if (Scene.MenuBase.checkCancel(isKey, options)) {
-			Datas.Systems.soundCancel.playSound();
+			Data.Systems.soundCancel.playSound();
 			currentState.index = (this.cancelAutoIndex.getValue() as number) - 1;
 		}
 	}

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, EventCommand } from '../index';
+import { Data, EventCommand } from '../index';
 import { Base } from './Base';
 
 /**
@@ -36,7 +36,7 @@ export class Localization extends Base {
 	 * @returns The localized name, or an empty string if not available.
 	 */
 	name(): string {
-		return this.names.get(Datas.Settings.currentLanguage) ?? '';
+		return this.names.get(Data.Settings.currentLanguage) ?? '';
 	}
 
 	/**

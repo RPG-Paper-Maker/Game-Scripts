@@ -20,7 +20,7 @@ import {
 	Platform,
 	Utils,
 } from '../Common';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 import { CharacteristicResType } from '../Model';
 import { Battler } from './Battler';
 import { Item } from './Item';
@@ -92,9 +92,9 @@ class Player {
 			}
 
 			// Equip
-			l = Datas.BattleSystems.maxEquipmentID;
+			l = Data.BattleSystems.maxEquipmentID;
 			this.equip = new Array(l + 1);
-			for (i = 1, l = Datas.BattleSystems.maxEquipmentID; i <= l; i++) {
+			for (i = 1, l = Data.BattleSystems.maxEquipmentID; i <= l; i++) {
 				this.equip[i] = null;
 			}
 
@@ -132,9 +132,9 @@ class Player {
 		// Adding equipments
 		let maxLength = 0;
 		let graphic: Graphic.Text;
-		for (let i = 0, l = Datas.BattleSystems.equipmentsOrder.length - 1; i < l; i++) {
+		for (let i = 0, l = Data.BattleSystems.equipmentsOrder.length - 1; i < l; i++) {
 			graphic = new Graphic.Text(
-				Datas.BattleSystems.getEquipment(Datas.BattleSystems.equipmentsOrder[i + 1]).name()
+				Data.BattleSystems.getEquipment(Data.BattleSystems.equipmentsOrder[i + 1]).name()
 			);
 			graphic.updateContextFont();
 			maxLength = Math.max(Platform.ctx.measureText(graphic.text).width, maxLength);
@@ -150,9 +150,9 @@ class Player {
 	 */
 	static getTemporaryPlayer(values?: number[]): Player {
 		const player = new Player();
-		const statistics = Datas.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsOrder;
 		for (let i = 0, l = statistics.length; i < l; i++) {
-			player.initStatValue(Datas.BattleSystems.getStatistic(statistics[i]), values ? values[statistics[i]] : 0);
+			player.initStatValue(Data.BattleSystems.getStatistic(statistics[i]), values ? values[statistics[i]] : 0);
 		}
 		return player;
 	}
@@ -251,9 +251,9 @@ class Player {
 	getSystem(): Model.Hero {
 		switch (this.kind) {
 			case CHARACTER_KIND.HERO:
-				return Datas.Heroes.get(this.id);
+				return Data.Heroes.get(this.id);
 			case CHARACTER_KIND.MONSTER:
-				return Datas.Monsters.get(this.id);
+				return Data.Monsters.get(this.id);
 		}
 	}
 
@@ -295,12 +295,12 @@ class Player {
 	 *  @returns {number[]}
 	 */
 	getSaveStat(): number[] {
-		const l = Datas.BattleSystems.statisticsOrder.length;
+		const l = Data.BattleSystems.statisticsOrder.length;
 		const list = new Array(l);
 		let statistic: Model.Statistic;
 		for (let i = 0; i < l; i++) {
-			const id = Datas.BattleSystems.statisticsOrder[i];
-			statistic = Datas.BattleSystems.getStatistic(id);
+			const id = Data.BattleSystems.statisticsOrder[i];
+			statistic = Data.BattleSystems.getStatistic(id);
 			list[id] = statistic.isFix
 				? [
 						this[statistic.abbreviation],
@@ -337,7 +337,7 @@ class Player {
 	 *  @returns {boolean}
 	 */
 	isDead(): boolean {
-		return Interpreter.evaluate(Datas.BattleSystems.formulaIsDead.getValue() as string, { user: this }) as boolean;
+		return Interpreter.evaluate(Data.BattleSystems.formulaIsDead.getValue() as string, { user: this }) as boolean;
 	}
 
 	/**
@@ -370,25 +370,25 @@ class Player {
 		}
 
 		// Stats
-		const statistics = Datas.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsOrder;
 		const statisticsProgression = this.system.getStatisticsProgression(this.changedClass);
 		const nonFixStatistics = [];
 		for (i = 0, l = statistics.length; i < l; i++) {
-			this[Datas.BattleSystems.getStatistic(statistics[i]).getBeforeAbbreviation()] = undefined;
+			this[Data.BattleSystems.getStatistic(statistics[i]).getBeforeAbbreviation()] = undefined;
 		}
 		let j: number, m: number, statistic: Model.Statistic, statisticProgression: Model.StatisticProgression;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
-			statistic = Datas.BattleSystems.getStatistic(id);
+			statistic = Data.BattleSystems.getStatistic(id);
 
 			// Default value
 			this.initStatValue(statistic, 0);
 			this[statistic.getBonusAbbreviation()] = 0;
 			this[statistic.getAddedAbbreviation()] = 0;
-			if (id === Datas.BattleSystems.idLevelStatistic) {
+			if (id === Data.BattleSystems.idLevelStatistic) {
 				// Level
 				this[statistic.abbreviation] = level;
-			} else if (id === Datas.BattleSystems.idExpStatistic) {
+			} else if (id === Data.BattleSystems.idExpStatistic) {
 				// Experience
 				this[statistic.abbreviation] = this.expList[level];
 				this[statistic.getMaxAbbreviation()] = this.expList[level + 1];
@@ -412,7 +412,7 @@ class Player {
 			for (j = 0; j < l; j++) {
 				statisticProgression = nonFixStatistics[j];
 				this.initStatValue(
-					Datas.BattleSystems.getStatistic(statisticProgression.id),
+					Data.BattleSystems.getStatistic(statisticProgression.id),
 					statisticProgression.getValueAtLevel(level, this)
 				);
 			}
@@ -430,8 +430,8 @@ class Player {
 		item?: Model.CommonSkillItem,
 		equipmentID?: number
 	): [number[], number[], Record<string, any>] {
-		const statistics = Datas.BattleSystems.statisticsOrder;
-		let l = Datas.BattleSystems.maxStatisticID;
+		const statistics = Data.BattleSystems.statisticsOrder;
+		let l = Data.BattleSystems.maxStatisticID;
 		const list = new Array(l + 1);
 		const bonus = new Array(l + 1);
 		const added = new Array(l + 1);
@@ -482,7 +482,7 @@ class Player {
 		let id: number;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			id = statistics[i];
-			statistic = Datas.BattleSystems.getStatistic(id);
+			statistic = Data.BattleSystems.getStatistic(id);
 			if (list[id] === null) {
 				list[id] = this[statistic.getAbbreviationNext()];
 			}
@@ -506,7 +506,7 @@ class Player {
 					bonus[statisticProgression.id] +
 					added[statisticProgression.id];
 				previewPlayer.initStatValue(
-					Datas.BattleSystems.getStatistic(statisticProgression.id),
+					Data.BattleSystems.getStatistic(statisticProgression.id),
 					list[statisticProgression.id]
 				);
 			}
@@ -536,7 +536,7 @@ class Player {
 						const result = characteristic.getNewStatValue(this);
 						if (result !== null) {
 							if (list[result[0]] === null) {
-								statistic = Datas.BattleSystems.getStatistic(result[0]);
+								statistic = Data.BattleSystems.getStatistic(result[0]);
 								base = this[statistic.getAbbreviationNext()] - this[statistic.getBonusAbbreviation()];
 								list[result[0]] = characteristic.operation ? 0 : base;
 								bonus[result[0]] = characteristic.operation ? -base : 0;
@@ -567,11 +567,11 @@ class Player {
 			bonus = result[1];
 			res = result[2];
 		}
-		const statistics = Datas.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsOrder;
 		let statistic: Model.Statistic, value: number;
 		for (let i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
-			statistic = Datas.BattleSystems.getStatistic(id);
+			statistic = Data.BattleSystems.getStatistic(id);
 			value = list[id];
 			if (statistic.isFix) {
 				this[statistic.abbreviation] = value;
@@ -620,18 +620,18 @@ class Player {
 	updateAllStatsValues() {
 		// Fix values : equipment influence etc
 		const level = this.getCurrentLevel();
-		const statistics = Datas.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsOrder;
 		const statisticsProgression = this.system.getStatisticsProgression(this.changedClass);
 		const nonFixStatistics = [];
 		let i: number, l: number;
 		for (i = 0, l = statistics.length; i < l; i++) {
-			this[Datas.BattleSystems.getStatistic(statistics[i]).getBeforeAbbreviation()] = undefined;
+			this[Data.BattleSystems.getStatistic(statistics[i]).getBeforeAbbreviation()] = undefined;
 		}
 		let j: number, m: number, statistic: Model.Statistic, statisticProgression: Model.StatisticProgression;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
-			statistic = Datas.BattleSystems.getStatistic(id);
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
+			statistic = Data.BattleSystems.getStatistic(id);
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				for (j = 0, m = statisticsProgression.length; j < m; j++) {
 					statisticProgression = statisticsProgression[j];
 					if (statisticProgression.id === id) {
@@ -650,7 +650,7 @@ class Player {
 		for (i = 0, l = nonFixStatistics.length; i < l; i++) {
 			for (j = 0; j < l; j++) {
 				statisticProgression = nonFixStatistics[j];
-				statistic = Datas.BattleSystems.getStatistic(statisticProgression.id);
+				statistic = Data.BattleSystems.getStatistic(statisticProgression.id);
 				this.updateStatValue(statistic, statisticProgression.getValueAtLevel(level, this));
 			}
 		}
@@ -677,9 +677,9 @@ class Player {
 		// Stats
 		const jsonStats = json.stats;
 		let i: number, l: number, statistic: Model.Statistic, value: number[];
-		for (i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			const id = Datas.BattleSystems.statisticsOrder[i];
-			statistic = Datas.BattleSystems.getStatistic(id);
+		for (i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			const id = Data.BattleSystems.statisticsOrder[i];
+			statistic = Data.BattleSystems.getStatistic(id);
 			value = jsonStats[id];
 			if (value) {
 				this[statistic.abbreviation] = value[0];
@@ -694,7 +694,7 @@ class Player {
 		}
 
 		// Equip
-		l = Datas.BattleSystems.maxEquipmentID;
+		l = Data.BattleSystems.maxEquipmentID;
 		this.equip = new Array(l + 1);
 		let equip: number[], item: Item;
 		for (i = 1; i <= l; i++) {
@@ -711,7 +711,7 @@ class Player {
 		}
 
 		// Exp list
-		this.changedClass = json.class ? Datas.Classes.get(json.class) : undefined;
+		this.changedClass = json.class ? Data.Classes.get(json.class) : undefined;
 		this.expList = this.system.createExpList(this.changedClass);
 		for (const i in json.exp) {
 			this.expList[i] = json.exp[i];
@@ -731,7 +731,7 @@ class Player {
 	 *  @returns {number}
 	 */
 	getCurrentLevel(): number {
-		return this[Datas.BattleSystems.getLevelStatistic().abbreviation];
+		return this[Data.BattleSystems.getLevelStatistic().abbreviation];
 	}
 
 	/**
@@ -739,7 +739,7 @@ class Player {
 	 */
 	levelUp() {
 		// Change lvl stat
-		this[Datas.BattleSystems.getLevelStatistic().abbreviation]++;
+		this[Data.BattleSystems.getLevelStatistic().abbreviation]++;
 
 		// Update statistics
 		this.updateAllStatsValues();
@@ -753,7 +753,7 @@ class Player {
 	 */
 	learnSkills() {
 		const newSkills = this.system.getLearnedSkills(
-			this[Datas.BattleSystems.getLevelStatistic().abbreviation],
+			this[Data.BattleSystems.getLevelStatistic().abbreviation],
 			this.changedClass
 		);
 
@@ -795,8 +795,8 @@ class Player {
 	 */
 	updateRemainingXP(fullTime: number) {
 		if (this.getCurrentLevel() < this.expList.length - 1) {
-			const current = this[Datas.BattleSystems.getExpStatistic().abbreviation];
-			const max = this[Datas.BattleSystems.getExpStatistic().getMaxAbbreviation()];
+			const current = this[Data.BattleSystems.getExpStatistic().abbreviation];
+			const max = this[Data.BattleSystems.getExpStatistic().getMaxAbbreviation()];
 			const xpForLvl = max - current;
 			const dif = this.totalRemainingXP - xpForLvl;
 			this.remainingXP = dif > 0 ? xpForLvl : this.totalRemainingXP;
@@ -815,7 +815,7 @@ class Player {
 	 *  Update obtained experience.
 	 */
 	updateObtainedExperience() {
-		const xpAbbreviation = Datas.BattleSystems.getExpStatistic().abbreviation;
+		const xpAbbreviation = Data.BattleSystems.getExpStatistic().abbreviation;
 		const tick = new Date().getTime() - this.timeXP;
 		if (tick >= this.totalTimeXP) {
 			this[xpAbbreviation] = this[xpAbbreviation] + this.remainingXP - this.obtainedXP;
@@ -834,8 +834,8 @@ class Player {
 	 *  @returns {boolean}
 	 */
 	updateExperience(): boolean {
-		const xpAbbreviation = Datas.BattleSystems.getExpStatistic().abbreviation;
-		const maxXPAbbreviation = Datas.BattleSystems.getExpStatistic().getMaxAbbreviation();
+		const xpAbbreviation = Data.BattleSystems.getExpStatistic().abbreviation;
+		const maxXPAbbreviation = Data.BattleSystems.getExpStatistic().getMaxAbbreviation();
 		const maxXP = this[maxXPAbbreviation];
 		this.updateObtainedExperience();
 		this.testedLevelUp = true;
@@ -895,7 +895,7 @@ class Player {
 	 *  Synchronize experience if level was manually updated with a command.
 	 */
 	synchronizeExperience() {
-		const statistic = Datas.BattleSystems.getExpStatistic();
+		const statistic = Data.BattleSystems.getExpStatistic();
 		const level = this.getCurrentLevel();
 		this[statistic.abbreviation] = this.expList[level];
 		this[statistic.getMaxAbbreviation()] = this.expList[level + 1];
@@ -905,7 +905,7 @@ class Player {
 	 *  Synchronize level if experience was manually updated with a command.
 	 */
 	synchronizeLevel() {
-		const expStatistic = Datas.BattleSystems.getExpStatistic();
+		const expStatistic = Data.BattleSystems.getExpStatistic();
 		const exp = this[expStatistic.abbreviation];
 		let finalLevel = this.expList.length - 1;
 		for (; finalLevel >= 1; finalLevel--) {
@@ -1242,8 +1242,8 @@ class Player {
 			) {
 				const type =
 					weaponArmor.kind === ITEM_KIND.WEAPON
-						? Datas.BattleSystems.getWeaponKind(weaponArmor.system.type)
-						: Datas.BattleSystems.getArmorKind(weaponArmor.system.type);
+						? Data.BattleSystems.getWeaponKind(weaponArmor.system.type)
+						: Data.BattleSystems.getArmorKind(weaponArmor.system.type);
 				if (type.equipments[characteristic.changeEquipmentID.getValue() as number]) {
 					return false;
 				}

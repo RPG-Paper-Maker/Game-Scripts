@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas } from '..';
+import { Data } from '..';
 import { ScreenResolution } from '../Common';
 import { Stack } from '../Manager';
 
@@ -104,10 +104,10 @@ class Bitmap {
 	 *  Set the position to the right.
 	 */
 	setRight(faceset: boolean = false, offset: number = 0) {
-		this.oX = ScreenResolution.SCREEN_X - offset - (faceset ? Datas.Systems.facesetScalingWidth : this.oW);
+		this.oX = ScreenResolution.SCREEN_X - offset - (faceset ? Data.Systems.facesetScalingWidth : this.oW);
 		this.x =
 			ScreenResolution.getScreenX(ScreenResolution.SCREEN_X - offset) -
-			ScreenResolution.getScreenMinXY(faceset ? Datas.Systems.facesetScalingWidth : this.oW);
+			ScreenResolution.getScreenMinXY(faceset ? Data.Systems.facesetScalingWidth : this.oW);
 		Stack.requestPaintHUD = true;
 	}
 
@@ -115,7 +115,7 @@ class Bitmap {
 	 *  Set the position to the bot.
 	 */
 	setBot(faceset: boolean = false, offset: number = 0) {
-		this.setY(ScreenResolution.SCREEN_Y - (faceset ? Datas.Systems.facesetScalingHeight : this.oH) - offset);
+		this.setY(ScreenResolution.SCREEN_Y - (faceset ? Data.Systems.facesetScalingHeight : this.oH) - offset);
 	}
 
 	/**

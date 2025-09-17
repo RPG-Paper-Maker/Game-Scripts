@@ -21,7 +21,7 @@ import {
 	SHAPE_KIND,
 	Utils,
 } from '../Common';
-import { Datas, EventCommand, Manager, Model, Scene } from '../index';
+import { Data, EventCommand, Manager, Model, Scene } from '../index';
 import { DynamicValue, StateInstance } from '../Model';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
@@ -206,17 +206,17 @@ class MapObject {
 			);
 		}
 		const globalPortion = position.getGlobalPortion();
-		const mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, globalPortion);
+		const mapsData = Game.current.getPortionData(Scene.Map.current.id, globalPortion);
 		if (object !== null) {
 			return {
 				object: object,
 				id: objectID,
-				datas: mapsDatas,
+				datas: mapsData,
 			};
 		}
 
 		// First search in the moved objects
-		const movedObjects = mapsDatas.m;
+		const movedObjects = mapsData.m;
 		let moved = null;
 		let i: number, l: number;
 		for (i = 0, l = movedObjects.length; i < l; i++) {
@@ -232,7 +232,7 @@ class MapObject {
 				kind: 0,
 				index: i,
 				list: null,
-				datas: mapsDatas,
+				datas: mapsData,
 			};
 		}
 
@@ -251,14 +251,14 @@ class MapObject {
 				}
 			}
 			if (moved === null) {
-				if (Scene.Map.current.id === Datas.Systems.ID_MAP_START_HERO && Game.current.hero.id === objectID) {
+				if (Scene.Map.current.id === Data.Systems.ID_MAP_START_HERO && Game.current.hero.id === objectID) {
 					return {
 						object: Game.current.hero,
 						id: objectID,
 						kind: 1,
 						index: -1,
 						list: null,
-						datas: mapsDatas,
+						datas: mapsData,
 					};
 				} else {
 					return null;
@@ -270,7 +270,7 @@ class MapObject {
 					kind: 1,
 					index: i,
 					list: objects,
-					datas: mapsDatas,
+					datas: mapsData,
 				};
 			}
 		} else {
@@ -297,21 +297,21 @@ class MapObject {
 			);
 		}
 		const globalPortion = position.getGlobalPortion();
-		const mapsDatas = Game.current.getPortionDatas(Scene.Map.current.id, globalPortion);
+		const mapsData = Game.current.getPortionData(Scene.Map.current.id, globalPortion);
 		const json = await Platform.parseFileJSON(
 			Paths.FILE_MAPS + Scene.Map.current.mapFilename + '/' + globalPortion.getFileName()
 		);
 		const mapPortion = new MapPortion(globalPortion);
 		const moved = mapPortion.getObjFromID(json, objectID);
 		if (moved === null) {
-			if (Scene.Map.current.id === Datas.Systems.ID_MAP_START_HERO && Game.current.hero.id === objectID) {
+			if (Scene.Map.current.id === Data.Systems.ID_MAP_START_HERO && Game.current.hero.id === objectID) {
 				return {
 					object: Game.current.hero,
 					id: objectID,
 					kind: 2,
 					index: -1,
 					list: null,
-					datas: mapsDatas,
+					datas: mapsData,
 				};
 			} else {
 				return null;
@@ -323,7 +323,7 @@ class MapObject {
 				kind: 2,
 				index: -1,
 				list: null,
-				datas: mapsDatas,
+				datas: mapsData,
 			};
 		}
 	}
@@ -361,17 +361,17 @@ class MapObject {
 				);
 			}
 			const portion = obj.getGlobalPortion();
-			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
 			let indexProp = -1;
-			if (portionDatas.pi) {
-				indexProp = portionDatas.pi.indexOf(this.system.id);
+			if (portionData.pi) {
+				indexProp = portionData.pi.indexOf(this.system.id);
 			}
-			mapProp = indexProp === -1 ? [] : portionDatas.p[indexProp];
+			mapProp = indexProp === -1 ? [] : portionData.p[indexProp];
 			indexProp = -1;
-			if (portionDatas.soi) {
-				indexProp = portionDatas.soi.indexOf(this.system.id);
+			if (portionData.soi) {
+				indexProp = portionData.soi.indexOf(this.system.id);
 			}
-			mapStatesOpts = indexProp === -1 ? [] : portionDatas.so[indexProp];
+			mapStatesOpts = indexProp === -1 ? [] : portionData.so[indexProp];
 		}
 
 		// Properties
@@ -493,15 +493,15 @@ class MapObject {
 				);
 			}
 			const portion = pos.getGlobalPortion();
-			const portionDatas = Game.current.getPortionDatas(Scene.Map.current.id, portion);
+			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
 			let indexState = -1;
-			if (portionDatas.si) {
-				indexState = portionDatas.si.indexOf(this.system.id);
+			if (portionData.si) {
+				indexState = portionData.si.indexOf(this.system.id);
 			}
 			this.states =
 				indexState === -1
 					? [this.system.states.length > 0 ? this.system.states[0].id : 1]
-					: portionDatas.s[indexState];
+					: portionData.s[indexState];
 		}
 		const previousStateInstance = this.currentStateInstance;
 		this.currentState = null;
@@ -532,11 +532,11 @@ class MapObject {
 			return;
 		}
 		let material = null;
-		let objectDatas: Model.Object3D;
+		let objectData: Model.Object3D;
 		if (this.currentStateInstance !== null) {
 			if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
-				objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
-				material = await Datas.SpecialElements.loadObject3DTexture(objectDatas.id);
+				objectData = Data.SpecialElements.objects[this.currentStateInstance.graphicID];
+				material = await Data.SpecialElements.loadObject3DTexture(objectData.id);
 			} else {
 				material =
 					this.currentStateInstance.graphicID === 0
@@ -559,11 +559,11 @@ class MapObject {
 		this.currentAngle.set(0, 0, 0);
 		this.currentScale.set(1, 1, 1);
 		if (this.currentState !== null && !this.isNone() && texture) {
-			this.speed = Datas.Systems.getSpeed(this.currentStateInstance.speedID);
-			this.frequency = Datas.Systems.getFrequency(this.currentStateInstance.frequencyID);
+			this.speed = Data.Systems.getSpeed(this.currentStateInstance.speedID);
+			this.frequency = Data.Systems.getFrequency(this.currentStateInstance.frequencyID);
 			this.frame.value =
-				this.currentStateInstance.indexX >= Datas.Systems.FRAMES
-					? Datas.Systems.FRAMES - 1
+				this.currentStateInstance.indexX >= Data.Systems.FRAMES
+					? Data.Systems.FRAMES - 1
 					: this.currentStateInstance.indexX;
 			this.orientationEye = this.currentStateInstance.setWithCamera
 				? this.currentStateInstance.indexY
@@ -584,15 +584,15 @@ class MapObject {
 				positionTranformation.y = 0;
 				positionTranformation.yPixels = 0;
 				positionTranformation.z = -1 / 2;
-				const objectDatas = Datas.SpecialElements.objects[this.currentStateInstance.graphicID];
+				const objectData = Data.SpecialElements.objects[this.currentStateInstance.graphicID];
 				let object3D: Object3DBox;
-				switch (objectDatas.shapeKind) {
+				switch (objectData.shapeKind) {
 					case SHAPE_KIND.BOX:
-						object3D = Object3DBox.create(objectDatas);
+						object3D = Object3DBox.create(objectData);
 						result = object3D.createGeometry(positionTranformation);
 						break;
 					case SHAPE_KIND.CUSTOM:
-						object3D = Object3DCustom.create(objectDatas);
+						object3D = Object3DCustom.create(objectData);
 						result = object3D.createGeometry(positionTranformation);
 						break;
 				}
@@ -614,15 +614,15 @@ class MapObject {
 				} else {
 					x = 0;
 					y = 0;
-					this.width = texture.image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.FRAMES;
+					this.width = texture.image.width / Data.Systems.SQUARE_SIZE / Data.Systems.FRAMES;
 					this.height =
 						texture.image.height /
-						Datas.Systems.SQUARE_SIZE /
-						Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID).getRows();
+						Data.Systems.SQUARE_SIZE /
+						Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID).getRows();
 					this.currentOrientationStop =
 						this.currentStateInstance.indexY >= 4 && this.currentStateInstance.indexY <= 7;
 					this.currentOrientationClimbing = this.currentStateInstance.indexY >= 8;
-					this.isOrientationStopWalk = !Datas.Pictures.get(
+					this.isOrientationStopWalk = !Data.Pictures.get(
 						PICTURE_KIND.CHARACTERS,
 						this.currentStateInstance.graphicID
 					).isStopAnimation;
@@ -639,9 +639,9 @@ class MapObject {
 					positionTranformation
 				);
 				this.currentCenterOffset.set(
-					positionTranformation.getPixelsCenterX() - Datas.Systems.SQUARE_SIZE / 2,
+					positionTranformation.getPixelsCenterX() - Data.Systems.SQUARE_SIZE / 2,
 					0,
-					positionTranformation.getPixelsCenterZ() - Datas.Systems.SQUARE_SIZE / 2
+					positionTranformation.getPixelsCenterZ() - Data.Systems.SQUARE_SIZE / 2
 				);
 			}
 			const geometry = result[0];
@@ -692,11 +692,11 @@ class MapObject {
 			this.speed =
 				this.currentState === null
 					? Model.DynamicValue.createNumberDouble(1)
-					: Datas.Systems.getSpeed(this.currentStateInstance.speedID);
+					: Data.Systems.getSpeed(this.currentStateInstance.speedID);
 			this.frequency =
 				this.currentState === null
 					? Model.DynamicValue.createNumberDouble(0)
-					: Datas.Systems.getFrequency(this.currentStateInstance.frequencyID);
+					: Data.Systems.getFrequency(this.currentStateInstance.frequencyID);
 			this.width = 0;
 			this.height = 0;
 		}
@@ -718,8 +718,8 @@ class MapObject {
 		let position = new THREE.Vector3(this.previousPosition.x, this.previousPosition.y, this.previousPosition.z);
 
 		// The speed depends on the time elapsed since the last update
-		const w = Scene.Map.current.mapProperties.length * Datas.Systems.SQUARE_SIZE;
-		const h = Scene.Map.current.mapProperties.width * Datas.Systems.SQUARE_SIZE;
+		const w = Scene.Map.current.mapProperties.length * Data.Systems.SQUARE_SIZE;
+		const h = Scene.Map.current.mapProperties.width * Data.Systems.SQUARE_SIZE;
 		let xPlus: number, zPlus: number, res: number;
 		if (orientation === ORIENTATION.SOUTH || this.previousOrientation === ORIENTATION.SOUTH) {
 			xPlus = distance * Mathf.cos((angle * Math.PI) / 180.0);
@@ -867,11 +867,11 @@ class MapObject {
 		if (l === 0) {
 			Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions.BB_BOX_DEFAULT_DETECTION, [
 				this.position.x,
-				this.position.y + Datas.Systems.SQUARE_SIZE / 2,
+				this.position.y + Data.Systems.SQUARE_SIZE / 2,
 				this.position.z,
-				Datas.Systems.SQUARE_SIZE,
-				Datas.Systems.SQUARE_SIZE,
-				Datas.Systems.SQUARE_SIZE,
+				Data.Systems.SQUARE_SIZE,
+				Data.Systems.SQUARE_SIZE,
+				Data.Systems.SQUARE_SIZE,
 				0,
 				0,
 				0,
@@ -933,7 +933,7 @@ class MapObject {
 								this.currentAngle.z,
 							],
 							true,
-							[0, this.boundingBoxSettings.b[i][1] / 2 / Datas.Systems.SQUARE_SIZE, 0]
+							[0, this.boundingBoxSettings.b[i][1] / 2 / Data.Systems.SQUARE_SIZE, 0]
 						);
 					} else {
 						box = Manager.Collisions.createOrientedBox();
@@ -1038,7 +1038,7 @@ class MapObject {
 			(this.speed.getValue() as number) *
 			MapObject.SPEED_NORMAL *
 			Manager.Stack.averageElapsedTime *
-			Datas.Systems.SQUARE_SIZE;
+			Data.Systems.SQUARE_SIZE;
 		if (this.previousOrientation !== null && this.previousOrientation !== this.orientation) {
 			// If already climbing, ignore
 			if (this.isClimbing && this.previousOrientation % 2 !== this.orientation % 2) {
@@ -1208,7 +1208,7 @@ class MapObject {
 	removeMoveTemp() {
 		if (!this.isHero) {
 			const previousPortion = Position.createFromVector3(this.position).getGlobalPortion();
-			let objects = Game.current.getPortionDatas(Scene.Map.current.id, previousPortion);
+			let objects = Game.current.getPortionData(Scene.Map.current.id, previousPortion);
 
 			// Remove from the moved objects in or out of the portion
 			let movedObjects = objects.mout;
@@ -1228,7 +1228,7 @@ class MapObject {
 			}
 			// Add to moved objects of the original portion if not done yet
 			const originalPortion = Scene.Map.current.mapProperties.allObjects.get(this.system.id).getGlobalPortion();
-			objects = Game.current.getPortionDatas(Scene.Map.current.id, originalPortion);
+			objects = Game.current.getPortionData(Scene.Map.current.id, originalPortion);
 			movedObjects = objects.m;
 			if (movedObjects && movedObjects.indexOf(this) === -1) {
 				movedObjects.push(this);
@@ -1249,7 +1249,7 @@ class MapObject {
 	addMoveTemp() {
 		if (!this.isHero) {
 			const afterPortion = Position.createFromVector3(this.position).getGlobalPortion();
-			const objects = Game.current.getPortionDatas(Scene.Map.current.id, afterPortion);
+			const objects = Game.current.getPortionData(Scene.Map.current.id, afterPortion);
 			const originalPortion = Scene.Map.current.mapProperties.allObjects.get(this.system.id).getGlobalPortion();
 			if (!originalPortion.equals(afterPortion)) {
 				objects.mout.push(this);
@@ -1280,7 +1280,7 @@ class MapObject {
 	 *  Add bounding boxes mesh to scene
 	 */
 	addBBToScene() {
-		if (Datas.Systems.showBB) {
+		if (Data.Systems.showBB) {
 			for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
 				Scene.Map.current.scene.add(this.meshBoundingBox[i]);
 			}
@@ -1302,7 +1302,7 @@ class MapObject {
 	 *  Remove bounding boxes mesh from scene
 	 */
 	removeBBFromScene() {
-		if (Datas.Systems.showBB) {
+		if (Data.Systems.showBB) {
 			for (let i = 0, l = this.meshBoundingBox.length; i < l; i++) {
 				Scene.Map.current.scene.remove(this.meshBoundingBox[i]);
 			}
@@ -1388,7 +1388,7 @@ class MapObject {
 				// If moving, update frame
 				if (this.currentStateInstance.moveAnimation) {
 					frame = this.frame.update(
-						(Datas.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
+						(Data.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
 					);
 				}
 
@@ -1398,7 +1398,7 @@ class MapObject {
 			} else {
 				if (this.currentStateInstance.stopAnimation && !this.isClimbing) {
 					frame = this.frame.update(
-						(Datas.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
+						(Data.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
 					);
 				} else {
 					frame = this.frame.value !== this.currentStateInstance.indexX;
@@ -1439,12 +1439,12 @@ class MapObject {
 			this.previousPosition = this.position;
 			this.upPosition = new THREE.Vector3(
 				this.position.x,
-				this.position.y + this.height * Datas.Systems.SQUARE_SIZE,
+				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
 				this.position.z
 			);
 			this.halfPosition = new THREE.Vector3(
 				this.position.x,
-				this.position.y + (this.height * Datas.Systems.SQUARE_SIZE) / 2,
+				this.position.y + (this.height * Data.Systems.SQUARE_SIZE) / 2,
 				this.position.z
 			);
 		}
@@ -1531,16 +1531,16 @@ class MapObject {
 				const textureHeight = texture.image.height;
 				let w: number, h: number, x: number, y: number;
 				if (this.currentStateInstance.graphicID === 0) {
-					w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
-					h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
-					x = (this.currentStateInstance.rectTileset.x * Datas.Systems.SQUARE_SIZE) / textureWidth;
-					y = (this.currentStateInstance.rectTileset.y * Datas.Systems.SQUARE_SIZE) / textureHeight;
+					w = (this.width * Data.Systems.SQUARE_SIZE) / textureWidth;
+					h = (this.height * Data.Systems.SQUARE_SIZE) / textureHeight;
+					x = (this.currentStateInstance.rectTileset.x * Data.Systems.SQUARE_SIZE) / textureWidth;
+					y = (this.currentStateInstance.rectTileset.y * Data.Systems.SQUARE_SIZE) / textureHeight;
 				} else {
-					w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
-					h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
-					x = (this.frame.value >= Datas.Systems.FRAMES ? Datas.Systems.FRAMES - 1 : this.frame.value) * w;
+					w = (this.width * Data.Systems.SQUARE_SIZE) / textureWidth;
+					h = (this.height * Data.Systems.SQUARE_SIZE) / textureHeight;
+					x = (this.frame.value >= Data.Systems.FRAMES ? Data.Systems.FRAMES - 1 : this.frame.value) * w;
 					y = this.isClimbing ? this.climbOrientation : this.orientation;
-					const p = Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
+					const p = Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
 					if (
 						this.currentOrientationClimbing ||
 						(this.currentStateInstance.climbAnimation && this.isClimbing)
@@ -1600,7 +1600,7 @@ class MapObject {
 	 *  @returns {number}
 	 */
 	getStateIndex(): number {
-		return this.frame.value + this.orientation * Datas.Systems.FRAMES;
+		return this.frame.value + this.orientation * Data.Systems.FRAMES;
 	}
 
 	/**

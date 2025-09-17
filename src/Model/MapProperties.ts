@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Constants, MAP_TRANSITION_KIND, Mathf, PICTURE_KIND, SONG_KIND, Utils } from '../Common';
 import { Game, MapObject, Position } from '../Core';
-import { Datas, Manager, Scene } from '../index';
+import { Data, Manager, Scene } from '../index';
 import { CameraProperties } from './CameraProperties';
 import { Color } from './Color';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
@@ -107,7 +107,7 @@ export class MapProperties extends Localization {
 	 * Update the background color.
 	 */
 	updateBackgroundColor(): void {
-		this.backgroundColor = Datas.Systems.getColor(
+		this.backgroundColor = Data.Systems.getColor(
 			this.isBackgroundColor ? (this.backgroundColorID.getValue() as number) : 1
 		);
 	}
@@ -117,7 +117,7 @@ export class MapProperties extends Localization {
 	 */
 	updateBackgroundImage(): void {
 		const texture = Manager.GL.textureLoader.load(
-			Datas.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath()
+			Data.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath()
 		);
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
@@ -128,11 +128,11 @@ export class MapProperties extends Localization {
 	 * Update the background skybox.
 	 */
 	updateBackgroundSkybox(): void {
-		const size = (10000 * Datas.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
+		const size = (10000 * Data.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
 		this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		this.skyboxMesh = new THREE.Mesh(
 			this.skyboxGeometry,
-			Datas.Systems.getSkybox(this.backgroundSkyboxID.getValue() as number).createTextures()
+			Data.Systems.getSkybox(this.backgroundSkyboxID.getValue() as number).createTextures()
 		);
 		Scene.Map.current.scene.add(this.skyboxMesh);
 	}
@@ -181,7 +181,7 @@ export class MapProperties extends Localization {
 		}
 		if (chosen) {
 			this.updateMaxNumberSteps();
-			const battleMap = Datas.BattleSystems.getBattleMap(this.randomBattleMapID.getValue() as number);
+			const battleMap = Data.BattleSystems.getBattleMap(this.randomBattleMapID.getValue() as number);
 			Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
 			Manager.Stack.push(
 				new Scene.Battle(
@@ -222,13 +222,13 @@ export class MapProperties extends Localization {
 
 		// Tileset & stored map data
 		const datas = Game.current.mapsProperties[this.id] ?? {};
-		this.tileset = Datas.Tilesets.get(Utils.valueOrDefault(datas.tileset, json.tileset));
+		this.tileset = Data.Tilesets.get(Utils.valueOrDefault(datas.tileset, json.tileset));
 		this.music = new PlaySong(SONG_KIND.MUSIC, Utils.valueOrDefault(datas.music, json.music));
 		this.backgroundSound = new PlaySong(
 			SONG_KIND.BACKGROUND_SOUND,
 			Utils.valueOrDefault(datas.backgroundSound, json.bgs)
 		);
-		this.cameraProperties = Datas.Systems.getCameraProperties(
+		this.cameraProperties = Data.Systems.getCameraProperties(
 			Utils.valueOrDefault(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue() as number)
 		);
 

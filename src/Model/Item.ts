@@ -11,7 +11,7 @@
 
 import { ITEM_KIND } from '../Common';
 import { Battler } from '../Core';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { CommonSkillItem } from './CommonSkillItem';
 
 /**
@@ -24,7 +24,7 @@ export class Item extends CommonSkillItem {
 	 * @returns {string} The localized item type name.
 	 */
 	getStringType(): string {
-		return Datas.Systems.getItemType(this.type).name();
+		return Data.Systems.getItemType(this.type).name();
 	}
 
 	/**

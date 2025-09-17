@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, SONG_KIND } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { SongJSON } from '../Model';
 
 /** @class
@@ -93,7 +93,7 @@ class Songs {
 	static get(kind: SONG_KIND, id: number): Model.Song {
 		return kind === SONG_KIND.NONE || id === -1
 			? new Model.Song()
-			: Datas.Base.get(id, this.list[kind], 'song ' + Model.Song.songKindToString(kind));
+			: Data.Base.get(id, this.list[kind], 'song ' + Model.Song.songKindToString(kind));
 	}
 }
 

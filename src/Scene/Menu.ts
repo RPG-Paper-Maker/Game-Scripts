@@ -11,7 +11,7 @@
 
 import { ALIGN, ScreenResolution } from '../Common';
 import { ChoicesOptions, Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Model, Scene } from '../index';
+import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { MenuBase } from './MenuBase';
 
 interface StructPositionChoice {
@@ -37,7 +37,7 @@ class Menu extends MenuBase {
 		// Initializing order index
 		this.selectedOrder = -1;
 		// Play a sound when opening the menu
-		Datas.Systems.soundCursor.playSound();
+		Data.Systems.soundCursor.playSound();
 	}
 
 	/**
@@ -70,8 +70,8 @@ class Menu extends MenuBase {
 		const graphics: Graphic.Text[] = [];
 		const actions: Function[] = [];
 		let command: Model.MainMenuCommand;
-		for (let i = 0, l = Datas.Systems.mainMenuCommands.length; i < l; i++) {
-			command = Datas.Systems.mainMenuCommands[i];
+		for (let i = 0, l = Data.Systems.mainMenuCommands.length; i < l; i++) {
+			command = Data.Systems.mainMenuCommands[i];
 			graphics[i] = new Graphic.Text(command.name(), { align: ALIGN.CENTER });
 			actions[i] = command.getCallback(this);
 		}
@@ -153,7 +153,7 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	onQuitMenu() {
-		Datas.Systems.soundCancel.playSound();
+		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
 	}
 
@@ -163,7 +163,7 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	onTeamUnselect() {
-		Datas.Systems.soundCancel.playSound();
+		Data.Systems.soundCancel.playSound();
 		this.windowChoicesTeam.unselect();
 	}
 
@@ -187,7 +187,7 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	onTeamSelect() {
-		Datas.Systems.soundConfirmation.playSound();
+		Data.Systems.soundConfirmation.playSound();
 		const winTeam = this.windowChoicesTeam;
 		const currentSelectedHero = winTeam.currentSelectedIndex;
 

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, Scene } from '..';
+import { Data, Manager, Scene } from '..';
 import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Base } from './Base';
@@ -58,32 +58,32 @@ class GameOver extends Base {
 		Manager.Songs.stopAll();
 
 		// Creating background
-		if (Datas.TitlescreenGameover.isGameOverBackgroundImage) {
+		if (Data.TitlescreenGameover.isGameOverBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
-				Datas.TitlescreenGameover.gameOverBackgroundImageID,
+				Data.TitlescreenGameover.gameOverBackgroundImageID,
 				PICTURE_KIND.GAME_OVER,
 				{ cover: true }
 			);
 		} else {
-			await Manager.Videos.play(Datas.Videos.get(Datas.TitlescreenGameover.gameOverBackgroundVideoID).getPath());
+			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.gameOverBackgroundVideoID).getPath());
 		}
 
 		// Windows
-		const commandsNb = Datas.TitlescreenGameover.gameOverCommands.length;
+		const commandsNb = Data.TitlescreenGameover.gameOverCommands.length;
 		this.windowChoicesCommands = new WindowChoices(
 			ScreenResolution.SCREEN_X / 2 - WindowBox.MEDIUM_SLOT_WIDTH / 2,
 			ScreenResolution.SCREEN_Y - Constants.HUGE_SPACE - commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT,
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
-			Datas.TitlescreenGameover.getGameOverCommandsNames(),
+			Data.TitlescreenGameover.getGameOverCommandsNames(),
 			{
 				nbItemsMax: commandsNb,
-				listCallbacks: Datas.TitlescreenGameover.getGameOverCommandsActions(),
+				listCallbacks: Data.TitlescreenGameover.getGameOverCommandsActions(),
 			}
 		);
 
 		// Play game over song
-		Datas.TitlescreenGameover.gameOverMusic.playMusic();
+		Data.TitlescreenGameover.gameOverMusic.playMusic();
 
 		this.loading = false;
 	}
@@ -101,7 +101,7 @@ class GameOver extends Base {
 		Game.current.hero.initializeProperties();
 
 		// Stop video if existing
-		if (!Datas.TitlescreenGameover.isGameOverBackgroundImage) {
+		if (!Data.TitlescreenGameover.isGameOverBackgroundImage) {
 			Manager.Videos.stop();
 		}
 
@@ -153,7 +153,7 @@ class GameOver extends Base {
 	 *  @inheritdoc
 	 */
 	drawHUD() {
-		if (Datas.TitlescreenGameover.isGameOverBackgroundImage) {
+		if (Data.TitlescreenGameover.isGameOverBackgroundImage) {
 			this.pictureBackground.draw();
 		}
 		this.windowChoicesCommands.draw();

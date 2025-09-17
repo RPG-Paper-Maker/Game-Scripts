@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { ELEMENT_MAP_KIND, Mathf, Utils } from '../Common';
-import { Core, Datas, Scene } from '../index';
+import { Core, Data, Scene } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { CustomGeometryFace } from './CustomGeometryFace';
 import { MapElement, StructMapElementCollision } from './MapElement';
@@ -171,9 +171,9 @@ class Sprite extends MapElement {
 		if (this.kind !== ELEMENT_MAP_KIND.SPRITES_FACE && !this.front) {
 			zPlus *= -1;
 		}
-		pos.setX(this.xOffset * Datas.Systems.SQUARE_SIZE);
-		pos.setY(this.yOffset * Datas.Systems.SQUARE_SIZE);
-		pos.setZ(this.zOffset * Datas.Systems.SQUARE_SIZE + zPlus);
+		pos.setX(this.xOffset * Data.Systems.SQUARE_SIZE);
+		pos.setY(this.yOffset * Data.Systems.SQUARE_SIZE);
+		pos.setZ(this.zOffset * Data.Systems.SQUARE_SIZE + zPlus);
 		vecA.multiply(size);
 		vecB.multiply(size);
 		vecC.multiply(size);
@@ -211,8 +211,8 @@ class Sprite extends MapElement {
 		const center = new THREE.Vector3();
 		const pos = new THREE.Vector3();
 		const size = new THREE.Vector3(
-			this.textureRect.width * Datas.Systems.SQUARE_SIZE * position.scaleX,
-			this.textureRect.height * Datas.Systems.SQUARE_SIZE * position.scaleY,
+			this.textureRect.width * Data.Systems.SQUARE_SIZE * position.scaleX,
+			this.textureRect.height * Data.Systems.SQUARE_SIZE * position.scaleY,
 			1.0
 		);
 
@@ -230,10 +230,10 @@ class Sprite extends MapElement {
 		}
 
 		// Getting UV coordinates
-		let x = (this.textureRect.x * Datas.Systems.SQUARE_SIZE) / width;
-		let y = (this.textureRect.y * Datas.Systems.SQUARE_SIZE) / height;
-		let w = (this.textureRect.width * Datas.Systems.SQUARE_SIZE) / width;
-		let h = (this.textureRect.height * Datas.Systems.SQUARE_SIZE) / height;
+		let x = (this.textureRect.x * Data.Systems.SQUARE_SIZE) / width;
+		let y = (this.textureRect.y * Data.Systems.SQUARE_SIZE) / height;
+		let w = (this.textureRect.width * Data.Systems.SQUARE_SIZE) / width;
+		let h = (this.textureRect.height * Data.Systems.SQUARE_SIZE) / height;
 		const coefX = MapElement.COEF_TEX / width;
 		const coefY = MapElement.COEF_TEX / height;
 		x += coefX;
@@ -258,13 +258,13 @@ class Sprite extends MapElement {
 					l: localPosition,
 					b: [
 						localPosition.x -
-							twidth * Datas.Systems.SQUARE_SIZE -
+							twidth * Data.Systems.SQUARE_SIZE -
 							((this.textureRect.width * position.scaleX) % 2) *
-								Math.round(Datas.Systems.SQUARE_SIZE / 2) +
+								Math.round(Data.Systems.SQUARE_SIZE / 2) +
 							rect.x +
 							Math.round((rect.width * position.scaleX) / 2),
 						localPosition.y +
-							this.textureRect.height * position.scaleY * Datas.Systems.SQUARE_SIZE -
+							this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
 							rect.y -
 							Math.round((rect.height * position.scaleY) / 2),
 						localPosition.z,
@@ -288,19 +288,19 @@ class Sprite extends MapElement {
 					l: localPosition,
 					b: [
 						localPosition.x -
-							twidth * Datas.Systems.SQUARE_SIZE -
+							twidth * Data.Systems.SQUARE_SIZE -
 							((this.textureRect.width * position.scaleX) % 2) *
-								Math.round(Datas.Systems.SQUARE_SIZE / 2) +
-							(x + this.xOffset) * Datas.Systems.SQUARE_SIZE * position.scaleX +
-							Math.round((Datas.Systems.SQUARE_SIZE * position.scaleX * position.scaleX) / 2),
+								Math.round(Data.Systems.SQUARE_SIZE / 2) +
+							(x + this.xOffset) * Data.Systems.SQUARE_SIZE * position.scaleX +
+							Math.round((Data.Systems.SQUARE_SIZE * position.scaleX * position.scaleX) / 2),
 						localPosition.y +
-							this.yOffset * Datas.Systems.SQUARE_SIZE +
-							this.textureRect.height * position.scaleY * Datas.Systems.SQUARE_SIZE -
-							y * Datas.Systems.SQUARE_SIZE * position.scaleY -
-							Math.round((Datas.Systems.SQUARE_SIZE * position.scaleY * position.scaleY) / 2),
+							this.yOffset * Data.Systems.SQUARE_SIZE +
+							this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
+							y * Data.Systems.SQUARE_SIZE * position.scaleY -
+							Math.round((Data.Systems.SQUARE_SIZE * position.scaleY * position.scaleY) / 2),
 						localPosition.z,
-						Datas.Systems.SQUARE_SIZE * position.scaleX,
-						Datas.Systems.SQUARE_SIZE * position.scaleY,
+						Data.Systems.SQUARE_SIZE * position.scaleX,
+						Data.Systems.SQUARE_SIZE * position.scaleY,
 						1,
 						position.angleY,
 						position.angleX,
@@ -325,8 +325,8 @@ class Sprite extends MapElement {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE, pos.z);
-			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Datas.Systems.SQUARE_SIZE, center.z);
+			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Data.Systems.SQUARE_SIZE, pos.z);
+			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Data.Systems.SQUARE_SIZE, center.z);
 			geometry.pushQuadVerticesFace(
 				Sprite.MODEL[0].clone().multiply(size).add(p),
 				Sprite.MODEL[1].clone().multiply(size).add(p),
@@ -339,8 +339,8 @@ class Sprite extends MapElement {
 			count = count + 4;
 		} else {
 			// Simple sprite
-			center.setX(center.x + this.xOffset * Datas.Systems.SQUARE_SIZE);
-			center.setZ(center.z + this.zOffset * Datas.Systems.SQUARE_SIZE);
+			center.setX(center.x + this.xOffset * Data.Systems.SQUARE_SIZE);
+			center.setZ(center.z + this.zOffset * Data.Systems.SQUARE_SIZE);
 			const vecSimpleA = vecA.clone();
 			const vecSimpleB = vecB.clone();
 			const vecSimpleC = vecC.clone();

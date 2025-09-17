@@ -10,7 +10,7 @@
 */
 
 import { PICTURE_KIND } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { Land } from './Land';
 import { StructMapElementCollision } from './MapElement';
@@ -67,20 +67,20 @@ class Autotile extends Land {
 		pictureID: number,
 		count: number
 	): StructMapElementCollision {
-		const autotile = Datas.SpecialElements.getAutotile(this.autotileID);
-		const picture = autotile ? Datas.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID) : null;
+		const autotile = Data.SpecialElements.getAutotile(this.autotileID);
+		const picture = autotile ? Data.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID) : null;
 		return super.updateGeometryLand(
 			geometry,
 			picture ? picture.getCollisionAtIndex(Land.prototype.getIndex.call(this, picture.width)) : null,
 			position,
 			width,
 			height,
-			((this.tileID % 64) * Datas.Systems.SQUARE_SIZE) / width,
+			((this.tileID % 64) * Data.Systems.SQUARE_SIZE) / width,
 			((Math.floor(this.tileID / 64) + 10 * texture.getOffset(pictureID, this.texture)) *
-				Datas.Systems.SQUARE_SIZE) /
+				Data.Systems.SQUARE_SIZE) /
 				height,
-			Datas.Systems.SQUARE_SIZE / width,
-			Datas.Systems.SQUARE_SIZE / height,
+			Data.Systems.SQUARE_SIZE / width,
+			Data.Systems.SQUARE_SIZE / height,
 			count
 		);
 	}

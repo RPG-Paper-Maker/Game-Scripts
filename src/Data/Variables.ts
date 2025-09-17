@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 
 /** @class
  *  All the variables datas.
@@ -49,7 +49,7 @@ class Variables {
 	 *  @returns {string}
 	 */
 	static get(id: number): string {
-		return Datas.Base.get(id, this.variablesNames, 'variable name');
+		return Data.Base.get(id, this.variablesNames, 'variable name');
 	}
 }
 

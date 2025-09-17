@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager } from '..';
+import { Data, Graphic, Manager } from '..';
 import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Base } from './Base';
@@ -60,7 +60,7 @@ class ChangeLanguage extends Base {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.LARGE_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.language.name(), { align: ALIGN.CENTER });
+		const graphic = new Graphic.Text(Data.Languages.extras.language.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 		};
@@ -77,7 +77,7 @@ class ChangeLanguage extends Base {
 			ScreenResolution.SCREEN_X - 2 * Constants.HUGE_SPACE - WindowBox.MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE,
 			WindowBox.LARGE_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.languageSelectedDescription.name(), {
+		const graphic = new Graphic.Text(Data.Languages.extras.languageSelectedDescription.name(), {
 			align: ALIGN.CENTER,
 		});
 		const options = {
@@ -98,18 +98,18 @@ class ChangeLanguage extends Base {
 		);
 		const options = {
 			nbItemsMax: 9,
-			listCallbacks: Datas.Languages.getCommandsCallbacks(),
+			listCallbacks: Data.Languages.getCommandsCallbacks(),
 		};
 		this.windowChoicesMain = new WindowChoices(
 			rect.x,
 			rect.y,
 			rect.width,
 			rect.height,
-			Datas.Languages.getCommandsGraphics(),
+			Data.Languages.getCommandsGraphics(),
 			options
 		);
 		this.windowChoicesMain.unselect();
-		this.windowChoicesMain.select(Datas.Languages.getIndexByID(Datas.Settings.currentLanguage));
+		this.windowChoicesMain.select(Data.Languages.getIndexByID(Data.Settings.currentLanguage));
 	}
 
 	/**
@@ -124,7 +124,7 @@ class ChangeLanguage extends Base {
 			width,
 			height
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.confirm.name(), { align: ALIGN.CENTER });
+		const graphic = new Graphic.Text(Data.Languages.extras.confirm.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 		};
@@ -145,8 +145,8 @@ class ChangeLanguage extends Base {
 			listCallbacks: [
 				() => {
 					// YES
-					Datas.Settings.updateCurrentLanguage(
-						Datas.Languages.listOrder[this.windowChoicesMain.currentSelectedIndex]
+					Data.Settings.updateCurrentLanguage(
+						Data.Languages.listOrder[this.windowChoicesMain.currentSelectedIndex]
 					);
 					Manager.Stack.translateAll();
 					this.step = 0;
@@ -162,8 +162,8 @@ class ChangeLanguage extends Base {
 			],
 		};
 		const graphics = [
-			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
-			new Graphic.Text(Datas.Languages.extras.no.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.no.name(), { align: ALIGN.CENTER }),
 		];
 		this.windowChoicesConfirm = new WindowChoices(rect.x, rect.y, rect.width, rect.height, graphics, options);
 	}
@@ -180,14 +180,14 @@ class ChangeLanguage extends Base {
 	 *  Create background stuff.
 	 */
 	async createBackground() {
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
-				Datas.TitlescreenGameover.titleBackgroundImageID,
+				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
 		} else {
-			await Manager.Videos.play(Datas.Videos.get(Datas.TitlescreenGameover.titleBackgroundVideoID).getPath());
+			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath());
 		}
 	}
 
@@ -204,7 +204,7 @@ class ChangeLanguage extends Base {
 	 *  Cancel the scene.
 	 */
 	cancel() {
-		Datas.Systems.soundCancel.playSound();
+		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
 	}
 
@@ -230,9 +230,9 @@ class ChangeLanguage extends Base {
 		switch (this.step) {
 			case 0:
 				this.windowChoicesMain.onKeyPressed(key, this);
-				if (Datas.Keyboards.checkActionMenu(key)) {
+				if (Data.Keyboards.checkActionMenu(key)) {
 					this.action();
-				} else if (Datas.Keyboards.checkCancelMenu(key)) {
+				} else if (Data.Keyboards.checkCancelMenu(key)) {
 					this.cancel();
 				}
 				break;
@@ -300,7 +300,7 @@ class ChangeLanguage extends Base {
 	 *  Draw the HUD scene
 	 */
 	drawHUD() {
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground.draw();
 		}
 		this.windowBoxLanguage.draw();

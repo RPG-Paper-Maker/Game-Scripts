@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Paths, PICTURE_KIND, Platform } from '../Common';
-import { Datas, Manager, Model } from '../index';
+import { Data, Manager, Model } from '../index';
 
 /** @class
  *  All the tilesets datas.
@@ -43,8 +43,8 @@ class Tilesets {
 			tileset = new Model.Tileset(jsonTileset);
 			this.list[jsonTileset.id] = tileset;
 		}
-		await this.loadPictures(PICTURE_KIND.CHARACTERS, Datas.Tilesets.PROPERTY_TEXTURES_CHARACTERS);
-		await this.loadPictures(PICTURE_KIND.BATTLERS, Datas.Tilesets.PROPERTY_TEXTURES_BATTLERS);
+		await this.loadPictures(PICTURE_KIND.CHARACTERS, Data.Tilesets.PROPERTY_TEXTURES_CHARACTERS);
+		await this.loadPictures(PICTURE_KIND.BATTLERS, Data.Tilesets.PROPERTY_TEXTURES_BATTLERS);
 	}
 
 	/**
@@ -54,7 +54,7 @@ class Tilesets {
 	 *  @returns {System.Tileset}
 	 */
 	static get(id: number): Model.Tileset {
-		return Datas.Base.get(id, this.list, 'tileset');
+		return Data.Base.get(id, this.list, 'tileset');
 	}
 
 	/**
@@ -63,7 +63,7 @@ class Tilesets {
 	 *  @param {string} texturesName - The field name textures
 	 */
 	static async loadPictures(pictureKind: PICTURE_KIND, texturesName: string) {
-		const pictures = Datas.Pictures.getListByKind(pictureKind);
+		const pictures = Data.Pictures.getListByKind(pictureKind);
 		const l = pictures.length;
 		const textures = new Array(l);
 		textures[0] = Manager.GL.loadTextureEmpty();

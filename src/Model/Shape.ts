@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, Paths, Platform, Utils } from '../Common';
 import { CustomGeometry } from '../Core';
-import { Datas, Manager } from '../index';
+import { Data, Manager } from '../index';
 import { Base } from './Base';
 
 /**
@@ -78,7 +78,7 @@ export class Shape extends Base {
 	 */
 	static getFolder(kind: CUSTOM_SHAPE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Datas.Systems.PATH_BR : dlc ? `${Datas.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
+			(isBR ? Data.Systems.PATH_BR : dlc ? `${Data.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
 			this.getLocalFolder(kind)
 		);
 	}
@@ -122,9 +122,9 @@ export class Shape extends Base {
 			if ((result = vertexPattern.exec(line))) {
 				// ["v 1.0 2.0 3.0", "1.0", "2.0", "3.0"]
 				const temp3D = new THREE.Vector3(
-					parseFloat(result[1]) * Datas.Systems.SQUARE_SIZE,
-					parseFloat(result[2]) * Datas.Systems.SQUARE_SIZE,
-					parseFloat(result[3]) * Datas.Systems.SQUARE_SIZE
+					parseFloat(result[1]) * Data.Systems.SQUARE_SIZE,
+					parseFloat(result[2]) * Data.Systems.SQUARE_SIZE,
+					parseFloat(result[3]) * Data.Systems.SQUARE_SIZE
 				);
 				v.push(temp3D);
 
@@ -191,7 +191,7 @@ export class Shape extends Base {
 					() => {},
 					() => {
 						const error = `Could not load ${url}`;
-						if (Datas.Systems.ignoreAssetsLoadingErrors) {
+						if (Data.Systems.ignoreAssetsLoadingErrors) {
 							console.warn(error);
 							resolve({
 								vertices: [],

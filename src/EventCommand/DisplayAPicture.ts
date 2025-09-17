@@ -11,7 +11,7 @@
 
 import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
-import { Datas, Manager, Model } from '../index';
+import { Data, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -66,7 +66,7 @@ class DisplayAPicture extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const currentIndex = this.index.getValue() as number;
-		const picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
+		const picture = Data.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
 		picture.setX(this.originX + (this.x.getValue() as number));
 		picture.setY(this.originY + (this.y.getValue() as number));
 		picture.centered = this.centered;

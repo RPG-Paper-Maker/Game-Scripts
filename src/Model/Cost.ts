@@ -13,7 +13,7 @@ import { DAMAGES_KIND, Interpreter, Utils } from '../Common';
 import { MapObjectCommandType } from '../Common/Types';
 import { Game, Player } from '../Core';
 import { StructIterator } from '../EventCommand';
-import { Datas, Scene } from '../index';
+import { Data, Scene } from '../index';
 import { Base } from './Base';
 import { CommonSkillItem } from './CommonSkillItem';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
@@ -105,7 +105,7 @@ export class Cost extends Base {
 		const value = this.getValue(user, target);
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
-				user[Datas.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation] -= value;
+				user[Data.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation] -= value;
 				break;
 			case DAMAGES_KIND.CURRENCY:
 				Game.current.currencies[this.currencyID.getValue() as number] -= value;
@@ -128,7 +128,7 @@ export class Cost extends Base {
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
 				currentValue =
-					user[Datas.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation];
+					user[Data.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation];
 				break;
 			case DAMAGES_KIND.CURRENCY:
 				currentValue = Game.current.getCurrency(this.currencyID.getValue() as number);
@@ -150,13 +150,13 @@ export class Cost extends Base {
 		let result = `${this.getValue(user, target)} `;
 		switch (this.kind) {
 			case DAMAGES_KIND.STAT:
-				result += Datas.BattleSystems.getStatistic(this.statisticID.getValue() as number).name();
+				result += Data.BattleSystems.getStatistic(this.statisticID.getValue() as number).name();
 				break;
 			case DAMAGES_KIND.CURRENCY:
-				result += Datas.Systems.getCurrency(this.currencyID.getValue() as number).name();
+				result += Data.Systems.getCurrency(this.currencyID.getValue() as number).name();
 				break;
 			case DAMAGES_KIND.VARIABLE:
-				result += Datas.Variables.get(this.variableID);
+				result += Data.Variables.get(this.variableID);
 				break;
 		}
 		return result;

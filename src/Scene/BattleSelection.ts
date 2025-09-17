@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Model, Scene } from '..';
+import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	AVAILABLE_KIND,
 	BATTLE_STEP,
@@ -68,7 +68,7 @@ class BattleSelection {
 		}
 
 		this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.NONE;
-		(<Graphic.Text>this.battle.windowTopInformations.content).setText(Datas.Languages.extras.selectAnAlly.name());
+		(<Graphic.Text>this.battle.windowTopInformations.content).setText(Data.Languages.extras.selectAnAlly.name());
 		this.battle.selectedUserIndex = this.selectFirstIndex(CHARACTER_KIND.HERO, 0);
 		this.battle.kindSelection = CHARACTER_KIND.HERO;
 		this.battle.userTarget = false;
@@ -172,7 +172,7 @@ class BattleSelection {
 				index = 0;
 			}
 		}
-		Datas.Systems.soundCursor.playSound();
+		Data.Systems.soundCursor.playSound();
 		return index;
 	}
 
@@ -246,7 +246,7 @@ class BattleSelection {
 		let ownedSkill: Skill, skill: Model.Skill;
 		for (let i = 0, l = skills.length; i < l; i++) {
 			ownedSkill = skills[i];
-			skill = Datas.Skills.get(ownedSkill.id);
+			skill = Data.Skills.get(ownedSkill.id);
 			if (
 				(skill.availableKind === AVAILABLE_KIND.ALWAYS || skill.availableKind === AVAILABLE_KIND.BATTLE) &&
 				Interpreter.evaluate(skill.conditionFormula.getValue() as string, { user: this.battle.user.player }) &&
@@ -452,7 +452,7 @@ class BattleSelection {
 		switch (this.battle.subStep) {
 			case 0:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					this.onAllySelected();
 				}
 				break;
@@ -460,16 +460,16 @@ class BattleSelection {
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 					this.onCommandSelected(isKey, options);
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					this.onAllyUnselected();
 				}
 				break;
 			case 2:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					this.onTargetsSelected();
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					this.onTargetsUnselected();
 				}
 				break;
@@ -489,22 +489,22 @@ class BattleSelection {
 				if (!this.battle.userTarget) {
 					if (isKey) {
 						if (
-							Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Up) ||
-							Datas.Keyboards.isKeyEqual(
+							Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Up) ||
+							Data.Keyboards.isKeyEqual(
 								options.key,
 								this.battle.subStep === 0
-									? Datas.Keyboards.menuControls.Left
-									: Datas.Keyboards.menuControls.Right
+									? Data.Keyboards.menuControls.Left
+									: Data.Keyboards.menuControls.Right
 							)
 						) {
 							index = this.indexArrowUp();
 						} else if (
-							Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Down) ||
-							Datas.Keyboards.isKeyEqual(
+							Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Down) ||
+							Data.Keyboards.isKeyEqual(
 								options.key,
 								this.battle.subStep === 0
-									? Datas.Keyboards.menuControls.Right
-									: Datas.Keyboards.menuControls.Left
+									? Data.Keyboards.menuControls.Right
+									: Data.Keyboards.menuControls.Left
 							)
 						) {
 							index = this.indexArrowDown();
@@ -525,12 +525,12 @@ class BattleSelection {
 				}
 				if (this.battle.subStep === 0) {
 					if (this.battle.selectedUserIndex !== index) {
-						Datas.Systems.soundCursor.playSound();
+						Data.Systems.soundCursor.playSound();
 					}
 					this.battle.selectedUserIndex = index;
 				} else {
 					if (this.battle.selectedTargetIndex !== index) {
-						Datas.Systems.soundCursor.playSound();
+						Data.Systems.soundCursor.playSound();
 					}
 					this.battle.selectedTargetIndex = index;
 				}

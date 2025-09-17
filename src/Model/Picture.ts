@@ -11,7 +11,7 @@
 
 import { Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { CollisionSquare, CollisionSquareJSON, Picture2D, Rectangle } from '../Core';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 
 export type PictureJSON = {
@@ -96,7 +96,7 @@ class Picture extends Base {
 	/** Get the folder path for a picture kind. */
 	static getFolder(kind: PICTURE_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Datas.Systems.PATH_BR : dlc ? Datas.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
+			(isBR ? Data.Systems.PATH_BR : dlc ? Data.Systems.PATH_DLCS + '/' + dlc : Platform.ROOT_DIRECTORY) +
 			this.getLocalFolder(kind)
 		);
 	}
@@ -170,8 +170,8 @@ class Picture extends Base {
 
 	/** Read collisions from image. */
 	readCollisionsImage(image: HTMLImageElement): void {
-		this.width = Math.floor(image.width / Datas.Systems.SQUARE_SIZE);
-		this.height = Math.floor(image.height / Datas.Systems.SQUARE_SIZE);
+		this.width = Math.floor(image.width / Data.Systems.SQUARE_SIZE);
+		this.height = Math.floor(image.height / Data.Systems.SQUARE_SIZE);
 		this.readCollisions();
 	}
 
@@ -180,7 +180,7 @@ class Picture extends Base {
 		if (!this.jsonCollisions) {
 			return;
 		}
-		const w = this.width / Datas.Systems.FRAMES;
+		const w = this.width / Data.Systems.FRAMES;
 		const h = this.height / this.getRows();
 		this.collisions = Array(this.width * this.height).fill(null);
 		for (const jsonTab of this.jsonCollisions) {
@@ -190,7 +190,7 @@ class Picture extends Base {
 			collision.read(jsonTab.v);
 			this.collisions[index] = collision;
 			if (this.collisionsRepeat) {
-				for (let j = 0; j < Datas.Systems.FRAMES; j++) {
+				for (let j = 0; j < Data.Systems.FRAMES; j++) {
 					for (let k = 0; k < 4; k++) {
 						this.collisions[x + j * w + (y + k * h) * this.width] = collision;
 					}
@@ -248,7 +248,7 @@ class Picture extends Base {
 					}
 					squares[i] = square.rect;
 				} else {
-					squares[i] = new Rectangle(0, 0, Datas.Systems.SQUARE_SIZE, Datas.Systems.SQUARE_SIZE);
+					squares[i] = new Rectangle(0, 0, Data.Systems.SQUARE_SIZE, Data.Systems.SQUARE_SIZE);
 				}
 			} else {
 				const square = this.getCollisionAtPos(x, y);
@@ -285,12 +285,12 @@ class Picture extends Base {
 	 * @returns Array of collision rectangles per state (frames × 4 directions).
 	 */
 	getSquaresForStates(image: HTMLImageElement): Rectangle[][] {
-		const w = Math.floor(image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.FRAMES);
-		const h = Math.floor(image.height / Datas.Systems.SQUARE_SIZE / this.getRows());
-		const states = new Array<(Rectangle | null)[]>(Datas.Systems.FRAMES * 4);
-		for (let i = 0; i < Datas.Systems.FRAMES; i++) {
+		const w = Math.floor(image.width / Data.Systems.SQUARE_SIZE / Data.Systems.FRAMES);
+		const h = Math.floor(image.height / Data.Systems.SQUARE_SIZE / this.getRows());
+		const states = new Array<(Rectangle | null)[]>(Data.Systems.FRAMES * 4);
+		for (let i = 0; i < Data.Systems.FRAMES; i++) {
 			for (let j = 0; j < 4; j++) {
-				states[i + j * Datas.Systems.FRAMES] = this.getSquaresForTexture(new Rectangle(i * w, j * h, w, h));
+				states[i + j * Data.Systems.FRAMES] = this.getSquaresForTexture(new Rectangle(i * w, j * h, w, h));
 			}
 		}
 		return states;

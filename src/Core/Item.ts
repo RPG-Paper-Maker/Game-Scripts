@@ -10,7 +10,7 @@
 */
 
 import { DAMAGES_KIND, ITEM_KIND } from '../Common';
-import { Datas, Model, Scene } from '../index';
+import { Data, Model, Scene } from '../index';
 import { Game } from './Game';
 import { Player } from './Player';
 
@@ -30,13 +30,13 @@ class Item {
 		this.kind = kind;
 		switch (this.kind) {
 			case ITEM_KIND.ITEM:
-				this.system = Datas.Items.get(id);
+				this.system = Data.Items.get(id);
 				break;
 			case ITEM_KIND.WEAPON:
-				this.system = Datas.Weapons.get(id);
+				this.system = Data.Weapons.get(id);
 				break;
 			case ITEM_KIND.ARMOR:
-				this.system = Datas.Armors.get(id);
+				this.system = Data.Armors.get(id);
 				break;
 		}
 		this.nb = nb;
@@ -219,7 +219,7 @@ class Item {
 					}
 					break;
 				case DAMAGES_KIND.STAT:
-					user[Datas.BattleSystems.getStatistic(id).abbreviation] -= totalValue;
+					user[Data.BattleSystems.getStatistic(id).abbreviation] -= totalValue;
 					break;
 				case DAMAGES_KIND.VARIABLE:
 					Game.current.variables[id] -= totalValue;
@@ -256,7 +256,7 @@ class Item {
 
 		// Update currency
 		for (const [id, [kind, value]] of price.entries()) {
-			const p = Math.round((value * (Datas.Systems.priceSoldItem.getValue() as number)) / 100) * times;
+			const p = Math.round((value * (Data.Systems.priceSoldItem.getValue() as number)) / 100) * times;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
 					Game.current.currencies[id] += p;
@@ -267,7 +267,7 @@ class Item {
 					}
 					break;
 				case DAMAGES_KIND.STAT:
-					user[Datas.BattleSystems.getStatistic(id).abbreviation] += p;
+					user[Data.BattleSystems.getStatistic(id).abbreviation] += p;
 					break;
 				case DAMAGES_KIND.VARIABLE:
 					Game.current.variables[id] += p;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Scene } from '../index';
+import { Data, Scene } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { Land } from './Land';
 import { StructMapElementCollision } from './MapElement';
@@ -64,10 +64,10 @@ class Floor extends Land {
 					position,
 					width,
 					height,
-					(this.texture.x * Datas.Systems.SQUARE_SIZE) / width,
-					(this.texture.y * Datas.Systems.SQUARE_SIZE) / height,
-					(this.texture.width * Datas.Systems.SQUARE_SIZE) / width,
-					(this.texture.height * Datas.Systems.SQUARE_SIZE) / height,
+					(this.texture.x * Data.Systems.SQUARE_SIZE) / width,
+					(this.texture.y * Data.Systems.SQUARE_SIZE) / height,
+					(this.texture.width * Data.Systems.SQUARE_SIZE) / width,
+					(this.texture.height * Data.Systems.SQUARE_SIZE) / height,
 					count
 			  );
 	}

@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, Mathf, OBJECT_COLLISION_KIND } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
 import { Object3D } from './Object3D';
@@ -64,7 +64,7 @@ class Object3DCustom extends Object3D {
 	 *  @returns {Vector3}
 	 */
 	getCenterVector(): THREE.Vector3 {
-		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry.center.clone();
+		return Data.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry.center.clone();
 	}
 
 	/**
@@ -77,7 +77,7 @@ class Object3DCustom extends Object3D {
 	 */
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]] {
 		const localPosition = position.toVector3();
-		const modelGeometry = Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry;
+		const modelGeometry = Data.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry;
 		const vertices = modelGeometry.vertices;
 		const uvs = modelGeometry.uvs;
 		const scale = this.datas.scale;
@@ -128,21 +128,18 @@ class Object3DCustom extends Object3D {
 					position.angleZ,
 				],
 				c: center,
-				w: Math.ceil(w / 2 / Datas.Systems.SQUARE_SIZE),
-				h: Math.ceil(h / 2 / Datas.Systems.SQUARE_SIZE),
+				w: Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE),
+				h: Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE),
 				cr: [-minPos.x - w / 2, -minPos.y - h / 2, -minPos.z - d / 2],
-				d: Math.ceil(d / 2 / Datas.Systems.SQUARE_SIZE),
+				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				m: Math.max(
-					Math.max(
-						Math.ceil(w / 2 / Datas.Systems.SQUARE_SIZE),
-						Math.ceil(h / 2 / Datas.Systems.SQUARE_SIZE)
-					),
-					Math.ceil(d / 2 / Datas.Systems.SQUARE_SIZE)
+					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),
+					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE)
 				),
 				k: true,
 			});
 		} else if (this.datas.collisionKind === OBJECT_COLLISION_KIND.CUSTOM) {
-			const obj = Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.datas.collisionCustomID).geometry;
+			const obj = Data.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.datas.collisionCustomID).geometry;
 			const w = obj.w * scale * position.scaleX;
 			const h = obj.h * scale * position.scaleY;
 			const d = obj.d * scale * position.scaleZ;
@@ -164,17 +161,14 @@ class Object3DCustom extends Object3D {
 					position.angleZ,
 				],
 				c: center,
-				w: Math.ceil(w / 2 / Datas.Systems.SQUARE_SIZE),
-				h: Math.ceil(h / 2 / Datas.Systems.SQUARE_SIZE),
+				w: Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE),
+				h: Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE),
 				rw: w,
 				rh: h,
-				d: Math.ceil(d / 2 / Datas.Systems.SQUARE_SIZE),
+				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				m: Math.max(
-					Math.max(
-						Math.ceil(w / 2 / Datas.Systems.SQUARE_SIZE),
-						Math.ceil(h / 2 / Datas.Systems.SQUARE_SIZE)
-					),
-					Math.ceil(d / 2 / Datas.Systems.SQUARE_SIZE)
+					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),
+					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE)
 				),
 				k: true,
 			});

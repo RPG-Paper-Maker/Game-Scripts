@@ -36,7 +36,7 @@ import {
 	ReactionInterpreter,
 	Rectangle,
 } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -118,7 +118,7 @@ class Map extends Base {
 
 		// Adding meshes for collision
 		this.collisions = [];
-		if (Datas.Systems.showBB) {
+		if (Data.Systems.showBB) {
 			this.scene.add(Manager.Collisions.BB_BOX);
 			this.scene.add(Manager.Collisions.BB_ORIENTED_BOX);
 			this.scene.add(Manager.Collisions.BB_BOX_DEFAULT_DETECTION);
@@ -142,7 +142,7 @@ class Map extends Base {
 	 *  Reload only the textures + collisions
 	 */
 	async reloadTextures() {
-		const limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Data.Systems.PORTIONS_RAY;
 		let i: number, j: number, k: number;
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
@@ -231,18 +231,18 @@ class Map extends Base {
 		if (this.mapProperties.isSunLight) {
 			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
-			this.sunLight.position.multiplyScalar(Datas.Systems.SQUARE_SIZE * 10);
+			this.sunLight.position.multiplyScalar(Data.Systems.SQUARE_SIZE * 10);
 			this.sunLight.target.position.set(0, 0, 0);
 			this.scene.add(this.sunLight);
 			this.sunLight.castShadow = true;
 			this.sunLight.shadow.mapSize.width = 2048;
 			this.sunLight.shadow.mapSize.height = 2048;
-			const d = Datas.Systems.SQUARE_SIZE * 10;
+			const d = Data.Systems.SQUARE_SIZE * 10;
 			this.sunLight.shadow.camera.left = -d;
 			this.sunLight.shadow.camera.right = d;
 			this.sunLight.shadow.camera.top = d;
 			this.sunLight.shadow.camera.bottom = -d;
-			this.sunLight.shadow.camera.far = Datas.Systems.SQUARE_SIZE * 350;
+			this.sunLight.shadow.camera.far = Data.Systems.SQUARE_SIZE * 350;
 			this.sunLight.shadow.bias = -0.0003;
 		}
 	}
@@ -269,7 +269,7 @@ class Map extends Base {
 	 *  Initialize all the objects moved or / and with changed states.
 	 */
 	initializePortionsObjects() {
-		const mapsDatas = Game.current.mapsDatas[this.id];
+		const mapsData = Game.current.mapsData[this.id];
 		let datas = null;
 		const l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
 		const w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
@@ -287,8 +287,8 @@ class Map extends Base {
 				objectsPortions[i][jp][jabs] = new Array(w);
 				for (k = 0; k < w; k++) {
 					datas =
-						mapsDatas && mapsDatas[i] && mapsDatas[i][jp] && mapsDatas[i][jp][jabs]
-							? mapsDatas[i][jp][jabs][k]
+						mapsData && mapsData[i] && mapsData[i][jp] && mapsData[i][jp][jabs]
+							? mapsData[i][jp][jabs][k]
 							: null;
 					objectsPortions[i][jp][jabs][k] = {
 						min: datas && datas.min ? datas.min : [],
@@ -318,7 +318,7 @@ class Map extends Base {
 				}
 			}
 		}
-		Game.current.mapsDatas[this.id] = objectsPortions;
+		Game.current.mapsData[this.id] = objectsPortions;
 		this.portionsObjectsUpdated = true;
 	}
 
@@ -330,16 +330,16 @@ class Map extends Base {
 		const path = tileset.getPath();
 		this.textureTileset = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
 		const t: THREE.Texture = this.textureTileset.map;
-		if (t.image.width % Datas.Systems.SQUARE_SIZE !== 0 || t.image.height % Datas.Systems.SQUARE_SIZE !== 0) {
+		if (t.image.width % Data.Systems.SQUARE_SIZE !== 0 || t.image.height % Data.Systems.SQUARE_SIZE !== 0) {
 			Platform.showErrorMessage(
 				'Tileset in ' +
 					path +
 					' is not in a size multiple of ' +
-					Datas.Systems.SQUARE_SIZE +
+					Data.Systems.SQUARE_SIZE +
 					'. Please edit this picture size.'
 			);
 		}
-		this.texturesCharacters = Datas.Tilesets.texturesCharacters;
+		this.texturesCharacters = Data.Tilesets.texturesCharacters;
 	}
 
 	/**
@@ -353,7 +353,7 @@ class Map extends Base {
 		}
 
 		// Characters
-		const pictures = Datas.Pictures.getListByKind(PICTURE_KIND.CHARACTERS);
+		const pictures = Data.Pictures.getListByKind(PICTURE_KIND.CHARACTERS);
 		const l = pictures.length;
 		this.collisions[PICTURE_KIND.CHARACTERS] = new Array(l);
 		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: Model.Picture;
@@ -427,7 +427,7 @@ class Map extends Base {
 		const offsetX = this.currentPortion.x - this.previousPortion.x;
 		const offsetY = this.currentPortion.y - this.previousPortion.y;
 		const offsetZ = this.currentPortion.z - this.previousPortion.z;
-		const limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Data.Systems.PORTIONS_RAY;
 		let i: number, j: number, k: number;
 		if (!update) {
 			for (i = -limit; i <= limit; i++) {
@@ -606,7 +606,7 @@ class Map extends Base {
 	 *  @returns {Record<string, any>}
 	 */
 	getObjectsAtPortion(portion: Portion): Record<string, any> {
-		return Game.current.getPortionDatas(this.id, portion);
+		return Game.current.getPortionData(this.id, portion);
 	}
 
 	/**
@@ -656,7 +656,7 @@ class Map extends Base {
 	 */
 	getPortionIndex(x: number, y: number, z: number): number {
 		const size = this.getMapPortionSize();
-		const limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Data.Systems.PORTIONS_RAY;
 		return (x + limit) * size * size + (y + limit) * size + (z + limit);
 	}
 
@@ -687,7 +687,7 @@ class Map extends Base {
 	 *  @returns {number}
 	 */
 	getMapPortionSize(): number {
-		return Datas.Systems.PORTIONS_RAY * 2 + 1;
+		return Data.Systems.PORTIONS_RAY * 2 + 1;
 	}
 
 	/**
@@ -696,7 +696,7 @@ class Map extends Base {
 	 */
 	getMapPortionTotalSize(): number {
 		const size = this.getMapPortionSize();
-		const limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Data.Systems.PORTIONS_RAY;
 		return limit * 2 * size * size + limit * 2 * size + limit * 2;
 	}
 
@@ -706,7 +706,7 @@ class Map extends Base {
 	 *  @returns {boolean}
 	 */
 	isInPortion(portion: Portion): boolean {
-		const limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Data.Systems.PORTIONS_RAY;
 		return (
 			portion.x >= -limit &&
 			portion.x <= limit &&
@@ -777,7 +777,7 @@ class Map extends Base {
 				if (pictureID === undefined) {
 					pictureID = special.pictureID;
 				}
-				picture = Datas.Pictures.get(kind, pictureID);
+				picture = Data.Pictures.get(kind, pictureID);
 				if (picture) {
 					picture.readCollisions();
 				}
@@ -789,7 +789,7 @@ class Map extends Base {
 	 *  Update portions according to a callback.
 	 */
 	updatePortions(base: object, callback: Function) {
-		const limit = Datas.Systems.PORTIONS_RAY;
+		const limit = Data.Systems.PORTIONS_RAY;
 		const lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
 		const lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
 		const ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
@@ -817,8 +817,8 @@ class Map extends Base {
 	 */
 	getWeatherPosition(portionsRay: number, offset: boolean = true): number {
 		return (
-			Math.random() * (Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * (portionsRay * 2 + 1)) -
-			Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * (portionsRay + (offset ? 0.5 : 0))
+			Math.random() * (Data.Systems.SQUARE_SIZE * Data.Systems.SQUARE_SIZE * (portionsRay * 2 + 1)) -
+			Data.Systems.SQUARE_SIZE * Data.Systems.SQUARE_SIZE * (portionsRay + (offset ? 0.5 : 0))
 		);
 	}
 
@@ -861,7 +861,7 @@ class Map extends Base {
 			{ addReturn: false }
 		);
 		let initialVelocity = Interpreter.evaluate(options.initialVelocity) as number;
-		initialVelocity *= Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
+		initialVelocity *= Data.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
 		const initialYRotation = Interpreter.evaluate(options.initialYRotation) as number;
 		const portionsRay = options.portionsRay;
 		const particlesNumber = options.finalParticlesNumber;
@@ -877,7 +877,7 @@ class Map extends Base {
 		const geometry = new THREE.BufferGeometry();
 		geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 		const material = new THREE.PointsMaterial({
-			color: options.isColor ? Datas.Systems.getColor(options.colorID).getHex() : 0xffffff,
+			color: options.isColor ? Data.Systems.getColor(options.colorID).getHex() : 0xffffff,
 			size: options.size,
 			transparent: true,
 			depthTest: options.depthTest,
@@ -885,7 +885,7 @@ class Map extends Base {
 		});
 		if (!options.isColor) {
 			const texture = new THREE.TextureLoader().load(
-				Datas.Pictures.get(PICTURE_KIND.PARTICLES, options.imageID).getPath()
+				Data.Pictures.get(PICTURE_KIND.PARTICLES, options.imageID).getPath()
 			);
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.NearestFilter;
@@ -976,7 +976,7 @@ class Map extends Base {
 			return;
 		}
 		let initialVelocity = Interpreter.evaluate(options.initialVelocity) as number;
-		initialVelocity *= Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
+		initialVelocity *= Data.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
 		const initialYRotation = Interpreter.evaluate(options.initialYRotation) as number;
 		const portionsRay = options.portionsRay;
 		const positionAttribute = points.geometry.getAttribute('position');
@@ -989,9 +989,9 @@ class Map extends Base {
 			if (
 				y <
 				(<THREE.PointsMaterial>points.material).size -
-					Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * portionsRay
+					Data.Systems.SQUARE_SIZE * Data.Systems.SQUARE_SIZE * portionsRay
 			) {
-				y += Datas.Systems.SQUARE_SIZE * Datas.Systems.SQUARE_SIZE * (portionsRay + 1);
+				y += Data.Systems.SQUARE_SIZE * Data.Systems.SQUARE_SIZE * (portionsRay + 1);
 				velocities[i] = initialVelocity;
 				rotationsAngle[i] = initialYRotation;
 				rotationsPoints[i] = Scene.Map.current.camera.target.position.clone();
@@ -1011,7 +1011,7 @@ class Map extends Base {
 			positionAttribute.setZ(i, v.z);
 			velocities[i] +=
 				(current ? this.addWeatherVelocity() : this.addPreviousWeatherVelocity()) *
-				(Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+				(Data.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
 			positionAttribute.setY(i, v.y + velocities[i]);
 		}
 		positionAttribute.needsUpdate = true;
@@ -1070,7 +1070,7 @@ class Map extends Base {
 		// Update autotiles animated
 		if (Scene.Map.autotileFrame.update()) {
 			Scene.Map.autotilesOffset.setY(
-				(Scene.Map.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Datas.Systems.SQUARE_SIZE) /
+				(Scene.Map.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Data.Systems.SQUARE_SIZE) /
 					Constants.MAX_PICTURE_SIZE
 			);
 		}
@@ -1096,7 +1096,7 @@ class Map extends Base {
 			Game.current.hero.update(angle);
 		}
 		this.updatePortions(this, function (x: number, y: number, z: number, i: number, j: number, k: number) {
-			const objects = Game.current.getPortionDatas(this.id, new Portion(x, y, z));
+			const objects = Game.current.getPortionData(this.id, new Portion(x, y, z));
 			let movedObjects = objects.min;
 			let p: number, l: number;
 			for (p = 0, l = movedObjects.length; p < l; p++) {
@@ -1122,13 +1122,13 @@ class Map extends Base {
 		super.update();
 
 		// Update camera hiding
-		if (Game.current !== null && (Datas.Systems.moveCameraOnBlockView.getValue() as number)) {
+		if (Game.current !== null && (Data.Systems.moveCameraOnBlockView.getValue() as number)) {
 			this.camera.forceNoHide = false;
 			this.camera.hidingDistance = -1;
 			const pointer = Manager.GL.toScreenPosition(
 				this.camera.target.position
 					.clone()
-					.add(new THREE.Vector3(0, this.camera.target.height * Datas.Systems.SQUARE_SIZE, 0)),
+					.add(new THREE.Vector3(0, this.camera.target.height * Data.Systems.SQUARE_SIZE, 0)),
 				this.camera.getThreeCamera()
 			)
 				.divide(new THREE.Vector2(ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT))
@@ -1141,8 +1141,8 @@ class Map extends Base {
 			}
 			let opacity = 1;
 			if (this.camera.isHiding()) {
-				if (this.camera.hidingDistance < 2 * Datas.Systems.SQUARE_SIZE) {
-					if (this.camera.hidingDistance < Datas.Systems.SQUARE_SIZE) {
+				if (this.camera.hidingDistance < 2 * Data.Systems.SQUARE_SIZE) {
+					if (this.camera.hidingDistance < Data.Systems.SQUARE_SIZE) {
 						opacity = 0;
 					} else {
 						opacity = 0.5;
@@ -1366,7 +1366,7 @@ class Map extends Base {
 		for (i = 0; i < l; i++) {
 			for (j = -d; j < h; j++) {
 				for (k = 0; k < w; k++) {
-					portion = Game.current.getPortionPosDatas(this.id, i, j, k);
+					portion = Game.current.getPortionPosData(this.id, i, j, k);
 					for (x = portion.min.length - 1; x >= 0; x--) {
 						if (!portion.min[x].currentState || !portion.min[x].currentStateInstance.keepPosition) {
 							portion.min.splice(x, 1);

@@ -11,7 +11,7 @@
 
 import { ALIGN_VERTICAL } from '../Common';
 import { Camera, MapObject, Node, ReactionInterpreter } from '../Core';
-import { Datas, Graphic, Manager, Model, Scene } from '../index';
+import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { Main } from '../main';
 
 /**
@@ -69,7 +69,7 @@ abstract class Base {
 			this.load().catch(console.error);
 		}
 		this.create();
-		if (Datas.Systems.showFPS) {
+		if (Data.Systems.showFPS) {
 			this.graphicFPS = new Graphic.Text('', { verticalAlign: ALIGN_VERTICAL.TOP });
 		}
 	}

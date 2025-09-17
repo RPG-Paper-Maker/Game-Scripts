@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager } from '../index';
+import { Data, Graphic, Manager } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -36,9 +36,9 @@ class TitleSettings extends Base {
 	 */
 	async load() {
 		// Creating background
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
-				Datas.TitlescreenGameover.titleBackgroundImageID,
+				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
@@ -69,10 +69,10 @@ class TitleSettings extends Base {
 			Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants.LARGE_SPACE,
 			ScreenResolution.SCREEN_X - 2 * Constants.HUGE_SPACE,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
-			Datas.TitlescreenGameover.getTitleSettingsCommandsContent(),
+			Data.TitlescreenGameover.getTitleSettingsCommandsContent(),
 			{
 				nbItemsMax: 9,
-				listCallbacks: Datas.TitlescreenGameover.getTitleSettingsCommandsActions(),
+				listCallbacks: Data.TitlescreenGameover.getTitleSettingsCommandsActions(),
 				bordersInsideVisible: false,
 			}
 		);
@@ -85,7 +85,7 @@ class TitleSettings extends Base {
 	 *  Cancel the scene.
 	 */
 	cancel() {
-		Datas.Systems.soundCancel.playSound();
+		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
 	}
 
@@ -107,7 +107,7 @@ class TitleSettings extends Base {
 	 */
 	onKeyPressed(key: string) {
 		this.windowChoicesMain.onKeyPressed(key);
-		if (Datas.Keyboards.checkCancelMenu(key)) {
+		if (Data.Keyboards.checkCancelMenu(key)) {
 			this.cancel();
 		}
 	}
@@ -144,7 +144,7 @@ class TitleSettings extends Base {
 	 *  Draw the HUD scene.
 	 */
 	drawHUD() {
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground.draw();
 		}
 		this.windowSettings.draw();

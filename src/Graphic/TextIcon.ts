@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -53,7 +53,7 @@ class TextIcon extends Base {
 		this.side = side;
 		this.align = align;
 		this.space = ScreenResolution.getScreenMinXY(space);
-		this.graphicIcon = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.iconID);
+		this.graphicIcon = Data.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.iconID);
 		this.graphicText = new Graphic.Text('', textOptions);
 		this.setText(text);
 	}
@@ -79,7 +79,7 @@ class TextIcon extends Base {
 	 *  @returns {number}
 	 */
 	getMaxHeight(): number {
-		return Math.max(this.graphicText.fontSize, ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize));
+		return Math.max(this.graphicText.fontSize, ScreenResolution.getScreenMinXY(Data.Systems.iconsSize));
 	}
 
 	/**
@@ -87,7 +87,7 @@ class TextIcon extends Base {
 	 *  @returns {number}
 	 */
 	getWidth(): number {
-		return ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + this.space + this.graphicText.textWidth;
+		return ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) + this.space + this.graphicText.textWidth;
 	}
 
 	/**
@@ -110,8 +110,8 @@ class TextIcon extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		const iconWidth = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
-		const iconHeight = ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
+		const iconWidth = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
+		const iconHeight = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
 
 		// Align offset
 		let offset: number;
@@ -128,18 +128,18 @@ class TextIcon extends Base {
 		}
 
 		// Draw according to side
-		const sx = this.indexX * Datas.Systems.iconsSize;
-		const sy = this.indexY * Datas.Systems.iconsSize;
+		const sx = this.indexX * Data.Systems.iconsSize;
+		const sy = this.indexY * Data.Systems.iconsSize;
 		if (this.side === ALIGN.LEFT) {
 			this.graphicIcon.draw({
 				x: x + offset,
 				y: y - iconHeight / 2 + h / 2,
-				w: Datas.Systems.iconsSize,
-				h: Datas.Systems.iconsSize,
+				w: Data.Systems.iconsSize,
+				h: Data.Systems.iconsSize,
 				sx: sx,
 				sy: sy,
-				sw: Datas.Systems.iconsSize,
-				sh: Datas.Systems.iconsSize,
+				sw: Data.Systems.iconsSize,
+				sh: Data.Systems.iconsSize,
 			});
 			offset += iconWidth + this.space;
 			this.graphicText.draw(x + offset, y, w, h);
@@ -149,12 +149,12 @@ class TextIcon extends Base {
 			this.graphicIcon.draw({
 				x: x + offset,
 				y: y - iconHeight / 2 + h / 2,
-				w: Datas.Systems.iconsSize,
-				h: Datas.Systems.iconsSize,
+				w: Data.Systems.iconsSize,
+				h: Data.Systems.iconsSize,
 				sx: sx,
 				sy: sy,
-				sw: Datas.Systems.iconsSize,
-				sh: Datas.Systems.iconsSize,
+				sw: Data.Systems.iconsSize,
+				sh: Data.Systems.iconsSize,
 			});
 		}
 	}

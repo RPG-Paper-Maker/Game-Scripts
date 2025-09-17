@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Model } from '..';
+import { Data, Graphic, Model } from '..';
 import { Paths, Platform, Utils } from '../Common';
 
 interface ExtrasKind {
@@ -139,7 +139,7 @@ class Languages {
 	 *  @returns {System.Monster}
 	 */
 	static get(id: number): string {
-		return Datas.Base.get(id, this.list, 'language');
+		return Data.Base.get(id, this.list, 'language');
 	}
 
 	/**

@@ -19,7 +19,7 @@ import {
 	Utils,
 } from '../Common';
 import { Battler, Game, Player, ReactionInterpreter } from '../Core';
-import { Datas, EventCommand, Manager, Scene } from '../index';
+import { Data, EventCommand, Manager, Scene } from '../index';
 import { Base } from './Base';
 import { CommonSkillItem } from './CommonSkillItem';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
@@ -313,7 +313,7 @@ export class Effect extends Base {
 				}
 				if (this.isDamageElement) {
 					const element = this.damageElementID.getValue() as number;
-					const modelElement = Datas.BattleSystems.getElement(element);
+					const modelElement = Data.BattleSystems.getElement(element);
 					// If target also has elements
 					for (const targetElement of target.elements) {
 						const efficiency = modelElement.efficiency.get(targetElement.getValue() as number);
@@ -321,12 +321,12 @@ export class Effect extends Base {
 					}
 					const fixRes =
 						target[
-							Datas.BattleSystems.getStatistic(Datas.BattleSystems.getStatisticElement(element))
+							Data.BattleSystems.getStatistic(Data.BattleSystems.getStatisticElement(element))
 								.abbreviation
 						];
 					const percentRes =
 						target[
-							Datas.BattleSystems.getStatistic(Datas.BattleSystems.getStatisticElementPercent(element))
+							Data.BattleSystems.getStatistic(Data.BattleSystems.getStatisticElementPercent(element))
 								.abbreviation
 						];
 					damage -= (damage * percentRes) / 100;
@@ -341,7 +341,7 @@ export class Effect extends Base {
 						battler.tempIsDamagesCritical ||
 						(battler.tempIsDamagesCritical === null && Mathf.randomPercentTest(critical))
 					) {
-						damage = Interpreter.evaluate(Datas.BattleSystems.formulaCrit.getValue() as string, {
+						damage = Interpreter.evaluate(Data.BattleSystems.formulaCrit.getValue() as string, {
 							user,
 							target,
 							damage,
@@ -375,12 +375,12 @@ export class Effect extends Base {
 			if (this.isDamageDisplayName) {
 				switch (this.damageKind) {
 					case DAMAGES_KIND.STAT:
-						damageName = Datas.BattleSystems.getStatistic(
+						damageName = Data.BattleSystems.getStatistic(
 							this.damageStatisticID.getValue() as number
 						).name();
 						break;
 					case DAMAGES_KIND.CURRENCY:
-						damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue() as number).name();
+						damageName = Data.Systems.getCurrency(this.damageCurrencyID.getValue() as number).name();
 						break;
 					default:
 						break;
@@ -398,7 +398,7 @@ export class Effect extends Base {
 			// Result accoring to damage kind
 			switch (this.damageKind) {
 				case DAMAGES_KIND.STAT: {
-					const stat = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue() as number);
+					const stat = Data.BattleSystems.getStatistic(this.damageStatisticID.getValue() as number);
 					const abbreviation = stat.abbreviation;
 					const max = target[stat.getMaxAbbreviation()];
 					const before = target[abbreviation];
@@ -529,7 +529,7 @@ export class Effect extends Base {
 	executeCommonReaction(forceReaction: boolean): boolean {
 		const reactionInterpreter = new ReactionInterpreter(
 			null,
-			Datas.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
+			Data.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
 			null,
 			null,
 			Utils.arrayToMap(this.commonReaction.parameters)
@@ -634,29 +634,29 @@ export class Effect extends Base {
 				user,
 				target,
 			}) as number;
-			options.push(`${Datas.Languages.extras.precision.name()}: ${precision}%`);
+			options.push(`${Data.Languages.extras.precision.name()}: ${precision}%`);
 		}
 		if (this.isDamageCritical) {
 			critical = Interpreter.evaluate(this.damageCriticalFormula.getValue() as string, {
 				user,
 				target,
 			}) as number;
-			options.push(`${Datas.Languages.extras.critical.name()}: ${critical}%`);
+			options.push(`${Data.Languages.extras.critical.name()}: ${critical}%`);
 		}
 		let damageName = '';
 		switch (this.damageKind) {
 			case DAMAGES_KIND.STAT:
-				damageName = Datas.BattleSystems.getStatistic(this.damageStatisticID.getValue() as number).name();
+				damageName = Data.BattleSystems.getStatistic(this.damageStatisticID.getValue() as number).name();
 				break;
 			case DAMAGES_KIND.CURRENCY:
-				damageName = Datas.Systems.getCurrency(this.damageCurrencyID.getValue() as number).name();
+				damageName = Data.Systems.getCurrency(this.damageCurrencyID.getValue() as number).name();
 				break;
 			case DAMAGES_KIND.VARIABLE:
-				damageName = Datas.Variables.get(this.damageVariableID);
+				damageName = Data.Variables.get(this.damageVariableID);
 				break;
 		}
 		return `${
-			damage > 0 ? Datas.Languages.extras.damage.name() : Datas.Languages.extras.heal.name()
+			damage > 0 ? Data.Languages.extras.damage.name() : Data.Languages.extras.heal.name()
 		} ${damageName}: ${min === max ? min : min + ' - ' + max}${
 			options.length > 0 ? ` [${options.join(' - ')}]` : ''
 		}`;
@@ -672,10 +672,10 @@ export class Effect extends Base {
 	 */
 	toStringStatus(user: Player, target: Player): string {
 		return `${
-			this.isAddStatus ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()
-		} ${Datas.Status.get(
+			this.isAddStatus ? Data.Languages.extras.add.name() : Data.Languages.extras.remove.name()
+		} ${Data.Status.get(
 			this.statusID.getValue() as number
-		).name()} [${Datas.Languages.extras.precision.name()}: ${Interpreter.evaluate(
+		).name()} [${Data.Languages.extras.precision.name()}: ${Interpreter.evaluate(
 			this.statusPrecisionFormula.getValue() as string,
 			{ user, target }
 		)}%]`;
@@ -689,8 +689,8 @@ export class Effect extends Base {
 	 */
 	toStringAddRemoveSkill(): string {
 		return `${
-			this.isAddSkill ? Datas.Languages.extras.add.name() : Datas.Languages.extras.remove.name()
-		} ${Datas.Languages.extras.skill.name()} ${Datas.Skills.get(this.addSkillID.getValue() as number).name()}`;
+			this.isAddSkill ? Data.Languages.extras.add.name() : Data.Languages.extras.remove.name()
+		} ${Data.Languages.extras.skill.name()} ${Data.Skills.get(this.addSkillID.getValue() as number).name()}`;
 	}
 
 	/**
@@ -700,7 +700,7 @@ export class Effect extends Base {
 	 * @returns A formatted string describing the perform skill effect.
 	 */
 	toStringPerformSkill(): string {
-		return `${Datas.Languages.extras.performSkill.name()} ${Datas.Skills.get(
+		return `${Data.Languages.extras.performSkill.name()} ${Data.Skills.get(
 			this.performSkillID.getValue() as number
 		).name()}`;
 	}

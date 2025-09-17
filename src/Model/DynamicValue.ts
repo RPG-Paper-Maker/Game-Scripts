@@ -14,7 +14,7 @@ import { DYNAMIC_VALUE_KIND, PICTURE_KIND, Platform, SONG_KIND, Utils } from '..
 import { MapObjectCommandType } from '../Common/Types';
 import { Game, ReactionInterpreter } from '../Core';
 import { StructIterator } from '../EventCommand';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 
 /**
@@ -227,69 +227,69 @@ export class DynamicValue extends Base {
 			case DYNAMIC_VALUE_KIND.PROPERTY:
 				return ReactionInterpreter.currentObject.properties[this.value as number];
 			case DYNAMIC_VALUE_KIND.CLASS:
-				return Datas.Classes.get(this.value as number);
+				return Data.Classes.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.HERO:
-				return Datas.Heroes.get(this.value as number);
+				return Data.Heroes.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.MONSTER:
-				return Datas.Monsters.get(this.value as number);
+				return Data.Monsters.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.TROOP:
-				return Datas.Troops.get(this.value as number);
+				return Data.Troops.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.ITEM:
-				return Datas.Items.get(this.value as number);
+				return Data.Items.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.WEAPON:
-				return Datas.Weapons.get(this.value as number);
+				return Data.Weapons.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.ARMOR:
-				return Datas.Armors.get(this.value as number);
+				return Data.Armors.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.SKILL:
-				return Datas.Skills.get(this.value as number);
+				return Data.Skills.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.ANIMATION:
-				return Datas.Animations.get(this.value as number);
+				return Data.Animations.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.STATUS:
-				return Datas.Status.get(this.value as number);
+				return Data.Status.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.TILESET:
-				return Datas.Tilesets.get(this.value as number);
+				return Data.Tilesets.get(this.value as number);
 			case DYNAMIC_VALUE_KIND.FONT_SIZE:
-				return Datas.Systems.getFontSize(this.value as number);
+				return Data.Systems.getFontSize(this.value as number);
 			case DYNAMIC_VALUE_KIND.FONT_NAME:
-				return Datas.Systems.getFontName(this.value as number);
+				return Data.Systems.getFontName(this.value as number);
 			case DYNAMIC_VALUE_KIND.COLOR:
-				return Datas.Systems.getColor(this.value as number);
+				return Data.Systems.getColor(this.value as number);
 			case DYNAMIC_VALUE_KIND.WINDOW_SKIN:
-				return Datas.Systems.getWindowSkin(this.value as number);
+				return Data.Systems.getWindowSkin(this.value as number);
 			case DYNAMIC_VALUE_KIND.CURRENCY:
-				return Datas.Systems.getCurrency(this.value as number);
+				return Data.Systems.getCurrency(this.value as number);
 			case DYNAMIC_VALUE_KIND.SPEED:
-				return Datas.Systems.getSpeed(this.value as number);
+				return Data.Systems.getSpeed(this.value as number);
 			case DYNAMIC_VALUE_KIND.DETECTION:
-				return Datas.Systems.getDetection(this.value as number);
+				return Data.Systems.getDetection(this.value as number);
 			case DYNAMIC_VALUE_KIND.CAMERA_PROPERTY:
-				return Datas.Systems.getCameraProperties(this.value as number);
+				return Data.Systems.getCameraProperties(this.value as number);
 			case DYNAMIC_VALUE_KIND.FREQUENCY:
-				return Datas.Systems.getFrequency(this.value as number);
+				return Data.Systems.getFrequency(this.value as number);
 			case DYNAMIC_VALUE_KIND.SKYBOX:
-				return Datas.Systems.getSkybox(this.value as number);
+				return Data.Systems.getSkybox(this.value as number);
 			case DYNAMIC_VALUE_KIND.BATTLE_MAP:
-				return Datas.BattleSystems.getBattleMap(this.value as number);
+				return Data.BattleSystems.getBattleMap(this.value as number);
 			case DYNAMIC_VALUE_KIND.ELEMENT:
-				return Datas.BattleSystems.getElement(this.value as number);
+				return Data.BattleSystems.getElement(this.value as number);
 			case DYNAMIC_VALUE_KIND.COMMON_STATISTIC:
-				return Datas.BattleSystems.getStatistic(this.value as number);
+				return Data.BattleSystems.getStatistic(this.value as number);
 			case DYNAMIC_VALUE_KIND.WEAPONS_KIND:
-				return Datas.BattleSystems.getWeaponKind(this.value as number);
+				return Data.BattleSystems.getWeaponKind(this.value as number);
 			case DYNAMIC_VALUE_KIND.ARMORS_KIND:
-				return Datas.BattleSystems.getArmorKind(this.value as number);
+				return Data.BattleSystems.getArmorKind(this.value as number);
 			case DYNAMIC_VALUE_KIND.COMMON_BATTLE_COMMAND:
-				return Datas.BattleSystems.getBattleCommand(this.value as number);
+				return Data.BattleSystems.getBattleCommand(this.value as number);
 			case DYNAMIC_VALUE_KIND.COMMON_EQUIPMENT:
-				return Datas.BattleSystems.getEquipment(this.value as number);
+				return Data.BattleSystems.getEquipment(this.value as number);
 			case DYNAMIC_VALUE_KIND.EVENT:
-				return Datas.CommonEvents.getEventUser(this.value as number);
+				return Data.CommonEvents.getEventUser(this.value as number);
 			case DYNAMIC_VALUE_KIND.STATE:
 				return this.value;
 			case DYNAMIC_VALUE_KIND.COMMON_REACTION:
-				return Datas.CommonEvents.getCommonReaction(this.value as number);
+				return Data.CommonEvents.getCommonReaction(this.value as number);
 			case DYNAMIC_VALUE_KIND.MODEL:
-				return Datas.CommonEvents.getCommonObject(this.value as number);
+				return Data.CommonEvents.getCommonObject(this.value as number);
 			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
 				if (deep) {
 					const obj = {};
@@ -313,43 +313,43 @@ export class DynamicValue extends Base {
 					this.z.getValue() as number as number
 				);
 			case DYNAMIC_VALUE_KIND.BARS:
-				return Datas.Pictures.get(PICTURE_KIND.BARS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.BARS, this.value as number);
 			case DYNAMIC_VALUE_KIND.ICONS:
-				return Datas.Pictures.get(PICTURE_KIND.ICONS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.ICONS, this.value as number);
 			case DYNAMIC_VALUE_KIND.AUTOTILES:
-				return Datas.Pictures.get(PICTURE_KIND.AUTOTILES, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.AUTOTILES, this.value as number);
 			case DYNAMIC_VALUE_KIND.CHARACTERS:
-				return Datas.Pictures.get(PICTURE_KIND.CHARACTERS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.value as number);
 			case DYNAMIC_VALUE_KIND.MOUNTAINS:
-				return Datas.Pictures.get(PICTURE_KIND.MOUNTAINS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.MOUNTAINS, this.value as number);
 			case DYNAMIC_VALUE_KIND.TILESETS:
-				return Datas.Pictures.get(PICTURE_KIND.TILESETS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.TILESETS, this.value as number);
 			case DYNAMIC_VALUE_KIND.WALLS:
-				return Datas.Pictures.get(PICTURE_KIND.WALLS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.WALLS, this.value as number);
 			case DYNAMIC_VALUE_KIND.BATTLERS:
-				return Datas.Pictures.get(PICTURE_KIND.BATTLERS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.BATTLERS, this.value as number);
 			case DYNAMIC_VALUE_KIND.FACESETS:
-				return Datas.Pictures.get(PICTURE_KIND.FACESETS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.FACESETS, this.value as number);
 			case DYNAMIC_VALUE_KIND.WINDOW_SKINS:
-				return Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.value as number);
 			case DYNAMIC_VALUE_KIND.TITLE_SCREEN:
-				return Datas.Pictures.get(PICTURE_KIND.TITLE_SCREEN, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.TITLE_SCREEN, this.value as number);
 			case DYNAMIC_VALUE_KIND.OBJECT_3D:
-				return Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.OBJECTS_3D, this.value as number);
 			case DYNAMIC_VALUE_KIND.PICTURES:
-				return Datas.Pictures.get(PICTURE_KIND.PICTURES, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.PICTURES, this.value as number);
 			case DYNAMIC_VALUE_KIND.ANIMATIONS:
-				return Datas.Pictures.get(PICTURE_KIND.ANIMATIONS, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.ANIMATIONS, this.value as number);
 			case DYNAMIC_VALUE_KIND.SKYBOXES:
-				return Datas.Pictures.get(PICTURE_KIND.SKYBOXES, this.value as number);
+				return Data.Pictures.get(PICTURE_KIND.SKYBOXES, this.value as number);
 			case DYNAMIC_VALUE_KIND.MUSIC:
-				return Datas.Songs.get(SONG_KIND.MUSIC, this.value as number);
+				return Data.Songs.get(SONG_KIND.MUSIC, this.value as number);
 			case DYNAMIC_VALUE_KIND.BACKGROUND_SOUND:
-				return Datas.Songs.get(SONG_KIND.BACKGROUND_SOUND, this.value as number);
+				return Data.Songs.get(SONG_KIND.BACKGROUND_SOUND, this.value as number);
 			case DYNAMIC_VALUE_KIND.SOUND:
-				return Datas.Songs.get(SONG_KIND.SOUND, this.value as number);
+				return Data.Songs.get(SONG_KIND.SOUND, this.value as number);
 			case DYNAMIC_VALUE_KIND.MUSIC_EFFECT:
-				return Datas.Songs.get(SONG_KIND.MUSIC_EFFECT, this.value as number);
+				return Data.Songs.get(SONG_KIND.MUSIC_EFFECT, this.value as number);
 			default:
 				return this.value;
 		}
@@ -359,9 +359,9 @@ export class DynamicValue extends Base {
 	isEqual(value: DynamicValue): boolean {
 		// If keyBoard
 		if (this.kind === DYNAMIC_VALUE_KIND.KEYBOARD && value.kind !== DYNAMIC_VALUE_KIND.KEYBOARD) {
-			return Datas.Keyboards.isKeyEqual(value.value as string, Datas.Keyboards.get(this.value as number));
+			return Data.Keyboards.isKeyEqual(value.value as string, Data.Keyboards.get(this.value as number));
 		} else if (value.kind === DYNAMIC_VALUE_KIND.KEYBOARD && this.kind !== DYNAMIC_VALUE_KIND.KEYBOARD) {
-			return Datas.Keyboards.isKeyEqual(this.value as string, Datas.Keyboards.get(value.value as number));
+			return Data.Keyboards.isKeyEqual(this.value as string, Data.Keyboards.get(value.value as number));
 		} else if (this.kind === DYNAMIC_VALUE_KIND.ANYTHING || value.kind === DYNAMIC_VALUE_KIND.ANYTHING) {
 			return true;
 		}

@@ -10,39 +10,39 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
- *  All the weapons datas
+ *  All the animations datas.
  *  @static
  */
-class Weapons {
-	private static list: Model.Weapon[];
+class Animations {
+	private static list: Model.Animation[];
 
 	constructor() {
 		throw new Error('This is a static class!');
 	}
 
 	/**
-	 *  Read the JSON file associated to weapons
+	 *  Read the JSON file associated to status.
 	 *  @static
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_WEAPONS)).weapons as any;
+		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Weapon });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Animation });
 	}
 
 	/**
-	 *  Get the weapon by ID.
+	 *  Get the animation by ID.
 	 *  @static
 	 *  @param {number} id
-	 *  @returns {System.Weapon}
+	 *  @returns {System.Animation}
 	 */
-	static get(id: number): Model.Weapon {
-		return Datas.Base.get(id, this.list, 'weapon');
+	static get(id: number): Model.Animation {
+		return Data.Base.get(id, this.list, 'animation');
 	}
 }
 
-export { Weapons };
+export { Animations };

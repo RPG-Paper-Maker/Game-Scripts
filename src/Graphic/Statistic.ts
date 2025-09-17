@@ -10,7 +10,7 @@
 */
 
 import { PICTURE_KIND, ScreenResolution } from '../Common';
-import { Core, Datas, Graphic, Model } from '../index';
+import { Core, Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -44,7 +44,7 @@ class Statistic extends Base {
 		let txt = String(this.player[statistic.abbreviation]);
 		if (!statistic.isFix) {
 			txt += '/' + this.player[statistic.getMaxAbbreviation()];
-			this.pictureBar = Datas.Pictures.get(PICTURE_KIND.BARS, this.statistic.pictureBarID);
+			this.pictureBar = Data.Pictures.get(PICTURE_KIND.BARS, this.statistic.pictureBarID);
 		}
 		this.graphicValue = new Graphic.Text(txt);
 	}

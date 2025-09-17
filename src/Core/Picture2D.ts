@@ -10,7 +10,7 @@
 */
 
 import { PICTURE_KIND, Platform, ScreenResolution } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Stack } from '../Manager';
 import { Bitmap } from './Bitmap';
 
@@ -117,7 +117,7 @@ class Picture2D extends Bitmap {
 	 * @memberof Picture2D
 	 */
 	static async createWithID(id: number, kind: PICTURE_KIND, opts: pictureOptions = {}) {
-		return await Picture2D.create(Datas.Pictures.get(kind, id), opts);
+		return await Picture2D.create(Data.Pictures.get(kind, id), opts);
 	}
 
 	/**

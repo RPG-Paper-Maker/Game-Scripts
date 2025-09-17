@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Scene } from '..';
+import { Data, Scene } from '..';
 import { CHARACTER_KIND, CONDITION_HEROES_KIND, Mathf, OPERATION_KIND, Utils } from '../Common';
 import { Player } from '../Core';
 import { Base } from './Base';
@@ -92,7 +92,7 @@ export class TroopReactionConditions extends Base {
 					// Statistic check
 					if (this.isStatisticID) {
 						const statId = this.statisticID.getValue() as number;
-						const stat = Datas.BattleSystems.getStatistic(statId);
+						const stat = Data.BattleSystems.getStatistic(statId);
 						const statValue = player[stat.abbreviation];
 						const statValueMax = player[stat.getMaxAbbreviation()];
 						if (statValueMax === undefined) {

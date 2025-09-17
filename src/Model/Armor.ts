@@ -10,7 +10,7 @@
 */
 
 import { ITEM_KIND } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { CommonSkillItem } from './CommonSkillItem';
 import { WeaponArmorKind } from './WeaponArmorKind';
 
@@ -23,7 +23,7 @@ export class Armor extends CommonSkillItem {
 	 * @returns The corresponding {@link WeaponArmorKind}.
 	 */
 	getType(): WeaponArmorKind {
-		return Datas.BattleSystems.getArmorKind(this.type);
+		return Data.BattleSystems.getArmorKind(this.type);
 	}
 
 	/**

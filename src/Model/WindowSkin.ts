@@ -11,7 +11,7 @@
 
 import { PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, Rectangle } from '../Core';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 
 /**
@@ -72,7 +72,7 @@ export class WindowSkin extends Base {
 	 * Update the window skin picture.
 	 */
 	async updatePicture(): Promise<void> {
-		this.picture = await Picture2D.create(Datas.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.pictureID), {
+		this.picture = await Picture2D.create(Data.Pictures.get(PICTURE_KIND.WINDOW_SKINS, this.pictureID), {
 			stretch: true,
 		});
 	}
@@ -211,7 +211,7 @@ export class WindowSkin extends Base {
 	 *  Draw the arrow for targets.
 	 */
 	drawArrowTarget(frame: number, x: number, y: number, positionResize: boolean = false): void {
-		const width = this.arrowTargetSelection.width / Datas.Systems.FRAMES;
+		const width = this.arrowTargetSelection.width / Data.Systems.FRAMES;
 		this.picture.draw({
 			x: x - width / 2,
 			y,
@@ -229,7 +229,7 @@ export class WindowSkin extends Base {
 	 *  Draw the arrow for end of messages.
 	 */
 	drawArrowMessage(frame: number, x: number, y: number): void {
-		const width = this.arrowEndMessage.width / Datas.Systems.FRAMES;
+		const width = this.arrowEndMessage.width / Data.Systems.FRAMES;
 		this.picture.draw({
 			x: x - width / 2,
 			y,

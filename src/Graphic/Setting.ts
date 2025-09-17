@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, TITLE_SETTING_KIND } from '../Common';
-import { Datas, Graphic } from '../index';
+import { Data, Graphic } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -29,13 +29,13 @@ class Setting extends Base {
 		let textLeft: string, textInformation: string;
 		switch (id) {
 			case TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT:
-				textLeft = Datas.Languages.extras.keyboardAssignment.name();
-				textInformation = Datas.Languages.extras.keyboardAssignmentDescription.name();
+				textLeft = Data.Languages.extras.keyboardAssignment.name();
+				textInformation = Data.Languages.extras.keyboardAssignmentDescription.name();
 				this.graphicRight = new Graphic.Text('...', { align: ALIGN.CENTER });
 				break;
 			case TITLE_SETTING_KIND.LANGUAGE:
-				textLeft = Datas.Languages.extras.language.name();
-				textInformation = Datas.Languages.extras.languageDescription.name();
+				textLeft = Data.Languages.extras.language.name();
+				textInformation = Data.Languages.extras.languageDescription.name();
 				this.graphicRight = new Graphic.Text('...', { align: ALIGN.CENTER });
 				break;
 		}

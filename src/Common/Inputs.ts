@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager, Scene } from '..';
+import { Data, Manager, Scene } from '..';
 import { Main } from '../main';
 
 /**
@@ -118,7 +118,7 @@ export class Inputs {
 
 		// Fullscreen toggle
 		if (key === 'F4' || (event.code === 'Enter' && (event.altKey || event.shiftKey))) {
-			Datas.Systems.switchFullscreen();
+			Data.Systems.switchFullscreen();
 			event.preventDefault();
 			return;
 		}
@@ -159,7 +159,7 @@ export class Inputs {
 	 * - Calls stack mouse down handler.
 	 */
 	private static onMouseDown(event: MouseEvent) {
-		if (!this.isReady() || !Datas.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
 		if (event.button === MOUSE_BUTTON.LEFT) {
@@ -179,7 +179,7 @@ export class Inputs {
 	 * - Calls stack mouse up handler.
 	 */
 	private static onMouseUp(event: MouseEvent) {
-		if (!this.isReady() || !Datas.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
 		Manager.Stack.onMouseUp(event.clientX, event.clientY);
@@ -197,7 +197,7 @@ export class Inputs {
 	 * - Calls stack mouse move handler.
 	 */
 	private static onMouseMove(event: MouseEvent) {
-		if (!this.isReady() || !Datas.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
 		this.mouseX = event.clientX;
@@ -212,7 +212,7 @@ export class Inputs {
 	 * - Calls stack mouse down handler.
 	 */
 	private static onTouchStart(event: TouchEvent) {
-		if (!this.isReady() || !Datas.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
 		this.mouseLeftPressed = true;
@@ -227,7 +227,7 @@ export class Inputs {
 	 * - Calls stack mouse move handler.
 	 */
 	private static onTouchMove(event: TouchEvent) {
-		if (!this.isReady() || !Datas.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
 		this.mouseX = event.touches[0].pageX;
@@ -241,7 +241,7 @@ export class Inputs {
 	 * - Calls stack mouse up handler.
 	 */
 	private static onTouchEnd(_event: TouchEvent) {
-		if (!this.isReady() || !Datas.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
 		Manager.Stack.onMouseUp(this.mouseX, this.mouseY);

@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
  *  All the videos datas.
@@ -47,7 +47,7 @@ class Videos {
 	 *  @returns {System.Video}
 	 */
 	static get(id: number): Model.Video {
-		return id === -1 ? new Model.Video() : Datas.Base.get(id, this.list, 'video');
+		return id === -1 ? new Model.Video() : Data.Base.get(id, this.list, 'video');
 	}
 }
 

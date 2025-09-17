@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Model, Scene } from '..';
+import { Data, Model, Scene } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject, Position, StructSearchResult } from '../Core';
 import { Base } from './Base';
@@ -94,7 +94,7 @@ class CreateObjectInMap extends Base {
 					this.x.getValue() as number,
 					this.y.getValue() as number,
 					this.z.getValue() as number,
-					((this.yPlus.getValue() as number) * 100) / Datas.Systems.SQUARE_SIZE
+					((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE
 				).toVector3();
 			} else {
 				MapObject.search(
@@ -119,8 +119,8 @@ class CreateObjectInMap extends Base {
 			if (this.isStockID) {
 				Game.current.variables[this.stockID.getValue(true) as number] = id;
 			}
-			Game.current.getPortionDatas(Scene.Map.current.id, globalPortion).m.push(newObject);
-			Game.current.getPortionDatas(Scene.Map.current.id, globalPortion).min.push(newObject);
+			Game.current.getPortionData(Scene.Map.current.id, globalPortion).m.push(newObject);
+			Game.current.getPortionData(Scene.Map.current.id, globalPortion).min.push(newObject);
 			newObject.changeState();
 		}
 		return currentState.position === null ? 0 : 1;

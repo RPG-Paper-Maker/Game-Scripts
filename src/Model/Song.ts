@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, SONG_KIND, Utils } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 
 /**
@@ -62,7 +62,7 @@ export class Song extends Base {
 	 */
 	static getFolder(kind: SONG_KIND, isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Datas.Systems.PATH_BR : dlc ? `${Datas.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
+			(isBR ? Data.Systems.PATH_BR : dlc ? `${Data.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
 			this.getLocalFolder(kind)
 		);
 	}

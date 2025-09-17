@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Model, Scene } from '..';
+import { Data, Graphic, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
@@ -102,7 +102,7 @@ class BattleEnemyAttack {
 				continue;
 			}
 			if (action.isConditionStatistic) {
-				stat = Datas.BattleSystems.getStatistic(action.statisticID.getValue() as number);
+				stat = Data.BattleSystems.getStatistic(action.statisticID.getValue() as number);
 				if (stat.isFix) {
 					if (
 						!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
@@ -139,7 +139,7 @@ class BattleEnemyAttack {
 				continue;
 			}
 			if (action.actionKind === MONSTER_ACTION_KIND.USE_SKILL) {
-				const skill = Datas.Skills.get(action.skillID.getValue() as number);
+				const skill = Data.Skills.get(action.skillID.getValue() as number);
 				if (
 					!skill.isPossible() ||
 					this.battle.user.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_USE_SKILLS)
@@ -216,7 +216,7 @@ class BattleEnemyAttack {
 		// Define battle command kind
 		switch (this.battle.action.actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL:
-				const effect = Datas.Skills.get(this.battle.action.skillID.getValue() as number).getEffects()[0];
+				const effect = Data.Skills.get(this.battle.action.skillID.getValue() as number).getEffects()[0];
 				if (effect) {
 					this.battle.battleCommandKind =
 						effect.kind === EFFECT_KIND.SPECIAL_ACTIONS
@@ -225,7 +225,7 @@ class BattleEnemyAttack {
 				} else {
 					this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
 				}
-				this.battle.attackSkill = Datas.Skills.get(this.battle.action.skillID.getValue() as number);
+				this.battle.attackSkill = Data.Skills.get(this.battle.action.skillID.getValue() as number);
 				break;
 			case MONSTER_ACTION_KIND.USE_ITEM:
 				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS;
@@ -256,11 +256,11 @@ class BattleEnemyAttack {
 		let targetKind: TARGET_KIND, side: CHARACTER_KIND;
 		switch (this.battle.action.actionKind) {
 			case MONSTER_ACTION_KIND.USE_SKILL:
-				this.battle.skill = Datas.Skills.get(this.battle.action.skillID.getValue() as number);
+				this.battle.skill = Data.Skills.get(this.battle.action.skillID.getValue() as number);
 				targetKind = this.battle.skill.targetKind;
 				break;
 			case MONSTER_ACTION_KIND.USE_ITEM:
-				this.battle.skill = Datas.Items.get(this.battle.action.itemID.getValue() as number);
+				this.battle.skill = Data.Items.get(this.battle.action.itemID.getValue() as number);
 				targetKind = this.battle.skill.targetKind;
 				break;
 			case MONSTER_ACTION_KIND.DO_NOTHING:

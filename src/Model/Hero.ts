@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { Skill } from '../Core';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Characteristic } from './Characteristic';
 import { Class, ClassJSON } from './Class';
 import { Localization, LocalizationJSON } from './Localization';
@@ -124,7 +124,7 @@ export class Hero extends Localization {
 	read(json: HeroJSON): void {
 		super.read(json);
 
-		this.class = Datas.Classes.get(
+		this.class = Data.Classes.get(
 			json.class,
 			`Could not find the class in ${this.isMonster() ? 'monster' : 'hero'} ${Utils.getIDName(
 				json.id,

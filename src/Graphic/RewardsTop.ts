@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic } from '..';
+import { Data, Graphic } from '..';
 import { ALIGN, Constants, ScreenResolution } from '../Common';
 import { Base } from './Base';
 
@@ -24,13 +24,13 @@ class RewardsTop extends Base {
 		super();
 
 		// Experience
-		this.graphicXP = new Graphic.Text(Datas.BattleSystems.getExpStatistic().name() + ':' + ' ' + xp);
+		this.graphicXP = new Graphic.Text(Data.BattleSystems.getExpStatistic().name() + ':' + ' ' + xp);
 
 		// Currencies
 		this.graphicCurrencies = [];
 		for (const id in currencies) {
 			this.graphicCurrencies.push(
-				Graphic.TextIcon.createFromSystem(String(currencies[id]), Datas.Systems.getCurrency(parseInt(id)), {
+				Graphic.TextIcon.createFromSystem(String(currencies[id]), Data.Systems.getCurrency(parseInt(id)), {
 					align: ALIGN.LEFT,
 				})
 			);

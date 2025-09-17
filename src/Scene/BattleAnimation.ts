@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Model, Scene } from '..';
+import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	ANIMATION_EFFECT_CONDITION_KIND,
 	ANIMATION_POSITION_KIND,
@@ -56,7 +56,7 @@ class BattleAnimation {
 							? this.battle.battleStartTurn.active
 								? this.battle.currentSkill
 								: (<Graphic.Skill>this.battle.windowChoicesSkills.getCurrentContent()).system
-							: Datas.Skills.get(this.battle.action.skillID.getValue() as number);
+							: Data.Skills.get(this.battle.action.skillID.getValue() as number);
 				}
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
@@ -67,7 +67,7 @@ class BattleAnimation {
 					content =
 						this.battle.attackingGroup === CHARACTER_KIND.HERO
 							? (<Graphic.Item>this.battle.windowChoicesItems.getCurrentContent()).item.system
-							: Datas.Items.get(this.battle.action.itemID.getValue() as number);
+							: Data.Items.get(this.battle.action.itemID.getValue() as number);
 				}
 				this.battle.informationText = content.getMessage(this.battle.user);
 				break;
@@ -106,9 +106,9 @@ class BattleAnimation {
 					}
 				}
 				if (this.battle.effects.length === 0) {
-					this.battle.animationUser = new Animation(Datas.Skills.get(1).animationUserID.getValue() as number);
+					this.battle.animationUser = new Animation(Data.Skills.get(1).animationUserID.getValue() as number);
 					this.battle.animationTarget = new Animation(
-						Datas.Skills.get(1).animationTargetID.getValue() as number
+						Data.Skills.get(1).animationTargetID.getValue() as number
 					);
 					const effects = this.battle.attackSkill.getEffects();
 					for (i = 1, l = effects.length; i < l; i++) {

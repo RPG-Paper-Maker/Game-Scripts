@@ -20,7 +20,7 @@ import {
 	STATUS_RESTRICTIONS_KIND,
 } from '../Common';
 import { ProgressionTable } from '../Model';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { Animation } from './Animation';
 import { Camera } from './Camera';
 import { CustomGeometry } from './CustomGeometry';
@@ -108,10 +108,10 @@ class Battler {
 		this.midPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
 		this.botPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
 		this.active = true;
-		this.frame = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameDuration) as number, {
-			frames: Datas.Systems.battlersFrames,
+		this.frame = new Frame(Interpreter.evaluate(Data.Systems.battlersFrameDuration) as number, {
+			frames: Data.Systems.battlersFrames,
 		});
-		this.frameAttacking = new Frame(Interpreter.evaluate(Datas.Systems.battlersFrameAttackingDuration) as number, {
+		this.frameAttacking = new Frame(Interpreter.evaluate(Data.Systems.battlersFrameAttackingDuration) as number, {
 			loop: false,
 		});
 		this.frameArrow = new Frame(125);
@@ -155,7 +155,7 @@ class Battler {
 		} else {
 			// Copy original material because there will be individual color
 			// changes
-			const originalMaterial = Datas.Tilesets.texturesBattlers[idBattler];
+			const originalMaterial = Data.Tilesets.texturesBattlers[idBattler];
 			const texture = Manager.GL.getMaterialTexture(originalMaterial);
 			const copiedTexture = texture.clone();
 			const material = Manager.GL.createMaterial({
@@ -165,8 +165,8 @@ class Battler {
 					offset: { type: 'v2', value: new THREE.Vector2() },
 				},
 			});
-			this.width = copiedTexture.image.width / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersFrames;
-			this.height = copiedTexture.image.height / Datas.Systems.SQUARE_SIZE / Datas.Systems.battlersColumns;
+			this.width = copiedTexture.image.width / Data.Systems.SQUARE_SIZE / Data.Systems.battlersFrames;
+			this.height = copiedTexture.image.height / Data.Systems.SQUARE_SIZE / Data.Systems.battlersColumns;
 			const sprite = Sprite.create(ELEMENT_MAP_KIND.SPRITES_FACE, new Rectangle(0, 0, this.width, this.height));
 			const geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
 			this.mesh = new THREE.Mesh(geometry, material);
@@ -175,23 +175,23 @@ class Battler {
 			this.mesh.castShadow = true;
 			this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 			this.topLeftPosition = new THREE.Vector3(
-				this.position.x - (this.width / 2) * Datas.Systems.SQUARE_SIZE,
-				this.position.y + this.height * Datas.Systems.SQUARE_SIZE,
+				this.position.x - (this.width / 2) * Data.Systems.SQUARE_SIZE,
+				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
 				this.position.z
 			);
 			this.botRightPosition = new THREE.Vector3(
-				this.position.x + (this.width / 2) * Datas.Systems.SQUARE_SIZE,
+				this.position.x + (this.width / 2) * Data.Systems.SQUARE_SIZE,
 				this.position.y,
 				this.position.z
 			);
 			this.upPosition = new THREE.Vector3(
 				this.position.x,
-				this.position.y + this.height * Datas.Systems.SQUARE_SIZE,
+				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
 				this.position.z
 			);
 			this.halfPosition = new THREE.Vector3(
 				this.position.x,
-				this.position.y + (this.height * Datas.Systems.SQUARE_SIZE) / 2,
+				this.position.y + (this.height * Data.Systems.SQUARE_SIZE) / 2,
 				this.position.z
 			);
 			if (isEnemy) {
@@ -287,7 +287,7 @@ class Battler {
 	 *  @returns {boolean}
 	 */
 	isAttacking(): boolean {
-		return this.isStepAttacking() && this.frameAttacking.value !== Datas.Systems.FRAMES - 1;
+		return this.isStepAttacking() && this.frameAttacking.value !== Data.Systems.FRAMES - 1;
 	}
 
 	/**
@@ -522,8 +522,8 @@ class Battler {
 					frame = this.frame.value;
 					break;
 			}
-			const w = (this.width * Datas.Systems.SQUARE_SIZE) / textureWidth;
-			const h = (this.height * Datas.Systems.SQUARE_SIZE) / textureHeight;
+			const w = (this.width * Data.Systems.SQUARE_SIZE) / textureWidth;
+			const h = (this.height * Data.Systems.SQUARE_SIZE) / textureHeight;
 			const x = frame * w;
 			const y = this.step * h;
 
@@ -592,7 +592,7 @@ class Battler {
 	 */
 	drawArrow() {
 		if (!this.hidden) {
-			Datas.Systems.getCurrentWindowSkin().drawArrowTarget(
+			Data.Systems.getCurrentWindowSkin().drawArrowTarget(
 				this.frameArrow.value,
 				this.arrowPosition.x,
 				this.arrowPosition.y,
@@ -606,7 +606,7 @@ class Battler {
 	 */
 	drawDamages() {
 		const zoom = this.timeDamage / Battler.TOTAL_TIME_DAMAGE;
-		const [x, height] = Datas.Systems.getCurrentWindowSkin().drawDamages(
+		const [x, height] = Data.Systems.getCurrentWindowSkin().drawDamages(
 			this.damages,
 			this.damagePosition.x,
 			this.damagePosition.y,

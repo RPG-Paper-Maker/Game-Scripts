@@ -10,39 +10,39 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
- *  All the items datas.
+ *  All the status datas.
  *  @static
  */
-class Items {
-	private static list: Model.Item[];
+class Status {
+	private static list: Model.Status[];
 
 	constructor() {
 		throw new Error('This is a static class!');
 	}
 
 	/**
-	 *  Read the JSON file associated to items.
+	 *  Read the JSON file associated to status.
 	 *  @static
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_ITEMS)).items as any;
+		const json = (await Platform.parseFileJSON(Paths.FILE_STATUS)).status as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Item });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Status });
 	}
 
 	/**
-	 *  Get the item by ID.
+	 *  Get the status by ID.
 	 *  @static
 	 *  @param {number} id
-	 *  @returns {System.Item}
+	 *  @returns {System.Status}
 	 */
-	static get(id: number): Model.Item {
-		return Datas.Base.get(id, this.list, 'item');
+	static get(id: number): Model.Status {
+		return Data.Base.get(id, this.list, 'status');
 	}
 }
 
-export { Items };
+export { Status };

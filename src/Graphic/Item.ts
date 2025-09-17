@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, Constants, DAMAGES_KIND, Mathf, ScreenResolution } from '../Common';
-import { Core, Datas, Graphic, Model } from '../index';
+import { Core, Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -59,10 +59,10 @@ class Item extends Base {
 				graphic = Graphic.TextIcon.createFromSystem(
 					Mathf.numberWithCommas(
 						showSellPrice
-							? Math.round(((Datas.Systems.priceSoldItem.getValue() as number) * value) / 100)
+							? Math.round(((Data.Systems.priceSoldItem.getValue() as number) * value) / 100)
 							: value
 					),
-					kind === DAMAGES_KIND.CURRENCY ? Datas.Systems.getCurrency(id) : null,
+					kind === DAMAGES_KIND.CURRENCY ? Data.Systems.getCurrency(id) : null,
 					{ align: ALIGN.RIGHT },
 					possible ? {} : { color: Model.Color.GREY }
 				);

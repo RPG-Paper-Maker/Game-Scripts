@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Scene } from '..';
+import { Data, Scene } from '..';
 import { DAMAGES_KIND, ITEM_KIND, Utils } from '../Common';
 import { JsonType, MapObjectCommandType } from '../Common/Types';
 import { Game, Player } from '../Core';
@@ -39,11 +39,11 @@ export class ShopItem extends Base {
 	getItem(): CommonSkillItem {
 		switch (this.selectionItem) {
 			case ITEM_KIND.ITEM:
-				return Datas.Items.get(this.itemID.getValue() as number);
+				return Data.Items.get(this.itemID.getValue() as number);
 			case ITEM_KIND.WEAPON:
-				return Datas.Weapons.get(this.weaponID.getValue() as number);
+				return Data.Weapons.get(this.weaponID.getValue() as number);
 			case ITEM_KIND.ARMOR:
-				return Datas.Armors.get(this.armorID.getValue() as number);
+				return Data.Armors.get(this.armorID.getValue() as number);
 		}
 	}
 
@@ -74,7 +74,7 @@ export class ShopItem extends Base {
 					currentValue = Game.current.currencies[id];
 					break;
 				case DAMAGES_KIND.STAT:
-					currentValue = user[Datas.BattleSystems.getStatistic(id).abbreviation];
+					currentValue = user[Data.BattleSystems.getStatistic(id).abbreviation];
 					break;
 				case DAMAGES_KIND.VARIABLE:
 					currentValue = Game.current.getVariable(id);
@@ -102,7 +102,7 @@ export class ShopItem extends Base {
 					currentValue = Game.current.currencies[id];
 					break;
 				case DAMAGES_KIND.STAT:
-					currentValue = user[Datas.BattleSystems.getStatistic(id).abbreviation];
+					currentValue = user[Data.BattleSystems.getStatistic(id).abbreviation];
 					break;
 				case DAMAGES_KIND.VARIABLE:
 					currentValue = Game.current.getVariable(id);

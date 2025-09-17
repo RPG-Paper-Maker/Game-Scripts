@@ -11,7 +11,7 @@
 
 import { GROUP_KIND } from '../Common';
 import { Game, MapObject, Player } from '../Core';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -51,7 +51,7 @@ class ChangeClass extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const newClass = Datas.Classes.get(this.classID.getValue() as number);
+		const newClass = Data.Classes.get(this.classID.getValue() as number);
 		let targets: Player[];
 		switch (this.selectionKind) {
 			case 0:
@@ -64,7 +64,7 @@ class ChangeClass extends Base {
 		let level: number;
 		for (const target of targets) {
 			target.changedClass = newClass;
-			level = target[Datas.BattleSystems.getLevelStatistic().abbreviation];
+			level = target[Data.BattleSystems.getLevelStatistic().abbreviation];
 			target.skills = target.system.getSkills(level, newClass);
 			target.updateElements();
 			target.updateAllStatsValues();

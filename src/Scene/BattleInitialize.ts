@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Datas, Graphic, Manager, Model, Scene } from '..';
+import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	ALIGN,
 	BATTLE_STEP,
@@ -78,14 +78,14 @@ class BattleInitialize {
 		for (let i = 0; i < l; i++) {
 			// Battlers
 			center = Interpreter.evaluate(
-				Datas.BattleSystems.heroesBattlersCenterOffset.getValue() as string
+				Data.BattleSystems.heroesBattlersCenterOffset.getValue() as string
 			) as THREE.Vector3;
 			if (!(center instanceof THREE.Vector3)) {
 				Platform.showErrorMessage(
 					'Heroes battlers center offset incorrect return, should be a THREE.Vecto3: ' + center
 				);
 			}
-			offset = Interpreter.evaluate(Datas.BattleSystems.heroesBattlersOffset.getValue() as string, {
+			offset = Interpreter.evaluate(Data.BattleSystems.heroesBattlersOffset.getValue() as string, {
 				additionalName: 'i',
 				additionalValue: i,
 			}) as THREE.Vector3;
@@ -133,12 +133,12 @@ class BattleInitialize {
 				offset = new THREE.Vector3();
 			} else {
 				center = Interpreter.evaluate(
-					Datas.BattleSystems.troopsBattlersCenterOffset.getValue() as string
+					Data.BattleSystems.troopsBattlersCenterOffset.getValue() as string
 				) as THREE.Vector3;
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers center offset incorrect return: ' + center);
 				}
-				offset = Interpreter.evaluate(Datas.BattleSystems.troopsBattlersOffset.getValue() as string, {
+				offset = Interpreter.evaluate(Data.BattleSystems.troopsBattlersOffset.getValue() as string, {
 					additionalName: 'i',
 					additionalValue: i,
 				}) as THREE.Vector3;
@@ -200,12 +200,12 @@ class BattleInitialize {
 	 *  Initialize window commands.
 	 */
 	public initializeWindowCommands() {
-		const l = Datas.BattleSystems.battleCommandsOrder.length;
+		const l = Data.BattleSystems.battleCommandsOrder.length;
 		const listContent: Graphic.TextIcon[] = new Array(l);
 		const listCallbacks = new Array(l);
 		let skill: Model.Skill;
 		for (let i = 0; i < l; i++) {
-			skill = Datas.Skills.get(Datas.BattleSystems.getBattleCommand(Datas.BattleSystems.battleCommandsOrder[i]));
+			skill = Data.Skills.get(Data.BattleSystems.getBattleCommand(Data.BattleSystems.battleCommandsOrder[i]));
 			listContent[i] = Graphic.TextIcon.createFromSystem(skill.name(), skill);
 			listContent[i].system = skill;
 			listCallbacks[i] = Model.CommonSkillItem.prototype.useCommand;

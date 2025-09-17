@@ -11,7 +11,7 @@
 
 import { ScreenResolution } from '../Common';
 import { Game, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -23,7 +23,7 @@ class SaveLoadGame extends Base {
 	public windowChoicesSlots: WindowChoices;
 	public windowInformations: WindowBox;
 	public windowBot: WindowBox;
-	public gamesDatas: Graphic.Save[];
+	public gamesData: Graphic.Save[];
 
 	constructor() {
 		super();
@@ -34,10 +34,10 @@ class SaveLoadGame extends Base {
 	 */
 	async load() {
 		// Initialize games
-		this.gamesDatas = [];
+		this.gamesData = [];
 		const currentGame = Game.current;
-		for (let i = 1; i <= Datas.Systems.saveSlots; i++) {
-			this.gamesDatas.push(null);
+		for (let i = 1; i <= Data.Systems.saveSlots; i++) {
+			this.gamesData.push(null);
 			const newGame = new Game(i);
 			await newGame.load();
 			Game.current = newGame;
@@ -50,7 +50,7 @@ class SaveLoadGame extends Base {
 		this.windowInformations = new WindowBox(120, 100, 500, 300, {
 			padding: WindowBox.MEDIUM_PADDING_BOX,
 		});
-		this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, this.gamesDatas, {
+		this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, this.gamesData, {
 			nbItemsMax: 6,
 			padding: WindowBox.NONE_PADDING,
 		});
@@ -63,7 +63,7 @@ class SaveLoadGame extends Base {
 	 *   @param {Game} game - The game
 	 */
 	initializeGame(game: Game) {
-		this.gamesDatas[game.slot - 1] = new Graphic.Save(game);
+		this.gamesData[game.slot - 1] = new Graphic.Save(game);
 	}
 
 	/**
@@ -81,7 +81,7 @@ class SaveLoadGame extends Base {
 	 *  @param {number} i - The slot index
 	 */
 	updateInformations(i: number) {
-		this.windowInformations.content = this.gamesDatas[i];
+		this.windowInformations.content = this.gamesData[i];
 	}
 
 	/**
@@ -91,7 +91,7 @@ class SaveLoadGame extends Base {
 	 */
 	cancel(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-			Datas.Systems.soundCancel.playSound();
+			Data.Systems.soundCancel.playSound();
 			Manager.Stack.pop();
 		}
 	}

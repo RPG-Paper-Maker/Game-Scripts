@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, EventCommand, Manager, Model, Scene } from '..';
+import { Data, EventCommand, Manager, Model, Scene } from '..';
 import { Mathf, ScreenResolution } from '../Common';
 import { Game, MapObject, WindowChoices } from '../Core';
 import { SpinBox } from '../Core/SpinBox';
@@ -70,20 +70,20 @@ class InputNumber extends Base {
 			currentState.startTime = t;
 			currentState.spinBoxes[currentState.index].setActive(false);
 			if (isKey) {
-				if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Right)) {
+				if (Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Right)) {
 					currentState.index = Mathf.mod(currentState.index + 1, currentState.digits);
-					Datas.Systems.soundCursor.playSound();
+					Data.Systems.soundCursor.playSound();
 					Manager.Stack.requestPaintHUD = true;
-				} else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Left)) {
+				} else if (Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Left)) {
 					currentState.index = Mathf.mod(currentState.index - 1, currentState.digits);
-					Datas.Systems.soundCursor.playSound();
+					Data.Systems.soundCursor.playSound();
 					Manager.Stack.requestPaintHUD = true;
 				}
 			} else {
 				for (let i = 0; i < currentState.digits; i++) {
 					if (currentState.index !== i && currentState.spinBoxes[i].isInside(options.x, options.y)) {
 						currentState.index = i;
-						Datas.Systems.soundCursor.playSound();
+						Data.Systems.soundCursor.playSound();
 						Manager.Stack.requestPaintHUD = true;
 					}
 				}

@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Constants } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 
 /** @class
  *  The data class for portion.
@@ -48,9 +48,9 @@ class Portion {
 	 */
 	static createFromVector3(position: THREE.Vector3): Portion {
 		return new Portion(
-			Math.floor(position.x / Datas.Systems.SQUARE_SIZE / Constants.PORTION_SIZE),
-			Math.floor(position.y / Datas.Systems.SQUARE_SIZE / Constants.PORTION_SIZE),
-			Math.floor(position.z / Datas.Systems.SQUARE_SIZE / Constants.PORTION_SIZE)
+			Math.floor(position.x / Data.Systems.SQUARE_SIZE / Constants.PORTION_SIZE),
+			Math.floor(position.y / Data.Systems.SQUARE_SIZE / Constants.PORTION_SIZE),
+			Math.floor(position.z / Data.Systems.SQUARE_SIZE / Constants.PORTION_SIZE)
 		);
 	}
 

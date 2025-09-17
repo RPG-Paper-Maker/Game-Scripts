@@ -11,7 +11,7 @@
 
 import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Picture2D } from '../Core';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { PictureJSON } from '../Model';
 
 /** @class
@@ -109,7 +109,7 @@ class Pictures {
 	static get(kind: PICTURE_KIND, id: number): Model.Picture {
 		return kind === PICTURE_KIND.NONE || id === -1
 			? new Model.Picture()
-			: Datas.Base.get(id, this.list[kind], 'picture ' + Model.Picture.pictureKindToString(kind));
+			: Data.Base.get(id, this.list[kind], 'picture ' + Model.Picture.pictureKindToString(kind));
 	}
 
 	/**

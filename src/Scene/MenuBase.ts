@@ -10,7 +10,7 @@
 */
 
 import { Base } from '.';
-import { Datas, Graphic, Scene } from '..';
+import { Data, Graphic, Scene } from '..';
 import { ALIGN, Inputs } from '../Common';
 import { Game, Player } from '../Core';
 
@@ -57,7 +57,7 @@ abstract class MenuBase extends Base {
 	 *  @static
 	 */
 	static checkActionMenu(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
-		return (isKey && Datas.Keyboards.checkActionMenu(options.key)) || (!isKey && Inputs.mouseLeftPressed);
+		return (isKey && Data.Keyboards.checkActionMenu(options.key)) || (!isKey && Inputs.mouseLeftPressed);
 	}
 
 	/**
@@ -65,7 +65,7 @@ abstract class MenuBase extends Base {
 	 *  @static
 	 */
 	static checkCancelMenu(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
-		return (isKey && Datas.Keyboards.checkCancelMenu(options.key)) || (!isKey && Inputs.mouseRightPressed);
+		return (isKey && Data.Keyboards.checkCancelMenu(options.key)) || (!isKey && Inputs.mouseRightPressed);
 	}
 
 	/**
@@ -73,7 +73,7 @@ abstract class MenuBase extends Base {
 	 *  @static
 	 */
 	static checkCancel(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
-		return (isKey && Datas.Keyboards.checkCancel(options.key)) || (!isKey && Inputs.mouseRightPressed);
+		return (isKey && Data.Keyboards.checkCancel(options.key)) || (!isKey && Inputs.mouseRightPressed);
 	}
 
 	/**

@@ -11,7 +11,7 @@
 
 import { Mathf, Platform, ScreenResolution, Utils } from '../Common';
 import { Frame, Game, MapObject, Position, ReactionInterpreter, StructSearchResult } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -94,10 +94,10 @@ class TeleportObject extends Base {
 			transitionedEnd: this.transitionEnd === 0,
 			startColor:
 				this.transitionStart === 1
-					? Datas.Systems.getColor(this.transitionStartColor.getValue() as number)
+					? Data.Systems.getColor(this.transitionStartColor.getValue() as number)
 					: null,
 			endColor:
-				this.transitionEnd === 1 ? Datas.Systems.getColor(this.transitionEndColor.getValue() as number) : null,
+				this.transitionEnd === 1 ? Data.Systems.getColor(this.transitionEndColor.getValue() as number) : null,
 			transitionColorAlpha: 0,
 			distance: Scene.Map.current.camera.distance,
 			transitioning: false,
@@ -144,7 +144,7 @@ class TeleportObject extends Base {
 						this.x.getValue() as number,
 						this.y.getValue() as number,
 						this.z.getValue() as number,
-						((this.yPlus.getValue() as number) * 100) / Datas.Systems.SQUARE_SIZE
+						((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE
 					).toVector3();
 				} else {
 					MapObject.search(

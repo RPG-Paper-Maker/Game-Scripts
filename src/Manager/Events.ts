@@ -11,7 +11,7 @@
 
 import { EVENT_COMMAND_KIND } from '../Common';
 import { Game, MapObject, Portion } from '../Core';
-import { Datas, EventCommand, Manager, Scene } from '../index';
+import { Data, EventCommand, Manager, Scene } from '../index';
 import { DynamicValue, ReactionCommandJSON } from '../Model';
 
 /** @class
@@ -234,7 +234,7 @@ class Events {
 					Scene.Map.current.updatePortions(
 						this,
 						function (x: number, y: number, z: number, i: number, j: number, k: number) {
-							const objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
+							const objects = Game.current.getPortionData(Scene.Map.current.id, new Portion(x, y, z));
 
 							// Moved objects
 							let a: number, l: number, object: MapObject;
@@ -296,7 +296,7 @@ class Events {
 		let objects: Record<string, any>;
 		const closests: any[][] = [];
 		Scene.Map.current.updatePortions(this, (x: number, y: number, z: number, i: number, j: number, k: number) => {
-			objects = Game.current.getPortionDatas(Scene.Map.current.id, new Portion(x, y, z));
+			objects = Game.current.getPortionData(Scene.Map.current.id, new Portion(x, y, z));
 
 			// Moved objects
 			Manager.Events.sendEventObjects(
@@ -342,7 +342,7 @@ class Events {
 		if (!senderNoReceiver || sender !== Game.current.hero) {
 			if (targetID !== -1) {
 				// Check according to detection model
-				if (!Datas.Systems.getDetection(targetID).checkCollision(sender, Game.current.hero)) {
+				if (!Data.Systems.getDetection(targetID).checkCollision(sender, Game.current.hero)) {
 					return;
 				}
 			}
@@ -402,7 +402,7 @@ class Events {
 			}
 			if (targetID !== -1) {
 				// Check according to detection model
-				if (!Datas.Systems.getDetection(targetID).checkCollision(sender, object)) {
+				if (!Data.Systems.getDetection(targetID).checkCollision(sender, object)) {
 					continue;
 				}
 			}

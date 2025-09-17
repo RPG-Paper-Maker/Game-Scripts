@@ -10,7 +10,7 @@
 */
 
 import { Utils } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 import { DynamicValue } from './DynamicValue';
 import { Event, EventJSON } from './Event';
@@ -130,7 +130,7 @@ export class MapObject extends Base {
 		if (modelID === -1) {
 			return;
 		}
-		const inheritedObject = Datas.CommonEvents.getCommonObject(modelID);
+		const inheritedObject = Data.CommonEvents.getCommonObject(modelID);
 
 		// Only one event per frame inheritance is a priority
 		this.isEventFrame = inheritedObject.isEventFrame;

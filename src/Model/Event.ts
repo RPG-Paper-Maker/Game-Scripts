@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 import { Parameter, ParameterJSON, ParameterListJSON } from './Parameter';
 import { Reaction, ReactionJSON } from './Reaction';
@@ -72,8 +72,8 @@ export class Event extends Base {
 		this.parameters = Parameter.readParametersWithDefault(
 			json,
 			(this.isSystem
-				? Datas.CommonEvents.getEventSystem(this.idEvent)
-				: Datas.CommonEvents.getEventUser(this.idEvent)
+				? Data.CommonEvents.getEventSystem(this.idEvent)
+				: Data.CommonEvents.getEventUser(this.idEvent)
 			).parameters
 		);
 

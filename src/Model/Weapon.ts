@@ -10,7 +10,7 @@
 */
 
 import { ITEM_KIND } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Armor } from './Armor';
 
 /**
@@ -24,7 +24,7 @@ export class Weapon extends Armor {
 	 * @returns {Model.WeaponArmorKind} The weapon kind associated with this weapon.
 	 */
 	getType(): Model.WeaponArmorKind {
-		return Datas.BattleSystems.getWeaponKind(this.type);
+		return Data.BattleSystems.getWeaponKind(this.type);
 	}
 
 	/**

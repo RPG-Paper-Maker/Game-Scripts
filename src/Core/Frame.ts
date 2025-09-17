@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Manager } from '../index';
+import { Data, Manager } from '../index';
 
 /** @class
  *  A frame for updating animations (characters, battlers, etc.).
@@ -30,7 +30,7 @@ class Frame {
 			loop = true,
 			tick = 0,
 			value = 0,
-			frames = Datas.Systems.FRAMES,
+			frames = Data.Systems.FRAMES,
 		}: { loop?: boolean; tick?: number; value?: number; frames?: number } = {}
 	) {
 		this.duration = duration;

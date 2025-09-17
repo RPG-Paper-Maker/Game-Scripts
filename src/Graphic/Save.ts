@@ -11,7 +11,7 @@
 
 import { ALIGN, ScreenResolution, Utils } from '../Common';
 import { Game } from '../Core';
-import { Datas, Graphic } from '../index';
+import { Data, Graphic } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -30,11 +30,11 @@ class Save extends Base {
 		super();
 
 		this.game = game;
-		this.graphicSlot = new Graphic.Text(Datas.Languages.extras.slot.name() + ' ' + this.game.slot, {
+		this.graphicSlot = new Graphic.Text(Data.Languages.extras.slot.name() + ' ' + this.game.slot, {
 			align: ALIGN.CENTER,
 		});
 		if (this.game.isEmpty) {
-			this.graphicEmpty = new Graphic.Text(Datas.Languages.extras.empty.name(), { align: ALIGN.CENTER });
+			this.graphicEmpty = new Graphic.Text(Data.Languages.extras.empty.name(), { align: ALIGN.CENTER });
 		} else {
 			this.graphicTimer = new Graphic.Text(Utils.getStringDate(this.game.playTime.getSeconds()), {
 				align: ALIGN.RIGHT,

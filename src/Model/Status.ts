@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas } from '..';
+import { Data } from '..';
 import { EFFECT_KIND, STATUS_RESTRICTIONS_KIND, Utils } from '../Common';
 import { Characteristic, CharacteristicJSON } from './Characteristic';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
@@ -71,7 +71,7 @@ export class Status extends Icon {
 		const effects: Effect[] = [];
 		for (const effect of this.effects) {
 			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
-				effects.concat(Datas.Skills.get(effect.performSkillID.getValue() as number).getEffects());
+				effects.concat(Data.Skills.get(effect.performSkillID.getValue() as number).getEffects());
 			} else {
 				effects.push(effect);
 			}

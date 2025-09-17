@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { PICTURE_KIND } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
@@ -69,7 +69,7 @@ class SpriteWall extends MapElement {
 		const vecC = new THREE.Vector3(0.5, 0.0, 0.0);
 		const vecD = new THREE.Vector3(-0.5, 0.0, 0.0);
 		const center = new THREE.Vector3();
-		const size = new THREE.Vector3(Datas.Systems.SQUARE_SIZE, height, 0);
+		const size = new THREE.Vector3(Data.Systems.SQUARE_SIZE, height, 0);
 		const angle = position.angleY;
 		const localPosition = position.toVector3();
 
@@ -87,10 +87,10 @@ class SpriteWall extends MapElement {
 		center.add(localPosition);
 
 		// Getting UV coordinates
-		const textureRect = new Rectangle(this.kind, 0, 1, Math.floor(height / Datas.Systems.SQUARE_SIZE));
-		let x: number = (textureRect[0] * Datas.Systems.SQUARE_SIZE) / width;
+		const textureRect = new Rectangle(this.kind, 0, 1, Math.floor(height / Data.Systems.SQUARE_SIZE));
+		let x: number = (textureRect[0] * Data.Systems.SQUARE_SIZE) / width;
 		let y = textureRect[1];
-		let w = Datas.Systems.SQUARE_SIZE / width;
+		let w = Data.Systems.SQUARE_SIZE / width;
 		let h = 1.0;
 		const coefX: number = MapElement.COEF_TEX / width;
 		const coefY: number = MapElement.COEF_TEX / height;
@@ -107,9 +107,9 @@ class SpriteWall extends MapElement {
 		// Collision
 		const objCollision: StructMapElementCollision[] = [];
 		let collisions: Rectangle[] = [];
-		const wall = Datas.SpecialElements.getWall(this.id);
+		const wall = Data.SpecialElements.getWall(this.id);
 		if (wall) {
-			const picture = Datas.Pictures.get(PICTURE_KIND.WALLS, pictureID);
+			const picture = Data.Pictures.get(PICTURE_KIND.WALLS, pictureID);
 			if (picture) {
 				collisions = picture.getSquaresForWall(textureRect);
 			}
@@ -121,7 +121,7 @@ class SpriteWall extends MapElement {
 					l: localPosition,
 					b: [
 						localPosition.x,
-						localPosition.y + Math.floor((textureRect.height * Datas.Systems.SQUARE_SIZE - rect.y) / 2),
+						localPosition.y + Math.floor((textureRect.height * Data.Systems.SQUARE_SIZE - rect.y) / 2),
 						localPosition.z,
 						rect.width,
 						rect.height - 0.001, // Small offset for climbing collisions stuff
@@ -141,7 +141,7 @@ class SpriteWall extends MapElement {
 						l: localPosition,
 						b: [
 							localPosition.x + x,
-							localPosition.y + Math.floor((textureRect[3] * Datas.Systems.SQUARE_SIZE - y) / 2),
+							localPosition.y + Math.floor((textureRect[3] * Data.Systems.SQUARE_SIZE - y) / 2),
 							localPosition.z,
 							rect.width,
 							rect.height,

@@ -21,7 +21,7 @@ import {
 	Utils,
 } from '../Common';
 import { Battler, Player } from '../Core';
-import { Datas, Scene } from '../index';
+import { Data, Scene } from '../index';
 import { Characteristic, CharacteristicJSON } from './Characteristic';
 import { Cost, CostJSON } from './Cost';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
@@ -125,7 +125,7 @@ class CommonSkillItem extends Icon {
 		const effects: Effect[] = [];
 		for (const effect of this.effects) {
 			if (effect.kind === EFFECT_KIND.PERFORM_SKILL) {
-				const skill = Datas.Skills.get(effect.performSkillID.getValue() as number);
+				const skill = Data.Skills.get(effect.performSkillID.getValue() as number);
 				effects.push(...skill.getEffects());
 			} else {
 				effects.push(effect);

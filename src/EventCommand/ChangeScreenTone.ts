@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -57,7 +57,7 @@ class ChangeScreenTone extends Base {
 	 */
 	initialize(): Record<string, any> {
 		const time = (this.time.getValue() as number) * 1000;
-		const color = this.colorID ? Datas.Systems.getColor(this.colorID.getValue() as number) : null;
+		const color = this.colorID ? Data.Systems.getColor(this.colorID.getValue() as number) : null;
 		return {
 			parallel: this.waitEnd,
 			finalDifRed:

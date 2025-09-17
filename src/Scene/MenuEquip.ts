@@ -11,7 +11,7 @@
 
 import { ALIGN, CHARACTERISTIC_KIND, Interpreter, ITEM_KIND, ORIENTATION_WINDOW } from '../Common';
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Model, Scene } from '../index';
+import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { MenuBase } from './MenuBase';
 
 /**
@@ -91,7 +91,7 @@ class MenuEquip extends MenuBase {
 	 */
 	createWindowChoiceEquipment() {
 		const rect = new Rectangle(20, 100, 290, WindowBox.SMALL_SLOT_HEIGHT);
-		const nbEquipments = Datas.BattleSystems.equipmentsOrder.length;
+		const nbEquipments = Data.BattleSystems.equipmentsOrder.length;
 		const options = {
 			nbItemsMax: Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, nbEquipments),
 		};
@@ -111,7 +111,7 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	createWindowChoiceList() {
-		const nbEquips = Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, Datas.BattleSystems.equipmentsOrder.length);
+		const nbEquips = Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, Data.BattleSystems.equipmentsOrder.length);
 		const nbEquipChoice = MenuBase.SLOTS_TO_DISPLAY - nbEquips - 1;
 		const y = 100 + (nbEquips + 1) * WindowBox.SMALL_SLOT_HEIGHT;
 		const rect = new Rectangle(20, y, 290, WindowBox.SMALL_SLOT_HEIGHT);
@@ -141,7 +141,7 @@ class MenuEquip extends MenuBase {
 	updateForTab() {
 		// update equipment
 		const equipLength = Player.getEquipmentLength();
-		const l = Datas.BattleSystems.equipmentsOrder.length;
+		const l = Data.BattleSystems.equipmentsOrder.length;
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
 		const characteristics = player.getCharacteristics();
 		const list = new Array(l);
@@ -153,12 +153,12 @@ class MenuEquip extends MenuBase {
 				characteristic = characteristics[j];
 				if (
 					characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
-					(characteristic.changeEquipmentID.getValue() as number) === Datas.BattleSystems.equipmentsOrder[i]
+					(characteristic.changeEquipmentID.getValue() as number) === Data.BattleSystems.equipmentsOrder[i]
 				) {
 					isPossible = characteristic.isAllowChangeEquipment;
 				}
 			}
-			list[i] = new Graphic.Equip(player, Datas.BattleSystems.equipmentsOrder[i], equipLength, isPossible);
+			list[i] = new Graphic.Equip(player, Data.BattleSystems.equipmentsOrder[i], equipLength, isPossible);
 		}
 		this.windowChoicesEquipment.setContents(list);
 		this.selectedEquipment = -1;
@@ -174,8 +174,8 @@ class MenuEquip extends MenuBase {
 	 */
 	updateEquipmentList() {
 		const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
-		const idEquipment = Datas.BattleSystems.equipmentsOrder[currentIndex];
-		const list: Graphic.Base[] = [new Graphic.Text('  [' + Datas.Languages.extras.remove.name() + ']')];
+		const idEquipment = Data.BattleSystems.equipmentsOrder[currentIndex];
+		const list: Graphic.Base[] = [new Graphic.Text('  [' + Data.Languages.extras.remove.name() + ']')];
 		let item: Item, systemItem: Model.CommonSkillItem;
 		let type: Model.WeaponArmorKind, nbItem: number;
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
@@ -219,7 +219,7 @@ class MenuEquip extends MenuBase {
 			this.list = [];
 		} else {
 			const item = <Graphic.Item>this.windowChoicesList.getCurrentContent();
-			const equipmentID = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
+			const equipmentID = Data.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
 			const system = item.item ? item.item.system : null;
 			const result = player.getEquipmentStatsAndBonus(system, equipmentID);
 			this.list = result[0];
@@ -273,7 +273,7 @@ class MenuEquip extends MenuBase {
 	 *  Remove the selected equipment.
 	 */
 	remove() {
-		this.removeAnEquipment(Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex]);
+		this.removeAnEquipment(Data.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex]);
 	}
 
 	/**
@@ -302,7 +302,7 @@ class MenuEquip extends MenuBase {
 		const index = this.windowChoicesTabs.currentSelectedIndex;
 		const character = Game.current.teamHeroes[index];
 		const gameItem = (<Graphic.Item>this.windowChoicesList.getCurrentContent()).item;
-		const id = Datas.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
+		const id = Data.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
 		const prev = character.equip[id];
 		character.equip[id] = gameItem;
 
@@ -310,8 +310,8 @@ class MenuEquip extends MenuBase {
 		for (const characteristic of gameItem.system.characteristics) {
 			if (characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP && !characteristic.isAllowEquip) {
 				const weaponArmor = characteristic.isAllowEquipWeapon
-					? Datas.BattleSystems.getWeaponKind(characteristic.equipWeaponTypeID.getValue() as number)
-					: Datas.BattleSystems.getArmorKind(characteristic.equipArmorTypeID.getValue() as number);
+					? Data.BattleSystems.getWeaponKind(characteristic.equipWeaponTypeID.getValue() as number)
+					: Data.BattleSystems.getArmorKind(characteristic.equipArmorTypeID.getValue() as number);
 				for (const [id, equipment] of weaponArmor.equipments.entries()) {
 					if (equipment) {
 						this.removeAnEquipment(id);
@@ -358,11 +358,11 @@ class MenuEquip extends MenuBase {
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		if (this.selectedEquipment === -1) {
 			if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-				Datas.Systems.soundCancel.playSound();
+				Data.Systems.soundCancel.playSound();
 				Manager.Stack.pop();
 			} else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 				if ((<Graphic.Equip>this.windowChoicesEquipment.getCurrentContent()).isPossible) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					this.selectedEquipment = this.windowChoicesEquipment.currentSelectedIndex;
 					this.windowChoicesList.currentSelectedIndex = 0;
 					if (this.windowChoicesList.listContents.length > 1) {
@@ -371,18 +371,18 @@ class MenuEquip extends MenuBase {
 					this.updateInformations();
 					this.windowChoicesList.selectCurrent();
 				} else {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 				}
 			}
 		} else {
 			if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-				Datas.Systems.soundCancel.playSound();
+				Data.Systems.soundCancel.playSound();
 				this.selectedEquipment = -1;
 				this.windowChoicesList.unselect();
 				this.updateInformations();
 			} else if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 				if (this.windowChoicesList.getCurrentContent() !== null) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					if (this.windowChoicesList.currentSelectedIndex === 0) {
 						this.remove();
 					} else {
@@ -392,7 +392,7 @@ class MenuEquip extends MenuBase {
 					this.windowChoicesList.unselect();
 					this.updateForTab();
 				} else {
-					Datas.Systems.soundImpossible.playSound();
+					Data.Systems.soundImpossible.playSound();
 				}
 			}
 		}

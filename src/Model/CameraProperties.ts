@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Constants, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Base } from './Base';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
@@ -66,7 +66,7 @@ export class CameraProperties extends Base {
 	initializeCamera(camera: Camera) {
 		camera.isPerspective = !this.orthographic;
 		camera.distance =
-			(this.distance.getValue() as number) * (Datas.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+			(this.distance.getValue() as number) * (Data.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
 		if (camera.isPerspective) {
 			camera.perspectiveCamera = new THREE.PerspectiveCamera(
 				this.fov.getValue() as number,
@@ -91,15 +91,15 @@ export class CameraProperties extends Base {
 		camera.targetPosition = new THREE.Vector3();
 		let x = this.targetOffsetX.getValue() as number;
 		if (this.isSquareTargetOffsetX) {
-			x *= Datas.Systems.SQUARE_SIZE;
+			x *= Data.Systems.SQUARE_SIZE;
 		}
 		let y = this.targetOffsetY.getValue() as number;
 		if (this.isSquareTargetOffsetY) {
-			y *= Datas.Systems.SQUARE_SIZE;
+			y *= Data.Systems.SQUARE_SIZE;
 		}
 		let z = this.targetOffsetZ.getValue() as number;
 		if (this.isSquareTargetOffsetZ) {
-			z *= Datas.Systems.SQUARE_SIZE;
+			z *= Data.Systems.SQUARE_SIZE;
 		}
 		camera.targetOffset = new THREE.Vector3(x, y, z);
 	}

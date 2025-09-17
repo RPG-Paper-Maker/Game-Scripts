@@ -12,7 +12,7 @@
 import { Node } from './Node';
 
 /** @class
- *  Datas structure of tree.
+ *  Data structure of tree.
  *  @param {any} data - The data
  */
 class Tree {

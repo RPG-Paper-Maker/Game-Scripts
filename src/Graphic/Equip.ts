@@ -11,7 +11,7 @@
 
 import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -36,7 +36,7 @@ class Equip extends Base {
 
 		// All the graphics
 		this.graphicEquipmentName = new Graphic.Text(
-			Datas.BattleSystems.getEquipment(id).name(),
+			Data.BattleSystems.getEquipment(id).name(),
 			isPossible ? {} : { color: Model.Color.GREY }
 		);
 		this.graphicEquipment = new Graphic.Text(

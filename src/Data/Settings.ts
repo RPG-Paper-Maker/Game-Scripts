@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas } from '..';
+import { Data } from '..';
 import { IO, Paths, Platform, TITLE_SETTING_KIND, Utils } from '../Common';
 
 /** @class
@@ -39,7 +39,7 @@ class Settings {
 		}
 		this.currentLanguage = Utils.valueOrDefault(
 			json[String(TITLE_SETTING_KIND.LANGUAGE)],
-			Datas.Languages.getMainLanguageID()
+			Data.Languages.getMainLanguageID()
 		);
 	}
 

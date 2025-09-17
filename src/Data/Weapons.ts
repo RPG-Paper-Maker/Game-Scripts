@@ -10,40 +10,39 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
- *  All the classes datas.
+ *  All the weapons datas
  *  @static
  */
-class Classes {
-	private static list: Model.Class[];
+class Weapons {
+	private static list: Model.Weapon[];
 
 	constructor() {
 		throw new Error('This is a static class!');
 	}
 
 	/**
-	 *  Read the JSON file associated to classes
+	 *  Read the JSON file associated to weapons
 	 *  @static
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)).classes as any;
+		const json = (await Platform.parseFileJSON(Paths.FILE_WEAPONS)).weapons as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Class });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Weapon });
 	}
 
 	/**
-	 *  Get the class by ID.
+	 *  Get the weapon by ID.
 	 *  @static
 	 *  @param {number} id
-	 *  @param {string} errorMessage
-	 *  @returns {System.Class}
+	 *  @returns {System.Weapon}
 	 */
-	static get(id: number, errorMessage: string = ''): Model.Class {
-		return Datas.Base.get(id, this.list, 'class', true, errorMessage);
+	static get(id: number): Model.Weapon {
+		return Data.Base.get(id, this.list, 'weapon');
 	}
 }
 
-export { Classes };
+export { Weapons };

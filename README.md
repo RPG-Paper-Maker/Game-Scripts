@@ -91,5 +91,5 @@ It's split into 9 modules:
     > The module who hold all the Graphics related class.
 -   Windows
     > The module who hold all the windows related class.
--   Datas
+-   Data
     > The module who hold all the datas.

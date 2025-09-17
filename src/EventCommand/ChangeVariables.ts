@@ -19,7 +19,7 @@ import {
 	VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND,
 } from '../Common';
 import { Game, Item, MapObject, Position, StructSearchResult } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -216,7 +216,7 @@ class ChangeVariables extends Base {
 						if (player.instid === id) {
 							currentState.value =
 								player[
-									Datas.BattleSystems.getStatistic(
+									Data.BattleSystems.getStatistic(
 										this.valueStatisticID.getValue() as number
 									).abbreviation
 								];

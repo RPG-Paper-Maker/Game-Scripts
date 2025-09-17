@@ -11,7 +11,7 @@
 
 import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D } from '../Core';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -46,7 +46,7 @@ class SkillItem extends Base {
 		});
 		if (this.system.hasTARGET_KIND) {
 			this.graphicTarget = new Graphic.Text(
-				Datas.Languages.extras.target.name() + ': ' + system.getTargetKindString(),
+				Data.Languages.extras.target.name() + ': ' + system.getTargetKindString(),
 				{ align: ALIGN.RIGHT, fontSize: Constants.MEDIUM_FONT_SIZE }
 			);
 		}
@@ -60,10 +60,10 @@ class SkillItem extends Base {
 				this.graphicEffects.push(graphic);
 			}
 			if (effect.isDamageElement) {
-				const element = Datas.BattleSystems.getElement(effect.damageElementID.getValue() as number);
-				graphicIcon = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, element.pictureID);
-				graphicIcon.sx = element.pictureIndexX * Datas.Systems.iconsSize;
-				graphicIcon.sy = element.pictureIndexY * Datas.Systems.iconsSize;
+				const element = Data.BattleSystems.getElement(effect.damageElementID.getValue() as number);
+				graphicIcon = Data.Pictures.getPictureCopy(PICTURE_KIND.ICONS, element.pictureID);
+				graphicIcon.sx = element.pictureIndexX * Data.Systems.iconsSize;
+				graphicIcon.sy = element.pictureIndexY * Data.Systems.iconsSize;
 				this.graphicElements.push(graphicIcon);
 				if (txt) {
 					graphic['elementIcon'] = graphicIcon;
@@ -114,17 +114,17 @@ class SkillItem extends Base {
 			graphic = this.graphicElements[i];
 			graphic.draw({
 				x: offsetX,
-				y: y - ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) / 2,
-				sw: Datas.Systems.iconsSize,
-				sh: Datas.Systems.iconsSize,
-				w: Datas.Systems.iconsSize,
-				h: Datas.Systems.iconsSize,
+				y: y - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) / 2,
+				sw: Data.Systems.iconsSize,
+				sh: Data.Systems.iconsSize,
+				w: Data.Systems.iconsSize,
+				h: Data.Systems.iconsSize,
 			});
-			offsetX += ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + this.graphicName.space;
+			offsetX += ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) + this.graphicName.space;
 		}
 		if (this.system.hasType) {
 			this.graphicType.draw(
-				x + ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) + this.graphicName.space,
+				x + ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) + this.graphicName.space,
 				y + offsetY,
 				w,
 				0
@@ -142,11 +142,11 @@ class SkillItem extends Base {
 				graphicText.measureText();
 				pictureIcon.draw({
 					x: x + graphicText.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE),
-					y: y + offsetY - ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) / 2,
-					sw: Datas.Systems.iconsSize,
-					sh: Datas.Systems.iconsSize,
-					w: Datas.Systems.iconsSize,
-					h: Datas.Systems.iconsSize,
+					y: y + offsetY - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) / 2,
+					sw: Data.Systems.iconsSize,
+					sh: Data.Systems.iconsSize,
+					w: Data.Systems.iconsSize,
+					h: Data.Systems.iconsSize,
 				});
 			}
 			offsetY += graphicText.fontSize + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);

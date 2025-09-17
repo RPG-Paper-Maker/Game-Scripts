@@ -11,7 +11,7 @@
 
 import { ALIGN, ORIENTATION_WINDOW } from '../Common';
 import { Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { MenuBase } from './MenuBase';
 
 /**
@@ -125,7 +125,7 @@ class MenuDescriptionState extends MenuBase {
 	 */
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-			Datas.Systems.soundCancel.playSound();
+			Data.Systems.soundCancel.playSound();
 			Manager.Stack.pop();
 		}
 	}

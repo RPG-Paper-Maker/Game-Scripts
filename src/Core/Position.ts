@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Constants, Mathf } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Portion } from './Portion';
 
 /** @class
@@ -104,9 +104,9 @@ class Position extends Portion {
 	 */
 	static createFromVector3(position: THREE.Vector3): Position {
 		return new Position(
-			Math.floor(position.x / Datas.Systems.SQUARE_SIZE),
-			Math.floor(position.y / Datas.Systems.SQUARE_SIZE),
-			Math.floor(position.z / Datas.Systems.SQUARE_SIZE)
+			Math.floor(position.x / Data.Systems.SQUARE_SIZE),
+			Math.floor(position.y / Data.Systems.SQUARE_SIZE),
+			Math.floor(position.z / Data.Systems.SQUARE_SIZE)
 		);
 	}
 
@@ -135,7 +135,7 @@ class Position extends Portion {
 	 *   @returns {number}
 	 */
 	getTotalY(): number {
-		return this.y * Datas.Systems.SQUARE_SIZE + (this.yPixels * Datas.Systems.SQUARE_SIZE) / 100;
+		return this.y * Data.Systems.SQUARE_SIZE + (this.yPixels * Data.Systems.SQUARE_SIZE) / 100;
 	}
 
 	/**
@@ -143,7 +143,7 @@ class Position extends Portion {
 	 *  @returns {number}
 	 */
 	getPixelsCenterX(): number {
-		return Math.floor((this.centerX * Datas.Systems.SQUARE_SIZE) / 100);
+		return Math.floor((this.centerX * Data.Systems.SQUARE_SIZE) / 100);
 	}
 
 	/**
@@ -151,7 +151,7 @@ class Position extends Portion {
 	 *  @returns {number}
 	 */
 	getPixelsCenterZ(): number {
-		return Math.floor((this.centerZ * Datas.Systems.SQUARE_SIZE) / 100);
+		return Math.floor((this.centerZ * Data.Systems.SQUARE_SIZE) / 100);
 	}
 
 	/**
@@ -172,9 +172,9 @@ class Position extends Portion {
 	 */
 	toVector3(center: boolean = true): THREE.Vector3 {
 		return new THREE.Vector3(
-			this.x * Datas.Systems.SQUARE_SIZE + (center ? (this.centerX / 100) * Datas.Systems.SQUARE_SIZE : 0),
-			this.y * Datas.Systems.SQUARE_SIZE + (this.yPixels * Datas.Systems.SQUARE_SIZE) / 100,
-			this.z * Datas.Systems.SQUARE_SIZE + (center ? (this.centerZ / 100) * Datas.Systems.SQUARE_SIZE : 0)
+			this.x * Data.Systems.SQUARE_SIZE + (center ? (this.centerX / 100) * Data.Systems.SQUARE_SIZE : 0),
+			this.y * Data.Systems.SQUARE_SIZE + (this.yPixels * Data.Systems.SQUARE_SIZE) / 100,
+			this.z * Data.Systems.SQUARE_SIZE + (center ? (this.centerZ / 100) * Data.Systems.SQUARE_SIZE : 0)
 		);
 	}
 

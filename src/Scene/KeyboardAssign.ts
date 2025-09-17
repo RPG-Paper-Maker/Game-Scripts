@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -46,9 +46,9 @@ class KeyboardAssign extends Base {
 	 */
 	async load() {
 		// Creating background
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
-				Datas.TitlescreenGameover.titleBackgroundImageID,
+				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
@@ -61,7 +61,7 @@ class KeyboardAssign extends Base {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.LARGE_SLOT_HEIGHT,
 			{
-				content: new Graphic.Text(Datas.Languages.extras.keyboardAssignment.name(), {
+				content: new Graphic.Text(Data.Languages.extras.keyboardAssignment.name(), {
 					align: ALIGN.CENTER,
 				}),
 				padding: WindowBox.SMALL_SLOT_PADDING,
@@ -73,7 +73,7 @@ class KeyboardAssign extends Base {
 			ScreenResolution.SCREEN_X - 2 * Constants.HUGE_SPACE - WindowBox.MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE,
 			WindowBox.LARGE_SLOT_HEIGHT,
 			{
-				content: new Graphic.Text(Datas.Languages.extras.keyboardAssignmentSelectedDescription.name(), {
+				content: new Graphic.Text(Data.Languages.extras.keyboardAssignmentSelectedDescription.name(), {
 					align: ALIGN.CENTER,
 				}),
 				padding: WindowBox.SMALL_SLOT_PADDING,
@@ -84,10 +84,10 @@ class KeyboardAssign extends Base {
 			Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants.LARGE_SPACE,
 			ScreenResolution.SCREEN_X - 2 * Constants.HUGE_SPACE,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
-			Datas.Keyboards.getCommandsGraphics(),
+			Data.Keyboards.getCommandsGraphics(),
 			{
 				nbItemsMax: 9,
-				listCallbacks: Datas.Keyboards.getCommandsActions(),
+				listCallbacks: Data.Keyboards.getCommandsActions(),
 				bordersInsideVisible: false,
 			}
 		);
@@ -130,7 +130,7 @@ class KeyboardAssign extends Base {
 	 *  Cancel the scene.
 	 */
 	cancel() {
-		Datas.Systems.soundCancel.playSound();
+		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
 	}
 
@@ -154,7 +154,7 @@ class KeyboardAssign extends Base {
 				if (this.currentSC.length === 0) {
 					graphic.updateShort(this.originalSC);
 				} else {
-					Datas.Settings.updateKeyboard(graphic.kb.id, this.currentSC);
+					Data.Settings.updateKeyboard(graphic.kb.id, this.currentSC);
 				}
 				Manager.Stack.requestPaintHUD = true;
 			}
@@ -182,7 +182,7 @@ class KeyboardAssign extends Base {
 			}
 		} else {
 			this.windowChoicesMain.onKeyPressed(key, this);
-			if (Datas.Keyboards.checkCancelMenu(key)) {
+			if (Data.Keyboards.checkCancelMenu(key)) {
 				this.cancel();
 			}
 		}
@@ -240,7 +240,7 @@ class KeyboardAssign extends Base {
 	 *  Draw the HUD scene
 	 */
 	drawHUD() {
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground.draw();
 		}
 		this.windowKeyboard.draw();

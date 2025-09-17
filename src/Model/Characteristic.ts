@@ -11,7 +11,7 @@
 
 import { CHARACTERISTIC_KIND, INCREASE_DECREASE_KIND, Interpreter, Utils } from '../Common';
 import { Player } from '../Core';
-import { Datas, Model, Scene } from '../index';
+import { Data, Model, Scene } from '../index';
 import { Base } from './Base';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 
@@ -109,7 +109,7 @@ export class Characteristic extends Base {
 				switch (this.increaseDecreaseKind) {
 					case INCREASE_DECREASE_KIND.STAT_VALUE: {
 						const statID = this.statisticValueID.getValue() as number;
-						const stat = Datas.BattleSystems.getStatistic(statID);
+						const stat = Data.BattleSystems.getStatistic(statID);
 						let value = (this.value.getValue() as number) * (this.isIncreaseDecrease ? 1 : -1);
 						const baseStatValue =
 							gamePlayer[stat.getAbbreviationNext()] - gamePlayer[stat.getBonusAbbreviation()];
@@ -126,9 +126,9 @@ export class Characteristic extends Base {
 					}
 					case INCREASE_DECREASE_KIND.ELEMENT_RES: {
 						const statID = this.unit
-							? Datas.BattleSystems.getStatisticElementPercent(this.elementResID.getValue() as number)
-							: Datas.BattleSystems.getStatisticElement(this.elementResID.getValue() as number);
-						const stat = Datas.BattleSystems.getStatistic(statID);
+							? Data.BattleSystems.getStatisticElementPercent(this.elementResID.getValue() as number)
+							: Data.BattleSystems.getStatisticElement(this.elementResID.getValue() as number);
+						const stat = Data.BattleSystems.getStatistic(statID);
 						let value = (this.value.getValue() as number) * (this.isIncreaseDecrease ? 1 : -1);
 						if (this.operation) {
 							// *
@@ -205,7 +205,7 @@ export class Characteristic extends Base {
 			case CHARACTERISTIC_KIND.INCREASE_DECREASE: {
 				switch (this.increaseDecreaseKind) {
 					case INCREASE_DECREASE_KIND.STAT_VALUE:
-						result += Datas.BattleSystems.getStatistic(
+						result += Data.BattleSystems.getStatistic(
 							Interpreter.evaluate(this.statisticValueID.getValue() as string, {
 								user,
 								target,
@@ -214,26 +214,26 @@ export class Characteristic extends Base {
 						break;
 					case INCREASE_DECREASE_KIND.ELEMENT_RES:
 						result +=
-							Datas.BattleSystems.getElement(this.elementResID.getValue() as number).name() + ' res.';
+							Data.BattleSystems.getElement(this.elementResID.getValue() as number).name() + ' res.';
 						break;
 					case INCREASE_DECREASE_KIND.STATUS_RES:
-						result += Datas.Status.get(this.statusResID.getValue() as number).name() + ' res.';
+						result += Data.Status.get(this.statusResID.getValue() as number).name() + ' res.';
 						break;
 					case INCREASE_DECREASE_KIND.EXPERIENCE_GAIN:
-						result += Datas.BattleSystems.getExpStatistic().name() + ' gain';
+						result += Data.BattleSystems.getExpStatistic().name() + ' gain';
 						break;
 					case INCREASE_DECREASE_KIND.CURRENCY_GAIN:
-						result += Datas.Systems.getCurrency(this.currencyGainID.getValue() as number).name() + ' gain';
+						result += Data.Systems.getCurrency(this.currencyGainID.getValue() as number).name() + ' gain';
 						break;
 					case INCREASE_DECREASE_KIND.SKILL_COST:
 						if (this.isAllSkillCost) {
 							result += 'All skills cost';
 						} else {
-							result += Datas.Skills.get(this.skillCostID.getValue() as number).name() + ' skill cost';
+							result += Data.Skills.get(this.skillCostID.getValue() as number).name() + ' skill cost';
 						}
 						break;
 					case INCREASE_DECREASE_KIND.VARIABLE:
-						result += Datas.Variables.get(this.variableID);
+						result += Data.Variables.get(this.variableID);
 						break;
 				}
 				result += ' ';

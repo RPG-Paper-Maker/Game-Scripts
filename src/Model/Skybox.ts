@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { PICTURE_KIND, Utils } from '../Common';
-import { Datas, Manager } from '../index';
+import { Data, Manager } from '../index';
 import { Base } from './Base';
 
 /**
@@ -46,7 +46,7 @@ export class Skybox extends Base {
 	 */
 	createTextures(): THREE.MeshPhongMaterial[] {
 		return [this.left, this.right, this.top, this.bot, this.front, this.back].map((side) => {
-			const texture = Manager.GL.textureLoader.load(Datas.Pictures.get(PICTURE_KIND.SKYBOXES, side).getPath());
+			const texture = Manager.GL.textureLoader.load(Data.Pictures.get(PICTURE_KIND.SKYBOXES, side).getPath());
 			texture.wrapS = THREE.RepeatWrapping;
 			texture.repeat.x = -1;
 			return Manager.GL.createMaterial({

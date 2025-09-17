@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Model } from '..';
+import { Data, Model } from '..';
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Battler } from './Battler';
 import { Picture2D } from './Picture2D';
@@ -26,9 +26,9 @@ class Status {
 
 	constructor(id: number, turn: number = 0) {
 		this.id = id;
-		this.system = Datas.Status.get(id);
+		this.system = Data.Status.get(id);
 		this.turn = turn;
-		this.picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.system.pictureID);
+		this.picture = Data.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.system.pictureID);
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Status {
 	 */
 	static drawList(statusList: Status[], x: number, y: number, align = ALIGN.LEFT) {
 		const l = statusList.length;
-		let totalWidth = l * ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
+		let totalWidth = l * ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
 		let s: Status;
 		if (l > 1) {
 			totalWidth += (l - 1) * ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
@@ -68,14 +68,14 @@ class Status {
 		}
 		for (let i = 0, l = statusList.length; i < l; i++) {
 			s = statusList[i];
-			xOffset += ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize);
+			xOffset += ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
 			s.draw(
 				x -
 					totalWidth +
 					xOffset +
 					ScreenResolution.getScreenMinXY(i * Constants.MEDIUM_SPACE) -
-					ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize),
-				y - ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize)
+					ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
+				y - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize)
 			);
 		}
 	}
@@ -125,12 +125,12 @@ class Status {
 		this.picture.draw({
 			x: x,
 			y: y,
-			sx: this.system.pictureIndexX * Datas.Systems.iconsSize,
-			sy: this.system.pictureIndexY * Datas.Systems.iconsSize,
-			sw: Datas.Systems.iconsSize,
-			sh: Datas.Systems.iconsSize,
-			w: ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize),
-			h: ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize),
+			sx: this.system.pictureIndexX * Data.Systems.iconsSize,
+			sy: this.system.pictureIndexY * Data.Systems.iconsSize,
+			sw: Data.Systems.iconsSize,
+			sh: Data.Systems.iconsSize,
+			w: ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
+			h: ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
 		});
 	}
 }

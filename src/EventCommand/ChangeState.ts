@@ -40,55 +40,55 @@ class ChangeState extends Base {
 	/**
 	 *  Add a state to an object.
 	 *  @static
-	 *  @param {Record<string, any>} - portionDatas Datas inside a portion
+	 *  @param {Record<string, any>} - portionData Data inside a portion
 	 *  @param {number} index - Index in the portion datas
 	 *  @param {number} state - ID of the state
 	 */
-	static addState(portionDatas: Record<string, any>, index: number, state: number) {
-		const states = portionDatas.s[index];
+	static addState(portionData: Record<string, any>, index: number, state: number) {
+		const states = portionData.s[index];
 		if (states.indexOf(state) === -1) {
 			states.push(state);
 		}
-		EventCommand.ChangeState.removeFromDatas(portionDatas, index, states);
+		EventCommand.ChangeState.removeFromData(portionData, index, states);
 	}
 
 	/**
 	 *  Remove a state from an object.
 	 *  @static
-	 *  @param {Record<string, any>} - portionDatas Datas inside a portion
+	 *  @param {Record<string, any>} - portionData Data inside a portion
 	 *  @param {number} index - Index in the portion datas
 	 *  @param {number} state - ID of the state
 	 */
-	static removeState(portionDatas: Record<string, any>, index: number, state: number) {
-		const states = portionDatas.s[index];
+	static removeState(portionData: Record<string, any>, index: number, state: number) {
+		const states = portionData.s[index];
 		const indexState = states.indexOf(state);
 		if (states.indexOf(state) !== -1) {
 			states.splice(indexState, 1);
 		}
-		EventCommand.ChangeState.removeFromDatas(portionDatas, index, states);
+		EventCommand.ChangeState.removeFromData(portionData, index, states);
 	}
 
 	/**
 	 *  Remove all the states from an object.
 	 *  @static
-	 *  @param {Record<string, any>} - portionDatas Datas inside a portion
+	 *  @param {Record<string, any>} - portionData Data inside a portion
 	 *  @param {number} index - Index in the portion datas
 	 */
-	static removeAll(portionDatas: Record<string, any>, index: number) {
-		portionDatas.s[index] = [];
+	static removeAll(portionData: Record<string, any>, index: number) {
+		portionData.s[index] = [];
 	}
 
 	/**
 	 *  Remove states from datas.
 	 *  @static
-	 *  @param {Record<string, any>} - portionDatas Datas inside a portion
+	 *  @param {Record<string, any>} - portionData Data inside a portion
 	 *  @param {number} index - Index in the portion datas
 	 *  @param {number[]} states
 	 */
-	static removeFromDatas(portionDatas: Record<string, any>, index: number, states: number[]) {
+	static removeFromData(portionData: Record<string, any>, index: number, states: number[]) {
 		if (states.length === 1 && states[0] === 1) {
-			portionDatas.si.splice(index, 1);
-			portionDatas.s.splice(index, 1);
+			portionData.si.splice(index, 1);
+			portionData.s.splice(index, 1);
 		}
 	}
 
@@ -205,24 +205,24 @@ class ChangeState extends Base {
 					);
 				}
 				const portion = position.getGlobalPortion();
-				const portionDatas = Game.current.getPortionDatas(currentState.map.id, portion);
-				let indexState = portionDatas.si.indexOf(objectID);
+				const portionData = Game.current.getPortionData(currentState.map.id, portion);
+				let indexState = portionData.si.indexOf(objectID);
 				if (indexState === -1) {
-					indexState = portionDatas.si.length;
-					portionDatas.si.push(objectID);
-					portionDatas.s.push([1]);
+					indexState = portionData.si.length;
+					portionData.si.push(objectID);
+					portionData.s.push([1]);
 				}
 				switch (this.operationKind) {
 					case 0: // Replacing
-						EventCommand.ChangeState.removeAll(portionDatas, indexState);
-						EventCommand.ChangeState.addState(portionDatas, indexState, this.idState.getValue() as number);
+						EventCommand.ChangeState.removeAll(portionData, indexState);
+						EventCommand.ChangeState.addState(portionData, indexState, this.idState.getValue() as number);
 						break;
 					case 1: // Adding
-						EventCommand.ChangeState.addState(portionDatas, indexState, this.idState.getValue() as number);
+						EventCommand.ChangeState.addState(portionData, indexState, this.idState.getValue() as number);
 						break;
 					case 2: // Deleting
 						EventCommand.ChangeState.removeState(
-							portionDatas,
+							portionData,
 							indexState,
 							this.idState.getValue() as number
 						);

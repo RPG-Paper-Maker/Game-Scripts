@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { OBJECT_COLLISION_KIND } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
 import { Object3D } from './Object3D';
@@ -202,10 +202,10 @@ class Object3DBox extends Object3D {
 		const localPosition = position.toVector3(false);
 		if (this.datas.isTopLeft) {
 			localPosition.setX(
-				localPosition.x - Math.floor(Datas.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterX() + coef
+				localPosition.x - Math.floor(Data.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterX() + coef
 			);
 			localPosition.setZ(
-				localPosition.z - Math.floor(Datas.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef
+				localPosition.z - Math.floor(Data.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef
 			);
 		} else {
 			localPosition.setX(localPosition.x + position.getPixelsCenterX() + coef);

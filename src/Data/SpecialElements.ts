@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Constants, Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 
 /** @class
  *  All the special elements datas.
@@ -53,7 +53,7 @@ class SpecialElements {
 	 *  @returns {System.Autotile}
 	 */
 	static getAutotile(id: number): Model.Autotile {
-		return Datas.Base.get(id, this.autotiles, 'autotile');
+		return Data.Base.get(id, this.autotiles, 'autotile');
 	}
 
 	/**
@@ -62,7 +62,7 @@ class SpecialElements {
 	 *  @returns {System.SpecialElement}
 	 */
 	static getWall(id: number): Model.SpecialElement {
-		return Datas.Base.get(id, this.walls, 'wall');
+		return Data.Base.get(id, this.walls, 'wall');
 	}
 
 	/**
@@ -71,7 +71,7 @@ class SpecialElements {
 	 *  @returns {System.Mountain}
 	 */
 	static getMountain(id: number): Model.Mountain {
-		return Datas.Base.get(id, this.mountains, 'mountain');
+		return Data.Base.get(id, this.mountains, 'mountain');
 	}
 
 	/**
@@ -80,7 +80,7 @@ class SpecialElements {
 	 *  @returns {System.Object3D}
 	 */
 	static getObject3D(id: number): Model.Object3D {
-		return Datas.Base.get(id, this.objects, 'object 3D');
+		return Data.Base.get(id, this.objects, 'object 3D');
 	}
 
 	/**
@@ -88,7 +88,7 @@ class SpecialElements {
 	 *  @returns {number}
 	 */
 	static getMaxAutotilesOffsetTexture(): number {
-		return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Datas.Systems.SQUARE_SIZE));
+		return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Data.Systems.SQUARE_SIZE));
 	}
 
 	/**
@@ -111,10 +111,10 @@ class SpecialElements {
 			texturesAutotile = [];
 			this.texturesAutotiles[pictureID] = texturesAutotile;
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
-			Platform.canvasRendering.width = 64 * Datas.Systems.SQUARE_SIZE;
+			Platform.canvasRendering.width = 64 * Data.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
 			if (autotile) {
-				const picture = Datas.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID);
+				const picture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID);
 				if (picture) {
 					result = await this.loadTextureAutotile(
 						textureAutotile,
@@ -157,7 +157,7 @@ class SpecialElements {
 		offset: number,
 		isAnimated: boolean
 	): Promise<any[]> {
-		const frames = isAnimated ? Datas.Systems.autotilesFrames : 1;
+		const frames = isAnimated ? Data.Systems.autotilesFrames : 1;
 		const picture2D = await Picture2D.create(picture);
 
 		// Check if correct format size
@@ -166,15 +166,15 @@ class SpecialElements {
 			picture.name,
 			picture2D.image.width,
 			picture2D.image.height,
-			2 * Datas.Systems.SQUARE_SIZE * frames,
-			3 * Datas.Systems.SQUARE_SIZE,
+			2 * Data.Systems.SQUARE_SIZE * frames,
+			3 * Data.Systems.SQUARE_SIZE,
 			false,
 			false
 		);
 
 		// Get width and height
-		const width = Math.floor(picture2D.image.width / 2 / Datas.Systems.SQUARE_SIZE) / frames;
-		const height = Math.floor(picture2D.image.height / 3 / Datas.Systems.SQUARE_SIZE);
+		const width = Math.floor(picture2D.image.width / 2 / Data.Systems.SQUARE_SIZE) / frames;
+		const height = Math.floor(picture2D.image.height / 3 / Data.Systems.SQUARE_SIZE);
 		const size = width * height;
 
 		// Update picture width and height for collisions settings
@@ -224,9 +224,9 @@ class SpecialElements {
 	 */
 	static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[]) {
 		let row = -1;
-		const offsetX = point[0] * 2 * Datas.Systems.SQUARE_SIZE;
-		const offsetY = point[1] * 3 * Datas.Systems.SQUARE_SIZE;
-		const sDiv = Math.floor(Datas.Systems.SQUARE_SIZE / 2);
+		const offsetX = point[0] * 2 * Data.Systems.SQUARE_SIZE;
+		const offsetY = point[1] * 3 * Data.Systems.SQUARE_SIZE;
+		const sDiv = Math.floor(Data.Systems.SQUARE_SIZE / 2);
 		const y = offset * Autotiles.COUNT_LIST * 2;
 		let a: number, b: number, c: number, d: number, count: number, lA: number, lB: number, lC: number, lD: number;
 		for (a = 0; a < Autotiles.COUNT_LIST; a++) {
@@ -247,8 +247,8 @@ class SpecialElements {
 							Math.floor(lA / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Datas.Systems.SQUARE_SIZE,
-							(row + y) * Datas.Systems.SQUARE_SIZE,
+							count * Data.Systems.SQUARE_SIZE,
+							(row + y) * Data.Systems.SQUARE_SIZE,
 							sDiv,
 							sDiv
 						);
@@ -258,8 +258,8 @@ class SpecialElements {
 							Math.floor(lB / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Datas.Systems.SQUARE_SIZE + sDiv,
-							(row + y) * Datas.Systems.SQUARE_SIZE,
+							count * Data.Systems.SQUARE_SIZE + sDiv,
+							(row + y) * Data.Systems.SQUARE_SIZE,
 							sDiv,
 							sDiv
 						);
@@ -269,8 +269,8 @@ class SpecialElements {
 							Math.floor(lC / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Datas.Systems.SQUARE_SIZE,
-							(row + y) * Datas.Systems.SQUARE_SIZE + sDiv,
+							count * Data.Systems.SQUARE_SIZE,
+							(row + y) * Data.Systems.SQUARE_SIZE + sDiv,
 							sDiv,
 							sDiv
 						);
@@ -280,8 +280,8 @@ class SpecialElements {
 							Math.floor(lD / 4) * sDiv + offsetY,
 							sDiv,
 							sDiv,
-							count * Datas.Systems.SQUARE_SIZE + sDiv,
-							(row + y) * Datas.Systems.SQUARE_SIZE + sDiv,
+							count * Data.Systems.SQUARE_SIZE + sDiv,
+							(row + y) * Data.Systems.SQUARE_SIZE + sDiv,
 							sDiv,
 							sDiv
 						);
@@ -326,7 +326,7 @@ class SpecialElements {
 		let textureWall = this.texturesWalls[pictureID];
 		if (textureWall === undefined) {
 			if (wall) {
-				const picture = Datas.Pictures.get(PICTURE_KIND.WALLS, pictureID);
+				const picture = Data.Pictures.get(PICTURE_KIND.WALLS, pictureID);
 				if (picture) {
 					textureWall = await this.loadTextureWall(picture, id);
 				} else {
@@ -362,29 +362,29 @@ class SpecialElements {
 			picture.name,
 			picture2D.image.width,
 			picture2D.image.height,
-			3 * Datas.Systems.SQUARE_SIZE,
-			Datas.Systems.SQUARE_SIZE,
+			3 * Data.Systems.SQUARE_SIZE,
+			Data.Systems.SQUARE_SIZE,
 			true,
 			false
 		);
 
 		// Update picture infos for collisions
-		picture.width = Math.floor(w / Datas.Systems.SQUARE_SIZE);
-		picture.height = Math.floor(h / Datas.Systems.SQUARE_SIZE);
+		picture.width = Math.floor(w / Data.Systems.SQUARE_SIZE);
+		picture.height = Math.floor(h / Data.Systems.SQUARE_SIZE);
 		Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
-		Platform.canvasRendering.width = w + Datas.Systems.SQUARE_SIZE;
+		Platform.canvasRendering.width = w + Data.Systems.SQUARE_SIZE;
 		Platform.canvasRendering.height = h;
 		Platform.ctxr.drawImage(picture2D.image, 0, 0);
-		const left = Platform.ctxr.getImageData(0, 0, Math.floor(Datas.Systems.SQUARE_SIZE / 2), h);
+		const left = Platform.ctxr.getImageData(0, 0, Math.floor(Data.Systems.SQUARE_SIZE / 2), h);
 		const right = Platform.ctxr.getImageData(
-			w - Math.floor(Datas.Systems.SQUARE_SIZE / 2),
+			w - Math.floor(Data.Systems.SQUARE_SIZE / 2),
 			0,
-			Math.floor(Datas.Systems.SQUARE_SIZE / 2),
+			Math.floor(Data.Systems.SQUARE_SIZE / 2),
 			picture2D.image.height
 		);
 		try {
 			Platform.ctxr.putImageData(left, w, 0);
-			Platform.ctxr.putImageData(right, w + Math.floor(Datas.Systems.SQUARE_SIZE / 2), 0);
+			Platform.ctxr.putImageData(right, w + Math.floor(Data.Systems.SQUARE_SIZE / 2), 0);
 		} catch (e) {
 			Platform.showErrorMessage(
 				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
@@ -400,7 +400,7 @@ class SpecialElements {
 	 *  @returns {number}
 	 */
 	static getMaxMountainOffsetTexture(): number {
-		return Math.floor(Constants.MAX_PICTURE_SIZE / (4 * Datas.Systems.SQUARE_SIZE));
+		return Math.floor(Constants.MAX_PICTURE_SIZE / (4 * Data.Systems.SQUARE_SIZE));
 	}
 
 	/**
@@ -421,10 +421,10 @@ class SpecialElements {
 			let result = null;
 			let texture = new THREE.Texture();
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
-			Platform.canvasRendering.width = 4 * Datas.Systems.SQUARE_SIZE;
-			Platform.canvasRendering.height = 7 * Datas.Systems.SQUARE_SIZE;
+			Platform.canvasRendering.width = 4 * Data.Systems.SQUARE_SIZE;
+			Platform.canvasRendering.height = 7 * Data.Systems.SQUARE_SIZE;
 			this.texturesMountains = [];
-			const picture = mountain ? Datas.Pictures.get(PICTURE_KIND.MOUNTAINS, pictureID) : null;
+			const picture = mountain ? Data.Pictures.get(PICTURE_KIND.MOUNTAINS, pictureID) : null;
 			result = await this.loadTextureMountain(textureMountain, texture, picture, offset, id);
 			if (result !== null) {
 				textureMountain = result[0];
@@ -465,8 +465,8 @@ class SpecialElements {
 			picture.name,
 			picture2D.image.width,
 			picture2D.image.height,
-			3 * Datas.Systems.SQUARE_SIZE,
-			3 * Datas.Systems.SQUARE_SIZE,
+			3 * Data.Systems.SQUARE_SIZE,
+			3 * Data.Systems.SQUARE_SIZE,
 			true,
 			true
 		);
@@ -507,9 +507,9 @@ class SpecialElements {
 	 *  @param {number} id - The picture id
 	 */
 	static paintPictureMountain(img: HTMLImageElement, offset: number, id: number) {
-		const y = offset * 4 * Datas.Systems.SQUARE_SIZE;
-		const sourceSize = 3 * Datas.Systems.SQUARE_SIZE;
-		const sDiv = Math.round(Datas.Systems.SQUARE_SIZE / 2);
+		const y = offset * 4 * Data.Systems.SQUARE_SIZE;
+		const sourceSize = 3 * Data.Systems.SQUARE_SIZE;
+		const sDiv = Math.round(Data.Systems.SQUARE_SIZE / 2);
 
 		// Draw original image
 		Platform.ctxr.drawImage(img, 0, y);
@@ -521,24 +521,24 @@ class SpecialElements {
 				Platform.ctxr.drawImage(
 					img,
 					0,
-					i * Datas.Systems.SQUARE_SIZE,
+					i * Data.Systems.SQUARE_SIZE,
 					sDiv,
-					Datas.Systems.SQUARE_SIZE,
+					Data.Systems.SQUARE_SIZE,
 					sourceSize,
-					y + i * Datas.Systems.SQUARE_SIZE,
+					y + i * Data.Systems.SQUARE_SIZE,
 					sDiv,
-					Datas.Systems.SQUARE_SIZE
+					Data.Systems.SQUARE_SIZE
 				);
 				Platform.ctxr.drawImage(
 					img,
 					sourceSize - sDiv,
-					i * Datas.Systems.SQUARE_SIZE,
+					i * Data.Systems.SQUARE_SIZE,
 					sDiv,
-					Datas.Systems.SQUARE_SIZE,
+					Data.Systems.SQUARE_SIZE,
 					sourceSize + sDiv,
-					y + i * Datas.Systems.SQUARE_SIZE,
+					y + i * Data.Systems.SQUARE_SIZE,
 					sDiv,
-					Datas.Systems.SQUARE_SIZE
+					Data.Systems.SQUARE_SIZE
 				);
 			}
 
@@ -546,24 +546,24 @@ class SpecialElements {
 			for (i = 0, l = 3; i < l; i++) {
 				Platform.ctxr.drawImage(
 					img,
-					i * Datas.Systems.SQUARE_SIZE,
+					i * Data.Systems.SQUARE_SIZE,
 					0,
-					Datas.Systems.SQUARE_SIZE,
+					Data.Systems.SQUARE_SIZE,
 					sDiv,
-					i * Datas.Systems.SQUARE_SIZE,
+					i * Data.Systems.SQUARE_SIZE,
 					y + sourceSize,
-					Datas.Systems.SQUARE_SIZE,
+					Data.Systems.SQUARE_SIZE,
 					sDiv
 				);
 				Platform.ctxr.drawImage(
 					img,
-					i * Datas.Systems.SQUARE_SIZE,
+					i * Data.Systems.SQUARE_SIZE,
 					sourceSize - sDiv,
-					Datas.Systems.SQUARE_SIZE,
+					Data.Systems.SQUARE_SIZE,
 					sDiv,
-					i * Datas.Systems.SQUARE_SIZE,
+					i * Data.Systems.SQUARE_SIZE,
 					y + sourceSize + sDiv,
-					Datas.Systems.SQUARE_SIZE,
+					Data.Systems.SQUARE_SIZE,
 					sDiv
 				);
 			}
@@ -609,14 +609,14 @@ class SpecialElements {
 				for (let j = 0, m = 4; j < m; j++) {
 					Platform.ctxr.drawImage(
 						img,
-						Datas.Systems.SQUARE_SIZE,
-						i * Datas.Systems.SQUARE_SIZE,
-						Datas.Systems.SQUARE_SIZE,
-						Datas.Systems.SQUARE_SIZE,
-						j * Datas.Systems.SQUARE_SIZE,
-						(4 + i) * Datas.Systems.SQUARE_SIZE,
-						Datas.Systems.SQUARE_SIZE,
-						Datas.Systems.SQUARE_SIZE
+						Data.Systems.SQUARE_SIZE,
+						i * Data.Systems.SQUARE_SIZE,
+						Data.Systems.SQUARE_SIZE,
+						Data.Systems.SQUARE_SIZE,
+						j * Data.Systems.SQUARE_SIZE,
+						(4 + i) * Data.Systems.SQUARE_SIZE,
+						Data.Systems.SQUARE_SIZE,
+						Data.Systems.SQUARE_SIZE
 					);
 				}
 			}
@@ -653,7 +653,7 @@ class SpecialElements {
 		}
 		let textureObject3D = this.texturesObjects3D[pictureID];
 		if (textureObject3D === undefined) {
-			const picture = Datas.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);
+			const picture = Data.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
 				const path = picture.getPath();
 				textureObject3D = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();

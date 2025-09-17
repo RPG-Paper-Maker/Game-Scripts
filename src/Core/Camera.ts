@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Mathf, ORIENTATION, ScreenResolution } from '../Common';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { MapObject } from './MapObject';
 
 /** @class
@@ -93,7 +93,7 @@ class Camera {
 	 *  @returns {number}
 	 */
 	getHidingDistance(): number {
-		if (Datas.Systems.moveCameraOnBlockView && !this.forceNoHide) {
+		if (Data.Systems.moveCameraOnBlockView && !this.forceNoHide) {
 			return this.hidingCurrent === -1 ? this.distance : this.hidingCurrent;
 		}
 		return this.distance;
@@ -247,7 +247,7 @@ class Camera {
 	updateTimer() {
 		if (
 			this.previousHidingDistance !== this.hidingDistance &&
-			Math.abs(this.previousHidingDistance - this.hidingDistance) > Datas.Systems.SQUARE_SIZE
+			Math.abs(this.previousHidingDistance - this.hidingDistance) > Data.Systems.SQUARE_SIZE
 		) {
 			this.hidingTime = 0;
 			this.hidingStart = this.hidingCurrent;
@@ -285,9 +285,9 @@ class Camera {
 			Scene.Map.current.sunLight.target.updateMatrixWorld();
 			Scene.Map.current.sunLight.position
 				.set(-1, 1.75, 1)
-				.multiplyScalar(Datas.Systems.SQUARE_SIZE * 10)
+				.multiplyScalar(Data.Systems.SQUARE_SIZE * 10)
 				.add(this.targetPosition);
-			const d = Math.max((Datas.Systems.SQUARE_SIZE * this.distance) / 10, 400);
+			const d = Math.max((Data.Systems.SQUARE_SIZE * this.distance) / 10, 400);
 			if (d !== Scene.Map.current.sunLight.shadow.camera.right) {
 				Scene.Map.current.sunLight.shadow.camera.left = -d;
 				Scene.Map.current.sunLight.shadow.camera.right = d;

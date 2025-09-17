@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Constants, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Autotile } from './Autotile';
 import { Autotiles } from './Autotiles';
 import { CustomGeometry } from './CustomGeometry';
@@ -151,11 +151,11 @@ class MapPortion {
 					const autotile = new Autotile(v);
 					let pictureID = Game.current.textures.autotiles[autotile.autotileID];
 					if (pictureID === undefined) {
-						pictureID = Datas.SpecialElements.getAutotile(autotile.autotileID).pictureID;
+						pictureID = Data.SpecialElements.getAutotile(autotile.autotileID).pictureID;
 					}
 					const indexPos = position.toIndex();
 					let texture = null;
-					const texturesAutotile = await Datas.SpecialElements.loadAutotileTexture(autotile.autotileID);
+					const texturesAutotile = await Data.SpecialElements.loadAutotileTexture(autotile.autotileID);
 					let autotiles: Autotiles;
 					if (texturesAutotile) {
 						for (let j = 0, m = texturesAutotile.length; j < m; j++) {
@@ -325,7 +325,7 @@ class MapPortion {
 			const sprite = new SpriteWall(v);
 			let pictureID = Game.current.textures.walls[sprite.id];
 			if (pictureID === undefined) {
-				pictureID = Datas.SpecialElements.getWall(sprite.id).pictureID;
+				pictureID = Data.SpecialElements.getWall(sprite.id).pictureID;
 			}
 			// Constructing the geometry
 			let obj = hash.get(sprite.id);
@@ -337,7 +337,7 @@ class MapPortion {
 				material = obj.material;
 				count = obj.c;
 			} else {
-				material = await Datas.SpecialElements.loadWallTexture(sprite.id);
+				material = await Data.SpecialElements.loadWallTexture(sprite.id);
 				if (material) {
 					geometry = new CustomGeometry();
 					count = 0;
@@ -395,9 +395,9 @@ class MapPortion {
 			mountain.read(v);
 			let pictureID = Game.current.textures.mountains[mountain.mountainID];
 			if (pictureID === undefined) {
-				pictureID = Datas.SpecialElements.getMountain(mountain.mountainID).pictureID;
+				pictureID = Data.SpecialElements.getMountain(mountain.mountainID).pictureID;
 			}
-			const textureMountain = await Datas.SpecialElements.loadMountainTexture(mountain.mountainID);
+			const textureMountain = await Data.SpecialElements.loadMountainTexture(mountain.mountainID);
 			let mountains: Mountains;
 			let texture: TextureBundle | null = null;
 			if (textureMountain) {
@@ -444,10 +444,10 @@ class MapPortion {
 
 		for (const { k, v } of json) {
 			const position = Position.createFromArray(k);
-			const datas = Datas.SpecialElements.getObject3D(v.did);
+			const datas = Data.SpecialElements.getObject3D(v.did);
 			let pictureID = Game.current.textures.objects3D[datas.id];
 			if (pictureID === undefined) {
-				pictureID = Datas.SpecialElements.getObject3D(datas.id).pictureID;
+				pictureID = Data.SpecialElements.getObject3D(datas.id).pictureID;
 			}
 			if (datas) {
 				let obj3D: Object3D;
@@ -478,7 +478,7 @@ class MapPortion {
 					material = obj.material;
 					count = obj.c;
 				} else {
-					material = await Datas.SpecialElements.loadObject3DTexture(datas.id);
+					material = await Data.SpecialElements.loadObject3DTexture(datas.id);
 					if (material) {
 						geometry = new CustomGeometry();
 						count = 0;
@@ -640,7 +640,7 @@ class MapPortion {
 		}
 
 		// Remove moved objects from the scene
-		const datas = Game.current.getPortionDatas(Scene.Map.current.id, this.portion);
+		const datas = Game.current.getPortionData(Scene.Map.current.id, this.portion);
 		let objects = datas.min;
 		for (i = 0, l = objects.length; i < l; i++) {
 			objects[i].removeFromScene();
@@ -760,9 +760,9 @@ class MapPortion {
 			objCollision = collisions[i];
 			centeredPosition = objCollision.c
 				? new Position(
-						position.x + Math.ceil(objCollision.c.x / Datas.Systems.SQUARE_SIZE),
-						position.y + Math.ceil(objCollision.c.y / Datas.Systems.SQUARE_SIZE),
-						position.z + Math.ceil(objCollision.c.z / Datas.Systems.SQUARE_SIZE)
+						position.x + Math.ceil(objCollision.c.x / Data.Systems.SQUARE_SIZE),
+						position.y + Math.ceil(objCollision.c.y / Data.Systems.SQUARE_SIZE),
+						position.z + Math.ceil(objCollision.c.z / Data.Systems.SQUARE_SIZE)
 				  )
 				: new Position(position.x, position.y, position.z);
 			minW = -objCollision.m;

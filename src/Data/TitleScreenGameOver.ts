@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, Paths, Platform, SONG_KIND, TITLE_SETTING_KIND, Utils } from '../Common';
-import { Datas, Graphic, Manager, Model, Scene } from '../index';
+import { Data, Graphic, Manager, Model, Scene } from '../index';
 
 /** @class
  *  All the titlescreen and gameover datas.
@@ -146,9 +146,9 @@ class TitlescreenGameover {
 	static getTitleSettingsCommandsAction(id: number): Function {
 		switch (id) {
 			case TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT:
-				return Datas.TitlescreenGameover.keyboardAssignment;
+				return Data.TitlescreenGameover.keyboardAssignment;
 			case TITLE_SETTING_KIND.LANGUAGE:
-				return Datas.TitlescreenGameover.language;
+				return Data.TitlescreenGameover.language;
 		}
 	}
 

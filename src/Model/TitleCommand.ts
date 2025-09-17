@@ -11,7 +11,7 @@
 
 import { Interpreter, Platform, TITLE_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
-import { Datas, Manager, Scene } from '../index';
+import { Data, Manager, Scene } from '../index';
 import { Localization, LocalizationJSON } from './Localization';
 
 /**
@@ -38,7 +38,7 @@ export class TitleCommand extends Localization {
 	 */
 	static startNewGame(): boolean {
 		// Stop video and songs if existing
-		if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (!Data.TitlescreenGameover.isTitleBackgroundImage) {
 			Manager.Videos.stop();
 		}
 
@@ -47,7 +47,7 @@ export class TitleCommand extends Localization {
 		Game.current.initializeDefault();
 
 		// Add local map to stack
-		Manager.Stack.replace(new Scene.Map(Datas.Systems.ID_MAP_START_HERO));
+		Manager.Stack.replace(new Scene.Map(Data.Systems.ID_MAP_START_HERO));
 
 		return true;
 	}

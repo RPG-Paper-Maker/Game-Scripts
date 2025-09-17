@@ -11,7 +11,7 @@
 
 import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
-import { Datas, Manager, Model } from '../index';
+import { Data, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -88,7 +88,7 @@ class SetMoveTurnAPicture extends Base {
 				const prevZoom = picture.zoom;
 				const prevOpacity = picture.opacity;
 				const prevAngle = picture.angle;
-				picture = Datas.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
+				picture = Data.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
 				if (prevCentered) {
 					prevX += (prevW - picture.oW) / 2;
 					prevY += (prevH - picture.oH) / 2;

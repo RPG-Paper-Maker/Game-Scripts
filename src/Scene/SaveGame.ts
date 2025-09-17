@@ -11,7 +11,7 @@
 
 import { ALIGN } from '../Common';
 import { Game } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { SaveLoadGame } from './SaveLoadGame';
 
 /** @class
@@ -38,8 +38,8 @@ class SaveGame extends SaveLoadGame {
 		await super.load();
 		this.setContents.call(
 			this,
-			new Graphic.Text(Datas.Languages.extras.saveAGame.name(), { align: ALIGN.CENTER }),
-			new Graphic.Text(Datas.Languages.extras.saveAGameDescription.name(), { align: ALIGN.CENTER })
+			new Graphic.Text(Data.Languages.extras.saveAGame.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.saveAGameDescription.name(), { align: ALIGN.CENTER })
 		);
 		this.loading = false;
 	}
@@ -62,7 +62,7 @@ class SaveGame extends SaveLoadGame {
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		// If action, save in the selected slot
 		if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-			Datas.Systems.soundConfirmation.playSound();
+			Data.Systems.soundConfirmation.playSound();
 			Manager.Stack.push(
 				new Scene.Confirm(() => {
 					this.save();

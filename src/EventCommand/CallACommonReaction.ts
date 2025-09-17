@@ -11,7 +11,7 @@
 
 import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { MapObject, ReactionInterpreter } from '../Core';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -58,7 +58,7 @@ class CallACommonReaction extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (!currentState.interpreter) {
-			const reaction = Datas.CommonEvents.getCommonReaction(this.commonReactionID);
+			const reaction = Data.CommonEvents.getCommonReaction(this.commonReactionID);
 			const parameters = Model.DynamicValue.mapWithParametersProperties(this.parameters);
 
 			// Correct parameters for default values
@@ -74,7 +74,7 @@ class CallACommonReaction extends Base {
 			}
 			currentState.interpreter = new ReactionInterpreter(
 				object,
-				Datas.CommonEvents.getCommonReaction(this.commonReactionID),
+				Data.CommonEvents.getCommonReaction(this.commonReactionID),
 				object,
 				state,
 				Utils.arrayToMap(parameters)

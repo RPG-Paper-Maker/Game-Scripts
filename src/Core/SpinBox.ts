@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager } from '..';
+import { Data, Graphic, Manager } from '..';
 import { ScreenResolution } from '../Common';
 import { Bitmap } from './Bitmap';
 import { Rectangle } from './Rectangle';
@@ -132,7 +132,7 @@ class SpinBox extends Bitmap {
 	updateValue(value: number) {
 		if (value !== this.value) {
 			this.value = value;
-			Datas.Systems.soundCursor.playSound();
+			Data.Systems.soundCursor.playSound();
 			(<Graphic.SpinBox>this.windowBox.content).setValue(value);
 			Manager.Stack.requestPaintHUD = true;
 		}
@@ -220,13 +220,13 @@ class SpinBox extends Bitmap {
 			const t = new Date().getTime();
 			if (t - this.startTime >= WindowChoices.TIME_WAIT_PRESS) {
 				this.startTime = t;
-				if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
+				if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Down)) {
 					this.goDown();
-				} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Up)) {
+				} else if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Up)) {
 					this.goUp();
-				} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
+				} else if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Right)) {
 					this.goRight();
-				} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
+				} else if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Left)) {
 					this.goLeft();
 				}
 			}
@@ -243,7 +243,7 @@ class SpinBox extends Bitmap {
 		if (this.active) {
 			this.isMouseInArrowDown = false;
 			this.isMouseInArrowUp = false;
-			const ws = Datas.Systems.getCurrentWindowSkin();
+			const ws = Data.Systems.getCurrentWindowSkin();
 			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
 			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3]);
 			if (this.value < this.max) {
@@ -277,7 +277,7 @@ class SpinBox extends Bitmap {
 	draw() {
 		this.windowBox.draw();
 		if (this.active) {
-			const ws = Datas.Systems.getCurrentWindowSkin();
+			const ws = Data.Systems.getCurrentWindowSkin();
 			if (this.value < this.max) {
 				ws.drawArrowUp(this.oX + (this.oW - ws.arrowUpDown[2]) / 2, this.oY - ws.arrowUpDown[3] / 2 - 1);
 			}

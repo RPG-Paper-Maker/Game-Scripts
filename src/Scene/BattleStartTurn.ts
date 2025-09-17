@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Model, Scene } from '..';
+import { Data, Graphic, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
@@ -148,7 +148,7 @@ class BattleStartTurn {
 			const skills: Model.Skill[] = [];
 			let skill: Model.Skill;
 			for (let i = 0, l = user.player.skills.length; i < l; i++) {
-				skill = Datas.Skills.get(user.player.skills[i].id);
+				skill = Data.Skills.get(user.player.skills[i].id);
 				if (!skill.isPossible()) {
 					continue;
 				}

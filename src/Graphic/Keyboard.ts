@@ -10,7 +10,7 @@
 */
 
 import { ALIGN } from '../Common';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -29,7 +29,7 @@ class Keyboard extends Base {
 		this.kb = kb;
 		this.graphicTextName = new Graphic.Text(kb.name());
 		this.graphicTextShort = new Graphic.Text(kb.toString(), { align: ALIGN.CENTER });
-		this.graphicTextInformation = new Graphic.Text(Datas.Languages.extras.pressAnyKeys.name(), {
+		this.graphicTextInformation = new Graphic.Text(Data.Languages.extras.pressAnyKeys.name(), {
 			align: ALIGN.CENTER,
 		});
 	}

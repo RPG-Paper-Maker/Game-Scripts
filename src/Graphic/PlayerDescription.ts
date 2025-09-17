@@ -12,7 +12,7 @@
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Picture2D, Player } from '../Core';
 import { Status } from '../Core/Status';
-import { Datas, Graphic, Manager, Model } from '../index';
+import { Data, Graphic, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -45,8 +45,8 @@ class PlayerDescription extends Base {
 		// Informations
 		const system = this.player.system;
 		const cl = this.player.getClass();
-		const levelStat = Datas.BattleSystems.getLevelStatistic();
-		const expStat = Datas.BattleSystems.getExpStatistic();
+		const levelStat = Data.BattleSystems.getLevelStatistic();
+		const expStat = Data.BattleSystems.getExpStatistic();
 
 		// All the graphics
 		this.graphicNameCenter = new Graphic.Text(this.player.name, { align: ALIGN.CENTER });
@@ -70,10 +70,10 @@ class PlayerDescription extends Base {
 		this.listStatsNames = [];
 		this.listStats = [];
 		let id: number, statistic: Model.Statistic, graphicName: Graphic.Text, txt: string;
-		for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Datas.BattleSystems.statisticsOrder[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+		for (let i = 0, j = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsOrder[i];
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes) {
 					continue;
 				}
@@ -89,8 +89,8 @@ class PlayerDescription extends Base {
 		}
 
 		// Battler
-		this.battler = Datas.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
-		this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
+		this.battler = Data.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
+		this.battlerFrame = new Frame(250, { frames: Data.Systems.battlersFrames });
 	}
 
 	/**
@@ -99,10 +99,10 @@ class PlayerDescription extends Base {
 	initializeStatisticProgression() {
 		this.listStatsProgression = [];
 		let id: number, statistic: Model.Statistic, value: number, graphic: Graphic.Text;
-		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Datas.BattleSystems.statisticsOrder[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsOrder[i];
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes) {
 					continue;
 				}
@@ -134,10 +134,10 @@ class PlayerDescription extends Base {
 		this.listStats = [];
 		this.maxLength = 0;
 		let id: number, statistic: Model.Statistic, graphicName: Graphic.Text, txt: string;
-		for (let i = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Datas.BattleSystems.statisticsOrder[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsOrder[i];
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 				graphicName = new Graphic.Text(statistic.name() + ':');
 				this.maxLength = Math.max(graphicName.textWidth, this.maxLength);
 				this.listStatsNames.push(graphicName);
@@ -209,11 +209,11 @@ class PlayerDescription extends Base {
 	draw(x: number, y: number, w: number, h: number) {
 		const xCharacter = x + ScreenResolution.getScreenMinXY(80);
 		let yName = y + ScreenResolution.getScreenMinXY(20);
-		const coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-		const wBattler = this.battler.w / Datas.Systems.battlersFrames;
-		const hBattler = this.battler.h / Datas.Systems.battlersColumns;
-		const owBattler = this.battler.oW / Datas.Systems.battlersFrames;
-		const ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
+		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
+		const wBattler = this.battler.w / Data.Systems.battlersFrames;
+		const hBattler = this.battler.h / Data.Systems.battlersColumns;
+		const owBattler = this.battler.oW / Data.Systems.battlersFrames;
+		const ohBattler = this.battler.oH / Data.Systems.battlersColumns;
 
 		// Battler
 		this.battler.draw({

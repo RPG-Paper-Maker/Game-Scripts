@@ -11,7 +11,7 @@
 
 import { Interpreter, Mathf, Platform, Utils } from '../Common';
 import { Game, MapObject, Player } from '../Core';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -82,9 +82,9 @@ class ChangeAStatistic extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const statisticID = this.statisticID.getValue() as number;
-		const stat = Datas.BattleSystems.getStatistic(statisticID);
-		const isChangingExperience = Datas.BattleSystems.idExpStatistic === statisticID;
-		const isChangingLevel = Datas.BattleSystems.idLevelStatistic === statisticID;
+		const stat = Data.BattleSystems.getStatistic(statisticID);
+		const isChangingExperience = Data.BattleSystems.idExpStatistic === statisticID;
+		const isChangingLevel = Data.BattleSystems.idLevelStatistic === statisticID;
 		const abr = this.isApplyToMax ? stat.getMaxAbbreviation() : stat.abbreviation;
 		let targets: Player[];
 		switch (this.selection) {

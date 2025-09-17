@@ -10,39 +10,39 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
- *  All the animations datas.
+ *  All the armors datas.
  *  @static
  */
-class Animations {
-	private static list: Model.Animation[];
+class Armors {
+	private static list: Model.Armor[];
 
 	constructor() {
 		throw new Error('This is a static class!');
 	}
 
 	/**
-	 *  Read the JSON file associated to status.
+	 *  Read the JSON file associated to armors.
 	 *  @static
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations as any;
+		const json = (await Platform.parseFileJSON(Paths.FILE_ARMORS)).armors as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Animation });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Armor });
 	}
 
 	/**
-	 *  Get the animation by ID.
+	 *  Get the armor by ID.
 	 *  @static
 	 *  @param {number} id
-	 *  @returns {System.Animation}
+	 *  @returns {System.Armor}
 	 */
-	static get(id: number): Model.Animation {
-		return Datas.Base.get(id, this.list, 'animation');
+	static get(id: number): Model.Armor {
+		return Data.Base.get(id, this.list, 'armor');
 	}
 }
 
-export { Animations };
+export { Armors };

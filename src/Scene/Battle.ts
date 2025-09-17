@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Datas, Graphic, Manager, Model, Scene } from '..';
+import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
@@ -208,7 +208,7 @@ class Battle extends Map {
 		this.battleVictory = new Scene.BattleVictory(this);
 
 		// ====
-		this.troop = Datas.Troops.get(troopID);
+		this.troop = Data.Troops.get(troopID);
 		this.canGameOver = canGameOver;
 		this.canEscape = canEscape;
 		this.transitionStart = transitionStart;
@@ -539,7 +539,7 @@ class Battle extends Map {
 	 *  Do camera standard moves.
 	 */
 	moveStandardCamera() {
-		if (Datas.BattleSystems.cameraMoveInBattle && this.cameraON) {
+		if (Data.BattleSystems.cameraMoveInBattle && this.cameraON) {
 			switch (this.cameraStep) {
 				case 0:
 					this.camera.distance -= this.cameraTick;

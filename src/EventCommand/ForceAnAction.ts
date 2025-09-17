@@ -11,7 +11,7 @@
 
 import { BATTLE_STEP, CHARACTER_KIND, EFFECT_SPECIAL_ACTION_KIND, Mathf, TARGET_KIND, Utils } from '../Common';
 import { Battler, MapObject } from '../Core';
-import { Datas, Model, Scene } from '../index';
+import { Data, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -105,11 +105,11 @@ class ForceAnAction extends Base {
 		switch (this.actionKind) {
 			case 0: // Skill
 				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS;
-				map.skill = Datas.Skills.get(this.actionID.getValue() as number);
+				map.skill = Data.Skills.get(this.actionID.getValue() as number);
 				break;
 			case 1: // Item
 				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS;
-				map.skill = Datas.Items.get(this.actionID.getValue() as number);
+				map.skill = Data.Items.get(this.actionID.getValue() as number);
 				break;
 			case 2: // Do nothing
 				map.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.NONE;

@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { Stack } from './Stack';
 
 /** @class
@@ -38,12 +38,12 @@ class GL {
 	 *  @static
 	 */
 	static initialize() {
-		this.renderer = new THREE.WebGLRenderer({ antialias: Datas.Systems.antialias, alpha: true });
+		this.renderer = new THREE.WebGLRenderer({ antialias: Data.Systems.antialias, alpha: true });
 		this.renderer.autoClear = false;
 		this.renderer.setSize(ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT, true);
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.setPixelRatio(window.devicePixelRatio);
-		if (Datas.Systems.antialias) {
+		if (Data.Systems.antialias) {
 			this.renderer.setPixelRatio(2);
 		}
 		document.body.appendChild(this.renderer.domElement);
@@ -97,7 +97,7 @@ class GL {
 				() => {},
 				() => {
 					const error = 'Could not load ' + path;
-					if (Datas.Systems.ignoreAssetsLoadingErrors) {
+					if (Data.Systems.ignoreAssetsLoadingErrors) {
 						const t = new THREE.Texture();
 						t.image = new Image();
 						console.warn(error);

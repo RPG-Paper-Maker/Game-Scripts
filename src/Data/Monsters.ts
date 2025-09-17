@@ -10,39 +10,39 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
- *  All the heroes datas.
+ *  All the monsters datas.
  *  @static
  */
-class Heroes {
-	private static list: Model.Hero[];
+class Monsters {
+	private static list: Model.Monster[];
 
 	constructor() {
 		throw new Error('This is a static class!');
 	}
 
 	/**
-	 *  Read the JSON file associated to heroes.
+	 *  Read the JSON file associated to monsters.
 	 *  @static
 	 *  @async
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_HEROES)).heroes as any;
+		const json = (await Platform.parseFileJSON(Paths.FILE_MONSTERS)).monsters as any;
 		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Hero });
+		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Monster });
 	}
 
 	/**
-	 *  Get the hero by ID.
+	 *  Get the monster by ID.
 	 *  @static
 	 *  @param {number} id
-	 *  @returns {System.Hero}
+	 *  @returns {System.Monster}
 	 */
-	static get(id: number): Model.Hero {
-		return Datas.Base.get(id, this.list, 'hero');
+	static get(id: number): Model.Monster {
+		return Data.Base.get(id, this.list, 'monster');
 	}
 }
 
-export { Heroes };
+export { Monsters };

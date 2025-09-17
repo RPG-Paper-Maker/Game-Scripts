@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform } from '../Common';
-import { Datas, Graphic, Model, Scene } from '../index';
+import { Data, Graphic, Model, Scene } from '../index';
 import { KeyboardJSON } from '../Model';
 
 /** @class
@@ -71,7 +71,7 @@ class Keyboards {
 			id = jsonKey.id;
 			abbreviation = jsonKey.abr;
 			key = new Model.Keyboard(jsonKey as KeyboardJSON);
-			sc = Datas.Settings.kb[id];
+			sc = Data.Settings.kb[id];
 			if (sc) {
 				key.sc = sc;
 			}
@@ -96,7 +96,7 @@ class Keyboards {
 	 *  @returns {System.Keyboard}
 	 */
 	static get(id: number): Model.Keyboard {
-		return Datas.Base.get(id, this.list, 'keyboard');
+		return Data.Base.get(id, this.list, 'keyboard');
 	}
 
 	/**
@@ -134,8 +134,8 @@ class Keyboards {
 	 */
 	static checkCancelMenu(key: string): boolean {
 		return (
-			Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel) ||
-			Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.controls.MainMenu)
+			Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Cancel) ||
+			Data.Keyboards.isKeyEqual(key, Data.Keyboards.controls.MainMenu)
 		);
 	}
 
@@ -145,7 +145,7 @@ class Keyboards {
 	 *  @returns {boolean}
 	 */
 	static checkCancel(key: string): boolean {
-		return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Cancel);
+		return Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Cancel);
 	}
 
 	/**
@@ -154,7 +154,7 @@ class Keyboards {
 	 *  @returns {boolean}
 	 */
 	static checkActionMenu(key: string): boolean {
-		return Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action);
+		return Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Action);
 	}
 }
 

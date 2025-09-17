@@ -22,7 +22,7 @@ import {
 	Position,
 	StructMapElementCollision,
 } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 
 /** @class
  *  The collisions manager.
@@ -247,7 +247,7 @@ class Collisions {
 	 *  @returns {THREE.Mesh}
 	 */
 	static getBBBoxDetection(force: boolean = false): THREE.Mesh {
-		if (Datas.Systems.showBB && !force) {
+		if (Data.Systems.showBB && !force) {
 			const box = Collisions.createBox(true);
 			this.BB_BOX_DETECTION = box;
 			box.geometry.boundingBox = new THREE.Box3();
@@ -462,9 +462,9 @@ class Collisions {
 			for (j = startJ; j <= endJ; j++) {
 				for (k = startK; k <= endK; k++) {
 					positionAfterPlus.set(
-						positionAfter.x + i * Datas.Systems.SQUARE_SIZE,
-						positionAfter.y + j * Datas.Systems.SQUARE_SIZE,
-						positionAfter.z + k * Datas.Systems.SQUARE_SIZE
+						positionAfter.x + i * Data.Systems.SQUARE_SIZE,
+						positionAfter.y + j * Data.Systems.SQUARE_SIZE,
+						positionAfter.z + k * Data.Systems.SQUARE_SIZE
 					);
 					portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfterPlus));
 					mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
@@ -486,9 +486,9 @@ class Collisions {
 									for (j2 = startJ; j2 <= endJ; j2++) {
 										for (k2 = startK; k2 <= endK; k2++) {
 											positionBeforePlus.set(
-												positionBefore.x + i2 * Datas.Systems.SQUARE_SIZE,
-												positionBefore.y + j2 * Datas.Systems.SQUARE_SIZE,
-												positionBefore.z + k2 * Datas.Systems.SQUARE_SIZE
+												positionBefore.x + i2 * Data.Systems.SQUARE_SIZE,
+												positionBefore.y + j2 * Data.Systems.SQUARE_SIZE,
+												positionBefore.z + k2 * Data.Systems.SQUARE_SIZE
 											);
 											portion = Scene.Map.current.getLocalPortion(
 												Portion.createFromVector3(positionBeforePlus)
@@ -570,12 +570,12 @@ class Collisions {
 					return [true, null, ORIENTATION.NONE];
 				} else {
 					let maxY = null;
-					const limitY = positionAfter.y - (Datas.Systems.mountainCollisionHeight.getValue() as number);
+					const limitY = positionAfter.y - (Data.Systems.mountainCollisionHeight.getValue() as number);
 					let temp: number;
 					for (i = 0; i < l; i++) {
 						temp = floors[i];
 						if (
-							temp <= positionAfter.y + (Datas.Systems.mountainCollisionHeight.getValue() as number) &&
+							temp <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number) &&
 							temp >= limitY
 						) {
 							if (maxY === null) {
@@ -615,14 +615,14 @@ class Collisions {
 								} else {
 									let maxY = null;
 									const limitY =
-										positionBefore.y - (Datas.Systems.mountainCollisionHeight.getValue() as number);
+										positionBefore.y - (Data.Systems.mountainCollisionHeight.getValue() as number);
 									let temp: number;
 									for (i = 0; i < l; i++) {
 										temp = floors[i];
 										if (
 											temp <=
 												positionBefore.y +
-													(Datas.Systems.mountainCollisionHeight.getValue() as number) &&
+													(Data.Systems.mountainCollisionHeight.getValue() as number) &&
 											temp >= limitY
 										) {
 											if (maxY === null) {
@@ -640,16 +640,16 @@ class Collisions {
 											const positionFront = positionBefore.clone();
 											switch (object.orientationEye) {
 												case ORIENTATION.NORTH:
-													positionFront.setZ(positionFront.z - Datas.Systems.SQUARE_SIZE / 2);
+													positionFront.setZ(positionFront.z - Data.Systems.SQUARE_SIZE / 2);
 													break;
 												case ORIENTATION.SOUTH:
-													positionFront.setZ(positionFront.z + Datas.Systems.SQUARE_SIZE / 2);
+													positionFront.setZ(positionFront.z + Data.Systems.SQUARE_SIZE / 2);
 													break;
 												case ORIENTATION.WEST:
-													positionFront.setX(positionFront.x - Datas.Systems.SQUARE_SIZE / 2);
+													positionFront.setX(positionFront.x - Data.Systems.SQUARE_SIZE / 2);
 													break;
 												case ORIENTATION.EAST:
-													positionFront.setX(positionFront.x + Datas.Systems.SQUARE_SIZE / 2);
+													positionFront.setX(positionFront.x + Data.Systems.SQUARE_SIZE / 2);
 													break;
 											}
 											portion = Scene.Map.current.getLocalPortion(
@@ -659,10 +659,10 @@ class Collisions {
 											if (mapPortion) {
 												floors =
 													mapPortion.squareNonEmpty[
-														Math.floor(positionFront.x / Datas.Systems.SQUARE_SIZE) %
+														Math.floor(positionFront.x / Data.Systems.SQUARE_SIZE) %
 															Constants.PORTION_SIZE
 													][
-														Math.floor(positionFront.z / Datas.Systems.SQUARE_SIZE) %
+														Math.floor(positionFront.z / Data.Systems.SQUARE_SIZE) %
 															Constants.PORTION_SIZE
 													];
 												if (floors.length > 0) {
@@ -681,9 +681,9 @@ class Collisions {
 											for (j = startJ; j <= endJ; j++) {
 												for (k = startK; k <= endK; k++) {
 													positionBeforePlus.set(
-														positionBefore.x + i * Datas.Systems.SQUARE_SIZE,
-														positionBefore.y + j * Datas.Systems.SQUARE_SIZE - 1,
-														positionBefore.z + k * Datas.Systems.SQUARE_SIZE
+														positionBefore.x + i * Data.Systems.SQUARE_SIZE,
+														positionBefore.y + j * Data.Systems.SQUARE_SIZE - 1,
+														positionBefore.z + k * Data.Systems.SQUARE_SIZE
 													);
 													portion = Scene.Map.current.getLocalPortion(
 														Portion.createFromVector3(positionBeforePlus)
@@ -714,12 +714,12 @@ class Collisions {
 																	for (k2 = startK; k2 <= endK; k2++) {
 																		positionAfterPlus.set(
 																			positionAfter.x +
-																				i2 * Datas.Systems.SQUARE_SIZE,
+																				i2 * Data.Systems.SQUARE_SIZE,
 																			positionAfter.y +
-																				j2 * Datas.Systems.SQUARE_SIZE -
+																				j2 * Data.Systems.SQUARE_SIZE -
 																				1,
 																			positionAfter.z +
-																				k2 * Datas.Systems.SQUARE_SIZE
+																				k2 * Data.Systems.SQUARE_SIZE
 																		);
 																		portion = Scene.Map.current.getLocalPortion(
 																			Portion.createFromVector3(positionAfterPlus)
@@ -1078,8 +1078,8 @@ class Collisions {
 								(object.speed.getValue() as number) *
 								MapObject.SPEED_NORMAL *
 								Manager.Stack.averageElapsedTime *
-								Datas.Systems.SQUARE_SIZE *
-								(Datas.Systems.climbingSpeed.getValue() as number);
+								Data.Systems.SQUARE_SIZE *
+								(Data.Systems.climbingSpeed.getValue() as number);
 							const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
 							const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
 							const y = object.isClimbingUp
@@ -1196,7 +1196,7 @@ class Collisions {
 		positionAfter: THREE.Vector3
 	): boolean {
 		// Remove previous
-		const mesh = Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, objCollision.id).mesh;
+		const mesh = Data.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, objCollision.id).mesh;
 		if (mesh !== this.currentCustomObject3D) {
 			Scene.Map.current.scene.remove(this.currentCustomObject3D);
 			this.currentCustomObject3D = mesh;
@@ -1207,7 +1207,7 @@ class Collisions {
 			this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), objCollision.b[7]);
 			this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), objCollision.b[8]);
 			Scene.Map.current.scene.add(this.currentCustomObject3D);
-			if (Datas.Systems.showBB) {
+			if (Data.Systems.showBB) {
 				this.currentCustomObject3D.material = this.BB_MATERIAL;
 			} else {
 				this.currentCustomObject3D.material = this.BB_EMPTY_MATERIAL;
@@ -1392,9 +1392,9 @@ class Collisions {
 				forceNever ||
 				-(
 					!forceAlways &&
-					y + h <= positionAfter.y + (Datas.Systems.mountainCollisionHeight.getValue() as number)
+					y + h <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number)
 				);
-			if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE, z, z + Datas.Systems.SQUARE_SIZE)) {
+			if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
 				return pass ? [false, positionAfter.y - y - h === 0 ? null : y + h] : [true, null];
 			} else {
 				if (!pass) {
@@ -1409,9 +1409,9 @@ class Collisions {
 								Mathf.isPointOnRectangle(
 									point,
 									x,
-									x + Datas.Systems.SQUARE_SIZE,
+									x + Data.Systems.SQUARE_SIZE,
 									z,
-									z + Datas.Systems.SQUARE_SIZE
+									z + Data.Systems.SQUARE_SIZE
 								)
 							) {
 								return [true, null];
@@ -1442,9 +1442,9 @@ class Collisions {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new THREE.Vector2(x - w, z + Datas.Systems.SQUARE_SIZE);
-					ptB = new THREE.Vector2(x, z + Datas.Systems.SQUARE_SIZE);
-					ptC = new THREE.Vector2(x, z + Datas.Systems.SQUARE_SIZE + w);
+					ptA = new THREE.Vector2(x - w, z + Data.Systems.SQUARE_SIZE);
+					ptB = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE);
+					ptC = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE + w);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1453,19 +1453,19 @@ class Collisions {
 						return [false, null];
 					}
 				} else {
-					if (Mathf.isPointOnRectangle(point, x - w, x, z, z + Datas.Systems.SQUARE_SIZE)) {
+					if (Mathf.isPointOnRectangle(point, x - w, x, z, z + Data.Systems.SQUARE_SIZE)) {
 						pA = new THREE.Vector3(x - w, y, z);
 						pB = new THREE.Vector3(x, y + h, z);
-						pC = new THREE.Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
+						pC = new THREE.Vector3(x, y + h, z + Data.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
 					}
 				}
 			} else if (objCollision.right && !mountain.right) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z - w);
-					ptB = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z);
-					ptC = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE + w, z);
+					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z - w);
+					ptB = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z);
+					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + w, z);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1474,9 +1474,9 @@ class Collisions {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE + w);
-					ptB = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE, z + Datas.Systems.SQUARE_SIZE);
-					ptC = new THREE.Vector2(x + Datas.Systems.SQUARE_SIZE + w, z + Datas.Systems.SQUARE_SIZE);
+					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE + w);
+					ptB = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE);
+					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + w, z + Data.Systems.SQUARE_SIZE);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1488,25 +1488,25 @@ class Collisions {
 					if (
 						Mathf.isPointOnRectangle(
 							point,
-							x + Datas.Systems.SQUARE_SIZE,
-							x + Datas.Systems.SQUARE_SIZE + w,
+							x + Data.Systems.SQUARE_SIZE,
+							x + Data.Systems.SQUARE_SIZE + w,
 							z,
-							z + Datas.Systems.SQUARE_SIZE
+							z + Data.Systems.SQUARE_SIZE
 						)
 					) {
-						pA = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y + h, z + Datas.Systems.SQUARE_SIZE);
-						pB = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y + h, z);
-						pC = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE + w, y, z);
+						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y + h, z + Data.Systems.SQUARE_SIZE);
+						pB = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y + h, z);
+						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE + w, y, z);
 					} else {
 						return [false, null];
 					}
 				}
 			} else {
 				if (objCollision.top && !mountain.top) {
-					if (Mathf.isPointOnRectangle(point, x, x + Datas.Systems.SQUARE_SIZE, z - w, z)) {
+					if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z - w, z)) {
 						pA = new THREE.Vector3(x, y + h, z);
 						pB = new THREE.Vector3(x, y, z - w);
-						pC = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y, z - w);
+						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z - w);
 					} else {
 						return [false, null];
 					}
@@ -1515,14 +1515,14 @@ class Collisions {
 						Mathf.isPointOnRectangle(
 							point,
 							x,
-							x + Datas.Systems.SQUARE_SIZE,
-							z + Datas.Systems.SQUARE_SIZE,
-							z + Datas.Systems.SQUARE_SIZE + w
+							x + Data.Systems.SQUARE_SIZE,
+							z + Data.Systems.SQUARE_SIZE,
+							z + Data.Systems.SQUARE_SIZE + w
 						)
 					) {
-						pA = new THREE.Vector3(x + Datas.Systems.SQUARE_SIZE, y, z + Datas.Systems.SQUARE_SIZE + w);
-						pB = new THREE.Vector3(x, y, z + Datas.Systems.SQUARE_SIZE + w);
-						pC = new THREE.Vector3(x, y + h, z + Datas.Systems.SQUARE_SIZE);
+						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z + Data.Systems.SQUARE_SIZE + w);
+						pB = new THREE.Vector3(x, y, z + Data.Systems.SQUARE_SIZE + w);
+						pC = new THREE.Vector3(x, y + h, z + Data.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
 					}
@@ -1544,9 +1544,9 @@ class Collisions {
 			const jposition =
 				newPosition.y - positionAfter.y < 0
 					? new Position(
-							Math.floor(positionAfter.x / Datas.Systems.SQUARE_SIZE),
-							Math.ceil(positionAfter.y / Datas.Systems.SQUARE_SIZE),
-							Math.floor(positionAfter.z / Datas.Systems.SQUARE_SIZE)
+							Math.floor(positionAfter.x / Data.Systems.SQUARE_SIZE),
+							Math.ceil(positionAfter.y / Data.Systems.SQUARE_SIZE),
+							Math.floor(positionAfter.z / Data.Systems.SQUARE_SIZE)
 					  )
 					: jpositionAfter;
 			mapPortion = Scene.Map.current.getMapPortionFromPortion(
@@ -1560,7 +1560,7 @@ class Collisions {
 			// If angle limit, block
 			if (
 				forceAlways ||
-				(!forceNever && mountain.angle > (Datas.Systems.mountainCollisionAngle.getValue() as number))
+				(!forceNever && mountain.angle > (Data.Systems.mountainCollisionAngle.getValue() as number))
 			) {
 				// Check if floor existing on top of the mountain angle
 				isFloor =
@@ -1572,7 +1572,7 @@ class Collisions {
 			return [
 				!forceNever &&
 					Math.abs(newPosition.y - positionAfter.y) >
-						(Datas.Systems.mountainCollisionHeight.getValue() as number),
+						(Data.Systems.mountainCollisionHeight.getValue() as number),
 				newPosition.y,
 			];
 		}

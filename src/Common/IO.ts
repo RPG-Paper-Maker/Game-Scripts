@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas } from '..';
+import { Data } from '..';
 import { Platform } from './Platform';
 import { JsonType } from './Types';
 
@@ -49,14 +49,14 @@ export class IO {
 
 	/**
 	 * Load and parse a JSON file.
-	 * If the project is protected (`Datas.Settings.isProtected`), the content will be
+	 * If the project is protected (`Data.Settings.isProtected`), the content will be
 	 * base64-decoded before parsing.
 	 * @param url - The path of the file.
 	 * @returns A promise resolving to the parsed JSON object, or `{}` if parsing fails.
 	 */
 	static async parseFileJSON(url: string): Promise<JsonType> {
 		let content = await Platform.loadFile(url);
-		if (Datas.Settings.isProtected) {
+		if (Data.Settings.isProtected) {
 			content = atob(content);
 		}
 		try {
@@ -69,7 +69,7 @@ export class IO {
 
 	/**
 	 * Save an object to a JSON file (desktop only).
-	 * If the project is protected (`Datas.Settings.isProtected`), the content will be
+	 * If the project is protected (`Data.Settings.isProtected`), the content will be
 	 * base64-encoded before saving.
 	 * @param path - The path of the file to save.
 	 * @param obj - The object to stringify and save.
@@ -77,7 +77,7 @@ export class IO {
 	 */
 	static async saveFile(path: string, obj: object): Promise<void> {
 		let content = JSON.stringify(obj);
-		if (Datas.Settings.isProtected) {
+		if (Data.Settings.isProtected) {
 			content = btoa(content);
 		}
 		window.ipcRenderer.send('save-file', path, content);

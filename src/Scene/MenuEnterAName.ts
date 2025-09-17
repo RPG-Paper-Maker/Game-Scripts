@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Scene } from '..';
+import { Data, Graphic, Manager, Scene } from '..';
 import { ALIGN, ORIENTATION_WINDOW, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Game, Picture2D, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { MenuBase } from './MenuBase';
@@ -54,7 +54,7 @@ class MenuEnterAName extends MenuBase {
 	 */
 	create() {
 		super.create();
-		this.initializeDatas();
+		this.initializeData();
 		this.createPictures();
 		this.createAllWindows();
 	}
@@ -72,9 +72,9 @@ class MenuEnterAName extends MenuBase {
 	/**
 	 *  Initialize all the datas.
 	 */
-	initializeDatas() {
-		this.rows = Datas.Systems.enterNameTable.length;
-		this.columns = Datas.Systems.enterNameTable[0].length;
+	initializeData() {
+		this.rows = Data.Systems.enterNameTable.length;
+		this.columns = Data.Systems.enterNameTable[0].length;
 		this.displayRows = Math.min(this.rows, MenuEnterAName.MAX_ROWS);
 		this.displayColumns = Math.min(this.columns, MenuEnterAName.MAX_COLUMNS);
 		this.selectedhero = Game.current.getHeroByInstanceID(this.heroInstanceID);
@@ -89,7 +89,7 @@ class MenuEnterAName extends MenuBase {
 	 *  Create all the pictures.
 	 */
 	createPictures() {
-		this.pictureFaceset = Datas.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, this.selectedhero.system.idFaceset);
+		this.pictureFaceset = Data.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, this.selectedhero.system.idFaceset);
 	}
 
 	/**
@@ -107,10 +107,10 @@ class MenuEnterAName extends MenuBase {
 			(ScreenResolution.SCREEN_X -
 				slotWidth * this.maxCharacters -
 				options.padding[0] * 2 -
-				Datas.Systems.facesetScalingWidth) /
+				Data.Systems.facesetScalingWidth) /
 				2 +
-				Datas.Systems.facesetScalingWidth,
-			Datas.Systems.facesetScalingHeight - WindowBox.MEDIUM_SLOT_HEIGHT,
+				Data.Systems.facesetScalingWidth,
+			Data.Systems.facesetScalingHeight - WindowBox.MEDIUM_SLOT_HEIGHT,
 			slotWidth,
 			WindowBox.MEDIUM_SLOT_HEIGHT
 		);
@@ -161,7 +161,7 @@ class MenuEnterAName extends MenuBase {
 		for (let i = 0; i < this.rows; i++) {
 			listGraphics = new Array(this.columns);
 			for (let j = 0; j < this.columns; j++) {
-				listGraphics[j] = new Graphic.Text(Datas.Systems.enterNameTable[i][j], { align: ALIGN.CENTER });
+				listGraphics[j] = new Graphic.Text(Data.Systems.enterNameTable[i][j], { align: ALIGN.CENTER });
 			}
 			this.windowChoicesMain[i] = new WindowChoices(
 				rect.x,
@@ -201,7 +201,7 @@ class MenuEnterAName extends MenuBase {
 	 */
 	action(isKey: boolean, options: { key?: string; x?: number; y?: number } = {}) {
 		if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-			Datas.Systems.soundConfirmation.playSound();
+			Data.Systems.soundConfirmation.playSound();
 			// If is on OK button
 			if (this.currentRow === this.rows) {
 				let name = '';
@@ -217,7 +217,7 @@ class MenuEnterAName extends MenuBase {
 					return;
 				}
 				(<Graphic.Text>this.windowChoicesTop.getContent(this.currentCharacterPosition)).setText(
-					Datas.Systems.enterNameTable[this.currentRow][
+					Data.Systems.enterNameTable[this.currentRow][
 						this.windowChoicesMain[this.currentRow].currentSelectedIndex
 					]
 				);
@@ -229,7 +229,7 @@ class MenuEnterAName extends MenuBase {
 				}
 			}
 		} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-			Datas.Systems.soundCancel.playSound();
+			Data.Systems.soundCancel.playSound();
 			if (this.currentCharacterPosition > 0) {
 				if (this.currentCharacterPosition < this.maxCharacters) {
 					(<Graphic.Text>this.windowChoicesTop.getContent(this.currentCharacterPosition)).setText('_');
@@ -254,7 +254,7 @@ class MenuEnterAName extends MenuBase {
 		const windowChoice = this.currentRow === this.rows ? null : this.windowChoicesMain[this.currentRow];
 		const index = windowChoice === null ? 0 : windowChoice.currentSelectedIndex;
 		if (isKey) {
-			if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Down)) {
+			if (Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Down)) {
 				if (windowChoice !== null) {
 					windowChoice.listWindows[windowChoice.currentSelectedIndex].selected = false;
 				}
@@ -277,7 +277,7 @@ class MenuEnterAName extends MenuBase {
 					}
 				}
 				if (i !== this.currentRow) {
-					Datas.Systems.soundCursor.playSound();
+					Data.Systems.soundCursor.playSound();
 					for (let i = 0; i < this.displayRows; i++) {
 						this.windowChoicesMain[i + this.offsetRow].setY(
 							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40
@@ -290,7 +290,7 @@ class MenuEnterAName extends MenuBase {
 					this.windowBoxOk.selected = false;
 					this.windowChoicesMain[this.currentRow].select(index);
 				}
-			} else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Up)) {
+			} else if (Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Up)) {
 				if (windowChoice !== null) {
 					windowChoice.listWindows[windowChoice.currentSelectedIndex].selected = false;
 				}
@@ -311,7 +311,7 @@ class MenuEnterAName extends MenuBase {
 					this.currentRow = this.rows;
 				}
 				if (i !== this.currentRow) {
-					Datas.Systems.soundCursor.playSound();
+					Data.Systems.soundCursor.playSound();
 					for (let i = 0; i < this.displayRows; i++) {
 						this.windowChoicesMain[i + this.offsetRow].setY(
 							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40
@@ -324,7 +324,7 @@ class MenuEnterAName extends MenuBase {
 					this.windowBoxOk.selected = false;
 					this.windowChoicesMain[this.currentRow].select(index);
 				}
-			} else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Right)) {
+			} else if (Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Right)) {
 				if (this.currentRow < this.rows) {
 					windowChoice.onKeyPressedAndRepeat(options.key);
 					for (let i = 0; i < this.rows; i++) {
@@ -332,7 +332,7 @@ class MenuEnterAName extends MenuBase {
 						this.windowChoicesMain[i].offsetSelectedIndex = windowChoice.offsetSelectedIndex;
 					}
 				}
-			} else if (Datas.Keyboards.isKeyEqual(options.key, Datas.Keyboards.menuControls.Left)) {
+			} else if (Data.Keyboards.isKeyEqual(options.key, Data.Keyboards.menuControls.Left)) {
 				if (this.currentRow < this.rows) {
 					windowChoice.onKeyPressedAndRepeat(options.key);
 					for (let i = 0; i < this.rows; i++) {
@@ -420,14 +420,14 @@ class MenuEnterAName extends MenuBase {
 	drawHUD() {
 		super.drawHUD();
 		this.pictureFaceset.draw({
-			sx: this.selectedhero.system.indexXFaceset * Datas.Systems.facesetsSize,
-			sy: this.selectedhero.system.indexYFaceset * Datas.Systems.facesetsSize,
-			sw: Datas.Systems.facesetsSize,
-			sh: Datas.Systems.facesetsSize,
-			w: Datas.Systems.facesetScalingWidth,
-			h: Datas.Systems.facesetScalingHeight,
-			x: this.windowChoicesTop.x - ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingWidth),
-			y: this.windowBoxMain.y - ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingHeight),
+			sx: this.selectedhero.system.indexXFaceset * Data.Systems.facesetsSize,
+			sy: this.selectedhero.system.indexYFaceset * Data.Systems.facesetsSize,
+			sw: Data.Systems.facesetsSize,
+			sh: Data.Systems.facesetsSize,
+			w: Data.Systems.facesetScalingWidth,
+			h: Data.Systems.facesetScalingHeight,
+			x: this.windowChoicesTop.x - ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth),
+			y: this.windowBoxMain.y - ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingHeight),
 		});
 		this.windowChoicesTop.draw();
 		this.windowBoxMain.draw();

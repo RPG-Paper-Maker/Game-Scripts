@@ -10,7 +10,7 @@
 */
 
 import { CUSTOM_SHAPE_KIND, Paths, Platform } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 import { ShapeJSON } from '../Model';
 
 /** @class
@@ -97,7 +97,7 @@ class Shapes {
 	static get(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
 		return kind === CUSTOM_SHAPE_KIND.NONE || id === -1
 			? new Model.Shape()
-			: Datas.Base.get(id, this.list[kind], 'shape ' + Model.Shape.customShapeKindToString(kind));
+			: Data.Base.get(id, this.list[kind], 'shape ' + Model.Shape.customShapeKindToString(kind));
 	}
 }
 

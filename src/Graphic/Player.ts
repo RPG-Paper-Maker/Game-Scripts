@@ -12,7 +12,7 @@
 import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Frame, Picture2D, Rectangle } from '../Core';
 import { Status } from '../Core/Status';
-import { Core, Datas, Graphic, Manager, Model } from '../index';
+import { Core, Data, Graphic, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -61,8 +61,8 @@ class Player extends Base {
 		// Informations
 		const hero = this.player.system;
 		const cl = this.player.getClass();
-		const levelStat = Datas.BattleSystems.getLevelStatistic();
-		const expStat = Datas.BattleSystems.getExpStatistic();
+		const levelStat = Data.BattleSystems.getLevelStatistic();
+		const expStat = Data.BattleSystems.getExpStatistic();
 
 		// All the graphics
 		this.graphicName = new Graphic.Text(this.player.name);
@@ -84,19 +84,19 @@ class Player extends Base {
 		let statistics: number[];
 		let i: number, l: number;
 		if (this.isMainMenu) {
-			l = Datas.Systems.heroesStatistics.length;
+			l = Data.Systems.heroesStatistics.length;
 			statistics = new Array(l);
 			for (i = 0; i < l; i++) {
-				statistics[i] = Datas.Systems.heroesStatistics[i].getValue() as number;
+				statistics[i] = Data.Systems.heroesStatistics[i].getValue() as number;
 			}
 		} else {
-			statistics = Datas.BattleSystems.statisticsOrder;
+			statistics = Data.BattleSystems.statisticsOrder;
 		}
 		let id: number, statistic: Model.Statistic, graphic: Graphic.Statistic;
 		for (i = 0, l = statistics.length; i < l; i++) {
 			id = statistics[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 
 				// Only display bars
 				if (!statistic.isFix) {
@@ -113,21 +113,21 @@ class Player extends Base {
 		}
 
 		// Faceset
-		this.faceset = Datas.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, player.getFacesetID());
+		this.faceset = Data.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, player.getFacesetID());
 		if (this.reverse) {
-			this.faceset.setLeft(Datas.Systems.getCurrentWindowSkin().borderBotLeft[2]);
+			this.faceset.setLeft(Data.Systems.getCurrentWindowSkin().borderBotLeft[2]);
 		} else {
-			this.faceset.setRight(true, Datas.Systems.getCurrentWindowSkin().borderBotRight[2]);
+			this.faceset.setRight(true, Data.Systems.getCurrentWindowSkin().borderBotRight[2]);
 		}
-		this.faceset.setBot(true, Datas.Systems.getCurrentWindowSkin().borderBotRight[3]);
+		this.faceset.setBot(true, Data.Systems.getCurrentWindowSkin().borderBotRight[3]);
 		this.faceset.reverse = this.reverse;
 
 		// Battler
-		this.battler = Datas.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
-		this.battlerFrame = new Frame(250, { frames: Datas.Systems.battlersFrames });
+		this.battler = Data.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
+		this.battlerFrame = new Frame(250, { frames: Data.Systems.battlersFrames });
 
 		// Level up
-		this.graphicLevelUp = new Graphic.Text(Datas.Languages.extras.levelUp.name());
+		this.graphicLevelUp = new Graphic.Text(Data.Languages.extras.levelUp.name());
 		this.displayNameLevel = true;
 	}
 
@@ -137,9 +137,9 @@ class Player extends Base {
 	 */
 	updateReverse(reverse: boolean) {
 		if (reverse) {
-			this.faceset.setLeft(Datas.Systems.getCurrentWindowSkin().borderBotLeft[2]);
+			this.faceset.setLeft(Data.Systems.getCurrentWindowSkin().borderBotLeft[2]);
 		} else {
-			this.faceset.setRight(true, Datas.Systems.getCurrentWindowSkin().borderBotRight[2]);
+			this.faceset.setRight(true, Data.Systems.getCurrentWindowSkin().borderBotRight[2]);
 		}
 		this.faceset.reverse = reverse;
 		this.reverse = reverse;
@@ -151,7 +151,7 @@ class Player extends Base {
 	update() {
 		// Informations
 		const cl = this.player.getClass();
-		const levelStat = Datas.BattleSystems.getLevelStatistic();
+		const levelStat = Data.BattleSystems.getLevelStatistic();
 
 		// All the graphics
 		this.graphicName.setText(this.player.name);
@@ -167,8 +167,8 @@ class Player extends Base {
 	 *  Update experience graphics.
 	 */
 	updateExperience() {
-		this.graphicLevel.setText(String(this.player[Datas.BattleSystems.getLevelStatistic().abbreviation]));
-		this.graphicExp.setText(this.player.getBarAbbreviation(Datas.BattleSystems.getExpStatistic()));
+		this.graphicLevel.setText(String(this.player[Data.BattleSystems.getLevelStatistic().abbreviation]));
+		this.graphicExp.setText(this.player.getBarAbbreviation(Data.BattleSystems.getExpStatistic()));
 	}
 
 	/**
@@ -230,11 +230,11 @@ class Player extends Base {
 	drawCharacter(x: number, y: number, w: number, h: number) {
 		// Battler
 		let yOffset = ScreenResolution.getScreenMinXY(100);
-		const coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-		const wBattler = this.battler.w / Datas.Systems.battlersFrames;
-		const hBattler = this.battler.h / Datas.Systems.battlersColumns;
-		const owBattler = this.battler.oW / Datas.Systems.battlersFrames;
-		const ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
+		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
+		const wBattler = this.battler.w / Data.Systems.battlersFrames;
+		const hBattler = this.battler.h / Data.Systems.battlersColumns;
+		const owBattler = this.battler.oW / Data.Systems.battlersFrames;
+		const ohBattler = this.battler.oH / Data.Systems.battlersColumns;
 		this.battlerRect.setCoords(
 			x,
 			y + yOffset - hBattler * coef - ScreenResolution.getScreenMinXY(15),
@@ -282,10 +282,10 @@ class Player extends Base {
 	drawChoice(x: number, y: number, w: number, h: number) {
 		const xCharacter = x + ScreenResolution.getScreenMinXY(80);
 		const yName = y + ScreenResolution.getScreenMinXY(20);
-		const coef = Constants.BASIC_SQUARE_SIZE / Datas.Systems.SQUARE_SIZE;
-		const wBattler = this.battler.w / Datas.Systems.battlersFrames;
-		const owBattler = this.battler.oW / Datas.Systems.battlersFrames;
-		const ohBattler = this.battler.oH / Datas.Systems.battlersColumns;
+		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
+		const wBattler = this.battler.w / Data.Systems.battlersFrames;
+		const owBattler = this.battler.oW / Data.Systems.battlersFrames;
+		const ohBattler = this.battler.oH / Data.Systems.battlersColumns;
 
 		// Battler
 		this.battler.draw({
@@ -358,7 +358,7 @@ class Player extends Base {
 		const xLevelName = x + wName + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
 		const xLevel = xLevelName + wLevelName;
 		const firstLineLength = xLevel + this.graphicLevel.textWidth;
-		const xOffset = this.reverse ? ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingWidth) : 0;
+		const xOffset = this.reverse ? ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth) : 0;
 
 		// Name, level, status
 		const yName = y + ScreenResolution.getScreenMinXY(10);
@@ -378,12 +378,12 @@ class Player extends Base {
 
 		// Faceset
 		this.faceset.draw({
-			sx: this.player.getFacesetIndexX() * Datas.Systems.facesetsSize,
-			sy: this.player.getFacesetIndexY() * Datas.Systems.facesetsSize,
-			sw: Datas.Systems.facesetsSize,
-			sh: Datas.Systems.facesetsSize,
-			w: Datas.Systems.facesetScalingWidth,
-			h: Datas.Systems.facesetScalingHeight,
+			sx: this.player.getFacesetIndexX() * Data.Systems.facesetsSize,
+			sy: this.player.getFacesetIndexY() * Data.Systems.facesetsSize,
+			sw: Data.Systems.facesetsSize,
+			sh: Data.Systems.facesetsSize,
+			w: Data.Systems.facesetScalingWidth,
+			h: Data.Systems.facesetScalingHeight,
 		});
 	}
 }

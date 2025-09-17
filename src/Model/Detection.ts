@@ -11,7 +11,7 @@
 
 import { ORIENTATION, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
-import { Datas, Manager } from '../index';
+import { Data, Manager } from '../index';
 import { Base } from './Base';
 
 /**
@@ -64,11 +64,11 @@ export class Detection extends Base {
 		const list = new Array(this.boxes.length);
 		for (let i = 0; i < this.boxes.length; i++) {
 			const [p, bls, blp, bhs, bhp, bws, bwp] = this.boxes[i];
-			const length = bls * Datas.Systems.SQUARE_SIZE + (blp / 100) * Datas.Systems.SQUARE_SIZE;
-			const height = bhs * Datas.Systems.SQUARE_SIZE + (bhp / 100) * Datas.Systems.SQUARE_SIZE;
-			const width = bws * Datas.Systems.SQUARE_SIZE + (bwp / 100) * Datas.Systems.SQUARE_SIZE;
-			const px = (p.x - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterX() + length / 2;
-			const pz = (p.z - 1) * Datas.Systems.SQUARE_SIZE + p.getPixelsCenterZ() + width / 2;
+			const length = bls * Data.Systems.SQUARE_SIZE + (blp / 100) * Data.Systems.SQUARE_SIZE;
+			const height = bhs * Data.Systems.SQUARE_SIZE + (bhp / 100) * Data.Systems.SQUARE_SIZE;
+			const width = bws * Data.Systems.SQUARE_SIZE + (bwp / 100) * Data.Systems.SQUARE_SIZE;
+			const px = (p.x - 1) * Data.Systems.SQUARE_SIZE + p.getPixelsCenterX() + length / 2;
+			const pz = (p.z - 1) * Data.Systems.SQUARE_SIZE + p.getPixelsCenterZ() + width / 2;
 			let x: number;
 			let z: number;
 			switch (orientation) {

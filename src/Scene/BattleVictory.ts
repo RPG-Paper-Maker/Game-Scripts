@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Model, Scene } from '..';
+import { Data, Graphic, Manager, Model, Scene } from '..';
 import { CHARACTER_KIND, LOOT_KIND, Platform, ScreenResolution } from '../Common';
 import { Battler, Game, Item, Player, WindowBox } from '../Core';
 import { Status } from '../Core/Status';
@@ -48,13 +48,13 @@ class BattleVictory {
 
 		// If loosing, directly go to end transition
 		if (!this.battle.winning) {
-			(<Graphic.Text>this.battle.windowTopInformations.content).setText(Datas.Languages.extras.defeat.name());
+			(<Graphic.Text>this.battle.windowTopInformations.content).setText(Data.Languages.extras.defeat.name());
 			this.battle.subStep = 4;
 			return;
 		}
 
 		// Change information bar content
-		(<Graphic.Text>this.battle.windowTopInformations.content).setText(Datas.Languages.extras.victory.name());
+		(<Graphic.Text>this.battle.windowTopInformations.content).setText(Data.Languages.extras.victory.name());
 
 		// Rewards
 		this.prepareRewards();
@@ -208,7 +208,7 @@ class BattleVictory {
 						WindowBox.HUGE_PADDING_BOX[0] +
 						WindowBox.HUGE_PADDING_BOX[2];
 					this.battle.windowStatisticProgression.setH(h);
-					Datas.BattleSystems.battleLevelUp.playSound();
+					Data.BattleSystems.battleLevelUp.playSound();
 					this.battle.subStep = 2;
 					return;
 				}

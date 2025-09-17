@@ -11,7 +11,7 @@
 
 import { Constants, ScreenResolution } from '../Common';
 import { Player } from '../Core';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -51,10 +51,10 @@ class EquipStats extends Base {
 			graphicValue: Graphic.Text,
 			baseValue: number,
 			newValue: number;
-		for (let i = 0, j = 0, l = Datas.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Datas.BattleSystems.statisticsOrder[i];
-			if (id !== Datas.BattleSystems.idLevelStatistic && id !== Datas.BattleSystems.idExpStatistic) {
-				statistic = Datas.BattleSystems.getStatistic(id);
+		for (let i = 0, j = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsOrder[i];
+			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
+				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes) {
 					continue;
 				}

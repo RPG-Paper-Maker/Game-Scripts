@@ -10,7 +10,7 @@
 */
 
 import { Platform, ScreenResolution, Utils } from '../Common';
-import { Datas, Graphic } from '../index';
+import { Data, Graphic } from '../index';
 import { Bitmap } from './Bitmap';
 import { Rectangle } from './Rectangle';
 
@@ -195,7 +195,7 @@ class WindowBox extends Bitmap {
 		}
 
 		// Draw box
-		Datas.Systems.getCurrentWindowSkin().drawBox(
+		Data.Systems.getCurrentWindowSkin().drawBox(
 			Rectangle.createFromArray(windowDimension), // to improve
 			this.selected,
 			this.bordersVisible

@@ -10,7 +10,7 @@
 */
 
 import { ALIGN } from '../Common';
-import { Core, Datas, Graphic, Model } from '../index';
+import { Core, Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -27,7 +27,7 @@ class Skill extends Base {
 	constructor(skill: Core.Skill) {
 		super();
 
-		this.system = Datas.Skills.get(skill.id);
+		this.system = Data.Skills.get(skill.id);
 		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system);
 		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: ALIGN.RIGHT });
 		this.graphicInformations = new Graphic.SkillItem(this.system);

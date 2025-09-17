@@ -10,7 +10,7 @@
 */
 
 import { ALIGN } from '../Common';
-import { Datas, Graphic, Scene } from '../index';
+import { Data, Graphic, Scene } from '../index';
 
 /** @class
  *   A scene for the loading.
@@ -24,7 +24,7 @@ class Loading extends Scene.Base {
 	constructor() {
 		super(false);
 
-		this.text = new Graphic.Text(Datas.Languages.extras.loading.name(), {
+		this.text = new Graphic.Text(Data.Languages.extras.loading.name(), {
 			align: ALIGN.RIGHT,
 			x: 590,
 			y: 450,

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Datas, Graphic, Manager, Scene } from '..';
+import { Data, Graphic, Manager, Scene } from '..';
 import { ALIGN, Constants, ORIENTATION_WINDOW, ScreenResolution } from '../Common';
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { SpinBox } from '../Core/SpinBox';
@@ -97,7 +97,7 @@ class MenuShop extends MenuBase {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.shop.name(), {
+		const graphic = new Graphic.Text(Data.Languages.extras.shop.name(), {
 			align: ALIGN.CENTER,
 		});
 		const options = {
@@ -116,9 +116,9 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		const list = [new Graphic.Text(Datas.Languages.extras.buy.name(), { align: ALIGN.CENTER })];
+		const list = [new Graphic.Text(Data.Languages.extras.buy.name(), { align: ALIGN.CENTER })];
 		if (!this.buyOnly) {
-			list.push(new Graphic.Text(Datas.Languages.extras.sell.name(), { align: ALIGN.CENTER }));
+			list.push(new Graphic.Text(Data.Languages.extras.sell.name(), { align: ALIGN.CENTER }));
 		}
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -138,11 +138,11 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		let l = Datas.Systems.inventoryFilters.length;
+		let l = Data.Systems.inventoryFilters.length;
 		const list: Graphic.Text[] = [];
 		let i: number;
-		for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
-			list[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
+		for (i = 0, l = Data.Systems.inventoryFilters.length; i < l; i++) {
+			list[i] = new Graphic.Text(Data.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
 		}
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -206,7 +206,7 @@ class MenuShop extends MenuBase {
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE,
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.empty.name(), {
+		const graphic = new Graphic.Text(Data.Languages.extras.empty.name(), {
 			align: ALIGN.CENTER,
 		});
 		const options = {
@@ -294,7 +294,7 @@ class MenuShop extends MenuBase {
 			width,
 			height
 		);
-		const graphic = new Graphic.Text(Datas.Languages.extras.equipQuestion.name(), { align: ALIGN.CENTER });
+		const graphic = new Graphic.Text(Data.Languages.extras.equipQuestion.name(), { align: ALIGN.CENTER });
 		const options = {
 			content: graphic,
 			padding: WindowBox.SMALL_SLOT_PADDING,
@@ -313,8 +313,8 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_HEIGHT
 		);
 		const list = [
-			new Graphic.Text(Datas.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
-			new Graphic.Text(Datas.Languages.extras.no.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.no.name(), { align: ALIGN.CENTER }),
 		];
 		const options = {
 			nbItemsMax: list.length,
@@ -352,7 +352,7 @@ class MenuShop extends MenuBase {
 			if (
 				item.nb !== 0 &&
 				(this.isBuy() || (item.system.canBeSold.getValue() as number)) &&
-				Datas.Systems.inventoryFilters[indexTab].getFilter()(item)
+				Data.Systems.inventoryFilters[indexTab].getFilter()(item)
 			) {
 				list.push(
 					this.isBuy()
@@ -382,7 +382,7 @@ class MenuShop extends MenuBase {
 					break;
 				}
 			}
-			(<Graphic.Text>this.windowBoxOwned.content).setText(Datas.Languages.extras.owned.name() + ': ' + owned);
+			(<Graphic.Text>this.windowBoxOwned.content).setText(Data.Languages.extras.owned.name() + ': ' + owned);
 		}
 		(<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateGraphicCharactersEquip(
 			(<Graphic.Item>this.windowBoxInformation.content).item
@@ -466,12 +466,12 @@ class MenuShop extends MenuBase {
 		switch (this.step) {
 			case 0:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					this.updateItemsList();
 					this.step = 1;
 					Manager.Stack.requestPaintHUD = true;
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					Scene.Map.current.user = null;
 					Manager.Stack.pop();
 				}
@@ -483,7 +483,7 @@ class MenuShop extends MenuBase {
 					}
 					if (this.isBuy()) {
 						if (graphic.item.shop.isPossiblePrice()) {
-							Datas.Systems.soundConfirmation.playSound();
+							Data.Systems.soundConfirmation.playSound();
 							if (
 								graphic.item.system.isWeaponArmor() &&
 								(<Graphic.UseSkillItem>this.windowBoxUseItem.content).graphicCharacters.length > 0
@@ -500,24 +500,24 @@ class MenuShop extends MenuBase {
 							}
 							Manager.Stack.requestPaintHUD = true;
 						} else {
-							Datas.Systems.soundImpossible.playSound();
+							Data.Systems.soundImpossible.playSound();
 						}
 					} else {
-						Datas.Systems.soundConfirmation.playSound();
+						Data.Systems.soundConfirmation.playSound();
 						this.spinBox.max = graphic.item.nb;
 						this.spinBox.updateValue(1);
 						this.step = 2;
 						Manager.Stack.requestPaintHUD = true;
 					}
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					this.step = 0;
 				}
 				break;
 			case 2:
 			case 4:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					const shopItem = graphic.item;
 					if (this.isBuy()) {
 						if (
@@ -552,20 +552,20 @@ class MenuShop extends MenuBase {
 					this.step = 1;
 					Manager.Stack.requestPaintHUD = true;
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					this.step = graphic.item.system.isWeaponArmor() ? 3 : 1;
 					Manager.Stack.requestPaintHUD = true;
 				}
 				break;
 			case 3:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 					this.spinBox.max = graphic.item.nb;
 					this.spinBox.updateValue(1);
 					this.step = 2;
 					Manager.Stack.requestPaintHUD = true;
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					(<Graphic.UseSkillItem>this.windowBoxUseItem.content).hideArrow = true;
 					this.synchronize();
 					this.step = 1;

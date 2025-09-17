@@ -11,7 +11,7 @@
 
 import { ALIGN, AVAILABLE_KIND, Constants, ORIENTATION_WINDOW, ScreenResolution, TARGET_KIND } from '../Common';
 import { Game, Item, Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 import { StructPositionChoice } from './Menu';
 
@@ -38,11 +38,11 @@ class MenuInventory extends Base {
 		Scene.Map.current.targets = [];
 
 		// Initializing the top menu for item kinds
-		let l = Datas.Systems.inventoryFilters.length;
+		let l = Data.Systems.inventoryFilters.length;
 		const menuKind: Graphic.Text[] = [];
 		let i: number;
-		for (i = 0, l = Datas.Systems.inventoryFilters.length; i < l; i++) {
-			menuKind[i] = new Graphic.Text(Datas.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
+		for (i = 0, l = Data.Systems.inventoryFilters.length; i < l; i++) {
+			menuKind[i] = new Graphic.Text(Data.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
 		}
 
 		// All the windows
@@ -147,7 +147,7 @@ class MenuInventory extends Base {
 		let ownedItem: Item;
 		for (let i = 0; i < nbItems; i++) {
 			ownedItem = Game.current.items[i];
-			if (Datas.Systems.inventoryFilters[indexTab].getFilter()(ownedItem)) {
+			if (Data.Systems.inventoryFilters[indexTab].getFilter()(ownedItem)) {
 				list.push(new Graphic.Item(ownedItem));
 			}
 		}
@@ -226,39 +226,39 @@ class MenuInventory extends Base {
 						(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU)
 					) {
 						if (targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) {
-							Datas.Systems.soundConfirmation.playSound();
+							Data.Systems.soundConfirmation.playSound();
 							this.substep = 1;
 							graphicUse.setSkillItem(graphic.item.system);
 							graphicUse.setAll(targetKind === TARGET_KIND.ALL_ALLIES);
 						} else if (targetKind === TARGET_KIND.NONE) {
 							if (graphic.item.system.use()) {
-								Datas.Systems.soundConfirmation.playSound();
+								Data.Systems.soundConfirmation.playSound();
 								this.useItem();
 							} else {
-								Datas.Systems.soundImpossible.playSound();
+								Data.Systems.soundImpossible.playSound();
 							}
 						} else {
-							Datas.Systems.soundImpossible.playSound();
+							Data.Systems.soundImpossible.playSound();
 						}
 						Manager.Stack.requestPaintHUD = true;
 					} else {
-						Datas.Systems.soundImpossible.playSound();
+						Data.Systems.soundImpossible.playSound();
 					}
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					Manager.Stack.pop();
 				}
 				break;
 			case 1:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
 					if (graphic.item.system.isPossible() && graphic.item.system.use()) {
-						Datas.Systems.soundConfirmation.playSound();
+						Data.Systems.soundConfirmation.playSound();
 						this.useItem();
 					} else {
-						Datas.Systems.soundCancel.playSound();
+						Data.Systems.soundCancel.playSound();
 					}
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					this.substep = 0;
 					Manager.Stack.requestPaintHUD = true;
 				}

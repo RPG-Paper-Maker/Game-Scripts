@@ -10,7 +10,7 @@
 */
 
 import { Inputs, ORIENTATION_WINDOW, ScreenResolution, Utils } from '../Common';
-import { Datas, Graphic, Manager } from '../index';
+import { Data, Graphic, Manager } from '../index';
 import { Bitmap } from './Bitmap';
 import { Rectangle } from './Rectangle';
 import { WindowBox } from './WindowBox';
@@ -384,7 +384,7 @@ class WindowChoices extends Bitmap {
 			this.offsetSelectedIndex = this.size - 1;
 		}
 		if (index !== this.currentSelectedIndex) {
-			Datas.Systems.soundCursor.playSound();
+			Data.Systems.soundCursor.playSound();
 			Manager.Stack.requestPaintHUD = true;
 		}
 	}
@@ -404,7 +404,7 @@ class WindowChoices extends Bitmap {
 			this.offsetSelectedIndex = 0;
 		}
 		if (index !== this.currentSelectedIndex) {
-			Datas.Systems.soundCursor.playSound();
+			Data.Systems.soundCursor.playSound();
 			Manager.Stack.requestPaintHUD = true;
 		}
 	}
@@ -414,7 +414,7 @@ class WindowChoices extends Bitmap {
 	 */
 	goArrowUp() {
 		this.offsetSelectedIndex++;
-		Datas.Systems.soundCursor.playSound();
+		Data.Systems.soundCursor.playSound();
 		Manager.Stack.requestPaintHUD = true;
 	}
 
@@ -423,7 +423,7 @@ class WindowChoices extends Bitmap {
 	 */
 	goArrowDown() {
 		this.offsetSelectedIndex--;
-		Datas.Systems.soundCursor.playSound();
+		Data.Systems.soundCursor.playSound();
 		Manager.Stack.requestPaintHUD = true;
 	}
 
@@ -469,17 +469,17 @@ class WindowChoices extends Bitmap {
 	 */
 	onKeyPressed(key: string, base?: object) {
 		if (this.currentSelectedIndex !== -1) {
-			if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Action)) {
+			if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Action)) {
 				const callback = this.listCallBacks[this.currentSelectedIndex];
 				if (callback !== null) {
 					// Play a sound according to callback result
 					if (callback.call(base)) {
-						Datas.Systems.soundConfirmation.playSound();
+						Data.Systems.soundConfirmation.playSound();
 					} else {
-						Datas.Systems.soundImpossible.playSound();
+						Data.Systems.soundImpossible.playSound();
 					}
 				} else {
-					Datas.Systems.soundImpossible.playSound();
+					Data.Systems.soundImpossible.playSound();
 				}
 			}
 		}
@@ -501,15 +501,15 @@ class WindowChoices extends Bitmap {
 
 				// Go up or go down according to key and orientation
 				if (this.orientation === ORIENTATION_WINDOW.VERTICAL) {
-					if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Down)) {
+					if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Down)) {
 						this.goDown();
-					} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Up)) {
+					} else if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Up)) {
 						this.goUp();
 					}
 				} else {
-					if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Right)) {
+					if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Right)) {
 						this.goDown();
-					} else if (Datas.Keyboards.isKeyEqual(key, Datas.Keyboards.menuControls.Left)) {
+					} else if (Data.Keyboards.isKeyEqual(key, Data.Keyboards.menuControls.Left)) {
 						this.goUp();
 					}
 				}
@@ -538,7 +538,7 @@ class WindowChoices extends Bitmap {
 			}
 			// If different index, then change it visually + sound
 			if (this.offsetSelectedIndex !== index && index < this.size) {
-				Datas.Systems.soundCursor.playSound();
+				Data.Systems.soundCursor.playSound();
 				this.listWindows[this.currentSelectedIndex].selected = false;
 				this.currentSelectedIndex += index - this.offsetSelectedIndex;
 				this.offsetSelectedIndex = index;
@@ -548,7 +548,7 @@ class WindowChoices extends Bitmap {
 		} else {
 			// If on arrow
 			const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
-			const ws = Datas.Systems.getCurrentWindowSkin();
+			const ws = Data.Systems.getCurrentWindowSkin();
 			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
 			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3] / 2);
 			const arrowX = this.x + this.w / 2 - arrowWidth / 2;
@@ -582,12 +582,12 @@ class WindowChoices extends Bitmap {
 			if (callback !== null) {
 				// Play a sound according to callback result
 				if (callback.call(base)) {
-					Datas.Systems.soundConfirmation.playSound();
+					Data.Systems.soundConfirmation.playSound();
 				} else {
-					Datas.Systems.soundImpossible.playSound();
+					Data.Systems.soundImpossible.playSound();
 				}
 			} else {
-				Datas.Systems.soundImpossible.playSound();
+				Data.Systems.soundImpossible.playSound();
 			}
 		}
 	}
@@ -612,7 +612,7 @@ class WindowChoices extends Bitmap {
 		}
 
 		// Draw arrows
-		const ws = Datas.Systems.getCurrentWindowSkin();
+		const ws = Data.Systems.getCurrentWindowSkin();
 		const arrowWidth = ws.arrowUpDown[2];
 		const arrowHeight = ws.arrowUpDown[3] / 2;
 		const arrowX = this.oX + this.oW / 2 - arrowWidth / 2;

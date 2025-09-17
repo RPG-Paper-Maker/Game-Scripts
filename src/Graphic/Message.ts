@@ -11,7 +11,7 @@
 
 import { ALIGN, Constants, PICTURE_KIND, ScreenResolution, TAG_KIND, Utils } from '../Common';
 import { Bitmap, Game, Node, Picture2D, Tree } from '../Core';
-import { Datas, Graphic, Model } from '../index';
+import { Data, Graphic, Model } from '../index';
 
 /** @class
  *  A class for message show text command.
@@ -51,7 +51,7 @@ class Message extends Graphic.Base {
 		super();
 
 		this.message = message;
-		this.faceset = Datas.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, facesetID);
+		this.faceset = Data.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, facesetID);
 		this.facesetIndexX = facesetIndexX;
 		this.facesetIndexY = facesetIndexY;
 		this.graphics = [];
@@ -238,12 +238,12 @@ class Message extends Graphic.Base {
 			ca: ALIGN.LEFT,
 			cb: false,
 			ci: false,
-			cs: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
-			cf: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
-			ctc: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcText, Model.Color.WHITE),
-			cbc: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcBackground, null),
-			csc: Utils.valueOrDefault(Datas.Systems.dbOptions.v_tOutline, false)
-				? Utils.valueOrDefault(Datas.Systems.dbOptions.v_tcOutline, null)
+			cs: Utils.valueOrDefault(Data.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE),
+			cf: Utils.valueOrDefault(Data.Systems.dbOptions.v_tFont, Constants.DEFAULT_FONT_NAME),
+			ctc: Utils.valueOrDefault(Data.Systems.dbOptions.v_tcText, Model.Color.WHITE),
+			cbc: Utils.valueOrDefault(Data.Systems.dbOptions.v_tcBackground, null),
+			csc: Utils.valueOrDefault(Data.Systems.dbOptions.v_tOutline, false)
+				? Utils.valueOrDefault(Data.Systems.dbOptions.v_tcOutline, null)
 				: null,
 		};
 
@@ -339,17 +339,17 @@ class Message extends Graphic.Base {
 			}
 			case TAG_KIND.ICON: {
 				const args = value.split(';');
-				const graphic = Datas.Pictures.getPictureCopy(PICTURE_KIND.ICONS, parseInt(args[0]));
-				graphic.sx = parseInt(args[1]) * Datas.Systems.iconsSize;
+				const graphic = Data.Pictures.getPictureCopy(PICTURE_KIND.ICONS, parseInt(args[0]));
+				graphic.sx = parseInt(args[1]) * Data.Systems.iconsSize;
 				if (isNaN(graphic.sx)) {
 					graphic.sx = 0;
 				}
-				graphic.sy = parseInt(args[2]) * Datas.Systems.iconsSize;
+				graphic.sy = parseInt(args[2]) * Data.Systems.iconsSize;
 				if (isNaN(graphic.sy)) {
 					graphic.sy = 0;
 				}
 				result.g.push(graphic);
-				result.p.push(ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize));
+				result.p.push(ScreenResolution.getScreenMinXY(Data.Systems.iconsSize));
 				result.a.push(result.ca);
 				if (Constants.DEFAULT_FONT_SIZE > result.h[0]) {
 					result.h[0] = Constants.DEFAULT_FONT_SIZE;
@@ -378,23 +378,23 @@ class Message extends Graphic.Base {
 				break;
 			case TAG_KIND.SIZE:
 				size = result.cs;
-				result.cs = Datas.Systems.getFontSize(value).getValue() as number;
+				result.cs = Data.Systems.getFontSize(value).getValue() as number;
 				break;
 			case TAG_KIND.FONT:
 				font = result.cf;
-				result.cf = Datas.Systems.getFontName(value).getName();
+				result.cf = Data.Systems.getFontName(value).getName();
 				break;
 			case TAG_KIND.TEXT_COLOR:
 				textColor = result.ctc;
-				result.ctc = Datas.Systems.getColor(value);
+				result.ctc = Data.Systems.getColor(value);
 				break;
 			case TAG_KIND.BACK_COLOR:
 				backColor = result.cbc;
-				result.cbc = Datas.Systems.getColor(value);
+				result.cbc = Data.Systems.getColor(value);
 				break;
 			case TAG_KIND.STROKE_COLOR:
 				strokeColor = result.csc;
-				result.csc = Datas.Systems.getColor(value);
+				result.csc = Data.Systems.getColor(value);
 				break;
 		}
 		if (node.firstChild !== null) {
@@ -443,7 +443,7 @@ class Message extends Graphic.Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawBehind(x: number, y: number, w: number, h: number) {
-		if (!Datas.Systems.dbOptions.v_fPosAbove) {
+		if (!Data.Systems.dbOptions.v_fPosAbove) {
 			this.drawFaceset(x, y, w, h);
 		}
 	}
@@ -457,17 +457,17 @@ class Message extends Graphic.Base {
 	 */
 	drawFaceset(x: number, y: number, w: number, h: number) {
 		this.faceset.draw({
-			x: x + Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Datas.Systems.dbOptions.v_fX), 0),
+			x: x + Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Data.Systems.dbOptions.v_fX), 0),
 			y:
 				y -
-				(ScreenResolution.getScreenMinXY(Datas.Systems.facesetScalingHeight) - h) / 2 +
-				Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Datas.Systems.dbOptions.v_fY), 0),
-			w: Datas.Systems.facesetScalingWidth,
-			h: Datas.Systems.facesetScalingHeight,
-			sx: this.facesetIndexX * Datas.Systems.facesetsSize,
-			sy: this.facesetIndexY * Datas.Systems.facesetsSize,
-			sw: Datas.Systems.facesetsSize,
-			sh: Datas.Systems.facesetsSize,
+				(ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingHeight) - h) / 2 +
+				Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Data.Systems.dbOptions.v_fY), 0),
+			w: Data.Systems.facesetScalingWidth,
+			h: Data.Systems.facesetScalingHeight,
+			sx: this.facesetIndexX * Data.Systems.facesetsSize,
+			sy: this.facesetIndexY * Data.Systems.facesetsSize,
+			sw: Data.Systems.facesetsSize,
+			sh: Data.Systems.facesetsSize,
 		});
 	}
 
@@ -492,10 +492,10 @@ class Message extends Graphic.Base {
 	 *  according to screen resolution
 	 */
 	draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: number = this.oH) {
-		if (Datas.Systems.dbOptions.v_fPosAbove) {
+		if (Data.Systems.dbOptions.v_fPosAbove) {
 			this.drawFaceset(x, y, w, h);
 		}
-		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Datas.Systems.facesetScalingWidth));
+		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Data.Systems.facesetScalingWidth));
 		const newY = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		let offsetY = 0;
 		let align = ALIGN.NONE;
@@ -531,11 +531,11 @@ class Message extends Graphic.Base {
 				if (graphic instanceof Picture2D) {
 					graphic.draw({
 						x: newX + offsetX,
-						y: newY - ScreenResolution.getScreenMinXY(Datas.Systems.iconsSize) / 2 + offsetY,
-						sw: Datas.Systems.iconsSize,
-						sh: Datas.Systems.iconsSize,
-						w: Datas.Systems.iconsSize,
-						h: Datas.Systems.iconsSize,
+						y: newY - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) / 2 + offsetY,
+						sw: Data.Systems.iconsSize,
+						sh: Data.Systems.iconsSize,
+						w: Data.Systems.iconsSize,
+						h: Data.Systems.iconsSize,
 					});
 				} else {
 					(<Graphic.Base>graphic).draw(newX + offsetX, newY + offsetY, graphic.oW, graphic.oH);

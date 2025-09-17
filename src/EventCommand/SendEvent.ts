@@ -11,7 +11,7 @@
 
 import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { MapObject } from '../Core';
-import { Datas, Manager, Model } from '../index';
+import { Data, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -54,8 +54,8 @@ class SendEvent extends Base {
 		// Parameters
 		const parameters = (
 			this.isSystem
-				? Datas.CommonEvents.getEventSystem(this.eventID)
-				: Datas.CommonEvents.getEventUser(this.eventID)
+				? Data.CommonEvents.getEventSystem(this.eventID)
+				: Data.CommonEvents.getEventUser(this.eventID)
 		).parameters;
 		this.parameters = [];
 		let parameter: Model.DynamicValue, paramID: number, k: DYNAMIC_VALUE_KIND;

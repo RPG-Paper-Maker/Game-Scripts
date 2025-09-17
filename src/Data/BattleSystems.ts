@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, SONG_KIND, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
  *  All the battle System datas.
@@ -149,19 +149,19 @@ class BattleSystems {
 		this.formulaCrit = Model.DynamicValue.readOrDefaultMessage(json.fc);
 		this.heroesBattlersCenterOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersCenterOffset,
-			'new THREE.Vector3(2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)'
 		);
 		this.heroesBattlersOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersOffset,
-			'new THREE.Vector3(i * Datas.Systems.SQUARE_SIZE / 2, 0, i * Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(i * Data.Systems.SQUARE_SIZE / 2, 0, i * Data.Systems.SQUARE_SIZE)'
 		);
 		this.troopsBattlersCenterOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersCenterOffset,
-			'new THREE.Vector3(-2 * Datas.Systems.SQUARE_SIZE, 0, -Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(-2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)'
 		);
 		this.troopsBattlersOffset = Model.DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersOffset,
-			'new THREE.Vector3(-i * Datas.Systems.SQUARE_SIZE * 3 / 4, 0, i * Datas.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(-i * Data.Systems.SQUARE_SIZE * 3 / 4, 0, i * Data.Systems.SQUARE_SIZE)'
 		);
 
 		// Musics
@@ -198,7 +198,7 @@ class BattleSystems {
 	 *  @returns {System.Element}
 	 */
 	static getElement(id: number): Model.Element {
-		return Datas.Base.get(id, this.elements, 'element');
+		return Data.Base.get(id, this.elements, 'element');
 	}
 
 	/**
@@ -207,7 +207,7 @@ class BattleSystems {
 	 *  @returns {System.Statistic}
 	 */
 	static getStatistic(id: number): Model.Statistic {
-		return Datas.Base.get(id, this.statistics, 'statistic');
+		return Data.Base.get(id, this.statistics, 'statistic');
 	}
 
 	/**
@@ -216,7 +216,7 @@ class BattleSystems {
 	 *  @returns {number}
 	 */
 	static getStatisticElement(id: number): number {
-		return Datas.Base.get(id, this.statisticsElements, 'statistic element');
+		return Data.Base.get(id, this.statisticsElements, 'statistic element');
 	}
 
 	/**
@@ -225,7 +225,7 @@ class BattleSystems {
 	 *  @returns {System.Statistic}
 	 */
 	static getStatisticElementPercent(id: number): number {
-		return Datas.Base.get(id, this.statisticsElementsPercent, 'statistic element percent');
+		return Data.Base.get(id, this.statisticsElementsPercent, 'statistic element percent');
 	}
 
 	/**
@@ -234,7 +234,7 @@ class BattleSystems {
 	 *  @returns {System.Localization}
 	 */
 	static getEquipment(id: number): Model.Localization {
-		return Datas.Base.get(id, this.equipments, 'equipment');
+		return Data.Base.get(id, this.equipments, 'equipment');
 	}
 
 	/**
@@ -243,7 +243,7 @@ class BattleSystems {
 	 *  @returns {System.WeaponArmorKind}
 	 */
 	static getWeaponKind(id: number): Model.WeaponArmorKind {
-		return Datas.Base.get(id, this.weaponsKind, 'weapon kind');
+		return Data.Base.get(id, this.weaponsKind, 'weapon kind');
 	}
 
 	/**
@@ -252,7 +252,7 @@ class BattleSystems {
 	 *  @returns {System.WeaponArmorKind}
 	 */
 	static getArmorKind(id: number): Model.WeaponArmorKind {
-		return Datas.Base.get(id, this.armorsKind, 'armor kind');
+		return Data.Base.get(id, this.armorsKind, 'armor kind');
 	}
 
 	/**
@@ -261,7 +261,7 @@ class BattleSystems {
 	 *  @returns {number}
 	 */
 	static getBattleCommand(id: number): number {
-		return Datas.Base.get(id, this.battleCommands, 'battle command');
+		return Data.Base.get(id, this.battleCommands, 'battle command');
 	}
 
 	/**
@@ -270,7 +270,7 @@ class BattleSystems {
 	 *  @returns {System.BattleMap}
 	 */
 	static getBattleMap(id: number): Model.BattleMap {
-		return Datas.Base.get(id, this.battleMaps, 'battle map');
+		return Data.Base.get(id, this.battleMaps, 'battle map');
 	}
 }
 

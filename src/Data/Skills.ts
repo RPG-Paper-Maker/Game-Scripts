@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Datas, Model } from '../index';
+import { Data, Model } from '../index';
 
 /** @class
  *   All the skills datas
@@ -41,7 +41,7 @@ class Skills {
 	 *  @returns {System.Skill}
 	 */
 	static get(id: number): Model.Skill {
-		return Datas.Base.get(id, this.list, 'skill');
+		return Data.Base.get(id, this.list, 'skill');
 	}
 }
 

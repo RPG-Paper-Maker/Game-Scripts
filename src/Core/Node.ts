@@ -10,7 +10,7 @@
 */
 
 /** @class
- *  Datas structure of tree.
+ *  Data structure of tree.
  *  @param {Node} parent - Parent of the node
  *  @param {any} data - Data of the node
  */

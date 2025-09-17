@@ -11,7 +11,7 @@
 
 import { ALIGN, AVAILABLE_KIND, Constants, ORIENTATION_WINDOW, ScreenResolution, TARGET_KIND } from '../Common';
 import { Battler, Game, Rectangle, WindowBox, WindowChoices } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { Base } from './Base';
 import { StructPositionChoice } from './Menu';
 
@@ -59,7 +59,7 @@ class MenuSkills extends Base {
 		this.createWindowChoicesList();
 		this.createWindowBoxInformation();
 		this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20, WindowBox.SMALL_SLOT_HEIGHT, {
-			content: new Graphic.Text(Datas.Languages.extras.empty.name(), { align: ALIGN.CENTER }),
+			content: new Graphic.Text(Data.Languages.extras.empty.name(), { align: ALIGN.CENTER }),
 			padding: WindowBox.SMALL_SLOT_PADDING,
 		});
 		this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140, {
@@ -186,16 +186,16 @@ class MenuSkills extends Base {
 						(targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) &&
 						(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU)
 					) {
-						Datas.Systems.soundConfirmation.playSound();
+						Data.Systems.soundConfirmation.playSound();
 						this.substep = 1;
 						graphicUse.setSkillItem(graphic.system);
 						graphicUse.setAll(targetKind === TARGET_KIND.ALL_ALLIES);
 						Manager.Stack.requestPaintHUD = true;
 					} else {
-						Datas.Systems.soundImpossible.playSound();
+						Data.Systems.soundImpossible.playSound();
 					}
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					Scene.Map.current.user = null;
 					Manager.Stack.pop();
 				}
@@ -211,7 +211,7 @@ class MenuSkills extends Base {
 						Manager.Stack.requestPaintHUD = true;
 					}
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
-					Datas.Systems.soundCancel.playSound();
+					Data.Systems.soundCancel.playSound();
 					this.substep = 0;
 					Manager.Stack.requestPaintHUD = true;
 				}

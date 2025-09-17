@@ -11,7 +11,7 @@
 
 import { ALIGN, PICTURE_KIND } from '../Common';
 import { Game, Picture2D } from '../Core';
-import { Datas, Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import { SaveLoadGame } from './SaveLoadGame';
 
 /** @class
@@ -32,12 +32,12 @@ class LoadGame extends SaveLoadGame {
 		await super.load();
 
 		this.setContents(
-			new Graphic.Text(Datas.Languages.extras.loadAGame.name(), { align: ALIGN.CENTER }),
-			new Graphic.Text(Datas.Languages.extras.loadAGameDescription.name(), { align: ALIGN.CENTER })
+			new Graphic.Text(Data.Languages.extras.loadAGame.name(), { align: ALIGN.CENTER }),
+			new Graphic.Text(Data.Languages.extras.loadAGameDescription.name(), { align: ALIGN.CENTER })
 		);
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground = await Picture2D.createWithID(
-				Datas.TitlescreenGameover.titleBackgroundImageID,
+				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
 				{ cover: true }
 			);
@@ -53,7 +53,7 @@ class LoadGame extends SaveLoadGame {
 		Game.current.hero.initializeProperties();
 
 		// Stop video if existing
-		if (!Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (!Data.TitlescreenGameover.isTitleBackgroundImage) {
 			Manager.Videos.stop();
 		}
 
@@ -73,9 +73,9 @@ class LoadGame extends SaveLoadGame {
 			Game.current = (<Graphic.Save>this.windowChoicesSlots.getCurrentContent()).game;
 			if (Game.current.isEmpty) {
 				Game.current = null;
-				Datas.Systems.soundImpossible.playSound();
+				Data.Systems.soundImpossible.playSound();
 			} else {
-				Datas.Systems.soundConfirmation.playSound();
+				Data.Systems.soundConfirmation.playSound();
 				this.loadGame();
 			}
 		}
@@ -102,7 +102,7 @@ class LoadGame extends SaveLoadGame {
 	 *  Draw the HUD scene
 	 */
 	drawHUD() {
-		if (Datas.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground.draw();
 		}
 		super.drawHUD();

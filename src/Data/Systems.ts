@@ -11,7 +11,7 @@
 
 import { Paths, Platform, ScreenResolution, SONG_KIND, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
-import { Datas, EventCommand, Manager, Model, Scene } from '../index';
+import { Data, EventCommand, Manager, Model, Scene } from '../index';
 
 /** @class
  *   All the System datas.
@@ -251,7 +251,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getItemType(id: number): Model.Localization {
-		return Datas.Base.get(id, this.itemsTypes, 'item type');
+		return Data.Base.get(id, this.itemsTypes, 'item type');
 	}
 
 	/**
@@ -261,7 +261,7 @@ class Systems {
 	 *  @returns {System.Color}
 	 */
 	static getColor(id: number): Model.Color {
-		return Datas.Base.get(id, this.colors, 'color');
+		return Data.Base.get(id, this.colors, 'color');
 	}
 
 	/**
@@ -271,7 +271,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getCurrency(id: number): Model.Currency {
-		return Datas.Base.get(id, this.currencies, 'currency');
+		return Data.Base.get(id, this.currencies, 'currency');
 	}
 
 	/**
@@ -281,7 +281,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getWindowSkin(id: number): Model.WindowSkin {
-		return Datas.Base.get(id, this.windowSkins, 'window skin');
+		return Data.Base.get(id, this.windowSkins, 'window skin');
 	}
 
 	/**
@@ -291,7 +291,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getCameraProperties(id: number): Model.CameraProperties {
-		return Datas.Base.get(id, this.cameraProperties, 'camera properties');
+		return Data.Base.get(id, this.cameraProperties, 'camera properties');
 	}
 
 	/**
@@ -301,7 +301,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getDetection(id: number): Model.Detection {
-		return Datas.Base.get(id, this.detections, 'detections');
+		return Data.Base.get(id, this.detections, 'detections');
 	}
 
 	/**
@@ -311,7 +311,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getSkybox(id: number): Model.Skybox {
-		return Datas.Base.get(id, this.skyboxes, 'skybox');
+		return Data.Base.get(id, this.skyboxes, 'skybox');
 	}
 
 	/**
@@ -321,7 +321,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getFontSize(id: number): Model.DynamicValue {
-		return Datas.Base.get(id, this.fontSizes, 'font size');
+		return Data.Base.get(id, this.fontSizes, 'font size');
 	}
 
 	/**
@@ -331,7 +331,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getFontName(id: number): Model.FontName {
-		return Datas.Base.get(id, this.fontNames, 'font name');
+		return Data.Base.get(id, this.fontNames, 'font name');
 	}
 
 	/**
@@ -341,7 +341,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getSpeed(id: number): Model.DynamicValue {
-		return Datas.Base.get(id, this.speeds, 'speed');
+		return Data.Base.get(id, this.speeds, 'speed');
 	}
 
 	/**
@@ -351,7 +351,7 @@ class Systems {
 	 *  @returns {string}
 	 */
 	static getFrequency(id: number): Model.DynamicValue {
-		return Datas.Base.get(id, this.frequencies, 'frequency');
+		return Data.Base.get(id, this.frequencies, 'frequency');
 	}
 
 	/**
@@ -360,7 +360,7 @@ class Systems {
 	 *  @async
 	 */
 	static getModelHero() {
-		this.modelHero = new MapObject(Datas.CommonEvents.heroObject, this.heroMapPosition.toVector3(), true);
+		this.modelHero = new MapObject(Data.CommonEvents.heroObject, this.heroMapPosition.toVector3(), true);
 	}
 
 	/**

@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { MapObject, Player } from '../Core';
-import { Common, Core, Datas, EventCommand, Graphic, Main, Manager, Model, Scene } from '../index';
+import { Common, Core, Data, EventCommand, Graphic, Main, Manager, Model, Scene } from '../index';
 
 /**
  * Represents the context available to evaluated formulas.
@@ -19,7 +19,7 @@ import { Common, Core, Datas, EventCommand, Graphic, Main, Manager, Model, Scene
 interface EvalContext {
 	Common: typeof Common;
 	Core: typeof Core;
-	Datas: typeof Datas;
+	Data: typeof Data;
 	EventCommand: typeof EventCommand;
 	Graphic: typeof Graphic;
 	Manager: typeof Manager;
@@ -87,7 +87,7 @@ export class Interpreter {
 		const context: EvalContext = {
 			Common,
 			Core,
-			Datas,
+			Data,
 			EventCommand,
 			Graphic,
 			Manager,

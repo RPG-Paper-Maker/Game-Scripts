@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, SHAPE_KIND, Utils } from '../Common';
-import { Datas } from '../index';
+import { Data } from '../index';
 import { Shape } from './Shape';
 import { SpecialElement, SpecialElementJSON } from './SpecialElement';
 
@@ -58,17 +58,17 @@ export class Object3D extends SpecialElement {
 
 	/** Width in pixels. */
 	widthPixels(): number {
-		return this.widthSquare * Datas.Systems.SQUARE_SIZE + (this.widthPixel * Datas.Systems.SQUARE_SIZE) / 100;
+		return this.widthSquare * Data.Systems.SQUARE_SIZE + (this.widthPixel * Data.Systems.SQUARE_SIZE) / 100;
 	}
 
 	/** Height in pixels. */
 	heightPixels(): number {
-		return this.heightSquare * Datas.Systems.SQUARE_SIZE + (this.heightPixel * Datas.Systems.SQUARE_SIZE) / 100;
+		return this.heightSquare * Data.Systems.SQUARE_SIZE + (this.heightPixel * Data.Systems.SQUARE_SIZE) / 100;
 	}
 
 	/** Depth in pixels. */
 	depthPixels(): number {
-		return this.depthSquare * Datas.Systems.SQUARE_SIZE + (this.depthPixel * Datas.Systems.SQUARE_SIZE) / 100;
+		return this.depthSquare * Data.Systems.SQUARE_SIZE + (this.depthPixel * Data.Systems.SQUARE_SIZE) / 100;
 	}
 
 	/** Width in squares. */
@@ -93,12 +93,12 @@ export class Object3D extends SpecialElement {
 
 	/** Get shape object. */
 	getObj(): Shape {
-		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.objID);
+		return Data.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.objID);
 	}
 
 	/** Get collision shape object. */
 	getCollisionObj(): Shape {
-		return Datas.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.collisionCustomID);
+		return Data.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, this.collisionCustomID);
 	}
 
 	/** Initialize from JSON data. */

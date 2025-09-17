@@ -10,7 +10,7 @@
 */
 export * as Common from './Common';
 export * as Core from './Core';
-export * as Datas from './Datas';
+export * as Data from './Data';
 export * as EventCommand from './EventCommand';
 export * as Graphic from './Graphic';
 export { Main } from './main.js';

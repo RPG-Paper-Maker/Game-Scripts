@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { Game, MapObject, Position } from '../Core';
-import { Datas, Manager, Model, Scene } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -130,7 +130,7 @@ class StartBattle extends Base {
 								this.yPlus.getValue() as number
 							)
 					  )
-					: Datas.BattleSystems.getBattleMap(this.battleMapID.getValue() as number);
+					: Data.BattleSystems.getBattleMap(this.battleMapID.getValue() as number);
 			Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
 
 			// Defining the battle state instance
@@ -142,9 +142,9 @@ class StartBattle extends Base {
 				this.transitionStart,
 				this.transitionEnd,
 				this.transitionStartColor
-					? Datas.Systems.getColor(this.transitionStartColor.getValue() as number)
+					? Data.Systems.getColor(this.transitionStartColor.getValue() as number)
 					: null,
-				this.transitionEndColor ? Datas.Systems.getColor(this.transitionEndColor.getValue() as number) : null
+				this.transitionEndColor ? Data.Systems.getColor(this.transitionEndColor.getValue() as number) : null
 			);
 
 			// Keep instance of battle state for results
