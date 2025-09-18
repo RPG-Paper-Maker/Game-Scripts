@@ -10,7 +10,8 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { Data } from '../index';
+import { CommonEvent, CommonReaction, MapObject } from '../Model';
 
 /** @class
  *  All the battle System datas.
@@ -18,15 +19,11 @@ import { Data, Model } from '../index';
  */
 class CommonEvents {
 	public static PROPERTY_STOCKED = 'stocked';
-	private static eventsSystem: Model.Event[];
-	private static eventsUser: Model.Event[];
-	private static commonReactions: Model.CommonReaction[];
-	private static commonObjects: Model.MapObject[];
-	public static heroObject: Model.MapObject;
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	private static eventsSystem: Map<number, CommonEvent>;
+	private static eventsUser: Map<number, CommonEvent>;
+	private static commonReactions: Map<number, CommonReaction>;
+	private static commonObjects: Map<number, MapObject>;
+	public static heroObject: MapObject;
 
 	/**
 	 *  Read the JSON file associated to common events.
@@ -36,35 +33,24 @@ class CommonEvents {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS)) as any;
 
-		// Lists
-		this.eventsSystem = [];
-		this.eventsUser = [];
-		this.commonReactions = [];
-		this.commonObjects = [];
-		Utils.readJSONSystemList({ list: json.eventsSystem, listIDs: this.eventsSystem, cons: Model.CommonEvent });
-		Utils.readJSONSystemList({ list: json.eventsUser, listIDs: this.eventsUser, cons: Model.CommonEvent });
-		Utils.readJSONSystemList({
-			list: json.commonReactors,
-			listIDs: this.commonReactions,
-			cons: Model.CommonReaction,
-		});
+		this.eventsSystem = Utils.readJSONMap(json.eventsSystem, CommonEvent);
+		this.eventsUser = Utils.readJSONMap(json.eventsUser, CommonEvent);
+		this.commonReactions = Utils.readJSONMap(json.commonReactors, CommonReaction);
 
 		// Common objects
 		/* First, we'll need to reorder the json list according to
         inheritance */
-		const jsonObjects = json.commonObjects;
+		this.commonObjects = new Map();
 		const reorderedList = [];
-		let jsonObject: Record<string, any>;
-		for (let i = 0, l = jsonObjects.length; i < l; i++) {
-			jsonObject = jsonObjects[i];
-			this.modelReOrder(jsonObject, reorderedList, jsonObjects, l);
+		for (const jsonObject of json.commonObjects) {
+			this.modelReOrder(jsonObject, reorderedList, json.commonObjects);
 		}
 
 		// Now, we can create all the models without problem
-		Utils.readJSONSystemList({ list: reorderedList, listIDs: this.commonObjects, cons: Model.MapObject });
+		this.commonObjects = Utils.readJSONMap(reorderedList, MapObject);
 
 		// Hero object
-		this.heroObject = new Model.MapObject();
+		this.heroObject = new MapObject();
 		this.heroObject.read(json.ho);
 	}
 
@@ -78,8 +64,7 @@ class CommonEvents {
 	static modelReOrder(
 		jsonObject: Record<string, any>,
 		reorderedList: Record<string, any>[],
-		jsonObjects: Record<string, any>[],
-		objectsLength: number
+		jsonObjects: Record<string, any>[]
 	) {
 		if (jsonObject && !jsonObject.hasOwnProperty(Data.CommonEvents.PROPERTY_STOCKED)) {
 			// If id = -1, we can add to the list
@@ -87,14 +72,14 @@ class CommonEvents {
 			if (id !== -1) {
 				// Search id in the json list
 				let inheritedObject: Record<string, any>;
-				for (let i = 0; i < objectsLength; i++) {
+				for (let i = 0; i < jsonObjects.length; i++) {
 					inheritedObject = jsonObjects[i];
 					if (inheritedObject.id === id) {
 						break;
 					}
 				}
 				// Test inheritance for this object
-				this.modelReOrder(inheritedObject, reorderedList, jsonObjects, objectsLength);
+				this.modelReOrder(inheritedObject, reorderedList, jsonObjects);
 			}
 			jsonObject.stocked = true;
 			reorderedList.push(jsonObject);
@@ -106,7 +91,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.Event}
 	 */
-	static getEventSystem(id: number): Model.Event {
+	static getEventSystem(id: number): CommonEvent {
 		return Data.Base.get(id, this.eventsSystem, 'event system');
 	}
 
@@ -115,7 +100,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.Event}
 	 */
-	static getEventUser(id: number): Model.Event {
+	static getEventUser(id: number): CommonEvent {
 		return Data.Base.get(id, this.eventsUser, 'event user');
 	}
 
@@ -124,7 +109,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.CommonReaction}
 	 */
-	static getCommonReaction(id: number): Model.CommonReaction {
+	static getCommonReaction(id: number): CommonReaction {
 		return Data.Base.get(id, this.commonReactions, 'common reaction');
 	}
 
@@ -133,7 +118,7 @@ class CommonEvents {
 	 *  @param {number} id
 	 *  @returns {System.MapObject}
 	 */
-	static getCommonObject(id: number): Model.MapObject {
+	static getCommonObject(id: number): MapObject {
 		return Data.Base.get(id, this.commonObjects, 'common object');
 	}
 }

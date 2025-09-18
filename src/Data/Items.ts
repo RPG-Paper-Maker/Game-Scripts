@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Item } from '../Model';
 
-/** @class
- *  All the items datas.
- *  @static
+/**
+ * JSON structure for Items.
  */
-class Items {
-	private static list: Model.Item[];
+export type ItemsJSON = {
+	items: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all item data.
+ */
+export class Items {
+	private static list: Map<number, Item>;
+
+	/**
+	 * Read the JSON file associated with items.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_ITEMS)) as ItemsJSON;
+		this.list = Utils.readJSONMap(json.items, Item);
 	}
 
 	/**
-	 *  Read the JSON file associated to items.
-	 *  @static
-	 *  @async
+	 * Get the item by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_ITEMS)).items as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Item });
-	}
-
-	/**
-	 *  Get the item by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Item}
-	 */
-	static get(id: number): Model.Item {
+	static get(id: number): Item {
 		return Data.Base.get(id, this.list, 'item');
 	}
 }
-
-export { Items };

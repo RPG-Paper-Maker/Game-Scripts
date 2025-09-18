@@ -10,19 +10,15 @@
 */
 
 import { Paths, Platform, SONG_KIND } from '../Common';
-import { Data, Model } from '../index';
-import { SongJSON } from '../Model';
+import { Data } from '../index';
+import { Song, SongJSON } from '../Model';
 
 /** @class
  *   All the songs datas
  *   @static
  */
 class Songs {
-	private static list: Model.Song[][];
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	private static list: Map<number, Map<number, Song>>;
 
 	/**
 	 *  Read the JSON file associated to songs
@@ -30,7 +26,7 @@ class Songs {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SONGS)).list as any;
 		const l = json.length;
-		this.list = new Array(l);
+		this.list = new Map();
 		let i: number,
 			j: number,
 			m: number,
@@ -40,8 +36,7 @@ class Songs {
 			jsonList: SongJSON[],
 			jsonSong: SongJSON,
 			id: number,
-			list: Model.Song[],
-			song: Model.Song;
+			song: Song;
 		for (i = 0; i < l; i++) {
 			jsonHash = json[i];
 			k = jsonHash.k;
@@ -59,28 +54,25 @@ class Songs {
 			}
 
 			// Fill the songs list
-			list = new Array(n + 1);
+			const list = new Map<number, Song>();
 			for (j = 0; j < n + 1; j++) {
 				jsonSong = jsonList[j];
 				if (jsonSong) {
 					id = jsonSong.id;
-					song = new Model.Song(jsonSong);
+					song = new Song(jsonSong);
 					song.kind = k;
 					if (!Platform.IS_DESKTOP && !song.isBR) {
 						song.base64 = await Platform.loadFile(
-							Platform.ROOT_DIRECTORY.slice(0, -1) +
-								Model.Song.getLocalFolder(song.kind) +
-								'/' +
-								song.name
+							Platform.ROOT_DIRECTORY.slice(0, -1) + Song.getLocalFolder(song.kind) + '/' + song.name
 						);
 					}
 					if (id === -1) {
 						id = 0;
 					}
-					list[id] = song;
+					list.set(id, song);
 				}
 			}
-			this.list[k] = list;
+			this.list.set(k, list);
 		}
 	}
 
@@ -90,10 +82,10 @@ class Songs {
 	 *  @param {number} id - The song id
 	 *  @returns {System.Song}
 	 */
-	static get(kind: SONG_KIND, id: number): Model.Song {
+	static get(kind: SONG_KIND, id: number): Song {
 		return kind === SONG_KIND.NONE || id === -1
-			? new Model.Song()
-			: Data.Base.get(id, this.list[kind], 'song ' + Model.Song.songKindToString(kind));
+			? new Song()
+			: Data.Base.get(id, this.list.get(kind), 'song ' + Song.songKindToString(kind));
 	}
 }
 

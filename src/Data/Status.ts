@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Status as ModelStatus } from '../Model';
 
-/** @class
- *  All the status datas.
- *  @static
+/**
+ * JSON structure for Status.
  */
-class Status {
-	private static list: Model.Status[];
+export type StatusJSON = {
+	status: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all status data.
+ */
+export class Status {
+	private static list: Map<number, ModelStatus>;
+
+	/**
+	 * Read the JSON file associated with status.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_STATUS)) as StatusJSON;
+		this.list = Utils.readJSONMap(json.status, ModelStatus);
 	}
 
 	/**
-	 *  Read the JSON file associated to status.
-	 *  @static
-	 *  @async
+	 * Get the status by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_STATUS)).status as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Status });
-	}
-
-	/**
-	 *  Get the status by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Status}
-	 */
-	static get(id: number): Model.Status {
+	static get(id: number): ModelStatus {
 		return Data.Base.get(id, this.list, 'status');
 	}
 }
-
-export { Status };

@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Armor } from '../Model';
 
-/** @class
- *  All the armors datas.
- *  @static
+/**
+ * JSON structure for Armors.
  */
-class Armors {
-	private static list: Model.Armor[];
+export type ArmorsJSON = {
+	armors: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all armor data.
+ */
+export class Armors {
+	private static list: Map<number, Armor>;
+
+	/**
+	 * Read the JSON file associated with armors.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_ARMORS)) as ArmorsJSON;
+		this.list = Utils.readJSONMap(json.armors, Armor);
 	}
 
 	/**
-	 *  Read the JSON file associated to armors.
-	 *  @static
-	 *  @async
+	 * Get the armor by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_ARMORS)).armors as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Armor });
-	}
-
-	/**
-	 *  Get the armor by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Armor}
-	 */
-	static get(id: number): Model.Armor {
+	static get(id: number): Armor {
 		return Data.Base.get(id, this.list, 'armor');
 	}
 }
-
-export { Armors };

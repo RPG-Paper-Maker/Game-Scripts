@@ -10,268 +10,201 @@
 */
 
 import { Paths, Platform, SONG_KIND, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import {
+	BattleMap,
+	DynamicValue,
+	DynamicValueJSON,
+	Element,
+	Localization,
+	PlaySong,
+	PlaySongJSON,
+	Statistic,
+	WeaponArmorKind,
+} from '../Model';
 
-/** @class
- *  All the battle System datas.
- *  @static
+/**
+ * JSON structure for BattleSystems.
  */
-class BattleSystems {
-	private static elements: Model.Element[];
-	private static elementsOrder: number[];
-	private static statistics: Model.Statistic[];
-	public static statisticsOrder: number[];
-	private static statisticsElements: number[];
-	private static statisticsElementsPercent: number[];
+export type BattleSystemsJSON = {
+	elements: Record<string, JsonType>[];
+	statistics: Record<string, JsonType>[];
+	equipments: Record<string, JsonType>[];
+	weaponsKind: Record<string, JsonType>[];
+	armorsKind: Record<string, JsonType>[];
+	battleCommands: { s: number }[];
+	battleMaps: Record<string, JsonType>[];
+	lv: number;
+	xp: number;
+	fisdead: DynamicValueJSON;
+	fc: DynamicValueJSON;
+	heroesBattlersCenterOffset?: DynamicValueJSON;
+	heroesBattlersOffset?: DynamicValueJSON;
+	troopsBattlersCenterOffset?: DynamicValueJSON;
+	troopsBattlersOffset?: DynamicValueJSON;
+	bmusic: PlaySongJSON;
+	blevelup: PlaySongJSON;
+	bvictory: PlaySongJSON;
+	cmib?: boolean;
+};
+
+/**
+ * Handles all battle system data.
+ */
+export class BattleSystems {
+	private static elements: Map<number, Element>;
+	private static statistics: Map<number, Statistic>;
+	public static statisticsIDs: number[];
+	private static statisticsElements: Map<number, number>;
+	private static statisticsElementsPercent: Map<number, number>;
 	public static maxStatisticID: number;
-	private static equipments: Model.Localization[];
-	public static equipmentsOrder: number[];
+	private static equipments: Map<number, Localization>;
+	public static equipmentsIDs: number[];
 	public static maxEquipmentID: number;
-	private static weaponsKind: Model.WeaponArmorKind[];
-	private static armorsKind: Model.WeaponArmorKind[];
-	private static battleCommands: number[];
-	public static battleCommandsOrder: number[];
-	private static battleMaps: Model.BattleMap[];
+	private static weaponsKind: Map<number, WeaponArmorKind>;
+	private static armorsKind: Map<number, WeaponArmorKind>;
+	private static battleCommands: Map<number, number>;
+	public static battleCommandsIDs: number[];
+	private static battleMaps: Map<number, BattleMap>;
 	public static idLevelStatistic: number;
 	public static idExpStatistic: number;
-	public static formulaIsDead: Model.DynamicValue;
-	public static formulaCrit: Model.DynamicValue;
-	public static heroesBattlersCenterOffset: Model.DynamicValue;
-	public static heroesBattlersOffset: Model.DynamicValue;
-	public static troopsBattlersCenterOffset: Model.DynamicValue;
-	public static troopsBattlersOffset: Model.DynamicValue;
-	public static battleMusic: Model.PlaySong;
-	public static battleLevelUp: Model.PlaySong;
-	public static battleVictory: Model.PlaySong;
+	public static formulaIsDead: DynamicValue;
+	public static formulaCrit: DynamicValue;
+	public static heroesBattlersCenterOffset: DynamicValue;
+	public static heroesBattlersOffset: DynamicValue;
+	public static troopsBattlersCenterOffset: DynamicValue;
+	public static troopsBattlersOffset: DynamicValue;
+	public static battleMusic: PlaySong;
+	public static battleLevelUp: PlaySong;
+	public static battleVictory: PlaySong;
 	public static cameraMoveInBattle: boolean;
 
-	constructor() {
-		throw new Error('This is a static class!');
+	/** Get the statistic corresponding to the level. */
+	static getLevelStatistic(): Statistic {
+		return this.getStatistic(this.idLevelStatistic);
+	}
+
+	/** Get the statistic corresponding to the experience. */
+	static getExpStatistic(): Statistic {
+		const stat = this.getStatistic(this.idExpStatistic);
+		return stat === undefined || stat.isRes ? null : stat;
+	}
+
+	/** Get an element by ID. */
+	static getElement(id: number): Element {
+		return Data.Base.get(id, this.elements, 'element');
+	}
+
+	/** Get a statistic by ID. */
+	static getStatistic(id: number): Statistic {
+		return Data.Base.get(id, this.statistics, 'statistic');
+	}
+
+	/** Get the statistic element by ID. */
+	static getStatisticElement(id: number): number {
+		return Data.Base.get(id, this.statisticsElements, 'statistic element');
+	}
+
+	/** Get the statistic element percent by ID. */
+	static getStatisticElementPercent(id: number): number {
+		return Data.Base.get(id, this.statisticsElementsPercent, 'statistic element percent');
+	}
+
+	/** Get an equipment by ID. */
+	static getEquipment(id: number): Localization {
+		return Data.Base.get(id, this.equipments, 'equipment');
+	}
+
+	/** Get a weapon kind by ID. */
+	static getWeaponKind(id: number): WeaponArmorKind {
+		return Data.Base.get(id, this.weaponsKind, 'weapon kind');
+	}
+
+	/** Get an armor kind by ID. */
+	static getArmorKind(id: number): WeaponArmorKind {
+		return Data.Base.get(id, this.armorsKind, 'armor kind');
+	}
+
+	/** Get a battle command by ID. */
+	static getBattleCommand(id: number): number {
+		return Data.Base.get(id, this.battleCommands, 'battle command');
+	}
+
+	/** Get a battle map by ID. */
+	static getBattleMap(id: number): BattleMap {
+		return Data.Base.get(id, this.battleMaps, 'battle map');
 	}
 
 	/**
-	 *  Read the JSON file associated to battle Model.
+	 * Read the JSON file associated with battle system.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM)) as any;
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_BATTLE_SYSTEM)) as BattleSystemsJSON;
 
-		// Elements
-		this.elements = [];
-		this.elementsOrder = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.elements, []),
-			listIDs: this.elements,
-			listIndexes: this.elementsOrder,
-			indexesIDs: true,
-			cons: Model.Element,
-		});
-
-		// Statistics
-		this.statistics = [];
-		this.statisticsOrder = [];
-		this.maxStatisticID = Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.statistics, []),
-			listIDs: this.statistics,
-			listIndexes: this.statisticsOrder,
-			indexesIDs: true,
-			cons: Model.Statistic,
-		});
+		const elementsIDs = [];
+		this.elements = Utils.readJSONMap(json.elements, Element, elementsIDs);
+		this.statisticsIDs = [];
+		this.statistics = Utils.readJSONMap(json.statistics, Statistic, this.statisticsIDs);
+		this.maxStatisticID = Utils.getMapMaxID(this.statistics);
+		this.equipmentsIDs = [];
+		this.equipments = Utils.readJSONMap(json.equipments, Localization, this.equipmentsIDs);
+		this.maxEquipmentID = Utils.getMapMaxID(this.equipments);
+		this.weaponsKind = Utils.readJSONMap(json.weaponsKind, WeaponArmorKind);
+		this.armorsKind = Utils.readJSONMap(json.armorsKind, WeaponArmorKind);
+		this.battleCommandsIDs = [];
+		this.battleCommands = Utils.readJSONMap(
+			json.battleCommands,
+			(jsonBattleCommand: { s: number }) => jsonBattleCommand.s,
+			this.battleCommandsIDs
+		);
+		this.battleMaps = Utils.readJSONMap(json.battleMaps, BattleMap);
 
 		// Add elements res to statistics
-		this.statisticsElements = [];
-		this.statisticsElementsPercent = [];
-		const index = this.statisticsOrder.length;
-		let id: number, name: string, i: number, l: number;
-		for (i = 0, l = this.elementsOrder.length; i < l; i++) {
-			id = this.elementsOrder[i];
-			name = this.elements[id].name();
-			this.statistics[this.maxStatisticID + i * 2 + 1] = Model.Statistic.createElementRes(id);
-			this.statistics[this.maxStatisticID + i * 2 + 2] = Model.Statistic.createElementResPercent(id, name);
-			this.statisticsOrder[index + i * 2] = this.maxStatisticID + i * 2 + 1;
-			this.statisticsOrder[index + i * 2 + 1] = this.maxStatisticID + i * 2 + 2;
-			this.statisticsElements[id] = this.maxStatisticID + i * 2 + 1;
-			this.statisticsElementsPercent[id] = this.maxStatisticID + i * 2 + 2;
+		this.statisticsElements = new Map();
+		this.statisticsElementsPercent = new Map();
+		const index = this.statisticsIDs.length;
+		for (const [i, id] of elementsIDs.entries()) {
+			const element = this.elements.get(id);
+			this.statistics.set(this.maxStatisticID + i * 2 + 1, Statistic.createElementRes(id));
+			this.statistics.set(this.maxStatisticID + i * 2 + 2, Statistic.createElementResPercent(id, element.name()));
+			this.statisticsIDs[index + i * 2] = this.maxStatisticID + i * 2 + 1;
+			this.statisticsIDs[index + i * 2 + 1] = this.maxStatisticID + i * 2 + 2;
+			this.statisticsElements.set(id, this.maxStatisticID + i * 2 + 1);
+			this.statisticsElementsPercent.set(id, this.maxStatisticID + i * 2 + 2);
 		}
-		this.maxStatisticID += l * 2;
-
-		// Equipments
-		this.equipments = [];
-		this.equipmentsOrder = [];
-		this.maxEquipmentID = Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.equipments, []),
-			listIDs: this.equipments,
-			listIndexes: this.equipmentsOrder,
-			indexesIDs: true,
-			cons: Model.Localization,
-		});
-		this.weaponsKind = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.weaponsKind, []),
-			listIDs: this.weaponsKind,
-			cons: Model.WeaponArmorKind,
-		});
-
-		// Armors kind
-		this.armorsKind = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.armorsKind, []),
-			listIDs: this.armorsKind,
-			cons: Model.WeaponArmorKind,
-		});
-
-		// Battle commands
-		this.battleCommands = [];
-		this.battleCommandsOrder = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.battleCommands, []),
-			listIDs: this.battleCommands,
-			listIndexes: this.battleCommandsOrder,
-			indexesIDs: true,
-			func: (jsonBattleCommand: Record<string, any>) => {
-				return jsonBattleCommand.s;
-			},
-		});
-
-		// Battle maps
-		this.battleMaps = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.battleMaps, []),
-			listIDs: this.battleMaps,
-			cons: Model.BattleMap,
-		});
+		this.maxStatisticID += elementsIDs.length * 2;
 
 		// Ids of specific statistics
 		this.idLevelStatistic = json.lv;
 		this.idExpStatistic = json.xp;
 
 		// Formulas
-		this.formulaIsDead = new Model.DynamicValue(json.fisdead);
-		this.formulaCrit = Model.DynamicValue.readOrDefaultMessage(json.fc);
-		this.heroesBattlersCenterOffset = Model.DynamicValue.readOrDefaultMessage(
+		this.formulaIsDead = new DynamicValue(json.fisdead);
+		this.formulaCrit = DynamicValue.readOrDefaultMessage(json.fc);
+		this.heroesBattlersCenterOffset = DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersCenterOffset,
 			'new THREE.Vector3(2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)'
 		);
-		this.heroesBattlersOffset = Model.DynamicValue.readOrDefaultMessage(
+		this.heroesBattlersOffset = DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersOffset,
 			'new THREE.Vector3(i * Data.Systems.SQUARE_SIZE / 2, 0, i * Data.Systems.SQUARE_SIZE)'
 		);
-		this.troopsBattlersCenterOffset = Model.DynamicValue.readOrDefaultMessage(
+		this.troopsBattlersCenterOffset = DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersCenterOffset,
 			'new THREE.Vector3(-2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)'
 		);
-		this.troopsBattlersOffset = Model.DynamicValue.readOrDefaultMessage(
+		this.troopsBattlersOffset = DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersOffset,
 			'new THREE.Vector3(-i * Data.Systems.SQUARE_SIZE * 3 / 4, 0, i * Data.Systems.SQUARE_SIZE)'
 		);
 
 		// Musics
-		this.battleMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.bmusic);
-		this.battleLevelUp = new Model.PlaySong(SONG_KIND.SOUND, json.blevelup);
-		this.battleVictory = new Model.PlaySong(SONG_KIND.MUSIC, json.bvictory);
+		this.battleMusic = new PlaySong(SONG_KIND.MUSIC, json.bmusic);
+		this.battleLevelUp = new PlaySong(SONG_KIND.SOUND, json.blevelup);
+		this.battleVictory = new PlaySong(SONG_KIND.MUSIC, json.bvictory);
 
 		// Options
 		this.cameraMoveInBattle = Utils.valueOrDefault(json.cmib, true);
 	}
-
-	/**
-	 *  Get the statistic corresponding to the level.
-	 *  @static
-	 *  @returns {System.Statistic}
-	 */
-	static getLevelStatistic(): Model.Statistic {
-		return this.statistics[this.idLevelStatistic];
-	}
-
-	/**
-	 *  Get the statistic corresponding to the experience.
-	 *  @static
-	 *  @returns {System.Statistic}
-	 */
-	static getExpStatistic(): Model.Statistic {
-		const stat = this.statistics[this.idExpStatistic];
-		return stat === undefined || stat.isRes ? null : stat;
-	}
-
-	/**
-	 *  Get the element by ID.
-	 *  @param {number} id
-	 *  @returns {System.Element}
-	 */
-	static getElement(id: number): Model.Element {
-		return Data.Base.get(id, this.elements, 'element');
-	}
-
-	/**
-	 *  Get the statistic by ID.
-	 *  @param {number} id
-	 *  @returns {System.Statistic}
-	 */
-	static getStatistic(id: number): Model.Statistic {
-		return Data.Base.get(id, this.statistics, 'statistic');
-	}
-
-	/**
-	 *  Get the statistic element by ID.
-	 *  @param {number} id
-	 *  @returns {number}
-	 */
-	static getStatisticElement(id: number): number {
-		return Data.Base.get(id, this.statisticsElements, 'statistic element');
-	}
-
-	/**
-	 *  Get the statistic element percent by ID.
-	 *  @param {number} id
-	 *  @returns {System.Statistic}
-	 */
-	static getStatisticElementPercent(id: number): number {
-		return Data.Base.get(id, this.statisticsElementsPercent, 'statistic element percent');
-	}
-
-	/**
-	 *  Get the equipment by ID.
-	 *  @param {number} id
-	 *  @returns {System.Localization}
-	 */
-	static getEquipment(id: number): Model.Localization {
-		return Data.Base.get(id, this.equipments, 'equipment');
-	}
-
-	/**
-	 *  Get the weapon kind by ID.
-	 *  @param {number} id
-	 *  @returns {System.WeaponArmorKind}
-	 */
-	static getWeaponKind(id: number): Model.WeaponArmorKind {
-		return Data.Base.get(id, this.weaponsKind, 'weapon kind');
-	}
-
-	/**
-	 *  Get the armor kind by ID.
-	 *  @param {number} id
-	 *  @returns {System.WeaponArmorKind}
-	 */
-	static getArmorKind(id: number): Model.WeaponArmorKind {
-		return Data.Base.get(id, this.armorsKind, 'armor kind');
-	}
-
-	/**
-	 *  Get the battle command by ID.
-	 *  @param {number} id
-	 *  @returns {number}
-	 */
-	static getBattleCommand(id: number): number {
-		return Data.Base.get(id, this.battleCommands, 'battle command');
-	}
-
-	/**
-	 *  Get the battle map by ID.
-	 *  @param {number} id
-	 *  @returns {System.BattleMap}
-	 */
-	static getBattleMap(id: number): Model.BattleMap {
-		return Data.Base.get(id, this.battleMaps, 'battle map');
-	}
 }
-
-export { BattleSystems };

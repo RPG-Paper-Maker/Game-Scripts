@@ -200,12 +200,12 @@ class BattleInitialize {
 	 *  Initialize window commands.
 	 */
 	public initializeWindowCommands() {
-		const l = Data.BattleSystems.battleCommandsOrder.length;
+		const l = Data.BattleSystems.battleCommandsIDs.length;
 		const listContent: Graphic.TextIcon[] = new Array(l);
 		const listCallbacks = new Array(l);
 		let skill: Model.Skill;
 		for (let i = 0; i < l; i++) {
-			skill = Data.Skills.get(Data.BattleSystems.getBattleCommand(Data.BattleSystems.battleCommandsOrder[i]));
+			skill = Data.Skills.get(Data.BattleSystems.getBattleCommand(Data.BattleSystems.battleCommandsIDs[i]));
 			listContent[i] = Graphic.TextIcon.createFromSystem(skill.name(), skill);
 			listContent[i].system = skill;
 			listCallbacks[i] = Model.CommonSkillItem.prototype.useCommand;

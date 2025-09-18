@@ -71,7 +71,7 @@ export class ShopItem extends Base {
 			let currentValue = 0;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
-					currentValue = Game.current.currencies[id];
+					currentValue = Game.current.getCurrency(id);
 					break;
 				case DAMAGES_KIND.STAT:
 					currentValue = user[Data.BattleSystems.getStatistic(id).abbreviation];
@@ -99,7 +99,7 @@ export class ShopItem extends Base {
 			let currentValue = 0;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
-					currentValue = Game.current.currencies[id];
+					currentValue = Game.current.getCurrency(id);
 					break;
 				case DAMAGES_KIND.STAT:
 					currentValue = user[Data.BattleSystems.getStatistic(id).abbreviation];

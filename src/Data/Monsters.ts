@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Monster } from '../Model';
 
-/** @class
- *  All the monsters datas.
- *  @static
+/**
+ * JSON structure for Monsters.
  */
-class Monsters {
-	private static list: Model.Monster[];
+export type MonstersJSON = {
+	monsters: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all monster data.
+ */
+export class Monsters {
+	private static list: Map<number, Monster>;
+
+	/**
+	 * Read the JSON file associated with monsters.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_MONSTERS)) as MonstersJSON;
+		this.list = Utils.readJSONMap(json.monsters, Monster);
 	}
 
 	/**
-	 *  Read the JSON file associated to monsters.
-	 *  @static
-	 *  @async
+	 * Get the monster by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_MONSTERS)).monsters as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Monster });
-	}
-
-	/**
-	 *  Get the monster by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Monster}
-	 */
-	static get(id: number): Model.Monster {
+	static get(id: number): Monster {
 		return Data.Base.get(id, this.list, 'monster');
 	}
 }
-
-export { Monsters };

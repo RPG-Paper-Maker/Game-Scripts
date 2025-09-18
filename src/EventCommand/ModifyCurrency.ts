@@ -44,16 +44,19 @@ class ModifyCurrency extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const currencyID = this.currencyID.getValue() as number;
-		const previousCurrency = Game.current.currencies[currencyID];
-		Game.current.currencies[currencyID] = Mathf.OPERATORS_NUMBERS[this.operation](
-			Game.current.currencies[currencyID],
-			this.value.getValue() as number
+		const previousCurrency = Game.current.getCurrency(currencyID);
+		Game.current.currencies.set(
+			currencyID,
+			Mathf.OPERATORS_NUMBERS[this.operation](
+				Game.current.getCurrency(currencyID),
+				this.value.getValue() as number
+			)
 		);
-		const dif = Game.current.currencies[currencyID] - previousCurrency;
+		const dif = Game.current.getCurrency(currencyID) - previousCurrency;
 		if (dif > 0) {
-			Game.current.currenciesEarned[currencyID] += dif;
+			Game.current.currenciesEarned.set(currencyID, Game.current.currenciesEarned.get(currencyID) + dif);
 		} else {
-			Game.current.currenciesUsed[currencyID] -= dif;
+			Game.current.currenciesUsed.set(currencyID, Game.current.currenciesUsed.get(currencyID) - dif);
 		}
 		return 1;
 	}

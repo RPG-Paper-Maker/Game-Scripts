@@ -535,7 +535,7 @@ class MapObject {
 		let objectData: Model.Object3D;
 		if (this.currentStateInstance !== null) {
 			if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
-				objectData = Data.SpecialElements.objects[this.currentStateInstance.graphicID];
+				objectData = Data.SpecialElements.getObject3D(this.currentStateInstance.graphicID);
 				material = await Data.SpecialElements.loadObject3DTexture(objectData.id);
 			} else {
 				material =
@@ -584,7 +584,7 @@ class MapObject {
 				positionTranformation.y = 0;
 				positionTranformation.yPixels = 0;
 				positionTranformation.z = -1 / 2;
-				const objectData = Data.SpecialElements.objects[this.currentStateInstance.graphicID];
+				const objectData = Data.SpecialElements.getObject3D(this.currentStateInstance.graphicID);
 				let object3D: Object3DBox;
 				switch (objectData.shapeKind) {
 					case SHAPE_KIND.BOX:

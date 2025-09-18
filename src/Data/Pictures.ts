@@ -11,19 +11,15 @@
 
 import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Picture2D } from '../Core';
-import { Data, Model } from '../index';
-import { PictureJSON } from '../Model';
+import { Data } from '../index';
+import { Picture, PictureJSON } from '../Model';
 
 /** @class
  *   All the pictures datas.
  *   @static
  */
 class Pictures {
-	private static list: Model.Picture[][];
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	private static list: Map<number, Map<number, Picture>>;
 
 	/**
 	 *  Read the JSON file associated to pictures.
@@ -33,7 +29,7 @@ class Pictures {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_PICTURES)).list as any;
 		const l = json.length;
-		this.list = new Array(l);
+		this.list = new Map();
 		let k: number,
 			j: number,
 			m: number,
@@ -42,8 +38,7 @@ class Pictures {
 			jsonHash: Record<string, any>,
 			jsonList: PictureJSON[],
 			jsonPicture: PictureJSON,
-			list: Model.Picture[],
-			picture: Model.Picture;
+			picture: Picture;
 		for (let i = 0; i < l; i++) {
 			jsonHash = json[i];
 			k = jsonHash.k;
@@ -60,17 +55,17 @@ class Pictures {
 				}
 			}
 			// Fill the pictures list
-			list = new Array(n + 1);
+			const list = new Map<number, Picture>();
 			for (j = 0; j < n + 1 + (k === PICTURE_KIND.CHARACTERS ? 1 : 0); j++) {
 				jsonPicture = jsonList[j];
 				if (jsonPicture) {
 					id = jsonPicture.id;
-					picture = new Model.Picture(jsonPicture);
+					picture = new Picture(jsonPicture);
 					picture.kind = k;
 					if (!Platform.IS_DESKTOP && !picture.isBR) {
 						picture.base64 = await Platform.loadFile(
 							Platform.ROOT_DIRECTORY.slice(0, -1) +
-								Model.Picture.getLocalFolder(picture.kind) +
+								Picture.getLocalFolder(picture.kind) +
 								'/' +
 								picture.name
 						);
@@ -92,11 +87,11 @@ class Pictures {
 						if (id === -1) {
 							id = 0;
 						}
-						list[id] = picture;
+						list.set(id, picture);
 					}
 				}
 			}
-			this.list[k] = list;
+			this.list.set(k, list);
 		}
 	}
 
@@ -106,10 +101,10 @@ class Pictures {
 	 *  @param {number} id - The picture id
 	 *  @returns {Picture}
 	 */
-	static get(kind: PICTURE_KIND, id: number): Model.Picture {
+	static get(kind: PICTURE_KIND, id: number): Picture {
 		return kind === PICTURE_KIND.NONE || id === -1
-			? new Model.Picture()
-			: Data.Base.get(id, this.list[kind], 'picture ' + Model.Picture.pictureKindToString(kind));
+			? new Picture()
+			: Data.Base.get(id, this.list.get(kind), 'picture ' + Picture.pictureKindToString(kind));
 	}
 
 	/**
@@ -117,8 +112,8 @@ class Pictures {
 	 *  @param {PICTURE_KIND} kind - The picture kind
 	 *  @returns {Picture}
 	 */
-	static getListByKind(kind: PICTURE_KIND): Model.Picture[] {
-		return this.list[kind];
+	static getListByKind(kind: PICTURE_KIND): Map<number, Picture> {
+		return this.list.get(kind);
 	}
 
 	/** Get a copy of the picture 2D.

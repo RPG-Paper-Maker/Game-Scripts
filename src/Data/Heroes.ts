@@ -10,39 +10,46 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Hero } from '../Model';
 
-/** @class
- *  All the heroes datas.
- *  @static
+/*
+    RPG Paper Maker Copyright (C) 2017-2025 Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+*/
+
+/**
+ * JSON structure for Heroes.
  */
-class Heroes {
-	private static list: Model.Hero[];
+export type HeroesJSON = {
+	heroes: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all hero data.
+ */
+export class Heroes {
+	private static list: Map<number, Hero>;
+
+	/**
+	 * Read the JSON file associated with heroes.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_HEROES)) as HeroesJSON;
+		this.list = Utils.readJSONMap(json.heroes, Hero);
 	}
 
 	/**
-	 *  Read the JSON file associated to heroes.
-	 *  @static
-	 *  @async
+	 * Get the hero by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_HEROES)).heroes as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Hero });
-	}
-
-	/**
-	 *  Get the hero by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Hero}
-	 */
-	static get(id: number): Model.Hero {
+	static get(id: number): Hero {
 		return Data.Base.get(id, this.list, 'hero');
 	}
 }
-
-export { Heroes };

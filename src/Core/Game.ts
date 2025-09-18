@@ -28,7 +28,7 @@ type JsonGame = {
 	battles?: number;
 	chronos?: Record<string, unknown>[];
 	itm?: Record<string, unknown>[];
-	cur?: Record<string, unknown>;
+	cur?: number[];
 	cure: number[];
 	curu: number[];
 	th?: Record<string, unknown>[];
@@ -58,11 +58,11 @@ class Game {
 	public heroBattle: MapObject;
 	public playTime: Chrono;
 	public charactersInstances: number;
-	public variables: any[];
+	public variables: Map<number, unknown>;
 	public items: Item[];
-	public currencies: number[];
-	public currenciesEarned: number[];
-	public currenciesUsed: number[];
+	public currencies: Map<number, number>;
+	public currenciesEarned: Map<number, number>;
+	public currenciesUsed: Map<number, number>;
 	public teamHeroes: Player[];
 	public reserveHeroes: Player[];
 	public hiddenHeroes: Player[];
@@ -130,7 +130,7 @@ class Game {
 		}
 		this.playTime = new Chrono(json.t);
 		this.charactersInstances = json.inst;
-		this.variables = json.vars;
+		this.variables = Utils.arrayToMap(json.vars);
 		this.shops = json.shops;
 		this.steps = Utils.valueOrDefault(json.steps, 0);
 		this.saves = Utils.valueOrDefault(json.saves, 0);
@@ -150,24 +150,9 @@ class Game {
 		});
 
 		// Currencies
-		this.currencies = [];
-		for (const id in json.cur) {
-			if (json.cur[id] !== null) {
-				this.currencies[id] = json.cur[id];
-			}
-		}
-		this.currenciesEarned = [];
-		for (const id in json.cure) {
-			if (json.cure[id] !== null) {
-				this.currenciesEarned[id] = json.cure[id];
-			}
-		}
-		this.currenciesUsed = [];
-		for (const id in json.curu) {
-			if (json.curu[id] !== null) {
-				this.currenciesUsed[id] = json.curu[id];
-			}
-		}
+		this.currencies = Utils.arrayToMap(json.cur);
+		this.currenciesEarned = Utils.arrayToMap(json.cure);
+		this.currenciesUsed = Utils.arrayToMap(json.curu);
 
 		// Heroes
 		this.teamHeroes = [];
@@ -248,11 +233,11 @@ class Game {
 			sh: reserveHeroes,
 			hh: hiddenHeroes,
 			itm: items,
-			cur: this.currencies,
-			cure: this.currenciesEarned,
-			curu: this.currenciesUsed,
+			cur: Utils.mapToArray(this.currencies),
+			cure: Utils.mapToArray(this.currenciesEarned),
+			curu: Utils.mapToArray(this.currenciesUsed),
 			inst: this.charactersInstances,
-			vars: this.variables,
+			vars: Utils.mapToArray(this.variables),
 			currentMapId: this.currentMapID,
 			heroPosition: [this.hero.position.x, this.hero.position.y, this.hero.position.z],
 			heroStates: this.heroStates,
@@ -503,10 +488,7 @@ class Game {
 	 *  Initialize the default variables.
 	 */
 	initializeVariables() {
-		this.variables = new Array(Data.Variables.variablesNumbers);
-		for (let i = 0; i < Data.Variables.variablesNumbers; i++) {
-			this.variables[i] = 0;
-		}
+		this.variables = new Map(Data.Variables.names.keys().map((id) => [id, 0]));
 	}
 
 	/**
@@ -521,7 +503,7 @@ class Game {
 	 */
 	instanciateTeam(groupKind: GROUP_KIND, type: CHARACTER_KIND, id: number, level: number, stockID: number): Player {
 		// Stock the instanciation id in a variable
-		this.variables[stockID] = this.charactersInstances;
+		this.variables.set(stockID, this.charactersInstances);
 
 		// Adding the instanciated character in the right group
 		const player = new Player(type, id, this.charactersInstances++, [], []);
@@ -563,6 +545,21 @@ class Game {
 	 */
 	getCurrency(id: number): any {
 		return Data.Base.get(id, this.currencies, 'currency');
+	}
+
+	setCurrency(id: number, value: number): void {
+		const before = this.getCurrency(id) ?? 0;
+		this.currencies.set(id, value);
+		const dif = Math.abs(value - before);
+		if (value > before) {
+			Game.current.currenciesEarned.set(id, Game.current.currenciesEarned.get(id) + dif);
+		} else {
+			Game.current.currenciesUsed.set(id, Game.current.currenciesUsed.get(id) + dif);
+		}
+	}
+
+	addCurrency(id: number, value: number): void {
+		this.currencies.set(id, this.getCurrency(id) + value);
 	}
 
 	/**

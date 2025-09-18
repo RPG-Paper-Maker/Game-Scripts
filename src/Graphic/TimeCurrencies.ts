@@ -31,17 +31,13 @@ class TimeCurrencies extends Base {
 		// Currencies
 		this.currencies = [];
 		let graphic: Graphic.TextIcon, systemCurrency: Model.Currency;
-		for (const id in Game.current.currencies) {
-			systemCurrency = Data.Systems.getCurrency(parseInt(id));
+		for (const [id, currency] of Game.current.currencies.entries()) {
+			systemCurrency = Data.Systems.getCurrency(id);
 			if (systemCurrency.displayInMenu.getValue() as number) {
-				graphic = Graphic.TextIcon.createFromSystem(
-					Mathf.numberWithCommas(Game.current.currencies[id]),
-					systemCurrency,
-					{
-						side: ALIGN.RIGHT,
-						align: ALIGN.RIGHT,
-					}
-				);
+				graphic = Graphic.TextIcon.createFromSystem(Mathf.numberWithCommas(currency), systemCurrency, {
+					side: ALIGN.RIGHT,
+					align: ALIGN.RIGHT,
+				});
 				this.currencies.push(graphic);
 			}
 		}

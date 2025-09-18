@@ -221,7 +221,7 @@ export class DynamicValue extends Base {
 				if (!Game.current) {
 					Platform.showErrorMessage('Trying to access a variable value without any game loaded.');
 				}
-				return forceVariable ? this.value : Game.current.variables[this.value as number];
+				return forceVariable ? this.value : Game.current.getVariable(this.value as number);
 			case DYNAMIC_VALUE_KIND.PARAMETER:
 				return ReactionInterpreter.currentParameters[this.value as number].getValue() as number;
 			case DYNAMIC_VALUE_KIND.PROPERTY:

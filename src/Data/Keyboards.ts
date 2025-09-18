@@ -10,22 +10,31 @@
 */
 
 import { Paths, Platform } from '../Common';
-import { Data, Graphic, Model, Scene } from '../index';
-import { KeyboardJSON } from '../Model';
+import { Data, Graphic, Scene } from '../index';
+import { Keyboard, KeyboardJSON } from '../Model';
+
+/**
+ * Represents the keyboard controls available in menus.
+ * Each property corresponds to a specific menu action.
+ */
+export interface MenuControls {
+	Action: Keyboard;
+	Cancel: Keyboard;
+	Up: Keyboard;
+	Down: Keyboard;
+	Left: Keyboard;
+	Right: Keyboard;
+}
 
 /** @class
  *  All the keyBoards datas.
  *  @static
  */
 class Keyboards {
-	private static list: Model.Keyboard[];
-	public static listOrdered: Model.Keyboard[];
+	private static list: Map<number, Keyboard>;
+	public static listIDs: number[];
 	public static menuControls: Record<string, any> = {};
 	public static controls: Record<string, any> = {};
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
 
 	/**
 	 *  Test if a key id can be equal to a keyboard System object.
@@ -34,7 +43,7 @@ class Keyboards {
 	 *  @param {System.KeyBoard} abr - The keyBoard to compare to the key
 	 *  @returns {boolean}
 	 */
-	static isKeyEqual(key: string, abr: Model.Keyboard): boolean {
+	static isKeyEqual(key: string, abr: Keyboard): boolean {
 		if (abr) {
 			const sc = abr.sc;
 			let m: number;
@@ -63,30 +72,30 @@ class Keyboards {
 		// Shortcuts
 		const jsonList = json.list;
 		const l = jsonList.length;
-		this.list = new Array(l + 1);
-		this.listOrdered = new Array(l);
-		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: Model.Keyboard, sc: string[][];
+		this.list = new Map();
+		this.listIDs = new Array(l);
+		let jsonKey: Record<string, any>, id: number, abbreviation: string, key: Keyboard, sc: string[][];
 		for (let i = 0; i < l; i++) {
 			jsonKey = jsonList[i];
 			id = jsonKey.id;
 			abbreviation = jsonKey.abr;
-			key = new Model.Keyboard(jsonKey as KeyboardJSON);
+			key = new Keyboard(jsonKey as KeyboardJSON);
 			sc = Data.Settings.kb[id];
 			if (sc) {
 				key.sc = sc;
 			}
-			this.list[id] = key;
-			this.listOrdered[i] = key;
+			this.list.set(id, key);
+			this.listIDs[i] = id;
 			this.controls[abbreviation] = key;
 		}
 
 		// Menu controls
-		this.menuControls['Action'] = this.list[json['a']];
-		this.menuControls['Cancel'] = this.list[json['c']];
-		this.menuControls['Up'] = this.list[json['u']];
-		this.menuControls['Down'] = this.list[json['d']];
-		this.menuControls['Left'] = this.list[json['l']];
-		this.menuControls['Right'] = this.list[json['r']];
+		this.menuControls['Action'] = this.list.get(json['a']);
+		this.menuControls['Cancel'] = this.list.get(json['c']);
+		this.menuControls['Up'] = this.list.get(json['u']);
+		this.menuControls['Down'] = this.list.get(json['d']);
+		this.menuControls['Left'] = this.list.get(json['l']);
+		this.menuControls['Right'] = this.list.get(json['r']);
 	}
 
 	/**
@@ -95,8 +104,12 @@ class Keyboards {
 	 *  @param {number} id
 	 *  @returns {System.Keyboard}
 	 */
-	static get(id: number): Model.Keyboard {
+	static get(id: number): Keyboard {
 		return Data.Base.get(id, this.list, 'keyboard');
+	}
+
+	static getByIndex(index: number): Keyboard {
+		return this.get(this.listIDs[index]);
 	}
 
 	/**
@@ -105,10 +118,10 @@ class Keyboards {
 	 *  @returns {GraphicKeyboard[]}
 	 */
 	static getCommandsGraphics(): Graphic.Keyboard[] {
-		const l = this.listOrdered.length;
+		const l = this.listIDs.length;
 		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
-			list[i] = new Graphic.Keyboard(this.listOrdered[i]);
+			list[i] = new Graphic.Keyboard(this.getByIndex(i));
 		}
 		return list;
 	}
@@ -119,7 +132,7 @@ class Keyboards {
 	 *  @returns {Function[]}
 	 */
 	static getCommandsActions(): Function[] {
-		const l = this.listOrdered.length;
+		const l = this.listIDs.length;
 		const list = new Array(l);
 		for (let i = 0; i < l; i++) {
 			list[i] = Scene.KeyboardAssign.prototype.updateKey;

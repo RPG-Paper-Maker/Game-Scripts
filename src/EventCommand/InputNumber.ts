@@ -145,7 +145,7 @@ class InputNumber extends Base {
 			for (const spinbox of currentState.spinBoxes) {
 				value += spinbox.value;
 			}
-			Game.current.variables[this.stockVariableID.getValue(true) as number] = parseInt(value);
+			Game.current.variables.set(this.stockVariableID.getValue(true) as number, parseInt(value));
 			return 1;
 		}
 		return 0;

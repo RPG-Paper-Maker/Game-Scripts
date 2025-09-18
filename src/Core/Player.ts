@@ -132,10 +132,8 @@ class Player {
 		// Adding equipments
 		let maxLength = 0;
 		let graphic: Graphic.Text;
-		for (let i = 0, l = Data.BattleSystems.equipmentsOrder.length - 1; i < l; i++) {
-			graphic = new Graphic.Text(
-				Data.BattleSystems.getEquipment(Data.BattleSystems.equipmentsOrder[i + 1]).name()
-			);
+		for (let i = 0, l = Data.BattleSystems.equipmentsIDs.length - 1; i < l; i++) {
+			graphic = new Graphic.Text(Data.BattleSystems.getEquipment(Data.BattleSystems.equipmentsIDs[i + 1]).name());
 			graphic.updateContextFont();
 			maxLength = Math.max(Platform.ctx.measureText(graphic.text).width, maxLength);
 		}
@@ -150,7 +148,7 @@ class Player {
 	 */
 	static getTemporaryPlayer(values?: number[]): Player {
 		const player = new Player();
-		const statistics = Data.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsIDs;
 		for (let i = 0, l = statistics.length; i < l; i++) {
 			player.initStatValue(Data.BattleSystems.getStatistic(statistics[i]), values ? values[statistics[i]] : 0);
 		}
@@ -295,11 +293,11 @@ class Player {
 	 *  @returns {number[]}
 	 */
 	getSaveStat(): number[] {
-		const l = Data.BattleSystems.statisticsOrder.length;
+		const l = Data.BattleSystems.statisticsIDs.length;
 		const list = new Array(l);
 		let statistic: Model.Statistic;
 		for (let i = 0; i < l; i++) {
-			const id = Data.BattleSystems.statisticsOrder[i];
+			const id = Data.BattleSystems.statisticsIDs[i];
 			statistic = Data.BattleSystems.getStatistic(id);
 			list[id] = statistic.isFix
 				? [
@@ -370,7 +368,7 @@ class Player {
 		}
 
 		// Stats
-		const statistics = Data.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsIDs;
 		const statisticsProgression = this.system.getStatisticsProgression(this.changedClass);
 		const nonFixStatistics = [];
 		for (i = 0, l = statistics.length; i < l; i++) {
@@ -430,7 +428,7 @@ class Player {
 		item?: Model.CommonSkillItem,
 		equipmentID?: number
 	): [number[], number[], Record<string, any>] {
-		const statistics = Data.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsIDs;
 		let l = Data.BattleSystems.maxStatisticID;
 		const list = new Array(l + 1);
 		const bonus = new Array(l + 1);
@@ -567,7 +565,7 @@ class Player {
 			bonus = result[1];
 			res = result[2];
 		}
-		const statistics = Data.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsIDs;
 		let statistic: Model.Statistic, value: number;
 		for (let i = 0, l = statistics.length; i < l; i++) {
 			const id = statistics[i];
@@ -620,7 +618,7 @@ class Player {
 	updateAllStatsValues() {
 		// Fix values : equipment influence etc
 		const level = this.getCurrentLevel();
-		const statistics = Data.BattleSystems.statisticsOrder;
+		const statistics = Data.BattleSystems.statisticsIDs;
 		const statisticsProgression = this.system.getStatisticsProgression(this.changedClass);
 		const nonFixStatistics = [];
 		let i: number, l: number;
@@ -677,8 +675,8 @@ class Player {
 		// Stats
 		const jsonStats = json.stats;
 		let i: number, l: number, statistic: Model.Statistic, value: number[];
-		for (i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			const id = Data.BattleSystems.statisticsOrder[i];
+		for (i = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			const id = Data.BattleSystems.statisticsIDs[i];
 			statistic = Data.BattleSystems.getStatistic(id);
 			value = jsonStats[id];
 			if (value) {

@@ -57,13 +57,9 @@ interface ExtrasKind {
  *  @static
  */
 class Languages {
-	private static list: string[];
-	public static listOrder: number[];
+	private static list: Map<number, string>;
+	public static listIDs: number[];
 	public static extras: ExtrasKind;
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
 
 	/**
 	 *  Read the JSON file associated to languages.
@@ -72,17 +68,8 @@ class Languages {
 	 */
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_LANGS)) as any;
-		this.list = [];
-		this.listOrder = [];
-		Utils.readJSONSystemList({
-			list: json.langs,
-			listIDs: this.list,
-			listIndexes: this.listOrder,
-			indexesIDs: true,
-			func: (element: Record<string, any>) => {
-				return element.name;
-			},
-		});
+		this.listIDs = [];
+		this.list = Utils.readJSONMap(json.langs, (element: { name: string }) => element.name, this.listIDs);
 		this.extras = {
 			loadAGame: new Model.Localization(json.lag),
 			loadAGameDescription: new Model.Localization(json.lagd),
@@ -129,7 +116,7 @@ class Languages {
 	 *  @returns {number}
 	 */
 	static getMainLanguageID(): number {
-		return this.listOrder[0];
+		return this.listIDs[0];
 	}
 
 	/**
@@ -149,7 +136,7 @@ class Languages {
 	 *  @returns {number}
 	 */
 	static getIndexByID(id: number): number {
-		return this.listOrder.indexOf(id);
+		return this.listIDs.indexOf(id);
 	}
 
 	/**
@@ -158,7 +145,7 @@ class Languages {
 	 *  @returns {Graphic.Text[]}
 	 */
 	static getCommandsGraphics(): Graphic.Text[] {
-		return this.listOrder.map((id) => new Graphic.Text(this.get(id)));
+		return this.listIDs.map((id) => new Graphic.Text(this.get(id)));
 	}
 
 	/**
@@ -167,7 +154,7 @@ class Languages {
 	 *  @returns {(() => boolean)[]}
 	 */
 	static getCommandsCallbacks(): (() => boolean)[] {
-		return this.listOrder.map((id) => () => {
+		return this.listIDs.map((id) => () => {
 			return true;
 		});
 	}

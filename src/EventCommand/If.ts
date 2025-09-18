@@ -334,7 +334,7 @@ class If extends Base {
 				break;
 			case 2:
 				result = Mathf.OPERATORS_COMPARE[this.operationCurrency](
-					Game.current.currencies[this.currencyID.getValue() as number],
+					Game.current.getCurrency(this.currencyID.getValue() as number),
 					this.currencyValue.getValue() as number
 				);
 				break;

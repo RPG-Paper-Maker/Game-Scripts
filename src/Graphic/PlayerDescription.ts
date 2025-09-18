@@ -70,8 +70,8 @@ class PlayerDescription extends Base {
 		this.listStatsNames = [];
 		this.listStats = [];
 		let id: number, statistic: Model.Statistic, graphicName: Graphic.Text, txt: string;
-		for (let i = 0, j = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Data.BattleSystems.statisticsOrder[i];
+		for (let i = 0, j = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsIDs[i];
 			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes) {
@@ -99,8 +99,8 @@ class PlayerDescription extends Base {
 	initializeStatisticProgression() {
 		this.listStatsProgression = [];
 		let id: number, statistic: Model.Statistic, value: number, graphic: Graphic.Text;
-		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Data.BattleSystems.statisticsOrder[i];
+		for (let i = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsIDs[i];
 			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes) {
@@ -134,8 +134,8 @@ class PlayerDescription extends Base {
 		this.listStats = [];
 		this.maxLength = 0;
 		let id: number, statistic: Model.Statistic, graphicName: Graphic.Text, txt: string;
-		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Data.BattleSystems.statisticsOrder[i];
+		for (let i = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsIDs[i];
 			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				statistic = Data.BattleSystems.getStatistic(id);
 				graphicName = new Graphic.Text(statistic.name() + ':');

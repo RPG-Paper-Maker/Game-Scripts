@@ -11,7 +11,23 @@
 
 import { Paths, Platform, ScreenResolution, SONG_KIND, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
-import { Data, EventCommand, Manager, Model, Scene } from '../index';
+import { Data, EventCommand, Manager, Scene } from '../index';
+import {
+	CameraProperties,
+	Color,
+	Currency,
+	Detection,
+	DynamicValue,
+	DynamicValueJSON,
+	FontName,
+	InitialPartyMember,
+	InventoryFilter,
+	Localization,
+	MainMenuCommand,
+	PlaySong,
+	Skybox,
+	WindowSkin,
+} from '../Model';
 
 /** @class
  *   All the System datas.
@@ -25,43 +41,43 @@ class Systems {
 	public static PATH_DLCS: string;
 	public static ID_MAP_START_HERO: number;
 	public static heroMapPosition: Position;
-	public static projectName: Model.Localization;
+	public static projectName: Localization;
 	public static antialias: boolean;
 	public static isMouseControls: boolean;
-	public static mountainCollisionHeight: Model.DynamicValue;
-	public static mountainCollisionAngle: Model.DynamicValue;
-	public static climbingSpeed: Model.DynamicValue;
-	public static moveCameraOnBlockView: Model.DynamicValue;
-	public static mapFrameDuration: Model.DynamicValue;
+	public static mountainCollisionHeight: DynamicValue;
+	public static mountainCollisionAngle: DynamicValue;
+	public static climbingSpeed: DynamicValue;
+	public static moveCameraOnBlockView: DynamicValue;
+	public static mapFrameDuration: DynamicValue;
 	public static battlersFrames: number;
 	public static battlersFrameDuration: string;
 	public static battlersFrameAttackingDuration: string;
 	public static battlersColumns: number;
 	public static autotilesFrames: number;
 	public static autotilesFrameDuration: number;
-	public static priceSoldItem: Model.DynamicValue;
+	public static priceSoldItem: DynamicValue;
 	public static enterNameTable: string[][];
 	public static showBB: boolean;
 	public static showFPS: boolean;
-	private static itemsTypes: Model.Localization[];
-	public static inventoryFilters: Model.InventoryFilter[];
-	public static mainMenuCommands: Model.MainMenuCommand[];
-	public static heroesStatistics: Model.DynamicValue[];
-	private static colors: Model.Color[];
-	private static currencies: Model.Currency[];
-	private static windowSkins: Model.WindowSkin[];
-	private static cameraProperties: Model.CameraProperties[];
-	private static detections: Model.Detection[];
-	private static skyboxes: Model.Skybox[];
-	private static fontSizes: Model.DynamicValue[];
-	private static fontNames: Model.FontName[];
-	private static speeds: Model.DynamicValue[];
-	private static frequencies: Model.DynamicValue[];
-	public static initialPartyMembers: Model.InitialPartyMember[];
-	public static soundCursor: Model.PlaySong;
-	public static soundConfirmation: Model.PlaySong;
-	public static soundCancel: Model.PlaySong;
-	public static soundImpossible: Model.PlaySong;
+	private static itemsTypes: Map<number, Localization>;
+	public static inventoryFilters: InventoryFilter[];
+	public static mainMenuCommands: MainMenuCommand[];
+	public static heroesStatistics: DynamicValue[];
+	private static colors: Map<number, Color>;
+	private static currencies: Map<number, Currency>;
+	private static windowSkins: Map<number, WindowSkin>;
+	private static cameraProperties: Map<number, CameraProperties>;
+	private static detections: Map<number, Detection>;
+	private static skyboxes: Map<number, Skybox>;
+	private static fontSizes: Map<number, DynamicValue>;
+	private static fontNames: Map<number, FontName>;
+	private static speeds: Map<number, DynamicValue>;
+	private static frequencies: Map<number, DynamicValue>;
+	public static initialPartyMembers: InitialPartyMember[];
+	public static soundCursor: PlaySong;
+	public static soundConfirmation: PlaySong;
+	public static soundCancel: PlaySong;
+	public static soundImpossible: PlaySong;
 	public static dbOptions: EventCommand.SetDialogBoxOptions;
 	public static facesetsSize: number;
 	public static facesetScalingWidth: number;
@@ -79,14 +95,14 @@ class Systems {
 	}
 
 	/**
-	 *  Read the JSON file associated to Model.
+	 *  Read the JSON file associated to
 	 *  @static
 	 */
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SYSTEM)) as any;
 
 		// Project name
-		this.projectName = new Model.Localization(json.pn);
+		this.projectName = new Localization(json.pn);
 		Platform.setWindowTitle(this.projectName.name());
 
 		// Screen resolution + antialiasing
@@ -109,11 +125,11 @@ class Systems {
 		this.SQUARE_SIZE = json.ss;
 		this.PORTIONS_RAY = Utils.valueOrDefault(json.portionRayIngame, 3);
 		this.FRAMES = json.frames;
-		this.mountainCollisionHeight = Model.DynamicValue.readOrDefaultNumber(json.mch, 4);
-		this.mountainCollisionAngle = Model.DynamicValue.readOrDefaultNumberDouble(json.mca, 45);
-		this.climbingSpeed = Model.DynamicValue.readOrDefaultNumberDouble(json.cs, 0.25);
-		this.moveCameraOnBlockView = Model.DynamicValue.readOrDefaultSwitch(json.mcobv, true);
-		this.mapFrameDuration = Model.DynamicValue.readOrDefaultNumber(json.mfd, 150);
+		this.mountainCollisionHeight = DynamicValue.readOrDefaultNumber(json.mch, 4);
+		this.mountainCollisionAngle = DynamicValue.readOrDefaultNumberDouble(json.mca, 45);
+		this.climbingSpeed = DynamicValue.readOrDefaultNumberDouble(json.cs, 0.25);
+		this.moveCameraOnBlockView = DynamicValue.readOrDefaultSwitch(json.mcobv, true);
+		this.mapFrameDuration = DynamicValue.readOrDefaultNumber(json.mfd, 150);
 		this.battlersFrames = Utils.valueOrDefault(json.battlersFrames, 4);
 		this.battlersFrameDuration = Utils.valueOrDefault(json.bfd, 'Common.Mathf.random(250, 300)');
 		this.battlersFrameAttackingDuration = Utils.valueOrDefault(json.bfad, '200');
@@ -121,7 +137,7 @@ class Systems {
 		this.autotilesFrames = Utils.valueOrDefault(json.autotilesFrames, 4);
 		this.autotilesFrameDuration = Utils.valueOrDefault(json.autotilesFrameDuration, 150);
 		this.saveSlots = Utils.valueOrDefault(json.saveSlots, 4);
-		this.priceSoldItem = Model.DynamicValue.readOrDefaultNumberDouble(json.priceSoldItem, 50);
+		this.priceSoldItem = DynamicValue.readOrDefaultNumberDouble(json.priceSoldItem, 50);
 
 		// Path BR
 		this.PATH_BR = Platform.WEB_DEV ? './BR' : Paths.FILES + json.pathBR;
@@ -147,78 +163,55 @@ class Systems {
 		this.ignoreAssetsLoadingErrors = true; //TODO
 
 		// Lists
-		this.itemsTypes = [];
+		this.itemsTypes = Utils.readJSONMap(json.itemsTypes, Localization);
 		this.inventoryFilters = [];
 		this.mainMenuCommands = [];
 		this.heroesStatistics = [];
-		this.colors = [];
-		this.currencies = [];
-		this.windowSkins = [];
-		this.cameraProperties = [];
-		this.detections = [];
-		this.skyboxes = [];
-		this.fontSizes = [];
-		this.fontNames = [];
-		this.speeds = [];
-		this.frequencies = [];
 		this.initialPartyMembers = [];
-		Utils.readJSONSystemList({ list: json.itemsTypes, listIDs: this.itemsTypes, cons: Model.Localization });
 		Utils.readJSONSystemList({
 			list: json.inventoryFilters,
 			listIndexes: this.inventoryFilters,
-			cons: Model.InventoryFilter,
+			cons: InventoryFilter,
 		});
 		Utils.readJSONSystemList({
 			list: json.mainMenuCommands,
 			listIndexes: this.mainMenuCommands,
-			cons: Model.MainMenuCommand,
+			cons: MainMenuCommand,
 		});
 		Utils.readJSONSystemList({
 			list: json.heroesStatistics,
 			listIndexes: this.heroesStatistics,
 			func: (element: Record<string, any>) => {
-				return Model.DynamicValue.readOrDefaultDatabase(element.statisticID);
+				return DynamicValue.readOrDefaultDatabase(element.statisticID);
 			},
 		});
-		Utils.readJSONSystemList({ list: json.colors, listIDs: this.colors, cons: Model.Color });
-		Utils.readJSONSystemList({ list: json.currencies, listIDs: this.currencies, cons: Model.Currency });
-		Utils.readJSONSystemList({ list: json.wskins, listIDs: this.windowSkins, cons: Model.WindowSkin });
-		Utils.readJSONSystemList({ list: json.cp, listIDs: this.cameraProperties, cons: Model.CameraProperties });
-		Utils.readJSONSystemList({ list: json.d, listIDs: this.detections, cons: Model.Detection });
-		Utils.readJSONSystemList({ list: json.sb, listIDs: this.skyboxes, cons: Model.Skybox });
-		Utils.readJSONSystemList({
-			list: json.fs,
-			listIDs: this.fontSizes,
-			func: (element: Record<string, any>) => {
-				return Model.DynamicValue.readOrDefaultNumber(element.s, 0);
-			},
-		});
-		Utils.readJSONSystemList({ list: json.fn, listIDs: this.fontNames, cons: Model.FontName });
-		Utils.readJSONSystemList({
-			list: json.sf,
-			listIDs: this.speeds,
-			func: (element: Record<string, any>) => {
-				return Model.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
-			},
-		});
-		Utils.readJSONSystemList({
-			list: json.f,
-			listIDs: this.frequencies,
-			func: (element: Record<string, any>) => {
-				return Model.DynamicValue.readOrDefaultNumberDouble(element.v, 1);
-			},
-		});
+		this.colors = Utils.readJSONMap(json.colors, Color);
+		this.currencies = Utils.readJSONMap(json.currencies, Currency);
+		this.windowSkins = Utils.readJSONMap(json.wskins, WindowSkin);
+		this.cameraProperties = Utils.readJSONMap(json.cp, CameraProperties);
+		this.detections = Utils.readJSONMap(json.d, Detection);
+		this.skyboxes = Utils.readJSONMap(json.sb, Skybox);
+		this.fontSizes = Utils.readJSONMap(json.fs, (element: { s: DynamicValueJSON }) =>
+			DynamicValue.readOrDefaultNumber(element.s)
+		);
+		this.fontNames = Utils.readJSONMap(json.fn, FontName);
+		this.speeds = Utils.readJSONMap(json.sf, (element: { v: DynamicValueJSON }) =>
+			DynamicValue.readOrDefaultNumberDouble(element.v, 1)
+		);
+		this.frequencies = Utils.readJSONMap(json.f, (element: { v: DynamicValueJSON }) =>
+			DynamicValue.readOrDefaultNumberDouble(element.v, 1)
+		);
 		Utils.readJSONSystemList({
 			list: Utils.valueOrDefault(json.initialPartyMembers, []),
 			listIndexes: this.initialPartyMembers,
-			cons: Model.InitialPartyMember,
+			cons: InitialPartyMember,
 		});
 
 		// Sounds
-		this.soundCursor = new Model.PlaySong(SONG_KIND.SOUND, json.scu);
-		this.soundConfirmation = new Model.PlaySong(SONG_KIND.SOUND, json.sco);
-		this.soundCancel = new Model.PlaySong(SONG_KIND.SOUND, json.sca);
-		this.soundImpossible = new Model.PlaySong(SONG_KIND.SOUND, json.si);
+		this.soundCursor = new PlaySong(SONG_KIND.SOUND, json.scu);
+		this.soundConfirmation = new PlaySong(SONG_KIND.SOUND, json.sco);
+		this.soundCancel = new PlaySong(SONG_KIND.SOUND, json.sca);
+		this.soundImpossible = new PlaySong(SONG_KIND.SOUND, json.si);
 
 		// Window skin options
 		this.dbOptions = <EventCommand.SetDialogBoxOptions>Manager.Events.getEventCommand(json.dbo);
@@ -250,7 +243,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getItemType(id: number): Model.Localization {
+	static getItemType(id: number): Localization {
 		return Data.Base.get(id, this.itemsTypes, 'item type');
 	}
 
@@ -260,7 +253,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {System.Color}
 	 */
-	static getColor(id: number): Model.Color {
+	static getColor(id: number): Color {
 		return Data.Base.get(id, this.colors, 'color');
 	}
 
@@ -270,7 +263,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getCurrency(id: number): Model.Currency {
+	static getCurrency(id: number): Currency {
 		return Data.Base.get(id, this.currencies, 'currency');
 	}
 
@@ -280,7 +273,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getWindowSkin(id: number): Model.WindowSkin {
+	static getWindowSkin(id: number): WindowSkin {
 		return Data.Base.get(id, this.windowSkins, 'window skin');
 	}
 
@@ -290,7 +283,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getCameraProperties(id: number): Model.CameraProperties {
+	static getCameraProperties(id: number): CameraProperties {
 		return Data.Base.get(id, this.cameraProperties, 'camera properties');
 	}
 
@@ -300,7 +293,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getDetection(id: number): Model.Detection {
+	static getDetection(id: number): Detection {
 		return Data.Base.get(id, this.detections, 'detections');
 	}
 
@@ -310,7 +303,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getSkybox(id: number): Model.Skybox {
+	static getSkybox(id: number): Skybox {
 		return Data.Base.get(id, this.skyboxes, 'skybox');
 	}
 
@@ -320,7 +313,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getFontSize(id: number): Model.DynamicValue {
+	static getFontSize(id: number): DynamicValue {
 		return Data.Base.get(id, this.fontSizes, 'font size');
 	}
 
@@ -330,7 +323,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getFontName(id: number): Model.FontName {
+	static getFontName(id: number): FontName {
 		return Data.Base.get(id, this.fontNames, 'font name');
 	}
 
@@ -340,7 +333,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getSpeed(id: number): Model.DynamicValue {
+	static getSpeed(id: number): DynamicValue {
 		return Data.Base.get(id, this.speeds, 'speed');
 	}
 
@@ -350,7 +343,7 @@ class Systems {
 	 *  @param {number} id
 	 *  @returns {string}
 	 */
-	static getFrequency(id: number): Model.DynamicValue {
+	static getFrequency(id: number): DynamicValue {
 		return Data.Base.get(id, this.frequencies, 'frequency');
 	}
 
@@ -368,22 +361,16 @@ class Systems {
 	 *  @static
 	 */
 	static async loadWindowSkins() {
-		for (let i = 1, l = this.windowSkins.length; i < l; i++) {
-			await this.windowSkins[i].updatePicture();
+		for (const windowSkin of this.windowSkins.values()) {
+			await windowSkin.updatePicture();
 		}
 	}
 
 	/**
 	 *  Get the default array currencies for a default game.
-	 *  @static
-	 *  @returns {number[]}
 	 */
-	static getDefaultCurrencies(): number[] {
-		const list = [];
-		for (const id in this.currencies) {
-			list[id] = 0;
-		}
-		return list;
+	static getDefaultCurrencies(): Map<number, number> {
+		return new Map<number, number>(this.currencies.keys().map((id) => [id, 0]));
 	}
 
 	/**
@@ -391,7 +378,7 @@ class Systems {
 	 *  @static
 	 *  @returns {SystemWindowSkin}
 	 */
-	static getCurrentWindowSkin(): Model.WindowSkin {
+	static getCurrentWindowSkin(): WindowSkin {
 		return this.dbOptions.v_windowSkin;
 	}
 

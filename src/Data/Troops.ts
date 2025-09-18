@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Troop } from '../Model';
 
-/** @class
- *  All the troops datas.
- *  @static
+/**
+ * JSON structure for Troops.
  */
-class Troops {
-	private static list: Model.Troop[];
+export type TroopsJSON = {
+	troops: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all troop data.
+ */
+export class Troops {
+	private static list: Map<number, Troop>;
+
+	/**
+	 * Read the JSON file associated with troops.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_TROOPS)) as TroopsJSON;
+		this.list = Utils.readJSONMap(json.troops, Troop);
 	}
 
 	/**
-	 *  Read the JSON file associated to troops
-	 *  @static
-	 *  @async
+	 * Get the troop by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_TROOPS)).troops as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Troop });
-	}
-
-	/**
-	 *  Get the troop by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Troop}
-	 */
-	static get(id: number): Model.Troop {
+	static get(id: number): Troop {
 		return Data.Base.get(id, this.list, 'troop');
 	}
 }
-
-export { Troops };

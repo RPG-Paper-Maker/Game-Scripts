@@ -291,9 +291,12 @@ class ChangeVariables extends Base {
 		// Apply new value to variable(s)
 		if (currentState.valid) {
 			for (let i = 0, l = this.nbSelection; i < l; i++) {
-				Game.current.variables[this.selection + i] = Mathf.OPERATORS_NUMBERS[this.operation](
-					Game.current.variables[this.selection + i],
-					currentState.value
+				Game.current.variables.set(
+					this.selection + i,
+					Mathf.OPERATORS_NUMBERS[this.operation](
+						Game.current.getVariable(this.selection + i),
+						currentState.value
+					)
 				);
 			}
 			return 1;

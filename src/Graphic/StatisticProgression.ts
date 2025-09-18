@@ -32,8 +32,8 @@ class StatisticProgression extends Base {
 		this.player = player;
 		this.listStatsProgression = [];
 		let id: number, statistic: Model.Statistic, value: number, txt: string, graphic: Graphic.Text;
-		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Data.BattleSystems.statisticsOrder[i];
+		for (let i = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsIDs[i];
 			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes || this.player[statistic.getBeforeAbbreviation()] === undefined) {
@@ -62,8 +62,8 @@ class StatisticProgression extends Base {
 		this.maxLength = 0;
 		this.maxProgressionLength = 0;
 		let id: number, statistic: Model.Statistic, graphic: Graphic.Text, txt: string;
-		for (let i = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Data.BattleSystems.statisticsOrder[i];
+		for (let i = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsIDs[i];
 			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes || this.player[statistic.getBeforeAbbreviation()] === undefined) {

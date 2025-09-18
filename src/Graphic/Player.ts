@@ -90,7 +90,7 @@ class Player extends Base {
 				statistics[i] = Data.Systems.heroesStatistics[i].getValue() as number;
 			}
 		} else {
-			statistics = Data.BattleSystems.statisticsOrder;
+			statistics = Data.BattleSystems.statisticsIDs;
 		}
 		let id: number, statistic: Model.Statistic, graphic: Graphic.Statistic;
 		for (i = 0, l = statistics.length; i < l; i++) {

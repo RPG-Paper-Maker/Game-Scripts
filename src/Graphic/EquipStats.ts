@@ -51,8 +51,8 @@ class EquipStats extends Base {
 			graphicValue: Graphic.Text,
 			baseValue: number,
 			newValue: number;
-		for (let i = 0, j = 0, l = Data.BattleSystems.statisticsOrder.length; i < l; i++) {
-			id = Data.BattleSystems.statisticsOrder[i];
+		for (let i = 0, j = 0, l = Data.BattleSystems.statisticsIDs.length; i < l; i++) {
+			id = Data.BattleSystems.statisticsIDs[i];
 			if (id !== Data.BattleSystems.idLevelStatistic && id !== Data.BattleSystems.idExpStatistic) {
 				statistic = Data.BattleSystems.getStatistic(id);
 				if (statistic.isRes) {

@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Animation } from '../Model';
 
-/** @class
- *  All the animations datas.
- *  @static
+/**
+ * JSON structure for Animations.
  */
-class Animations {
-	private static list: Model.Animation[];
+export type AnimationsJSON = {
+	animations: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+/**
+ * Handles all animation data.
+ */
+export class Animations {
+	private static list: Map<number, Animation>;
 
 	/**
-	 *  Read the JSON file associated to status.
-	 *  @static
-	 *  @async
+	 * Read the JSON file associated with animations.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)).animations as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Animation });
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)) as AnimationsJSON;
+		this.list = Utils.readJSONMap(json.animations, Animation);
 	}
 
 	/**
 	 *  Get the animation by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Animation}
 	 */
-	static get(id: number): Model.Animation {
+	static get(id: number): Animation {
 		return Data.Base.get(id, this.list, 'animation');
 	}
 }
-
-export { Animations };

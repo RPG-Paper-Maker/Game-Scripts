@@ -126,7 +126,7 @@ class BattleEnemyAttack {
 			if (
 				action.isConditionVariable &&
 				!Mathf.OPERATORS_COMPARE[action.operationKindVariable](
-					Game.current.variables[action.variableID],
+					Game.current.getVariable(action.variableID),
 					action.variableValueCompare.getValue() as number
 				)
 			) {

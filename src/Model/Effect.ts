@@ -370,7 +370,7 @@ export class Effect extends Base {
 				damage = Math.round(damage);
 			}
 			if (this.isDamageStockVariableID) {
-				Game.current.variables[this.damageStockVariableID] = damage === null ? 0 : damage;
+				Game.current.variables.set(this.damageStockVariableID, damage === null ? 0 : damage);
 			}
 			if (this.isDamageDisplayName) {
 				switch (this.damageKind) {
@@ -415,19 +415,22 @@ export class Effect extends Base {
 				case DAMAGES_KIND.CURRENCY: {
 					const currencyID = this.damageCurrencyID.getValue() as number;
 					if (target.kind === CHARACTER_KIND.HERO) {
-						const before = Game.current.currencies[currencyID];
-						Game.current.currencies[currencyID] -= damage;
-						if (Game.current.currencies[currencyID] < 0) {
-							Game.current.currencies[currencyID] = 0;
+						const before = Game.current.getCurrency(currencyID);
+						Game.current.addCurrency(currencyID, -damage);
+						if (Game.current.getCurrency(currencyID) < 0) {
+							Game.current.setCurrency(currencyID, 0);
 						}
-						result = result || before !== Game.current.currencies[currencyID];
+						result = result || before !== Game.current.getCurrency(currencyID);
 					}
 					break;
 				}
 				case DAMAGES_KIND.VARIABLE: {
-					const before = Game.current.variables[this.damageVariableID];
-					Game.current.variables[this.damageVariableID] -= damage;
-					result = result || before !== Game.current.variables[this.damageVariableID];
+					const before = Game.current.getVariable(this.damageVariableID);
+					Game.current.variables.set(
+						this.damageVariableID,
+						Game.current.getVariable(this.damageVariableID) - damage
+					);
+					result = result || before !== Game.current.getVariable(this.damageVariableID);
 					break;
 				}
 			}

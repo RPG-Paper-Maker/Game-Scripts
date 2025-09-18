@@ -10,33 +10,27 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { Data } from '../index';
+import { Video } from '../Model';
 
 /** @class
  *  All the videos datas.
  *  @static
  */
 class Videos {
-	private static list: Model.Video[];
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	private static list: Map<number, Video>;
 
 	/**
 	 *  Read the JSON file associated to videos
 	 */
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)).list as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Video });
+		this.list = Utils.readJSONMap(json, Video);
 		if (!Platform.IS_DESKTOP) {
-			for (const video of this.list) {
-				if (video) {
-					video.base64 = await Platform.loadFile(
-						Platform.ROOT_DIRECTORY.slice(0, -1) + Model.Video.getLocalFolder() + '/' + video.name
-					);
-				}
+			for (const video of this.list.values()) {
+				video.base64 = await Platform.loadFile(
+					Platform.ROOT_DIRECTORY.slice(0, -1) + Video.getLocalFolder() + '/' + video.name
+				);
 			}
 		}
 	}
@@ -46,8 +40,8 @@ class Videos {
 	 *  @param {number} id
 	 *  @returns {System.Video}
 	 */
-	static get(id: number): Model.Video {
-		return id === -1 ? new Model.Video() : Data.Base.get(id, this.list, 'video');
+	static get(id: number): Video {
+		return id === -1 ? new Video() : Data.Base.get(id, this.list, 'video');
 	}
 }
 

@@ -173,17 +173,17 @@ export class Utils {
 	/**
 	 * Converts a list of JSON objects into a `Map<number, T>`,
 	 * using a provided transform function or constructor.
-	 * @template T - The target type to transform each JSON object into.
-	 * @param {JsonType[]} [jsonList=[]] - An array of JSON objects. Each must contain an `id` field (numeric).
-	 * @param {(new (data: JsonType) => T) | ((data: JsonType) => T)} transformFn -
-	 *   Either a class constructor or a plain function to transform each JSON object into type `T`.
-	 * @returns {Map<number, T>} A map where:
+	 * @param jsonList - An array of JSON objects. Each must contain an `id` field (numeric).
+	 * @param transformFn - Either a class constructor or a plain function to transform each JSON object into type `T`.
+	 * @param ids - List of ids that will be filled (provide an empty array).
+	 * @returns A map where:
 	 *   - The key is the `id` property of each JSON object.
 	 *   - The value is the transformed object of type `T`.
 	 */
 	public static readJSONMap<T>(
 		jsonList: JsonType[] = [],
-		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T)
+		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T),
+		ids?: number[]
 	): Map<number, T> {
 		return new Map(
 			jsonList.map<[number, T]>((json) => {
@@ -195,7 +195,11 @@ export class Utils {
 					// Called as regular function
 					item = (transformFn as (data: JsonType) => T)(json);
 				}
-				return [(json.id as number) ?? 0, item];
+				const id = (json.id as number) ?? 0;
+				if (ids) {
+					ids.push(id);
+				}
+				return [id, item];
 			})
 		);
 	}
@@ -209,8 +213,26 @@ export class Utils {
 		return map.size > 0 ? Math.max(...map.keys()) : 0;
 	}
 
+	/**
+	 * Converts an array into a Map, using array indices as keys (1-based).
+	 * @param array - The array to convert.
+	 * @returns A map where each value from the array is mapped to its index + 1.
+	 */
 	public static arrayToMap<T>(array: T[]): Map<number, T> {
 		return new Map(array.map((value, index) => [index + 1, value]));
+	}
+
+	/**
+	 * Converts a Map with numeric keys into an array, using the keys as indices.
+	 * @param map - The map to convert.
+	 * @returns An array where each value is placed at the index corresponding to its key in the map.
+	 */
+	public static mapToArray<T>(map: Map<number, T>): T[] {
+		const result: T[] = [];
+		for (const [id, value] of map.entries()) {
+			result[id] = value;
+		}
+		return result;
 	}
 
 	/**

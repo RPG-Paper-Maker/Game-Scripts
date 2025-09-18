@@ -10,39 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Skill } from '../Model';
 
-/** @class
- *   All the skills datas
- *   @static
+/**
+ * JSON structure for Skills.
  */
-class Skills {
-	private static list: Model.Skill[];
+export type SkillsJSON = {
+	skills: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all skill data.
+ */
+export class Skills {
+	private static list: Map<number, Skill>;
+
+	/**
+	 * Read the JSON file associated with skills.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_SKILLS)) as SkillsJSON;
+		this.list = Utils.readJSONMap(json.skills, Skill);
 	}
 
 	/**
-	 *  Read the JSON file associated to skills.
-	 *  @static
-	 *  @async
+	 * Get the skill by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_SKILLS)).skills as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Skill });
-	}
-
-	/**
-	 *  Get the skill by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Skill}
-	 */
-	static get(id: number): Model.Skill {
+	static get(id: number): Skill {
 		return Data.Base.get(id, this.list, 'skill');
 	}
 }
-
-export { Skills };

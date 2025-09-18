@@ -12,45 +12,39 @@
 import { Paths, Platform } from '../Common';
 import { Data } from '../index';
 
-/** @class
- *  All the variables datas.
- *  @static
+/**
+ * JSON structure for Variables.
  */
-class Variables {
-	public static VARIABLES_PER_PAGE = 25;
-	public static variablesNumbers: number;
-	public static variablesNames: string[];
+export type VariablesJSON = {
+	variables: {
+		list: { id: number; name: string }[];
+	}[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+/**
+ * Handles all variable data.
+ */
+export class Variables {
+	static readonly VARIABLES_PER_PAGE = 25;
+	public static names: Map<number, string>;
 
 	/**
-	 *  Read the JSON file associated to variables.
-	 *  @static
-	 *  @async
+	 * Read the JSON file associated with variables.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_VARIABLES)).variables as any;
-		this.variablesNumbers = json.length * this.VARIABLES_PER_PAGE + 1;
-		this.variablesNames = new Array(this.variablesNumbers);
-		let i: number, j: number, l: number, m: number, variable: Record<string, any>;
-		for (i = 0, l = json.length; i < l; i++) {
-			for (j = 0, m = this.VARIABLES_PER_PAGE; j < m; j++) {
-				variable = json[i].list[j];
-				this.variablesNames[variable.id] = variable.name;
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_VARIABLES)) as VariablesJSON;
+		this.names = new Map();
+		for (const page of json.variables) {
+			for (const variable of page.list) {
+				this.names.set(variable.id, variable.name);
 			}
 		}
 	}
 
 	/**
-	 *  Get the variable name by ID.
-	 *  @param {number} id
-	 *  @returns {string}
+	 * Get the variable name by ID.
 	 */
 	static get(id: number): string {
-		return Data.Base.get(id, this.variablesNames, 'variable name');
+		return Data.Base.get(id, this.names, 'variable name');
 	}
 }
-
-export { Variables };

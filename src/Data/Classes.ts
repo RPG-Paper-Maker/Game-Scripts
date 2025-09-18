@@ -10,40 +10,35 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data, Model } from '../index';
+import { JsonType } from '../Common/Types';
+import { Data } from '../index';
+import { Class } from '../Model';
 
-/** @class
- *  All the classes datas.
- *  @static
+/**
+ * JSON structure for Classes.
  */
-class Classes {
-	private static list: Model.Class[];
+export type ClassesJSON = {
+	classes: Record<string, JsonType>[];
+};
 
-	constructor() {
-		throw new Error('This is a static class!');
+/**
+ * Handles all class data.
+ */
+export class Classes {
+	private static list: Map<number, Class>;
+
+	/**
+	 * Read the JSON file associated with classes.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)) as ClassesJSON;
+		this.list = Utils.readJSONMap(json.classes, Class);
 	}
 
 	/**
-	 *  Read the JSON file associated to classes
-	 *  @static
-	 *  @async
+	 * Get the class by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)).classes as any;
-		this.list = [];
-		Utils.readJSONSystemList({ list: json, listIDs: this.list, cons: Model.Class });
-	}
-
-	/**
-	 *  Get the class by ID.
-	 *  @static
-	 *  @param {number} id
-	 *  @param {string} errorMessage
-	 *  @returns {System.Class}
-	 */
-	static get(id: number, errorMessage: string = ''): Model.Class {
+	static get(id: number, errorMessage?: string): Class {
 		return Data.Base.get(id, this.list, 'class', true, errorMessage);
 	}
 }
-
-export { Classes };

@@ -146,7 +146,7 @@ class ChangeLanguage extends Base {
 				() => {
 					// YES
 					Data.Settings.updateCurrentLanguage(
-						Data.Languages.listOrder[this.windowChoicesMain.currentSelectedIndex]
+						Data.Languages.listIDs[this.windowChoicesMain.currentSelectedIndex]
 					);
 					Manager.Stack.translateAll();
 					this.step = 0;

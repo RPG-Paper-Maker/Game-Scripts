@@ -10,19 +10,15 @@
 */
 
 import { CUSTOM_SHAPE_KIND, Paths, Platform } from '../Common';
-import { Data, Model } from '../index';
-import { ShapeJSON } from '../Model';
+import { Data } from '../index';
+import { Shape, ShapeJSON } from '../Model';
 
 /** @class
  *  All the shapes datas.
  *  @static
  */
 class Shapes {
-	private static list: Model.Shape[][];
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	private static list: Map<number, Map<number, Shape>>;
 
 	/**
 	 *  Read the JSON file associated to shapes.
@@ -30,7 +26,7 @@ class Shapes {
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SHAPES)).list as any;
 		const l = json.length;
-		this.list = new Array(l);
+		this.list = new Map();
 		let j: number,
 			m: number,
 			n: number,
@@ -39,8 +35,7 @@ class Shapes {
 			jsonList: ShapeJSON[],
 			jsonShape: ShapeJSON,
 			id: number,
-			list: Model.Shape[],
-			shape: Model.Shape;
+			shape: Shape;
 		for (let i = 0; i < l; i++) {
 			jsonHash = json[i];
 			k = jsonHash.k;
@@ -58,19 +53,16 @@ class Shapes {
 			}
 
 			// Fill the shapes list
-			list = new Array(n + 1);
+			const list = new Map<number, Shape>();
 			for (j = 0; j < n + 1; j++) {
 				jsonShape = jsonList[j];
 				if (jsonShape) {
 					id = jsonShape.id;
-					shape = new Model.Shape(jsonShape);
+					shape = new Shape(jsonShape);
 					shape.kind = k;
 					if (!Platform.IS_DESKTOP && !shape.isBR) {
 						shape.base64 = await Platform.loadFile(
-							Platform.ROOT_DIRECTORY.slice(0, -1) +
-								Model.Shape.getLocalFolder(shape.kind) +
-								'/' +
-								shape.name
+							Platform.ROOT_DIRECTORY.slice(0, -1) + Shape.getLocalFolder(shape.kind) + '/' + shape.name
 						);
 					}
 					if (k === CUSTOM_SHAPE_KIND.OBJ || k === CUSTOM_SHAPE_KIND.COLLISIONS) {
@@ -80,11 +72,11 @@ class Shapes {
 						if (id === -1) {
 							id = 0;
 						}
-						list[id] = shape;
+						list.set(id, shape);
 					}
 				}
 			}
-			this.list[k] = list;
+			this.list.set(k, list);
 		}
 	}
 
@@ -94,10 +86,10 @@ class Shapes {
 	 *  @param {number} id - The shape id
 	 *  @returns {System.Shape}
 	 */
-	static get(kind: CUSTOM_SHAPE_KIND, id: number): Model.Shape {
+	static get(kind: CUSTOM_SHAPE_KIND, id: number): Shape {
 		return kind === CUSTOM_SHAPE_KIND.NONE || id === -1
-			? new Model.Shape()
-			: Data.Base.get(id, this.list[kind], 'shape ' + Model.Shape.customShapeKindToString(kind));
+			? new Shape()
+			: Data.Base.get(id, this.list.get(kind), 'shape ' + Shape.customShapeKindToString(kind));
 	}
 }
 

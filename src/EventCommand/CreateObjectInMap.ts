@@ -117,7 +117,7 @@ class CreateObjectInMap extends Base {
 				currentState.position
 			);
 			if (this.isStockID) {
-				Game.current.variables[this.stockID.getValue(true) as number] = id;
+				Game.current.variables.set(this.stockID.getValue(true) as number, id);
 			}
 			Game.current.getPortionData(Scene.Map.current.id, globalPortion).m.push(newObject);
 			Game.current.getPortionData(Scene.Map.current.id, globalPortion).min.push(newObject);

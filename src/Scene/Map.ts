@@ -354,7 +354,7 @@ class Map extends Base {
 
 		// Characters
 		const pictures = Data.Pictures.getListByKind(PICTURE_KIND.CHARACTERS);
-		const l = pictures.length;
+		const l = pictures.size;
 		this.collisions[PICTURE_KIND.CHARACTERS] = new Array(l);
 		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: Model.Picture;
 		for (let i = 1; i < l; i++) {
@@ -363,7 +363,7 @@ class Map extends Base {
 			if (texture) {
 				image = texture.image;
 			}
-			p = pictures[i];
+			p = pictures.get(i);
 			if (p) {
 				p.readCollisionsImage(image);
 				this.collisions[PICTURE_KIND.CHARACTERS][i] = p.getSquaresForStates(image);

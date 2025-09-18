@@ -91,7 +91,7 @@ class MenuEquip extends MenuBase {
 	 */
 	createWindowChoiceEquipment() {
 		const rect = new Rectangle(20, 100, 290, WindowBox.SMALL_SLOT_HEIGHT);
-		const nbEquipments = Data.BattleSystems.equipmentsOrder.length;
+		const nbEquipments = Data.BattleSystems.equipmentsIDs.length;
 		const options = {
 			nbItemsMax: Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, nbEquipments),
 		};
@@ -111,7 +111,7 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	createWindowChoiceList() {
-		const nbEquips = Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, Data.BattleSystems.equipmentsOrder.length);
+		const nbEquips = Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, Data.BattleSystems.equipmentsIDs.length);
 		const nbEquipChoice = MenuBase.SLOTS_TO_DISPLAY - nbEquips - 1;
 		const y = 100 + (nbEquips + 1) * WindowBox.SMALL_SLOT_HEIGHT;
 		const rect = new Rectangle(20, y, 290, WindowBox.SMALL_SLOT_HEIGHT);
@@ -141,7 +141,7 @@ class MenuEquip extends MenuBase {
 	updateForTab() {
 		// update equipment
 		const equipLength = Player.getEquipmentLength();
-		const l = Data.BattleSystems.equipmentsOrder.length;
+		const l = Data.BattleSystems.equipmentsIDs.length;
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
 		const characteristics = player.getCharacteristics();
 		const list = new Array(l);
@@ -153,12 +153,12 @@ class MenuEquip extends MenuBase {
 				characteristic = characteristics[j];
 				if (
 					characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
-					(characteristic.changeEquipmentID.getValue() as number) === Data.BattleSystems.equipmentsOrder[i]
+					(characteristic.changeEquipmentID.getValue() as number) === Data.BattleSystems.equipmentsIDs[i]
 				) {
 					isPossible = characteristic.isAllowChangeEquipment;
 				}
 			}
-			list[i] = new Graphic.Equip(player, Data.BattleSystems.equipmentsOrder[i], equipLength, isPossible);
+			list[i] = new Graphic.Equip(player, Data.BattleSystems.equipmentsIDs[i], equipLength, isPossible);
 		}
 		this.windowChoicesEquipment.setContents(list);
 		this.selectedEquipment = -1;
@@ -174,7 +174,7 @@ class MenuEquip extends MenuBase {
 	 */
 	updateEquipmentList() {
 		const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
-		const idEquipment = Data.BattleSystems.equipmentsOrder[currentIndex];
+		const idEquipment = Data.BattleSystems.equipmentsIDs[currentIndex];
 		const list: Graphic.Base[] = [new Graphic.Text('  [' + Data.Languages.extras.remove.name() + ']')];
 		let item: Item, systemItem: Model.CommonSkillItem;
 		let type: Model.WeaponArmorKind, nbItem: number;
@@ -219,7 +219,7 @@ class MenuEquip extends MenuBase {
 			this.list = [];
 		} else {
 			const item = <Graphic.Item>this.windowChoicesList.getCurrentContent();
-			const equipmentID = Data.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
+			const equipmentID = Data.BattleSystems.equipmentsIDs[this.windowChoicesEquipment.currentSelectedIndex];
 			const system = item.item ? item.item.system : null;
 			const result = player.getEquipmentStatsAndBonus(system, equipmentID);
 			this.list = result[0];
@@ -273,7 +273,7 @@ class MenuEquip extends MenuBase {
 	 *  Remove the selected equipment.
 	 */
 	remove() {
-		this.removeAnEquipment(Data.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex]);
+		this.removeAnEquipment(Data.BattleSystems.equipmentsIDs[this.windowChoicesEquipment.currentSelectedIndex]);
 	}
 
 	/**
@@ -302,7 +302,7 @@ class MenuEquip extends MenuBase {
 		const index = this.windowChoicesTabs.currentSelectedIndex;
 		const character = Game.current.teamHeroes[index];
 		const gameItem = (<Graphic.Item>this.windowChoicesList.getCurrentContent()).item;
-		const id = Data.BattleSystems.equipmentsOrder[this.windowChoicesEquipment.currentSelectedIndex];
+		const id = Data.BattleSystems.equipmentsIDs[this.windowChoicesEquipment.currentSelectedIndex];
 		const prev = character.equip[id];
 		character.equip[id] = gameItem;
 

@@ -108,10 +108,10 @@ export class Cost extends Base {
 				user[Data.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation] -= value;
 				break;
 			case DAMAGES_KIND.CURRENCY:
-				Game.current.currencies[this.currencyID.getValue() as number] -= value;
+				Game.current.addCurrency(this.currencyID.getValue() as number, -value);
 				break;
 			case DAMAGES_KIND.VARIABLE:
-				Game.current.variables[this.variableID] -= value;
+				Game.current.variables.set(this.variableID, Game.current.getVariable(this.variableID) - value);
 				break;
 		}
 	}

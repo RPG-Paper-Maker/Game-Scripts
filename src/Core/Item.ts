@@ -211,18 +211,18 @@ class Item {
 			const totalValue = value * times;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
-					Game.current.currencies[id] -= totalValue;
+					Game.current.currencies.set(id, Game.current.currencies.get(id) - totalValue);
 					if (totalValue > 0) {
-						Game.current.currenciesUsed[id] += totalValue;
+						Game.current.currenciesUsed.set(id, Game.current.currenciesUsed.get(id) + totalValue);
 					} else {
-						Game.current.currenciesEarned[id] -= totalValue;
+						Game.current.currenciesEarned.set(id, Game.current.currenciesEarned.get(id) - totalValue);
 					}
 					break;
 				case DAMAGES_KIND.STAT:
 					user[Data.BattleSystems.getStatistic(id).abbreviation] -= totalValue;
 					break;
 				case DAMAGES_KIND.VARIABLE:
-					Game.current.variables[id] -= totalValue;
+					Game.current.variables.set(id, (Game.current.getVariable(id) as number) - totalValue);
 					break;
 			}
 		}
@@ -270,7 +270,7 @@ class Item {
 					user[Data.BattleSystems.getStatistic(id).abbreviation] += p;
 					break;
 				case DAMAGES_KIND.VARIABLE:
-					Game.current.variables[id] += p;
+					Game.current.variables.set(id, Game.current.getVariable(id) + p);
 					break;
 			}
 		}

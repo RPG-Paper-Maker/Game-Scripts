@@ -10,8 +10,9 @@
 */
 
 import * as THREE from 'three';
-import { Paths, PICTURE_KIND, Platform } from '../Common';
-import { Data, Manager, Model } from '../index';
+import { Paths, PICTURE_KIND, Platform, Utils } from '../Common';
+import { Data, Manager } from '../index';
+import { Picture, Tileset } from '../Model';
 
 /** @class
  *  All the tilesets datas.
@@ -20,7 +21,7 @@ import { Data, Manager, Model } from '../index';
 class Tilesets {
 	public static PROPERTY_TEXTURES_CHARACTERS = 'texturesCharacters';
 	public static PROPERTY_TEXTURES_BATTLERS = 'texturesBattlers';
-	private static list: Model.Tileset[];
+	private static list: Map<number, Tileset>;
 	public static texturesCharacters: THREE.MeshPhongMaterial[];
 	public static texturesBattlers: THREE.MeshPhongMaterial[];
 
@@ -33,16 +34,7 @@ class Tilesets {
 	 */
 	static async read() {
 		const json = (await Platform.parseFileJSON(Paths.FILE_TILESETS)).list as any;
-		const l = json.length;
-		this.list = new Array(l + 1);
-
-		// Sorting all the tilesets according to the ID
-		let i: number, jsonTileset: Record<string, any>, tileset: Model.Tileset;
-		for (i = 0; i < l; i++) {
-			jsonTileset = json[i];
-			tileset = new Model.Tileset(jsonTileset);
-			this.list[jsonTileset.id] = tileset;
-		}
+		this.list = Utils.readJSONMap(json, Tileset);
 		await this.loadPictures(PICTURE_KIND.CHARACTERS, Data.Tilesets.PROPERTY_TEXTURES_CHARACTERS);
 		await this.loadPictures(PICTURE_KIND.BATTLERS, Data.Tilesets.PROPERTY_TEXTURES_BATTLERS);
 	}
@@ -53,7 +45,7 @@ class Tilesets {
 	 *  @param {number} id
 	 *  @returns {System.Tileset}
 	 */
-	static get(id: number): Model.Tileset {
+	static get(id: number): Tileset {
 		return Data.Base.get(id, this.list, 'tileset');
 	}
 
@@ -64,12 +56,11 @@ class Tilesets {
 	 */
 	static async loadPictures(pictureKind: PICTURE_KIND, texturesName: string) {
 		const pictures = Data.Pictures.getListByKind(pictureKind);
-		const l = pictures.length;
-		const textures = new Array(l);
+		const textures = new Array(pictures.size);
 		textures[0] = Manager.GL.loadTextureEmpty();
-		let picture: Model.Picture, path: string;
-		for (let i = 1; i < l; i++) {
-			picture = pictures[i];
+		let picture: Picture, path: string;
+		for (let i = 1; i < pictures.size; i++) {
+			picture = pictures.get(i);
 			if (picture) {
 				path = picture.getPath();
 				textures[i] = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
