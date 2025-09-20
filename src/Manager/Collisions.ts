@@ -1064,7 +1064,13 @@ class Collisions {
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject
 	): [boolean, number, ORIENTATION] {
-		const sprites = mapPortion.boundingBoxesSprites[jpositionAfter.toIndex()];
+		const sprites = this.getCollisionsWithOverflows(
+			mapPortion,
+			'boundingBoxesSprites',
+			jpositionAfter,
+			Scene.Map.current.overflowSprites
+		);
+
 		let tested = false;
 		if (sprites !== null) {
 			let objCollision: StructMapElementCollision;
@@ -1141,6 +1147,25 @@ class Collisions {
 		}
 	}
 
+	static getCollisionsWithOverflows(
+		mapPortion: MapPortion,
+		boundingBoxPropertyName: string,
+		jpositionAfter: Position,
+		overflow: Map<string, Set<string>>
+	): StructMapElementCollision[] {
+		const list = [...(mapPortion[boundingBoxPropertyName][jpositionAfter.toIndex()] ?? [])];
+		const overflowPortions = overflow.get(jpositionAfter.getGlobalPortion().toKey()) ?? new Set();
+		for (const key of overflowPortions) {
+			const overflowMapPortion = Scene.Map.current.getMapPortionFromPortion(
+				Scene.Map.current.getLocalPortion(Portion.fromKey(key))
+			);
+			if (overflowMapPortion) {
+				list.push(...(overflowMapPortion[boundingBoxPropertyName][jpositionAfter.toIndex()] ?? []));
+			}
+		}
+		return list;
+	}
+
 	/**
 	 *  Check if there is a collision with sprites at this position.
 	 *  @static
@@ -1159,7 +1184,12 @@ class Collisions {
 		testedCollisions: StructMapElementCollision[],
 		object: MapObject
 	): boolean {
-		const objects3D = mapPortion.boundingBoxesObjects3D[jpositionAfter.toIndex()];
+		const objects3D = this.getCollisionsWithOverflows(
+			mapPortion,
+			'boundingBoxesObjects3D',
+			jpositionAfter,
+			Scene.Map.current.overflowObjects3D
+		);
 		if (objects3D !== null) {
 			let objCollision: StructMapElementCollision;
 			for (let i = 0, l = objects3D.length; i < l; i++) {
@@ -1275,15 +1305,12 @@ class Collisions {
 		object: MapObject
 	): [boolean, number] {
 		let yMountain = null;
-		const mountains = [...(mapPortion.boundingBoxesMountains[jpositionAfter.toIndex()] ?? [])];
-		const overflowPortions =
-			Scene.Map.current.overflowMountains.get(jpositionAfter.getGlobalPortion().toKey()) ?? new Set();
-		for (const portion of overflowPortions) {
-			const overflowMapPortion = Scene.Map.current.getMapPortionFromPortion(Portion.fromKey(portion));
-			if (overflowMapPortion) {
-				mountains.push(...(overflowMapPortion.boundingBoxesMountains[jpositionAfter.toIndex()] ?? []));
-			}
-		}
+		const mountains = this.getCollisionsWithOverflows(
+			mapPortion,
+			'boundingBoxesMountains',
+			jpositionAfter,
+			Scene.Map.current.overflowMountains
+		);
 		let block = false;
 		for (const mountain of mountains) {
 			const result = this.checkMountain(

@@ -32,7 +32,7 @@ import { Base } from './Base';
 export type SpecialElementsJSON = {
 	autotiles: AutotileJSON[];
 	walls: SpecialElementJSON[];
-	ms: MountainJSON[];
+	m: MountainJSON[];
 	o: Object3DJSON[];
 };
 
@@ -649,7 +649,7 @@ export class SpecialElements {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS)) as SpecialElementsJSON;
 		this.autotiles = Utils.readJSONMap(json.autotiles, Autotile);
 		this.walls = Utils.readJSONMap(json.walls, SpecialElement);
-		this.mountains = Utils.readJSONMap(json.ms, Mountain);
+		this.mountains = Utils.readJSONMap(json.m, Mountain);
 		this.objects = Utils.readJSONMap(json.o, Object3D);
 	}
 }

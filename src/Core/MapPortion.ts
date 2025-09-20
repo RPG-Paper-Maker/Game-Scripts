@@ -719,8 +719,9 @@ class MapPortion {
 					z = objCollision.k ? 0 : objCollision.w;
 					for (c = -z; c <= z; c++) {
 						positionPlus = new Position(position.x + a, position.y + b, position.z + c);
-						if (Scene.Map.current.isInMap(positionPlus) && this.isPositionIn(positionPlus)) {
+						if (Scene.Map.current.isInMap(positionPlus)) {
 							this.boundingBoxesSprites[positionPlus.toIndex()].push(objCollision);
+							this.addOverflowCollision(Scene.Map.current.overflowSprites, positionPlus);
 						}
 					}
 				}
@@ -792,20 +793,24 @@ class MapPortion {
 							}
 							boundingBoxes[positionPlus.toIndex()].push(objCollisionPlus);
 							// Overflowing to another portion
-							const mapPortion = Scene.Map.current.getMapPortionByPosition(positionPlus);
-							if (mapPortion && mapPortion !== this) {
-								const key = mapPortion.portion.toKey();
-								let portions = overflowMap.get(key);
-								if (!portions) {
-									portions = new Set();
-									overflowMap.set(key, portions);
-								}
-								portions.add(this.portion.toKey());
-							}
+							this.addOverflowCollision(overflowMap, positionPlus);
 						}
 					}
 				}
 			}
+		}
+	}
+
+	addOverflowCollision(overflowMap: Map<string, Set<string>>, positionPlus: Position): void {
+		const globalPortion = positionPlus.getGlobalPortion();
+		if (!globalPortion.equals(this.portion)) {
+			const key = globalPortion.toKey();
+			let portions = overflowMap.get(key);
+			if (!portions) {
+				portions = new Set();
+				overflowMap.set(key, portions);
+			}
+			portions.add(this.portion.toKey());
 		}
 	}
 
