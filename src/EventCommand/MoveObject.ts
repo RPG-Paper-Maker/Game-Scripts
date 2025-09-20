@@ -330,7 +330,7 @@ class MoveObject extends Base {
 		if (this.isCameraOrientation && Inputs.lockedKeys.size > 0) {
 			const currentEvent = ReactionInterpreter.currentReaction.currentReaction.event;
 			if (currentEvent && currentEvent.idEvent === 3 && currentEvent.isSystem) {
-				const pressedKey = ReactionInterpreter.currentParameters[1].getValue() as string;
+				const pressedKey = ReactionInterpreter.currentParameters.get(1).getValue() as string;
 				const lockedAngle = Inputs.lockedKeys.get(pressedKey);
 				if (lockedAngle !== undefined) {
 					const dif = lockedAngle - Scene.Map.current.camera.horizontalAngle;
