@@ -14,7 +14,19 @@ import { Utils } from '../Common';
 import { CollisionSquare } from './CollisionSquare';
 import { Position } from './Position';
 
-interface StructMapElementCollision {
+/**
+ * Minimal JSON structure for a map element.
+ */
+export type MapElementJSON = {
+	xOff?: number;
+	yOff?: number;
+	zOff?: number;
+};
+
+/**
+ * Internal structure used for collision checks.
+ */
+export interface StructMapElementCollision {
 	b?: number[];
 	p?: Position;
 	l?: THREE.Vector3;
@@ -38,10 +50,10 @@ interface StructMapElementCollision {
 	cr?: [number, number, number];
 }
 
-/** @class
- *  An element in the map.
+/**
+ * An element in the map.
  */
-class MapElement {
+export class MapElement {
 	public static readonly COEF_TEX = 0.2;
 
 	public xOffset: number;
@@ -53,17 +65,15 @@ class MapElement {
 		this.xOffset = 0;
 		this.yOffset = 0;
 		this.zOffset = 0;
+		this.front = false;
 	}
 
 	/**
-	 *  Read the JSON associated to the map element.
-	 *  @param {Record<string, any>} json - Json object describing the map element
+	 * Read the JSON associated to the map element.
 	 */
-	read(json: Record<string, any>) {
+	read(json: MapElementJSON): void {
 		this.xOffset = Utils.valueOrDefault(json.xOff, 0);
 		this.yOffset = Utils.valueOrDefault(json.yOff, 0);
 		this.zOffset = Utils.valueOrDefault(json.zOff, 0);
 	}
 }
-
-export { MapElement, StructMapElementCollision };

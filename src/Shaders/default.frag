@@ -42,14 +42,10 @@ void main() {
 	ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
 	vec3 totalEmissiveRadiance = emissive;
 	#include <logdepthbuf_fragment>
-	vec2 pos;
-	vec2 coords = vec2(vMapUv.x + offset.x, vMapUv.y + offset.y);
+	vec2 coords = vMapUv * repeat + offset;
 	if (reverseH)
-		pos = vec2(1.0 - coords.x, coords.y);
-	else
-		pos = coords;
-	pos = vec2(pos.x - floor(pos.x), pos.y - floor(pos.y));
-	vec4 sampledDiffuseColor = texture2D(map, pos * repeat);
+    	coords.x = 1.0 - coords.x;
+	vec4 sampledDiffuseColor = texture2D(map, coords);
 	if (sampledDiffuseColor.a <= alpha_threshold)
         discard;
 	#ifdef DECODE_VIDEO_TEXTURE
@@ -58,7 +54,14 @@ void main() {
 	#endif
 	diffuseColor *= sampledDiffuseColor;
 	if (enableShadows && sampledDiffuseColor.a >= 1.0) {
-		#include <map_fragment>
+		#ifdef USE_MAP
+			vec4 sampledDiffuseColor = texture2D( map, coords );
+			#ifdef DECODE_VIDEO_TEXTURE
+				// use inline sRGB decode until browsers properly support SRGB8_ALPHA8 with video textures (#26516)
+				sampledDiffuseColor = sRGBTransferEOTF( sampledDiffuseColor );
+			#endif
+			diffuseColor *= sampledDiffuseColor;
+		#endif
 		#include <color_fragment>
 		#include <alphamap_fragment>
 		#include <alphatest_fragment>

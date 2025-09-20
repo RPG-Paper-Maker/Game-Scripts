@@ -12,22 +12,27 @@
 import { PICTURE_KIND } from '../Common';
 import { Data } from '../index';
 import { CustomGeometry } from './CustomGeometry';
-import { Land } from './Land';
+import { Land, LandJSON } from './Land';
 import { StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 import { TextureBundle } from './TextureBundle';
 
 /**
- * An autotile in the map
- *
- * @class Autotile
- * @extends {Land}
+ * JSON structure describing an Autotile element.
  */
-class Autotile extends Land {
+export type AutotileJSON = LandJSON & {
+	id: number;
+	tid: number;
+};
+
+/**
+ * An autotile element on the map grid.
+ */
+export class Autotile extends Land {
 	public autotileID: number;
 	public tileID: number;
 
-	constructor(json?: Record<string, any>) {
+	constructor(json?: AutotileJSON) {
 		super();
 		if (json) {
 			this.read(json);
@@ -35,28 +40,15 @@ class Autotile extends Land {
 	}
 
 	/**
-	 *  Read the JSON associated to the autotile.
-	 *  @param {Record<string, any>} json - Json object describing the autotile
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
-
-		this.autotileID = json.id;
-		this.tileID = json.tid;
-	}
-
-	/**
-	 *  Update the geometry associated to this autotile and return the
-	 *  collision result.
-	 *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
-	 *  autotiles
-	 *  @param {TextureBundle} texure - The several texture used for this
-	 *  geometry
-	 *  @param {Position} position - The json position
-	 *  @param {number} width - The texture total width
-	 *  @param {number} height - The texture total height
-	 *  @param {number} count - The faces count
-	 *  @returns {StructMapElementCollision}
+	 * Update the geometry for this autotile and optionally generate collision data.
+	 * @param geometry - The custom geometry instance to update with vertices, indices and UVs.
+	 * @param texture - The texture bundle providing offsets and atlas management.
+	 * @param position - The autotile’s position in the map grid.
+	 * @param width - The total texture width (in pixels).
+	 * @param height - The total texture height (in pixels).
+	 * @param pictureID - The picture resource ID for this autotile.
+	 * @param count - The current face count used for indexing.
+	 * @returns A {@link StructMapElementCollision} describing collision data, or `null` if no collision applies.
 	 */
 	updateGeometryAutotile(
 		geometry: CustomGeometry,
@@ -84,6 +76,13 @@ class Autotile extends Land {
 			count
 		);
 	}
-}
 
-export { Autotile };
+	/**
+	 * Read and initialize this autotile from JSON data.
+	 */
+	read(json: AutotileJSON): void {
+		super.read(json);
+		this.autotileID = json.id;
+		this.tileID = json.tid;
+	}
+}

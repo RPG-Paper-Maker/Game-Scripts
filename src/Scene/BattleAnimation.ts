@@ -155,10 +155,10 @@ class BattleAnimation {
 			this.battle.effects[0].getMissAndCrit();
 		}
 		this.battle.currentTargetIndex = null;
-		if (this.battle.animationUser && this.battle.animationUser.system === null) {
+		if (this.battle.animationUser && this.battle.animationUser.model === null) {
 			this.battle.animationUser = null;
 		}
-		if (this.battle.animationTarget && this.battle.animationTarget.system === null) {
+		if (this.battle.animationTarget && this.battle.animationTarget.model === null) {
 			this.battle.animationTarget = null;
 		}
 	}
@@ -218,7 +218,7 @@ class BattleAnimation {
 				// Test if animation finished
 				if (
 					(!this.battle.animationUser ||
-						this.battle.animationUser.frame > this.battle.animationUser.system.maxFrameID) &&
+						this.battle.animationUser.frame > this.battle.animationUser.model.maxFrameID) &&
 					!this.battle.user.isAttacking()
 				) {
 					if (!this.battle.animationTarget) {
@@ -240,7 +240,7 @@ class BattleAnimation {
 				this.battle.animationTarget.update();
 				this.battle.animationTarget.playSounds(this.getCondition());
 				Manager.Stack.requestPaintHUD = true;
-				if (this.battle.animationTarget.frame > this.battle.animationTarget.system.maxFrameID) {
+				if (this.battle.animationTarget.frame > this.battle.animationTarget.model.maxFrameID) {
 					this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
 					for (i = 0, l = this.battle.targets.length; i < l; i++) {
 						this.battle.targets[i].timeDamage = 0;
@@ -420,7 +420,7 @@ class BattleAnimation {
 		}
 		let i: number, l: number;
 		if (this.battle.animationTarget) {
-			if (this.battle.animationTarget.system.positionKind === ANIMATION_POSITION_KIND.SCREEN_CENTER) {
+			if (this.battle.animationTarget.model.positionKind === ANIMATION_POSITION_KIND.SCREEN_CENTER) {
 				this.battle.animationTarget.draw(null);
 			} else {
 				for (i = 0, l = this.battle.targets.length; i < l; i++) {
@@ -434,7 +434,7 @@ class BattleAnimation {
 			this.battle.reactionInterpretersEffects.length === 0 &&
 			(this.battle.user === null || !this.battle.user.isAttacking()) &&
 			(!this.battle.animationTarget ||
-				this.battle.animationTarget.frame > this.battle.animationTarget.system.maxFrameID)
+				this.battle.animationTarget.frame > this.battle.animationTarget.model.maxFrameID)
 		) {
 			for (i = 0, l = this.battle.targets.length; i < l; i++) {
 				this.battle.targets[i].drawDamages();

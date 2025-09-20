@@ -17,11 +17,11 @@ import { StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 import { TextureBundle } from './TextureBundle';
 
-/** @class
- *  Autotiles grouped with the same textures.
- *  @param {TextureBundle} texture
+/**
+ * A group of autotiles that share the same {@link TextureBundle}.
+ * Provides geometry aggregation and mesh creation for rendering.
  */
-class Autotiles {
+export class Autotiles {
 	public static COUNT_LIST = 5;
 	public static LIST_A = ['A1', 'A2', 'A3', 'A4', 'A5'];
 	public static LIST_B = ['B1', 'B2', 'B3', 'B4', 'B5'];
@@ -60,19 +60,18 @@ class Autotiles {
 	constructor(bundle: TextureBundle) {
 		this.bundle = bundle;
 		const texture = Manager.GL.getMaterialTexture(bundle.material);
-		this.width = texture ? texture.image.width : 0;
-		this.height = texture ? texture.image.height : 0;
+		this.width = texture?.image?.width ?? 0;
+		this.height = texture?.image?.height ?? 0;
 		this.geometry = new CustomGeometry();
 		this.mesh = null;
 		this.index = 0;
 	}
 
 	/**
-	 *  Update the geometry of the autotiles according to an autotile and its
-	 *  position.
-	 *  @param {Position} position - The position
-	 *  @param {Autotile} autotile - The autotile to add to geometry
-	 *  @returns {StructMapElementCollision}
+	 * Update the geometry with a new autotile instance at a given position.
+	 * @param position - The autotile’s position in the map grid.
+	 * @param autotile - The autotile instance to update geometry for.
+	 * @param pictureID - The picture ID used to resolve autotile textures.
 	 */
 	updateGeometry(position: Position, autotile: Autotile, pictureID: number): StructMapElementCollision {
 		return this.width === null || this.height === 0
@@ -89,8 +88,8 @@ class Autotiles {
 	}
 
 	/**
-	 *  Create a mesh with material and geometry.
-	 *  @returns {boolean}
+	 * Create a mesh from the current geometry and material.
+	 * @returns `true` if the mesh was successfully created, `false` if geometry is empty.
 	 */
 	createMesh(): boolean {
 		if (this.geometry.isEmpty()) {
@@ -101,5 +100,3 @@ class Autotiles {
 		return true;
 	}
 }
-
-export { Autotiles };

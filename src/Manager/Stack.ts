@@ -142,12 +142,7 @@ class Stack {
 		const json = (await Common.Platform.parseFileJSON(Paths.FILE_TEST)) as any;
 		const troopID = json.troopID;
 		const battleMap = Data.BattleSystems.getBattleMap(json.battleTroopTestBattleMapID);
-		const heroes: Model.HeroTroopBattleTest[] = [];
-		Utils.readJSONSystemList({
-			list: json.battleTroopTestHeroes,
-			listIndexes: heroes,
-			cons: Model.HeroTroopBattleTest,
-		});
+		const heroes = Utils.readJSONList(json.battleTroopTestHeroes, Model.HeroTroopBattleTest);
 		Game.current = new Game();
 		Game.current.initializeDefault();
 		Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);

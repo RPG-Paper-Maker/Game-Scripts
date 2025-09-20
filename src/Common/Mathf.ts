@@ -213,4 +213,30 @@ export class Mathf {
 		vec.applyEuler(euler);
 		vec.add(center);
 	}
+
+	/**
+	 * Rotate a quadrilateral around a center point using Euler angles.
+	 * This applies the same Euler rotation to the four vertices of a quad
+	 * (`vecA`, `vecB`, `vecC`, `vecD`) around a given `center`.
+	 * Modifies the vectors in place.
+	 * @param vecA - First vertex of the quad.
+	 * @param vecB - Second vertex of the quad.
+	 * @param vecC - Third vertex of the quad.
+	 * @param vecD - Fourth vertex of the quad.
+	 * @param center - The pivot point around which to apply the rotation.
+	 * @param euler - The Euler rotation to apply.
+	 */
+	static rotateQuadEuler(
+		vecA: THREE.Vector3,
+		vecB: THREE.Vector3,
+		vecC: THREE.Vector3,
+		vecD: THREE.Vector3,
+		center: THREE.Vector3,
+		euler: THREE.Euler
+	) {
+		this.rotateVertexEuler(vecA, center, euler);
+		this.rotateVertexEuler(vecB, center, euler);
+		this.rotateVertexEuler(vecC, center, euler);
+		this.rotateVertexEuler(vecD, center, euler);
+	}
 }

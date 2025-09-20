@@ -10,61 +10,51 @@
 */
 
 import * as THREE from 'three';
-import { Utils } from '../Common';
+import { Mathf, Utils } from '../Common';
 import { Data } from '../index';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
 import { MapElement, StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 import { Rectangle } from './Rectangle';
-import { Sprite } from './Sprite';
 
-/** @class
- *  A land in the map.
- *  @extends MapElement
+/**
+ * JSON structure describing a Land element.
  */
-class Land extends MapElement {
+export type LandJSON = {
+	xOff?: number;
+	yOff?: number;
+	zOff?: number;
+	up?: boolean;
+	t: number[];
+};
+
+/**
+ * A land element placed on the map grid.
+ */
+export class Land extends MapElement {
 	public up: boolean;
 	public texture: Rectangle;
 
-	constructor() {
-		super();
-	}
-
 	/**
-	 *  Read the JSON associated to the land
-	 *  @param {Record<string, any>} json - Json object describing the land
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
-		this.up = Utils.valueOrDefault(json.up, true);
-		this.texture = Rectangle.createFromArray(json.t);
-	}
-
-	/**
-	 *  Return the rect index.
-	 *  @param {number} width
-	 *  @returns {number}
+	 * Compute the index of this land’s texture rectangle in a texture atlas.
 	 */
 	getIndex(width: number): number {
 		return this.texture.x + this.texture.y * width;
 	}
 
 	/**
-	 *  Update the geometry associated to this land and return the collision
-	 *  result.
-	 *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
-	 *  autotiles
-	 *  @param {CollisionSquare} collision - The collision square
-	 *  @param {Position} position - The position
-	 *  @param {number} width - The texture total width
-	 *  @param {number} height - The texture total height
-	 *  @param {number} x - The x texture position
-	 *  @param {number} y - The y texture position
-	 *  @param {number} w - The w texture size
-	 *  @param {number} h - The h texture size
-	 *  @param {number} count - The faces count
-	 *  @returns {StructCollision}
+	 * Update the geometry for this land tile and optionally generate collision data.
+	 *
+	 * @param geometry - The custom geometry instance to update with vertices, indices and UVs.
+	 * @param collision - The collision square definition for this tile.
+	 * @param position - The tile’s position in the map grid.
+	 * @param x - The X texture coordinate (in pixels).
+	 * @param y - The Y texture coordinate (in pixels).
+	 * @param w - The texture width (in pixels).
+	 * @param h - The texture height (in pixels).
+	 * @param count - The current face count used for indexing.
+	 * @returns A {@link StructMapElementCollision} describing collision data, or `null` if no collision should be applied.
 	 */
 	updateGeometryLand(
 		geometry: CustomGeometry,
@@ -86,7 +76,6 @@ class Land extends MapElement {
 		}
 		const b = localPosition.y + yLayerOffset;
 		const c = localPosition.z;
-		let objCollision: StructMapElementCollision = null;
 
 		// Vertices
 		const vecA = new THREE.Vector3(a - Data.Systems.SQUARE_SIZE / 2, b, c - Data.Systems.SQUARE_SIZE / 2);
@@ -94,8 +83,7 @@ class Land extends MapElement {
 		const vecC = new THREE.Vector3(a + Data.Systems.SQUARE_SIZE / 2, b, c + Data.Systems.SQUARE_SIZE / 2);
 		const vecD = new THREE.Vector3(a - Data.Systems.SQUARE_SIZE / 2, b, c + Data.Systems.SQUARE_SIZE / 2);
 		const center = new THREE.Vector3(a, b, c);
-		Sprite.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
-		// Vertices
+		Mathf.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 
 		// Indices
@@ -116,6 +104,7 @@ class Land extends MapElement {
 		geometry.pushQuadUVs(texA, texB, texC, texD);
 
 		// Collision
+		let objCollision: StructMapElementCollision | null = null;
 		if (collision !== null) {
 			const rect = collision.rect;
 			if (!collision.hasAllDirections() || collision.terrain > 0) {
@@ -141,6 +130,13 @@ class Land extends MapElement {
 		}
 		return objCollision;
 	}
-}
 
-export { Land };
+	/**
+	 * Read and initialize this land tile from JSON data.
+	 */
+	read(json: LandJSON): void {
+		super.read(json);
+		this.up = Utils.valueOrDefault(json.up, true);
+		this.texture = Rectangle.createFromArray(json.t);
+	}
+}

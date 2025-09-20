@@ -9,18 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants } from './index';
 import { JsonType } from './Types';
-
-interface SystemJsonList<T = any> {
-	list: Record<string, any>[];
-	listIDs?: T[];
-	listIndexes?: (T | number)[];
-	indexesIDs?: boolean;
-	listHash?: Record<string, T>;
-	cons?: new (data: any) => T;
-	func?: (data: any) => T;
-}
 
 /**
  * Static utility class providing helper functions for value handling,
@@ -101,41 +90,6 @@ export class Utils {
 	 */
 	public static createFont(fontSize: number, fontName: string, bold: boolean, italic: boolean): string {
 		return `${bold ? 'bold ' : ''}${italic ? 'italic ' : ''}${fontSize}px "${fontName}"`;
-	}
-
-	/**
-	 * Reads a JSON system list and populates the provided structures with elements.
-	 * @param json - The JSON list definition
-	 * @returns The maximum ID encountered
-	 */
-	public static readJSONSystemList<T>(json: SystemJsonList<T>): number {
-		// TODO replace by Map
-		let maxID = 0;
-
-		for (let i = 0; i < json.list.length; i++) {
-			const jsonElement = json.list[i];
-			const id = jsonElement.id;
-			let element: T;
-
-			if (json.listHash === undefined) {
-				element = json.cons ? new json.cons(jsonElement) : json.func!(jsonElement);
-
-				if (json.listIDs) {
-					json.listIDs[jsonElement.id] = element;
-				}
-				if (json.listIndexes) {
-					json.listIndexes[i] = json.indexesIDs ? id : element;
-				}
-			} else {
-				json.listHash[jsonElement[Constants.JSON_KEY]] = json.cons
-					? new json.cons(jsonElement[Constants.JSON_VALUE])
-					: json.func!(jsonElement);
-			}
-
-			maxID = Math.max(id, maxID);
-		}
-
-		return maxID;
 	}
 
 	/**

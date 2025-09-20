@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { CHARACTER_KIND, GROUP_KIND, Paths, Platform, Utils } from '../Common';
+import { CHARACTER_KIND, GROUP_KIND, ITEM_KIND, Paths, Platform, Utils } from '../Common';
 import { Data, Manager, Model, Scene } from '../index';
 import { Chrono } from './Chrono';
 import { Item } from './Item';
@@ -140,14 +140,10 @@ class Game {
 		});
 
 		// Items
-		this.items = [];
-		Utils.readJSONSystemList({
-			list: json.itm,
-			listIndexes: this.items,
-			func: (json: Record<string, any>) => {
-				return new Item(json.kind, json.id, json.nb);
-			},
-		});
+		this.items = Utils.readJSONList(
+			json.itm,
+			(element: { kind: ITEM_KIND; id: number; nb: number }) => new Item(element.kind, element.id, element.nb)
+		);
 
 		// Currencies
 		this.currencies = Utils.arrayToMap(json.cur);
@@ -155,30 +151,44 @@ class Game {
 		this.currenciesUsed = Utils.arrayToMap(json.curu);
 
 		// Heroes
-		this.teamHeroes = [];
-		Utils.readJSONSystemList({
-			list: json.th,
-			listIndexes: this.teamHeroes,
-			func: (json: Record<string, any>) => {
-				return new Player(json.kind, json.id, json.instid, json.sk, json.status, json.name, json);
-			},
-		});
-		this.reserveHeroes = [];
-		Utils.readJSONSystemList({
-			list: json.sh,
-			listIndexes: this.reserveHeroes,
-			func: (json: Record<string, any>) => {
-				return new Player(json.kind, json.id, json.instid, json.sk, json.status, json.name, json);
-			},
-		});
-		this.hiddenHeroes = [];
-		Utils.readJSONSystemList({
-			list: json.hh,
-			listIndexes: this.hiddenHeroes,
-			func: (json: Record<string, any>) => {
-				return new Player(json.kind, json.id, json.instid, json.sk, json.status, json.name, json);
-			},
-		});
+		this.teamHeroes = Utils.readJSONList(
+			json.th,
+			(element: {
+				kind: number;
+				id: number;
+				instid: number;
+				sk: { id: number }[];
+				status: { id: number; turn: number }[];
+				name: string;
+			}) =>
+				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element)
+		);
+
+		this.reserveHeroes = Utils.readJSONList(
+			json.sh,
+			(element: {
+				kind: number;
+				id: number;
+				instid: number;
+				sk: { id: number }[];
+				status: { id: number; turn: number }[];
+				name: string;
+			}) =>
+				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element)
+		);
+
+		this.hiddenHeroes = Utils.readJSONList(
+			json.hh,
+			(element: {
+				kind: number;
+				id: number;
+				instid: number;
+				sk: { id: number }[];
+				status: { id: number; turn: number }[];
+				name: string;
+			}) =>
+				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element)
+		);
 
 		// Map infos
 		this.currentMapID = json.currentMapId;

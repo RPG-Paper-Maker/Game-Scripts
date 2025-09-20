@@ -31,13 +31,10 @@ import { Rectangle } from './Rectangle';
 import { Sprite } from './Sprite';
 import { Status } from './Status';
 
-/** @class
- *  A battler in a battle (ally or ennemy).
- *  @param {Player} player - The character properties
- *  @param {Vector3} position - The battler position
- *  @param {Camera} camera - the camera associated to the battle
+/**
+ * Represents a battler in battle (ally or enemy) including its mesh, animations, and HUD.
  */
-class Battler {
+export class Battler {
 	public static OFFSET_SELECTED = 10;
 	public static TIME_MOVE = 200;
 	public static TOTAL_TIME_DAMAGE = 250;
@@ -78,23 +75,24 @@ class Battler {
 	public botRightPosition: THREE.Vector3;
 	public upPosition: THREE.Vector3;
 	public halfPosition: THREE.Vector3;
+	public animationOffset = new THREE.Vector2();
 	public rect: Rectangle = new Rectangle();
 	public moving: boolean;
 	public attacking: boolean;
 	public damages: number;
 	public damagesName: string;
-	public graphicDamageName: Graphic.Text = new Graphic.Text('', { verticalAlign: ALIGN_VERTICAL.BOT });
+	public graphicDamageName = new Graphic.Text('', { verticalAlign: ALIGN_VERTICAL.BOT });
 	public isDamagesMiss: boolean;
 	public isDamagesCritical: boolean;
-	public tempIsDamagesMiss: boolean = null;
-	public tempIsDamagesCritical: boolean = null;
-	public currentStatusAnimation: Animation = null;
+	public tempIsDamagesMiss: boolean | null = null;
+	public tempIsDamagesCritical: boolean | null = null;
+	public currentStatusAnimation: Animation | null = null;
 	public lastStatus: Status;
 	public lastStatusHealed: Status;
-	public lastTarget: Battler = null;
-	public hidden: boolean = false;
+	public lastTarget: Battler | null = null;
+	public hidden = false;
 
-	constructor(player: Player, isEnemy: boolean = false, position?: Position, vect?: THREE.Vector3, camera?: Camera) {
+	constructor(player: Player, isEnemy = false, position?: Position, vect?: THREE.Vector3, camera?: Camera) {
 		this.player = player;
 		this.isEnemy = isEnemy;
 		this.initialPosition = position;
@@ -107,6 +105,13 @@ class Battler {
 		this.topPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
 		this.midPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
 		this.botPosition = Manager.GL.toScreenPosition(this.position, camera.getThreeCamera());
+		this.initialize();
+	}
+
+	/**
+	 * Initialize battler properties, frames, mesh, and positions.
+	 * */
+	initialize(): void {
 		this.active = true;
 		this.frame = new Frame(Interpreter.evaluate(Data.Systems.battlersFrameDuration) as number, {
 			frames: Data.Systems.battlersFrames,
@@ -149,12 +154,11 @@ class Battler {
 		);
 		this.timerMove = 0;
 		this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
-		const idBattler = player.getBattlerID();
+		const idBattler = this.player.getBattlerID();
 		if (idBattler === -1) {
 			this.mesh = null;
 		} else {
-			// Copy original material because there will be individual color
-			// changes
+			// Copy original material because there will be individual color changes
 			const originalMaterial = Data.Pictures.texturesBattlers.get(idBattler);
 			const texture = Manager.GL.getMaterialTexture(originalMaterial);
 			const copiedTexture = texture.clone();
@@ -162,13 +166,13 @@ class Battler {
 				texture: copiedTexture,
 				uniforms: {
 					colorD: { type: 'v4', value: Manager.GL.screenTone.clone() },
-					offset: { type: 'v2', value: new THREE.Vector2() },
+					offset: { type: 'v2', value: this.animationOffset },
 				},
 			});
 			this.width = copiedTexture.image.width / Data.Systems.SQUARE_SIZE / Data.Systems.battlersFrames;
 			this.height = copiedTexture.image.height / Data.Systems.SQUARE_SIZE / Data.Systems.battlersColumns;
 			const sprite = Sprite.create(ELEMENT_MAP_KIND.SPRITES_FACE, new Rectangle(0, 0, this.width, this.height));
-			const geometry = sprite.createGeometry(this.width, this.height, false, position)[0];
+			const geometry = sprite.createGeometry(this.width, this.height, false, this.initialPosition)[0];
 			this.mesh = new THREE.Mesh(geometry, material);
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 			this.mesh.receiveShadow = true;
@@ -194,45 +198,72 @@ class Battler {
 				this.position.y + (this.height * Data.Systems.SQUARE_SIZE) / 2,
 				this.position.z
 			);
-			if (isEnemy) {
+			if (this.isEnemy) {
 				this.mesh.scale.set(-1, 1, 1);
 			}
-			this.updateUVs();
+			this.initializeTexture();
 		}
-		// Update status animation
 		this.updateAnimationStatus();
 	}
 
 	/**
-	 *  Check at least one affected status contains the following restriction.
-	 *  @param {STATUS_RESTRICTIONS_KIND} restriction - The kind of restriction
-	 *  @returns {boolean}
-	 */
-	containsRestriction(restriction: STATUS_RESTRICTIONS_KIND): boolean {
-		let status: Status;
-		for (let i = 0, l = this.player.status.length; i < l; i++) {
-			status = this.player.status[i];
-			if (status.system.restrictionKind === restriction) {
-				return true;
-			}
-		}
-		return false;
+	 * Initialize UV mapping for the battler mesh.
+	 * */
+	initializeTexture(): void {
+		const texture = Manager.GL.getMaterialTexture(this.mesh.material as MeshPhongMaterial);
+		const w = (this.width * Data.Systems.SQUARE_SIZE) / texture.image.width;
+		const h = (this.height * Data.Systems.SQUARE_SIZE) / texture.image.height;
+		const texA = new THREE.Vector2();
+		const texB = new THREE.Vector2();
+		const texC = new THREE.Vector2();
+		const texD = new THREE.Vector2();
+		CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, 0, 0, w, h);
+		(this.mesh.geometry as CustomGeometry).pushQuadUVs(texA, texB, texC, texD);
+		(this.mesh.geometry as CustomGeometry).updateUVs();
 	}
 
 	/**
-	 *  Check if mouse is inside the battler rectangle.
-	 *  @param {number} x
-	 *  @param {number} y
-	 *  @returns {boolean}
+	 *  Update the UVs coordinates according to frame and orientation.
+	 */
+	updateUVs() {
+		if (this.mesh) {
+			const texture = Manager.GL.getMaterialTexture(this.mesh.material as MeshPhongMaterial);
+			let frame = 0;
+			switch (this.step) {
+				case BATTLER_STEP.ATTACK:
+				case BATTLER_STEP.SKILL:
+				case BATTLER_STEP.ITEM:
+					frame = this.frameAttacking.value;
+					break;
+				default:
+					frame = this.frame.value;
+					break;
+			}
+			const w = (this.width * Data.Systems.SQUARE_SIZE) / texture.image.width;
+			const h = (this.height * Data.Systems.SQUARE_SIZE) / texture.image.height;
+			const x = frame * w;
+			const y = this.step * h;
+			this.animationOffset.set(x, y);
+		}
+	}
+
+	/**
+	 * Check if the battler has a status restriction.
+	 * */
+	containsRestriction(restriction: STATUS_RESTRICTIONS_KIND): boolean {
+		return this.player.status.some((status) => status.system.restrictionKind === restriction);
+	}
+
+	/**
+	 *  Check if mouse coordinates are inside the battler.
 	 */
 	isInside(x: number, y: number): boolean {
 		return this.rect.isInside(x, y);
 	}
 
 	/**
-	 *  Set the selected state.
-	 *  @param {boolean} selected - Indicate if the battler is selected
-	 */
+	 * Set battler selected state and reset timer for movement.
+	 * */
 	setSelected(selected: boolean) {
 		if (this.selected !== selected) {
 			this.selected = selected;
@@ -241,22 +272,15 @@ class Battler {
 	}
 
 	/**
-	 *  Set the active state.
-	 *  @param {boolean} active - Indicate if the battler is active
+	 * Set battler active state and update material screen tone.
 	 */
 	setActive(active: boolean) {
 		this.active = active;
-		const material = <MeshPhongMaterial>this.mesh.material;
+		const material = this.mesh.material as THREE.MeshPhongMaterial;
 		if (active) {
-			material.userData.uniforms.colorD.value.setX(Manager.GL.screenTone.x);
-			material.userData.uniforms.colorD.value.setY(Manager.GL.screenTone.y);
-			material.userData.uniforms.colorD.value.setZ(Manager.GL.screenTone.z);
-			material.userData.uniforms.colorD.value.setW(Manager.GL.screenTone.w);
+			material.userData.uniforms.colorD.value.copy(Manager.GL.screenTone);
 		} else {
-			material.userData.uniforms.colorD.value.setX(Manager.GL.screenTone.x - 0.3);
-			material.userData.uniforms.colorD.value.setY(Manager.GL.screenTone.y - 0.3);
-			material.userData.uniforms.colorD.value.setZ(Manager.GL.screenTone.z - 0.3);
-			material.userData.uniforms.colorD.value.setW(Manager.GL.screenTone.w - 0.3);
+			material.userData.uniforms.colorD.value.copy(Manager.GL.screenTone.clone().subScalar(0.3));
 		}
 	}
 
@@ -271,65 +295,57 @@ class Battler {
 
 	/**
 	 *  Check if the battler is attacking (or skill, item, escape).
-	 *  @returns {boolean}
 	 */
 	isStepAttacking(): boolean {
-		return (
-			this.step === BATTLER_STEP.ATTACK ||
-			this.step === BATTLER_STEP.SKILL ||
-			this.step === BATTLER_STEP.ITEM ||
-			this.step === BATTLER_STEP.ESCAPE
-		);
+		return [BATTLER_STEP.ATTACK, BATTLER_STEP.SKILL, BATTLER_STEP.ITEM, BATTLER_STEP.ESCAPE].includes(this.step);
 	}
 
 	/**
 	 *  Check if the battler is attacking and the frames is currently run.
-	 *  @returns {boolean}
 	 */
 	isAttacking(): boolean {
 		return this.isStepAttacking() && this.frameAttacking.value !== Data.Systems.FRAMES - 1;
 	}
 
 	/**
+	 *  Set battler step.
+	 */
+	updateStep(step: BATTLER_STEP): void {
+		this.frameAttacking.value = 0;
+		this.step = step;
+		this.updateUVs();
+	}
+
+	/**
 	 *  Set battler step as using a skill.
 	 */
 	setUsingSkill() {
-		this.frameAttacking.value = 0;
-		this.step = BATTLER_STEP.SKILL;
-		this.updateUVs();
+		this.updateStep(BATTLER_STEP.SKILL);
 	}
 
 	/**
 	 *  Set battler step as using an item.
 	 */
 	setUsingItem() {
-		this.frameAttacking.value = 0;
-		this.step = BATTLER_STEP.ITEM;
-		this.updateUVs();
+		this.updateStep(BATTLER_STEP.ITEM);
 	}
 
 	/**
 	 *  Set battler step as escaping.
 	 */
 	setEscaping() {
-		this.frameAttacking.value = 0;
-		this.step = BATTLER_STEP.ESCAPE;
-		this.updateUVs();
+		this.updateStep(BATTLER_STEP.ESCAPE);
 	}
 
 	/**
 	 *  Set battler step as victory.
 	 */
 	setVictory() {
-		this.frame.value = 0;
-		this.step = BATTLER_STEP.VICTORY;
-		this.updateUVs();
+		this.updateStep(BATTLER_STEP.VICTORY);
 	}
 
 	/**
 	 *  Update battler step if is dead, attacked if attacked.
-	 *  @param {boolean} attacked - Indicate if the battler is attacked
-	 *  @param {Player} user - The attack / skill / item user
 	 */
 	updateDead(attacked: boolean, user?: Player) {
 		let step = this.step;
@@ -372,7 +388,6 @@ class Battler {
 	 *  Update the selected move progress.
 	 */
 	updateSelected() {
-		let newX = this.mesh.position.x;
 		let progression: ProgressionTable;
 		if (this.isEnemy) {
 			progression = this.selected ? this.progressionEnemyFront : this.progressionEnemyBack;
@@ -386,7 +401,7 @@ class Battler {
 			this.moving = false;
 			time = Battler.TIME_MOVE;
 		}
-		newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
+		const newX = progression.getProgressionAt(time, Battler.TIME_MOVE, true);
 		if (this.mesh.position.x !== newX) {
 			this.mesh.position.setX(newX);
 			this.upPosition.setX(newX);
@@ -417,7 +432,7 @@ class Battler {
 	}
 
 	/**
-	 *  Update the frame.
+	 *  Update the arrow.
 	 */
 	updateArrow() {
 		if (this.frameArrow.update()) {
@@ -469,7 +484,6 @@ class Battler {
 
 	/**
 	 *  Update current status animation.
-	 *  @param {Core.Status} previousFirst - The previous status animation.
 	 */
 	updateAnimationStatus(previousFirst: Status = undefined) {
 		const status = this.player.status[0];
@@ -504,46 +518,7 @@ class Battler {
 	}
 
 	/**
-	 *  Update the UVs coordinates according to frame and orientation.
-	 */
-	updateUVs() {
-		if (this.mesh) {
-			const texture = Manager.GL.getMaterialTexture(<MeshPhongMaterial>this.mesh.material);
-			const textureWidth = texture.image.width;
-			const textureHeight = texture.image.height;
-			let frame = 0;
-			switch (this.step) {
-				case BATTLER_STEP.ATTACK:
-				case BATTLER_STEP.SKILL:
-				case BATTLER_STEP.ITEM:
-					frame = this.frameAttacking.value;
-					break;
-				default:
-					frame = this.frame.value;
-					break;
-			}
-			const w = (this.width * Data.Systems.SQUARE_SIZE) / textureWidth;
-			const h = (this.height * Data.Systems.SQUARE_SIZE) / textureHeight;
-			const x = frame * w;
-			const y = this.step * h;
-
-			// Update geometry
-			const texA = new THREE.Vector2();
-			const texB = new THREE.Vector2();
-			const texC = new THREE.Vector2();
-			const texD = new THREE.Vector2();
-			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
-
-			// Update geometry
-			(<CustomGeometry>this.mesh.geometry).pushQuadUVs(texA, texB, texC, texD);
-			(<CustomGeometry>this.mesh.geometry).updateUVs();
-		}
-	}
-
-	/**
 	 *  Add a new status and check if already in.
-	 *  @param {number} id - The status id to add
-	 *  @returns {Core.Status}
 	 */
 	addStatus(id: number): Status {
 		const status = this.player.addStatus(id);
@@ -553,8 +528,6 @@ class Battler {
 
 	/**
 	 *  Remove the status.
-	 *  @param {number} id - The status id to remove
-	 *  @returns {Core.Status}
 	 */
 	removeStatus(id: number): Status {
 		const status = this.player.removeStatus(id);
@@ -566,11 +539,10 @@ class Battler {
 	 *  Update status step (first priority status displayed).
 	 */
 	updateStatusStep() {
-		// Update step if changed
 		let step = BATTLER_STEP.NORMAL;
 		const s = this.player.status[0];
 		if (s) {
-			step = s.system.battlerPosition.getValue() as number as number;
+			step = s.system.battlerPosition.getValue() as number;
 		}
 		if (this.step !== step) {
 			this.step = step;
@@ -578,6 +550,9 @@ class Battler {
 		}
 	}
 
+	/**
+	 *  Update hidden state.
+	 */
 	updateHidden(hidden: boolean) {
 		this.hidden = hidden;
 		if (this.hidden) {
@@ -645,5 +620,3 @@ class Battler {
 		this.drawStatus();
 	}
 }
-
-export { Battler };

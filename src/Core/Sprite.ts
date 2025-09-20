@@ -105,26 +105,6 @@ class Sprite extends MapElement {
 		Mathf.rotateVertex(vecD, center, angle, axis);
 	}
 
-	static rotateVertexEuler(vec: THREE.Vector3, center: THREE.Vector3, euler: THREE.Euler) {
-		vec.sub(center);
-		vec.applyEuler(euler);
-		vec.add(center);
-	}
-
-	static rotateQuadEuler(
-		vecA: THREE.Vector3,
-		vecB: THREE.Vector3,
-		vecC: THREE.Vector3,
-		vecD: THREE.Vector3,
-		center: THREE.Vector3,
-		euler: THREE.Euler
-	) {
-		Mathf.rotateVertexEuler(vecA, center, euler);
-		Mathf.rotateVertexEuler(vecB, center, euler);
-		Mathf.rotateVertexEuler(vecC, center, euler);
-		Mathf.rotateVertexEuler(vecD, center, euler);
-	}
-
 	/**
 	 *  Add a static sprite to the geometry.
 	 *  @static
@@ -345,7 +325,7 @@ class Sprite extends MapElement {
 			const vecSimpleB = vecB.clone();
 			const vecSimpleC = vecC.clone();
 			const vecSimpleD = vecD.clone();
-			Sprite.rotateQuadEuler(vecSimpleA, vecSimpleB, vecSimpleC, vecSimpleD, center, position.toRotationEuler());
+			Mathf.rotateQuadEuler(vecSimpleA, vecSimpleB, vecSimpleC, vecSimpleD, center, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecSimpleA,
@@ -367,7 +347,7 @@ class Sprite extends MapElement {
 			const vecDoubleC = vecC.clone();
 			const vecDoubleD = vecD.clone();
 			Sprite.rotateSprite(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, 90, Sprite.Y_AXIS);
-			Sprite.rotateQuadEuler(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, position.toRotationEuler());
+			Mathf.rotateQuadEuler(vecDoubleA, vecDoubleB, vecDoubleC, vecDoubleD, center, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(
 				geometry,
 				vecDoubleA,
@@ -392,7 +372,7 @@ class Sprite extends MapElement {
 				const vecQuadra2C = vecC.clone();
 				const vecQuadra2D = vecD.clone();
 				Sprite.rotateSprite(vecQuadra1A, vecQuadra1B, vecQuadra1C, vecQuadra1D, center, 45, Sprite.Y_AXIS);
-				Sprite.rotateQuadEuler(
+				Mathf.rotateQuadEuler(
 					vecQuadra1A,
 					vecQuadra1B,
 					vecQuadra1C,
@@ -401,7 +381,7 @@ class Sprite extends MapElement {
 					position.toRotationEuler()
 				);
 				Sprite.rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
-				Sprite.rotateQuadEuler(
+				Mathf.rotateQuadEuler(
 					vecQuadra2A,
 					vecQuadra2B,
 					vecQuadra2C,

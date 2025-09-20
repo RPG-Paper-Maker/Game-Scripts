@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { OBJECT_COLLISION_KIND } from '../Common';
+import { Mathf, OBJECT_COLLISION_KIND } from '../Common';
 import { Data, Model } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { StructMapElementCollision } from './MapElement';
@@ -267,7 +267,7 @@ class Object3DBox extends Object3D {
 			texB = new THREE.Vector2(textures[tB[0]], textures[tB[1]]);
 			texC = new THREE.Vector2(textures[tC[0]], textures[tC[1]]);
 			texD = new THREE.Vector2(textures[tD[0]], textures[tD[1]]);
-			Sprite.rotateQuadEuler(vecA, vecB, vecC, vecD, localPosition, position.toRotationEuler());
+			Mathf.rotateQuadEuler(vecA, vecB, vecC, vecD, localPosition, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
 		}
 

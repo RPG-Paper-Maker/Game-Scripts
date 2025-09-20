@@ -11,43 +11,29 @@
 
 import { Data, Scene } from '../index';
 import { CustomGeometry } from './CustomGeometry';
-import { Land } from './Land';
+import { Land, LandJSON } from './Land';
 import { StructMapElementCollision } from './MapElement';
 import { Position } from './Position';
 
 /**
- *  A floor in the map.
- *
- *  @class Floor
- *  @extends {Land}
+ * A floor tile element in the map grid.
  */
-class Floor extends Land {
-	constructor(json?: Record<string, any>) {
+export class Floor extends Land {
+	constructor(json?: LandJSON) {
 		super();
-
 		if (json) {
 			this.read(json);
 		}
 	}
 
 	/**
-	 *  Read the JSON associated to the floor.
-	 *  @param {Record<string, any>} json - Json object describing the floor
-	 */
-	read(json: Record<string, any>) {
-		super.read(json);
-	}
-
-	/**
-	 *  Update the geometry associated to this floor and return the
-	 *  collision result.
-	 *  @param {Core.CustomGeometry} geometry - The geometry asoociated to the
-	 *  floor
-	 *  @param {Core.Position} position - The position
-	 *  @param {number} width - The texture total width
-	 *  @param {number} height - The texture total height
-	 *  @param {number} count - The faces count
-	 *  @returns {StructMapElementCollision}
+	 * Update the geometry for this floor and optionally generate collision data.
+	 * @param geometry - The custom geometry instance to update with vertices, indices and UVs.
+	 * @param position - The floor tile’s position in the map grid.
+	 * @param width - The total texture width (in pixels).
+	 * @param height - The total texture height (in pixels).
+	 * @param count - The current face count used for indexing.
+	 * @returns A {@link StructMapElementCollision} describing collision data, or `null` if no collision applies.
 	 */
 	updateGeometry(
 		geometry: CustomGeometry,
@@ -72,5 +58,3 @@ class Floor extends Land {
 			  );
 	}
 }
-
-export { Floor };
