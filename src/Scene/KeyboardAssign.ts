@@ -154,7 +154,7 @@ class KeyboardAssign extends Base {
 				if (this.currentSC.length === 0) {
 					graphic.updateShort(this.originalSC);
 				} else {
-					Data.Settings.updateKeyboard(graphic.kb.id, this.currentSC);
+					Data.Settings.updateKeyboard(graphic.kb.id, this.currentSC).catch(console.error);
 				}
 				Manager.Stack.requestPaintHUD = true;
 			}

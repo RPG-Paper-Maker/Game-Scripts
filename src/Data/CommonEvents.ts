@@ -11,13 +11,24 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { Data } from '../index';
-import { CommonEvent, CommonReaction, MapObject } from '../Model';
+import { CommonEvent, CommonReaction, CommonReactionJSON, MapObject, MapObjectJSON, ParameterListJSON } from '../Model';
+import { Base } from './Base';
 
-/** @class
- *  All the battle System datas.
- *  @static
+/**
+ * JSON structure for Common Events.
  */
-class CommonEvents {
+export type CommonEventsJSON = {
+	eventsSystem: Record<string, ParameterListJSON>[];
+	eventsUser: Record<string, ParameterListJSON>[];
+	commonReactors: Record<string, CommonReactionJSON>[];
+	commonObjects: Record<string, MapObjectJSON>[];
+	ho: MapObjectJSON;
+};
+
+/**
+ * Handles all common events data.
+ */
+export class CommonEvents {
 	public static PROPERTY_STOCKED = 'stocked';
 	private static eventsSystem: Map<number, CommonEvent>;
 	private static eventsUser: Map<number, CommonEvent>;
@@ -26,12 +37,64 @@ class CommonEvents {
 	public static heroObject: MapObject;
 
 	/**
-	 *  Read the JSON file associated to common events.
-	 *  @static
-	 *  @async
+	 * Get the event system by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS)) as any;
+	static getEventSystem(id: number): CommonEvent {
+		return Base.get(id, this.eventsSystem, 'event system');
+	}
+
+	/**
+	 * Get the event user by ID.
+	 */
+	static getEventUser(id: number): CommonEvent {
+		return Base.get(id, this.eventsUser, 'event user');
+	}
+
+	/**
+	 * Get the common reaction by ID.
+	 */
+	static getCommonReaction(id: number): CommonReaction {
+		return Base.get(id, this.commonReactions, 'common reaction');
+	}
+
+	/**
+	 * Get the common object by ID.
+	 */
+	static getCommonObject(id: number): MapObject {
+		return Base.get(id, this.commonObjects, 'common object');
+	}
+
+	/**
+	 * Reorder the models in the right order for inheritance.
+	 * @param jsonObject - Current object to analyze
+	 * @param reorderedList - Accumulator for reordered objects
+	 * @param jsonObjects - Original list of JSON objects
+	 */
+	static modelReOrder(jsonObject: MapObjectJSON, reorderedList: MapObjectJSON[], jsonObjects: MapObjectJSON[]): void {
+		if (jsonObject && !Object.prototype.hasOwnProperty.call(jsonObject, Data.CommonEvents.PROPERTY_STOCKED)) {
+			// If id = -1, we can add to the list
+			const id = jsonObject.hId;
+			if (id !== -1) {
+				// Search id in the json list
+				let inheritedObject: MapObjectJSON;
+				for (inheritedObject of jsonObjects) {
+					if (inheritedObject.id === id) {
+						break;
+					}
+				}
+				// Test inheritance for this object
+				this.modelReOrder(inheritedObject, reorderedList, jsonObjects);
+			}
+			jsonObject.stocked = true;
+			reorderedList.push(jsonObject);
+		}
+	}
+
+	/**
+	 * Read the JSON file associated to common events.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS)) as CommonEventsJSON;
 
 		this.eventsSystem = Utils.readJSONMap(json.eventsSystem, CommonEvent);
 		this.eventsUser = Utils.readJSONMap(json.eventsUser, CommonEvent);
@@ -50,77 +113,6 @@ class CommonEvents {
 		this.commonObjects = Utils.readJSONMap(reorderedList, MapObject);
 
 		// Hero object
-		this.heroObject = new MapObject();
-		this.heroObject.read(json.ho);
-	}
-
-	/**
-	 *  Reorder the models in the right order for inheritance.
-	 *  @param {Record<string, any>} - jsonObject The json corresponding to the
-	 *  current object to analyze
-	 *  @pa Dataects
-	 *  @param {number} objectsLength - The number of objects to identify
-	 */
-	static modelReOrder(
-		jsonObject: Record<string, any>,
-		reorderedList: Record<string, any>[],
-		jsonObjects: Record<string, any>[]
-	) {
-		if (jsonObject && !jsonObject.hasOwnProperty(Data.CommonEvents.PROPERTY_STOCKED)) {
-			// If id = -1, we can add to the list
-			const id = jsonObject.hId;
-			if (id !== -1) {
-				// Search id in the json list
-				let inheritedObject: Record<string, any>;
-				for (let i = 0; i < jsonObjects.length; i++) {
-					inheritedObject = jsonObjects[i];
-					if (inheritedObject.id === id) {
-						break;
-					}
-				}
-				// Test inheritance for this object
-				this.modelReOrder(inheritedObject, reorderedList, jsonObjects);
-			}
-			jsonObject.stocked = true;
-			reorderedList.push(jsonObject);
-		}
-	}
-
-	/**
-	 *  Get the event system by ID.
-	 *  @param {number} id
-	 *  @returns {System.Event}
-	 */
-	static getEventSystem(id: number): CommonEvent {
-		return Data.Base.get(id, this.eventsSystem, 'event system');
-	}
-
-	/**
-	 *  Get the event user by ID.
-	 *  @param {number} id
-	 *  @returns {System.Event}
-	 */
-	static getEventUser(id: number): CommonEvent {
-		return Data.Base.get(id, this.eventsUser, 'event user');
-	}
-
-	/**
-	 *  Get the common reaction by ID.
-	 *  @param {number} id
-	 *  @returns {System.CommonReaction}
-	 */
-	static getCommonReaction(id: number): CommonReaction {
-		return Data.Base.get(id, this.commonReactions, 'common reaction');
-	}
-
-	/**
-	 *  Get the common object by ID.
-	 *  @param {number} id
-	 *  @returns {System.MapObject}
-	 */
-	static getCommonObject(id: number): MapObject {
-		return Data.Base.get(id, this.commonObjects, 'common object');
+		this.heroObject = new MapObject(json.ho);
 	}
 }
-
-export { CommonEvents };

@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform } from '../Common';
-import { Data } from '../index';
+import { Base } from './Base';
 
 /**
  * JSON structure for Variables.
@@ -29,6 +29,13 @@ export class Variables {
 	public static names: Map<number, string>;
 
 	/**
+	 * Get the variable name by ID.
+	 */
+	static get(id: number): string {
+		return Base.get(id, this.names, 'variable name');
+	}
+
+	/**
 	 * Read the JSON file associated with variables.
 	 */
 	static async read(): Promise<void> {
@@ -39,12 +46,5 @@ export class Variables {
 				this.names.set(variable.id, variable.name);
 			}
 		}
-	}
-
-	/**
-	 * Get the variable name by ID.
-	 */
-	static get(id: number): string {
-		return Data.Base.get(id, this.names, 'variable name');
 	}
 }

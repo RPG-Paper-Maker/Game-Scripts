@@ -14,26 +14,97 @@ import { MapObject, Position } from '../Core';
 import { Data, EventCommand, Manager, Scene } from '../index';
 import {
 	CameraProperties,
+	CameraPropertiesJSON,
 	Color,
+	ColorJSON,
 	Currency,
+	CurrencyJSON,
 	Detection,
+	DetectionJSON,
 	DynamicValue,
 	DynamicValueJSON,
 	FontName,
+	FontNameJSON,
 	InitialPartyMember,
 	InventoryFilter,
+	InventoryFilterJSON,
 	Localization,
+	LocalizationJSON,
 	MainMenuCommand,
+	MainMenuCommandJSON,
 	PlaySong,
+	PlaySongJSON,
+	ReactionCommandJSON,
 	Skybox,
+	SkyboxJSON,
 	WindowSkin,
+	WindowSkinJSON,
 } from '../Model';
+import { Base } from './Base';
+
+/**
+ * Minimal JSON type for system file (use `any`-ish shapes where models read their own fields).
+ */
+export type SystemsJSON = {
+	pn: LocalizationJSON;
+	sw: number;
+	sh: number;
+	isw: boolean;
+	aa?: boolean;
+	isMouseControls?: boolean;
+	ss: number;
+	portionRayIngame?: number;
+	frames: number;
+	mch?: DynamicValueJSON;
+	mca?: DynamicValueJSON;
+	cs?: DynamicValueJSON;
+	mcobv?: DynamicValueJSON;
+	mfd?: DynamicValueJSON;
+	battlersFrames?: number;
+	bfd?: string;
+	bfad?: string;
+	battlersColumns?: number;
+	autotilesFrames?: number;
+	autotilesFrameDuration?: number;
+	saveSlots?: number;
+	priceSoldItem?: DynamicValueJSON;
+	pathBR?: string;
+	idMapHero?: number;
+	hmp?: number[];
+	bb?: boolean;
+	fps?: boolean;
+	itemsTypes?: LocalizationJSON[];
+	inventoryFilters?: InventoryFilterJSON[];
+	mainMenuCommands?: MainMenuCommandJSON[];
+	heroesStatistics?: LocalizationJSON[];
+	initialPartyMembers?: { statisticID: DynamicValueJSON }[];
+	colors?: ColorJSON[];
+	currencies?: CurrencyJSON[];
+	wskins?: WindowSkinJSON[];
+	cp?: CameraPropertiesJSON[];
+	d?: DetectionJSON[];
+	sb?: SkyboxJSON[];
+	fs?: { s: DynamicValueJSON }[];
+	fn?: FontNameJSON[];
+	sf?: { v: DynamicValueJSON }[];
+	f?: { v: DynamicValueJSON }[];
+	scu?: PlaySongJSON;
+	sco?: PlaySongJSON;
+	sca?: PlaySongJSON;
+	si?: PlaySongJSON;
+	dbo?: ReactionCommandJSON;
+	facesetsSize?: number;
+	facesetScalingWidth?: number;
+	facesetScalingHeight?: number;
+	iconsSize?: number;
+	enterNameTable?: string[][];
+};
 
 /** @class
  *   All the System datas.
  *   @static
  */
-class Systems {
+export class Systems {
 	public static SQUARE_SIZE: number;
 	public static PORTIONS_RAY: number;
 	public static FRAMES: number;
@@ -90,8 +161,148 @@ class Systems {
 	public static windowHeight: number;
 	public static isScreenWindow: boolean;
 
-	constructor() {
-		throw new Error('This is a static class!');
+	/**
+	 * Get the item type by ID safely.
+	 */
+	static getItemType(id: number): Localization {
+		return Base.get(id, this.itemsTypes, 'item type');
+	}
+
+	/**
+	 * Get the color by ID safely.
+	 */
+	static getColor(id: number): Color {
+		return Base.get(id, this.colors, 'color');
+	}
+
+	/**
+	 * Get the currency by ID safely.
+	 */
+	static getCurrency(id: number): Currency {
+		return Base.get(id, this.currencies, 'currency');
+	}
+
+	/**
+	 * Get the window skin by ID safely.
+	 */
+	static getWindowSkin(id: number): WindowSkin {
+		return Base.get(id, this.windowSkins, 'window skin');
+	}
+
+	/**
+	 * Get the camera properties by ID safely.
+	 */
+	static getCameraProperties(id: number): CameraProperties {
+		return Base.get(id, this.cameraProperties, 'camera properties');
+	}
+
+	/**
+	 * Get the detection by ID safely.
+	 */
+	static getDetection(id: number): Detection {
+		return Base.get(id, this.detections, 'detection');
+	}
+
+	/**
+	 * Get the skybox by ID safely.
+	 */
+	static getSkybox(id: number): Skybox {
+		return Base.get(id, this.skyboxes, 'skybox');
+	}
+
+	/**
+	 * Get the font size by ID safely.
+	 */
+	static getFontSize(id: number): DynamicValue {
+		return Base.get(id, this.fontSizes, 'font size');
+	}
+
+	/**
+	 * Get the font name by ID safely.
+	 */
+	static getFontName(id: number): FontName {
+		return Base.get(id, this.fontNames, 'font name');
+	}
+
+	/**
+	 * Get the speed by ID safely.
+	 */
+	static getSpeed(id: number): DynamicValue {
+		return Base.get(id, this.speeds, 'speed');
+	}
+
+	/**
+	 * Get the frequency by ID safely.
+	 */
+	static getFrequency(id: number): DynamicValue {
+		return Base.get(id, this.frequencies, 'frequency');
+	}
+
+	/**
+	 * Get the system object of hero.
+	 */
+	static getModelHero(): void {
+		this.modelHero = new MapObject(Data.CommonEvents.heroObject, this.heroMapPosition.toVector3(), true);
+	}
+
+	/**
+	 * Get the default array currencies for a default game.
+	 */
+	static getDefaultCurrencies(): Map<number, number> {
+		return new Map<number, number>(Array.from(this.currencies.keys()).map((id) => [id, 0]));
+	}
+
+	/**
+	 * Get the current System window skin.
+	 */
+	static getCurrentWindowSkin(): WindowSkin {
+		return this.dbOptions.v_windowSkin;
+	}
+
+	/**
+	 * Update the window size and all the canvas sizes.
+	 */
+	static updateWindowSize(w: number, h: number, fullscreen: boolean): void {
+		if (fullscreen) {
+			w = Platform.screenWidth;
+			h = Platform.screenHeight;
+		}
+		Platform.setWindowSize(w, h, fullscreen);
+		Platform.canvasHUD.width = w;
+		Platform.canvasHUD.height = h;
+		Platform.canvasHUD.style.width = `${w}px`;
+		Platform.canvasHUD.style.height = `${h}px`;
+		Platform.canvas3D.style.width = `${w}px`;
+		Platform.canvas3D.style.height = `${h}px`;
+		Platform.canvasVideos.height = h;
+		ScreenResolution.CANVAS_WIDTH = w;
+		ScreenResolution.CANVAS_HEIGHT = h;
+		ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / ScreenResolution.SCREEN_X;
+		ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / ScreenResolution.SCREEN_Y;
+		Manager.GL.resize();
+		Manager.Stack.requestPaintHUD = true;
+		for (const scene of Manager.Stack.content) {
+			scene.draw3D();
+		}
+	}
+
+	/**
+	 *  Switch between window and fullscreen.
+	 *  @static
+	 */
+	static switchFullscreen() {
+		this.isScreenWindow = !this.isScreenWindow;
+		this.updateWindowSize(this.windowWidth, this.windowHeight, this.isScreenWindow);
+	}
+
+	/**
+	 *  Load the window skins pictures
+	 *  @static
+	 */
+	static async loadWindowSkins() {
+		for (const windowSkin of this.windowSkins.values()) {
+			await windowSkin.updatePicture();
+		}
 	}
 
 	/**
@@ -99,7 +310,7 @@ class Systems {
 	 *  @static
 	 */
 	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_SYSTEM)) as any;
+		const json = (await Platform.parseFileJSON(Paths.FILE_SYSTEM)) as SystemsJSON;
 
 		// Project name
 		this.projectName = new Localization(json.pn);
@@ -143,7 +354,7 @@ class Systems {
 		this.PATH_BR = Platform.WEB_DEV ? './BR' : Paths.FILES + json.pathBR;
 
 		// Path DLC
-		this.PATH_DLCS = (Paths.FILES + (await Platform.parseFileJSON(Paths.FILE_DLCS)).p) as any;
+		this.PATH_DLCS = Paths.FILES + (await Platform.parseFileJSON(Paths.FILE_DLCS)).p;
 
 		// Hero beginning
 		this.ID_MAP_START_HERO = json.idMapHero;
@@ -164,27 +375,13 @@ class Systems {
 
 		// Lists
 		this.itemsTypes = Utils.readJSONMap(json.itemsTypes, Localization);
-		this.inventoryFilters = [];
-		this.mainMenuCommands = [];
-		this.heroesStatistics = [];
-		this.initialPartyMembers = [];
-		Utils.readJSONSystemList({
-			list: json.inventoryFilters,
-			listIndexes: this.inventoryFilters,
-			cons: InventoryFilter,
-		});
-		Utils.readJSONSystemList({
-			list: json.mainMenuCommands,
-			listIndexes: this.mainMenuCommands,
-			cons: MainMenuCommand,
-		});
-		Utils.readJSONSystemList({
-			list: json.heroesStatistics,
-			listIndexes: this.heroesStatistics,
-			func: (element: Record<string, any>) => {
-				return DynamicValue.readOrDefaultDatabase(element.statisticID);
-			},
-		});
+		this.inventoryFilters = Utils.readJSONList(json.inventoryFilters, InventoryFilter);
+		this.mainMenuCommands = Utils.readJSONList(json.mainMenuCommands, MainMenuCommand);
+		this.heroesStatistics = Utils.readJSONList(
+			json.heroesStatistics,
+			(element: { statisticID: DynamicValueJSON }) => DynamicValue.readOrDefaultDatabase(element.statisticID)
+		);
+		this.initialPartyMembers = Utils.readJSONList(json.initialPartyMembers, InitialPartyMember);
 		this.colors = Utils.readJSONMap(json.colors, Color);
 		this.currencies = Utils.readJSONMap(json.currencies, Currency);
 		this.windowSkins = Utils.readJSONMap(json.wskins, WindowSkin);
@@ -201,11 +398,6 @@ class Systems {
 		this.frequencies = Utils.readJSONMap(json.f, (element: { v: DynamicValueJSON }) =>
 			DynamicValue.readOrDefaultNumberDouble(element.v, 1)
 		);
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.initialPartyMembers, []),
-			listIndexes: this.initialPartyMembers,
-			cons: InitialPartyMember,
-		});
 
 		// Sounds
 		this.soundCursor = new PlaySong(SONG_KIND.SOUND, json.scu);
@@ -214,7 +406,7 @@ class Systems {
 		this.soundImpossible = new PlaySong(SONG_KIND.SOUND, json.si);
 
 		// Window skin options
-		this.dbOptions = <EventCommand.SetDialogBoxOptions>Manager.Events.getEventCommand(json.dbo);
+		this.dbOptions = Manager.Events.getEventCommand(json.dbo) as EventCommand.SetDialogBoxOptions;
 		this.dbOptions.update();
 
 		// Faceset options
@@ -236,191 +428,4 @@ class Systems {
 		Manager.Stack.sceneLoading = new Scene.Loading();
 		Manager.Stack.requestPaintHUD = true;
 	}
-
-	/**
-	 *  Get the item type by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getItemType(id: number): Localization {
-		return Data.Base.get(id, this.itemsTypes, 'item type');
-	}
-
-	/**
-	 *  Get the color by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {System.Color}
-	 */
-	static getColor(id: number): Color {
-		return Data.Base.get(id, this.colors, 'color');
-	}
-
-	/**
-	 *  Get the currency by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getCurrency(id: number): Currency {
-		return Data.Base.get(id, this.currencies, 'currency');
-	}
-
-	/**
-	 *  Get the window skin by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getWindowSkin(id: number): WindowSkin {
-		return Data.Base.get(id, this.windowSkins, 'window skin');
-	}
-
-	/**
-	 *  Get the camera properties by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getCameraProperties(id: number): CameraProperties {
-		return Data.Base.get(id, this.cameraProperties, 'camera properties');
-	}
-
-	/**
-	 *  Get the detection by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getDetection(id: number): Detection {
-		return Data.Base.get(id, this.detections, 'detections');
-	}
-
-	/**
-	 *  Get the skybox by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getSkybox(id: number): Skybox {
-		return Data.Base.get(id, this.skyboxes, 'skybox');
-	}
-
-	/**
-	 *  Get the font size by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getFontSize(id: number): DynamicValue {
-		return Data.Base.get(id, this.fontSizes, 'font size');
-	}
-
-	/**
-	 *  Get the font name by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getFontName(id: number): FontName {
-		return Data.Base.get(id, this.fontNames, 'font name');
-	}
-
-	/**
-	 *  Get the speed by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getSpeed(id: number): DynamicValue {
-		return Data.Base.get(id, this.speeds, 'speed');
-	}
-
-	/**
-	 *  Get the frequency by ID safely.
-	 *  @static
-	 *  @param {number} id
-	 *  @returns {string}
-	 */
-	static getFrequency(id: number): DynamicValue {
-		return Data.Base.get(id, this.frequencies, 'frequency');
-	}
-
-	/**
-	 *  Get the system object of hero.
-	 *  @static
-	 *  @async
-	 */
-	static getModelHero() {
-		this.modelHero = new MapObject(Data.CommonEvents.heroObject, this.heroMapPosition.toVector3(), true);
-	}
-
-	/**
-	 *  Load the window skins pictures
-	 *  @static
-	 */
-	static async loadWindowSkins() {
-		for (const windowSkin of this.windowSkins.values()) {
-			await windowSkin.updatePicture();
-		}
-	}
-
-	/**
-	 *  Get the default array currencies for a default game.
-	 */
-	static getDefaultCurrencies(): Map<number, number> {
-		return new Map<number, number>(this.currencies.keys().map((id) => [id, 0]));
-	}
-
-	/**
-	 *  Get the current System window skin.
-	 *  @static
-	 *  @returns {SystemWindowSkin}
-	 */
-	static getCurrentWindowSkin(): WindowSkin {
-		return this.dbOptions.v_windowSkin;
-	}
-
-	/**
-	 *  Update the window size and all the canvas sizes.
-	 *  @static
-	 *  @param {number} w
-	 *  @param {number} h
-	 *  @param {boolean} fullscreen
-	 */
-	static updateWindowSize(w: number, h: number, fullscreen: boolean) {
-		if (fullscreen) {
-			w = Platform.screenWidth;
-			h = Platform.screenHeight;
-		}
-		Platform.setWindowSize(w, h, fullscreen);
-		Platform.canvasHUD.width = w;
-		Platform.canvasHUD.height = h;
-		Platform.canvasHUD.style.width = `${w}px`;
-		Platform.canvasHUD.style.height = `${h}px`;
-		Platform.canvas3D.style.width = `${w}px`;
-		Platform.canvas3D.style.height = `${h}px`;
-		Platform.canvasVideos.height = h;
-		ScreenResolution.CANVAS_WIDTH = w;
-		ScreenResolution.CANVAS_HEIGHT = h;
-		ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / ScreenResolution.SCREEN_X;
-		ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / ScreenResolution.SCREEN_Y;
-		Manager.GL.resize();
-		Manager.Stack.requestPaintHUD = true;
-		for (const scene of Manager.Stack.content) {
-			scene.draw3D();
-		}
-	}
-
-	/**
-	 *  Switch between window and fullscreen.
-	 *  @static
-	 */
-	static switchFullscreen() {
-		this.isScreenWindow = !this.isScreenWindow;
-		this.updateWindowSize(this.windowWidth, this.windowHeight, this.isScreenWindow);
-	}
 }
-
-export { Systems };

@@ -11,8 +11,8 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import { Monster } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for Monsters.
@@ -28,17 +28,17 @@ export class Monsters {
 	private static list: Map<number, Monster>;
 
 	/**
+	 * Get the monster by ID.
+	 */
+	static get(id: number): Monster {
+		return Base.get(id, this.list, 'monster');
+	}
+
+	/**
 	 * Read the JSON file associated with monsters.
 	 */
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_MONSTERS)) as MonstersJSON;
 		this.list = Utils.readJSONMap(json.monsters, Monster);
-	}
-
-	/**
-	 * Get the monster by ID.
-	 */
-	static get(id: number): Monster {
-		return Data.Base.get(id, this.list, 'monster');
 	}
 }

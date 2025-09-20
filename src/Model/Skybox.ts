@@ -17,7 +17,7 @@ import { Base } from './Base';
 /**
  * JSON structure describing a skybox.
  */
-type SkyboxJSON = {
+export type SkyboxJSON = {
 	fid?: number;
 	bid?: number;
 	tid?: number;

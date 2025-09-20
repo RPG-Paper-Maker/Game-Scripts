@@ -297,6 +297,17 @@ class Picture extends Base {
 	}
 
 	/**
+	 * Load the picture as a base64 string when not on desktop and not br.
+	 */
+	async checkBase64(): Promise<void> {
+		if (!Platform.IS_DESKTOP && !this.isBR) {
+			this.base64 = await Platform.loadFile(
+				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Picture.getLocalFolder(this.kind)}/${this.name}`
+			);
+		}
+	}
+
+	/**
 	 * Detects left and right transparent borders of a bar image
 	 * and sets `borderLeft` / `borderRight` for scaling purposes.
 	 */

@@ -68,7 +68,6 @@ class Map extends Base {
 	public previousPortion: Portion;
 	public mapPortions: MapPortion[];
 	public textureTileset: THREE.MeshPhongMaterial;
-	public texturesCharacters: THREE.MeshPhongMaterial[];
 	public collisions: Rectangle[][][][];
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
@@ -339,7 +338,6 @@ class Map extends Base {
 					'. Please edit this picture size.'
 			);
 		}
-		this.texturesCharacters = Data.Tilesets.texturesCharacters;
 	}
 
 	/**
@@ -358,7 +356,7 @@ class Map extends Base {
 		this.collisions[PICTURE_KIND.CHARACTERS] = new Array(l);
 		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: Model.Picture;
 		for (let i = 1; i < l; i++) {
-			material = this.texturesCharacters[i];
+			material = Data.Pictures.texturesCharacters.get(i);
 			const texture = Manager.GL.getMaterialTexture(material);
 			if (texture) {
 				image = texture.image;

@@ -68,6 +68,17 @@ export class Video extends Base {
 	}
 
 	/**
+	 * Load the video as a base64 string when not on desktop and not br.
+	 */
+	async checkBase64(): Promise<void> {
+		if (!Platform.IS_DESKTOP && !this.isBR) {
+			this.base64 = await Platform.loadFile(
+				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Video.getLocalFolder()}/${this.name}`
+			);
+		}
+	}
+
+	/**
 	 * Read JSON into this video.
 	 */
 	read(json: VideoJSON): void {

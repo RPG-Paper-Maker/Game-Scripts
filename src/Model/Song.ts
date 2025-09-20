@@ -115,6 +115,17 @@ export class Song extends Base {
 	}
 
 	/**
+	 * Load the song as a base64 string when not on desktop and not br.
+	 */
+	async checkBase64(): Promise<void> {
+		if (!Platform.IS_DESKTOP && !this.isBR) {
+			this.base64 = await Platform.loadFile(
+				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Song.getLocalFolder(this.kind)}/${this.name}`
+			);
+		}
+	}
+
+	/**
 	 * Read the JSON data into this song.
 	 */
 	read(json: SongJSON): void {

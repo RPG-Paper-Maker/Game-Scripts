@@ -11,7 +11,6 @@
 
 import { Paths, Platform, SONG_KIND, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import {
 	BattleMap,
 	DynamicValue,
@@ -23,6 +22,7 @@ import {
 	Statistic,
 	WeaponArmorKind,
 } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for BattleSystems.
@@ -93,47 +93,47 @@ export class BattleSystems {
 
 	/** Get an element by ID. */
 	static getElement(id: number): Element {
-		return Data.Base.get(id, this.elements, 'element');
+		return Base.get(id, this.elements, 'element');
 	}
 
 	/** Get a statistic by ID. */
 	static getStatistic(id: number): Statistic {
-		return Data.Base.get(id, this.statistics, 'statistic');
+		return Base.get(id, this.statistics, 'statistic');
 	}
 
 	/** Get the statistic element by ID. */
 	static getStatisticElement(id: number): number {
-		return Data.Base.get(id, this.statisticsElements, 'statistic element');
+		return Base.get(id, this.statisticsElements, 'statistic element');
 	}
 
 	/** Get the statistic element percent by ID. */
 	static getStatisticElementPercent(id: number): number {
-		return Data.Base.get(id, this.statisticsElementsPercent, 'statistic element percent');
+		return Base.get(id, this.statisticsElementsPercent, 'statistic element percent');
 	}
 
 	/** Get an equipment by ID. */
 	static getEquipment(id: number): Localization {
-		return Data.Base.get(id, this.equipments, 'equipment');
+		return Base.get(id, this.equipments, 'equipment');
 	}
 
 	/** Get a weapon kind by ID. */
 	static getWeaponKind(id: number): WeaponArmorKind {
-		return Data.Base.get(id, this.weaponsKind, 'weapon kind');
+		return Base.get(id, this.weaponsKind, 'weapon kind');
 	}
 
 	/** Get an armor kind by ID. */
 	static getArmorKind(id: number): WeaponArmorKind {
-		return Data.Base.get(id, this.armorsKind, 'armor kind');
+		return Base.get(id, this.armorsKind, 'armor kind');
 	}
 
 	/** Get a battle command by ID. */
 	static getBattleCommand(id: number): number {
-		return Data.Base.get(id, this.battleCommands, 'battle command');
+		return Base.get(id, this.battleCommands, 'battle command');
 	}
 
 	/** Get a battle map by ID. */
 	static getBattleMap(id: number): BattleMap {
-		return Data.Base.get(id, this.battleMaps, 'battle map');
+		return Base.get(id, this.battleMaps, 'battle map');
 	}
 
 	/**

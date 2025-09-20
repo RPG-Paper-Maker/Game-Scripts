@@ -11,8 +11,8 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import { Item } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for Items.
@@ -28,17 +28,17 @@ export class Items {
 	private static list: Map<number, Item>;
 
 	/**
+	 * Get the item by ID.
+	 */
+	static get(id: number): Item {
+		return Base.get(id, this.list, 'item');
+	}
+
+	/**
 	 * Read the JSON file associated with items.
 	 */
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_ITEMS)) as ItemsJSON;
 		this.list = Utils.readJSONMap(json.items, Item);
-	}
-
-	/**
-	 * Get the item by ID.
-	 */
-	static get(id: number): Item {
-		return Data.Base.get(id, this.list, 'item');
 	}
 }

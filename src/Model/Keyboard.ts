@@ -16,6 +16,7 @@ import { Localization, LocalizationJSON } from './Localization';
  */
 export type KeyboardJSON = LocalizationJSON & {
 	id: number;
+	abr: string;
 	sc: string[][];
 };
 

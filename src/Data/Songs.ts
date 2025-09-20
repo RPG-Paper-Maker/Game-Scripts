@@ -10,83 +10,53 @@
 */
 
 import { Paths, Platform, SONG_KIND } from '../Common';
-import { Data } from '../index';
 import { Song, SongJSON } from '../Model';
+import { Base } from './Base';
 
-/** @class
- *   All the songs datas
- *   @static
+/**
+ * JSON structure for Songs.
  */
-class Songs {
-	private static list: Map<number, Map<number, Song>>;
+export type SongsJSON = {
+	list: {
+		k: SONG_KIND;
+		v: SongJSON[];
+	}[];
+};
+
+/**
+ * Handles all song data.
+ */
+export class Songs {
+	private static list: Map<SONG_KIND, Map<number, Song>>;
 
 	/**
-	 *  Read the JSON file associated to songs
+	 * Get a song by kind and ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_SONGS)).list as any;
-		const l = json.length;
+	static get(kind: SONG_KIND, id: number, errorMessage?: string): Song {
+		if (kind === SONG_KIND.NONE || id === -1) {
+			return new Song();
+		}
+		return Base.get(id, this.list.get(kind), `song ${Song.songKindToString(kind)}`, true, errorMessage);
+	}
+
+	/**
+	 * Read the JSON file associated with songs.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_SONGS)) as SongsJSON;
 		this.list = new Map();
-		let i: number,
-			j: number,
-			m: number,
-			n: number,
-			jsonHash: Record<string, any>,
-			k: SONG_KIND,
-			jsonList: SongJSON[],
-			jsonSong: SongJSON,
-			id: number,
-			song: Song;
-		for (i = 0; i < l; i++) {
-			jsonHash = json[i];
-			k = jsonHash.k;
-			jsonList = jsonHash.v;
-
-			// Get the max ID
-			m = jsonList.length;
-			n = 0;
-			for (j = 0; j < m; j++) {
-				jsonSong = jsonList[j];
-				id = jsonSong.id;
-				if (id > n) {
-					n = id;
-				}
-			}
-
-			// Fill the songs list
+		for (const jsonHash of json.list) {
+			const k = jsonHash.k;
+			const jsonList = jsonHash.v;
 			const list = new Map<number, Song>();
-			for (j = 0; j < n + 1; j++) {
-				jsonSong = jsonList[j];
-				if (jsonSong) {
-					id = jsonSong.id;
-					song = new Song(jsonSong);
-					song.kind = k;
-					if (!Platform.IS_DESKTOP && !song.isBR) {
-						song.base64 = await Platform.loadFile(
-							Platform.ROOT_DIRECTORY.slice(0, -1) + Song.getLocalFolder(song.kind) + '/' + song.name
-						);
-					}
-					if (id === -1) {
-						id = 0;
-					}
-					list.set(id, song);
-				}
+			for (const jsonSong of jsonList) {
+				const id = jsonSong.id ?? 0;
+				const song = new Song(jsonSong);
+				song.kind = k;
+				await song.checkBase64();
+				list.set(id, song);
 			}
 			this.list.set(k, list);
 		}
 	}
-
-	/**
-	 *  Get the corresponding song.
-	 *  @param {SONG_KIND} kind - The song kind
-	 *  @param {number} id - The song id
-	 *  @returns {System.Song}
-	 */
-	static get(kind: SONG_KIND, id: number): Song {
-		return kind === SONG_KIND.NONE || id === -1
-			? new Song()
-			: Data.Base.get(id, this.list.get(kind), 'song ' + Song.songKindToString(kind));
-	}
 }
-
-export { Songs };

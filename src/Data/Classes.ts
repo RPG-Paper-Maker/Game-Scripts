@@ -11,8 +11,8 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import { Class } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for Classes.
@@ -28,17 +28,17 @@ export class Classes {
 	private static list: Map<number, Class>;
 
 	/**
+	 * Get the class by ID.
+	 */
+	static get(id: number, errorMessage?: string): Class {
+		return Base.get(id, this.list, 'class', true, errorMessage);
+	}
+
+	/**
 	 * Read the JSON file associated with classes.
 	 */
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_CLASSES)) as ClassesJSON;
 		this.list = Utils.readJSONMap(json.classes, Class);
-	}
-
-	/**
-	 * Get the class by ID.
-	 */
-	static get(id: number, errorMessage?: string): Class {
-		return Data.Base.get(id, this.list, 'class', true, errorMessage);
 	}
 }

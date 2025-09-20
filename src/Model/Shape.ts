@@ -232,6 +232,17 @@ export class Shape extends Base {
 	}
 
 	/**
+	 * Load the shape as a base64 string when not on desktop and not br.
+	 */
+	async checkBase64(): Promise<void> {
+		if (!Platform.IS_DESKTOP && !this.isBR) {
+			this.base64 = await Platform.loadFile(
+				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Shape.getLocalFolder(this.kind)}/${this.name}`
+			);
+		}
+	}
+
+	/**
 	 * Read the JSON associated with the shape.
 	 */
 	read(json: ShapeJSON): void {

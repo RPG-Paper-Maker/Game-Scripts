@@ -13,85 +13,79 @@ import * as THREE from 'three';
 import { Constants, Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
 import { Data, Manager, Scene } from '../index';
-import { Autotile, Mountain, Object3D, Picture, SpecialElement } from '../Model';
+import {
+	Autotile,
+	AutotileJSON,
+	Mountain,
+	MountainJSON,
+	Object3D,
+	Object3DJSON,
+	Picture,
+	SpecialElement,
+	SpecialElementJSON,
+} from '../Model';
+import { Base } from './Base';
 
-/** @class
- *  All the special elements datas.
- *  @static
+/**
+ * JSON structure for special elements data.
  */
-class SpecialElements {
+export type SpecialElementsJSON = {
+	autotiles: AutotileJSON[];
+	walls: SpecialElementJSON[];
+	ms: MountainJSON[];
+	o: Object3DJSON[];
+};
+
+/**
+ * Handles all special element data (autotiles, walls, mountains, objects).
+ */
+export class SpecialElements {
 	private static autotiles: Map<number, Autotile>;
 	private static walls: Map<number, SpecialElement>;
 	private static mountains: Map<number, Mountain>;
 	private static objects: Map<number, Object3D>;
-	public static texturesAutotiles: TextureBundle[][] = [];
-	public static texturesWalls: THREE.MeshPhongMaterial[] = [];
-	public static texturesObjects3D: THREE.MeshPhongMaterial[] = [];
-	public static texturesMountains: TextureBundle[] = [];
-
-	constructor() {
-		throw new Error('This is a static class!');
-	}
+	private static texturesAutotiles: Map<number, TextureBundle[]> = new Map();
+	private static texturesWalls: Map<number, THREE.MeshPhongMaterial> = new Map();
+	private static texturesObjects3D: Map<number, THREE.MeshPhongMaterial> = new Map();
+	private static texturesMountains: Map<number, TextureBundle> = new Map();
 
 	/**
-	 *  Read the JSON file associated to special elements.
-	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS)) as any;
-		this.autotiles = Utils.readJSONMap(json.autotiles, Autotile);
-		this.walls = Utils.readJSONMap(json.walls, SpecialElement);
-		this.mountains = Utils.readJSONMap(json.ms, Mountain);
-		this.objects = Utils.readJSONMap(json.o, Object3D);
-	}
-
-	/**
-	 *  Get the autotile by ID.
-	 *  @param {number} id
-	 *  @returns {System.Autotile}
+	 * Get an autotile by ID.
 	 */
 	static getAutotile(id: number): Autotile {
-		return Data.Base.get(id, this.autotiles, 'autotile');
+		return Base.get(id, this.autotiles, 'autotile');
 	}
 
 	/**
-	 *  Get the wall by ID.
-	 *  @param {number} id
-	 *  @returns {System.SpecialElement}
+	 * Get a wall by ID.
 	 */
 	static getWall(id: number): SpecialElement {
-		return Data.Base.get(id, this.walls, 'wall');
+		return Base.get(id, this.walls, 'wall');
 	}
 
 	/**
-	 *  Get the mountain by ID.
-	 *  @param {number} id
-	 *  @returns {System.Mountain}
+	 * Get a mountain by ID.
 	 */
 	static getMountain(id: number): Mountain {
-		return Data.Base.get(id, this.mountains, 'mountain');
+		return Base.get(id, this.mountains, 'mountain');
 	}
 
 	/**
-	 *  Get the object 3D by ID.
-	 *  @param {number} id
-	 *  @returns {System.Object3D}
+	 * Get an object 3D by ID.
 	 */
 	static getObject3D(id: number): Object3D {
-		return Data.Base.get(id, this.objects, 'object 3D');
+		return Base.get(id, this.objects, 'object 3D');
 	}
 
 	/**
 	 *  Get the max possible offset of an autotile texture.
-	 *  @returns {number}
 	 */
 	static getMaxAutotilesOffsetTexture(): number {
 		return Math.floor(Constants.MAX_PICTURE_SIZE / (9 * Data.Systems.SQUARE_SIZE));
 	}
 
 	/**
-	 *  Get the autotile texture.
-	 *  @param {number} id
-	 *  @returns {Promise<TextureBundle>}
+	 * Load the autotile texture.
 	 */
 	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
 		const autotile = this.getAutotile(id);
@@ -99,14 +93,14 @@ class SpecialElements {
 		if (pictureID === undefined) {
 			pictureID = autotile.pictureID;
 		}
-		let texturesAutotile = this.texturesAutotiles[pictureID];
+		let texturesAutotile = this.texturesAutotiles.get(pictureID);
 		if (texturesAutotile === undefined) {
 			let offset = 0;
 			let result = null;
 			let textureAutotile: TextureBundle = null;
 			let texture = new THREE.Texture();
 			texturesAutotile = [];
-			this.texturesAutotiles[pictureID] = texturesAutotile;
+			this.texturesAutotiles.set(pictureID, texturesAutotile);
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
 			Platform.canvasRendering.width = 64 * Data.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = Constants.MAX_PICTURE_SIZE;
@@ -138,14 +132,9 @@ class SpecialElements {
 		}
 		return texturesAutotile;
 	}
+
 	/**
-	 *  Load an autotile ID and add it to context rendering.
-	 *  @param {TextureBundle} textureAutotile - The autotile several texture
-	 *  @param {THREE.Texture} texture - The texture to paint on
-	 *  @param {System.Picture} picture - The picture to paint
-	 *  @param {number} offset - The offset
-	 *  @param {boolean} isAnimated
-	 *  @returns {any[]}
+	 * Load an autotile ID and add it to context rendering.
 	 */
 	static async loadTextureAutotile(
 		textureAutotile: TextureBundle,
@@ -153,7 +142,7 @@ class SpecialElements {
 		picture: Picture,
 		offset: number,
 		isAnimated: boolean
-	): Promise<any[]> {
+	): Promise<[TextureBundle, THREE.Texture, number]> {
 		const frames = isAnimated ? Data.Systems.autotilesFrames : 1;
 		const picture2D = await Picture2D.create(picture);
 
@@ -177,9 +166,8 @@ class SpecialElements {
 		// Update picture width and height for collisions settings
 		picture.width = width;
 		picture.height = height;
-		let j: number, point: number[], p: number[];
 		for (let i = 0; i < size; i++) {
-			point = [i % width, Math.floor(i / width)];
+			const point = [i % width, Math.floor(i / width)];
 			if (isAnimated) {
 				if (textureAutotile != null) {
 					await this.updateTextureAutotile(textureAutotile, texture, picture.id);
@@ -194,8 +182,8 @@ class SpecialElements {
 				textureAutotile.setBegin(picture.id, point);
 				textureAutotile.isAnimated = isAnimated;
 			}
-			for (j = 0; j < frames; j++) {
-				p = [point[0] * frames + j, point[1]];
+			for (let j = 0; j < frames; j++) {
+				const p = [point[0] * frames + j, point[1]];
 				this.paintPictureAutotile(picture2D.image, offset, p);
 				offset++;
 			}
@@ -213,11 +201,7 @@ class SpecialElements {
 	}
 
 	/**
-	 *  Paint the picture in texture.
-	 *  @param {Image} img - The image to draw
-	 *  @param {number} offset - The offset
-	 *  @param {number[]} point - The in several texture
-	 *  @param {number} id - The autotile id
+	 * Paint the picture in texture (autotiles).
 	 */
 	static paintPictureAutotile(img: HTMLImageElement, offset: number, point: number[]) {
 		let row = -1;
@@ -225,17 +209,16 @@ class SpecialElements {
 		const offsetY = point[1] * 3 * Data.Systems.SQUARE_SIZE;
 		const sDiv = Math.floor(Data.Systems.SQUARE_SIZE / 2);
 		const y = offset * Autotiles.COUNT_LIST * 2;
-		let a: number, b: number, c: number, d: number, count: number, lA: number, lB: number, lC: number, lD: number;
-		for (a = 0; a < Autotiles.COUNT_LIST; a++) {
-			lA = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_A[a]];
-			count = 0;
+		for (let a = 0; a < Autotiles.COUNT_LIST; a++) {
+			const lA = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_A[a]];
+			let count = 0;
 			row++;
-			for (b = 0; b < Autotiles.COUNT_LIST; b++) {
-				lB = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_B[b]];
-				for (c = 0; c < Autotiles.COUNT_LIST; c++) {
-					lC = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_C[c]];
-					for (d = 0; d < Autotiles.COUNT_LIST; d++) {
-						lD = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_D[d]];
+			for (let b = 0; b < Autotiles.COUNT_LIST; b++) {
+				const lB = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_B[b]];
+				for (let c = 0; c < Autotiles.COUNT_LIST; c++) {
+					const lC = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_C[c]];
+					for (let d = 0; d < Autotiles.COUNT_LIST; d++) {
+						const lD = Autotiles.AUTOTILE_BORDER[Autotiles.LIST_D[d]];
 
 						// Draw
 						Platform.ctxr.drawImage(
@@ -294,10 +277,7 @@ class SpecialElements {
 	}
 
 	/**
-	 *  Update texture of a TextureAutotile.
-	 *  @param {TextureBundle} textureAutotile - The autotile several texture
-	 *  @param {THREE.Texture} texture - The texture to paint on
-	 *  @param {number} id - The autotile picture ID
+	 * Update texture of a TextureAutotile.
 	 */
 	static async updateTextureAutotile(textureAutotile: TextureBundle, texture: THREE.Texture, id: number) {
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
@@ -306,13 +286,11 @@ class SpecialElements {
 		textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
 			? Scene.Map.autotilesOffset
 			: new THREE.Vector2();
-		this.texturesAutotiles[id].push(textureAutotile);
+		this.texturesAutotiles.get(id).push(textureAutotile);
 	}
 
 	/**
-	 *  Get the wall texture.
-	 *  @param {number} id
-	 *  @returns {Promise<THREE.MeshPhongMaterial>}
+	 *  Load the wall texture.
 	 */
 	static async loadWallTexture(id: number): Promise<THREE.MeshPhongMaterial> {
 		const wall = this.getWall(id);
@@ -320,7 +298,7 @@ class SpecialElements {
 		if (pictureID === undefined) {
 			pictureID = wall.pictureID;
 		}
-		let textureWall = this.texturesWalls[pictureID];
+		let textureWall = this.texturesWalls.get(pictureID);
 		if (textureWall === undefined) {
 			if (wall) {
 				const picture = Data.Pictures.get(PICTURE_KIND.WALLS, pictureID);
@@ -333,16 +311,13 @@ class SpecialElements {
 			} else {
 				textureWall = Manager.GL.loadTextureEmpty();
 			}
-			this.texturesWalls[pictureID] = textureWall;
+			this.texturesWalls.set(pictureID, textureWall);
 		}
 		return textureWall;
 	}
 
 	/**
 	 *  Load a wall texture.
-	 *  @param {System.Picture} picture - The picture to load
-	 *  @param {number} id - The picture id
-	 *  @returns {THREE.MeshPhongMaterial}
 	 */
 	static async loadTextureWall(picture: Picture, id: number): Promise<THREE.MeshPhongMaterial> {
 		const picture2D = await Picture2D.create(picture);
@@ -382,28 +357,25 @@ class SpecialElements {
 		try {
 			Platform.ctxr.putImageData(left, w, 0);
 			Platform.ctxr.putImageData(right, w + Math.floor(Data.Systems.SQUARE_SIZE / 2), 0);
-		} catch (e) {
+		} catch {
 			Platform.showErrorMessage(
 				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
 			);
 		}
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
 		texture.needsUpdate = true;
-		return Manager.GL.createMaterial({ texture: texture });
+		return Manager.GL.createMaterial({ texture });
 	}
 
 	/**
-	 *  Get the max possible offset of a mountain texture.
-	 *  @returns {number}
+	 * Get the max possible offset of a mountain texture.
 	 */
 	static getMaxMountainOffsetTexture(): number {
 		return Math.floor(Constants.MAX_PICTURE_SIZE / (4 * Data.Systems.SQUARE_SIZE));
 	}
 
 	/**
-	 *  Get the mountain texture.
-	 *  @param {number} id
-	 *  @returns {Promise<TextureBundle>}
+	 * Load the mountain texture.
 	 */
 	static async loadMountainTexture(id: number): Promise<TextureBundle> {
 		const mountain = this.getMountain(id);
@@ -411,22 +383,19 @@ class SpecialElements {
 		if (pictureID === undefined) {
 			pictureID = mountain.pictureID;
 		}
-		let textureMountain = this.texturesMountains[pictureID];
+		let textureMountain = this.texturesMountains.get(pictureID);
 		if (textureMountain === undefined) {
 			textureMountain = null;
 			let offset = 0;
-			let result = null;
 			let texture = new THREE.Texture();
 			Platform.ctxr.clearRect(0, 0, Platform.canvasRendering.width, Platform.canvasRendering.height);
 			Platform.canvasRendering.width = 4 * Data.Systems.SQUARE_SIZE;
 			Platform.canvasRendering.height = 7 * Data.Systems.SQUARE_SIZE;
-			this.texturesMountains = [];
+			this.texturesMountains = new Map();
 			const picture = mountain ? Data.Pictures.get(PICTURE_KIND.MOUNTAINS, pictureID) : null;
-			result = await this.loadTextureMountain(textureMountain, texture, picture, offset, id);
+			const result = await this.loadTextureMountain(textureMountain, texture, picture, offset, id);
 			if (result !== null) {
-				textureMountain = result[0];
-				texture = result[1];
-				offset = result[2];
+				[textureMountain, texture, offset] = result;
 			}
 			if (offset > 0) {
 				await this.updateTextureMountain(textureMountain, texture, pictureID);
@@ -436,13 +405,7 @@ class SpecialElements {
 	}
 
 	/**
-	 *  Load a mountain ID and add it to context rendering
-	 *  @param {TextureBundle} textureMountain - The mountain several texture
-	 *  @param {THREE.Texture} texture - The texture to paint on
-	 *  @param {System.Picture} picture - The picture to paint
-	 *  @param {number} offset - The offset
-	 *  @param {number} id - The picture id
-	 *  @returns {any[]}
+	 * Load a mountain ID and add it to context rendering.
 	 */
 	static async loadTextureMountain(
 		textureMountain: TextureBundle,
@@ -450,7 +413,7 @@ class SpecialElements {
 		picture: Picture,
 		offset: number,
 		id: number
-	): Promise<any[]> {
+	): Promise<[TextureBundle, THREE.Texture, number]> {
 		const picture2D = await Picture2D.create(picture);
 		const width = 3;
 		const height = 3;
@@ -473,9 +436,8 @@ class SpecialElements {
 			picture.width = width;
 			picture.height = height;
 		}
-		let point: number[];
 		for (let i = 0; i < size; i++) {
-			point = [i % width, Math.floor(i / width)];
+			const point = [i % width, Math.floor(i / width)];
 			if (offset === 0 && textureMountain === null) {
 				textureMountain = new TextureBundle();
 				textureMountain.setBegin(picture.id, point);
@@ -498,10 +460,7 @@ class SpecialElements {
 	}
 
 	/**
-	 *  Paint the picture in texture.
-	 *  @param {HTMLImageElement} img - The image to draw
-	 *  @param {number} offset - The offset
-	 *  @param {number} id - The picture id
+	 * Paint the picture in texture (mountains).
 	 */
 	static paintPictureMountain(img: HTMLImageElement, offset: number, id: number) {
 		const y = offset * 4 * Data.Systems.SQUARE_SIZE;
@@ -513,8 +472,7 @@ class SpecialElements {
 
 		// Add left/right autos
 		try {
-			let i: number, l: number;
-			for (i = 0, l = 3; i < l; i++) {
+			for (let i = 0; i < 3; i++) {
 				Platform.ctxr.drawImage(
 					img,
 					0,
@@ -540,7 +498,7 @@ class SpecialElements {
 			}
 
 			// Add top/bot autos
-			for (i = 0, l = 3; i < l; i++) {
+			for (let i = 0; i < 3; i++) {
 				Platform.ctxr.drawImage(
 					img,
 					i * Data.Systems.SQUARE_SIZE,
@@ -602,8 +560,8 @@ class SpecialElements {
 			);
 
 			// Repeated mid (for corners)
-			for (let i = 0, l = 3; i < l; i++) {
-				for (let j = 0, m = 4; j < m; j++) {
+			for (let i = 0; i < 3; i++) {
+				for (let j = 0; j < 4; j++) {
 					Platform.ctxr.drawImage(
 						img,
 						Data.Systems.SQUARE_SIZE,
@@ -617,7 +575,7 @@ class SpecialElements {
 					);
 				}
 			}
-		} catch (e) {
+		} catch {
 			Platform.showErrorMessage(
 				'Error: Wrong mountain (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
 			);
@@ -625,30 +583,25 @@ class SpecialElements {
 	}
 
 	/**
-	 *  Update texture of a TextureSeveral.
-	 *  @param {TextureBundle} textureMountain - The mountain several texture
-	 *  @param {THREE.Texture} texture - The texture to paint on
-	 *  @param {number} id - The picture ID
+	 * Update texture of a TextureMountain.
 	 */
 	static async updateTextureMountain(textureMountain: TextureBundle, texture: THREE.Texture, id: number) {
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
 		texture.needsUpdate = true;
-		textureMountain.material = Manager.GL.createMaterial({ texture: texture, side: THREE.BackSide });
-		this.texturesMountains[id] = textureMountain;
+		textureMountain.material = Manager.GL.createMaterial({ texture, side: THREE.BackSide });
+		this.texturesMountains.set(id, textureMountain);
 	}
 
 	/**
-	 *  Get the wall texture.
-	 *  @param {number} id
-	 *  @returns {Promise<THREE.MeshPhongMaterial>}
-	 */
+	 * Load the 3D object texture.
+	 * */
 	static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongMaterial> {
 		const object3D = this.getObject3D(id);
 		let pictureID = Game.current.textures.objects3D[id];
 		if (pictureID === undefined) {
 			pictureID = object3D.pictureID;
 		}
-		let textureObject3D = this.texturesObjects3D[pictureID];
+		let textureObject3D = this.texturesObjects3D.get(pictureID);
 		if (textureObject3D === undefined) {
 			const picture = Data.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
@@ -657,19 +610,13 @@ class SpecialElements {
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();
 			}
-			this.texturesObjects3D[pictureID] = textureObject3D;
+			this.texturesObjects3D.set(pictureID, textureObject3D);
 		}
 		return textureObject3D;
 	}
 
 	/**
-	 *  Check if a special element picture is in correct format size.
-	 *  @param {string} type The type of special element as a string
-	 *  @param {string} name The name of the picture
-	 *  @param {number} w The picture width
-	 *  @param {number} h The picture height
-	 *  @param {number} cw The excepted width
-	 *  @param {number} ch The excepted height
+	 * Ensures the picture dimensions are correctly aligned with the game grid.
 	 */
 	static checkPictureSize(
 		type: string,
@@ -683,17 +630,26 @@ class SpecialElements {
 	) {
 		const isOKW = strictw ? w === cw : w % cw === 0;
 		const isOKH = stricth ? h === ch : h % ch === 0;
-		let error = 'Wrong ' + type + ' size for ' + name + '. ';
-		if (!isOKW) {
-			error += 'Width should be ' + (strictw ? '' : 'a multiple of ') + cw + " but it's currently " + w + '.';
-		}
-		if (!isOKH) {
-			error += 'Height should be ' + (stricth ? '' : 'a multiple of ') + ch + " but it's currently " + h + '.';
-		}
 		if (!isOKW || !isOKH) {
+			let error = `Wrong ${type} size for ${name}.`;
+			if (!isOKW) {
+				error += ` Width should be ${strictw ? '' : 'a multiple of '}${cw}, but it's currently ${w}.`;
+			}
+			if (!isOKH) {
+				error += ` Height should be ${stricth ? '' : 'a multiple of '}${ch}, but it's currently ${h}.`;
+			}
 			Platform.showErrorMessage(error);
 		}
 	}
-}
 
-export { SpecialElements };
+	/**
+	 *  Read the JSON file associated to special elements.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_SPECIAL_ELEMENTS)) as SpecialElementsJSON;
+		this.autotiles = Utils.readJSONMap(json.autotiles, Autotile);
+		this.walls = Utils.readJSONMap(json.walls, SpecialElement);
+		this.mountains = Utils.readJSONMap(json.ms, Mountain);
+		this.objects = Utils.readJSONMap(json.o, Object3D);
+	}
+}

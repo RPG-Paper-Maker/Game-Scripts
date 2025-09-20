@@ -147,7 +147,7 @@ class ChangeLanguage extends Base {
 					// YES
 					Data.Settings.updateCurrentLanguage(
 						Data.Languages.listIDs[this.windowChoicesMain.currentSelectedIndex]
-					);
+					).catch(console.error);
 					Manager.Stack.translateAll();
 					this.step = 0;
 					Manager.Stack.requestPaintHUD = true;

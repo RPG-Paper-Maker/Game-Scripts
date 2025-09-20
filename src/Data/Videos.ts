@@ -10,39 +10,40 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
-import { Data } from '../index';
-import { Video } from '../Model';
+import { Video, VideoJSON } from '../Model';
+import { Base } from './Base';
 
-/** @class
- *  All the videos datas.
- *  @static
+/**
+ * JSON structure for Videos.
  */
-class Videos {
+export type VideosJSON = {
+	list: VideoJSON[];
+};
+
+/**
+ * Handles all video data.
+ */
+export class Videos {
 	private static list: Map<number, Video>;
 
 	/**
-	 *  Read the JSON file associated to videos
+	 * Get a video by ID.
 	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)).list as any;
-		this.list = Utils.readJSONMap(json, Video);
-		if (!Platform.IS_DESKTOP) {
-			for (const video of this.list.values()) {
-				video.base64 = await Platform.loadFile(
-					Platform.ROOT_DIRECTORY.slice(0, -1) + Video.getLocalFolder() + '/' + video.name
-				);
-			}
+	static get(id: number, errorMessage?: string): Video {
+		if (id === -1) {
+			return new Video();
 		}
+		return Base.get(id, this.list, 'video', true, errorMessage);
 	}
 
 	/**
-	 *  Get the corresponding video.
-	 *  @param {number} id
-	 *  @returns {System.Video}
+	 * Read the JSON file associated with videos.
 	 */
-	static get(id: number): Video {
-		return id === -1 ? new Video() : Data.Base.get(id, this.list, 'video');
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)) as VideosJSON;
+		this.list = Utils.readJSONMap(json.list, Video);
+		for (const video of this.list.values()) {
+			await video.checkBase64();
+		}
 	}
 }
-
-export { Videos };

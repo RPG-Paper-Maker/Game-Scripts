@@ -155,7 +155,7 @@ class Battler {
 		} else {
 			// Copy original material because there will be individual color
 			// changes
-			const originalMaterial = Data.Tilesets.texturesBattlers[idBattler];
+			const originalMaterial = Data.Pictures.texturesBattlers.get(idBattler);
 			const texture = Manager.GL.getMaterialTexture(originalMaterial);
 			const copiedTexture = texture.clone();
 			const material = Manager.GL.createMaterial({

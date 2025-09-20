@@ -9,82 +9,77 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Data } from '..';
 import { IO, Paths, Platform, TITLE_SETTING_KIND, Utils } from '../Common';
+import { Languages } from './Languages';
 
-/** @class
- *  All the settings datas.
- *  @static
+/**
+ * JSON structure for the settings file.
  */
-class Settings {
-	public static kb: string[][][];
+export type SettingsJSON = {
+	[TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT]: {
+		[id: number]: string[][];
+	};
+	[TITLE_SETTING_KIND.LANGUAGE]: number;
+};
+
+/**
+ * Handles all application settings.
+ */
+export class Settings {
+	public static kb: Map<number, string[][]>;
 	public static currentLanguage: number;
 	public static isProtected: boolean;
 
-	constructor() {
-		throw new Error('This is a static class!');
-	}
-
 	/**
-	 *  Read the settings file.
-	 *  @static
+	 * Check if the app is in protected (dev) mode.
 	 */
-	static async read() {
-		// Settings
-		const json = (await Platform.parseFileJSON(Paths.FILE_SETTINGS)) as any;
-		this.kb = [];
-		const jsonObjs = json[String(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)];
-		for (const id in jsonObjs) {
-			this.kb[id] = jsonObjs[id];
-		}
-		this.currentLanguage = Utils.valueOrDefault(
-			json[String(TITLE_SETTING_KIND.LANGUAGE)],
-			Data.Languages.getMainLanguageID()
-		);
-	}
-
-	/**
-	 *  Write the settings file.
-	 *  @static
-	 */
-	static write() {
-		const json = {};
-		const jsonObjs = {};
-		for (const id in this.kb) {
-			jsonObjs[id] = this.kb[id];
-		}
-		json[String(TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT)] = jsonObjs;
-		json[String(TITLE_SETTING_KIND.LANGUAGE)] = this.currentLanguage;
-		IO.saveFile(Paths.FILE_SETTINGS, json);
-	}
-
-	/**
-	 *  Check if the app is in dev mode
-	 *  @static
-	 */
-	static async checkIsProtected() {
+	static async checkIsProtected(): Promise<void> {
 		this.isProtected = await Platform.fileExists(Paths.FILE_PROTECT);
 	}
 
 	/**
-	 *  Update Keyboard settings.
-	 *  @param {number} id
-	 *  @param {string[][]} sc -
-	 *  @static
+	 * Update keyboard settings for a given ID.
+	 * @param id - Keyboard ID
+	 * @param sc - Shortcuts array
 	 */
-	static updateKeyboard(id: number, sc: string[][]) {
-		this.kb[id] = sc;
-		this.write();
+	static async updateKeyboard(id: number, sc: string[][]): Promise<void> {
+		this.kb.set(id, sc);
+		await this.save();
 	}
 
 	/**
-	 *  Update current language setting.
-	 *  @param {number} id
+	 * Update the current language.
+	 * @param id - Language ID
 	 */
-	static updateCurrentLanguage(id: number) {
+	static async updateCurrentLanguage(id: number): Promise<void> {
 		this.currentLanguage = id;
-		this.write();
+		await this.save();
+	}
+
+	/**
+	 * Read the settings file.
+	 */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_SETTINGS)) as SettingsJSON;
+		this.kb = new Map();
+		const jsonObjs = json[TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT];
+		for (const id in jsonObjs) {
+			this.kb.set(Number(id), jsonObjs[id]);
+		}
+		this.currentLanguage = Utils.valueOrDefault(json[TITLE_SETTING_KIND.LANGUAGE], Languages.getMainLanguageID());
+	}
+
+	/**
+	 *  Write the settings file.
+	 */
+	static async save(): Promise<void> {
+		const json = {};
+		const jsonObjs = {};
+		for (const [id, value] of this.kb.entries()) {
+			jsonObjs[id] = value;
+		}
+		json[TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT] = jsonObjs;
+		json[TITLE_SETTING_KIND.LANGUAGE] = this.currentLanguage;
+		await IO.saveFile(Paths.FILE_SETTINGS, json);
 	}
 }
-
-export { Settings };

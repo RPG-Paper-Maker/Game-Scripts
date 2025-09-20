@@ -11,8 +11,8 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import { Troop } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for Troops.
@@ -28,17 +28,17 @@ export class Troops {
 	private static list: Map<number, Troop>;
 
 	/**
+	 * Get the troop by ID.
+	 */
+	static get(id: number): Troop {
+		return Base.get(id, this.list, 'troop');
+	}
+
+	/**
 	 * Read the JSON file associated with troops.
 	 */
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_TROOPS)) as TroopsJSON;
 		this.list = Utils.readJSONMap(json.troops, Troop);
-	}
-
-	/**
-	 * Get the troop by ID.
-	 */
-	static get(id: number): Troop {
-		return Data.Base.get(id, this.list, 'troop');
 	}
 }

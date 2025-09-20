@@ -10,57 +10,116 @@
 */
 
 import { ALIGN, Paths, Platform, SONG_KIND, TITLE_SETTING_KIND, Utils } from '../Common';
-import { Data, Graphic, Manager, Model, Scene } from '../index';
+import { Graphic, Manager, Scene } from '../index';
+import { GameOverCommand, GameOverCommandJSON, PlaySong, PlaySongJSON, TitleCommand, TitleCommandJSON } from '../Model';
 
-/** @class
- *  All the titlescreen and gameover datas.
- *  @static
+/**
+ * JSON structure for title screen and game over.
  */
-class TitlescreenGameover {
+export type TitlescreenGameoverJSON = {
+	itbi: boolean;
+	tb: number;
+	tbv: number;
+	tm: PlaySongJSON;
+	tc: TitleCommandJSON[];
+	ts: { id?: number; checked?: boolean }[];
+	isGameOverBackgroundImage: boolean;
+	gameOverBackgroundImage: number;
+	gameOverBackgroundVideo: number;
+	gameOverMusic: PlaySongJSON;
+	gameOverCommands: GameOverCommandJSON[];
+};
+
+/**
+ * All the title screen and game over data.
+ */
+export class TitlescreenGameover {
 	public static isTitleBackgroundImage: boolean;
 	public static titleBackgroundImageID: number;
 	public static titleBackgroundVideoID: number;
-	public static titleMusic: Model.PlaySong;
-	public static titleCommands: Model.TitleCommand[];
+	public static titleMusic: PlaySong;
+	public static titleCommands: TitleCommand[];
 	public static titleSettings: number[];
 	public static isGameOverBackgroundImage: boolean;
 	public static gameOverBackgroundImageID: number;
 	public static gameOverBackgroundVideoID: number;
-	public static gameOverMusic: Model.PlaySong;
-	public static gameOverCommands: Model.GameOverCommand[];
+	public static gameOverMusic: PlaySong;
+	public static gameOverCommands: GameOverCommand[];
 
-	constructor() {
-		throw new Error('This is a static class!');
+	/** Get title screen command graphics. */
+	static getTitleCommandsNames(): Graphic.Text[] {
+		return this.titleCommands.map((cmd) => {
+			const text = new Graphic.Text(cmd.name(), { align: ALIGN.CENTER });
+			text.datas = cmd;
+			return text;
+		});
 	}
 
-	/**
-	 *  Read the JSON file associated to title screen and game over.
-	 *  @static
-	 *  @async
-	 */
-	static async read() {
-		const json = (await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER)) as any;
+	/** Get title screen command actions. */
+	static getTitleCommandsActions(): (() => boolean)[] {
+		return this.titleCommands.map((cmd) => cmd.getAction());
+	}
+
+	/** Get title screen setting command graphics. */
+	static getTitleSettingsCommandsContent(): Graphic.Setting[] {
+		return this.titleSettings.map((id) => new Graphic.Setting(id));
+	}
+
+	/** Get title screen setting command actions. */
+	static getTitleSettingsCommandsActions(): (() => boolean)[] {
+		return this.titleSettings.map((id) => this.getTitleSettingsCommandsAction(id));
+	}
+
+	/** Get action for a specific title setting. */
+	static getTitleSettingsCommandsAction(id: number): () => boolean {
+		switch (id) {
+			case TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT:
+				return this.keyboardAssignment;
+			case TITLE_SETTING_KIND.LANGUAGE:
+				return this.language;
+		}
+	}
+
+	/** Setting action: open keyboard assignment. */
+	static keyboardAssignment(): boolean {
+		Manager.Stack.push(new Scene.KeyboardAssign());
+		return true;
+	}
+
+	/** Setting action: open language selection. */
+	static language(): boolean {
+		Manager.Stack.push(new Scene.ChangeLanguage());
+		return true;
+	}
+
+	/** Get game over command graphics. */
+	static getGameOverCommandsNames(): Graphic.Text[] {
+		return this.gameOverCommands.map((cmd) => {
+			const text = new Graphic.Text(cmd.name(), { align: ALIGN.CENTER });
+			text.datas = cmd;
+			return text;
+		});
+	}
+
+	/** Get game over command actions. */
+	static getGameOverCommandsActions(): (() => boolean)[] {
+		return this.gameOverCommands.map((cmd) => cmd.getAction());
+	}
+
+	/** Read the JSON file associated with title screen and game over. */
+	static async read(): Promise<void> {
+		const json = (await Platform.parseFileJSON(Paths.FILE_TITLE_SCREEN_GAME_OVER)) as TitlescreenGameoverJSON;
 
 		// Title screen
 		this.isTitleBackgroundImage = Utils.valueOrDefault(json.itbi, true);
 		this.titleBackgroundImageID = Utils.valueOrDefault(json.tb, 1);
 		this.titleBackgroundVideoID = Utils.valueOrDefault(json.tbv, 1);
-		this.titleMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.tm);
-		this.titleCommands = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.tc, []),
-			listIndexes: this.titleCommands,
-			cons: Model.TitleCommand,
-		});
-		const jsonList = json.ts;
-		const l = jsonList.length;
+		this.titleMusic = new PlaySong(SONG_KIND.MUSIC, json.tm);
+		this.titleCommands = Utils.readJSONList(json.tc, TitleCommand);
 		this.titleSettings = [];
-		let obj: Record<string, any>;
-		for (let i = 0, j = 0; i < l; i++) {
-			obj = jsonList[i];
+		for (const obj of json.ts) {
 			if (Utils.valueOrDefault(obj.checked, true)) {
-				this.titleSettings[j] = obj.id ?? 0;
-				j++;
+				this.titleSettings.push(obj.id ?? 0);
 			}
 		}
 
@@ -68,141 +127,7 @@ class TitlescreenGameover {
 		this.isGameOverBackgroundImage = Utils.valueOrDefault(json.isGameOverBackgroundImage, true);
 		this.gameOverBackgroundImageID = Utils.valueOrDefault(json.gameOverBackgroundImage, 1);
 		this.gameOverBackgroundVideoID = Utils.valueOrDefault(json.gameOverBackgroundVideo, 1);
-		this.gameOverMusic = new Model.PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
-		this.gameOverCommands = [];
-		Utils.readJSONSystemList({
-			list: Utils.valueOrDefault(json.gameOverCommands, []),
-			listIndexes: this.gameOverCommands,
-			cons: Model.GameOverCommand,
-		});
-	}
-
-	/**
-	 *  Get the title screen commands graphic names.
-	 *  @static
-	 *  @returns {Graphic.Text[]}
-	 */
-	static getTitleCommandsNames(): Graphic.Text[] {
-		const l = this.titleCommands.length;
-		const list = new Array(l);
-		let titleCommand: Model.TitleCommand, obj: Graphic.Text;
-		for (let i = 0; i < l; i++) {
-			titleCommand = this.titleCommands[i];
-			obj = new Graphic.Text(titleCommand.name(), { align: ALIGN.CENTER });
-			obj.datas = titleCommand;
-			list[i] = obj;
-		}
-		return list;
-	}
-
-	/**
-	 *  Get the title screen commands actions functions.
-	 *  @static
-	 *  @returns {function[]}
-	 */
-	static getTitleCommandsActions(): Function[] {
-		const l = this.titleCommands.length;
-		const list = new Array(l);
-		for (let i = 0; i < l; i++) {
-			list[i] = this.titleCommands[i].getAction();
-		}
-		return list;
-	}
-
-	/**
-	 *  Get the title screen commands settings content graphic.
-	 *  @static
-	 *  @returns {Graphic.Setting[]}
-	 */
-	static getTitleSettingsCommandsContent(): Graphic.Setting[] {
-		const l = this.titleSettings.length;
-		const list = new Array(l);
-		for (let i = 0; i < l; i++) {
-			list[i] = new Graphic.Setting(this.titleSettings[i]);
-		}
-		return list;
-	}
-
-	/**
-	 *  Get the title screen settings commands actions functions.
-	 *  @static
-	 *  @returns {function[]}
-	 */
-	static getTitleSettingsCommandsActions(): Function[] {
-		const l = this.titleSettings.length;
-		const list = new Array(l);
-		for (let i = 0; i < l; i++) {
-			list[i] = this.getTitleSettingsCommandsAction(this.titleSettings[i]);
-		}
-		return list;
-	}
-
-	/**
-	 *  Get the title screen settings commands action function according to ID.
-	 *  @static
-	 *  @param {number} id - The action ID
-	 *  @returns {function}
-	 */
-	static getTitleSettingsCommandsAction(id: number): Function {
-		switch (id) {
-			case TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT:
-				return Data.TitlescreenGameover.keyboardAssignment;
-			case TITLE_SETTING_KIND.LANGUAGE:
-				return Data.TitlescreenGameover.language;
-		}
-	}
-
-	/**
-	 *  Get the game over commands graphic names.
-	 *  @static
-	 *  @returns {Graphic.Text[]}
-	 */
-	static getGameOverCommandsNames(): Graphic.Text[] {
-		const l = this.gameOverCommands.length;
-		const list = new Array(l);
-		let command: Model.GameOverCommand, obj: Graphic.Text;
-		for (let i = 0; i < l; i++) {
-			command = this.gameOverCommands[i];
-			obj = new Graphic.Text(command.name(), { align: ALIGN.CENTER });
-			obj.datas = command;
-			list[i] = obj;
-		}
-		return list;
-	}
-
-	/**
-	 *  Get the game over commands actions functions.
-	 *  @static
-	 *  @returns {function[]}
-	 */
-	static getGameOverCommandsActions(): Function[] {
-		const l = this.gameOverCommands.length;
-		const list = new Array(l);
-		for (let i = 0; i < l; i++) {
-			list[i] = this.gameOverCommands[i].getAction();
-		}
-		return list;
-	}
-
-	/**
-	 *  The setting action keyboard assignment.
-	 *  @static
-	 *  @returns {boolean}
-	 */
-	static keyboardAssignment(): boolean {
-		Manager.Stack.push(new Scene.KeyboardAssign());
-		return true;
-	}
-
-	/**
-	 *  The setting action language.
-	 *  @static
-	 *  @returns {boolean}
-	 */
-	static language(): boolean {
-		Manager.Stack.push(new Scene.ChangeLanguage());
-		return true;
+		this.gameOverMusic = new PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
+		this.gameOverCommands = Utils.readJSONList(json.gameOverCommands, GameOverCommand);
 	}
 }
-
-export { TitlescreenGameover };

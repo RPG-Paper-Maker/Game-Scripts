@@ -541,7 +541,7 @@ class MapObject {
 				material =
 					this.currentStateInstance.graphicID === 0
 						? Scene.Map.current.textureTileset
-						: Scene.Map.current.texturesCharacters[this.currentStateInstance.graphicID];
+						: Data.Pictures.texturesCharacters.get(this.currentStateInstance.graphicID);
 			}
 		}
 		if (material && this.isHero) {
@@ -1589,7 +1589,7 @@ class MapObject {
 			this.mesh.material =
 				this.currentStateInstance.graphicID === 0
 					? Scene.Map.current.textureTileset
-					: Scene.Map.current.texturesCharacters[this.currentStateInstance.graphicID];
+					: Data.Pictures.texturesCharacters.get(this.currentStateInstance.graphicID);
 		} else {
 			this.mesh = null;
 		}

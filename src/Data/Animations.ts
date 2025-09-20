@@ -11,8 +11,8 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import { Animation } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for Animations.
@@ -28,17 +28,17 @@ export class Animations {
 	private static list: Map<number, Animation>;
 
 	/**
+	 *  Get the animation by ID.
+	 */
+	static get(id: number): Animation {
+		return Base.get(id, this.list, 'animation');
+	}
+
+	/**
 	 * Read the JSON file associated with animations.
 	 */
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_ANIMATIONS)) as AnimationsJSON;
 		this.list = Utils.readJSONMap(json.animations, Animation);
-	}
-
-	/**
-	 *  Get the animation by ID.
-	 */
-	static get(id: number): Animation {
-		return Data.Base.get(id, this.list, 'animation');
 	}
 }

@@ -30,6 +30,7 @@ export type MapObjectJSON = {
 	states?: StateJSON[];
 	p?: PropertyJSON[];
 	events?: EventJSON[];
+	stocked?: boolean; // No in engine, used for reordering purposes
 };
 
 /**

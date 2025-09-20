@@ -11,8 +11,8 @@
 
 import { Paths, Platform, Utils } from '../Common';
 import { JsonType } from '../Common/Types';
-import { Data } from '../index';
 import { Skill } from '../Model';
+import { Base } from './Base';
 
 /**
  * JSON structure for Skills.
@@ -28,17 +28,17 @@ export class Skills {
 	private static list: Map<number, Skill>;
 
 	/**
+	 * Get the skill by ID.
+	 */
+	static get(id: number): Skill {
+		return Base.get(id, this.list, 'skill');
+	}
+
+	/**
 	 * Read the JSON file associated with skills.
 	 */
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SKILLS)) as SkillsJSON;
 		this.list = Utils.readJSONMap(json.skills, Skill);
-	}
-
-	/**
-	 * Get the skill by ID.
-	 */
-	static get(id: number): Skill {
-		return Data.Base.get(id, this.list, 'skill');
 	}
 }
