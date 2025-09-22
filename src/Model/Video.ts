@@ -45,7 +45,7 @@ export class Video extends Base {
 	 */
 	static getFolder(isBR: boolean, dlc: string): string {
 		return (
-			(isBR ? Data.Systems.PATH_BR : dlc ? `${Data.Systems.PATH_DLCS}/${dlc}` : Platform.ROOT_DIRECTORY) +
+			(isBR ? Data.Systems.PATH_BR + '/' : dlc ? `${Data.Systems.PATH_DLCS}/${dlc}/` : Platform.ROOT_DIRECTORY) +
 			this.getLocalFolder()
 		);
 	}
@@ -71,7 +71,7 @@ export class Video extends Base {
 	 * Load the video as a base64 string when not on desktop and not br.
 	 */
 	async checkBase64(): Promise<void> {
-		if (!Platform.IS_DESKTOP && !this.isBR) {
+		if (!Platform.IS_DESKTOP && !this.isBR && Platform.WEB_DEV) {
 			this.base64 = await Platform.loadFile(
 				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Video.getLocalFolder()}/${this.name}`
 			);

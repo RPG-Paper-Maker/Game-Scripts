@@ -73,11 +73,11 @@ export class Paths {
 	// -------------------------------------------------------------------------
 
 	// Media types
-	static readonly PICTURES = '/Images';
-	static readonly VIDEOS = '/Videos';
-	static readonly FONTS = '/Fonts';
-	static readonly SONGS = '/Songs/';
-	static readonly SHAPES = '/Shapes/';
+	static readonly PICTURES = 'Images';
+	static readonly VIDEOS = 'Videos';
+	static readonly FONTS = 'Fonts';
+	static readonly SONGS = 'Songs/';
+	static readonly SHAPES = 'Shapes/';
 
 	// HUD and UI
 	static readonly HUD = Paths.PICTURES + '/HUD/';
@@ -119,7 +119,11 @@ export class Paths {
 
 	/** Base path for game scripts (adjusted for web builds). */
 	static readonly SCRIPTS =
-		(Platform.WEB_DEV && !Platform.IS_DESKTOP ? '.' + window.location.pathname : '') + 'Scripts/';
+		(Platform.WEB_DEV && !Platform.IS_DESKTOP
+			? '.' + window.location.pathname
+			: Platform.IS_DESKTOP
+			? ''
+			: Platform.ROOT_DIRECTORY) + 'Scripts/';
 	static readonly PLUGINS = Platform.ROOT_DIRECTORY + 'Plugins/';
 	static readonly SHADERS = Paths.SCRIPTS + 'Shaders/';
 	static readonly SAVES = Platform.ROOT_DIRECTORY + 'Saves';
