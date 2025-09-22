@@ -146,9 +146,9 @@ class Game {
 		);
 
 		// Currencies
-		this.currencies = Utils.arrayToMap(json.cur);
-		this.currenciesEarned = Utils.arrayToMap(json.cure);
-		this.currenciesUsed = Utils.arrayToMap(json.curu);
+		this.currencies = Utils.arrayToMap(json.cur, true);
+		this.currenciesEarned = Utils.arrayToMap(json.cure, true);
+		this.currenciesUsed = Utils.arrayToMap(json.curu, true);
 
 		// Heroes
 		this.teamHeroes = Utils.readJSONList(

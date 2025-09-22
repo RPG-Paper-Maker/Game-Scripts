@@ -172,8 +172,9 @@ export class Utils {
 	 * @param array - The array to convert.
 	 * @returns A map where each value from the array is mapped to its index + 1.
 	 */
-	public static arrayToMap<T>(array: T[]): Map<number, T> {
-		return new Map(array.map((value, index) => [index + 1, value]));
+	public static arrayToMap<T>(array: T[], removeFirst = false): Map<number, T> {
+		const arr = removeFirst ? array.slice(1) : array;
+		return new Map(arr.map((value, index) => [index + 1, value]));
 	}
 
 	/**
