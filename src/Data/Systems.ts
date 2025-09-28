@@ -69,6 +69,7 @@ export type SystemsJSON = {
 	saveSlots?: number;
 	priceSoldItem?: DynamicValueJSON;
 	pathBR?: string;
+	pathDLCS?: string;
 	idMapHero?: number;
 	hmp?: number[];
 	bb?: boolean;
@@ -354,7 +355,7 @@ export class Systems {
 		this.PATH_BR = Platform.WEB_DEV ? './BR' : Paths.FILES + json.pathBR;
 
 		// Path DLC
-		this.PATH_DLCS = Paths.FILES + (await Platform.parseFileJSON(Paths.FILE_DLCS)).p;
+		this.PATH_DLCS = Paths.FILES + json.pathDLCS;
 
 		// Hero beginning
 		this.ID_MAP_START_HERO = json.idMapHero;

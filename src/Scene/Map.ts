@@ -352,21 +352,19 @@ class Map extends Base {
 
 		// Characters
 		const pictures = Data.Pictures.getListByKind(PICTURE_KIND.CHARACTERS);
-		const l = pictures.size;
-		this.collisions[PICTURE_KIND.CHARACTERS] = new Array(l);
-		let material: THREE.MeshPhongMaterial, image: HTMLImageElement, p: Model.Picture;
-		for (let i = 1; i < l; i++) {
-			material = Data.Pictures.texturesCharacters.get(i);
+		this.collisions[PICTURE_KIND.CHARACTERS] = [];
+		for (const [id, p] of pictures.entries()) {
+			const material = Data.Pictures.texturesCharacters.get(id);
 			const texture = Manager.GL.getMaterialTexture(material);
+			let image: HTMLImageElement;
 			if (texture) {
 				image = texture.image;
 			}
-			p = pictures.get(i);
 			if (p) {
 				p.readCollisionsImage(image);
-				this.collisions[PICTURE_KIND.CHARACTERS][i] = p.getSquaresForStates(image);
+				this.collisions[PICTURE_KIND.CHARACTERS][id] = p.getSquaresForStates(image);
 			} else {
-				this.collisions[PICTURE_KIND.CHARACTERS][i] = null;
+				this.collisions[PICTURE_KIND.CHARACTERS][id] = null;
 			}
 		}
 	}
