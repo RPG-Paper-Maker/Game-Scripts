@@ -62,13 +62,15 @@ function createWindow() {
 	window.removeMenu();
 }
 
-app.whenReady()
-	.then(() =>
-		globalShortcut.register('Alt+CommandOrControl+I', () => {
+app.whenReady().then(() => {
+	const shortcuts = ['CommandOrControl+Alt+I', 'CommandOrControl+Shift+I'];
+	for (const shortcut of shortcuts) {
+		globalShortcut.register(shortcut, () => {
 			window.openDevTools({ mode: 'undocked' });
-		})
-	)
-	.then(createWindow);
+		});
+	}
+	createWindow();
+});
 
 app.on('window-all-closed', () => {
 	app.quit();
