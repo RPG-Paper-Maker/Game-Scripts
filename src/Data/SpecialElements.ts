@@ -282,7 +282,7 @@ export class SpecialElements {
 	static async updateTextureAutotile(textureAutotile: TextureBundle, texture: THREE.Texture, id: number) {
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
 		texture.needsUpdate = true;
-		textureAutotile.material = Manager.GL.createMaterial({ texture: texture });
+		textureAutotile.material = Manager.GL.createMaterial({ texture });
 		textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
 			? Scene.Map.autotilesOffset
 			: new THREE.Vector2();

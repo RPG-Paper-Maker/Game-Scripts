@@ -22,8 +22,6 @@ import { Stack } from './Stack';
 class GL {
 	public static SHADER_FIX_VERTEX: string;
 	public static SHADER_FIX_FRAGMENT: string;
-	public static SHADER_FACE_VERTEX: string;
-	public static SHADER_FACE_FRAGMENT: string;
 	public static renderer: THREE.WebGLRenderer;
 	public static textureLoader = new THREE.TextureLoader();
 	public static raycaster = new THREE.Raycaster();
@@ -59,10 +57,6 @@ class GL {
 		this.SHADER_FIX_VERTEX = json;
 		json = await Platform.loadFile(Paths.SHADERS + 'default.frag', true);
 		this.SHADER_FIX_FRAGMENT = json;
-		json = await Platform.loadFile(Paths.SHADERS + 'default.vert', true);
-		this.SHADER_FACE_VERTEX = json;
-		json = await Platform.loadFile(Paths.SHADERS + 'default.frag', true);
-		this.SHADER_FACE_FRAGMENT = json;
 	}
 
 	/**
