@@ -89,7 +89,7 @@ class SendEvent extends Base {
 			this.targetID ? (this.targetID.getValue() as number) : -1,
 			this.isSystem,
 			this.eventID,
-			Utils.arrayToMap(Model.DynamicValue.mapWithParametersProperties(this.parameters)),
+			Utils.arrayToMap(Model.DynamicValue.mapWithParametersProperties(this.parameters), true),
 			this.senderNoReceiver,
 			this.onlyTheClosest
 		);

@@ -77,7 +77,7 @@ class CallACommonReaction extends Base {
 				Data.CommonEvents.getCommonReaction(this.commonReactionID),
 				object,
 				state,
-				Utils.arrayToMap(parameters)
+				Utils.arrayToMap(parameters, true)
 			);
 		}
 		const previousBlocking = ReactionInterpreter.blockingHero;

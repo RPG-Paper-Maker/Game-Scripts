@@ -166,6 +166,7 @@ class GL {
 			alphaTest: 0.5,
 			opacity: opts.opacity,
 			shininess: 0,
+			specular: new THREE.Color(0x000000),
 		});
 		material.userData.uniforms = uniforms;
 		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({

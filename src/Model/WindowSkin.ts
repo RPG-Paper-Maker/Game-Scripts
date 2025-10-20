@@ -90,8 +90,8 @@ export class WindowSkin extends Base {
 		positionResize = true
 	): void {
 		this.picture.draw({
-			x: x,
-			y: y,
+			x,
+			y,
 			w: w * zoom,
 			h: h * zoom,
 			sx: r.x,
