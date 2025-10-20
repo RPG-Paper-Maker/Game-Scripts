@@ -42,6 +42,7 @@ export class HeroTroopBattleTest extends Base {
 		for (const equipment of this.equipments) {
 			equipment.equip(player);
 		}
+		player.updateAllStatsValues();
 	}
 
 	/**
