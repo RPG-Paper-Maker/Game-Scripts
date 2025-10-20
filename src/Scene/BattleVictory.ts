@@ -160,11 +160,11 @@ class BattleVictory {
 			const list = player.getRewardLoots();
 			for (j = 0, m = list.length; j < m; j++) {
 				const loots = list[j];
-				for (const [id] of loots.entries()) {
+				for (const [id, value] of loots.entries()) {
 					if (this.battle.loots[j].hasOwnProperty(id)) {
-						this.battle.loots[j][id].nb += loots[id].nb;
+						this.battle.loots[j][id].nb += value.nb;
 					} else {
-						this.battle.loots[j][id] = loots[id];
+						this.battle.loots[j][id] = value;
 						this.battle.lootsNumber++;
 					}
 				}
@@ -347,7 +347,7 @@ class BattleVictory {
 
 				// Transition None
 				if (this.battle.transitionEnd === 0) {
-					this.battle.sceneMap.updateBackgroundColor();
+					this.battle.sceneMap?.updateBackgroundColor();
 				}
 
 				// Transition zoom
