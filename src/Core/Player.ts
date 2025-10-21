@@ -605,9 +605,7 @@ class Player {
 	 */
 	updateStatValue(statistic: Model.Statistic, value: number) {
 		const abr = statistic.isFix ? statistic.abbreviation : statistic.getMaxAbbreviation();
-		if (this[statistic.getBeforeAbbreviation()] !== undefined) {
-			this[statistic.getBeforeAbbreviation()] = this[abr];
-		}
+		this[statistic.getBeforeAbbreviation()] = this[abr];
 		this[abr] = value;
 		this[statistic.getBonusAbbreviation()] = 0;
 	}
