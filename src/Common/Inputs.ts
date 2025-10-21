@@ -114,7 +114,7 @@ export class Inputs {
 		if (!this.isReady()) {
 			return;
 		}
-		const key = event.key;
+		const key = event.key.toUpperCase();
 
 		// Fullscreen toggle
 		if (key === 'F4' || (event.code === 'Enter' && (event.altKey || event.shiftKey))) {
@@ -143,7 +143,7 @@ export class Inputs {
 	 */
 	private static onKeyUp(event: KeyboardEvent) {
 		if (this.isReady()) {
-			const key = event.key;
+			const key = event.key.toUpperCase();
 			this.keysPressed.delete(key);
 			this.lockedKeys.delete(key);
 			Manager.Stack.onKeyReleased(key);
