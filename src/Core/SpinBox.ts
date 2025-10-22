@@ -244,8 +244,8 @@ class SpinBox extends Bitmap {
 			this.isMouseInArrowDown = false;
 			this.isMouseInArrowUp = false;
 			const ws = Data.Systems.getCurrentWindowSkin();
-			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
-			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3]);
+			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown.width);
+			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown.height);
 			if (this.value < this.max) {
 				const rect = new Rectangle(
 					this.x + (this.w - arrowWidth) / 2,
@@ -279,10 +279,10 @@ class SpinBox extends Bitmap {
 		if (this.active) {
 			const ws = Data.Systems.getCurrentWindowSkin();
 			if (this.value < this.max) {
-				ws.drawArrowUp(this.oX + (this.oW - ws.arrowUpDown[2]) / 2, this.oY - ws.arrowUpDown[3] / 2 - 1);
+				ws.drawArrowUp(this.oX + (this.oW - ws.arrowUpDown.height) / 2, this.oY - ws.arrowUpDown.width / 2 - 1);
 			}
 			if (this.value > this.min) {
-				ws.drawArrowDown(this.oX + (this.oW - ws.arrowUpDown[2]) / 2, this.oY + this.oH + 1);
+				ws.drawArrowDown(this.oX + (this.oW - ws.arrowUpDown.height) / 2, this.oY + this.oH + 1);
 			}
 		}
 	}

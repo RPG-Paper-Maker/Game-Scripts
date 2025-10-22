@@ -549,8 +549,8 @@ class WindowChoices extends Bitmap {
 			// If on arrow
 			const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
 			const ws = Data.Systems.getCurrentWindowSkin();
-			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown[2]);
-			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown[3] / 2);
+			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown.width);
+			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown.height / 2);
 			const arrowX = this.x + this.w / 2 - arrowWidth / 2;
 
 			// If pressing on arrow up
@@ -613,9 +613,9 @@ class WindowChoices extends Bitmap {
 
 		// Draw arrows
 		const ws = Data.Systems.getCurrentWindowSkin();
-		const arrowWidth = ws.arrowUpDown[2];
-		const arrowHeight = ws.arrowUpDown[3] / 2;
-		const arrowX = this.oX + this.oW / 2 - arrowWidth / 2;
+		const arrowWidth = ws.arrowUpDown.width;
+		const arrowHeight = ws.arrowUpDown.height / 2;
+		const arrowX = this.oX + (this.oW + this.padding[0] * 2 - arrowWidth) / 2;
 		if (this.currentSelectedIndex - offset > 0) {
 			ws.drawArrowUp(arrowX, this.oY - arrowHeight - 1);
 		}
