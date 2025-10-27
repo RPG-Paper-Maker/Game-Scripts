@@ -11,4 +11,6 @@
 
 export type JsonType = Record<string, unknown>;
 
+export type JsonKeyValueType = { k: number; v: JsonType };
+
 export type MapObjectCommandType = number | string | boolean | JsonType;

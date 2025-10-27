@@ -23,6 +23,7 @@ import { Data, EventCommand, Manager, Scene } from '../index';
 import { Base } from './Base';
 import { CommonSkillItem } from './CommonSkillItem';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
+import { ReactionCommandJSON } from './Reaction';
 
 /**
  * JSON schema for a skill or item effect.
@@ -55,7 +56,7 @@ export type EffectJSON = {
 	iask?: boolean;
 	asid?: DynamicValueJSON;
 	psid?: DynamicValueJSON;
-	cr?: DynamicValueJSON;
+	cr?: ReactionCommandJSON;
 	sak?: number;
 	sf?: DynamicValueJSON;
 	itct?: boolean;
@@ -762,7 +763,7 @@ export class Effect extends Base {
 				this.commonReaction =
 					json.cr === undefined
 						? null
-						: (Manager.Events.getEventCommand(json.cr as any) as EventCommand.CallACommonReaction);
+						: (Manager.Events.getEventCommand(json.cr) as EventCommand.CallACommonReaction);
 				break;
 			case EFFECT_KIND.SPECIAL_ACTIONS:
 				this.specialActionKind = Utils.valueOrDefault(json.sak, EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS);

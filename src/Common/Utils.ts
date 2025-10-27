@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { JsonType } from './Types';
+import { JsonKeyValueType, JsonType } from './Types';
 
 /**
  * Static utility class providing helper functions for value handling,
@@ -154,6 +154,25 @@ export class Utils {
 					ids.push(id);
 				}
 				return [id, item];
+			})
+		);
+	}
+
+	public static readJSONMapKeyValue<T>(
+		jsonList: JsonKeyValueType[] = [],
+		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T)
+	): Map<number, T> {
+		return new Map(
+			jsonList.map<[number, T]>((json) => {
+				let item: T;
+				if (typeof transformFn === 'function' && 'prototype' in transformFn) {
+					// Called as constructor
+					item = new (transformFn as new (data: JsonType) => T)(json.v);
+				} else {
+					// Called as regular function
+					item = (transformFn as (data: JsonType) => T)(json.v);
+				}
+				return [json.k, item];
 			})
 		);
 	}
