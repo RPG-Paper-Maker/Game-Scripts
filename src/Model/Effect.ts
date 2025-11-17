@@ -238,11 +238,9 @@ export class Effect extends Base {
 			case EFFECT_KIND.DAMAGES:
 				result = this.executeDamages(user);
 				break;
-
 			case EFFECT_KIND.STATUS:
 				result = this.executeStatus(user);
 				break;
-
 			case EFFECT_KIND.ADD_REMOVE_SKILL:
 				result = this.executeAddRemoveSkill();
 				break;

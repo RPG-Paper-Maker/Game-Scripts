@@ -356,7 +356,7 @@ class Picture extends Base {
 		for (let i = w * h - 1; i >= 0; i--) {
 			const x = i % w;
 			const y = Math.floor(i / w);
-			const square = this.getCollisionAtPos(texture[0] + x, texture[1] + y);
+			const square = this.getCollisionAtPos(texture.x + x, texture.y + y);
 			if (square && square.climbing) {
 				squares.push([x, y]);
 			}
