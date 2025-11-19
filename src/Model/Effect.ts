@@ -534,7 +534,7 @@ export class Effect extends Base {
 			Data.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
 			null,
 			null,
-			Utils.arrayToMap(this.commonReaction.parameters)
+			Utils.arrayToMap(this.commonReaction.parameters, true)
 		);
 		Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
 		Manager.Stack.top.reactionInterpreters.push(reactionInterpreter);

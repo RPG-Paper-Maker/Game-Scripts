@@ -193,7 +193,9 @@ export class Utils {
 	 */
 	public static arrayToMap<T>(array: T[], removeFirst = false): Map<number, T> {
 		const arr = removeFirst ? array.slice(1) : array;
-		return new Map(arr.map((value, index) => [index + 1, value]));
+		return new Map(
+			arr.map((value, index) => [index + 1, value]).filter(([_, v]) => v !== undefined) as [number, T][]
+		);
 	}
 
 	/**

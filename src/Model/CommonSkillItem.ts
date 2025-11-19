@@ -181,7 +181,7 @@ class CommonSkillItem extends Icon {
 	 */
 	isPossible(target?: Player, checkCost = true): boolean {
 		const targets = Scene.Map.current.getPossibleTargets(this.targetKind);
-		const user = Scene.Map.current.user.player ?? null;
+		const user = Scene.Map.current.user?.player ?? null;
 
 		// Condition
 		if (!Interpreter.evaluate(this.conditionFormula.getValue() as string)) {
