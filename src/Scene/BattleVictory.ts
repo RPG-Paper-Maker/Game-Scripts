@@ -60,11 +60,20 @@ class BattleVictory {
 		this.prepareRewards();
 		let id: string;
 		for (id in this.battle.currencies) {
-			Game.current.currencies[id] += this.battle.currencies[id];
+			Game.current.currencies.set(
+				Number(id),
+				Game.current.currencies.get(Number(id)) + this.battle.currencies[id]
+			);
 			if (this.battle.currencies[id] > 0) {
-				Game.current.currenciesEarned[id] += this.battle.currencies[id];
+				Game.current.currenciesEarned.set(
+					Number(id),
+					Game.current.currenciesEarned.get(Number(id)) + this.battle.currencies[id]
+				);
 			} else {
-				Game.current.currenciesUsed[id] -= this.battle.currencies[id];
+				Game.current.currenciesUsed.set(
+					Number(id),
+					Game.current.currenciesUsed.get(Number(id)) - this.battle.currencies[id]
+				);
 			}
 		}
 		for (i = 0, l = this.battle.loots.length; i < l; i++) {

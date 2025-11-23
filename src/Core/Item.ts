@@ -259,11 +259,11 @@ class Item {
 			const p = Math.round((value * (Data.Systems.priceSoldItem.getValue() as number)) / 100) * times;
 			switch (kind) {
 				case DAMAGES_KIND.CURRENCY:
-					Game.current.currencies[id] += p;
+					Game.current.currencies.set(id, Game.current.currencies.get(id) + p);
 					if (p > 0) {
-						Game.current.currenciesEarned[id] += p;
+						Game.current.currenciesEarned.set(id, Game.current.currenciesEarned.get(id) + p);
 					} else {
-						Game.current.currenciesUsed[id] -= p;
+						Game.current.currenciesUsed.set(id, Game.current.currenciesUsed.get(id) + p);
 					}
 					break;
 				case DAMAGES_KIND.STAT:
