@@ -329,7 +329,7 @@ class Map extends Base {
 		const path = tileset.getPath();
 		this.textureTileset = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
 		const t: THREE.Texture = this.textureTileset.map;
-		if (t.image.width % Data.Systems.SQUARE_SIZE !== 0 || t.image.height % Data.Systems.SQUARE_SIZE !== 0) {
+		if (t && (t.image.width % Data.Systems.SQUARE_SIZE !== 0 || t.image.height % Data.Systems.SQUARE_SIZE !== 0)) {
 			Platform.showErrorMessage(
 				'Tileset in ' +
 					path +
