@@ -240,6 +240,13 @@ class GL {
 		position.project(camera);
 		return new THREE.Vector2(position.x * widthHalf + widthHalf, -(position.y * heightHalf) + heightHalf);
 	}
+
+	static getMaterialTextureSize(material: THREE.MeshPhongMaterial | null): { width: number; height: number } {
+		return {
+			width: (material?.map?.image as HTMLImageElement)?.width ?? 0,
+			height: (material?.map?.image as HTMLImageElement)?.height ?? 0,
+		};
+	}
 }
 
 export { GL };

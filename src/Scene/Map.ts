@@ -328,8 +328,8 @@ class Map extends Base {
 		const tileset = this.mapProperties.tileset;
 		const path = tileset.getPath();
 		this.textureTileset = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
-		const t: THREE.Texture = this.textureTileset.map;
-		if (t && (t.image.width % Data.Systems.SQUARE_SIZE !== 0 || t.image.height % Data.Systems.SQUARE_SIZE !== 0)) {
+		const { width, height } = Manager.GL.getMaterialTextureSize(this.textureTileset);
+		if (width % Data.Systems.SQUARE_SIZE !== 0 || height % Data.Systems.SQUARE_SIZE !== 0) {
 			Platform.showErrorMessage(
 				'Tileset in ' +
 					path +
@@ -347,7 +347,7 @@ class Map extends Base {
 		// Tileset
 		const texture = Manager.GL.getMaterialTexture(this.textureTileset);
 		if (this.mapProperties.tileset.picture && texture) {
-			this.mapProperties.tileset.picture.readCollisionsImage(texture.image);
+			this.mapProperties.tileset.picture.readCollisionsImage(texture.image as HTMLImageElement);
 		}
 
 		// Characters
@@ -358,7 +358,7 @@ class Map extends Base {
 			const texture = Manager.GL.getMaterialTexture(material);
 			let image: HTMLImageElement;
 			if (texture) {
-				image = texture.image;
+				image = texture.image as HTMLImageElement;
 			}
 			if (p) {
 				p.readCollisionsImage(image);

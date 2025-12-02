@@ -115,9 +115,7 @@ class MapPortion {
 			return;
 		}
 		const material = Scene.Map.current.textureTileset;
-		const texture = Manager.GL.getMaterialTexture(material);
-		const width = texture ? texture.image.width : 0;
-		const height = texture ? texture.image.height : 0;
+		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const geometry = new CustomGeometry();
 		const layers: [Position, Floor][] = [];
 		let count = 0;
@@ -245,8 +243,8 @@ class MapPortion {
 		const faceGeometry = new CustomGeometryFace();
 		let staticCount = 0,
 			faceCount = 0;
-		const texture = Manager.GL.getMaterialTexture(material);
-		if (texture) {
+		const { width, height } = Manager.GL.getMaterialTextureSize(material);
+		if (width > 0 && height > 0) {
 			let s: Record<string, any>,
 				position: Position,
 				sprite: Sprite,
@@ -261,8 +259,8 @@ class MapPortion {
 				if (sprite.kind === ELEMENT_MAP_KIND.SPRITES_FACE) {
 					resultUpdate = sprite.updateGeometry(
 						faceGeometry,
-						texture.image.width,
-						texture.image.height,
+						width,
+						height,
 						position,
 						faceCount,
 						true,
@@ -273,8 +271,8 @@ class MapPortion {
 				} else {
 					resultUpdate = sprite.updateGeometry(
 						staticGeometry,
-						texture.image.width,
-						texture.image.height,
+						width,
+						height,
 						position,
 						staticCount,
 						true,
@@ -349,16 +347,9 @@ class MapPortion {
 					hash.set(sprite.id, obj);
 				}
 			}
-			const texture = Manager.GL.getMaterialTexture(material);
-			if (texture) {
-				const result = sprite.updateGeometry(
-					geometry,
-					position,
-					texture.image.width,
-					texture.image.height,
-					pictureID,
-					count
-				);
+			const { width, height } = Manager.GL.getMaterialTextureSize(material);
+			if (width > 0 && height > 0) {
+				const result = sprite.updateGeometry(geometry, position, width, height, pictureID, count);
 				obj.c = result[0];
 				this.updateCollisionSprite(result[1], position);
 			}

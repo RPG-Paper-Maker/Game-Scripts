@@ -614,9 +614,10 @@ class MapObject {
 				} else {
 					x = 0;
 					y = 0;
-					this.width = texture.image.width / Data.Systems.SQUARE_SIZE / Data.Systems.FRAMES;
+					const { width, height } = Manager.GL.getMaterialTextureSize(material);
+					this.width = width / Data.Systems.SQUARE_SIZE / Data.Systems.FRAMES;
 					this.height =
-						texture.image.height /
+						height /
 						Data.Systems.SQUARE_SIZE /
 						Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID).getRows();
 					this.currentOrientationStop =
@@ -1525,59 +1526,49 @@ class MapObject {
 			!this.isNone() &&
 			this.currentStateInstance.graphicKind !== ELEMENT_MAP_KIND.OBJECT_3D
 		) {
-			const texture = Manager.GL.getMaterialTexture(<THREE.MeshPhongMaterial>this.mesh.material);
-			if (texture) {
-				const textureWidth = texture.image.width;
-				const textureHeight = texture.image.height;
-				let w: number, h: number, x: number, y: number;
-				if (this.currentStateInstance.graphicID === 0) {
-					w = (this.width * Data.Systems.SQUARE_SIZE) / textureWidth;
-					h = (this.height * Data.Systems.SQUARE_SIZE) / textureHeight;
-					x = (this.currentStateInstance.rectTileset.x * Data.Systems.SQUARE_SIZE) / textureWidth;
-					y = (this.currentStateInstance.rectTileset.y * Data.Systems.SQUARE_SIZE) / textureHeight;
-				} else {
-					w = (this.width * Data.Systems.SQUARE_SIZE) / textureWidth;
-					h = (this.height * Data.Systems.SQUARE_SIZE) / textureHeight;
-					x = (this.frame.value >= Data.Systems.FRAMES ? Data.Systems.FRAMES - 1 : this.frame.value) * w;
-					y = this.isClimbing ? this.climbOrientation : this.orientation;
-					const p = Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
-					if (
-						this.currentOrientationClimbing ||
-						(this.currentStateInstance.climbAnimation && this.isClimbing)
-					) {
-						if (p.isClimbAnimation) {
-							if (p.isStopAnimation) {
-								y += 8;
-							} else {
-								y += 4;
-							}
-						}
-					} else if (
-						this.currentOrientationStop ||
-						(this.currentStateInstance.stopAnimation && !this.moving)
-					) {
+			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongMaterial);
+			let w: number, h: number, x: number, y: number;
+			if (this.currentStateInstance.graphicID === 0) {
+				w = (this.width * Data.Systems.SQUARE_SIZE) / width;
+				h = (this.height * Data.Systems.SQUARE_SIZE) / height;
+				x = (this.currentStateInstance.rectTileset.x * Data.Systems.SQUARE_SIZE) / width;
+				y = (this.currentStateInstance.rectTileset.y * Data.Systems.SQUARE_SIZE) / height;
+			} else {
+				w = (this.width * Data.Systems.SQUARE_SIZE) / width;
+				h = (this.height * Data.Systems.SQUARE_SIZE) / height;
+				x = (this.frame.value >= Data.Systems.FRAMES ? Data.Systems.FRAMES - 1 : this.frame.value) * w;
+				y = this.isClimbing ? this.climbOrientation : this.orientation;
+				const p = Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
+				if (this.currentOrientationClimbing || (this.currentStateInstance.climbAnimation && this.isClimbing)) {
+					if (p.isClimbAnimation) {
 						if (p.isStopAnimation) {
+							y += 8;
+						} else {
 							y += 4;
 						}
 					}
-					y *= h;
+				} else if (this.currentOrientationStop || (this.currentStateInstance.stopAnimation && !this.moving)) {
+					if (p.isStopAnimation) {
+						y += 4;
+					}
 				}
-				const coefX = MapElement.COEF_TEX / textureWidth;
-				const coefY = MapElement.COEF_TEX / textureHeight;
-				x += coefX;
-				y += coefY;
-				w -= coefX * 2;
-				h -= coefY * 2;
-				const texA = new THREE.Vector2();
-				const texB = new THREE.Vector2();
-				const texC = new THREE.Vector2();
-				const texD = new THREE.Vector2();
-				CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
-
-				// Update geometry
-				(<CustomGeometry>this.mesh.geometry).pushQuadUVs(texA, texB, texC, texD);
-				(<CustomGeometry>this.mesh.geometry).updateUVs();
+				y *= h;
 			}
+			const coefX = MapElement.COEF_TEX / width;
+			const coefY = MapElement.COEF_TEX / height;
+			x += coefX;
+			y += coefY;
+			w -= coefX * 2;
+			h -= coefY * 2;
+			const texA = new THREE.Vector2();
+			const texB = new THREE.Vector2();
+			const texC = new THREE.Vector2();
+			const texD = new THREE.Vector2();
+			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
+
+			// Update geometry
+			(<CustomGeometry>this.mesh.geometry).pushQuadUVs(texA, texB, texC, texD);
+			(<CustomGeometry>this.mesh.geometry).updateUVs();
 		}
 	}
 

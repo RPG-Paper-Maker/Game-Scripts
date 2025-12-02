@@ -169,8 +169,9 @@ export class Battler {
 					offset: { type: 'v2', value: this.animationOffset },
 				},
 			});
-			this.width = copiedTexture.image.width / Data.Systems.SQUARE_SIZE / Data.Systems.battlersFrames;
-			this.height = copiedTexture.image.height / Data.Systems.SQUARE_SIZE / Data.Systems.battlersColumns;
+			const { width, height } = Manager.GL.getMaterialTextureSize(material);
+			this.width = width / Data.Systems.SQUARE_SIZE / Data.Systems.battlersFrames;
+			this.height = height / Data.Systems.SQUARE_SIZE / Data.Systems.battlersColumns;
 			const sprite = Sprite.create(ELEMENT_MAP_KIND.SPRITES_FACE, new Rectangle(0, 0, this.width, this.height));
 			const geometry = sprite.createGeometry(this.width, this.height, false, this.initialPosition)[0];
 			this.mesh = new THREE.Mesh(geometry, material);
@@ -210,9 +211,9 @@ export class Battler {
 	 * Initialize UV mapping for the battler mesh.
 	 * */
 	initializeTexture(): void {
-		const texture = Manager.GL.getMaterialTexture(this.mesh.material as MeshPhongMaterial);
-		const w = (this.width * Data.Systems.SQUARE_SIZE) / texture.image.width;
-		const h = (this.height * Data.Systems.SQUARE_SIZE) / texture.image.height;
+		const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as MeshPhongMaterial);
+		const w = (this.width * Data.Systems.SQUARE_SIZE) / width;
+		const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 		const texA = new THREE.Vector2();
 		const texB = new THREE.Vector2();
 		const texC = new THREE.Vector2();
@@ -227,7 +228,6 @@ export class Battler {
 	 */
 	updateUVs() {
 		if (this.mesh) {
-			const texture = Manager.GL.getMaterialTexture(this.mesh.material as MeshPhongMaterial);
 			let frame = 0;
 			switch (this.step) {
 				case BATTLER_STEP.ATTACK:
@@ -239,8 +239,9 @@ export class Battler {
 					frame = this.frame.value;
 					break;
 			}
-			const w = (this.width * Data.Systems.SQUARE_SIZE) / texture.image.width;
-			const h = (this.height * Data.Systems.SQUARE_SIZE) / texture.image.height;
+			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as MeshPhongMaterial);
+			const w = (this.width * Data.Systems.SQUARE_SIZE) / width;
+			const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 			const x = frame * w;
 			const y = this.step * h;
 			this.animationOffset.set(x, y);
