@@ -873,7 +873,7 @@ class Map extends Base {
 		const geometry = new THREE.BufferGeometry();
 		geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
 		const material = new THREE.PointsMaterial({
-			color: options.isColor ? Data.Systems.getColor(options.colorID).getHex() : 0xffffff,
+			color: options.isColor ? options.color.getHex() : 0xffffff,
 			size: options.size,
 			transparent: true,
 			depthTest: options.depthTest,
