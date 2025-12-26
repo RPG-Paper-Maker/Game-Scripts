@@ -38,12 +38,19 @@ export class Mathf {
 	 */
 	static readonly OPERATORS_NUMBERS: ReadonlyArray<(a: number, b: number) => number> = Object.freeze([
 		(_a, b) => b,
-		(a, b) => a + b,
-		(a, b) => a - b,
-		(a, b) => a * b,
-		(a, b) => a / b,
+		(a, b) => this.roundDecimalFour(a + b),
+		(a, b) => this.roundDecimalFour(a - b),
+		(a, b) => this.roundDecimalFour(a * b),
+		(a, b) => this.roundDecimalFour(a / b),
 		(a, b) => a % b,
 	]);
+
+	/**
+	 * Rounds a number to **4 decimal places** using standard rounding.
+	 */
+	static roundDecimalFour(num: number): number {
+		return Math.round(num * 1e4) / 1e4;
+	}
 
 	/**
 	 * Cosine with rounding to reduce floating errors.

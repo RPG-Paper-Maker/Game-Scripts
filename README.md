@@ -7,7 +7,27 @@ Original TS code used for RPG Paper Maker Core code.
 ### Pre-requirements
 
 -   [Node.js](https://nodejs.org/en)
--   IDE: we recommend you to use [Visual Studio Code](https://code.visualstudio.com/)
+-   IDE: we strongly recommend you to use [Visual Studio Code](https://code.visualstudio.com/), and also install the ESLint extensions. For prettier: you can enable the format on save by: opening VSCode, CTRL + SHIFT + P > "Preferences: Open User Settings: (JSON)", and add this in the `settings.json`:
+
+```json
+    "editor.formatOnSave": true,
+    "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[json]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    }
+```
+
 -   For Windows users only: we recommend to use [Git for Windows](https://gitforwindows.org/) and use GIT BASH functionnality to run all the next following commands (right click in desired folder and click on Git Bash). You can also use default Windows PowerShell.
 
 ### Build
