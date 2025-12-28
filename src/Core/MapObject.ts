@@ -354,11 +354,7 @@ class MapObject {
 		} else {
 			const obj = Scene.Map.current.mapProperties.allObjects.get(this.system.id);
 			if (obj === undefined) {
-				Platform.showErrorMessage(
-					'Object linking issue. Please go to map ' +
-						Scene.Map.current.mapProperties.name() +
-						' and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.'
-				);
+				Platform.showErrorMessage('Object linking issue ' + Scene.Map.current.mapProperties.id);
 			}
 			const portion = obj.getGlobalPortion();
 			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
@@ -486,11 +482,7 @@ class MapObject {
 		} else {
 			const pos = Scene.Map.current.mapProperties.allObjects.get(this.system.id);
 			if (pos === undefined) {
-				Platform.showErrorMessage(
-					'Object linking issue. Please go to map ' +
-						Scene.Map.current.mapProperties.name() +
-						' and use Options > Debug Options in map > Synchronize map objects. Please report it to dev.'
-				);
+				Platform.showErrorMessage('Object linking issue ' + Scene.Map.current.mapProperties.id);
 			}
 			const portion = pos.getGlobalPortion();
 			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
