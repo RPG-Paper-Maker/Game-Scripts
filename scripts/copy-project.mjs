@@ -25,7 +25,7 @@ async function exists(path) {
 (async function () {
 	const BUILD_DIR = './build';
 	const DOCUMENTS_FOLDER = path.join(os.homedir(), 'Documents');
-	const CONTENT_FOLDER = path.join(DOCUMENTS_FOLDER, 'RPG Paper Maker Games', 'project-without-name');
+	const CONTENT_FOLDER = path.join(DOCUMENTS_FOLDER, 'RPG Paper Maker Games', 'Project-without-name');
 
 	try {
 		if (await exists(BUILD_DIR)) {

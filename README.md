@@ -38,7 +38,7 @@ Install node dependencies:
 npm install
 ```
 
-You also need to have a project to test. You can run this command to automaticaly copy the `project-without-name` project folder you have in `pathToYourDocuments/RPG Paper Maker Games`:
+You also need to have a project to test. You can run this command to automaticaly copy the `Project-without-name` project folder you have in `pathToYourDocuments/RPG Paper Maker Games`:
 
 ```bash
 npm run copy-project
