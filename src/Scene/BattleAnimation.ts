@@ -86,25 +86,10 @@ class BattleAnimation {
 		(<Graphic.Text>this.battle.windowTopInformations.content).setText(this.battle.informationText);
 		this.battle.time = new Date().getTime();
 		this.battle.effects = [];
-		let i: number, l: number, effects: Model.Effect[];
+		let i: number, l: number;
 		switch (this.battle.battleCommandKind) {
 			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
-				if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
-					const equipments = this.battle.user.player.equip;
-					let j: number, m: number, gameItem: Item, weapon: Model.Weapon;
-					for (i = 0, l = equipments.length; i < l; i++) {
-						gameItem = equipments[i];
-						if (gameItem && gameItem.kind === ITEM_KIND.WEAPON) {
-							weapon = gameItem.system;
-							this.battle.animationUser = new Animation(weapon.animationUserID.getValue() as number);
-							this.battle.animationTarget = new Animation(weapon.animationTargetID.getValue() as number);
-							effects = weapon.getEffects();
-							for (j = 0, m = effects.length; j < m; j++) {
-								this.battle.effects.push(effects[j]);
-							}
-						}
-					}
-				}
+				this.addWeaponsEffects();
 				if (this.battle.effects.length === 0) {
 					this.battle.animationUser = new Animation(Data.Skills.get(1).animationUserID.getValue() as number);
 					this.battle.animationTarget = new Animation(
@@ -122,6 +107,13 @@ class BattleAnimation {
 				this.battle.animationUser = new Animation(content.animationUserID.getValue() as number);
 				this.battle.animationTarget = new Animation(content.animationTargetID.getValue() as number);
 				this.battle.effects = content.getEffects();
+				if (
+					this.battle.effects.find(
+						(effect) => effect.specialActionKind === EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS
+					)
+				) {
+					this.addWeaponsEffects();
+				}
 				content.cost();
 				this.battle.user.setUsingSkill();
 				break;
@@ -160,6 +152,25 @@ class BattleAnimation {
 		}
 		if (this.battle.animationTarget && this.battle.animationTarget.model === null) {
 			this.battle.animationTarget = null;
+		}
+	}
+
+	addWeaponsEffects(): void {
+		if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
+			const equipments = this.battle.user.player.equip;
+			let j: number, m: number, gameItem: Item, weapon: Model.Weapon;
+			for (let i = 0, l = equipments.length; i < l; i++) {
+				gameItem = equipments[i];
+				if (gameItem && gameItem.kind === ITEM_KIND.WEAPON) {
+					weapon = gameItem.system;
+					this.battle.animationUser = new Animation(weapon.animationUserID.getValue() as number);
+					this.battle.animationTarget = new Animation(weapon.animationTargetID.getValue() as number);
+					const effects = weapon.getEffects();
+					for (j = 0, m = effects.length; j < m; j++) {
+						this.battle.effects.push(effects[j]);
+					}
+				}
+			}
 		}
 	}
 
