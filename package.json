@@ -15,22 +15,22 @@
 		"generate-docs": "npx typedoc src --plugin typedoc-github-theme"
 	},
 	"devDependencies": {
-		"@eslint/js": "^9.39.1",
+		"@eslint/js": "^9.39.2",
 		"@types/howler": "^2.2.12",
-		"@types/node": "^24.10.1",
-		"@types/three": "^0.181.0",
-		"@typescript-eslint/eslint-plugin": "^8.48.0",
-		"@typescript-eslint/parser": "^8.48.0",
-		"electron": "39.2.4",
-		"eslint": "^9.39.1",
-		"globals": "^16.5.0",
+		"@types/node": "^25.0.3",
+		"@types/three": "^0.182.0",
+		"@typescript-eslint/eslint-plugin": "^8.51.0",
+		"@typescript-eslint/parser": "^8.51.0",
+		"electron": "39.2.7",
+		"eslint": "^9.39.2",
+		"globals": "^17.0.0",
 		"howler": "^2.2.4",
 		"jiti": "^2.6.1",
 		"nodemon": "^3.1.11",
-		"three": "^0.181.2",
+		"three": "^0.182.0",
 		"typedoc": "^0.28.15",
 		"typedoc-github-theme": "^0.3.1",
 		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.48.0"
+		"typescript-eslint": "^8.51.0"
 	}
 }
