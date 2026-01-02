@@ -8,7 +8,7 @@
 		"start": "node scripts/build.mjs && electron ./main.js --dev",
 		"electron": "electron ./main.js --dev",
 		"copy-project": "node scripts/copy-project.mjs",
-		"update-packages": "ncu -u && npm run clear-packages && npm run update-libs",
+		"update-packages": "npx npm-check-updates -u && npm run clear-packages && npm run update-libs",
 		"update-libs": "bash scripts/update-libs.sh",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
 		"push-build": "bash scripts/push-build.sh",
