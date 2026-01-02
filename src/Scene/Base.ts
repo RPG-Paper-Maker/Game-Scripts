@@ -108,7 +108,7 @@ abstract class Base {
 	 */
 	updateInterpreters() {
 		// Index of all the finished parallel reactions
-		const endingReactions = [];
+		const endingReactions: ReactionInterpreter[] = [];
 
 		// Updating blocking hero
 		ReactionInterpreter.blockingHero = false;
@@ -121,13 +121,17 @@ abstract class Base {
 		}
 
 		// Updating all reactions
-		let effectIndex: number, i: number, l: number;
-		for (i = 0, l = this.reactionInterpreters.length; i < l; i++) {
-			reaction = this.reactionInterpreters[i];
+		let effectIndex: number;
+		const reactionInterpreters = [...this.reactionInterpreters];
+		for (const reaction of reactionInterpreters) {
+			if (reaction.currentReaction.commands.root.firstChild.data.song) {
+				console.log(reaction);
+			}
+
 			reaction.update();
 			if (reaction.isFinished()) {
 				reaction.updateFinish();
-				endingReactions.push(i);
+				endingReactions.push(reaction);
 				effectIndex = this.reactionInterpretersEffects.indexOf(reaction);
 				if (effectIndex !== -1) {
 					this.reactionInterpretersEffects.splice(effectIndex, 1);
@@ -140,9 +144,7 @@ abstract class Base {
 		}
 
 		// Deleting finished reactions
-		for (i = endingReactions.length - 1; i >= 0; i--) {
-			this.reactionInterpreters.splice(endingReactions[i], 1);
-		}
+		this.reactionInterpreters = this.reactionInterpreters.filter((reaction) => !endingReactions.includes(reaction));
 	}
 
 	/**
@@ -196,6 +198,7 @@ abstract class Base {
 					break;
 				}
 			}
+			console.log(reaction, excecuted);
 			if (!excecuted) {
 				reactionInterpreter = new ReactionInterpreter(sender, reaction, object, state, parameters, event);
 				this.reactionInterpreters.push(reactionInterpreter);
@@ -204,7 +207,6 @@ abstract class Base {
 						object.movingState.pause = true;
 					}
 				}
-
 				return reactionInterpreter;
 			}
 		}

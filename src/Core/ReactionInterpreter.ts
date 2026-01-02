@@ -99,6 +99,8 @@ class ReactionInterpreter {
 		if (this.currentMapObject && this.currentMapObject.movingState !== null) {
 			this.currentMapObject.movingState.pause = false;
 		}
+		this.currentMapObject = null;
+		this.currentReaction = null;
 	}
 
 	/**
