@@ -123,7 +123,7 @@ export class Land extends MapElement {
 				objCollision = {
 					p: position,
 					l: localPosition,
-					b: [a + rect.x, b + 0.5, c + rect.y, rect.width, rect.height, 1, 0],
+					b: [a + rect.x + rect.width / 2 - Data.Systems.SQUARE_SIZE / 2, b + 0.5, c + rect.y + rect.height / 2 - Data.Systems.SQUARE_SIZE / 2, rect.width, rect.height, 1, 0],
 					cs: null,
 				};
 			}
