@@ -177,6 +177,14 @@ class MoveCamera extends Base {
 					timeRate = difNb / currentState.time;
 				}
 
+				// Rotation
+
+				Scene.Map.current.camera.addHorizontalAngle(timeRate * currentState.finalDifH);
+				Scene.Map.current.camera.addVerticalAngle(timeRate * currentState.finalDifV);
+				if (this.rotationTargetOffset) {
+					Scene.Map.current.camera.updateTargetOffset();
+				}
+
 				// Move
 				let positionOffset = new THREE.Vector3(
 					timeRate * currentState.finalDifPosition.x,
@@ -202,18 +210,12 @@ class MoveCamera extends Base {
 				}
 				Scene.Map.current.camera.updateDistance();
 
-				// Rotation
-				Scene.Map.current.camera.addHorizontalAngle(timeRate * currentState.finalDifH);
-				Scene.Map.current.camera.addVerticalAngle(timeRate * currentState.finalDifV);
-				if (this.rotationTargetOffset) {
-					Scene.Map.current.camera.updateTargetOffset();
-				}
-
 				// Zoom
 				Scene.Map.current.camera.distance += timeRate * currentState.finalDifDistance;
 
 				// Update
 				Scene.Map.current.camera.update();
+
 				// If time = 0, then this is the end of the command
 				if (currentState.timeLeft === 0) {
 					Inputs.updateLockedKeysAngles(currentState.initialH);

@@ -124,10 +124,6 @@ abstract class Base {
 		let effectIndex: number;
 		const reactionInterpreters = [...this.reactionInterpreters];
 		for (const reaction of reactionInterpreters) {
-			if (reaction.currentReaction.commands.root.firstChild.data.song) {
-				console.log(reaction);
-			}
-
 			reaction.update();
 			if (reaction.isFinished()) {
 				reaction.updateFinish();
@@ -198,7 +194,6 @@ abstract class Base {
 					break;
 				}
 			}
-			console.log(reaction, excecuted);
 			if (!excecuted) {
 				reactionInterpreter = new ReactionInterpreter(sender, reaction, object, state, parameters, event);
 				this.reactionInterpreters.push(reactionInterpreter);
