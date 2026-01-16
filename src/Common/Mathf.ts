@@ -17,6 +17,7 @@ import * as THREE from 'three';
  * This class is non-instantiable: all members are static.
  */
 export class Mathf {
+	static readonly EPS = 1e-10;
 	/**
 	 * Comparison operator table.
 	 * Index mapping is expected by callers:
@@ -245,5 +246,13 @@ export class Mathf {
 		this.rotateVertexEuler(vecB, center, euler);
 		this.rotateVertexEuler(vecC, center, euler);
 		this.rotateVertexEuler(vecD, center, euler);
+	}
+
+	/**
+	 * Returns a numerically safe value for division. Replaces values very close to zero with EPS to avoid division by zero.
+	 * @param value - The value to check and modify
+	 */
+	static nearZeroValue(value: number) {
+		return Math.abs(value) < this.EPS ? this.EPS : value;
 	}
 }

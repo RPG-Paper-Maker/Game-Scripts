@@ -1176,7 +1176,7 @@ class Map extends Base {
 					Utils.arrayToMap([
 						Model.DynamicValue.createMessage(key),
 						Model.DynamicValue.createSwitch(false),
-						Model.DynamicValue.create(DYNAMIC_VALUE_KIND.ANYTHING)
+						Model.DynamicValue.create(DYNAMIC_VALUE_KIND.ANYTHING),
 					]),
 					true,
 					false
@@ -1402,4 +1402,3 @@ class Map extends Base {
 }
 
 export { Map };
-
