@@ -537,7 +537,6 @@ export class Effect extends Base {
 			Utils.arrayToMap(this.commonReaction.parameters, true)
 		);
 		Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
-		Manager.Stack.top.reactionInterpreters.push(reactionInterpreter);
 		if (forceReaction) {
 			Manager.Stack.top.updateInterpreters();
 			if (Manager.Stack.top.reactionInterpretersEffects.length === 0) {
