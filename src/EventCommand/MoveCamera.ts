@@ -178,7 +178,6 @@ class MoveCamera extends Base {
 				}
 
 				// Rotation
-
 				Scene.Map.current.camera.addHorizontalAngle(timeRate * currentState.finalDifH);
 				Scene.Map.current.camera.addVerticalAngle(timeRate * currentState.finalDifV);
 				if (this.rotationTargetOffset) {

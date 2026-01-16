@@ -114,7 +114,7 @@ abstract class Base {
 		ReactionInterpreter.blockingHero = false;
 		let reaction: ReactionInterpreter;
 		for (reaction of this.reactionInterpreters) {
-			if (reaction.currentReaction.blockingHero) {
+			if (reaction.currentReaction?.blockingHero) {
 				ReactionInterpreter.blockingHero = true;
 				break;
 			}
