@@ -172,12 +172,12 @@ class WindowChoices extends Bitmap {
 			windowBox.setX(
 				this.orientation === ORIENTATION_WINDOW.HORIZONTAL
 					? this.oX + this.padding[0] + i * this.choiceWidth + i * this.space
-					: this.oX + this.padding[0]
+					: this.oX + this.padding[0],
 			);
 			windowBox.setY(
 				this.orientation === ORIENTATION_WINDOW.HORIZONTAL
 					? this.oY
-					: this.oY + i * this.choiceHeight + i * this.space
+					: this.oY + i * this.choiceHeight + i * this.space,
 			);
 		}
 	}
@@ -239,7 +239,7 @@ class WindowChoices extends Bitmap {
 					{
 						content: this.listContents[i],
 						padding: this.bordersInsideVisible ? this.padding : WindowBox.NONE_PADDING,
-					}
+					},
 				);
 			} else {
 				window = new WindowBox(
@@ -250,7 +250,7 @@ class WindowChoices extends Bitmap {
 					{
 						content: this.listContents[i],
 						padding: this.padding,
-					}
+					},
 				);
 			}
 			window.bordersVisible = this.bordersInsideVisible && this.bordersVisible;
@@ -577,7 +577,7 @@ class WindowChoices extends Bitmap {
 	 *  @param {Object} base - The base object to apply with callback
 	 */
 	onMouseUp(x: number, y: number, base?: object) {
-		if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed && this.isInside(x, y)) {
+		if (this.currentSelectedIndex !== -1 && Inputs.mouseLeftPressed) {
 			const callback = this.listCallBacks[this.currentSelectedIndex];
 			if (callback !== null) {
 				// Play a sound according to callback result
@@ -607,7 +607,7 @@ class WindowChoices extends Bitmap {
 			this.listWindows[index].draw(
 				true,
 				this.listWindows[i].windowDimension,
-				this.listWindows[i].contentDimension
+				this.listWindows[i].contentDimension,
 			);
 		}
 
