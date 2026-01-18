@@ -269,6 +269,9 @@ class BattleAnimation {
 				if (this.battle.reactionInterpretersEffects.length > 0) {
 					for (i = 0, l = this.battle.targets.length; i < l; i++) {
 						this.battle.targets[i].timeDamage = 0;
+						this.battle.targets[i].damages = null;
+						this.battle.targets[i].isDamagesMiss = false;
+						this.battle.targets[i].isDamagesCritical = false;
 					}
 					return;
 				}
