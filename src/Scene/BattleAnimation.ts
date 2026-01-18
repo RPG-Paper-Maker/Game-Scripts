@@ -13,6 +13,7 @@ import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	ANIMATION_EFFECT_CONDITION_KIND,
 	ANIMATION_POSITION_KIND,
+	ArrayUtils,
 	BATTLE_STEP,
 	CHARACTER_KIND,
 	EFFECT_KIND,
@@ -93,7 +94,7 @@ class BattleAnimation {
 				if (this.battle.effects.length === 0) {
 					this.battle.animationUser = new Animation(Data.Skills.get(1).animationUserID.getValue() as number);
 					this.battle.animationTarget = new Animation(
-						Data.Skills.get(1).animationTargetID.getValue() as number
+						Data.Skills.get(1).animationTargetID.getValue() as number,
 					);
 					const effects = this.battle.attackSkill.getEffects();
 					for (i = 1, l = effects.length; i < l; i++) {
@@ -103,20 +104,20 @@ class BattleAnimation {
 				this.battle.user.setAttacking();
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS:
-			case EFFECT_SPECIAL_ACTION_KIND.NONE:
+			case EFFECT_SPECIAL_ACTION_KIND.NONE: {
 				this.battle.animationUser = new Animation(content.animationUserID.getValue() as number);
 				this.battle.animationTarget = new Animation(content.animationTargetID.getValue() as number);
 				this.battle.effects = content.getEffects();
-				if (
-					this.battle.effects.find(
-						(effect) => effect.specialActionKind === EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS
-					)
-				) {
-					this.addWeaponsEffects();
+				const index = this.battle.effects.findIndex(
+					(effect) => effect.specialActionKind === EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS,
+				);
+				if (index !== -1) {
+					this.addWeaponsEffects(index);
 				}
 				content.cost();
 				this.battle.user.setUsingSkill();
 				break;
+			}
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS:
 				const graphic = <Graphic.Item>this.battle.windowChoicesItems.getCurrentContent();
 				this.battle.animationUser = new Animation(content.animationUserID.getValue() as number);
@@ -155,7 +156,7 @@ class BattleAnimation {
 		}
 	}
 
-	addWeaponsEffects(): void {
+	addWeaponsEffects(index = -1): void {
 		if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
 			const equipments = this.battle.user.player.equip;
 			let j: number, m: number, gameItem: Item, weapon: Model.Weapon;
@@ -167,7 +168,11 @@ class BattleAnimation {
 					this.battle.animationTarget = new Animation(weapon.animationTargetID.getValue() as number);
 					const effects = weapon.getEffects();
 					for (j = 0, m = effects.length; j < m; j++) {
-						this.battle.effects.push(effects[j]);
+						if (index === -1) {
+							this.battle.effects.push(effects[j]);
+						} else {
+							ArrayUtils.insert(this.battle.effects, index + j, effects[j]);
+						}
 					}
 				}
 			}
@@ -311,7 +316,7 @@ class BattleAnimation {
 									messages.push(
 										target.player.kind === CHARACTER_KIND.HERO
 											? target.lastStatus.getMessageAllyAffected(target)
-											: target.lastStatus.getMessageEnemyAffected(target)
+											: target.lastStatus.getMessageEnemyAffected(target),
 									);
 								}
 								if (target.lastStatusHealed !== null) {
