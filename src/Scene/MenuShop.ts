@@ -95,7 +95,7 @@ class MenuShop extends MenuBase {
 			Constants.HUGE_SPACE,
 			Constants.HUGE_SPACE,
 			WindowBox.MEDIUM_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const graphic = new Graphic.Text(Data.Languages.extras.shop.name(), {
 			align: ALIGN.CENTER,
@@ -114,7 +114,7 @@ class MenuShop extends MenuBase {
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - WindowBox.SMALL_SLOT_WIDTH * 2,
 			Constants.HUGE_SPACE,
 			WindowBox.SMALL_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const list = [new Graphic.Text(Data.Languages.extras.buy.name(), { align: ALIGN.CENTER })];
 		if (!this.buyOnly) {
@@ -136,7 +136,7 @@ class MenuShop extends MenuBase {
 			Constants.MEDIUM_SPACE,
 			Constants.HUGE_SPACE + WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE,
 			WindowBox.SMALL_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		let l = Data.Systems.inventoryFilters.length;
 		const list: Graphic.Text[] = [];
@@ -168,7 +168,7 @@ class MenuShop extends MenuBase {
 			Constants.HUGE_SPACE,
 			Constants.HUGE_SPACE + (WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2,
 			WindowBox.LARGE_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const options = {
 			nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY,
@@ -188,7 +188,7 @@ class MenuShop extends MenuBase {
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - width,
 			Constants.HUGE_SPACE + (WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2,
 			width,
-			height
+			height,
 		);
 		const options = {
 			padding: WindowBox.HUGE_PADDING_BOX,
@@ -204,7 +204,7 @@ class MenuShop extends MenuBase {
 			Constants.LARGE_SPACE,
 			WindowBox.SMALL_SLOT_WIDTH,
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const graphic = new Graphic.Text(Data.Languages.extras.empty.name(), {
 			align: ALIGN.CENTER,
@@ -226,7 +226,7 @@ class MenuShop extends MenuBase {
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - width,
 			this.windowBoxInformation.oY + this.windowBoxInformation.oH + Constants.MEDIUM_SPACE,
 			width,
-			height
+			height,
 		);
 		const graphic = new Graphic.UseSkillItem({ hideArrow: true });
 		const options = {
@@ -244,7 +244,7 @@ class MenuShop extends MenuBase {
 			Constants.LARGE_SPACE,
 			ScreenResolution.SCREEN_Y - WindowBox.SMALL_SLOT_HEIGHT - Constants.LARGE_SPACE,
 			WindowBox.SMALL_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const graphic = new Graphic.Text('', { align: ALIGN.CENTER });
 		const options = {
@@ -264,7 +264,7 @@ class MenuShop extends MenuBase {
 			ScreenResolution.SCREEN_X - Constants.LARGE_SPACE - width,
 			ScreenResolution.SCREEN_Y - WindowBox.SMALL_SLOT_HEIGHT - Constants.LARGE_SPACE,
 			width,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const options = {
 			content: graphic,
@@ -292,7 +292,7 @@ class MenuShop extends MenuBase {
 			(ScreenResolution.SCREEN_X - width) / 2,
 			(ScreenResolution.SCREEN_Y - height) / 2,
 			width,
-			height
+			height,
 		);
 		const graphic = new Graphic.Text(Data.Languages.extras.equipQuestion.name(), { align: ALIGN.CENTER });
 		const options = {
@@ -310,7 +310,7 @@ class MenuShop extends MenuBase {
 			(ScreenResolution.SCREEN_X - WindowBox.SMALL_SLOT_WIDTH) / 2,
 			this.windowBoxConfirmEquip.oY + this.windowBoxConfirmEquip.oH,
 			WindowBox.SMALL_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const list = [
 			new Graphic.Text(Data.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
@@ -357,7 +357,7 @@ class MenuShop extends MenuBase {
 				list.push(
 					this.isBuy()
 						? new Graphic.Item(item, { nbItem: item.nb, possible: item.shop.isPossiblePrice() })
-						: new Graphic.Item(item, { showSellPrice: true })
+						: new Graphic.Item(item, { showSellPrice: true }),
 				);
 			}
 		}
@@ -371,6 +371,9 @@ class MenuShop extends MenuBase {
 	 *  Update informations to display.
 	 */
 	synchronize() {
+		if (this.windowChoicesList.listContents.length === 0) {
+			return;
+		}
 		this.windowBoxInformation.content = this.windowChoicesList.getCurrentContent();
 		if (this.windowBoxInformation.content) {
 			let owned = 0;
@@ -385,7 +388,7 @@ class MenuShop extends MenuBase {
 			(<Graphic.Text>this.windowBoxOwned.content).setText(Data.Languages.extras.owned.name() + ': ' + owned);
 		}
 		(<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateGraphicCharactersEquip(
-			(<Graphic.Item>this.windowBoxInformation.content).item
+			(<Graphic.Item>this.windowBoxInformation.content).item,
 		);
 	}
 
@@ -433,7 +436,7 @@ class MenuShop extends MenuBase {
 	updateEquipmentStats() {
 		const player = this.getCurrentPlayer();
 		const result = player.getBestWeaponArmorToReplace(
-			(<Graphic.Item>this.windowChoicesList.getCurrentContent()).item.system
+			(<Graphic.Item>this.windowChoicesList.getCurrentContent()).item.system,
 		);
 		this.windowBoxInformation.content = new Graphic.EquipStats(player, result[2][0], false);
 		this.currentEquipmentID = result[1];
