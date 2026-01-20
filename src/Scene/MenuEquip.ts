@@ -101,7 +101,7 @@ class MenuEquip extends MenuBase {
 			rect.width,
 			rect.height,
 			new Array(nbEquipments),
-			options
+			options,
 		);
 	}
 
@@ -179,11 +179,7 @@ class MenuEquip extends MenuBase {
 		let item: Item, systemItem: Model.CommonSkillItem;
 		let type: Model.WeaponArmorKind, nbItem: number;
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];
-		let j: number,
-			m: number,
-			characteristic: Model.Characteristic,
-			allow: boolean,
-			characteristics: Model.Characteristic[];
+		let allow: boolean;
 		for (let i = 0, l = Game.current.items.length; i < l; i++) {
 			item = Game.current.items[i];
 			if (item.kind !== ITEM_KIND.ITEM) {

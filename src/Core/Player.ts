@@ -75,7 +75,7 @@ class Player {
 		skills?: Record<string, any>[],
 		status?: Record<string, any>[],
 		name?: string,
-		json?: Record<string, any>
+		json?: Record<string, any>,
 	) {
 		if (kind !== undefined) {
 			this.kind = kind;
@@ -228,7 +228,7 @@ class Player {
 		selectionKind: CONDITION_HEROES_KIND,
 		tab: Player[],
 		instanceID: number,
-		callback: Function
+		callback: Function,
 	): boolean {
 		switch (selectionKind) {
 			case CONDITION_HEROES_KIND.ALL_THE_HEROES:
@@ -304,13 +304,13 @@ class Player {
 						this[statistic.abbreviation],
 						this[statistic.getBonusAbbreviation()],
 						this[statistic.getAddedAbbreviation()],
-				  ]
+					]
 				: [
 						this[statistic.abbreviation],
 						this[statistic.getBonusAbbreviation()],
 						this[statistic.getMaxAbbreviation()],
 						this[statistic.getAddedAbbreviation()],
-				  ];
+					];
 		}
 		return list;
 	}
@@ -411,7 +411,7 @@ class Player {
 				statisticProgression = nonFixStatistics[j];
 				this.initStatValue(
 					Data.BattleSystems.getStatistic(statisticProgression.id),
-					statisticProgression.getValueAtLevel(level, this)
+					statisticProgression.getValueAtLevel(level, this),
 				);
 			}
 		}
@@ -426,7 +426,7 @@ class Player {
 	 */
 	getEquipmentStatsAndBonus(
 		item?: Model.CommonSkillItem,
-		equipmentID?: number
+		equipmentID?: number,
 	): [number[], number[], Record<string, any>] {
 		const statistics = Data.BattleSystems.statisticsIDs;
 		let l = Data.BattleSystems.maxStatisticID;
@@ -499,13 +499,13 @@ class Player {
 					statisticProgression.getValueAtLevel(
 						this.getCurrentLevel(),
 						previewPlayer,
-						this.system.getProperty(Model.Class.PROPERTY_FINAL_LEVEL, this.changedClass)
+						this.system.getProperty(Model.Class.PROPERTY_FINAL_LEVEL, this.changedClass),
 					) +
 					bonus[statisticProgression.id] +
 					added[statisticProgression.id];
 				previewPlayer.initStatValue(
 					Data.BattleSystems.getStatistic(statisticProgression.id),
-					list[statisticProgression.id]
+					list[statisticProgression.id],
 				);
 			}
 		}
@@ -522,7 +522,7 @@ class Player {
 		characteristics: Model.Characteristic[],
 		list: number[],
 		bonus: number[],
-		res: CharacteristicResType
+		res: CharacteristicResType,
 	) {
 		let characteristic: Model.Characteristic, statistic: Model.Statistic, base: number;
 		for (let i = 0, l = characteristics.length; i < l; i++) {
@@ -750,7 +750,7 @@ class Player {
 	learnSkills() {
 		const newSkills = this.system.getLearnedSkills(
 			this[Data.BattleSystems.getLevelStatistic().abbreviation],
-			this.changedClass
+			this.changedClass,
 		);
 
 		// If already added, remove
@@ -1091,7 +1091,7 @@ class Player {
 	 *  @returns {[number, number, number[][]]}
 	 */
 	getBestWeaponArmorToReplace(
-		weaponArmor: Model.CommonSkillItem
+		weaponArmor: Model.CommonSkillItem,
 	): [number, number, [number[], number[], Record<string, any>]] {
 		const equipments = weaponArmor.getType().equipments;
 		const baseResult = this.getEquipmentStatsAndBonus();
@@ -1153,7 +1153,7 @@ class Player {
 		// Also add weapons and armors
 		for (const equipment of this.equip) {
 			if (equipment) {
-				characteristics = characteristics.concat(equipment.system.characteristics);
+				characteristics = [...equipment.system.characteristics, ...characteristics];
 			}
 		}
 		return characteristics;
@@ -1221,27 +1221,23 @@ class Player {
 		const characteristics = this.getCharacteristics();
 		for (const characteristic of characteristics) {
 			if (
-				characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
+				characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_EQUIP &&
 				((weaponArmor.kind === ITEM_KIND.WEAPON &&
 					characteristic.isAllowEquipWeapon &&
 					weaponArmor.system.type === (characteristic.equipWeaponTypeID.getValue() as number)) ||
 					(weaponArmor.kind === ITEM_KIND.ARMOR &&
 						!characteristic.isAllowEquipWeapon &&
-						weaponArmor.system.type === (characteristic.equipArmorTypeID.getValue() as number))) &&
-				!characteristic.isAllowEquip
+						weaponArmor.system.type === (characteristic.equipArmorTypeID.getValue() as number)))
 			) {
-				return false;
+				return characteristic.isAllowEquip;
 			}
-			if (
-				characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE &&
-				!characteristic.isAllowChangeEquipment
-			) {
+			if (characteristic.kind === CHARACTERISTIC_KIND.ALLOW_FORBID_CHANGE) {
 				const type =
 					weaponArmor.kind === ITEM_KIND.WEAPON
 						? Data.BattleSystems.getWeaponKind(weaponArmor.system.type)
 						: Data.BattleSystems.getArmorKind(weaponArmor.system.type);
 				if (type.equipments[characteristic.changeEquipmentID.getValue() as number]) {
-					return false;
+					return characteristic.isAllowChangeEquipment;
 				}
 			}
 		}

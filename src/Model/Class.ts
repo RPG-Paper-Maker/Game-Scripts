@@ -63,7 +63,7 @@ export class Class extends Localization {
 
 	/** Combine characteristics with those of an upClass. */
 	getCharacteristics(upClass: Class): Characteristic[] {
-		return this.characteristics.concat(upClass.characteristics);
+		return [...upClass.characteristics, ...this.characteristics];
 	}
 
 	/** Combine statistics progression with those of an upClass, replacing duplicates by ID. */
