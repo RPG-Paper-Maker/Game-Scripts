@@ -137,7 +137,7 @@ abstract class Base {
 		// Deleting finished reactions
 		this.reactionInterpreters = this.reactionInterpreters.filter((reaction) => !endingReactions.includes(reaction));
 		this.reactionInterpretersEffects = this.reactionInterpretersEffects.filter(
-			(reaction) => !endingReactions.includes(reaction)
+			(reaction) => !endingReactions.includes(reaction),
 		);
 	}
 
@@ -178,7 +178,7 @@ abstract class Base {
 		state: number,
 		parameters: Map<number, Model.DynamicValue>,
 		event: [Model.Event, number],
-		moving: boolean = false
+		moving: boolean = false,
 	): ReactionInterpreter {
 		if (reaction.getFirstCommand() !== null) {
 			let excecuted = false;

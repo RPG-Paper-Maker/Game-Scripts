@@ -57,7 +57,6 @@ class Map extends Base {
 
 	public id: number;
 	public mapFilename: string;
-	public orientation: ORIENTATION;
 	public user: Battler;
 	public isBattleMap: boolean;
 	public tempTargets: Battler[];
@@ -90,7 +89,7 @@ class Map extends Base {
 		id: number,
 		isBattleMap: boolean = false,
 		minimal: boolean = false,
-		heroOrientation: ORIENTATION = null
+		heroOrientation: ORIENTATION = null,
 	) {
 		super(false);
 
@@ -126,7 +125,6 @@ class Map extends Base {
 		await this.readMapProperties();
 		this.initializeSunLight();
 		this.initializeCamera();
-		this.orientation = this.camera.getMapOrientation();
 		this.initializePortionsObjects();
 		await this.loadTextures();
 		this.loadCollisions();
@@ -167,10 +165,10 @@ class Map extends Base {
 						const portion = new Portion(
 							this.currentPortion.x + i,
 							this.currentPortion.y + j,
-							this.currentPortion.z + k
+							this.currentPortion.z + k,
 						);
 						const json = (await Platform.parseFileJSON(
-							Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName()
+							Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName(),
 						)) as any;
 						mapPortion.readStatic(json);
 					}
@@ -197,7 +195,7 @@ class Map extends Base {
 		const json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS)) as any;
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
-				'The battle map ' + this.id + " doesn't " + 'exists. Please check your battle maps.'
+				'The battle map ' + this.id + " doesn't " + 'exists. Please check your battle maps.',
 			);
 		}
 		this.mapProperties = new Model.MapProperties(json);
@@ -260,7 +258,7 @@ class Map extends Base {
 			this.mapProperties.skyboxGeometry.translate(
 				this.camera.getThreeCamera().position.x,
 				this.camera.getThreeCamera().position.y,
-				this.camera.getThreeCamera().position.z
+				this.camera.getThreeCamera().position.z,
 			);
 		}
 	}
@@ -336,7 +334,7 @@ class Map extends Base {
 					path +
 					' is not in a size multiple of ' +
 					Data.Systems.SQUARE_SIZE +
-					'. Please edit this picture size.'
+					'. Please edit this picture size.',
 			);
 		}
 	}
@@ -436,7 +434,7 @@ class Map extends Base {
 							this.currentPortion.z + k,
 							i,
 							j,
-							k
+							k,
 						);
 					}
 				}
@@ -515,7 +513,7 @@ class Map extends Base {
 		x: number,
 		y: number,
 		z: number,
-		move: boolean = false
+		move: boolean = false,
 	) {
 		const lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
 		const lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
@@ -524,7 +522,7 @@ class Map extends Base {
 		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
 			const portion = new Portion(realX, realY, realZ);
 			const json = (await Platform.parseFileJSON(
-				Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName()
+				Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName(),
 			)) as any;
 			if (json.hasOwnProperty('lands')) {
 				const mapPortion = new MapPortion(portion);
@@ -675,7 +673,7 @@ class Map extends Base {
 		return new Portion(
 			portion.x - this.currentPortion.x,
 			portion.y - this.currentPortion.y,
-			portion.z - this.currentPortion.z
+			portion.z - this.currentPortion.z,
 		);
 	}
 
@@ -847,7 +845,7 @@ class Map extends Base {
 				'WeatherYRotation=function(){return ' +
 				options.yRotationAddition +
 				';}',
-			{ addReturn: false }
+			{ addReturn: false },
 		);
 		Interpreter.evaluate(
 			'Scene.Map.current.add' +
@@ -855,7 +853,7 @@ class Map extends Base {
 				'WeatherVelocityn=function(){return ' +
 				options.velocityAddition +
 				';}',
-			{ addReturn: false }
+			{ addReturn: false },
 		);
 		let initialVelocity = Interpreter.evaluate(options.initialVelocity) as number;
 		initialVelocity *= Data.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE;
@@ -882,7 +880,7 @@ class Map extends Base {
 		});
 		if (!options.isColor) {
 			const texture = new THREE.TextureLoader().load(
-				Data.Pictures.get(PICTURE_KIND.PARTICLES, options.imageID).getPath()
+				Data.Pictures.get(PICTURE_KIND.PARTICLES, options.imageID).getPath(),
 			);
 			texture.magFilter = THREE.NearestFilter;
 			texture.minFilter = THREE.NearestFilter;
@@ -892,7 +890,7 @@ class Map extends Base {
 		points.position.set(
 			Scene.Map.current.camera.target.position.x,
 			Scene.Map.current.camera.target.position.y,
-			Scene.Map.current.camera.target.position.z
+			Scene.Map.current.camera.target.position.z,
 		);
 		points.renderOrder = 100;
 		this.scene.add(points);
@@ -999,7 +997,7 @@ class Map extends Base {
 			v = new THREE.Vector3(
 				positionAttribute.getX(i) - (Scene.Map.current.camera.target.position.x - points.position.x),
 				y,
-				positionAttribute.getZ(i) - (Scene.Map.current.camera.target.position.z - points.position.z)
+				positionAttribute.getZ(i) - (Scene.Map.current.camera.target.position.z - points.position.z),
 			);
 			rotationsAngle[i] +=
 				((current ? this.addWeatherYRotation() : this.addPreviousWeatherYRotation()) * Math.PI) / 180;
@@ -1015,7 +1013,7 @@ class Map extends Base {
 		points.position.set(
 			Scene.Map.current.camera.target.position.x,
 			Scene.Map.current.camera.target.position.y,
-			Scene.Map.current.camera.target.position.z
+			Scene.Map.current.camera.target.position.z,
 		);
 	}
 
@@ -1059,7 +1057,7 @@ class Map extends Base {
 						Model.DynamicValue.createSwitch(true),
 					]),
 					true,
-					false
+					false,
 				);
 			}
 		}
@@ -1068,9 +1066,13 @@ class Map extends Base {
 		if (Scene.Map.autotileFrame.update()) {
 			Scene.Map.autotilesOffset.setY(
 				(Scene.Map.autotileFrame.value * Autotiles.COUNT_LIST * 2 * Data.Systems.SQUARE_SIZE) /
-					Constants.MAX_PICTURE_SIZE
+					Constants.MAX_PICTURE_SIZE,
 			);
 		}
+
+		// Update scene game (interpreters)
+		this.mapProperties.startupObject.update();
+		super.update();
 
 		// Update camera
 		this.camera.forceNoHide = true;
@@ -1114,10 +1116,6 @@ class Map extends Base {
 		this.updateWeather(false);
 		this.updateWeather();
 
-		// Update scene game (interpreters)
-		this.mapProperties.startupObject.update();
-		super.update();
-
 		// Update camera hiding
 		if (Game.current !== null && (Data.Systems.moveCameraOnBlockView.getValue() as number)) {
 			this.camera.forceNoHide = false;
@@ -1126,7 +1124,7 @@ class Map extends Base {
 				this.camera.target.position
 					.clone()
 					.add(new THREE.Vector3(0, this.camera.target.height * Data.Systems.SQUARE_SIZE, 0)),
-				this.camera.getThreeCamera()
+				this.camera.getThreeCamera(),
 			)
 				.divide(new THREE.Vector2(ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT))
 				.subScalar(0.5);
@@ -1154,7 +1152,7 @@ class Map extends Base {
 
 		// Update portion
 		if (Scene.Map.current.updateCurrentPortion()) {
-			this.loadPortions(true);
+			this.loadPortions(true).catch(console.error);
 			this.loading = true;
 		}
 	}
@@ -1179,7 +1177,7 @@ class Map extends Base {
 						Model.DynamicValue.create(DYNAMIC_VALUE_KIND.ANYTHING),
 					]),
 					true,
-					false
+					false,
 				);
 			}
 			super.onKeyPressed(key);
@@ -1202,7 +1200,7 @@ class Map extends Base {
 					4,
 					Utils.arrayToMap([Model.DynamicValue.createMessage(key)]),
 					true,
-					false
+					false,
 				);
 			}
 			super.onKeyReleased(key);
@@ -1229,7 +1227,7 @@ class Map extends Base {
 						Model.DynamicValue.createSwitch(true),
 					]),
 					true,
-					false
+					false,
 				);
 			}
 			return super.onKeyPressedRepeat(key);
@@ -1257,7 +1255,7 @@ class Map extends Base {
 						Model.DynamicValue.createSwitch(false),
 					]),
 					true,
-					false
+					false,
 				);
 			}
 			super.onKeyPressedAndRepeat(key);
@@ -1286,7 +1284,7 @@ class Map extends Base {
 						Model.DynamicValue.createSwitch(false),
 					]),
 					true,
-					false
+					false,
 				);
 			}
 			super.onMouseDown(x, y);
@@ -1309,7 +1307,7 @@ class Map extends Base {
 					7,
 					Utils.arrayToMap([Model.DynamicValue.createNumber(x), Model.DynamicValue.createNumber(y)]),
 					true,
-					false
+					false,
 				);
 			}
 			super.onMouseMove(x, y);
@@ -1336,7 +1334,7 @@ class Map extends Base {
 						Model.DynamicValue.createSwitch(Inputs.mouseLeftPressed),
 					]),
 					true,
-					false
+					false,
 				);
 			}
 			super.onMouseUp(x, y);
@@ -1400,7 +1398,7 @@ class Map extends Base {
 		Manager.Collisions.applyOrientedBoxTransforms(Manager.Collisions.BB_ORIENTED_BOX, [0, 0, 0, 0, 0, 0, 0, 0, 0]);
 		Manager.Collisions.applyBoxSpriteTransforms(
 			Manager.Collisions.getBBBoxDetection(true),
-			[0, 0, 0, 0, 0, 0, 0, 0, 0]
+			[0, 0, 0, 0, 0, 0, 0, 0, 0],
 		);
 	}
 }

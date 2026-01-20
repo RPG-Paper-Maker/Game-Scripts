@@ -29,6 +29,7 @@ class Camera {
 	public isPerspective: boolean;
 	public target: MapObject;
 	public targetPosition: THREE.Vector3;
+	public targetLastPosition: THREE.Vector3;
 	public targetOffset: THREE.Vector3;
 	public distance: number;
 	public horizontalAngle: number;
@@ -171,6 +172,13 @@ class Camera {
 	 */
 	updateTargetPosition() {
 		this.targetPosition = this.target.position.clone().add(this.targetOffset);
+		if (this.targetLastPosition) {
+			const diff = this.target.position.clone().sub(this.targetLastPosition);
+			Scene.Map.current.camera.getThreeCamera().position.add(diff);
+			this.targetLastPosition.copy(Scene.Map.current.camera.target.position);
+		} else {
+			this.targetLastPosition = this.target.position.clone();
+		}
 	}
 
 	/**
@@ -230,6 +238,9 @@ class Camera {
 	 *  Update the distance.
 	 */
 	updateDistance() {
+		if (Data.Systems.moveCameraOnBlockView && this.hidingCurrent !== -1) {
+			return;
+		}
 		this.distance = this.getThreeCamera().position.distanceTo(this.targetPosition);
 	}
 
@@ -238,7 +249,6 @@ class Camera {
 	 */
 	updateView() {
 		this.getThreeCamera().lookAt(this.targetPosition);
-		Scene.Map.current.orientation = this.getMapOrientation();
 	}
 
 	/**

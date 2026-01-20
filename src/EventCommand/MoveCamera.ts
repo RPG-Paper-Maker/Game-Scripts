@@ -85,20 +85,19 @@ class MoveCamera extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
-		Scene.Map.current.camera.update();
 		const time = (this.time.getValue() as number) * 1000;
 		const operation = Mathf.OPERATORS_NUMBERS[this.operation];
 		const finalX = operation(
 			Scene.Map.current.camera.getThreeCamera().position.x,
-			(this.x.getValue() as number) * (this.xSquare ? Data.Systems.SQUARE_SIZE : 1)
+			(this.x.getValue() as number) * (this.xSquare ? Data.Systems.SQUARE_SIZE : 1),
 		);
 		const finalY = operation(
 			Scene.Map.current.camera.getThreeCamera().position.y,
-			(this.y.getValue() as number) * (this.ySquare ? Data.Systems.SQUARE_SIZE : 1)
+			(this.y.getValue() as number) * (this.ySquare ? Data.Systems.SQUARE_SIZE : 1),
 		);
 		const finalZ = operation(
 			Scene.Map.current.camera.getThreeCamera().position.z,
-			(this.z.getValue() as number) * (this.zSquare ? Data.Systems.SQUARE_SIZE : 1)
+			(this.z.getValue() as number) * (this.zSquare ? Data.Systems.SQUARE_SIZE : 1),
 		);
 		const finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue() as number);
 		const finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue() as number);
@@ -114,6 +113,7 @@ class MoveCamera extends Base {
 			timeLeft: time,
 			targetID: this.targetID === null ? null : (this.targetID.getValue() as number),
 			target: null,
+			targetLastPosition: Scene.Map.current.camera.target.position.clone(),
 		};
 	}
 
@@ -134,8 +134,9 @@ class MoveCamera extends Base {
 						currentState.targetID,
 						(result: StructSearchResult) => {
 							currentState.target = result.object;
+							Scene.Map.current.camera.targetLastPosition = null;
 						},
-						object
+						object,
 					);
 				}
 				currentState.waitingObject = true;
@@ -145,7 +146,7 @@ class MoveCamera extends Base {
 				if (!currentState.editedTarget) {
 					if (currentState.target) {
 						Scene.Map.current.camera.targetOffset.add(
-							Scene.Map.current.camera.target.position.clone().sub(currentState.target.position)
+							Scene.Map.current.camera.target.position.clone().sub(currentState.target.position),
 						);
 						dif = currentState.target.position.clone().sub(Scene.Map.current.camera.target.position);
 						currentState.finalPosition.add(dif);
@@ -158,7 +159,7 @@ class MoveCamera extends Base {
 						}
 					}
 					currentState.finalDifPosition = currentState.finalPosition.sub(
-						Scene.Map.current.camera.getThreeCamera().position
+						Scene.Map.current.camera.getThreeCamera().position,
 					);
 					currentState.editedTarget = true;
 				}
@@ -177,6 +178,10 @@ class MoveCamera extends Base {
 					timeRate = difNb / currentState.time;
 				}
 
+				if (currentState.target) {
+					Scene.Map.current.camera.targetLastPosition = null;
+				}
+
 				// Rotation
 				Scene.Map.current.camera.addHorizontalAngle(timeRate * currentState.finalDifH);
 				Scene.Map.current.camera.addVerticalAngle(timeRate * currentState.finalDifV);
@@ -188,7 +193,7 @@ class MoveCamera extends Base {
 				let positionOffset = new THREE.Vector3(
 					timeRate * currentState.finalDifPosition.x,
 					timeRate * currentState.finalDifPosition.y,
-					timeRate * currentState.finalDifPosition.z
+					timeRate * currentState.finalDifPosition.z,
 				);
 				Scene.Map.current.camera.getThreeCamera().position.add(positionOffset);
 				if (this.moveTargetOffset) {
@@ -198,7 +203,7 @@ class MoveCamera extends Base {
 						positionOffset = new THREE.Vector3(
 							timeRate * (currentState.finalDifPosition.x - currentState.moveChangeTargetDif.x),
 							timeRate * (currentState.finalDifPosition.y - currentState.moveChangeTargetDif.y),
-							timeRate * (currentState.finalDifPosition.z - currentState.moveChangeTargetDif.z)
+							timeRate * (currentState.finalDifPosition.z - currentState.moveChangeTargetDif.z),
 						);
 						Scene.Map.current.camera.targetOffset.add(positionOffset);
 					}
@@ -207,13 +212,10 @@ class MoveCamera extends Base {
 				if (currentState.finalDifH === 0 && currentState.finalDifV === 0) {
 					Scene.Map.current.camera.updateAngles();
 				}
-				Scene.Map.current.camera.updateDistance();
 
 				// Zoom
+				Scene.Map.current.camera.updateDistance();
 				Scene.Map.current.camera.distance += timeRate * currentState.finalDifDistance;
-
-				// Update
-				Scene.Map.current.camera.update();
 
 				// If time = 0, then this is the end of the command
 				if (currentState.timeLeft === 0) {

@@ -202,7 +202,7 @@ class MapObject {
 					' in map ' +
 					Scene.Map.current.mapProperties.name() +
 					'. Please check where ' +
-					'this ID is used and remove it.'
+					'this ID is used and remove it.',
 			);
 		}
 		const globalPortion = position.getGlobalPortion();
@@ -293,13 +293,13 @@ class MapObject {
 		}
 		if (!position) {
 			Platform.showErrorMessage(
-				'Trying to access an object ID ' + objectID + " that doesn't exists. Please check your commands."
+				'Trying to access an object ID ' + objectID + " that doesn't exists. Please check your commands.",
 			);
 		}
 		const globalPortion = position.getGlobalPortion();
 		const mapsData = Game.current.getPortionData(Scene.Map.current.id, globalPortion);
 		const json = await Platform.parseFileJSON(
-			Paths.FILE_MAPS + Scene.Map.current.mapFilename + '/' + globalPortion.getFileName()
+			Paths.FILE_MAPS + Scene.Map.current.mapFilename + '/' + globalPortion.getFileName(),
 		);
 		const mapPortion = new MapPortion(globalPortion);
 		const moved = mapPortion.getObjFromID(json, objectID);
@@ -545,7 +545,7 @@ class MapObject {
 		this.position.set(
 			this.position.x - this.currentCenterOffset.x,
 			this.position.y,
-			this.position.z - this.currentCenterOffset.z
+			this.position.z - this.currentCenterOffset.z,
 		);
 		this.currentCenterOffset.set(0, 0, 0);
 		this.currentAngle.set(0, 0, 0);
@@ -559,7 +559,7 @@ class MapObject {
 					: this.currentStateInstance.indexX;
 			this.orientationEye = this.currentStateInstance.setWithCamera
 				? this.currentStateInstance.indexY
-				: Mathf.mod(Scene.Map.current.orientation + this.currentStateInstance.indexY - 2, 4);
+				: Mathf.mod(Scene.Map.current.camera.getMapOrientation() + this.currentStateInstance.indexY - 2, 4);
 			this.updateOrientation();
 			let result: [CustomGeometry, [number, StructMapElementCollision[]]];
 			const positionTranformation = Position.createFromVector3(this.position);
@@ -617,24 +617,24 @@ class MapObject {
 					this.currentOrientationClimbing = this.currentStateInstance.indexY >= 8;
 					this.isOrientationStopWalk = !Data.Pictures.get(
 						PICTURE_KIND.CHARACTERS,
-						this.currentStateInstance.graphicID
+						this.currentStateInstance.graphicID,
 					).isStopAnimation;
 				}
 
 				const sprite = Sprite.create(
 					this.currentStateInstance.graphicKind,
-					new Rectangle(x, y, this.width, this.height)
+					new Rectangle(x, y, this.width, this.height),
 				);
 				result = sprite.createGeometry(
 					this.width,
 					this.height,
 					this.currentStateInstance.graphicID === 0,
-					positionTranformation
+					positionTranformation,
 				);
 				this.currentCenterOffset.set(
 					positionTranformation.getPixelsCenterX() - Data.Systems.SQUARE_SIZE / 2,
 					0,
-					positionTranformation.getPixelsCenterZ() - Data.Systems.SQUARE_SIZE / 2
+					positionTranformation.getPixelsCenterZ() - Data.Systems.SQUARE_SIZE / 2,
 				);
 			}
 			const geometry = result[0];
@@ -643,17 +643,17 @@ class MapObject {
 			this.currentAngle.set(
 				positionTranformation.angleX,
 				positionTranformation.angleY,
-				positionTranformation.angleZ
+				positionTranformation.angleZ,
 			);
 			this.currentScale.set(
 				positionTranformation.scaleX,
 				positionTranformation.scaleY,
-				positionTranformation.scaleZ
+				positionTranformation.scaleZ,
 			);
 			this.position.set(
 				this.position.x + this.currentCenterOffset.x,
 				this.position.y,
-				this.position.z + this.currentCenterOffset.z
+				this.position.z + this.currentCenterOffset.z,
 			);
 			if (Scene.Map.current.mapProperties.isSunLight) {
 				this.mesh.receiveShadow = true;
@@ -799,7 +799,7 @@ class MapObject {
 					position,
 					this,
 					this.boundingBoxSettings.b[i],
-					true
+					true,
 				);
 
 				if (result[0]) {
@@ -823,13 +823,13 @@ class MapObject {
 			for (j = 0, m = object.meshBoundingBox.length; j < m; j++) {
 				if (
 					this.meshBoundingBox[i].geometry.boundingBox.intersectsBox(
-						object.meshBoundingBox[j].geometry.boundingBox
+						object.meshBoundingBox[j].geometry.boundingBox,
 					)
 				) {
 					if (
 						Manager.Collisions.obbVSobb(
 							<CustomGeometry>this.meshBoundingBox[i].geometry,
-							<CustomGeometry>object.meshBoundingBox[j].geometry
+							<CustomGeometry>object.meshBoundingBox[j].geometry,
 						)
 					) {
 						return true;
@@ -850,7 +850,7 @@ class MapObject {
 			if (
 				Manager.Collisions.obbVSobb(
 					<CustomGeometry>this.meshBoundingBox[i].geometry,
-					<CustomGeometry>Manager.Collisions.getBBBoxDetection(true).geometry
+					<CustomGeometry>Manager.Collisions.getBBBoxDetection(true).geometry,
 				)
 			) {
 				return true;
@@ -873,7 +873,7 @@ class MapObject {
 				Manager.Collisions.obbVSobb(
 					<CustomGeometry>Manager.Collisions.BB_BOX_DEFAULT_DETECTION.geometry,
 					<CustomGeometry>Manager.Collisions.getBBBoxDetection(true).geometry,
-					false
+					false,
 				)
 			) {
 				return true;
@@ -908,7 +908,7 @@ class MapObject {
 				this.boundingBoxSettings.b = [];
 				for (let i = 0, l = this.boundingBoxSettings.squares.length; i < l; i++) {
 					this.boundingBoxSettings.b.push(
-						CollisionSquare.getBB(this.boundingBoxSettings.squares[i], this.width, this.height)
+						CollisionSquare.getBB(this.boundingBoxSettings.squares[i], this.width, this.height),
 					);
 					if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX) {
 						box = Manager.Collisions.createBox();
@@ -926,7 +926,7 @@ class MapObject {
 								this.currentAngle.z,
 							],
 							true,
-							[0, this.boundingBoxSettings.b[i][1] / 2 / Data.Systems.SQUARE_SIZE, 0]
+							[0, this.boundingBoxSettings.b[i][1] / 2 / Data.Systems.SQUARE_SIZE, 0],
 						);
 					} else {
 						box = Manager.Collisions.createOrientedBox();
@@ -1226,7 +1226,7 @@ class MapObject {
 			if (movedObjects && movedObjects.indexOf(this) === -1) {
 				movedObjects.push(this);
 				movedObjects = Scene.Map.current.getMapPortionFromPortion(
-					Scene.Map.current.getLocalPortion(originalPortion)
+					Scene.Map.current.getLocalPortion(originalPortion),
 				).objectsList;
 				index = movedObjects.indexOf(this);
 				if (index !== -1) {
@@ -1319,7 +1319,7 @@ class MapObject {
 		eventID: number,
 		parameters: Map<number, DynamicValue>,
 		states: number[],
-		events?: [Model.Event, number]
+		events?: [Model.Event, number],
 	): boolean {
 		// Option only one event per frame
 		if ((this.system.isEventFrame && this.receivedOneEvent) || this.removed) {
@@ -1381,7 +1381,7 @@ class MapObject {
 				// If moving, update frame
 				if (this.currentStateInstance.moveAnimation) {
 					frame = this.frame.update(
-						(Data.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
+						(Data.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number),
 					);
 				}
 
@@ -1391,7 +1391,7 @@ class MapObject {
 			} else {
 				if (this.currentStateInstance.stopAnimation && !this.isClimbing) {
 					frame = this.frame.update(
-						(Data.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number)
+						(Data.Systems.mapFrameDuration.getValue() as number) / (this.speed.getValue() as number),
 					);
 				} else {
 					frame = this.frame.value !== this.currentStateInstance.indexX;
@@ -1433,12 +1433,12 @@ class MapObject {
 			this.upPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
-				this.position.z
+				this.position.z,
 			);
 			this.halfPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + (this.height * Data.Systems.SQUARE_SIZE) / 2,
-				this.position.z
+				this.position.z,
 			);
 		}
 
@@ -1463,7 +1463,7 @@ class MapObject {
 				this.currentState.id,
 				new Map(),
 				null,
-				true
+				true,
 			);
 			if (interpreter !== null) {
 				this.movingState = interpreter.currentCommandState;
@@ -1485,8 +1485,9 @@ class MapObject {
 	 *  Update the orientation according to the camera position
 	 */
 	updateOrientation() {
-		this.orientation = Mathf.mod((Scene.Map.current.orientation - 2) * 3 + this.orientationEye, 4);
-		this.climbOrientation = Mathf.mod((Scene.Map.current.orientation - 2) * 3 + this.climbOrientationEye, 4);
+		const mapOrientation = Scene.Map.current.camera.getMapOrientation();
+		this.orientation = Mathf.mod((mapOrientation - 2) * 3 + this.orientationEye, 4);
+		this.climbOrientation = Mathf.mod((mapOrientation - 2) * 3 + this.climbOrientationEye, 4);
 		if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
 			let angle = 0;
 			switch (this.orientationEye) {
@@ -1614,7 +1615,7 @@ class MapObject {
 	getOrientationBetweenPosition(
 		position: THREE.Vector3,
 		force: boolean = false,
-		front: boolean = false
+		front: boolean = false,
 	): ORIENTATION {
 		const x = Math.abs(position.x - this.position.x);
 		const z = Math.abs(position.z - this.position.z);
@@ -1642,7 +1643,7 @@ class MapObject {
 		this.terrain = 0;
 		if (!Scene.Map.current.loading && this.position) {
 			const mapPortion = Scene.Map.current.getMapPortionFromPortion(
-				Scene.Map.current.getLocalPortion(Portion.createFromVector3(this.position))
+				Scene.Map.current.getLocalPortion(Portion.createFromVector3(this.position)),
 			);
 			if (mapPortion) {
 				const position = Position.createFromVector3(this.position);

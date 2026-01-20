@@ -65,7 +65,7 @@ class MoveObject extends Base {
 			this.kind = command[iterator.i++];
 			if (this.kind >= COMMAND_MOVE_KIND.MOVE_NORTH && this.kind <= COMMAND_MOVE_KIND.MOVE_BACK) {
 				this.parameters.push({
-					square: !Utils.numberToBool(command[iterator.i++]),
+					square: command[iterator.i++] === 0,
 				});
 				switch (this.kind) {
 					case COMMAND_MOVE_KIND.MOVE_NORTH:
@@ -112,7 +112,7 @@ class MoveObject extends Base {
 						break;
 				}
 			} else if (this.kind === COMMAND_MOVE_KIND.JUMP) {
-				const square = !Utils.numberToBool(command[iterator.i++]);
+				const square = command[iterator.i++] === 0;
 				const x = Model.DynamicValue.createValueCommand(command, iterator);
 				const y = Model.DynamicValue.createValueCommand(command, iterator);
 				const yPlus = Model.DynamicValue.createValueCommand(command, iterator);
@@ -121,7 +121,7 @@ class MoveObject extends Base {
 				const peakYPlus = Model.DynamicValue.createValueCommand(command, iterator);
 				const time = Model.DynamicValue.createValueCommand(command, iterator);
 				this.parameters.push({
-					square: square,
+					square,
 					x: x,
 					y: y,
 					yPlus: yPlus,
@@ -383,7 +383,7 @@ class MoveObject extends Base {
 			orientation,
 			Data.Systems.SQUARE_SIZE - currentState.distance,
 			angle,
-			this.isCameraOrientation
+			this.isCameraOrientation,
 		);
 		currentState.distance += distances[0];
 		currentState.normalDistance += distances[1];
@@ -428,7 +428,7 @@ class MoveObject extends Base {
 	moveNorth(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		return object ? this.move(currentState, object, parameters.square, ORIENTATION.NORTH) : ORIENTATION.NORTH;
 	}
@@ -443,7 +443,7 @@ class MoveObject extends Base {
 	moveSouth(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			return this.move(currentState, object, parameters.square, ORIENTATION.SOUTH);
@@ -461,7 +461,7 @@ class MoveObject extends Base {
 	moveWest(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			return this.move(currentState, object, parameters.square, ORIENTATION.WEST);
@@ -479,7 +479,7 @@ class MoveObject extends Base {
 	moveEast(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			return this.move(currentState, object, parameters.square, ORIENTATION.EAST);
@@ -497,7 +497,7 @@ class MoveObject extends Base {
 	moveNorthWest(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.previousOrientation = ORIENTATION.NORTH;
@@ -516,7 +516,7 @@ class MoveObject extends Base {
 	moveNorthEast(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.previousOrientation = ORIENTATION.NORTH;
@@ -535,7 +535,7 @@ class MoveObject extends Base {
 	moveSouthWest(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.previousOrientation = ORIENTATION.SOUTH;
@@ -554,7 +554,7 @@ class MoveObject extends Base {
 	moveSouthEast(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.previousOrientation = ORIENTATION.SOUTH;
@@ -573,7 +573,7 @@ class MoveObject extends Base {
 	moveRandom(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		switch (currentState.random) {
 			case COMMAND_MOVE_KIND.MOVE_NORTH:
@@ -597,7 +597,7 @@ class MoveObject extends Base {
 	moveHero(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		return this.moveHeroAndOpposite(currentState, object, parameters, false);
 	}
@@ -612,7 +612,7 @@ class MoveObject extends Base {
 	moveOppositeHero(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		return this.moveHeroAndOpposite(currentState, object, parameters, true);
 	}
@@ -629,7 +629,7 @@ class MoveObject extends Base {
 		currentState: Record<string, any>,
 		object: MapObject,
 		parameters: Record<string, any>,
-		opposite: boolean
+		opposite: boolean,
 	): ORIENTATION | boolean {
 		if (object) {
 			let orientation =
@@ -666,7 +666,7 @@ class MoveObject extends Base {
 	moveFront(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			const orientation =
@@ -687,7 +687,7 @@ class MoveObject extends Base {
 	moveBack(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			const orientation =
@@ -717,7 +717,7 @@ class MoveObject extends Base {
 					(parameters.x.getValue() as number) * square + currentState.startJump.x,
 					(((parameters.y.getValue() as number) * square + parameters.yPlus.getValue()) as number) +
 						currentState.startJump.y,
-					(parameters.z.getValue() as number) * square + currentState.startJump.z
+					(parameters.z.getValue() as number) * square + currentState.startJump.z,
 				);
 				currentState.peak = ((parameters.peakY.getValue() as number) * Data.Systems.SQUARE_SIZE +
 					parameters.peakYPlus.getValue()) as number;
@@ -727,7 +727,7 @@ class MoveObject extends Base {
 							currentState.endJump.y +
 							'px, Peak position=' +
 							currentState.peak +
-							'px'
+							'px',
 					);
 				}
 				currentState.time = (parameters.time.getValue() as number) * 1000;
@@ -737,7 +737,7 @@ class MoveObject extends Base {
 				currentState.endJump,
 				currentState.peak,
 				currentState.currentTime,
-				currentState.time
+				currentState.time,
 			);
 			if (currentState.currentTime === currentState.time) {
 				currentState.currentTime = -1;
@@ -759,10 +759,12 @@ class MoveObject extends Base {
 	turnNorth(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((ORIENTATION.NORTH + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt(
+				(ORIENTATION.NORTH + (this.isCameraOrientation ? Scene.Map.current.camera.getMapOrientation() : 0)) % 4,
+			);
 			return true;
 		}
 		return ORIENTATION.NORTH;
@@ -778,10 +780,12 @@ class MoveObject extends Base {
 	turnSouth(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((ORIENTATION.SOUTH + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt(
+				(ORIENTATION.SOUTH + (this.isCameraOrientation ? Scene.Map.current.camera.getMapOrientation() : 0)) % 4,
+			);
 			return true;
 		}
 		return ORIENTATION.SOUTH;
@@ -797,10 +801,12 @@ class MoveObject extends Base {
 	turnWest(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((ORIENTATION.WEST + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt(
+				(ORIENTATION.WEST + (this.isCameraOrientation ? Scene.Map.current.camera.getMapOrientation() : 0)) % 4,
+			);
 			return true;
 		}
 		return ORIENTATION.WEST;
@@ -816,10 +822,12 @@ class MoveObject extends Base {
 	turnEast(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			object.lookAt((ORIENTATION.EAST + (this.isCameraOrientation ? Scene.Map.current.orientation : 0)) % 4);
+			object.lookAt(
+				(ORIENTATION.EAST + (this.isCameraOrientation ? Scene.Map.current.camera.getMapOrientation() : 0)) % 4,
+			);
 			return true;
 		}
 		return ORIENTATION.EAST;
@@ -835,7 +843,7 @@ class MoveObject extends Base {
 	turn90Right(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt((object.orientationEye + 1) % 4);
@@ -854,7 +862,7 @@ class MoveObject extends Base {
 	turn90Left(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt((object.orientationEye - 1) % 4);
@@ -873,7 +881,7 @@ class MoveObject extends Base {
 	lookAtHero(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt(object.getOrientationBetween(Game.current.hero));
@@ -892,7 +900,7 @@ class MoveObject extends Base {
 	lookAtHeroOpposite(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			object.lookAt((object.getOrientationBetween(Game.current.hero) + 2) % 4);
@@ -910,7 +918,7 @@ class MoveObject extends Base {
 	changeGraphics(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -922,7 +930,7 @@ class MoveObject extends Base {
 					parameters.indexX,
 					parameters.indexY,
 					parameters.width,
-					parameters.height
+					parameters.height,
 				);
 			} else {
 				object.currentStateInstance.indexX = parameters.indexX;
@@ -962,7 +970,7 @@ class MoveObject extends Base {
 	changeSpeed(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -993,7 +1001,7 @@ class MoveObject extends Base {
 	changeFrequency(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1024,7 +1032,7 @@ class MoveObject extends Base {
 	moveAnimation(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1052,7 +1060,7 @@ class MoveObject extends Base {
 	stopAnimation(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1080,7 +1088,7 @@ class MoveObject extends Base {
 	climbAnimation(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1108,7 +1116,7 @@ class MoveObject extends Base {
 	directionFix(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1136,7 +1144,7 @@ class MoveObject extends Base {
 	through(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1166,7 +1174,7 @@ class MoveObject extends Base {
 	setWithCamera(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1194,7 +1202,7 @@ class MoveObject extends Base {
 	pixelOffset(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1222,7 +1230,7 @@ class MoveObject extends Base {
 	keepPosition(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
@@ -1250,7 +1258,7 @@ class MoveObject extends Base {
 	useCommand(
 		currentState: Record<string, any>,
 		object: MapObject,
-		parameters: Record<string, any>
+		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
 			if (currentState.commandState === null) {
@@ -1374,7 +1382,7 @@ class MoveObject extends Base {
 					(result: StructSearchResult) => {
 						currentState.object = result.object;
 					},
-					object
+					object,
 				);
 				currentState.waitingObject = true;
 			}
@@ -1383,7 +1391,7 @@ class MoveObject extends Base {
 					this,
 					currentState,
 					currentState.object,
-					this.parameters[currentState.index]
+					this.parameters[currentState.index],
 				);
 
 				if (finished) {
