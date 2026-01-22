@@ -104,9 +104,11 @@ export class Cost extends Base {
 		const target = Player.getTemporaryPlayer();
 		const value = this.getValue(user, target);
 		switch (this.kind) {
-			case DAMAGES_KIND.STAT:
-				user[Data.BattleSystems.getStatistic(this.statisticID.getValue() as number).abbreviation] -= value;
+			case DAMAGES_KIND.STAT: {
+				const stat = Data.BattleSystems.getStatistic(this.statisticID.getValue() as number);
+				user[stat.abbreviation] = Math.min(user[stat.abbreviation] - value, user[stat.getMaxAbbreviation()]);
 				break;
+			}
 			case DAMAGES_KIND.CURRENCY:
 				Game.current.addCurrency(this.currencyID.getValue() as number, -value);
 				break;
