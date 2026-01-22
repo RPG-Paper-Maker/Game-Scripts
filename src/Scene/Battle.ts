@@ -104,6 +104,7 @@ class Battle extends Map {
 	public listSkills: Graphic.Skill[];
 	public listItems: Graphic.Item[];
 	public effects: Model.Effect[];
+	public previousEffects: Model.Effect[];
 
 	//Battle Information
 	public graphicPlayers: Graphic.Player[][];
@@ -178,6 +179,7 @@ class Battle extends Map {
 	public xp: number;
 	public battleMap: Model.BattleMap;
 	public currentEffectIndex: number;
+	public previousCurrentEffectIndex: number;
 	public currentTargetIndex: number;
 	public priorityIndex: number;
 	public lootsNumber: number;
@@ -194,7 +196,7 @@ class Battle extends Map {
 		transitionStart: number,
 		transitionEnd: number,
 		transitionStartColor: Model.Color,
-		transitionEndColor: Model.Color
+		transitionEndColor: Model.Color,
 	) {
 		super(battleMap.idMap, true);
 
