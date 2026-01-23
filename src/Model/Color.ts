@@ -42,7 +42,7 @@ export class Color extends Base {
 	/** Alpha channel (0–1). */
 	public alpha: number;
 
-	/** CSS-style RGB string (e.g. `"rgb(255, 0, 0)"`). */
+	/** CSS-style RGB string */
 	public rgb: string;
 
 	/** THREE.js color object for rendering. */
@@ -57,7 +57,7 @@ export class Color extends Base {
 	 * @param r - Red channel (0–255).
 	 * @param g - Green channel (0–255).
 	 * @param b - Blue channel (0–255).
-	 * @param a - Alpha channel (0–255, defaults to 255).
+	 * @param a - Alpha channel (0–1, defaults to 1).
 	 */
 	static createColor(r: number, g: number, b: number, a?: number): Color {
 		const color = new Color();
@@ -90,7 +90,7 @@ export class Color extends Base {
 			const rgb = new THREE.Vector3(
 				Math.max(Math.min(this.color.r + tone.x, 1), -1),
 				Math.max(Math.min(this.color.g + tone.y, 1), -1),
-				Math.max(Math.min(this.color.b + tone.z, 1), -1)
+				Math.max(Math.min(this.color.b + tone.z, 1), -1),
 			);
 			const w = new THREE.Vector3(0.2125, 0.7154, 0.0721);
 			const intensity = rgb.dot(w);
@@ -98,7 +98,7 @@ export class Color extends Base {
 			hex = new THREE.Color(
 				Math.min(Math.max(0, m.x), 1),
 				Math.min(Math.max(0, m.y), 1),
-				Math.min(Math.max(0, m.z), 1)
+				Math.min(Math.max(0, m.z), 1),
 			).getHexString();
 			return `#${hex}`;
 		}
@@ -110,14 +110,14 @@ export class Color extends Base {
 	 * @param r - Red channel (0–255).
 	 * @param g - Green channel (0–255).
 	 * @param b - Blue channel (0–255).
-	 * @param a - Alpha channel (0–255, defaults to 255).
+	 * @param a - Alpha channel (0–1, defaults to 1).
 	 */
-	initialize(r: number, g: number, b: number, a: number = 255): void {
+	initialize(r: number, g: number, b: number, a: number = 1): void {
 		this.red = r;
 		this.green = g;
 		this.blue = b;
 		this.alpha = a / 255;
-		this.rgb = `rgb(${this.red}, ${this.green}, ${this.blue})`;
+		this.rgb = `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.alpha})`;
 		this.color = new THREE.Color(this.rgb);
 	}
 
