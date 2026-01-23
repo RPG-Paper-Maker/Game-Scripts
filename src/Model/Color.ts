@@ -116,8 +116,8 @@ export class Color extends Base {
 		this.red = r;
 		this.green = g;
 		this.blue = b;
-		this.alpha = a / 255;
-		this.rgb = `rgba(${this.red}, ${this.green}, ${this.blue}, ${this.alpha})`;
+		this.alpha = a;
+		this.rgb = `rgb(${this.red}, ${this.green}, ${this.blue})`;
 		this.color = new THREE.Color(this.rgb);
 	}
 
