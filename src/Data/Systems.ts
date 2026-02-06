@@ -380,7 +380,7 @@ export class Systems {
 		this.mainMenuCommands = Utils.readJSONList(json.mainMenuCommands, MainMenuCommand);
 		this.heroesStatistics = Utils.readJSONList(
 			json.heroesStatistics,
-			(element: { statisticID: DynamicValueJSON }) => DynamicValue.readOrDefaultDatabase(element.statisticID)
+			(element: { statisticID: DynamicValueJSON }) => DynamicValue.readOrDefaultDatabase(element.statisticID),
 		);
 		this.initialPartyMembers = Utils.readJSONList(json.initialPartyMembers, InitialPartyMember);
 		this.colors = Utils.readJSONMap(json.colors, Color);
@@ -390,14 +390,14 @@ export class Systems {
 		this.detections = Utils.readJSONMap(json.d, Detection);
 		this.skyboxes = Utils.readJSONMap(json.sb, Skybox);
 		this.fontSizes = Utils.readJSONMap(json.fs, (element: { s: DynamicValueJSON }) =>
-			DynamicValue.readOrDefaultNumber(element.s)
+			DynamicValue.readOrDefaultNumber(element.s),
 		);
 		this.fontNames = Utils.readJSONMap(json.fn, FontName);
 		this.speeds = Utils.readJSONMap(json.sf, (element: { v: DynamicValueJSON }) =>
-			DynamicValue.readOrDefaultNumberDouble(element.v, 1)
+			DynamicValue.readOrDefaultNumberDouble(element.v, 1),
 		);
 		this.frequencies = Utils.readJSONMap(json.f, (element: { v: DynamicValueJSON }) =>
-			DynamicValue.readOrDefaultNumberDouble(element.v, 1)
+			DynamicValue.readOrDefaultNumberDouble(element.v, 1),
 		);
 
 		// Sounds

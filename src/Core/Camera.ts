@@ -172,7 +172,7 @@ class Camera {
 	 */
 	updateTargetPosition() {
 		this.targetPosition = this.target.position.clone().add(this.targetOffset);
-		if (this.targetLastPosition) {
+		if (this.targetLastPosition && Scene.Map.current.camera) {
 			const diff = this.target.position.clone().sub(this.targetLastPosition);
 			this.getThreeCamera().position.add(diff);
 			this.targetLastPosition.copy(Scene.Map.current.camera.target.position);
@@ -290,7 +290,7 @@ class Camera {
 		this.updateView();
 
 		// Update light
-		if (Scene.Map.current.mapProperties.isSunLight) {
+		if (Scene.Map.current.mapProperties && Scene.Map.current.mapProperties.isSunLight) {
 			Scene.Map.current.sunLight.target.position.copy(this.targetPosition);
 			Scene.Map.current.sunLight.target.updateMatrixWorld();
 			Scene.Map.current.sunLight.position

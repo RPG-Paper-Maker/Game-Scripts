@@ -144,7 +144,7 @@ class TeleportObject extends Base {
 						this.x.getValue() as number,
 						this.y.getValue() as number,
 						this.z.getValue() as number,
-						((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE
+						((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
 					).toVector3();
 				} else {
 					MapObject.search(
@@ -152,7 +152,7 @@ class TeleportObject extends Base {
 						(result: StructSearchResult) => {
 							currentState.position = result.object.position;
 						},
-						object
+						object,
 					);
 				}
 				currentState.waitingPosition = true;
@@ -178,12 +178,13 @@ class TeleportObject extends Base {
 									// Initialize time event again to reinclude time repeat off
 									Game.current.hero.initializeTimeEvents();
 									Manager.Stack.replace(map);
+									Scene.Map.current = map;
 									currentState.distance = null;
 								} else {
 									needReload = true;
 									Game.current.hero.orientationEye = Mathf.mod(
 										direction + Scene.Map.current.camera.getMapOrientation() - 2,
-										4
+										4,
 									);
 									Game.current.hero.updateUVs();
 								}
@@ -199,7 +200,7 @@ class TeleportObject extends Base {
 						}
 						currentState.teleported = true;
 					},
-					object
+					object,
 				);
 				currentState.waitingObject = true;
 			}

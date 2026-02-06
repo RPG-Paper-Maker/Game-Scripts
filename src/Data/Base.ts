@@ -32,7 +32,7 @@ export abstract class Base {
 		list: Map<number, T>,
 		name: string,
 		isID = true,
-		errorMessage = ''
+		errorMessage = '',
 	): T {
 		if (id === null) {
 			return null;
@@ -45,7 +45,7 @@ export abstract class Base {
 				errorMessage ||
 					`${Base.STRING_ERROR_GET_1}${isID ? 'ID' : 'index'} ${Utils.formatNumber(id, 4)}: ${name}${
 						Base.STRING_ERROR_GET_2
-					}`
+					}`,
 			);
 		} else {
 			return v;

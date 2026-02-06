@@ -161,7 +161,7 @@ class ChangeState extends Base {
 						(result: StructSearchResult) => {
 							currentState.object = result.object;
 						},
-						object
+						object,
 					);
 				} else {
 					currentState.object = {};
@@ -201,7 +201,7 @@ class ChangeState extends Base {
 						'Change state command: the object ID ' +
 							objectID +
 							" selected doesn't exist in the map " +
-							currentState.map.name
+							currentState.map.name,
 					);
 				}
 				const portion = position.getGlobalPortion();
@@ -224,7 +224,7 @@ class ChangeState extends Base {
 						EventCommand.ChangeState.removeState(
 							portionData,
 							indexState,
-							this.idState.getValue() as number
+							this.idState.getValue() as number,
 						);
 						break;
 				}

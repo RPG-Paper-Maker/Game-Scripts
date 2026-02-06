@@ -87,7 +87,7 @@ class Message extends Graphic.Base {
 						TAG_KIND.TEXT,
 						message.substring(lastC, c),
 						true,
-						notClosed
+						notClosed,
 					);
 				}
 				lastC = c + 1;
@@ -102,7 +102,7 @@ class Message extends Graphic.Base {
 						TAG_KIND.TEXT,
 						message.substring(lastC, c),
 						true,
-						notClosed
+						notClosed,
 					);
 				}
 				cr = c;
@@ -150,7 +150,7 @@ class Message extends Graphic.Base {
 						TAG_KIND.TEXT,
 						message.substring(c, cr + 1),
 						true,
-						notClosed
+						notClosed,
 					);
 				} else {
 					split = tag.split('=');
@@ -159,7 +159,7 @@ class Message extends Graphic.Base {
 						tagKind,
 						open && split.length > 1 ? split[1] : null,
 						open,
-						notClosed
+						notClosed,
 					);
 				}
 				lastC = cr + 1;
@@ -378,23 +378,23 @@ class Message extends Graphic.Base {
 				break;
 			case TAG_KIND.SIZE:
 				size = result.cs;
-				result.cs = Data.Systems.getFontSize(value).getValue() as number;
+				result.cs = Data.Systems.getFontSize(Number(value)).getValue() as number;
 				break;
 			case TAG_KIND.FONT:
 				font = result.cf;
-				result.cf = Data.Systems.getFontName(value).getName();
+				result.cf = Data.Systems.getFontName(Number(value)).getName();
 				break;
 			case TAG_KIND.TEXT_COLOR:
 				textColor = result.ctc;
-				result.ctc = Data.Systems.getColor(value);
+				result.ctc = Data.Systems.getColor(Number(value));
 				break;
 			case TAG_KIND.BACK_COLOR:
 				backColor = result.cbc;
-				result.cbc = Data.Systems.getColor(value);
+				result.cbc = Data.Systems.getColor(Number(value));
 				break;
 			case TAG_KIND.STROKE_COLOR:
 				strokeColor = result.csc;
-				result.csc = Data.Systems.getColor(value);
+				result.csc = Data.Systems.getColor(Number(value));
 				break;
 		}
 		if (node.firstChild !== null) {
