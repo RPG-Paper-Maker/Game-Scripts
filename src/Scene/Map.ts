@@ -524,7 +524,7 @@ class Map extends Base {
 			const json = (await Platform.parseFileJSON(
 				Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName(),
 			)) as any;
-			if (json.hasOwnProperty('lands')) {
+			if (json && json.hasOwnProperty('lands')) {
 				const mapPortion = new MapPortion(portion);
 				this.setMapPortion(x, y, z, mapPortion, move);
 				await mapPortion.read(json);
