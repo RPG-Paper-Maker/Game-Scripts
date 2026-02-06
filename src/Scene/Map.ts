@@ -1074,6 +1074,11 @@ class Map extends Base {
 		this.mapProperties.startupObject.update();
 		super.update();
 
+		// If map changed during interpreter update, stop processing
+		if (Scene.Map.current !== this) {
+			return;
+		}
+
 		// Update camera
 		this.camera.forceNoHide = true;
 		this.camera.update();
@@ -1353,6 +1358,10 @@ class Map extends Base {
 	 *  Close the map.
 	 */
 	close() {
+		this.reactionInterpreters = [];
+		this.reactionInterpretersEffects = [];
+		this.parallelCommands = [];
+
 		const l = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
 		const w = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
 		const d = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
