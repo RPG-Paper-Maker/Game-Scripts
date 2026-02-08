@@ -497,6 +497,7 @@ class Message extends Graphic.Base {
 		}
 		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Data.Systems.facesetScalingWidth));
 		const newY = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const textAreaWidth = w - (newX - x);
 		let offsetY = 0;
 		let align = ALIGN.NONE;
 		let c = this.heights.length - 1;
@@ -510,6 +511,7 @@ class Message extends Graphic.Base {
 			// New line
 			if (graphic === null) {
 				offsetY += this.heights[c--] * 2;
+				offsetX = 0;
 				align = ALIGN.NONE;
 				j++;
 			} else {
@@ -537,10 +539,22 @@ class Message extends Graphic.Base {
 						w: Data.Systems.iconsSize,
 						h: Data.Systems.iconsSize,
 					});
+					offsetX += this.positions[i];
 				} else {
-					(<Graphic.Base>graphic).draw(newX + offsetX, newY + offsetY, graphic.oW, graphic.oH);
+					const textGraphic = graphic as Graphic.Text;
+					if (textAreaWidth > 0 && offsetX > 0 && offsetX + this.positions[i] > textAreaWidth) {
+						offsetY += textGraphic.fontSize * 2;
+						offsetX = 0;
+					}
+					const availableW = textAreaWidth > 0 ? textAreaWidth - offsetX : 0;
+					textGraphic.draw(newX + offsetX, newY + offsetY, availableW, graphic.oH);
+					if (textGraphic.lines.length > 1) {
+						offsetY += (textGraphic.lines.length - 1) * textGraphic.fontSize * 2;
+						offsetX = 0;
+					} else {
+						offsetX += this.positions[i];
+					}
 				}
-				offsetX += this.positions[i];
 			}
 		}
 	}
