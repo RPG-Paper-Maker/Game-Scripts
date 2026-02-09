@@ -21,9 +21,11 @@ interface StructIterator {
  */
 abstract class Base {
 	public parallel: boolean;
+	public disabled: boolean;
 
 	constructor() {
 		this.parallel = false;
+		this.disabled = false;
 	}
 
 	/**

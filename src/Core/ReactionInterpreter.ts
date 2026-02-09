@@ -153,6 +153,13 @@ class ReactionInterpreter {
 		}
 		this.updateObjectParameters();
 
+		if (this.currentCommand.data.disabled) {
+			if (typeof this.currentCommand.data.goToNextCommand === 'function') {
+				return this.goToNextCommand(this.currentCommand);
+			}
+			return this.endOfBlock(this.currentCommand, this.currentCommand.next);
+		}
+
 		// Update can return different type of values
 		ReactionInterpreter.currentReaction = this;
 		const result = this.currentCommand.data.update(

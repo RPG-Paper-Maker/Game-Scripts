@@ -23,6 +23,7 @@ import { Event } from './Event';
 export type ReactionCommandJSON = {
 	kind: EVENT_COMMAND_KIND;
 	command: MapObjectCommandType[];
+	d?: boolean;
 	children?: ReactionCommandJSON[];
 };
 
@@ -78,6 +79,10 @@ export class Reaction extends Base {
 			// Comment
 			if (command instanceof EventCommand.Comment) {
 				continue;
+			}
+
+			if (jsonCommand.d) {
+				command.disabled = true;
 			}
 
 			// Add node
