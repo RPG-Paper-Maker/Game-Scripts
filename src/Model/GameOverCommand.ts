@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Manager, Model, Scene } from '..';
+import { Data, Manager, Model, Scene } from '..';
 import { GAME_OVER_COMMAND_KIND, Interpreter, Platform, Utils } from '../Common';
 import { Game } from '../Core';
 import { Localization, LocalizationJSON } from './Localization';
@@ -50,9 +50,19 @@ export class GameOverCommand extends Localization {
 	}
 
 	/**
+	 * Stop the game over video if it is playing.
+	 */
+	static stopGameOverVideo() {
+		if (!Data.TitlescreenGameover.isGameOverBackgroundImage) {
+			Manager.Videos.stop();
+		}
+	}
+
+	/**
 	 * Callback function for continuing the game (load last save).
 	 */
 	continue(): boolean {
+		GameOverCommand.stopGameOverVideo();
 		if (Game.current.slot === -1) {
 			// No save slot → start new game
 			Model.TitleCommand.startNewGame();
@@ -67,6 +77,7 @@ export class GameOverCommand extends Localization {
 	 * Callback function for going back to title screen.
 	 */
 	titleScreen(): boolean {
+		GameOverCommand.stopGameOverVideo();
 		Manager.Stack.popAll();
 		Manager.Stack.pushTitleScreen();
 		return true;

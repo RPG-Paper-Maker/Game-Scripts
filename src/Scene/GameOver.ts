@@ -100,11 +100,6 @@ class GameOver extends Base {
 		// Initialize properties for hero
 		Game.current.hero.initializeProperties();
 
-		// Stop video if existing
-		if (!Data.TitlescreenGameover.isGameOverBackgroundImage) {
-			Manager.Videos.stop();
-		}
-
 		// Load map
 		Manager.Stack.replace(new Scene.Map(Game.current.currentMapID));
 
