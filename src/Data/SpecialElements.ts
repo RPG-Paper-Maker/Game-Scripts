@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -112,7 +112,7 @@ export class SpecialElements {
 						texture,
 						picture,
 						offset,
-						autotile.isAnimated
+						autotile.isAnimated,
 					);
 					picture.readCollisions();
 				} else {
@@ -141,7 +141,7 @@ export class SpecialElements {
 		texture: THREE.Texture,
 		picture: Picture,
 		offset: number,
-		isAnimated: boolean
+		isAnimated: boolean,
 	): Promise<[TextureBundle, THREE.Texture, number]> {
 		const frames = isAnimated ? Data.Systems.autotilesFrames : 1;
 		const picture2D = await Picture2D.create(picture);
@@ -155,7 +155,7 @@ export class SpecialElements {
 			2 * Data.Systems.SQUARE_SIZE * frames,
 			3 * Data.Systems.SQUARE_SIZE,
 			false,
-			false
+			false,
 		);
 
 		// Get width and height
@@ -230,7 +230,7 @@ export class SpecialElements {
 							count * Data.Systems.SQUARE_SIZE,
 							(row + y) * Data.Systems.SQUARE_SIZE,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						Platform.ctxr.drawImage(
 							img,
@@ -241,7 +241,7 @@ export class SpecialElements {
 							count * Data.Systems.SQUARE_SIZE + sDiv,
 							(row + y) * Data.Systems.SQUARE_SIZE,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						Platform.ctxr.drawImage(
 							img,
@@ -252,7 +252,7 @@ export class SpecialElements {
 							count * Data.Systems.SQUARE_SIZE,
 							(row + y) * Data.Systems.SQUARE_SIZE + sDiv,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						Platform.ctxr.drawImage(
 							img,
@@ -263,7 +263,7 @@ export class SpecialElements {
 							count * Data.Systems.SQUARE_SIZE + sDiv,
 							(row + y) * Data.Systems.SQUARE_SIZE + sDiv,
 							sDiv,
-							sDiv
+							sDiv,
 						);
 						count++;
 						if (count === 64) {
@@ -337,7 +337,7 @@ export class SpecialElements {
 			3 * Data.Systems.SQUARE_SIZE,
 			Data.Systems.SQUARE_SIZE,
 			true,
-			false
+			false,
 		);
 
 		// Update picture infos for collisions
@@ -352,14 +352,14 @@ export class SpecialElements {
 			w - Math.floor(Data.Systems.SQUARE_SIZE / 2),
 			0,
 			Math.floor(Data.Systems.SQUARE_SIZE / 2),
-			picture2D.image.height
+			picture2D.image.height,
 		);
 		try {
 			Platform.ctxr.putImageData(left, w, 0);
 			Platform.ctxr.putImageData(right, w + Math.floor(Data.Systems.SQUARE_SIZE / 2), 0);
 		} catch {
 			Platform.showErrorMessage(
-				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
+				'Error: Wrong wall (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.',
 			);
 		}
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
@@ -412,7 +412,7 @@ export class SpecialElements {
 		texture: THREE.Texture,
 		picture: Picture,
 		offset: number,
-		id: number
+		id: number,
 	): Promise<[TextureBundle, THREE.Texture, number]> {
 		const picture2D = await Picture2D.create(picture);
 		const width = 3;
@@ -428,7 +428,7 @@ export class SpecialElements {
 			3 * Data.Systems.SQUARE_SIZE,
 			3 * Data.Systems.SQUARE_SIZE,
 			true,
-			true
+			true,
 		);
 
 		// Update picture width and height for collisions settings
@@ -482,7 +482,7 @@ export class SpecialElements {
 					sourceSize,
 					y + i * Data.Systems.SQUARE_SIZE,
 					sDiv,
-					Data.Systems.SQUARE_SIZE
+					Data.Systems.SQUARE_SIZE,
 				);
 				Platform.ctxr.drawImage(
 					img,
@@ -493,7 +493,7 @@ export class SpecialElements {
 					sourceSize + sDiv,
 					y + i * Data.Systems.SQUARE_SIZE,
 					sDiv,
-					Data.Systems.SQUARE_SIZE
+					Data.Systems.SQUARE_SIZE,
 				);
 			}
 
@@ -508,7 +508,7 @@ export class SpecialElements {
 					i * Data.Systems.SQUARE_SIZE,
 					y + sourceSize,
 					Data.Systems.SQUARE_SIZE,
-					sDiv
+					sDiv,
 				);
 				Platform.ctxr.drawImage(
 					img,
@@ -519,7 +519,7 @@ export class SpecialElements {
 					i * Data.Systems.SQUARE_SIZE,
 					y + sourceSize + sDiv,
 					Data.Systems.SQUARE_SIZE,
-					sDiv
+					sDiv,
 				);
 			}
 
@@ -534,7 +534,7 @@ export class SpecialElements {
 				sourceSize + sDiv,
 				y + sourceSize,
 				sDiv,
-				sDiv
+				sDiv,
 			);
 			Platform.ctxr.drawImage(
 				img,
@@ -545,7 +545,7 @@ export class SpecialElements {
 				sourceSize,
 				y + sourceSize + sDiv,
 				sDiv,
-				sDiv
+				sDiv,
 			);
 			Platform.ctxr.drawImage(
 				img,
@@ -556,7 +556,7 @@ export class SpecialElements {
 				sourceSize + sDiv,
 				y + sourceSize + sDiv,
 				sDiv,
-				sDiv
+				sDiv,
 			);
 
 			// Repeated mid (for corners)
@@ -571,13 +571,13 @@ export class SpecialElements {
 						j * Data.Systems.SQUARE_SIZE,
 						(4 + i) * Data.Systems.SQUARE_SIZE,
 						Data.Systems.SQUARE_SIZE,
-						Data.Systems.SQUARE_SIZE
+						Data.Systems.SQUARE_SIZE,
 					);
 				}
 			}
 		} catch {
 			Platform.showErrorMessage(
-				'Error: Wrong mountain (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.'
+				'Error: Wrong mountain (with ID:' + id + ') parsing. Please verify that you have a 3 x 3 picture.',
 			);
 		}
 	}
@@ -629,7 +629,7 @@ export class SpecialElements {
 		cw: number,
 		ch: number,
 		strictw: boolean,
-		stricth: boolean
+		stricth: boolean,
 	) {
 		const isOKW = strictw ? w === cw : w % cw === 0;
 		const isOKH = stricth ? h === ch : h % ch === 0;

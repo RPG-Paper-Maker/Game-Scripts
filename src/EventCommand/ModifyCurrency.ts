@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -49,8 +49,8 @@ class ModifyCurrency extends Base {
 			currencyID,
 			Mathf.OPERATORS_NUMBERS[this.operation](
 				Game.current.getCurrency(currencyID),
-				this.value.getValue() as number
-			)
+				this.value.getValue() as number,
+			),
 		);
 		const dif = Game.current.getCurrency(currencyID) - previousCurrency;
 		if (dif > 0) {

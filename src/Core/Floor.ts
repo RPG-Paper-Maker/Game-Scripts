@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -40,7 +40,7 @@ export class Floor extends Land {
 		position: Position,
 		width: number,
 		height: number,
-		count: number
+		count: number,
 	): StructMapElementCollision {
 		return width === 0 || height === 0
 			? null
@@ -54,7 +54,7 @@ export class Floor extends Land {
 					(this.texture.y * Data.Systems.SQUARE_SIZE) / height,
 					(this.texture.width * Data.Systems.SQUARE_SIZE) / width,
 					(this.texture.height * Data.Systems.SQUARE_SIZE) / height,
-					count
-			  );
+					count,
+				);
 	}
 }

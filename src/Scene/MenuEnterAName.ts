@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -112,7 +112,7 @@ class MenuEnterAName extends MenuBase {
 				Data.Systems.facesetScalingWidth,
 			Data.Systems.facesetScalingHeight - WindowBox.MEDIUM_SLOT_HEIGHT,
 			slotWidth,
-			WindowBox.MEDIUM_SLOT_HEIGHT
+			WindowBox.MEDIUM_SLOT_HEIGHT,
 		);
 		const list = new Array(this.maxCharacters);
 		for (let i = 0; i < this.maxCharacters; i++) {
@@ -135,7 +135,7 @@ class MenuEnterAName extends MenuBase {
 			(ScreenResolution.SCREEN_X - width) / 2 - options.padding[0],
 			this.windowChoicesTop.oY + this.windowChoicesTop.oH,
 			width + options.padding[0] * 2,
-			height + options.padding[0] * 2
+			height + options.padding[0] * 2,
 		);
 		this.windowBoxMain = new WindowBox(rect.x, rect.y, rect.width, rect.height, options);
 	}
@@ -148,7 +148,7 @@ class MenuEnterAName extends MenuBase {
 			this.windowBoxMain.oX + this.windowBoxMain.padding[0],
 			this.windowBoxMain.oY + this.windowBoxMain.padding[0],
 			40,
-			40
+			40,
 		);
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -169,7 +169,7 @@ class MenuEnterAName extends MenuBase {
 				rect.width,
 				rect.height,
 				listGraphics,
-				options
+				options,
 			);
 			this.windowChoicesMain[i].unselect();
 		}
@@ -185,7 +185,7 @@ class MenuEnterAName extends MenuBase {
 			this.windowBoxMain.oX + this.windowBoxMain.oW - width,
 			this.windowBoxMain.oY + this.windowBoxMain.oH,
 			width,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const graphic = new Graphic.Text('OK', { align: ALIGN.CENTER });
 		const options = {
@@ -219,7 +219,7 @@ class MenuEnterAName extends MenuBase {
 				(<Graphic.Text>this.windowChoicesTop.getContent(this.currentCharacterPosition)).setText(
 					Data.Systems.enterNameTable[this.currentRow][
 						this.windowChoicesMain[this.currentRow].currentSelectedIndex
-					]
+					],
 				);
 				this.currentCharacterPosition++;
 				if (this.currentCharacterPosition === this.maxCharacters) {
@@ -280,7 +280,7 @@ class MenuEnterAName extends MenuBase {
 					Data.Systems.soundCursor.playSound();
 					for (let i = 0; i < this.displayRows; i++) {
 						this.windowChoicesMain[i + this.offsetRow].setY(
-							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40
+							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40,
 						);
 					}
 				}
@@ -314,7 +314,7 @@ class MenuEnterAName extends MenuBase {
 					Data.Systems.soundCursor.playSound();
 					for (let i = 0; i < this.displayRows; i++) {
 						this.windowChoicesMain[i + this.offsetRow].setY(
-							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40
+							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40,
 						);
 					}
 				}
@@ -373,7 +373,7 @@ class MenuEnterAName extends MenuBase {
 	update() {
 		if (this.frameUnderscore.update() && this.currentCharacterPosition < this.maxCharacters) {
 			(<Graphic.Text>this.windowChoicesTop.getContent(this.currentCharacterPosition)).setText(
-				this.frameUnderscore.value === 0 ? '_' : ' '
+				this.frameUnderscore.value === 0 ? '_' : ' ',
 			);
 		}
 	}

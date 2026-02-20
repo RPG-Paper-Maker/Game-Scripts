@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -156,7 +156,7 @@ export class BattleSystems {
 		this.battleCommands = Utils.readJSONMap(
 			json.battleCommands,
 			(jsonBattleCommand: { s: number }) => jsonBattleCommand.s,
-			this.battleCommandsIDs
+			this.battleCommandsIDs,
 		);
 		this.battleMaps = Utils.readJSONMap(json.battleMaps, BattleMap);
 
@@ -184,19 +184,19 @@ export class BattleSystems {
 		this.formulaCrit = DynamicValue.readOrDefaultMessage(json.fc);
 		this.heroesBattlersCenterOffset = DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersCenterOffset,
-			'new THREE.Vector3(2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)',
 		);
 		this.heroesBattlersOffset = DynamicValue.readOrDefaultMessage(
 			json.heroesBattlersOffset,
-			'new THREE.Vector3(i * Data.Systems.SQUARE_SIZE / 2, 0, i * Data.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(i * Data.Systems.SQUARE_SIZE / 2, 0, i * Data.Systems.SQUARE_SIZE)',
 		);
 		this.troopsBattlersCenterOffset = DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersCenterOffset,
-			'new THREE.Vector3(-2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(-2 * Data.Systems.SQUARE_SIZE, 0, -Data.Systems.SQUARE_SIZE)',
 		);
 		this.troopsBattlersOffset = DynamicValue.readOrDefaultMessage(
 			json.troopsBattlersOffset,
-			'new THREE.Vector3(-i * Data.Systems.SQUARE_SIZE * 3 / 4, 0, i * Data.Systems.SQUARE_SIZE)'
+			'new THREE.Vector3(-i * Data.Systems.SQUARE_SIZE * 3 / 4, 0, i * Data.Systems.SQUARE_SIZE)',
 		);
 
 		// Musics

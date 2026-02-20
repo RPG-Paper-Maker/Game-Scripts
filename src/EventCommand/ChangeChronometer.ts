@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,7 +62,7 @@ class ChangeChronometer extends Base {
 				const time = (this.time.getValue() as number) * 1000;
 				if (chrono === null) {
 					Game.current.chronometers.push(
-						new Chrono(time, Game.current.getNewChronoID(), true, this.diplayOnScreen)
+						new Chrono(time, Game.current.getNewChronoID(), true, this.diplayOnScreen),
 					);
 				}
 				Manager.Stack.requestPaintHUD = true;

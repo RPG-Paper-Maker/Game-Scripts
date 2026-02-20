@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -94,7 +94,7 @@ class CreateObjectInMap extends Base {
 					this.x.getValue() as number,
 					this.y.getValue() as number,
 					this.z.getValue() as number,
-					((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE
+					((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
 				).toVector3();
 			} else {
 				MapObject.search(
@@ -102,7 +102,7 @@ class CreateObjectInMap extends Base {
 					(result: StructSearchResult) => {
 						currentState.position = result.object.position.clone();
 					},
-					object
+					object,
 				);
 			}
 			currentState.waitingPosition = true;
@@ -114,7 +114,7 @@ class CreateObjectInMap extends Base {
 			Scene.Map.current.mapProperties.allObjects.set(id, position);
 			const newObject = new MapObject(
 				Model.MapObject.createFromModelID(this.modelID.getValue() as number, id),
-				currentState.position
+				currentState.position,
 			);
 			if (this.isStockID) {
 				Game.current.variables.set(this.stockID.getValue(true) as number, id);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -132,7 +132,7 @@ class ChangeVariables extends Base {
 				case 1: // Random number
 					currentState.value = Mathf.random(
 						this.valueRandomA.getValue() as number,
-						this.valueRandomB.getValue() as number
+						this.valueRandomB.getValue() as number,
 					);
 					break;
 				case 2: // Message
@@ -152,7 +152,7 @@ class ChangeVariables extends Base {
 								Platform.showErrorMessage(
 									'Cannot find object ID ' +
 										objectID +
-										' in change variables for map object characteristics.'
+										' in change variables for map object characteristics.',
 								);
 							}
 							switch (this.valueMapObjectChar) {
@@ -183,7 +183,7 @@ class ChangeVariables extends Base {
 							}
 							currentState.valid = true;
 						},
-						object
+						object,
 					);
 					break;
 				case 5: // Number of weapon / armor / item in inventory
@@ -194,17 +194,17 @@ class ChangeVariables extends Base {
 					switch (this.valueTotalCurrencyKind) {
 						case 0: // Owned
 							currentState.value = Game.current.getCurrency(
-								this.valueTotalCurrencyID.getValue() as number
+								this.valueTotalCurrencyID.getValue() as number,
 							);
 							break;
 						case 1: // Earned
 							currentState.value = Game.current.getCurrencyEarned(
-								this.valueTotalCurrencyID.getValue() as number
+								this.valueTotalCurrencyID.getValue() as number,
 							);
 							break;
 						case 2: // Used
 							currentState.value = Game.current.getCurrencyUsed(
-								this.valueTotalCurrencyID.getValue() as number
+								this.valueTotalCurrencyID.getValue() as number,
 							);
 							break;
 					}
@@ -217,7 +217,7 @@ class ChangeVariables extends Base {
 							currentState.value =
 								player[
 									Data.BattleSystems.getStatistic(
-										this.valueStatisticID.getValue() as number
+										this.valueStatisticID.getValue() as number,
 									).abbreviation
 								];
 							break;
@@ -295,8 +295,8 @@ class ChangeVariables extends Base {
 					this.selection + i,
 					Mathf.OPERATORS_NUMBERS[this.operation](
 						Game.current.getVariable(this.selection + i),
-						currentState.value
-					)
+						currentState.value,
+					),
 				);
 			}
 			return 1;

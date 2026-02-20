@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -306,7 +306,7 @@ export class Effect extends Base {
 								user,
 								target,
 							}) as number)) /
-							100
+							100,
 					);
 					damage = Mathf.random(damage - variance, damage + variance);
 				}
@@ -354,7 +354,7 @@ export class Effect extends Base {
 						Interpreter.evaluate(this.damagesMinimumFormula.getValue() as string, {
 							user,
 							target,
-						}) as number
+						}) as number,
 					);
 				}
 				if (this.isDamagesMaximum) {
@@ -363,7 +363,7 @@ export class Effect extends Base {
 						Interpreter.evaluate(this.damagesMaximumFormula.getValue() as string, {
 							user,
 							target,
-						}) as number
+						}) as number,
 					);
 				}
 				damage = Math.round(damage);
@@ -375,7 +375,7 @@ export class Effect extends Base {
 				switch (this.damageKind) {
 					case DAMAGES_KIND.STAT:
 						damageName = Data.BattleSystems.getStatistic(
-							this.damageStatisticID.getValue() as number
+							this.damageStatisticID.getValue() as number,
 						).name();
 						break;
 					case DAMAGES_KIND.CURRENCY:
@@ -427,7 +427,7 @@ export class Effect extends Base {
 					const before = Game.current.getVariable(this.damageVariableID);
 					Game.current.variables.set(
 						this.damageVariableID,
-						Game.current.getVariable(this.damageVariableID) - damage
+						Game.current.getVariable(this.damageVariableID) - damage,
 					);
 					result = result || before !== Game.current.getVariable(this.damageVariableID);
 					break;
@@ -534,7 +534,7 @@ export class Effect extends Base {
 			Data.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
 			null,
 			null,
-			Utils.arrayToMap(this.commonReaction.parameters, true)
+			Utils.arrayToMap(this.commonReaction.parameters, true),
 		);
 		Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
 		if (forceReaction) {
@@ -619,7 +619,7 @@ export class Effect extends Base {
 						user,
 						target,
 					}) as number)) /
-					100
+					100,
 			);
 		}
 		let min = damage - variance;
@@ -675,10 +675,10 @@ export class Effect extends Base {
 		return `${
 			this.isAddStatus ? Data.Languages.extras.add.name() : Data.Languages.extras.remove.name()
 		} ${Data.Status.get(
-			this.statusID.getValue() as number
+			this.statusID.getValue() as number,
 		).name()} [${Data.Languages.extras.precision.name()}: ${Interpreter.evaluate(
 			this.statusPrecisionFormula.getValue() as string,
-			{ user, target }
+			{ user, target },
 		)}%]`;
 	}
 
@@ -702,7 +702,7 @@ export class Effect extends Base {
 	 */
 	toStringPerformSkill(): string {
 		return `${Data.Languages.extras.performSkill.name()} ${Data.Skills.get(
-			this.performSkillID.getValue() as number
+			this.performSkillID.getValue() as number,
 		).name()}`;
 	}
 

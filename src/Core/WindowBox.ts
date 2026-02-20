@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -187,7 +187,7 @@ class WindowBox extends Bitmap {
 	draw(
 		isChoice: boolean = false,
 		windowDimension: number[] = this.windowDimension,
-		contentDimension: number[] = this.contentDimension
+		contentDimension: number[] = this.contentDimension,
 	) {
 		// Content behind
 		if (this.content) {
@@ -198,7 +198,7 @@ class WindowBox extends Bitmap {
 		Data.Systems.getCurrentWindowSkin().drawBox(
 			Rectangle.createFromArray(windowDimension), // to improve
 			this.selected,
-			this.bordersVisible
+			this.bordersVisible,
 		);
 
 		// Draw content
@@ -210,7 +210,7 @@ class WindowBox extends Bitmap {
 					contentDimension[0],
 					contentDimension[1] - ScreenResolution.getScreenY(this.padding[3] / 2),
 					contentDimension[2],
-					contentDimension[3] + ScreenResolution.getScreenY(this.padding[3])
+					contentDimension[3] + ScreenResolution.getScreenY(this.padding[3]),
 				);
 				Platform.ctx.clip();
 			}
@@ -219,7 +219,7 @@ class WindowBox extends Bitmap {
 					contentDimension[0],
 					contentDimension[1],
 					contentDimension[2],
-					contentDimension[3]
+					contentDimension[3],
 				);
 			} else {
 				this.content.draw(contentDimension[0], contentDimension[1], contentDimension[2], contentDimension[3]);

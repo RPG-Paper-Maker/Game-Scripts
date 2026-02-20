@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -64,7 +64,7 @@ class RemoveObjectFromMap extends Base {
 									if (index === -1) {
 										result.datas = Game.current.getPortionData(
 											Scene.Map.current.id,
-											Portion.createFromVector3(result.object.position)
+											Portion.createFromVector3(result.object.position),
 										);
 										result.datas.mout.splice(result.datas.mout.indexOf(result.object), 1);
 									} else {
@@ -86,7 +86,7 @@ class RemoveObjectFromMap extends Base {
 					}
 					currentState.finished = true;
 				},
-				object
+				object,
 			);
 		}
 		return currentState.finished ? 1 : 0;

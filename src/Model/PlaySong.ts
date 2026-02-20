@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -86,7 +86,7 @@ export class PlaySong extends Base {
 	public static createValueCommand(
 		command: MapObjectCommandType[],
 		iterator: StructIterator,
-		kind: SONG_KIND
+		kind: SONG_KIND,
 	): PlaySong {
 		const song = new PlaySong(kind);
 		song.parse(command, iterator);
@@ -108,7 +108,7 @@ export class PlaySong extends Base {
 		isStart: boolean,
 		start: DynamicValue,
 		isEnd: boolean,
-		end: DynamicValue
+		end: DynamicValue,
 	): void {
 		this.songID = songID;
 		this.volume = volume;
@@ -156,7 +156,7 @@ export class PlaySong extends Base {
 			this.songID.getValue() as number,
 			volume,
 			start,
-			this.end ? (this.end.getValue() as number) : null
+			this.end ? (this.end.getValue() as number) : null,
 		);
 		return 1;
 	}
@@ -178,7 +178,7 @@ export class PlaySong extends Base {
 			const played = Manager.Songs.playMusicEffect(
 				this.songID.getValue() as number,
 				(this.volume.getValue() as number) / 100,
-				currentState
+				currentState,
 			);
 			currentState.end = played;
 			return played ? 1 : 0;

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -37,11 +37,11 @@ class Equip extends Base {
 		// All the graphics
 		this.graphicEquipmentName = new Graphic.Text(
 			Data.BattleSystems.getEquipment(id).name(),
-			isPossible ? {} : { color: Model.Color.GREY }
+			isPossible ? {} : { color: Model.Color.GREY },
 		);
 		this.graphicEquipment = new Graphic.Text(
 			equiped === null ? '-' : equiped.system.name(),
-			isPossible ? {} : { color: Model.Color.GREY }
+			isPossible ? {} : { color: Model.Color.GREY },
 		);
 	}
 

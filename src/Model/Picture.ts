@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -242,7 +242,7 @@ class Picture extends Base {
 						Platform.showErrorMessage(
 							`Your wall image ${this.name} is not using a correct template. 
 							Your image should be this size: WIDTH: 3 * SQUARE_SIZE, HEIGHT: as you wish. 
-							There should be left wall, middle wall, and right wall for the 3 width squares.`
+							There should be left wall, middle wall, and right wall for the 3 width squares.`,
 						);
 						return;
 					}
@@ -302,7 +302,7 @@ class Picture extends Base {
 	async checkBase64(): Promise<void> {
 		if (!Platform.IS_DESKTOP && !this.isBR && Platform.WEB_DEV) {
 			this.base64 = await Platform.loadFile(
-				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Picture.getLocalFolder(this.kind)}/${this.name}`
+				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Picture.getLocalFolder(this.kind)}/${this.name}`,
 			);
 		}
 	}

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -310,7 +310,7 @@ export class DynamicValue extends Base {
 				return new THREE.Vector3(
 					this.x.getValue() as number as number,
 					this.y.getValue() as number as number,
-					this.z.getValue() as number as number
+					this.z.getValue() as number as number,
 				);
 			case DYNAMIC_VALUE_KIND.BARS:
 				return Data.Pictures.get(PICTURE_KIND.BARS, this.value as number);
@@ -389,7 +389,7 @@ export class DynamicValue extends Base {
 				this.customList = Utils.readJSONList(
 					json.customList.list,
 					(jsonParameter: { value: DynamicValueJSON }) =>
-						DynamicValue.readOrDefaultNumber(jsonParameter.value)
+						DynamicValue.readOrDefaultNumber(jsonParameter.value),
 				);
 				break;
 			case DYNAMIC_VALUE_KIND.VECTOR2:

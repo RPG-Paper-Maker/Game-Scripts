@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
     Use Commercial edition for commercial use of your games.
@@ -49,7 +49,7 @@ class Plugins {
 	 */
 	static async loadPlugin(pluginJSON: Record<string, any>): Promise<boolean> {
 		const json = (await Platform.parseFileJSON(
-			Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_DETAILS
+			Paths.PLUGINS + pluginJSON.name + '/' + Paths.FILE_PLUGIN_DETAILS,
 		)) as any;
 		const plugin = new Model.Plugin(pluginJSON.id, json);
 		// FIX 01 : plugin wasn't unloaded if not enabled.
@@ -185,14 +185,14 @@ class Plugins {
 		LT extends keyof T['prototype'],
 		CXT = ClassMethod<T, LT>,
 		TR = string,
-		LM = NewableFunction
+		LM = NewableFunction,
 	>(
 		classObject: T,
 		prototypeName: LT | TR | M,
 		prototype: CXT | T[M] | LM,
 		staticType: boolean = false,
 		overwrite: boolean = false,
-		loadOriginalBefore: boolean = true
+		loadOriginalBefore: boolean = true,
 	) {
 		const TheAnyPrototype: any = prototype; //force any type, system will not accept otherwise!
 		if (!staticType) {

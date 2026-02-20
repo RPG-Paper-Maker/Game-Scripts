@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -94,7 +94,7 @@ class ChangeAStatistic extends Base {
 					Platform.showErrorMessage(
 						"Can't get any hero/enemy with instance ID " +
 							this.heInstanceID.getValue() +
-							'. Please review your event command.'
+							'. Please review your event command.',
 					);
 				}
 				targets = [t];
@@ -111,7 +111,7 @@ class ChangeAStatistic extends Base {
 				case 0:
 					target[abr] = Mathf.OPERATORS_NUMBERS[this.operation](
 						target[abr],
-						this.vNumber.getValue() as number
+						this.vNumber.getValue() as number,
 					);
 					break;
 				case 1:
@@ -119,13 +119,13 @@ class ChangeAStatistic extends Base {
 						target[abr],
 						Interpreter.evaluate(this.vFormula.getValue() as string, {
 							user: target,
-						}) as number
+						}) as number,
 					);
 					break;
 				case 2:
 					target[abr] = Mathf.OPERATORS_NUMBERS[this.operation](
 						target[abr],
-						target[stat.getMaxAbbreviation()]
+						target[stat.getMaxAbbreviation()],
 					);
 					break;
 			}

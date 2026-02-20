@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,17 +62,17 @@ class BattleVictory {
 		for (id in this.battle.currencies) {
 			Game.current.currencies.set(
 				Number(id),
-				Game.current.currencies.get(Number(id)) + this.battle.currencies[id]
+				Game.current.currencies.get(Number(id)) + this.battle.currencies[id],
 			);
 			if (this.battle.currencies[id] > 0) {
 				Game.current.currenciesEarned.set(
 					Number(id),
-					Game.current.currenciesEarned.get(Number(id)) + this.battle.currencies[id]
+					Game.current.currenciesEarned.get(Number(id)) + this.battle.currencies[id],
 				);
 			} else {
 				Game.current.currenciesUsed.set(
 					Number(id),
-					Game.current.currenciesUsed.get(Number(id)) - this.battle.currencies[id]
+					Game.current.currenciesUsed.get(Number(id)) - this.battle.currencies[id],
 				);
 			}
 		}
@@ -116,7 +116,7 @@ class BattleVictory {
 			{
 				content: new Graphic.Loots(this.battle.loots, this.battle.lootsNumber),
 				padding: WindowBox.SMALL_PADDING_BOX,
-			}
+			},
 		);
 	}
 
@@ -210,7 +210,7 @@ class BattleVictory {
 					this.battle.finishedXP = false;
 					player.stepLevelUp = 0;
 					this.battle.windowStatisticProgression.content = new Graphic.StatisticProgression(
-						this.battle.user.player
+						this.battle.user.player,
 					);
 					h =
 						(<Graphic.StatisticProgression>this.battle.windowStatisticProgression.content).getHeight() +
@@ -256,7 +256,7 @@ class BattleVictory {
 			0,
 			this.battle.musicMap.volume.getValue() as number,
 			0,
-			Scene.Battle.TIME_LINEAR_MUSIC_START
+			Scene.Battle.TIME_LINEAR_MUSIC_START,
 		);
 	}
 
@@ -269,7 +269,7 @@ class BattleVictory {
 			Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
 			0,
 			0,
-			Scene.Battle.TIME_LINEAR_MUSIC_END
+			Scene.Battle.TIME_LINEAR_MUSIC_END,
 		);
 		this.battle.subStep = 3;
 		this.battle.time = new Date().getTime();

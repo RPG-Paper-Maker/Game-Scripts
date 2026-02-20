@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -206,7 +206,7 @@ class Events {
 		eventID: number,
 		parameters: Map<number, DynamicValue>,
 		senderNoReceiver: boolean,
-		onlyTheClosest: boolean
+		onlyTheClosest: boolean,
 	) {
 		switch (targetKind) {
 			case 0: // Send to all
@@ -220,7 +220,7 @@ class Events {
 					eventID,
 					parameters,
 					senderNoReceiver,
-					onlyTheClosest
+					onlyTheClosest,
 				);
 				break;
 			case 2: // Send to a particular object
@@ -264,7 +264,7 @@ class Events {
 									}
 								}
 							}
-						}
+						},
 					);
 				}
 				break;
@@ -291,7 +291,7 @@ class Events {
 		eventID: number,
 		parameters: Map<number, DynamicValue>,
 		senderNoReceiver: boolean = false,
-		onlyTheClosest: boolean = false
+		onlyTheClosest: boolean = false,
 	) {
 		let objects: Record<string, any>;
 		const closests: any[][] = [];
@@ -308,7 +308,7 @@ class Events {
 				parameters,
 				senderNoReceiver,
 				onlyTheClosest,
-				closests
+				closests,
 			);
 			Manager.Events.sendEventObjects(
 				objects.mout,
@@ -319,7 +319,7 @@ class Events {
 				parameters,
 				senderNoReceiver,
 				onlyTheClosest,
-				closests
+				closests,
 			);
 			// Static
 			const mapPortion = Scene.Map.current.getMapPortion(i, j, k);
@@ -333,7 +333,7 @@ class Events {
 					parameters,
 					senderNoReceiver,
 					onlyTheClosest,
-					closests
+					closests,
 				);
 			}
 		});
@@ -392,7 +392,7 @@ class Events {
 		parameters: Map<number, DynamicValue>,
 		senderNoReceiver: boolean,
 		onlyTheClosest: boolean,
-		closests: any[][]
+		closests: any[][],
 	) {
 		let object: MapObject;
 		for (let i = 0, l = objects.length; i < l; i++) {

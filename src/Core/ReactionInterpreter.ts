@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -49,7 +49,7 @@ class ReactionInterpreter {
 		state: number,
 		parameters?: Map<number, Model.DynamicValue>,
 		event?: [Model.Event, number],
-		command: Node = reaction.getFirstCommand()
+		command: Node = reaction.getFirstCommand(),
 	) {
 		this.currentSender = sender;
 		this.currentReaction = reaction;
@@ -122,7 +122,7 @@ class ReactionInterpreter {
 					this.currentState,
 					this.currentParameters,
 					this.currentTimeState,
-					this.currentCommand
+					this.currentCommand,
 				);
 				interpreter.currentCommandState.parallel = true;
 				Scene.Map.current.parallelCommands.push(interpreter);
@@ -165,7 +165,7 @@ class ReactionInterpreter {
 		const result = this.currentCommand.data.update(
 			this.currentCommandState,
 			this.currentMapObject,
-			this.currentState
+			this.currentState,
 		);
 		let value = null;
 

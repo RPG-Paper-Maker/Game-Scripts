@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -181,7 +181,7 @@ class Mountain extends MapElement {
 		vecFrontB: THREE.Vector3,
 		vecBackB: THREE.Vector3,
 		geometry: CustomGeometry,
-		count: number
+		count: number,
 	): number {
 		let xKind = Mountain.X_LEFT_OFFSET;
 		const nbSteps = Math.ceil(faceHeight / Data.Systems.SQUARE_SIZE);
@@ -231,7 +231,7 @@ class Mountain extends MapElement {
 				geometry,
 				count,
 				0,
-				vecFrontA.distanceTo(vecFrontB)
+				vecFrontA.distanceTo(vecFrontB),
 			);
 		} else if (faceHeight <= 2 * Data.Systems.SQUARE_SIZE) {
 			// 2 B / T sprites
@@ -264,7 +264,7 @@ class Mountain extends MapElement {
 				geometry,
 				count,
 				vecCenterA.distanceTo(vecCenterB),
-				vecFrontA.distanceTo(vecFrontB)
+				vecFrontA.distanceTo(vecFrontB),
 			);
 
 			// Top
@@ -296,7 +296,7 @@ class Mountain extends MapElement {
 				geometry,
 				count,
 				0,
-				vecCenterA.distanceTo(vecCenterB)
+				vecCenterA.distanceTo(vecCenterB),
 			);
 		} else {
 			// 3 B / M / T sprites
@@ -331,7 +331,7 @@ class Mountain extends MapElement {
 				geometry,
 				count,
 				vecStepLeftB.distanceTo(vecStepRightB),
-				vecFrontA.distanceTo(vecFrontB)
+				vecFrontA.distanceTo(vecFrontB),
 			);
 
 			// Middle: add as many as middle blocks as possible
@@ -369,7 +369,7 @@ class Mountain extends MapElement {
 					geometry,
 					count,
 					vecStepLeftB.distanceTo(vecStepRightB),
-					vecStepLeftA.distanceTo(vecStepRightA)
+					vecStepLeftA.distanceTo(vecStepRightA),
 				);
 			}
 
@@ -402,7 +402,7 @@ class Mountain extends MapElement {
 				geometry,
 				count,
 				0,
-				vecStepLeftB.distanceTo(vecStepRightB)
+				vecStepLeftB.distanceTo(vecStepRightB),
 			);
 		}
 		return count;
@@ -468,7 +468,7 @@ class Mountain extends MapElement {
 		geometry: CustomGeometry,
 		count: number,
 		xCornerOffsetTop: number,
-		xCornerOffsetBot: number
+		xCornerOffsetBot: number,
 	): number {
 		count = this.drawFace(
 			xKind,
@@ -494,7 +494,7 @@ class Mountain extends MapElement {
 			count,
 			0,
 			0,
-			false
+			false,
 		);
 
 		// Draw corner only if there is a border width
@@ -523,7 +523,7 @@ class Mountain extends MapElement {
 				count,
 				xCornerOffsetTop,
 				xCornerOffsetBot,
-				true
+				true,
 			);
 		}
 		return count;
@@ -581,7 +581,7 @@ class Mountain extends MapElement {
 		count: number,
 		xCornerOffsetTop: number,
 		xCornerOffsetBot: number,
-		isCorner: boolean
+		isCorner: boolean,
 	): number {
 		// Textures coordinates
 		let x = (xKind * Data.Systems.SQUARE_SIZE) / width;
@@ -604,27 +604,27 @@ class Mountain extends MapElement {
 				(Mountain.X_MID_OFFSET * Data.Systems.SQUARE_SIZE + (Data.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2) /
 					width +
 					coefX,
-				y
+				y,
 			);
 			texB = new THREE.Vector2(
 				((Mountain.X_MID_OFFSET + 1) * Data.Systems.SQUARE_SIZE -
 					(Data.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2) /
 					width -
 					coefX,
-				y
+				y,
 			);
 			texC = new THREE.Vector2(
 				((Mountain.X_MID_OFFSET + 1) * Data.Systems.SQUARE_SIZE -
 					(Data.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2) /
 					width -
 					coefX,
-				y + h
+				y + h,
 			);
 			texD = new THREE.Vector2(
 				(Mountain.X_MID_OFFSET * Data.Systems.SQUARE_SIZE + (Data.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2) /
 					width +
 					coefX,
-				y + h
+				y + h,
 			);
 		} else {
 			// Triangle form for corners
@@ -668,7 +668,7 @@ class Mountain extends MapElement {
 		texture: TextureBundle,
 		position: Position,
 		pictureID: number,
-		count: number
+		count: number,
 	): any[] {
 		// General configurations
 		const yOffset = texture.getOffset(pictureID, null) * 4 * Data.Systems.SQUARE_SIZE;
@@ -682,7 +682,7 @@ class Mountain extends MapElement {
 		const center = new THREE.Vector3(
 			localPosition.x + Data.Systems.SQUARE_SIZE / 2,
 			localPosition.y + Data.Systems.SQUARE_SIZE / 2,
-			localPosition.z + Data.Systems.SQUARE_SIZE / 2
+			localPosition.z + Data.Systems.SQUARE_SIZE / 2,
 		);
 		const xLeft = localPosition.x;
 		const xRight = localPosition.x + Data.Systems.SQUARE_SIZE;
@@ -719,7 +719,7 @@ class Mountain extends MapElement {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		// Top
@@ -746,7 +746,7 @@ class Mountain extends MapElement {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		// Left
@@ -773,7 +773,7 @@ class Mountain extends MapElement {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 		// Right
@@ -800,7 +800,7 @@ class Mountain extends MapElement {
 				vecFrontB,
 				vecBackB,
 				geometry,
-				count
+				count,
 			);
 		}
 

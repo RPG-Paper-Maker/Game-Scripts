@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -64,7 +64,7 @@ class TitleScreen extends Base {
 			this.pictureBackground = await Picture2D.createWithID(
 				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
-				{ cover: true }
+				{ cover: true },
 			);
 		} else {
 			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath());
@@ -82,7 +82,7 @@ class TitleScreen extends Base {
 				nbItemsMax: commandsNb,
 				listCallbacks: Data.TitlescreenGameover.getTitleCommandsActions(),
 				padding: [0, 0, 0, 0],
-			}
+			},
 		);
 
 		// Play title screen song
@@ -97,7 +97,7 @@ class TitleScreen extends Base {
 	translate() {
 		for (let i = 0, l = this.windowChoicesCommands.listContents.length; i < l; i++) {
 			(<Graphic.Text>this.windowChoicesCommands.listContents[i]).setText(
-				Data.TitlescreenGameover.titleCommands[i].name()
+				Data.TitlescreenGameover.titleCommands[i].name(),
 			);
 		}
 	}

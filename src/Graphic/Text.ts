@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -76,7 +76,7 @@ class Text extends Base {
 			strokeColor = Utils.valueOrDefault(Data.Systems.dbOptions.tOutline, false)
 				? Utils.valueOrDefault(Data.Systems.dbOptions.v_tcOutline, null)
 				: null,
-		} = {}
+		} = {},
 	) {
 		super(x, y, w, h);
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -87,7 +87,7 @@ export class WindowSkin extends Base {
 		w = r.width,
 		h = r.height,
 		zoom = 1.0,
-		positionResize = true
+		positionResize = true,
 	): void {
 		this.picture.draw({
 			x,
@@ -129,7 +129,7 @@ export class WindowSkin extends Base {
 				rect.x + this.borderTopLeft.width,
 				rect.y + this.borderTopLeft.height,
 				rect.width - this.borderTopLeft.width - this.borderBotRight.width,
-				rect.height - this.borderTopLeft.height - this.borderBotRight.height
+				rect.height - this.borderTopLeft.height - this.borderBotRight.height,
 			);
 		}
 	}
@@ -146,7 +146,7 @@ export class WindowSkin extends Base {
 			this.drawElement(
 				this.borderBotRight,
 				rect.x + rect.width - this.borderBotRight.width,
-				rect.y + rect.height - this.borderBotRight.height
+				rect.y + rect.height - this.borderBotRight.height,
 			);
 
 			// Borders
@@ -314,7 +314,7 @@ export class WindowSkin extends Base {
 		y: number,
 		isCrit: boolean,
 		isMiss: boolean,
-		zoom: number
+		zoom: number,
 	): [number, number] {
 		if (isMiss) {
 			this.drawElement(
@@ -324,7 +324,7 @@ export class WindowSkin extends Base {
 				this.textMiss.width,
 				this.textMiss.height,
 				zoom,
-				false
+				false,
 			);
 			return [0, 0];
 		} else if (damage < 0) {

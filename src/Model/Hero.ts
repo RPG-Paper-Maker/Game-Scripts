@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -128,8 +128,8 @@ export class Hero extends Localization {
 			json.class,
 			`Could not find the class in ${this.isMonster() ? 'monster' : 'hero'} ${Utils.getIDName(
 				json.id,
-				this.name()
-			)}, please check your Data manager and add a correct class.`
+				this.name(),
+			)}, please check your Data manager and add a correct class.`,
 		);
 		this.idBattler = Utils.valueOrDefault(json.bid, -1);
 		this.idFaceset = Utils.valueOrDefault(json.fid, -1);

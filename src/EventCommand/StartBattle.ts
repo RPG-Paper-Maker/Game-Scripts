@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,7 +62,7 @@ class StartBattle extends Base {
 				if (Scene.Map.current.mapProperties.randomBattles.length > 0) {
 					const totalPriorities = Scene.Map.current.mapProperties.randomBattles.reduce(
 						(sum, randomBattle) => sum + (randomBattle.priority.getValue() as number),
-						0
+						0,
 					);
 					let r = Math.random() * totalPriorities;
 					let selectedBattle: Model.RandomBattle | null = null;
@@ -151,9 +151,9 @@ class StartBattle extends Base {
 								this.x.getValue() as number,
 								this.y.getValue() as number,
 								this.z.getValue() as number,
-								this.yPlus.getValue() as number
-							)
-					  )
+								this.yPlus.getValue() as number,
+							),
+						)
 					: Data.BattleSystems.getBattleMap(this.battleMapID.getValue() as number);
 			Game.current.heroBattle = new MapObject(Game.current.hero.system, battleMap.position.toVector3(), true);
 
@@ -168,7 +168,7 @@ class StartBattle extends Base {
 				this.transitionStartColor
 					? Data.Systems.getColor(this.transitionStartColor.getValue() as number)
 					: null,
-				this.transitionEndColor ? Data.Systems.getColor(this.transitionEndColor.getValue() as number) : null
+				this.transitionEndColor ? Data.Systems.getColor(this.transitionEndColor.getValue() as number) : null,
 			);
 
 			// Keep instance of battle state for results

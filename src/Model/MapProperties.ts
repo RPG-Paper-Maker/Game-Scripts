@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -108,7 +108,7 @@ export class MapProperties extends Localization {
 	 */
 	updateBackgroundColor(): void {
 		this.backgroundColor = Data.Systems.getColor(
-			this.isBackgroundColor ? (this.backgroundColorID.getValue() as number) : 1
+			this.isBackgroundColor ? (this.backgroundColorID.getValue() as number) : 1,
 		);
 	}
 
@@ -117,7 +117,7 @@ export class MapProperties extends Localization {
 	 */
 	updateBackgroundImage(): void {
 		const texture = Manager.GL.textureLoader.load(
-			Data.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath()
+			Data.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath(),
 		);
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
@@ -132,7 +132,7 @@ export class MapProperties extends Localization {
 		this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		this.skyboxMesh = new THREE.Mesh(
 			this.skyboxGeometry,
-			Data.Systems.getSkybox(this.backgroundSkyboxID.getValue() as number).createTextures()
+			Data.Systems.getSkybox(this.backgroundSkyboxID.getValue() as number).createTextures(),
 		);
 		Scene.Map.current.scene.add(this.skyboxMesh);
 	}
@@ -146,7 +146,7 @@ export class MapProperties extends Localization {
 		}
 		this.maxNumberSteps = Mathf.variance(
 			this.randomBattleNumberStep.getValue() as number,
-			this.randomBattleVariance.getValue() as number
+			this.randomBattleVariance.getValue() as number,
 		);
 	}
 
@@ -166,7 +166,7 @@ export class MapProperties extends Localization {
 		}
 		const rand = Mathf.random(0, 100);
 		const battles = this.randomBattles.filter(
-			(b) => b.currentPriority > 0 && b.currentNumberSteps >= this.maxNumberSteps
+			(b) => b.currentPriority > 0 && b.currentNumberSteps >= this.maxNumberSteps,
 		);
 		const total = battles.reduce((sum, b) => sum + b.currentPriority, 0);
 
@@ -192,8 +192,8 @@ export class MapProperties extends Localization {
 					MAP_TRANSITION_KIND.ZOOM,
 					MAP_TRANSITION_KIND.ZOOM,
 					null,
-					null
-				)
+					null,
+				),
 			);
 		}
 	}
@@ -226,10 +226,10 @@ export class MapProperties extends Localization {
 		this.music = new PlaySong(SONG_KIND.MUSIC, Utils.valueOrDefault(datas.music, json.music));
 		this.backgroundSound = new PlaySong(
 			SONG_KIND.BACKGROUND_SOUND,
-			Utils.valueOrDefault(datas.backgroundSound, json.bgs)
+			Utils.valueOrDefault(datas.backgroundSound, json.bgs),
 		);
 		this.cameraProperties = Data.Systems.getCameraProperties(
-			Utils.valueOrDefault(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue() as number)
+			Utils.valueOrDefault(datas.camera, DynamicValue.readOrDefaultDatabase(json.cp, 1).getValue() as number),
 		);
 
 		// Background

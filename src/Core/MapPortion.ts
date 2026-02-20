@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -264,7 +264,7 @@ class MapPortion {
 						position,
 						faceCount,
 						true,
-						localPosition
+						localPosition,
 					);
 					faceCount = resultUpdate[0];
 					collisions = resultUpdate[1];
@@ -276,7 +276,7 @@ class MapPortion {
 						position,
 						staticCount,
 						true,
-						localPosition
+						localPosition,
 					);
 					staticCount = resultUpdate[0];
 					collisions = resultUpdate[1];
@@ -407,7 +407,7 @@ class MapPortion {
 					objCollision,
 					position,
 					true,
-					Scene.Map.current.overflowMountains
+					Scene.Map.current.overflowMountains,
 				);
 			}
 		}
@@ -442,20 +442,12 @@ class MapPortion {
 			}
 			if (datas) {
 				// GLTF with no user texture: use embedded materials directly
-				if (
-					datas.shapeKind === SHAPE_KIND.CUSTOM &&
-					datas.gltfID !== -1 &&
-					pictureID === -1
-				) {
+				if (datas.shapeKind === SHAPE_KIND.CUSTOM && datas.gltfID !== -1 && pictureID === -1) {
 					const shape = Data.Shapes.get(CUSTOM_SHAPE_KIND.GLTF, datas.gltfID);
 					if (shape?.gltfScene) {
 						const clone = shape.gltfScene.clone();
 						const s = Data.Systems.SQUARE_SIZE * datas.scale;
-						clone.scale.set(
-							s * position.scaleX,
-							s * position.scaleY,
-							s * position.scaleZ,
-						);
+						clone.scale.set(s * position.scaleX, s * position.scaleY, s * position.scaleZ);
 						const localPosition = position.toVector3();
 						clone.position.copy(localPosition);
 						clone.rotation.set(
@@ -527,7 +519,7 @@ class MapPortion {
 						result[1],
 						position,
 						datas.shapeKind === SHAPE_KIND.CUSTOM,
-						Scene.Map.current.overflowObjects3D
+						Scene.Map.current.overflowObjects3D,
 					);
 				}
 			}
@@ -769,7 +761,7 @@ class MapPortion {
 		collisions: StructMapElementCollision[],
 		position: Position,
 		side: boolean,
-		overflowMap: Map<string, Set<string>>
+		overflowMap: Map<string, Set<string>>,
 	) {
 		let i: number,
 			l: number,
@@ -792,8 +784,8 @@ class MapPortion {
 				? new Position(
 						position.x + Math.ceil(objCollision.c.x / Data.Systems.SQUARE_SIZE),
 						position.y + Math.ceil(objCollision.c.y / Data.Systems.SQUARE_SIZE),
-						position.z + Math.ceil(objCollision.c.z / Data.Systems.SQUARE_SIZE)
-				  )
+						position.z + Math.ceil(objCollision.c.z / Data.Systems.SQUARE_SIZE),
+					)
 				: new Position(position.x, position.y, position.z);
 			minW = -objCollision.m;
 			maxW = objCollision.m;
@@ -807,7 +799,7 @@ class MapPortion {
 						positionPlus = new Position(
 							centeredPosition.x + a,
 							centeredPosition.y + b,
-							centeredPosition.z + c
+							centeredPosition.z + c,
 						);
 						if (Scene.Map.current.isInMap(positionPlus)) {
 							if (side) {
@@ -853,7 +845,7 @@ class MapPortion {
 	getObjectCollisionAt(
 		positionSource: Position,
 		positionTarget: Position,
-		kind: ELEMENT_MAP_KIND
+		kind: ELEMENT_MAP_KIND,
 	): StructMapElementCollision[] {
 		const result: StructMapElementCollision[] = [];
 		switch (kind) {
@@ -888,7 +880,7 @@ class MapPortion {
 	 */
 	addToNonEmpty(position: Position) {
 		this.squareNonEmpty[position.x % Constants.PORTION_SIZE][position.z % Constants.PORTION_SIZE].push(
-			position.getTotalY()
+			position.getTotalY(),
 		);
 	}
 

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -143,7 +143,7 @@ class Object3DCustom extends Object3D {
 				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				m: Math.max(
 					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),
-					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE)
+					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				),
 				k: true,
 			});
@@ -177,7 +177,7 @@ class Object3DCustom extends Object3D {
 				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				m: Math.max(
 					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),
-					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE)
+					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				),
 				k: true,
 			});

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -81,7 +81,7 @@ class MenuSkills extends Base {
 			Constants.HUGE_SPACE,
 			Constants.HUGE_SPACE + (WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2,
 			WindowBox.LARGE_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const options = {
 			nbItemsMax: Scene.Menu.SLOTS_TO_DISPLAY,
@@ -100,7 +100,7 @@ class MenuSkills extends Base {
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - width,
 			Constants.HUGE_SPACE + (WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2,
 			width,
-			height
+			height,
 		);
 		const options = {
 			padding: WindowBox.HUGE_PADDING_BOX,

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -107,7 +107,7 @@ export class Utils {
 	public static readJSONList<T>(
 		jsonList: JsonType[] = [],
 		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T),
-		ordered = false
+		ordered = false,
 	): T[] {
 		const list = jsonList;
 		if (ordered) {
@@ -137,7 +137,7 @@ export class Utils {
 	public static readJSONMap<T>(
 		jsonList: JsonType[] = [],
 		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T),
-		ids?: number[]
+		ids?: number[],
 	): Map<number, T> {
 		return new Map(
 			jsonList.map<[number, T]>((json) => {
@@ -154,13 +154,13 @@ export class Utils {
 					ids.push(id);
 				}
 				return [id, item];
-			})
+			}),
 		);
 	}
 
 	public static readJSONMapKeyValue<T>(
 		jsonList: JsonKeyValueType[] = [],
-		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T)
+		transformFn: (new (data: JsonType) => T) | ((data: JsonType) => T),
 	): Map<number, T> {
 		return new Map(
 			jsonList.map<[number, T]>((json) => {
@@ -173,7 +173,7 @@ export class Utils {
 					item = (transformFn as (data: JsonType) => T)(json.v);
 				}
 				return [json.k, item];
-			})
+			}),
 		);
 	}
 
@@ -194,7 +194,7 @@ export class Utils {
 	public static arrayToMap<T>(array: T[], removeFirst = false): Map<number, T> {
 		const arr = removeFirst ? array.slice(1) : array;
 		return new Map(
-			arr.map((value, index) => [index + 1, value]).filter(([_, v]) => v !== undefined) as [number, T][]
+			arr.map((value, index) => [index + 1, value]).filter(([_, v]) => v !== undefined) as [number, T][],
 		);
 	}
 

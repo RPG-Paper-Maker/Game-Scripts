@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -51,10 +51,10 @@ class PlayerDescription extends Base {
 		// All the graphics
 		this.graphicNameCenter = new Graphic.Text(this.player.name, { align: ALIGN.CENTER });
 		this.graphicName = new Graphic.Text(this.player.name);
-		(this.graphicDescription = new Graphic.Text(system.description.name(), {
+		((this.graphicDescription = new Graphic.Text(system.description.name(), {
 			fontSize: Constants.MEDIUM_FONT_SIZE,
 		})),
-			(this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants.MEDIUM_FONT_SIZE }));
+			(this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants.MEDIUM_FONT_SIZE })));
 		this.graphicLevelName = new Graphic.Text(levelStat.name());
 		this.graphicLevel = new Graphic.Text(String(player[levelStat.abbreviation]));
 		if (expStat === null) {
@@ -183,7 +183,7 @@ class PlayerDescription extends Base {
 				x + this.maxLength + ScreenResolution.getScreenMinXY(10),
 				i * ScreenResolution.getScreenMinXY(30),
 				0,
-				0
+				0,
 			);
 		}
 	}
@@ -246,7 +246,7 @@ class PlayerDescription extends Base {
 				xCharacter + this.graphicExpName.textWidth + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE),
 				yExp,
 				0,
-				0
+				0,
 			);
 			yDescription += ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		}
@@ -269,7 +269,7 @@ class PlayerDescription extends Base {
 						ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE),
 					yStat,
 					0,
-					0
+					0,
 				);
 			}
 		}

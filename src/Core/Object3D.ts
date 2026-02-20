@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -51,7 +51,7 @@ abstract class Object3D extends MapElement {
 	abstract updateGeometry(
 		geometry: CustomGeometry,
 		position: Position,
-		count: number
+		count: number,
 	): [number, StructMapElementCollision[]];
 }
 

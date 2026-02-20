@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -43,7 +43,7 @@ class TextIcon extends Base {
 		indexX: number,
 		indexY: number,
 		{ side = ALIGN.LEFT, align = ALIGN.LEFT, space = Constants.MEDIUM_SPACE } = {},
-		textOptions = {}
+		textOptions = {},
 	) {
 		super();
 
@@ -70,7 +70,7 @@ class TextIcon extends Base {
 			icon === null ? 0 : icon.pictureIndexX,
 			icon === null ? 0 : icon.pictureIndexY,
 			options,
-			textOptions
+			textOptions,
 		);
 	}
 

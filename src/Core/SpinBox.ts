@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -51,7 +51,7 @@ class SpinBox extends Bitmap {
 			active = true,
 			allowLeftRight = true,
 			times = true,
-		} = {}
+		} = {},
 	) {
 		super(x, y, w, h);
 		this.value = value;
@@ -251,7 +251,7 @@ class SpinBox extends Bitmap {
 					this.x + (this.w - arrowWidth) / 2,
 					this.y - arrowHeight / 2 - 1,
 					arrowWidth,
-					arrowHeight
+					arrowHeight,
 				);
 				if (rect.isInside(x, y)) {
 					this.isMouseInArrowUp = true;
@@ -262,7 +262,7 @@ class SpinBox extends Bitmap {
 					this.x + (this.w - arrowWidth) / 2,
 					this.y + this.h + 1,
 					arrowWidth,
-					arrowHeight
+					arrowHeight,
 				);
 				if (rect.isInside(x, y)) {
 					this.isMouseInArrowDown = true;

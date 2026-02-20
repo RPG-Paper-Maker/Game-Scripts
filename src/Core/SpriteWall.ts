@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -62,7 +62,7 @@ class SpriteWall extends MapElement {
 		width: number,
 		height: number,
 		pictureID: number,
-		count: number
+		count: number,
 	): [number, StructMapElementCollision[]] {
 		const vecA = new THREE.Vector3(-0.5, 1.0, 0.0);
 		const vecB = new THREE.Vector3(0.5, 1.0, 0.0);

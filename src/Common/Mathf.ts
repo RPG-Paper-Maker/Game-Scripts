@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -202,7 +202,7 @@ export class Mathf {
 		center: THREE.Vector3,
 		angle: number,
 		axis: THREE.Vector3,
-		isDegree: boolean = true
+		isDegree: boolean = true,
 	): void {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
@@ -240,7 +240,7 @@ export class Mathf {
 		vecC: THREE.Vector3,
 		vecD: THREE.Vector3,
 		center: THREE.Vector3,
-		euler: THREE.Euler
+		euler: THREE.Euler,
 	) {
 		this.rotateVertexEuler(vecA, center, euler);
 		this.rotateVertexEuler(vecB, center, euler);

@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -72,7 +72,7 @@ export class CameraProperties extends Base {
 				this.fov.getValue() as number,
 				ScreenResolution.CANVAS_WIDTH / ScreenResolution.CANVAS_HEIGHT,
 				this.near.getValue() as number,
-				this.far.getValue() as number
+				this.far.getValue() as number,
 			);
 		} else {
 			const x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
@@ -83,7 +83,7 @@ export class CameraProperties extends Base {
 				y,
 				-y,
 				-this.far.getValue() as number,
-				this.far.getValue() as number
+				this.far.getValue() as number,
 			);
 		}
 		camera.horizontalAngle = this.horizontalAngle.getValue() as number;

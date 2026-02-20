@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -77,7 +77,7 @@ class CallACommonReaction extends Base {
 				Data.CommonEvents.getCommonReaction(this.commonReactionID),
 				object,
 				state,
-				Utils.arrayToMap(parameters, true)
+				Utils.arrayToMap(parameters, true),
 			);
 		}
 		const previousBlocking = ReactionInterpreter.blockingHero;
@@ -100,7 +100,7 @@ class CallACommonReaction extends Base {
 		if (currentState.interpreter && currentState.interpreter.currentCommand) {
 			currentState.interpreter.currentCommand.data.onKeyPressed(
 				currentState.interpreter.currentCommandState,
-				key
+				key,
 			);
 		}
 		super.onKeyPressed(currentState, key);
@@ -115,7 +115,7 @@ class CallACommonReaction extends Base {
 		if (currentState.interpreter && currentState.interpreter.currentCommand) {
 			currentState.interpreter.currentCommand.data.onKeyReleased(
 				currentState.interpreter.currentCommandState,
-				key
+				key,
 			);
 		}
 		super.onKeyReleased(currentState, key);
@@ -131,7 +131,7 @@ class CallACommonReaction extends Base {
 		if (currentState.interpreter && currentState.interpreter.currentCommand) {
 			return currentState.interpreter.currentCommand.data.onKeyPressedRepeat(
 				currentState.interpreter.currentCommandState,
-				key
+				key,
 			);
 		}
 		return super.onKeyPressedRepeat(currentState, key);
@@ -148,7 +148,7 @@ class CallACommonReaction extends Base {
 		if (currentState.interpreter && currentState.interpreter.currentCommand) {
 			currentState.interpreter.currentCommand.data.onKeyPressedAndRepeat(
 				currentState.interpreter.currentCommandState,
-				key
+				key,
 			);
 		}
 		return super.onKeyPressedAndRepeat(currentState, key);

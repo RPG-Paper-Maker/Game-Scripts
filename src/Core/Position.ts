@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -56,7 +56,7 @@ class Position extends Portion {
 		angleZ: number = 0,
 		scaleX: number = 1,
 		scaleY: number = 1,
-		scaleZ: number = 1
+		scaleZ: number = 1,
 	) {
 		super(x, y, z);
 
@@ -92,7 +92,7 @@ class Position extends Portion {
 			array[9],
 			array[10],
 			array[11],
-			array[12]
+			array[12],
 		);
 	}
 
@@ -106,7 +106,7 @@ class Position extends Portion {
 		return new Position(
 			Math.floor(position.x / Data.Systems.SQUARE_SIZE),
 			Math.floor(position.y / Data.Systems.SQUARE_SIZE),
-			Math.floor(position.z / Data.Systems.SQUARE_SIZE)
+			Math.floor(position.z / Data.Systems.SQUARE_SIZE),
 		);
 	}
 
@@ -162,7 +162,7 @@ class Position extends Portion {
 		return new Portion(
 			Math.floor(this.x / Constants.PORTION_SIZE),
 			Math.floor(this.y / Constants.PORTION_SIZE),
-			Math.floor(this.z / Constants.PORTION_SIZE)
+			Math.floor(this.z / Constants.PORTION_SIZE),
 		);
 	}
 
@@ -174,7 +174,7 @@ class Position extends Portion {
 		return new THREE.Vector3(
 			this.x * Data.Systems.SQUARE_SIZE + (center ? (this.centerX / 100) * Data.Systems.SQUARE_SIZE : 0),
 			this.y * Data.Systems.SQUARE_SIZE + (this.yPixels * Data.Systems.SQUARE_SIZE) / 100,
-			this.z * Data.Systems.SQUARE_SIZE + (center ? (this.centerZ / 100) * Data.Systems.SQUARE_SIZE : 0)
+			this.z * Data.Systems.SQUARE_SIZE + (center ? (this.centerZ / 100) * Data.Systems.SQUARE_SIZE : 0),
 		);
 	}
 
@@ -182,7 +182,7 @@ class Position extends Portion {
 		return new THREE.Euler(
 			Mathf.degreesToRadians(this.angleX),
 			Mathf.degreesToRadians(this.angleY),
-			Mathf.degreesToRadians(this.angleZ)
+			Mathf.degreesToRadians(this.angleZ),
 		);
 	}
 

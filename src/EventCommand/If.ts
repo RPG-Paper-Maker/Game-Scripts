@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -206,7 +206,7 @@ class If extends Base {
 			case 0: // Variable / Param / Prop
 				result = Mathf.OPERATORS_COMPARE[this.variableParamPropOPERATION_KIND](
 					this.variableParamProp.getValue() as number,
-					this.variableParamPropValue.getValue() as number
+					this.variableParamPropValue.getValue() as number,
 				);
 				break;
 			case 1:
@@ -225,7 +225,7 @@ class If extends Base {
 							this.getHeroInstanceID(),
 							(hero: Player) => {
 								return hero.name === name;
-							}
+							},
 						);
 						break;
 					case 1:
@@ -242,7 +242,7 @@ class If extends Base {
 									}
 								}
 								return false;
-							}
+							},
 						);
 						break;
 					case 2:
@@ -258,7 +258,7 @@ class If extends Base {
 									}
 								}
 								return false;
-							}
+							},
 						);
 						break;
 					case 3:
@@ -277,7 +277,7 @@ class If extends Base {
 											}
 										}
 										return false;
-									}
+									},
 								);
 								break;
 							case 1:
@@ -294,7 +294,7 @@ class If extends Base {
 											}
 										}
 										return false;
-									}
+									},
 								);
 								break;
 						}
@@ -312,7 +312,7 @@ class If extends Base {
 									}
 								}
 								return false;
-							}
+							},
 						);
 						break;
 					case 5:
@@ -325,9 +325,9 @@ class If extends Base {
 							(hero: Player) => {
 								return Mathf.OPERATORS_COMPARE[this.heroesStatisticOperation](
 									hero[stat.abbreviation],
-									value
+									value,
 								);
-							}
+							},
 						);
 						break;
 				}
@@ -335,7 +335,7 @@ class If extends Base {
 			case 2:
 				result = Mathf.OPERATORS_COMPARE[this.operationCurrency](
 					Game.current.getCurrency(this.currencyID.getValue() as number),
-					this.currencyValue.getValue() as number
+					this.currencyValue.getValue() as number,
 				);
 				break;
 			case 3:
@@ -429,7 +429,7 @@ class If extends Base {
 						(result: StructSearchResult) => {
 							currentState.object = result.object;
 						},
-						object
+						object,
 					);
 					currentState.waitingObject = true;
 				}
@@ -444,7 +444,7 @@ class If extends Base {
 				const index = Utils.indexOfProp(
 					Game.current.chronometers as any,
 					'id',
-					this.chronometerID.getValue() as number
+					this.chronometerID.getValue() as number,
 				);
 				if (index === -1) {
 					result = false;
@@ -453,7 +453,7 @@ class If extends Base {
 					const chrono = Game.current.chronometers[index];
 					result = Mathf.OPERATORS_COMPARE[this.chronometerOperation](
 						chrono.getSeconds(),
-						this.chronometerSeconds.getValue() as number
+						this.chronometerSeconds.getValue() as number,
 					);
 				}
 				break;
@@ -465,7 +465,7 @@ class If extends Base {
 						(result: StructSearchResult) => {
 							currentState.object = result.object;
 						},
-						object
+						object,
 					);
 					currentState.waitingObject = true;
 				}

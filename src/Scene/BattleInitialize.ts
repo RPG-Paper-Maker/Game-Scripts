@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -78,11 +78,11 @@ class BattleInitialize {
 		for (let i = 0; i < l; i++) {
 			// Battlers
 			center = Interpreter.evaluate(
-				Data.BattleSystems.heroesBattlersCenterOffset.getValue() as string
+				Data.BattleSystems.heroesBattlersCenterOffset.getValue() as string,
 			) as THREE.Vector3;
 			if (!(center instanceof THREE.Vector3)) {
 				Platform.showErrorMessage(
-					'Heroes battlers center offset incorrect return, should be a THREE.Vecto3: ' + center
+					'Heroes battlers center offset incorrect return, should be a THREE.Vecto3: ' + center,
 				);
 			}
 			offset = Interpreter.evaluate(Data.BattleSystems.heroesBattlersOffset.getValue() as string, {
@@ -91,7 +91,7 @@ class BattleInitialize {
 			}) as THREE.Vector3;
 			if (!(offset instanceof THREE.Vector3)) {
 				Platform.showErrorMessage(
-					'Heroes battlers offset incorrect return, should be a THREE.Vecto3: ' + center
+					'Heroes battlers offset incorrect return, should be a THREE.Vecto3: ' + center,
 				);
 			}
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
@@ -133,7 +133,7 @@ class BattleInitialize {
 				offset = new THREE.Vector3();
 			} else {
 				center = Interpreter.evaluate(
-					Data.BattleSystems.troopsBattlersCenterOffset.getValue() as string
+					Data.BattleSystems.troopsBattlersCenterOffset.getValue() as string,
 				) as THREE.Vector3;
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers center offset incorrect return: ' + center);
@@ -172,7 +172,7 @@ class BattleInitialize {
 			{
 				padding: WindowBox.SMALL_SLOT_PADDING,
 				content: new Graphic.Text('', { align: ALIGN.CENTER }),
-			}
+			},
 		);
 		this.battle.windowUserInformations = new WindowBox(
 			ScreenResolution.SCREEN_X - Scene.Battle.WINDOW_PROFILE_WIDTH,
@@ -182,7 +182,7 @@ class BattleInitialize {
 			{
 				padding: WindowBox.MEDIUM_PADDING_BOX,
 				limitContent: false,
-			}
+			},
 		);
 		this.battle.windowTargetInformations = new WindowBox(
 			0,
@@ -192,7 +192,7 @@ class BattleInitialize {
 			{
 				padding: WindowBox.MEDIUM_PADDING_BOX,
 				limitContent: false,
-			}
+			},
 		);
 	}
 
@@ -219,7 +219,7 @@ class BattleInitialize {
 			{
 				nbItemsMax: Scene.Battle.COMMANDS_NUMBER,
 				listCallbacks: listCallbacks,
-			}
+			},
 		);
 		this.battle.windowChoicesSkills = new WindowChoices(
 			Scene.Battle.WINDOW_COMMANDS_SELECT_X,
@@ -229,7 +229,7 @@ class BattleInitialize {
 			[],
 			{
 				nbItemsMax: Scene.Battle.COMMANDS_NUMBER,
-			}
+			},
 		);
 		this.battle.windowSkillDescription = new WindowBox(
 			ScreenResolution.SCREEN_X - Scene.Battle.WINDOW_DESCRIPTIONS_X,
@@ -238,7 +238,7 @@ class BattleInitialize {
 			Scene.Battle.WINDOW_DESCRIPTIONS_HEIGHT,
 			{
 				padding: WindowBox.HUGE_PADDING_BOX,
-			}
+			},
 		);
 		this.battle.windowChoicesItems = new WindowChoices(
 			Scene.Battle.WINDOW_COMMANDS_SELECT_X,
@@ -248,7 +248,7 @@ class BattleInitialize {
 			[],
 			{
 				nbItemsMax: Scene.Battle.COMMANDS_NUMBER,
-			}
+			},
 		);
 		this.battle.windowItemDescription = new WindowBox(
 			ScreenResolution.SCREEN_X - Scene.Battle.WINDOW_DESCRIPTIONS_X,
@@ -257,7 +257,7 @@ class BattleInitialize {
 			Scene.Battle.WINDOW_DESCRIPTIONS_HEIGHT,
 			{
 				padding: WindowBox.HUGE_PADDING_BOX,
-			}
+			},
 		);
 	}
 
@@ -275,7 +275,7 @@ class BattleInitialize {
 			{
 				content: new Graphic.XPProgression(),
 				padding: WindowBox.SMALL_PADDING_BOX,
-			}
+			},
 		);
 		this.battle.windowStatisticProgression = new WindowBox(
 			Scene.Battle.WINDOW_STATS_X,
@@ -284,7 +284,7 @@ class BattleInitialize {
 			Scene.Battle.WINDOW_STATS_HEIGHT,
 			{
 				padding: WindowBox.HUGE_PADDING_BOX,
-			}
+			},
 		);
 	}
 

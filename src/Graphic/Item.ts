@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -31,7 +31,7 @@ class Item extends Base {
 			nbItem,
 			possible = true,
 			showSellPrice = false,
-		}: { nbItem?: number; possible?: boolean; showSellPrice?: boolean } = {}
+		}: { nbItem?: number; possible?: boolean; showSellPrice?: boolean } = {},
 	) {
 		super();
 
@@ -43,7 +43,7 @@ class Item extends Base {
 			'',
 			this.item.system,
 			{},
-			possible ? {} : { color: Model.Color.GREY }
+			possible ? {} : { color: Model.Color.GREY },
 		);
 		this.updateName(nbItem);
 		if (item.shop === undefined) {
@@ -60,11 +60,11 @@ class Item extends Base {
 					Mathf.numberWithCommas(
 						showSellPrice
 							? Math.round(((Data.Systems.priceSoldItem.getValue() as number) * value) / 100)
-							: value
+							: value,
 					),
 					kind === DAMAGES_KIND.CURRENCY ? Data.Systems.getCurrency(id) : null,
 					{ align: ALIGN.RIGHT },
-					possible ? {} : { color: Model.Color.GREY }
+					possible ? {} : { color: Model.Color.GREY },
 				);
 				this.graphicCurrencies.push(graphic);
 			}
@@ -78,7 +78,7 @@ class Item extends Base {
 	updateName(nbItem?: number) {
 		nbItem = nbItem === undefined ? this.item.nb : nbItem;
 		this.graphicName.setText(
-			this.item.system.name() + (this.item.shop !== undefined && nbItem !== -1 ? ' ' + '[' + nbItem + ']' : '')
+			this.item.system.name() + (this.item.shop !== undefined && nbItem !== -1 ? ' ' + '[' + nbItem + ']' : ''),
 		);
 	}
 

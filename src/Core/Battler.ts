@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -135,22 +135,22 @@ export class Battler {
 		this.progressionAllyFront = ProgressionTable.createFromNumbers(
 			this.position.x,
 			this.position.x - Battler.OFFSET_SELECTED,
-			0
+			0,
 		);
 		this.progressionAllyBack = ProgressionTable.createFromNumbers(
 			this.position.x - Battler.OFFSET_SELECTED,
 			this.position.x,
-			0
+			0,
 		);
 		this.progressionEnemyFront = ProgressionTable.createFromNumbers(
 			this.position.x,
 			this.position.x + Battler.OFFSET_SELECTED,
-			0
+			0,
 		);
 		this.progressionEnemyBack = ProgressionTable.createFromNumbers(
 			this.position.x + Battler.OFFSET_SELECTED,
 			this.position.x,
-			0
+			0,
 		);
 		this.timerMove = 0;
 		this.timeDamage = Battler.TOTAL_TIME_DAMAGE;
@@ -182,22 +182,22 @@ export class Battler {
 			this.topLeftPosition = new THREE.Vector3(
 				this.position.x - (this.width / 2) * Data.Systems.SQUARE_SIZE,
 				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
-				this.position.z
+				this.position.z,
 			);
 			this.botRightPosition = new THREE.Vector3(
 				this.position.x + (this.width / 2) * Data.Systems.SQUARE_SIZE,
 				this.position.y,
-				this.position.z
+				this.position.z,
 			);
 			this.upPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
-				this.position.z
+				this.position.z,
 			);
 			this.halfPosition = new THREE.Vector3(
 				this.position.x,
 				this.position.y + (this.height * Data.Systems.SQUARE_SIZE) / 2,
-				this.position.z
+				this.position.z,
 			);
 			if (this.isEnemy) {
 				this.mesh.scale.set(-1, 1, 1);
@@ -439,7 +439,7 @@ export class Battler {
 		if (this.frameArrow.update()) {
 			this.arrowPosition = Manager.GL.toScreenPosition(
 				this.mesh.position,
-				Scene.Map.current.camera.getThreeCamera()
+				Scene.Map.current.camera.getThreeCamera(),
 			);
 			Manager.Stack.requestPaintHUD = true;
 		}
@@ -492,7 +492,7 @@ export class Battler {
 			if (status) {
 				this.currentStatusAnimation = new Animation(
 					status.system.animationID.getValue() as number as number,
-					true
+					true,
 				);
 			} else {
 				this.currentStatusAnimation = null;
@@ -572,7 +572,7 @@ export class Battler {
 				this.frameArrow.value,
 				this.arrowPosition.x,
 				this.arrowPosition.y,
-				false
+				false,
 			);
 		}
 	}
@@ -588,7 +588,7 @@ export class Battler {
 			this.damagePosition.y,
 			this.isDamagesCritical,
 			this.isDamagesMiss,
-			zoom
+			zoom,
 		);
 		if (this.damagesName && this.damages && !this.isDamagesMiss) {
 			this.graphicDamageName.setText(this.damagesName);

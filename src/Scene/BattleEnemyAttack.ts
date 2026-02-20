@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -96,7 +96,7 @@ class BattleEnemyAttack {
 				action.isConditionTurn &&
 				!Mathf.OPERATORS_COMPARE[action.operationKindTurn](
 					this.battle.turn,
-					action.turnValueCompare.getValue() as number
+					action.turnValueCompare.getValue() as number,
 				)
 			) {
 				continue;
@@ -107,7 +107,7 @@ class BattleEnemyAttack {
 					if (
 						!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
 							player[stat.abbreviation],
-							action.statisticValueCompare.getValue() as number
+							action.statisticValueCompare.getValue() as number,
 						)
 					) {
 						continue;
@@ -116,7 +116,7 @@ class BattleEnemyAttack {
 					if (
 						!Mathf.OPERATORS_COMPARE[action.operationKindStatistic](
 							(player[stat.abbreviation] / player[stat.getMaxAbbreviation()]) * 100,
-							action.statisticValueCompare.getValue() as number
+							action.statisticValueCompare.getValue() as number,
 						)
 					) {
 						continue;
@@ -127,7 +127,7 @@ class BattleEnemyAttack {
 				action.isConditionVariable &&
 				!Mathf.OPERATORS_COMPARE[action.operationKindVariable](
 					Game.current.getVariable(action.variableID),
-					action.variableValueCompare.getValue() as number
+					action.variableValueCompare.getValue() as number,
 				)
 			) {
 				continue;

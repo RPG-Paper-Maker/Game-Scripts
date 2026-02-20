@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -76,7 +76,7 @@ class BattleSelection {
 		this.battle.targets = [];
 		this.moveArrow();
 		this.battle.battlers[this.battle.kindSelection][this.selectedUserTargetIndex()].updateArrowPosition(
-			this.battle.camera
+			this.battle.camera,
 		);
 		this.battle.listSkills = [];
 		this.battle.listItems = [];
@@ -134,7 +134,7 @@ class BattleSelection {
 				this.battle.kindSelection = CHARACTER_KIND.HERO;
 				this.battle.userTarget = true;
 				this.battle.selectedTargetIndex = this.battle.battlers[this.battle.kindSelection].indexOf(
-					this.battle.user
+					this.battle.user,
 				);
 				break;
 			case TARGET_KIND.ENEMY:
@@ -380,7 +380,7 @@ class BattleSelection {
 						Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
 						0,
 						0,
-						Scene.Battle.TIME_LINEAR_MUSIC_END
+						Scene.Battle.TIME_LINEAR_MUSIC_END,
 					);
 					for (i = 0, l = this.battle.battlers[CHARACTER_KIND.HERO].length; i < l; i++) {
 						this.battle.battlers[CHARACTER_KIND.HERO][i].setEscaping();
@@ -494,7 +494,7 @@ class BattleSelection {
 								options.key,
 								this.battle.subStep === 0
 									? Data.Keyboards.menuControls.Left
-									: Data.Keyboards.menuControls.Right
+									: Data.Keyboards.menuControls.Right,
 							)
 						) {
 							index = this.indexArrowUp();
@@ -504,7 +504,7 @@ class BattleSelection {
 								options.key,
 								this.battle.subStep === 0
 									? Data.Keyboards.menuControls.Right
-									: Data.Keyboards.menuControls.Left
+									: Data.Keyboards.menuControls.Left,
 							)
 						) {
 							index = this.indexArrowDown();

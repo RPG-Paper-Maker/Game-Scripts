@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -142,7 +142,7 @@ class Game {
 		// Items
 		this.items = Utils.readJSONList(
 			json.itm,
-			(element: { kind: ITEM_KIND; id: number; nb: number }) => new Item(element.kind, element.id, element.nb)
+			(element: { kind: ITEM_KIND; id: number; nb: number }) => new Item(element.kind, element.id, element.nb),
 		);
 
 		// Currencies
@@ -161,7 +161,7 @@ class Game {
 				status: { id: number; turn: number }[];
 				name: string;
 			}) =>
-				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element)
+				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element),
 		);
 
 		this.reserveHeroes = Utils.readJSONList(
@@ -174,7 +174,7 @@ class Game {
 				status: { id: number; turn: number }[];
 				name: string;
 			}) =>
-				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element)
+				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element),
 		);
 
 		this.hiddenHeroes = Utils.readJSONList(
@@ -187,7 +187,7 @@ class Game {
 				status: { id: number; turn: number }[];
 				name: string;
 			}) =>
-				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element)
+				new Player(element.kind, element.id, element.instid, element.sk, element.status, element.name, element),
 		);
 
 		// Map infos
@@ -481,7 +481,7 @@ class Game {
 				member.characterKind,
 				member.heroID.getValue() as number as number,
 				member.level.getValue() as number as number,
-				member.variableInstanceID.getValue(true) as number
+				member.variableInstanceID.getValue(true) as number,
 			);
 		}
 		this.mapsData = {};
@@ -720,7 +720,7 @@ class Game {
 					2,
 					Utils.arrayToMap([Model.DynamicValue.createNumber(chrono.id)]),
 					true,
-					false
+					false,
 				);
 			}
 		}

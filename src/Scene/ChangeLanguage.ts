@@ -1,5 +1,5 @@
 /*
-    RPG Paper Maker Copyright (C) 2017-2025 Wano
+    RPG Paper Maker Copyright (C) 2017-2026 Wano
 
     RPG Paper Maker engine is under proprietary license.
     This source code is also copyrighted.
@@ -58,7 +58,7 @@ class ChangeLanguage extends Base {
 			Constants.HUGE_SPACE,
 			Constants.HUGE_SPACE,
 			WindowBox.MEDIUM_SLOT_WIDTH,
-			WindowBox.LARGE_SLOT_HEIGHT
+			WindowBox.LARGE_SLOT_HEIGHT,
 		);
 		const graphic = new Graphic.Text(Data.Languages.extras.language.name(), { align: ALIGN.CENTER });
 		const options = {
@@ -75,7 +75,7 @@ class ChangeLanguage extends Base {
 			Constants.HUGE_SPACE + WindowBox.MEDIUM_SLOT_WIDTH + Constants.LARGE_SPACE,
 			Constants.HUGE_SPACE,
 			ScreenResolution.SCREEN_X - 2 * Constants.HUGE_SPACE - WindowBox.MEDIUM_SLOT_WIDTH - Constants.LARGE_SPACE,
-			WindowBox.LARGE_SLOT_HEIGHT
+			WindowBox.LARGE_SLOT_HEIGHT,
 		);
 		const graphic = new Graphic.Text(Data.Languages.extras.languageSelectedDescription.name(), {
 			align: ALIGN.CENTER,
@@ -94,7 +94,7 @@ class ChangeLanguage extends Base {
 			Constants.HUGE_SPACE,
 			Constants.HUGE_SPACE + WindowBox.LARGE_SLOT_HEIGHT + Constants.LARGE_SPACE,
 			ScreenResolution.SCREEN_X - 2 * Constants.HUGE_SPACE,
-			WindowBox.MEDIUM_SLOT_HEIGHT
+			WindowBox.MEDIUM_SLOT_HEIGHT,
 		);
 		const options = {
 			nbItemsMax: 9,
@@ -106,7 +106,7 @@ class ChangeLanguage extends Base {
 			rect.width,
 			rect.height,
 			Data.Languages.getCommandsGraphics(),
-			options
+			options,
 		);
 		this.windowChoicesMain.unselect();
 		this.windowChoicesMain.select(Data.Languages.getIndexByID(Data.Settings.currentLanguage));
@@ -122,7 +122,7 @@ class ChangeLanguage extends Base {
 			(ScreenResolution.SCREEN_X - width) / 2,
 			(ScreenResolution.SCREEN_Y - height) / 2,
 			width,
-			height
+			height,
 		);
 		const graphic = new Graphic.Text(Data.Languages.extras.confirm.name(), { align: ALIGN.CENTER });
 		const options = {
@@ -139,14 +139,14 @@ class ChangeLanguage extends Base {
 			this.windowBoxConfirm.oX + (this.windowBoxConfirm.oW - WindowBox.SMALL_SLOT_WIDTH) / 2,
 			this.windowBoxConfirm.oY + this.windowBoxConfirm.oH,
 			WindowBox.SMALL_SLOT_WIDTH,
-			WindowBox.SMALL_SLOT_HEIGHT
+			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		const options = {
 			listCallbacks: [
 				() => {
 					// YES
 					Data.Settings.updateCurrentLanguage(
-						Data.Languages.listIDs[this.windowChoicesMain.currentSelectedIndex]
+						Data.Languages.listIDs[this.windowChoicesMain.currentSelectedIndex],
 					).catch(console.error);
 					Manager.Stack.translateAll();
 					this.step = 0;
@@ -184,7 +184,7 @@ class ChangeLanguage extends Base {
 			this.pictureBackground = await Picture2D.createWithID(
 				Data.TitlescreenGameover.titleBackgroundImageID,
 				PICTURE_KIND.TITLE_SCREEN,
-				{ cover: true }
+				{ cover: true },
 			);
 		} else {
 			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath());
