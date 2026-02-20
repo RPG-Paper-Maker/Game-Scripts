@@ -601,6 +601,9 @@ export class SpecialElements {
 		if (pictureID === undefined) {
 			pictureID = object3D.pictureID;
 		}
+		if (pictureID === -1) {
+			return Manager.GL.loadTextureEmpty();
+		}
 		let textureObject3D = this.texturesObjects3D.get(pictureID);
 		if (textureObject3D === undefined) {
 			const picture = Data.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);

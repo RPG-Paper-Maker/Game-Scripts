@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
+import { Constants, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
 import { Data, Manager, Model, Scene } from '../index';
 import { Autotile } from './Autotile';
 import { Autotiles } from './Autotiles';
@@ -441,6 +441,44 @@ class MapPortion {
 				pictureID = Data.SpecialElements.getObject3D(datas.id).pictureID;
 			}
 			if (datas) {
+				// GLTF with no user texture: use embedded materials directly
+				if (
+					datas.shapeKind === SHAPE_KIND.CUSTOM &&
+					datas.gltfID !== -1 &&
+					pictureID === -1
+				) {
+					const shape = Data.Shapes.get(CUSTOM_SHAPE_KIND.GLTF, datas.gltfID);
+					if (shape?.gltfScene) {
+						const clone = shape.gltfScene.clone();
+						const s = Data.Systems.SQUARE_SIZE * datas.scale;
+						clone.scale.set(
+							s * position.scaleX,
+							s * position.scaleY,
+							s * position.scaleZ,
+						);
+						const localPosition = position.toVector3();
+						clone.position.copy(localPosition);
+						clone.rotation.set(
+							(position.angleX * Math.PI) / 180,
+							(position.angleY * Math.PI) / 180,
+							(position.angleZ * Math.PI) / 180,
+						);
+						clone.renderOrder = -1;
+						if (Scene.Map.current.mapProperties.isSunLight) {
+							clone.traverse((child) => {
+								if (child instanceof THREE.Mesh) {
+									child.receiveShadow = true;
+									child.castShadow = true;
+								}
+							});
+						}
+						clone.layers.enable(1);
+						this.staticObjects3DList.push(clone as unknown as THREE.Mesh);
+						Scene.Map.current.scene.add(clone);
+					}
+					continue;
+				}
+
 				let obj3D: Object3D;
 				switch (datas.shapeKind) {
 					case SHAPE_KIND.BOX:

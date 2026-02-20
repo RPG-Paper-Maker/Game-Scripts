@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { CUSTOM_SHAPE_KIND, Paths, Platform, Utils } from '../Common';
 import { CustomGeometry } from '../Core';
 import { Data, Manager } from '../index';
@@ -53,6 +54,7 @@ export class Shape extends Base {
 	public base64: string;
 	public mesh: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
 	public geometry: ParsedGeometry | null = null;
+	public gltfScene: THREE.Group | null = null;
 
 	constructor(json?: ShapeJSON) {
 		super(json);
@@ -69,6 +71,8 @@ export class Shape extends Base {
 				return '.mtl';
 			case CUSTOM_SHAPE_KIND.COLLISIONS:
 				return '.obj collisions';
+			case CUSTOM_SHAPE_KIND.GLTF:
+				return '.gltf';
 		}
 		return '';
 	}
@@ -94,6 +98,8 @@ export class Shape extends Base {
 				return Paths.MTL;
 			case CUSTOM_SHAPE_KIND.COLLISIONS:
 				return Paths.OBJ_COLLISIONS;
+			case CUSTOM_SHAPE_KIND.GLTF:
+				return Paths.GLTF;
 		}
 		return '';
 	}
@@ -124,7 +130,7 @@ export class Shape extends Base {
 				const temp3D = new THREE.Vector3(
 					parseFloat(result[1]) * Data.Systems.SQUARE_SIZE,
 					parseFloat(result[2]) * Data.Systems.SQUARE_SIZE,
-					parseFloat(result[3]) * Data.Systems.SQUARE_SIZE
+					parseFloat(result[3]) * Data.Systems.SQUARE_SIZE,
 				);
 				v.push(temp3D);
 
@@ -163,7 +169,7 @@ export class Shape extends Base {
 			center: new THREE.Vector3(
 				(maxVertex.x - minVertex.x) / 2 + minVertex.x,
 				(maxVertex.y - minVertex.y) / 2 + minVertex.y,
-				(maxVertex.z - minVertex.z) / 2 + minVertex.z
+				(maxVertex.z - minVertex.z) / 2 + minVertex.z,
 			),
 			w: maxVertex.x - minVertex.x,
 			h: maxVertex.y - minVertex.y,
@@ -172,13 +178,104 @@ export class Shape extends Base {
 	}
 
 	/**
-	 *  Load the .obj.
+	 * Parse a GLTF/GLB buffer into vertices, uvs, and bounds.
+	 */
+	static async parseGLTF(
+		buffer: ArrayBuffer,
+		squareSize: number,
+	): Promise<{ geometryData: ParsedGeometry; scene: THREE.Group }> {
+		const loader = new GLTFLoader();
+		const gltf = await loader.parseAsync(buffer, '');
+		const vertices: THREE.Vector3[] = [];
+		const uvs: THREE.Vector2[] = [];
+		let minVertex = new THREE.Vector3();
+		let maxVertex = new THREE.Vector3();
+		let firstVertex = true;
+		gltf.scene.traverse((child) => {
+			if (!(child instanceof THREE.Mesh)) {
+				return;
+			}
+			let geometry = child.geometry as THREE.BufferGeometry;
+			if (geometry.index) {
+				geometry = geometry.toNonIndexed();
+			}
+			const posAttr = geometry.getAttribute('position');
+			const uvAttr = geometry.getAttribute('uv');
+			for (let i = 0; i < posAttr.count; i++) {
+				const vertex = new THREE.Vector3(
+					posAttr.getX(i) * squareSize,
+					posAttr.getY(i) * squareSize,
+					posAttr.getZ(i) * squareSize,
+				);
+				vertices.push(vertex);
+				if (uvAttr) {
+					uvs.push(new THREE.Vector2(uvAttr.getX(i), 1.0 - uvAttr.getY(i)));
+				} else {
+					uvs.push(new THREE.Vector2(0, 0));
+				}
+				if (firstVertex) {
+					minVertex = vertex.clone();
+					maxVertex = vertex.clone();
+					firstVertex = false;
+				} else {
+					minVertex.min(vertex);
+					maxVertex.max(vertex);
+				}
+			}
+		});
+		return {
+			geometryData: {
+				vertices,
+				uvs,
+				minVertex,
+				maxVertex,
+				center: new THREE.Vector3(
+					(maxVertex.x - minVertex.x) / 2 + minVertex.x,
+					(maxVertex.y - minVertex.y) / 2 + minVertex.y,
+					(maxVertex.z - minVertex.z) / 2 + minVertex.z,
+				),
+				w: maxVertex.x - minVertex.x,
+				h: maxVertex.y - minVertex.y,
+				d: maxVertex.z - minVertex.z,
+			},
+			scene: gltf.scene,
+		};
+	}
+
+	/**
+	 *  Load the shape.
 	 */
 	async load(): Promise<void> {
 		if (this.id === -1 || this.geometry) {
 			return;
 		}
-		if (this.base64) {
+		if (this.kind === CUSTOM_SHAPE_KIND.GLTF) {
+			const url = this.getPath();
+			try {
+				const response = await fetch(url);
+				const buffer = await response.arrayBuffer();
+				const result = await Shape.parseGLTF(buffer, Data.Systems.SQUARE_SIZE);
+				this.geometry = result.geometryData;
+				this.gltfScene = result.scene;
+			} catch {
+				const error = `Could not load ${url}`;
+				if (Data.Systems.ignoreAssetsLoadingErrors) {
+					console.warn(error);
+					this.geometry = {
+						vertices: [],
+						uvs: [],
+						minVertex: new THREE.Vector3(),
+						maxVertex: new THREE.Vector3(),
+						center: new THREE.Vector3(),
+						w: 0,
+						h: 0,
+						d: 0,
+					};
+				} else {
+					Platform.showErrorMessage(error);
+				}
+			}
+		} else if (this.base64) {
 			const base64Data = this.base64.split(',')[1];
 			this.geometry = Shape.parse(atob(base64Data));
 			this.base64 = '';
@@ -206,14 +303,16 @@ export class Shape extends Base {
 						} else {
 							Platform.showErrorMessage(error);
 						}
-					}
+					},
 				);
 			});
+		}
+		if (this.geometry && this.geometry.vertices.length > 0) {
 			const geometry = new CustomGeometry();
 			const vertices = this.geometry.vertices;
 			const uvs = this.geometry.uvs;
 			let count = 0;
-			for (let i = 0, l = this.geometry.vertices.length; i < l; i += 3) {
+			for (let i = 0, l = vertices.length; i < l; i += 3) {
 				geometry.pushTriangleVertices(vertices[i].clone(), vertices[i + 1].clone(), vertices[i + 2].clone());
 				geometry.pushTriangleIndices(count);
 				geometry.pushTriangleUVs(uvs[i].clone(), uvs[i + 1].clone(), uvs[i + 2].clone());
@@ -237,7 +336,7 @@ export class Shape extends Base {
 	async checkBase64(): Promise<void> {
 		if (!Platform.IS_DESKTOP && !this.isBR && Platform.WEB_DEV) {
 			this.base64 = await Platform.loadFile(
-				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Shape.getLocalFolder(this.kind)}/${this.name}`
+				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Shape.getLocalFolder(this.kind)}/${this.name}`,
 			);
 		}
 	}

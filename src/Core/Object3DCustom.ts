@@ -63,8 +63,16 @@ class Object3DCustom extends Object3D {
 	 *  Get the center vector.
 	 *  @returns {Vector3}
 	 */
+	getShapeKindAndID(): [CUSTOM_SHAPE_KIND, number] {
+		if (this.datas.gltfID !== -1) {
+			return [CUSTOM_SHAPE_KIND.GLTF, this.datas.gltfID];
+		}
+		return [CUSTOM_SHAPE_KIND.OBJ, this.datas.objID];
+	}
+
 	getCenterVector(): THREE.Vector3 {
-		return Data.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry.center.clone();
+		const [kind, id] = this.getShapeKindAndID();
+		return Data.Shapes.get(kind, id).geometry.center.clone();
 	}
 
 	/**
@@ -77,7 +85,8 @@ class Object3DCustom extends Object3D {
 	 */
 	updateGeometry(geometry: CustomGeometry, position: Position, count: number): [number, StructMapElementCollision[]] {
 		const localPosition = position.toVector3();
-		const modelGeometry = Data.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.datas.objID).geometry;
+		const [kind, shapeID] = this.getShapeKindAndID();
+		const modelGeometry = Data.Shapes.get(kind, shapeID).geometry;
 		const vertices = modelGeometry.vertices;
 		const uvs = modelGeometry.uvs;
 		const scale = this.datas.scale;

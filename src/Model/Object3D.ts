@@ -20,6 +20,7 @@ export type Object3DJSON = SpecialElementJSON & {
 	id: number;
 	sk?: SHAPE_KIND;
 	oid?: number;
+	gid?: number;
 	mid?: number;
 	ck?: OBJECT_COLLISION_KIND;
 	ccid?: number;
@@ -39,6 +40,7 @@ export class Object3D extends SpecialElement {
 	public id: number;
 	public shapeKind: SHAPE_KIND;
 	public objID: number;
+	public gltfID: number;
 	public mtlID: number;
 	public collisionKind: OBJECT_COLLISION_KIND;
 	public collisionCustomID: number;
@@ -93,6 +95,9 @@ export class Object3D extends SpecialElement {
 
 	/** Get shape object. */
 	getObj(): Shape {
+		if (this.gltfID !== -1) {
+			return Data.Shapes.get(CUSTOM_SHAPE_KIND.GLTF, this.gltfID);
+		}
 		return Data.Shapes.get(CUSTOM_SHAPE_KIND.OBJ, this.objID);
 	}
 
@@ -107,6 +112,7 @@ export class Object3D extends SpecialElement {
 		this.id = json.id;
 		this.shapeKind = Utils.valueOrDefault(json.sk, SHAPE_KIND.BOX);
 		this.objID = Utils.valueOrDefault(json.oid, -1);
+		this.gltfID = Utils.valueOrDefault(json.gid, -1);
 		this.mtlID = Utils.valueOrDefault(json.mid, -1);
 		this.collisionKind = Utils.valueOrDefault(json.ck, OBJECT_COLLISION_KIND.NONE);
 		this.collisionCustomID = Utils.valueOrDefault(json.ccid, -1);

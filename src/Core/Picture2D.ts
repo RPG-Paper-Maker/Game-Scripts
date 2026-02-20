@@ -52,7 +52,7 @@ class Picture2D extends Bitmap {
 			stretch = false,
 			sx = 0,
 			sy = 0,
-		} = {}
+		} = {},
 	) {
 		super(x, y, w, h);
 
@@ -89,7 +89,7 @@ class Picture2D extends Bitmap {
 			angle?: number;
 			cover?: boolean;
 			stretch?: boolean;
-		} = {}
+		} = {},
 	) {
 		const pic = picture ? new Picture2D(picture.getPath(), opts) : new Picture2D();
 		await pic.load();
@@ -229,14 +229,14 @@ class Picture2D extends Bitmap {
 				w === null
 					? this.w * this.zoom
 					: this.stretch
-					? ScreenResolution.getScreenX(w)
-					: ScreenResolution.getScreenMinXY(w);
+						? ScreenResolution.getScreenX(w)
+						: ScreenResolution.getScreenMinXY(w);
 			h =
 				h === null
 					? this.h * this.zoom
 					: this.stretch
-					? ScreenResolution.getScreenY(h)
-					: ScreenResolution.getScreenMinXY(h);
+						? ScreenResolution.getScreenY(h)
+						: ScreenResolution.getScreenMinXY(h);
 
 			// Draw the image according to all parameters
 			const angle = (this.angle * Math.PI) / 180;

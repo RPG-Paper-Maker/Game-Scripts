@@ -425,6 +425,7 @@ export enum CUSTOM_SHAPE_KIND {
 	OBJ,
 	MTL,
 	COLLISIONS,
+	GLTF,
 }
 
 /** Enum for the different object collision kind. */

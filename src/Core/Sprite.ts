@@ -73,7 +73,7 @@ class Sprite extends MapElement {
 		center: THREE.Vector3,
 		angle: number,
 		axis: THREE.Vector3,
-		isDegree: boolean = true
+		isDegree: boolean = true,
 	) {
 		vec.sub(center);
 		vec.applyAxisAngle(axis, isDegree ? (angle * Math.PI) / 180.0 : angle);
@@ -97,7 +97,7 @@ class Sprite extends MapElement {
 		vecD: THREE.Vector3,
 		center: THREE.Vector3,
 		angle: number,
-		axis: THREE.Vector3
+		axis: THREE.Vector3,
 	) {
 		Mathf.rotateVertex(vecA, center, angle, axis);
 		Mathf.rotateVertex(vecB, center, angle, axis);
@@ -128,7 +128,7 @@ class Sprite extends MapElement {
 		texB: THREE.Vector2,
 		texC: THREE.Vector2,
 		texD: THREE.Vector2,
-		count: number
+		count: number,
 	): number {
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
 		geometry.pushQuadIndices(count);
@@ -143,7 +143,7 @@ class Sprite extends MapElement {
 		vecD: THREE.Vector3,
 		pos: THREE.Vector3,
 		position: Position,
-		size: THREE.Vector3
+		size: THREE.Vector3,
 	) {
 		let zPlus = position.layer * 0.05;
 
@@ -182,7 +182,7 @@ class Sprite extends MapElement {
 		position: Position,
 		count: number,
 		tileset: boolean,
-		localPosition: THREE.Vector3
+		localPosition: THREE.Vector3,
 	): [number, StructMapElementCollision[]] {
 		const vecA = Sprite.MODEL[0].clone();
 		const vecB = Sprite.MODEL[1].clone();
@@ -193,7 +193,7 @@ class Sprite extends MapElement {
 		const size = new THREE.Vector3(
 			this.textureRect.width * Data.Systems.SQUARE_SIZE * position.scaleX,
 			this.textureRect.height * Data.Systems.SQUARE_SIZE * position.scaleY,
-			1.0
+			1.0,
 		);
 
 		// For static sprites
@@ -312,7 +312,7 @@ class Sprite extends MapElement {
 				Sprite.MODEL[1].clone().multiply(size).add(p),
 				Sprite.MODEL[2].clone().multiply(size).add(p),
 				Sprite.MODEL[3].clone().multiply(size).add(p),
-				c
+				c,
 			);
 			geometry.pushQuadIndices(count);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
@@ -336,7 +336,7 @@ class Sprite extends MapElement {
 				texB,
 				texC,
 				texD,
-				count
+				count,
 			);
 		}
 
@@ -358,7 +358,7 @@ class Sprite extends MapElement {
 				texB,
 				texC,
 				texD,
-				count
+				count,
 			);
 
 			// Quadra sprite
@@ -378,7 +378,7 @@ class Sprite extends MapElement {
 					vecQuadra1C,
 					vecQuadra1D,
 					center,
-					position.toRotationEuler()
+					position.toRotationEuler(),
 				);
 				Sprite.rotateSprite(vecQuadra2A, vecQuadra2B, vecQuadra2C, vecQuadra2D, center, -45, Sprite.Y_AXIS);
 				Mathf.rotateQuadEuler(
@@ -387,7 +387,7 @@ class Sprite extends MapElement {
 					vecQuadra2C,
 					vecQuadra2D,
 					center,
-					position.toRotationEuler()
+					position.toRotationEuler(),
 				);
 				count = Sprite.addStaticSpriteToGeometry(
 					geometry,
@@ -399,7 +399,7 @@ class Sprite extends MapElement {
 					texB,
 					texC,
 					texD,
-					count
+					count,
 				);
 				count = Sprite.addStaticSpriteToGeometry(
 					geometry,
@@ -411,7 +411,7 @@ class Sprite extends MapElement {
 					texB,
 					texC,
 					texD,
-					count
+					count,
 				);
 			}
 		}
@@ -430,7 +430,7 @@ class Sprite extends MapElement {
 		width: number,
 		height: number,
 		tileset: boolean,
-		position: Position
+		position: Position,
 	): [CustomGeometry, [number, StructMapElementCollision[]]] {
 		const geometry = new CustomGeometry();
 		const collisions = this.updateGeometry(geometry, width, height, position, 0, tileset, null);

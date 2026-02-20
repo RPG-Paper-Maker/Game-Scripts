@@ -112,6 +112,7 @@ export class Paths {
 	static readonly OBJ = Paths.SHAPES + 'OBJ';
 	static readonly MTL = Paths.SHAPES + 'MTL';
 	static readonly OBJ_COLLISIONS = Paths.SHAPES + 'Collisions';
+	static readonly GLTF = Paths.SHAPES + 'GLTF';
 
 	// -------------------------------------------------------------------------
 	// Scripts, plugins, shaders, saves
