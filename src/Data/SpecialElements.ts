@@ -589,6 +589,9 @@ export class SpecialElements {
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
 		texture.needsUpdate = true;
 		textureMountain.material = Manager.GL.createMaterial({ texture, side: THREE.BackSide });
+		textureMountain.material.polygonOffset = true;
+		textureMountain.material.polygonOffsetFactor = 1;
+		textureMountain.material.polygonOffsetUnits = 1;
 		this.texturesMountains.set(id, textureMountain);
 	}
 
@@ -609,7 +612,14 @@ export class SpecialElements {
 			const picture = Data.Pictures.get(PICTURE_KIND.OBJECTS_3D, pictureID);
 			if (picture) {
 				const path = picture.getPath();
-				textureObject3D = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();
+				if (path) {
+					textureObject3D = await Manager.GL.loadTexture(path);
+					textureObject3D.polygonOffset = true;
+					textureObject3D.polygonOffsetFactor = 1;
+					textureObject3D.polygonOffsetUnits = 1;
+				} else {
+					textureObject3D = Manager.GL.loadTextureEmpty();
+				}
 			} else {
 				textureObject3D = Manager.GL.loadTextureEmpty();
 			}

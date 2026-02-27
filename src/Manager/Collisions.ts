@@ -1407,7 +1407,53 @@ class Collisions {
 			}
 		} else {
 			// if w > 0, go like a slope
-			// Get coplanar points according to side
+			const rwBot = objCollision.rwBot ?? objCollision.rw;
+			const rwTop = objCollision.rwTop ?? objCollision.rw;
+			const rwLeft = objCollision.rwLeft ?? objCollision.rw;
+			const rwRight = objCollision.rwRight ?? objCollision.rw;
+
+			// Determine which side the player is on and its slope width
+			let sideW: number;
+			if (objCollision.left && !mountain.left) {
+				sideW = rwLeft;
+			} else if (objCollision.right && !mountain.right) {
+				sideW = rwRight;
+			} else if (objCollision.top && !mountain.top) {
+				sideW = rwTop;
+			} else if (objCollision.bot && !mountain.bot) {
+				sideW = rwBot;
+			} else {
+				return [false, null];
+			}
+
+			// If this side has no slope (width = 0), fall back to box collision for the vertical wall
+			if (sideW === 0) {
+				const pass =
+					forceNever ||
+					-(
+						!forceAlways &&
+						y + h <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number)
+					);
+				if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
+					return pass ? [false, positionAfter.y - y - h === 0 ? null : y + h] : [true, null];
+				} else if (!pass) {
+					const vertices = object.currentBoundingBox.geometry.getVertices();
+					for (let i = 0, l = vertices.length; i < l; i += 3) {
+						const vy = vertices[i + 1];
+						if (vy >= y && vy <= y + h) {
+							const vPoint = new THREE.Vector2(vertices[i], vertices[i + 2]);
+							if (
+								Mathf.isPointOnRectangle(vPoint, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)
+							) {
+								return [true, null];
+							}
+						}
+					}
+				}
+				return [false, null];
+			}
+
+			// Slope geometry: find the coplanar points for the intersection plane, using per-side widths
 			let ptA: THREE.Vector2,
 				ptB: THREE.Vector2,
 				ptC: THREE.Vector2,
@@ -1416,9 +1462,9 @@ class Collisions {
 				pC: THREE.Vector3;
 			if (objCollision.left && !mountain.left) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new THREE.Vector2(x - w, z);
+					ptA = new THREE.Vector2(x - rwLeft, z);
 					ptB = new THREE.Vector2(x, z);
-					ptC = new THREE.Vector2(x, z - w);
+					ptC = new THREE.Vector2(x, z - rwTop);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1427,9 +1473,9 @@ class Collisions {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new THREE.Vector2(x - w, z + Data.Systems.SQUARE_SIZE);
+					ptA = new THREE.Vector2(x - rwLeft, z + Data.Systems.SQUARE_SIZE);
 					ptB = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE);
-					ptC = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE + w);
+					ptC = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE + rwBot);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1438,8 +1484,8 @@ class Collisions {
 						return [false, null];
 					}
 				} else {
-					if (Mathf.isPointOnRectangle(point, x - w, x, z, z + Data.Systems.SQUARE_SIZE)) {
-						pA = new THREE.Vector3(x - w, y, z);
+					if (Mathf.isPointOnRectangle(point, x - rwLeft, x, z, z + Data.Systems.SQUARE_SIZE)) {
+						pA = new THREE.Vector3(x - rwLeft, y, z);
 						pB = new THREE.Vector3(x, y + h, z);
 						pC = new THREE.Vector3(x, y + h, z + Data.Systems.SQUARE_SIZE);
 					} else {
@@ -1448,9 +1494,9 @@ class Collisions {
 				}
 			} else if (objCollision.right && !mountain.right) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z - w);
+					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z - rwTop);
 					ptB = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z);
-					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + w, z);
+					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + rwRight, z);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1459,9 +1505,9 @@ class Collisions {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE + w);
+					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE + rwBot);
 					ptB = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE);
-					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + w, z + Data.Systems.SQUARE_SIZE);
+					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + rwRight, z + Data.Systems.SQUARE_SIZE);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA = new THREE.Vector3(ptA.x, y, ptA.y);
 						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
@@ -1474,24 +1520,24 @@ class Collisions {
 						Mathf.isPointOnRectangle(
 							point,
 							x + Data.Systems.SQUARE_SIZE,
-							x + Data.Systems.SQUARE_SIZE + w,
+							x + Data.Systems.SQUARE_SIZE + rwRight,
 							z,
 							z + Data.Systems.SQUARE_SIZE,
 						)
 					) {
 						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y + h, z + Data.Systems.SQUARE_SIZE);
 						pB = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y + h, z);
-						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE + w, y, z);
+						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE + rwRight, y, z);
 					} else {
 						return [false, null];
 					}
 				}
 			} else {
 				if (objCollision.top && !mountain.top) {
-					if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z - w, z)) {
+					if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z - rwTop, z)) {
 						pA = new THREE.Vector3(x, y + h, z);
-						pB = new THREE.Vector3(x, y, z - w);
-						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z - w);
+						pB = new THREE.Vector3(x, y, z - rwTop);
+						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z - rwTop);
 					} else {
 						return [false, null];
 					}
@@ -1502,11 +1548,11 @@ class Collisions {
 							x,
 							x + Data.Systems.SQUARE_SIZE,
 							z + Data.Systems.SQUARE_SIZE,
-							z + Data.Systems.SQUARE_SIZE + w,
+							z + Data.Systems.SQUARE_SIZE + rwBot,
 						)
 					) {
-						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z + Data.Systems.SQUARE_SIZE + w);
-						pB = new THREE.Vector3(x, y, z + Data.Systems.SQUARE_SIZE + w);
+						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z + Data.Systems.SQUARE_SIZE + rwBot);
+						pB = new THREE.Vector3(x, y, z + Data.Systems.SQUARE_SIZE + rwBot);
 						pC = new THREE.Vector3(x, y + h, z + Data.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
@@ -1542,11 +1588,9 @@ class Collisions {
 				return [false, null];
 			}
 
-			// If angle limit, block
-			if (
-				forceAlways ||
-				(!forceNever && mountain.angle > (Data.Systems.mountainCollisionAngle.getValue() as number))
-			) {
+			// If angle limit, block — compute per-side angle from actual side width
+			const sideAngle = sideW === 0 ? 90 : (Math.atan(h / sideW) * 180) / Math.PI;
+			if (forceAlways || (!forceNever && sideAngle > (Data.Systems.mountainCollisionAngle.getValue() as number))) {
 				// Check if floor existing on top of the mountain angle
 				isFloor =
 					jposition.y === jpositionAfter.y

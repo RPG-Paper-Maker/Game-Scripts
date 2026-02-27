@@ -36,6 +36,10 @@ export interface StructMapElementCollision {
 	h?: number;
 	d?: number;
 	rw?: number;
+	rwBot?: number;
+	rwTop?: number;
+	rwLeft?: number;
+	rwRight?: number;
 	rh?: number;
 	m?: number;
 	t?: MapElement;
