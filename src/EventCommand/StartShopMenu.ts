@@ -10,7 +10,7 @@
 */
 
 import { Manager, Model, Scene } from '..';
-import { ITEM_KIND } from '../Common';
+import { DYNAMIC_VALUE_KIND, ITEM_KIND } from '../Common';
 import { Game, Item, MapObject } from '../Core';
 import { Base } from './Base';
 
@@ -84,17 +84,44 @@ class StartShopMenu extends Base {
 				}
 				list[i] = new Item(system.selectionItem, id, stock, system);
 			}
-		} else {
 			if (!this.isRestock) {
-				for (let i = 0, l = this.items.length; i < l; i++) {
-					system = this.items[i];
-					id = system.getItem().id;
-					stock = system.getStock();
-					stocks[system.selectionItem][id] = stock;
+				for (const kindStr of Object.keys(stocks)) {
+					const kind = parseInt(kindStr) as ITEM_KIND;
+					for (const idStr of Object.keys(stocks[kind])) {
+						const extraId = parseInt(idStr);
+						if (!this.items.some((s) => s.selectionItem === kind && s.getItem().id === extraId)) {
+							const shopItem = new Model.ShopItem();
+							shopItem.selectionItem = kind;
+							const idVal = Model.DynamicValue.create(DYNAMIC_VALUE_KIND.NUMBER, extraId);
+							switch (kind) {
+								case ITEM_KIND.ITEM:
+									shopItem.itemID = idVal;
+									break;
+								case ITEM_KIND.WEAPON:
+									shopItem.weaponID = idVal;
+									break;
+								case ITEM_KIND.ARMOR:
+									shopItem.armorID = idVal;
+									break;
+							}
+							shopItem.selectionPrice = false;
+							shopItem.selectionStock = false;
+							list.push(new Item(kind, extraId, stocks[kind][extraId], shopItem));
+						}
+					}
+				}
+			}
+		} else {
+			for (let i = 0, l = this.items.length; i < l; i++) {
+				system = this.items[i];
+				id = system.getItem().id;
+				stock = system.getStock();
+				stocks[system.selectionItem][id] = stock;
+				if (!this.isRestock) {
 					list[i] = new Item(system.selectionItem, id, stock, system);
 				}
-				Game.current.shops[shopID] = stocks;
 			}
+			Game.current.shops[shopID] = stocks;
 		}
 		return this.isRestock
 			? {
