@@ -148,6 +148,10 @@ class BattleAnimation {
 			this.battle.effects[0].getMissAndCrit();
 		}
 		this.battle.currentTargetIndex = null;
+		// For ForceAnAction: skip the sprite attacking animation wait in substep 0
+		if (this.battle.forceAnAction && this.battle.user) {
+			this.battle.user.frameAttacking.value = Data.Systems.FRAMES - 1;
+		}
 		if (this.battle.animationUser && this.battle.animationUser.model === null) {
 			this.battle.animationUser = null;
 		}
@@ -376,6 +380,10 @@ class BattleAnimation {
 							this.battle.subStep = this.battle.previousSubStep;
 							this.battle.currentEffectIndex = this.battle.previousCurrentEffectIndex;
 							this.battle.effects = this.battle.previousEffects;
+							this.battle.informationText = this.battle.previousInformationText;
+							(<Graphic.Text>this.battle.windowTopInformations.content).setText(
+								this.battle.informationText,
+							);
 							return;
 						} else {
 							// Testing end of turn

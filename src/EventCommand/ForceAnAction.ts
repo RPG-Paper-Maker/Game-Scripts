@@ -184,6 +184,7 @@ class ForceAnAction extends Base {
 		map.previousSubStep = map.subStep;
 		map.previousCurrentEffectIndex = map.currentEffectIndex;
 		map.previousEffects = map.effects;
+		map.previousInformationText = map.informationText;
 		// Start animation
 		map.changeStep(BATTLE_STEP.ANIMATION);
 		return null;

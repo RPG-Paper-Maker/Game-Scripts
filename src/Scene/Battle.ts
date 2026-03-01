@@ -116,6 +116,7 @@ class Battle extends Map {
 	public turn: number;
 	public currentSkill: Model.Skill;
 	public informationText: string;
+	public previousInformationText: string;
 	public oneTimeTroopReactions: boolean[] = [];
 
 	//Animation
