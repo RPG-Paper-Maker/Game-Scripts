@@ -20,8 +20,8 @@ import { Data, Manager } from './index';
  * @class Main
  */
 export class Main {
-	static clock = new THREE.Clock();
-	static clockFPS = new THREE.Clock();
+	static clock = new THREE.Timer();
+	static clockFPS = new THREE.Timer();
 	static delta = 0;
 	static maxFPS: number = 60;
 	static FPS: number = 0;
@@ -109,6 +109,7 @@ export class Main {
 	 */
 	static loop() {
 		requestAnimationFrame(Main.loop);
+		Main.clock.update();
 		Main.delta += Main.clock.getDelta();
 		if (Main.delta > 1 / Main.maxFPS) {
 			// Update if everything is loaded
@@ -127,6 +128,7 @@ export class Main {
 			Manager.Stack.averageElapsedTime = (Manager.Stack.averageElapsedTime + Manager.Stack.elapsedTime) / 2;
 			Manager.Stack.lastUpdateTime = new Date().getTime();
 			Main.frames++;
+			Main.clockFPS.update();
 			Main.time += Main.clockFPS.getDelta();
 			if (Main.time >= 1) {
 				Main.FPS = Main.frames;
