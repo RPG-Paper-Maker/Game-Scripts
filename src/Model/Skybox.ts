@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { PICTURE_KIND, Utils } from '../Common';
 import { Data, Manager } from '../index';
 import { Base } from './Base';
@@ -44,7 +44,7 @@ export class Skybox extends Base {
 	/**
 	 * Create the textures for the skybox.
 	 */
-	createTextures(): THREE.MeshPhongMaterial[] {
+	createTextures(): THREE.MeshPhongNodeMaterial[] {
 		return [this.left, this.right, this.top, this.bot, this.front, this.back].map((side) => {
 			const texture = Manager.GL.textureLoader.load(Data.Pictures.get(PICTURE_KIND.SKYBOXES, side).getPath());
 			texture.wrapS = THREE.RepeatWrapping;

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Inputs, Platform } from './Common';
 import { Data, Manager } from './index';
 
@@ -59,7 +59,7 @@ export class Main {
 		await Data.Songs.read();
 		await Data.Videos.read();
 		await Data.Shapes.read();
-		Manager.GL.initialize();
+		await Manager.GL.initialize();
 		Manager.GL.resize();
 		Manager.Collisions.initialize();
 		await Data.SpecialElements.read();

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Constants, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
 import { Data, Manager, Model, Scene } from '../index';
 import { Autotile } from './Autotile';
@@ -204,7 +204,6 @@ class MapPortion {
 			if (Scene.Map.current.mapProperties.isSunLight) {
 				this.staticFloorsMesh.receiveShadow = true;
 				this.staticFloorsMesh.castShadow = true;
-				this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			Scene.Map.current.scene.add(this.staticFloorsMesh);
 		}
@@ -216,7 +215,6 @@ class MapPortion {
 						if (Scene.Map.current.mapProperties.isSunLight) {
 							autotiles.mesh.receiveShadow = true;
 							autotiles.mesh.castShadow = true;
-							autotiles.mesh.customDepthMaterial = autotiles.bundle.material.userData.customDepthMaterial;
 						}
 						Scene.Map.current.scene.add(autotiles.mesh);
 					}
@@ -294,7 +292,6 @@ class MapPortion {
 			if (Scene.Map.current.mapProperties.isSunLight) {
 				this.staticSpritesMesh.receiveShadow = true;
 				this.staticSpritesMesh.castShadow = true;
-				this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			Scene.Map.current.scene.add(this.staticSpritesMesh);
 		}
@@ -305,7 +302,6 @@ class MapPortion {
 			if (Scene.Map.current.mapProperties.isSunLight) {
 				this.faceSpritesMesh.castShadow = true;
 				this.faceSpritesMesh.receiveShadow = true;
-				this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			Scene.Map.current.scene.add(this.faceSpritesMesh);
 		}
@@ -327,7 +323,7 @@ class MapPortion {
 			}
 			// Constructing the geometry
 			let obj = hash.get(sprite.id);
-			let material: THREE.MeshPhongMaterial;
+			let material: THREE.MeshPhongNodeMaterial;
 			let geometry: CustomGeometry;
 			let count: number;
 			if (obj) {
@@ -363,7 +359,6 @@ class MapPortion {
 				if (Scene.Map.current.mapProperties.isSunLight) {
 					mesh.receiveShadow = true;
 					mesh.castShadow = true;
-					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				}
 				mesh.layers.enable(1);
 				this.staticWallsList.push(mesh);
@@ -418,7 +413,6 @@ class MapPortion {
 				if (Scene.Map.current.mapProperties.isSunLight) {
 					mountains.mesh.receiveShadow = true;
 					mountains.mesh.castShadow = true;
-					mountains.mesh.customDepthMaterial = mountains.bundle.material.userData.customDepthMaterial;
 				}
 				mountains.mesh.layers.enable(1);
 				Scene.Map.current.scene.add(mountains.mesh);
@@ -491,7 +485,7 @@ class MapPortion {
 
 				// Constructing the geometry
 				let obj = hash.get(pictureID);
-				let material: THREE.MeshPhongMaterial;
+				let material: THREE.MeshPhongNodeMaterial;
 				let geometry: CustomGeometry;
 				let count: number;
 				if (obj) {
@@ -536,7 +530,6 @@ class MapPortion {
 				if (Scene.Map.current.mapProperties.isSunLight) {
 					mesh.receiveShadow = true;
 					mesh.castShadow = true;
-					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				}
 				mesh.layers.enable(1);
 				Scene.Map.current.scene.add(mesh);

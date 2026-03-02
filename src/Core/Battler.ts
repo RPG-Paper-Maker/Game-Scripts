@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
-import { MeshPhongMaterial } from 'three';
+import * as THREE from 'three/webgpu';
+import { uniform } from 'three/tsl';
 import {
 	ALIGN,
 	ALIGN_VERTICAL,
@@ -165,8 +165,8 @@ export class Battler {
 			const material = Manager.GL.createMaterial({
 				texture: copiedTexture,
 				uniforms: {
-					colorD: { type: 'v4', value: Manager.GL.screenTone.clone() },
-					offset: { type: 'v2', value: this.animationOffset },
+					colorD: uniform(Manager.GL.screenTone.clone()),
+					offset: uniform(this.animationOffset),
 				},
 			});
 			const { width, height } = Manager.GL.getMaterialTextureSize(material);
@@ -178,7 +178,6 @@ export class Battler {
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 			this.mesh.receiveShadow = true;
 			this.mesh.castShadow = true;
-			this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 			this.topLeftPosition = new THREE.Vector3(
 				this.position.x - (this.width / 2) * Data.Systems.SQUARE_SIZE,
 				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
@@ -211,7 +210,7 @@ export class Battler {
 	 * Initialize UV mapping for the battler mesh.
 	 * */
 	initializeTexture(): void {
-		const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as MeshPhongMaterial);
+		const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongNodeMaterial);
 		const w = (this.width * Data.Systems.SQUARE_SIZE) / width;
 		const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 		const texA = new THREE.Vector2();
@@ -239,7 +238,7 @@ export class Battler {
 					frame = this.frame.value;
 					break;
 			}
-			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as MeshPhongMaterial);
+			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongNodeMaterial);
 			const w = (this.width * Data.Systems.SQUARE_SIZE) / width;
 			const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 			const x = frame * w;
@@ -277,11 +276,11 @@ export class Battler {
 	 */
 	setActive(active: boolean) {
 		this.active = active;
-		const material = this.mesh.material as THREE.MeshPhongMaterial;
+		const material = this.mesh.material as THREE.MeshPhongNodeMaterial;
 		if (active) {
-			material.userData.uniforms.colorD.value.copy(Manager.GL.screenTone);
+			material.userData.uniforms.colorD = uniform(Manager.GL.screenTone);
 		} else {
-			material.userData.uniforms.colorD.value.copy(Manager.GL.screenTone.clone().subScalar(0.3));
+			material.userData.uniforms.colorD = uniform(Manager.GL.screenTone.clone().subScalar(0.3));
 		}
 	}
 

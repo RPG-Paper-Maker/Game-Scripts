@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import {
 	ELEMENT_MAP_KIND,
 	Mathf,
@@ -59,7 +59,7 @@ class MapObject {
 	public isHero: boolean;
 	public movingState: Record<string, any>;
 	public previousPosition: THREE.Vector3;
-	public mesh: THREE.Mesh<CustomGeometry, THREE.MeshPhongMaterial>;
+	public mesh: THREE.Mesh<CustomGeometry, THREE.MeshPhongNodeMaterial>;
 	public meshBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>[];
 	public currentBoundingBox: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
 	public boundingBoxSettings: Record<string, any>;
@@ -658,7 +658,6 @@ class MapObject {
 			if (Scene.Map.current.mapProperties.isSunLight) {
 				this.mesh.receiveShadow = true;
 				this.mesh.castShadow = true;
-				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 			this.mesh.renderOrder = 1;
@@ -1519,7 +1518,7 @@ class MapObject {
 			!this.isNone() &&
 			this.currentStateInstance.graphicKind !== ELEMENT_MAP_KIND.OBJECT_3D
 		) {
-			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongMaterial);
+			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongNodeMaterial);
 			let w: number, h: number, x: number, y: number;
 			if (this.currentStateInstance.graphicID === 0) {
 				w = (this.width * Data.Systems.SQUARE_SIZE) / width;
