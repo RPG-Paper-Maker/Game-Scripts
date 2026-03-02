@@ -238,6 +238,10 @@ class Camera {
 	 *  Update the distance.
 	 */
 	updateDistance() {
+		if (Data.Systems.moveCameraOnBlockView && this.hidingCurrent !== -1) {
+			return;
+		}
+		this.distance = this.getThreeCamera().position.distanceTo(this.targetPosition);
 		this.getThreeCamera().position.normalize().multiplyScalar(this.distance);
 	}
 
