@@ -242,7 +242,6 @@ class Camera {
 			return;
 		}
 		this.distance = this.getThreeCamera().position.distanceTo(this.targetPosition);
-		this.getThreeCamera().position.normalize().multiplyScalar(this.distance);
 	}
 
 	/**
