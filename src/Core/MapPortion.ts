@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Constants, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
 import { Data, Manager, Model, Scene } from '../index';
 import { Autotile } from './Autotile';
@@ -327,7 +327,7 @@ class MapPortion {
 			}
 			// Constructing the geometry
 			let obj = hash.get(sprite.id);
-			let material: THREE.MeshPhongMaterial;
+			let material: THREE.MeshPhongNodeMaterial;
 			let geometry: CustomGeometry;
 			let count: number;
 			if (obj) {
@@ -491,7 +491,7 @@ class MapPortion {
 
 				// Constructing the geometry
 				let obj = hash.get(pictureID);
-				let material: THREE.MeshPhongMaterial;
+				let material: THREE.MeshPhongNodeMaterial;
 				let geometry: CustomGeometry;
 				let count: number;
 				if (obj) {

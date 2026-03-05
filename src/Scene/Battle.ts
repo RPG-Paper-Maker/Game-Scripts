@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
