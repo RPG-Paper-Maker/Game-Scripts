@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import {
 	Constants,
 	DYNAMIC_VALUE_KIND,
@@ -67,7 +67,7 @@ class Map extends Base {
 	public currentPortion: Portion;
 	public previousPortion: Portion;
 	public mapPortions: MapPortion[];
-	public textureTileset: THREE.MeshPhongMaterial;
+	public textureTileset: THREE.MeshPhongNodeMaterial;
 	public collisions: Rectangle[][][][];
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
@@ -224,8 +224,10 @@ class Map extends Base {
 	 *  Initialize sun light.
 	 */
 	initializeSunLight() {
+		Manager.GL.allLights.length = 0;
 		const ambient = new THREE.AmbientLight(0xffffff, this.mapProperties.isSunLight ? 1.2 : 2);
 		this.scene.add(ambient);
+		Manager.GL.allLights.push(ambient);
 		if (this.mapProperties.isSunLight) {
 			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
 			this.sunLight.position.set(-1, 1.75, 1);
@@ -242,6 +244,7 @@ class Map extends Base {
 			this.sunLight.shadow.camera.bottom = -d;
 			this.sunLight.shadow.camera.far = Data.Systems.SQUARE_SIZE * 350;
 			this.sunLight.shadow.bias = -0.0003;
+			Manager.GL.allLights.push(this.sunLight);
 		}
 	}
 

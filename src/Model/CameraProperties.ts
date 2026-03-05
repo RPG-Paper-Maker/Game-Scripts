@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
 import { Constants, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
 import { Data } from '../index';

@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
+import * as THREE from 'three/webgpu';
+import { uniform } from 'three/tsl';
 import { Constants, Paths, PICTURE_KIND, Platform, Utils } from '../Common';
 import { Autotiles, Game, Picture2D, TextureBundle } from '../Core';
 import { Data, Manager, Scene } from '../index';
@@ -45,8 +46,8 @@ export class SpecialElements {
 	private static mountains: Map<number, Mountain>;
 	private static objects: Map<number, Object3D>;
 	private static texturesAutotiles: Map<number, TextureBundle[]> = new Map();
-	private static texturesWalls: Map<number, THREE.MeshPhongMaterial> = new Map();
-	private static texturesObjects3D: Map<number, THREE.MeshPhongMaterial> = new Map();
+	private static texturesWalls: Map<number, THREE.MeshPhongNodeMaterial> = new Map();
+	private static texturesObjects3D: Map<number, THREE.MeshPhongNodeMaterial> = new Map();
 	private static texturesMountains: Map<number, TextureBundle> = new Map();
 
 	/**
@@ -283,16 +284,16 @@ export class SpecialElements {
 		texture.image = await Picture2D.loadImage(Platform.canvasRendering.toDataURL());
 		texture.needsUpdate = true;
 		textureAutotile.material = Manager.GL.createMaterial({ texture });
-		textureAutotile.material.userData.uniforms.offset.value = textureAutotile.isAnimated
-			? Scene.Map.autotilesOffset
-			: new THREE.Vector2();
+		textureAutotile.material.userData.uniforms.offset = textureAutotile.isAnimated
+			? uniform(Scene.Map.autotilesOffset)
+			: uniform(new THREE.Vector2());
 		this.texturesAutotiles.get(id).push(textureAutotile);
 	}
 
 	/**
 	 *  Load the wall texture.
 	 */
-	static async loadWallTexture(id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadWallTexture(id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const wall = this.getWall(id);
 		let pictureID = Game.current.textures.walls[id];
 		if (pictureID === undefined) {
@@ -319,7 +320,7 @@ export class SpecialElements {
 	/**
 	 *  Load a wall texture.
 	 */
-	static async loadTextureWall(picture: Picture, id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadTextureWall(picture: Picture, id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const picture2D = await Picture2D.create(picture);
 		const texture = new THREE.Texture();
 		const w = picture2D.image.width;
@@ -598,7 +599,7 @@ export class SpecialElements {
 	/**
 	 * Load the 3D object texture.
 	 * */
-	static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongMaterial> {
+	static async loadObject3DTexture(id: number): Promise<THREE.MeshPhongNodeMaterial> {
 		const object3D = this.getObject3D(id);
 		let pictureID = Game.current.textures.objects3D[id];
 		if (pictureID === undefined) {
