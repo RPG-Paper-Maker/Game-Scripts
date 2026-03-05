@@ -11,6 +11,7 @@
 
 import * as THREE from 'three';
 import {
+	CUSTOM_SHAPE_KIND,
 	ELEMENT_MAP_KIND,
 	Mathf,
 	OBJECT_MOVING_KIND,
@@ -99,6 +100,9 @@ class MapObject {
 	public currentCenterOffset: THREE.Vector3 = new THREE.Vector3();
 	public currentAngle: THREE.Vector3 = new THREE.Vector3();
 	public currentScale: THREE.Vector3 = new THREE.Vector3();
+	public gltfGroup: THREE.Group | null = null;
+	public animationMixer: THREE.AnimationMixer | null = null;
+	public _currentGltfAnimIndex: number = -2;
 
 	constructor(system: Model.MapObject, position?: THREE.Vector3, isHero: boolean = false) {
 		this.system = system;
@@ -518,6 +522,12 @@ class MapObject {
 
 		// Remove previous mesh
 		this.removeFromScene();
+		this.gltfGroup = null;
+		if (this.animationMixer) {
+			this.animationMixer.stopAllAction();
+			this.animationMixer = null;
+		}
+		this._currentGltfAnimIndex = -2;
 
 		// Update mesh
 		if (this.isStartup || !Scene.Map.current.textureTileset) {
@@ -536,12 +546,17 @@ class MapObject {
 						: Data.Pictures.texturesCharacters.get(this.currentStateInstance.graphicID);
 			}
 		}
-		if (material && this.isHero) {
+		if (material && this.isHero && Manager.GL.getMaterialTexture(material)) {
 			// For opacity purposes
 			material = Manager.GL.cloneMaterial(material);
 		}
 		this.meshBoundingBox = [];
 		const texture = Manager.GL.getMaterialTexture(material);
+		let isGltfNoTexture = false;
+		if (!texture && this.currentStateInstance?.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D) {
+			const gltfCheckData = Data.SpecialElements.getObject3D(this.currentStateInstance.graphicID);
+			isGltfNoTexture = gltfCheckData.shapeKind === SHAPE_KIND.CUSTOM && gltfCheckData.gltfID !== -1;
+		}
 		this.position.set(
 			this.position.x - this.currentCenterOffset.x,
 			this.position.y,
@@ -550,7 +565,7 @@ class MapObject {
 		this.currentCenterOffset.set(0, 0, 0);
 		this.currentAngle.set(0, 0, 0);
 		this.currentScale.set(1, 1, 1);
-		if (this.currentState !== null && !this.isNone() && texture) {
+		if (this.currentState !== null && !this.isNone() && (texture || isGltfNoTexture)) {
 			this.speed = Data.Systems.getSpeed(this.currentStateInstance.speedID);
 			this.frequency = Data.Systems.getFrequency(this.currentStateInstance.frequencyID);
 			this.frame.value =
@@ -586,6 +601,45 @@ class MapObject {
 					case SHAPE_KIND.CUSTOM:
 						object3D = Object3DCustom.create(objectData);
 						result = object3D.createGeometry(positionTranformation);
+						if (objectData.gltfID !== -1 && isGltfNoTexture) {
+							const gltfShape = Data.Shapes.get(CUSTOM_SHAPE_KIND.GLTF, objectData.gltfID);
+							if (gltfShape?.gltfScene) {
+								this.gltfGroup = gltfShape.gltfScene.clone(true);
+								const s = Data.Systems.SQUARE_SIZE * objectData.scale;
+								this.gltfGroup.scale.set(
+									s * positionTranformation.scaleX,
+									s * positionTranformation.scaleY,
+									s * positionTranformation.scaleZ,
+								);
+								let initOrientAngle = 0;
+								switch (this.orientationEye) {
+									case ORIENTATION.EAST:
+										initOrientAngle = 90;
+										break;
+									case ORIENTATION.NORTH:
+										initOrientAngle = 180;
+										break;
+									case ORIENTATION.WEST:
+										initOrientAngle = 270;
+										break;
+								}
+								this.gltfGroup.rotation.set(
+									(positionTranformation.angleX * Math.PI) / 180,
+									(initOrientAngle + positionTranformation.angleY) * (Math.PI / 180),
+									(positionTranformation.angleZ * Math.PI) / 180,
+								);
+								this.gltfGroup.renderOrder = 1;
+								if (Scene.Map.current.mapProperties.isSunLight) {
+									this.gltfGroup.traverse((child) => {
+										if (child instanceof THREE.Mesh) {
+											child.receiveShadow = true;
+											child.castShadow = true;
+										}
+									});
+								}
+								this.animationMixer = new THREE.AnimationMixer(this.gltfGroup);
+							}
+						}
 						break;
 				}
 				// Correct position offset (left / top)
@@ -640,6 +694,9 @@ class MapObject {
 			const geometry = result[0];
 			const objCollision = result[1];
 			this.mesh = new THREE.Mesh(geometry, material);
+			if (isGltfNoTexture) {
+				this.mesh = null;
+			}
 			this.currentAngle.set(
 				positionTranformation.angleX,
 				positionTranformation.angleY,
@@ -655,13 +712,15 @@ class MapObject {
 				this.position.y,
 				this.position.z + this.currentCenterOffset.z,
 			);
-			if (Scene.Map.current.mapProperties.isSunLight) {
-				this.mesh.receiveShadow = true;
-				this.mesh.castShadow = true;
-				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
+			if (this.mesh !== null) {
+				if (Scene.Map.current.mapProperties.isSunLight) {
+					this.mesh.receiveShadow = true;
+					this.mesh.castShadow = true;
+					this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
+				}
+				this.mesh.position.set(this.position.x, this.position.y, this.position.z);
+				this.mesh.renderOrder = 1;
 			}
-			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
-			this.mesh.renderOrder = 1;
 			this.boundingBoxSettings = objCollision[1][0];
 			if (this.boundingBoxSettings) {
 				if (this.currentStateInstance.graphicID === 0) {
@@ -1263,8 +1322,13 @@ class MapObject {
 	 *  Add object mesh to scene
 	 */
 	addToScene() {
-		if (!this.isInScene && this.mesh !== null) {
-			Scene.Map.current.scene.add(this.mesh);
+		if (!this.isInScene && (this.mesh !== null || this.gltfGroup !== null)) {
+			if (this.mesh !== null) {
+				Scene.Map.current.scene.add(this.mesh);
+			}
+			if (this.gltfGroup !== null) {
+				Scene.Map.current.scene.add(this.gltfGroup);
+			}
 			this.isInScene = true;
 		}
 	}
@@ -1285,7 +1349,12 @@ class MapObject {
 	 */
 	removeFromScene() {
 		if (this.isInScene) {
-			Scene.Map.current.scene.remove(this.mesh);
+			if (this.mesh !== null) {
+				Scene.Map.current.scene.remove(this.mesh);
+			}
+			if (this.gltfGroup !== null) {
+				Scene.Map.current.scene.remove(this.gltfGroup);
+			}
 			this.removeBBFromScene();
 			this.isInScene = false;
 		}
@@ -1420,6 +1489,50 @@ class MapObject {
 			}
 		}
 
+		// GLTF group update
+		if (this.gltfGroup !== null) {
+			this.gltfGroup.position.set(this.position.x, this.position.y, this.position.z);
+			if (this.currentStateInstance) {
+				const userAngleY = (this.currentStateInstance.angleY.getValue() as number) * (Math.PI / 180);
+				const prevX: number = this.gltfGroup.userData.prevX ?? this.position.x;
+				const prevZ: number = this.gltfGroup.userData.prevZ ?? this.position.z;
+				this.gltfGroup.userData.prevX = this.position.x;
+				this.gltfGroup.userData.prevZ = this.position.z;
+				const dx = this.position.x - prevX;
+				const dz = this.position.z - prevZ;
+				if (dx !== 0 || dz !== 0) {
+					this.gltfGroup.userData.gltfTargetAngle = Math.atan2(dx, dz) + userAngleY;
+				} else if (this.gltfGroup.userData.gltfTargetAngle === undefined) {
+					let initAngle = 0;
+					switch (this.orientationEye) {
+						case ORIENTATION.EAST:
+							initAngle = Math.PI / 2;
+							break;
+						case ORIENTATION.NORTH:
+							initAngle = Math.PI;
+							break;
+						case ORIENTATION.WEST:
+							initAngle = (3 * Math.PI) / 2;
+							break;
+					}
+					this.gltfGroup.userData.gltfTargetAngle = initAngle + userAngleY;
+					this.gltfGroup.rotation.y = this.gltfGroup.userData.gltfTargetAngle;
+				}
+				if (this.gltfGroup.userData.gltfTargetAngle !== undefined) {
+					const target: number = this.gltfGroup.userData.gltfTargetAngle;
+					const current = this.gltfGroup.rotation.y;
+					const diff =
+						((((target - current + Math.PI) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI)) - Math.PI;
+					const t = Math.min(1, (Manager.Stack.elapsedTime / 1000) * 15);
+					this.gltfGroup.rotation.y = current + diff * t;
+				}
+			}
+			if (this.animationMixer) {
+				this.updateGltfAnimation();
+				this.animationMixer.update(Manager.Stack.elapsedTime / 1000);
+			}
+		}
+
 		// Moving
 		this.updateMovingState();
 
@@ -1468,6 +1581,25 @@ class MapObject {
 			if (interpreter !== null) {
 				this.movingState = interpreter.currentCommandState;
 			}
+		}
+	}
+
+	/**
+	 *  Update GLTF animation based on moving state.
+	 */
+	updateGltfAnimation() {
+		if (!this.animationMixer || !this.gltfGroup || !this.currentStateInstance) return;
+		const objectData = Data.SpecialElements.getObject3D(this.currentStateInstance.graphicID);
+		const shape = Data.Shapes.get(CUSTOM_SHAPE_KIND.GLTF, objectData.gltfID);
+		if (!shape?.gltfAnimations?.length) return;
+		const animIndex = this.moving ? objectData.moveAnimationIndex : objectData.stopAnimationIndex;
+		if (animIndex === this._currentGltfAnimIndex) return;
+		this._currentGltfAnimIndex = animIndex;
+		this.animationMixer.stopAllAction();
+		if (animIndex >= 0 && animIndex < shape.gltfAnimations.length) {
+			const action = this.animationMixer.clipAction(shape.gltfAnimations[animIndex]);
+			action.setLoop(THREE.LoopRepeat, Infinity);
+			action.play();
 		}
 	}
 

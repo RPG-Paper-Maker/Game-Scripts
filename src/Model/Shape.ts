@@ -55,6 +55,7 @@ export class Shape extends Base {
 	public mesh: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>;
 	public geometry: ParsedGeometry | null = null;
 	public gltfScene: THREE.Group | null = null;
+	public gltfAnimations: THREE.AnimationClip[] = [];
 
 	constructor(json?: ShapeJSON) {
 		super(json);
@@ -183,7 +184,7 @@ export class Shape extends Base {
 	static async parseGLTF(
 		buffer: ArrayBuffer,
 		squareSize: number,
-	): Promise<{ geometryData: ParsedGeometry; scene: THREE.Group }> {
+	): Promise<{ geometryData: ParsedGeometry; scene: THREE.Group; animations: THREE.AnimationClip[] }> {
 		const loader = new GLTFLoader();
 		const gltf = await loader.parseAsync(buffer, '');
 		const vertices: THREE.Vector3[] = [];
@@ -239,6 +240,7 @@ export class Shape extends Base {
 				d: maxVertex.z - minVertex.z,
 			},
 			scene: gltf.scene,
+			animations: gltf.animations ?? [],
 		};
 	}
 
@@ -257,6 +259,7 @@ export class Shape extends Base {
 				const result = await Shape.parseGLTF(buffer, Data.Systems.SQUARE_SIZE);
 				this.geometry = result.geometryData;
 				this.gltfScene = result.scene;
+				this.gltfAnimations = result.animations;
 			} catch {
 				const error = `Could not load ${url}`;
 				if (Data.Systems.ignoreAssetsLoadingErrors) {
