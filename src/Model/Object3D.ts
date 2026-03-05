@@ -33,6 +33,8 @@ export type Object3DJSON = SpecialElementJSON & {
 	dp?: number;
 	st?: boolean;
 	itl?: boolean;
+	mai?: number;
+	sai?: number;
 };
 
 /** Represents a 3D object. */
@@ -53,6 +55,8 @@ export class Object3D extends SpecialElement {
 	public depthPixel: number;
 	public stretch: boolean;
 	public isTopLeft: boolean;
+	public moveAnimationIndex: number;
+	public stopAnimationIndex: number;
 
 	constructor(json?: Object3DJSON) {
 		super(json);
@@ -125,5 +129,7 @@ export class Object3D extends SpecialElement {
 		this.depthPixel = Utils.valueOrDefault(json.dp, 0);
 		this.stretch = Utils.valueOrDefault(json.st, false);
 		this.isTopLeft = Utils.valueOrDefault(json.itl, true);
+		this.moveAnimationIndex = Utils.valueOrDefault(json.mai, -1);
+		this.stopAnimationIndex = Utils.valueOrDefault(json.sai, -1);
 	}
 }
