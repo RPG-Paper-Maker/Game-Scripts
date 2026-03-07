@@ -47,6 +47,7 @@ export type CommonSkillItemJSON = IconJSON & {
 	s?: PlaySongJSON;
 	auid?: DynamicValueJSON;
 	atid?: DynamicValueJSON;
+	roe?: DynamicValueJSON;
 	canBeSold?: DynamicValueJSON;
 	battleMessage?: LocalizationJSON;
 	p?: CostJSON[];
@@ -73,6 +74,7 @@ class CommonSkillItem extends Icon {
 	public sound: PlaySong;
 	public animationID: DynamicValue;
 	public animationTargetID: DynamicValue;
+	public runOnEnemy: DynamicValue;
 	public canBeSold: DynamicValue;
 	public battleMessage: Localization;
 	public price: Cost[];
@@ -103,6 +105,7 @@ class CommonSkillItem extends Icon {
 		this.sound = new PlaySong(SONG_KIND.SOUND, json.s);
 		this.animationUserID = DynamicValue.readOrNone(json.auid);
 		this.animationTargetID = DynamicValue.readOrNone(json.atid);
+		this.runOnEnemy = DynamicValue.readOrDefaultSwitch(json.roe, false);
 		this.canBeSold = DynamicValue.readOrDefaultSwitch(json.canBeSold);
 		this.battleMessage = new Localization(json.battleMessage);
 		this.price = Utils.readJSONList(json.p, Cost);

@@ -37,6 +37,7 @@ import { Status } from './Status';
 export class Battler {
 	public static OFFSET_SELECTED = 10;
 	public static TIME_MOVE = 200;
+	public static TIME_RUN = 250;
 	public static TOTAL_TIME_DAMAGE = 250;
 
 	public player: Player;
@@ -78,6 +79,11 @@ export class Battler {
 	public animationOffset = new THREE.Vector2();
 	public rect: Rectangle = new Rectangle();
 	public moving: boolean;
+	public isRunMoving = false;
+	public isAtRunPosition = false;
+	public progressionRunX: ProgressionTable | null = null;
+	public progressionRunZ: ProgressionTable | null = null;
+	public timerRunMove = 0;
 	public attacking: boolean;
 	public damages: number;
 	public damagesName: string;
@@ -389,6 +395,9 @@ export class Battler {
 	 *  Update the selected move progress.
 	 */
 	updateSelected() {
+		if (this.isAtRunPosition) {
+			return;
+		}
 		let progression: ProgressionTable;
 		if (this.isEnemy) {
 			progression = this.selected ? this.progressionEnemyFront : this.progressionEnemyBack;
@@ -481,6 +490,48 @@ export class Battler {
 	 */
 	updateArrowPosition(camera: Camera) {
 		this.arrowPosition = Manager.GL.toScreenPosition(this.mesh.position, camera.getThreeCamera());
+	}
+
+	startRunTo(targetX: number, targetZ: number): void {
+		this.progressionRunX = ProgressionTable.createFromNumbers(this.mesh.position.x, targetX, 0);
+		this.progressionRunZ = ProgressionTable.createFromNumbers(this.mesh.position.z, targetZ, 0);
+		this.timerRunMove = new Date().getTime();
+		this.isRunMoving = true;
+		this.isAtRunPosition = true;
+	}
+
+	startRunBack(): void {
+		let targetX: number;
+		if (this.selected) {
+			targetX = this.isEnemy
+				? this.position.x + Battler.OFFSET_SELECTED
+				: this.position.x - Battler.OFFSET_SELECTED;
+		} else {
+			targetX = this.position.x;
+		}
+		this.progressionRunX = ProgressionTable.createFromNumbers(this.mesh.position.x, targetX, 0);
+		this.progressionRunZ = ProgressionTable.createFromNumbers(this.mesh.position.z, this.position.z, 0);
+		this.timerRunMove = new Date().getTime();
+		this.isRunMoving = true;
+		this.isAtRunPosition = false;
+	}
+
+	updateRunMove(): void {
+		let time = new Date().getTime() - this.timerRunMove;
+		if (time >= Battler.TIME_RUN) {
+			time = Battler.TIME_RUN;
+			this.isRunMoving = false;
+		}
+		const newX = this.progressionRunX.getProgressionAt(time, Battler.TIME_RUN, true);
+		const newZ = this.progressionRunZ.getProgressionAt(time, Battler.TIME_RUN, true);
+		this.mesh.position.setX(newX);
+		this.mesh.position.setZ(newZ);
+		this.upPosition.setX(newX);
+		this.upPosition.setZ(newZ);
+		this.halfPosition.setX(newX);
+		this.halfPosition.setZ(newZ);
+		this.updatePositions();
+		Manager.Stack.requestPaintHUD = true;
 	}
 
 	/**
