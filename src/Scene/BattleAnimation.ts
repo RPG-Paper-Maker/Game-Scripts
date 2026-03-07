@@ -15,6 +15,7 @@ import {
 	ANIMATION_POSITION_KIND,
 	ArrayUtils,
 	BATTLE_STEP,
+	BATTLER_STEP,
 	CHARACTER_KIND,
 	EFFECT_KIND,
 	EFFECT_SPECIAL_ACTION_KIND,
@@ -34,6 +35,8 @@ import { Animation, Battler, Game, Item } from '../Core';
 
 class BattleAnimation {
 	public battle: Scene.Battle;
+	public runOnEnemy = false;
+	private pendingBattlerStep: BATTLER_STEP = BATTLER_STEP.NORMAL;
 
 	public constructor(battle: Scene.Battle) {
 		this.battle = battle;
@@ -87,6 +90,7 @@ class BattleAnimation {
 		(<Graphic.Text>this.battle.windowTopInformations.content).setText(this.battle.informationText);
 		this.battle.time = new Date().getTime();
 		this.battle.effects = [];
+		this.runOnEnemy = false;
 		let i: number, l: number;
 		switch (this.battle.battleCommandKind) {
 			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
@@ -101,6 +105,7 @@ class BattleAnimation {
 						this.battle.effects.push(effects[i]);
 					}
 				}
+				this.runOnEnemy = this.battle.attackSkill.runOnEnemy.getValue() as boolean;
 				this.battle.user.setAttacking();
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS:
@@ -115,6 +120,7 @@ class BattleAnimation {
 					this.addWeaponsEffects(index);
 				}
 				content.cost();
+				this.runOnEnemy = content.runOnEnemy.getValue() as boolean;
 				this.battle.user.setUsingSkill();
 				break;
 			}
@@ -126,6 +132,7 @@ class BattleAnimation {
 				if (this.battle.user.player.kind === CHARACTER_KIND.HERO) {
 					Game.current.useItem(graphic.item);
 				}
+				this.runOnEnemy = content.runOnEnemy.getValue() as boolean;
 				this.battle.user.setUsingItem();
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.END_TURN:
@@ -157,6 +164,13 @@ class BattleAnimation {
 		}
 		if (this.battle.animationTarget && this.battle.animationTarget.model === null) {
 			this.battle.animationTarget = null;
+		}
+		if (this.runOnEnemy) {
+			this.pendingBattlerStep = this.battle.user.step;
+			this.battle.user.step = BATTLER_STEP.NORMAL;
+			this.battle.user.updateUVs();
+			this.startRunToTarget();
+			this.battle.subStep = 3;
 		}
 	}
 
@@ -242,15 +256,39 @@ class BattleAnimation {
 					!this.battle.user.isAttacking()
 				) {
 					if (!this.battle.animationTarget) {
-						this.battle.time =
-							new Date().getTime() -
-							Scene.Battle.TIME_ACTION_ANIMATION +
-							Scene.Battle.TIME_ACTION_NO_ANIMATION;
-						for (i = 0, l = this.battle.targets.length; i < l; i++) {
-							this.battle.targets[i].timeDamage = 0;
+						if (this.runOnEnemy) {
+							this.battle.user.step = BATTLER_STEP.NORMAL;
+							this.battle.user.updateUVs();
+							this.startRunBack();
+							this.battle.subStep = 4;
+						} else {
+							this.battle.time =
+								new Date().getTime() -
+								Scene.Battle.TIME_ACTION_ANIMATION +
+								Scene.Battle.TIME_ACTION_NO_ANIMATION;
+							for (i = 0, l = this.battle.targets.length; i < l; i++) {
+								this.battle.targets[i].timeDamage = 0;
+							}
+							this.battle.subStep = 2;
 						}
-						this.battle.subStep = 2;
 					} else {
+						if (this.runOnEnemy) {
+							this.battle.currentEffectIndex++;
+							for (l = this.battle.effects.length; this.battle.currentEffectIndex < l; this.battle.currentEffectIndex++) {
+								const effect = this.battle.effects[this.battle.currentEffectIndex];
+								effect.execute(true);
+								if (!effect.canSkip && effect.isAnimated()) {
+									if (effect.kind === EFFECT_KIND.STATUS) {
+										this.battle.currentTargetIndex = -1;
+									}
+									break;
+								}
+							}
+							this.updateTargetsAttacked();
+							for (i = 0, l = this.battle.targets.length; i < l; i++) {
+								this.battle.targets[i].timeDamage = 0;
+							}
+						}
 						this.battle.subStep = 1;
 					}
 				}
@@ -261,12 +299,39 @@ class BattleAnimation {
 				this.battle.animationTarget.playSounds(this.getCondition());
 				Manager.Stack.requestPaintHUD = true;
 				if (this.battle.animationTarget.frame > this.battle.animationTarget.model.maxFrameID) {
-					this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
-					for (i = 0, l = this.battle.targets.length; i < l; i++) {
-						this.battle.targets[i].timeDamage = 0;
+					if (this.runOnEnemy) {
+						this.battle.user.step = BATTLER_STEP.NORMAL;
+						this.battle.user.updateUVs();
+						this.startRunBack();
+						this.battle.subStep = 4;
+					} else {
+						this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
+						for (i = 0, l = this.battle.targets.length; i < l; i++) {
+							this.battle.targets[i].timeDamage = 0;
+						}
+						this.battle.subStep = 2;
 					}
-					this.battle.subStep = 2;
 				}
+				break;
+			case 3: // Run to target
+				if (this.battle.user.isRunMoving) {
+					this.battle.user.updateRunMove();
+					return;
+				}
+				this.battle.user.step = this.pendingBattlerStep;
+				this.battle.user.updateUVs();
+				this.battle.subStep = 0;
+				break;
+			case 4: // Run back
+				if (this.battle.user.isRunMoving) {
+					this.battle.user.updateRunMove();
+					return;
+				}
+				this.battle.time = new Date().getTime() - Scene.Battle.TIME_ACTION_ANIMATION;
+				for (i = 0, l = this.battle.targets.length; i < l; i++) {
+					this.battle.targets[i].timeDamage = 0;
+				}
+				this.battle.subStep = 2;
 				break;
 			case 2: // Damages
 				// If calling a common reaction, wait for it to be finished
@@ -462,13 +527,37 @@ class BattleAnimation {
 		if (
 			(this.battle.reactionInterpretersEffects.length === 0 || this.battle.forceAnAction) &&
 			(this.battle.user === null || !this.battle.user.isAttacking()) &&
-			(!this.battle.animationTarget ||
+			(this.runOnEnemy ||
+				!this.battle.animationTarget ||
 				this.battle.animationTarget.frame > this.battle.animationTarget.model.maxFrameID)
 		) {
 			for (i = 0, l = this.battle.targets.length; i < l; i++) {
 				this.battle.targets[i].drawDamages();
 			}
 		}
+	}
+
+
+	private startRunToTarget(): void {
+		const targets = this.battle.targets;
+		let targetX = 0;
+		let targetZ = 0;
+		let avgTargetWidth = 0;
+		for (const target of targets) {
+			targetX += target.mesh.position.x;
+			targetZ += target.mesh.position.z;
+			avgTargetWidth += target.width;
+		}
+		targetX /= targets.length;
+		targetZ /= targets.length;
+		avgTargetWidth /= targets.length;
+		const offset = (avgTargetWidth / 2) * Data.Systems.SQUARE_SIZE;
+		const directionX = Math.sign(this.battle.user.position.x - targetX);
+		this.battle.user.startRunTo(targetX + directionX * offset, targetZ);
+	}
+
+	private startRunBack(): void {
+		this.battle.user.startRunBack();
 	}
 }
 
