@@ -1153,7 +1153,7 @@ class Map extends Base {
 				}
 			}
 			if (Game.current && Game.current.hero.mesh) {
-				Game.current.hero.mesh.material.opacity = opacity;
+				Game.current.hero.mesh.material.userData.uniforms.opacity.value = opacity;
 			}
 			this.camera.updateTimer();
 		}

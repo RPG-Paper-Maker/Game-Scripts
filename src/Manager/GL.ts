@@ -17,6 +17,7 @@ import {
 	lights,
 	mix,
 	normalView,
+	step,
 	texture,
 	uniform,
 	uv,
@@ -174,7 +175,7 @@ class GL {
 			map: opts.texture,
 			side: opts.side,
 			transparent: true,
-			alphaTest: 0.5,
+			alphaTest: 0.01,
 			opacity: opts.opacity,
 			shininess: 0,
 			specular: new THREE.Color(0x000000),
@@ -190,7 +191,7 @@ class GL {
 			const tex = texture(opts.texture, coords);
 			const color = vec3(tex).add(vec3(u.colorD));
 			const intensity = vec3(dot(color, vec3(0.2125, 0.7154, 0.0721)));
-			return vec4(mix(intensity, color, u.colorD.w), tex.a);
+			return vec4(mix(intensity, color, u.colorD.w), step(0.5, tex.a).mul(u.opacity));
 		});
 		material.colorNode = colorShader();
 		if (opts.unlit) {
