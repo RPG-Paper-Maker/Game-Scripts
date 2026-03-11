@@ -3,6 +3,8 @@
 # Threejs
 cp ./node_modules/three/build/three.module.min.js ./src/Libs/three.module.min.js
 cp ./node_modules/three/build/three.core.min.js ./src/Libs/three.core.min.js
+cp ./node_modules/three/build/three.webgpu.min.js ./src/Libs/three.webgpu.min.js
+cp ./node_modules/three/build/three.tsl.min.js ./src/Libs/three.tsl.min.js
 rm -rf ./src/Libs/examples
 mkdir -p ./src/Libs/examples/jsm/loaders
 mkdir -p ./src/Libs/examples/jsm/utils

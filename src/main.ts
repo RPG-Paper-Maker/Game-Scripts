@@ -54,12 +54,12 @@ export class Main {
 		await Data.Settings.read();
 		await Data.Systems.read();
 		await Data.Variables.read();
+		await Manager.GL.initialize();
 		await Manager.GL.load();
 		await Data.Pictures.read();
 		await Data.Songs.read();
 		await Data.Videos.read();
 		await Data.Shapes.read();
-		await Manager.GL.initialize();
 		Manager.GL.resize();
 		Manager.Collisions.initialize();
 		await Data.SpecialElements.read();
