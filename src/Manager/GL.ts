@@ -9,8 +9,22 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import {
+	BRDF_Lambert,
+	diffuseColor,
+	dot,
+	Fn,
+	lights,
+	mix,
+	normalView,
+	texture,
+	uniform,
+	uv,
+	vec2,
+	vec3,
+	vec4,
+} from 'three/tsl';
 import * as THREE from 'three/webgpu';
-import { BRDF_Lambert, diffuseColor, dot, Fn, lights, mix, normalView, texture, uniform, uv, vec2, vec3, vec4 } from 'three/tsl';
 import { Platform, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
 import { Data, Model } from '../index';
@@ -28,7 +42,6 @@ class GL {
 	public static raycaster = new THREE.Raycaster();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public static allLights = [];
-	public static colorShader: THREE.TSL.FnNode<any, THREE.Node<"vec4">>;
 	public static lightingModel: THREE.LightingModel;
 	public static lightingModelContext: THREE.LightsNode;
 
@@ -58,30 +71,21 @@ class GL {
 	 *  @static
 	 */
 	static async load() {
-		// Shaders
 		this.allLights = [];
-		this.colorShader = Fn(({ m, u }: any) =>
-		{
-			const coords = vec2(uv().add(u.offset)).mul(vec2(m.map.repeat));
-			const tex = texture(m.map, coords);
-			const color = vec3(tex).add(vec3(u.colorD));
-			const intensity = vec3(dot(color, vec3(0.2125, 0.7154, 0.0721)));
-			return vec4(mix(intensity, color, u.colorD.w), tex.a);
-		});
 		this.lightingModel = new THREE.LightingModel();
-		this.lightingModel.direct = function({ lightDirection, lightColor, reflectedLight }: any)
-		{
+		this.lightingModel.direct = function ({ lightDirection, lightColor, reflectedLight }: any) {
 			const dotNL = normalView.dot(lightDirection).clamp();
 			const irradiance = dotNL.mul(lightColor);
-			reflectedLight.directDiffuse.addAssign(irradiance.mul(vec4(BRDF_Lambert({ diffuseColor: diffuseColor.rgb }))));
+			reflectedLight.directDiffuse.addAssign(
+				irradiance.mul(vec4(BRDF_Lambert({ diffuseColor: diffuseColor.rgb }))),
+			);
 		};
-		this.lightingModel.indirect = function(builder: any)
-		{
+		this.lightingModel.indirect = function (builder: any) {
 			const { ambientOcclusion, irradiance, reflectedLight } = builder.context;
 			reflectedLight.indirectDiffuse.addAssign(irradiance.mul(BRDF_Lambert({ diffuseColor })));
 			reflectedLight.indirectDiffuse.mulAssign(ambientOcclusion);
 		};
-		this.lightingModelContext = (lights(this.allLights) as any).context({ lightingModel : this.lightingModel });
+		this.lightingModelContext = (lights(this.allLights) as any).context({ lightingModel: this.lightingModel });
 	}
 
 	/**
@@ -150,6 +154,7 @@ class GL {
 		side?: THREE.Side;
 		opacity?: number;
 		shadows?: boolean;
+		unlit?: boolean;
 	}): THREE.MeshPhongNodeMaterial {
 		if (!opts.texture) {
 			opts.texture = new THREE.Texture();
@@ -168,26 +173,37 @@ class GL {
 		const material = new THREE.MeshPhongNodeMaterial({
 			map: opts.texture,
 			side: opts.side,
-			transparent: false, // keep false until shadows bug is fixed
+			transparent: true,
 			alphaTest: 0.5,
 			opacity: opts.opacity,
 			shininess: 0,
 			specular: new THREE.Color(0x000000),
 		});
-		material.userData.uniforms =
-		{
+		const u = {
 			offset: uniform(new THREE.Vector2()),
 			colorD: uniform(this.screenTone),
-			opacity: uniform(opts.opacity)
+			opacity: uniform(opts.opacity),
 		};
-		material.colorNode = GL.colorShader({ m: material, u: material.userData.uniforms });
-		material.lightsNode = opts.shadows ? GL.lightingModelContext : lights();
+		material.userData.uniforms = u;
+		const colorShader = Fn(() => {
+			const coords = vec2(uv().add(u.offset)).mul(vec2(opts.texture.repeat));
+			const tex = texture(opts.texture, coords);
+			const color = vec3(tex).add(vec3(u.colorD));
+			const intensity = vec3(dot(color, vec3(0.2125, 0.7154, 0.0721)));
+			return vec4(mix(intensity, color, u.colorD.w), tex.a);
+		});
+		material.colorNode = colorShader();
+		if (opts.unlit) {
+			(material as any).lights = false;
+		} else {
+			material.lightsNode = opts.shadows ? GL.lightingModelContext : lights();
+		}
 		return material;
 	}
 
 	static cloneMaterial(material: THREE.MeshPhongNodeMaterial): THREE.MeshPhongNodeMaterial {
 		return this.createMaterial({
-			texture: material.map
+			texture: material.map,
 		});
 	}
 

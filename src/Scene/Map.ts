@@ -225,11 +225,11 @@ class Map extends Base {
 	 */
 	initializeSunLight() {
 		Manager.GL.allLights.length = 0;
-		const ambient = new THREE.AmbientLight(0xffffff, this.mapProperties.isSunLight ? 1.2 : 2);
+		const ambient = new THREE.AmbientLight(0xffffff, this.mapProperties.isSunLight ? 1.37 : Math.PI);
 		this.scene.add(ambient);
 		Manager.GL.allLights.push(ambient);
 		if (this.mapProperties.isSunLight) {
-			this.sunLight = new THREE.DirectionalLight(0xffffff, 2);
+			this.sunLight = new THREE.DirectionalLight(0xffffff, 2.28);
 			this.sunLight.position.set(-1, 1.75, 1);
 			this.sunLight.position.multiplyScalar(Data.Systems.SQUARE_SIZE * 10);
 			this.sunLight.target.position.set(0, 0, 0);

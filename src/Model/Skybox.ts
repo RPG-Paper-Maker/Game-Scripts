@@ -44,20 +44,11 @@ export class Skybox extends Base {
 	/**
 	 * Create the textures for the skybox.
 	 */
-	createTextures(): THREE.MeshBasicNodeMaterial[] {
+	createTextures(): THREE.MeshPhongNodeMaterial[] {
 		return [this.left, this.right, this.top, this.bot, this.front, this.back].map((side) => {
 			const texture = Manager.GL.textureLoader.load(Data.Pictures.get(PICTURE_KIND.SKYBOXES, side).getPath());
-			texture.wrapS = THREE.RepeatWrapping;
 			texture.repeat.x = -1;
-			texture.magFilter = THREE.NearestFilter;
-			texture.minFilter = THREE.NearestFilter;
-			texture.wrapS = THREE.RepeatWrapping;
-			texture.wrapT = THREE.RepeatWrapping;
-			texture.colorSpace = THREE.SRGBColorSpace;
-			return new THREE.MeshBasicNodeMaterial({
-				map: texture,
-				side: THREE.BackSide
-			});
+			return Manager.GL.createMaterial({ texture, side: THREE.BackSide, unlit: true, flipY: true });
 		});
 	}
 
