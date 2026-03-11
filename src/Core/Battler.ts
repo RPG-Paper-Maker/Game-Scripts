@@ -170,11 +170,8 @@ export class Battler {
 			const copiedTexture = texture.clone();
 			const material = Manager.GL.createMaterial({
 				texture: copiedTexture,
-				uniforms: {
-					colorD: uniform(Manager.GL.screenTone.clone()),
-					offset: uniform(this.animationOffset)
-				},
 			});
+			this.animationOffset = material.userData.uniforms.offset.value as THREE.Vector2;
 			const { width, height } = Manager.GL.getMaterialTextureSize(material);
 			this.width = width / Data.Systems.SQUARE_SIZE / Data.Systems.battlersFrames;
 			this.height = height / Data.Systems.SQUARE_SIZE / Data.Systems.battlersColumns;
