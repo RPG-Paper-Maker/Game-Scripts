@@ -136,6 +136,7 @@ class GL {
 		}
 		opts.texture.magFilter = THREE.NearestFilter;
 		opts.texture.minFilter = THREE.NearestFilter;
+		opts.texture.colorSpace = THREE.NoColorSpace;
 		opts.texture.flipY = opts.flipY ? true : false;
 		opts.texture.wrapS = THREE.RepeatWrapping;
 		opts.texture.wrapT = THREE.RepeatWrapping;
