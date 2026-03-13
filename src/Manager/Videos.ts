@@ -28,7 +28,7 @@ class Videos {
 	 *  @param {string} src
 	 *  @param {EventListener} endedHandler
 	 */
-	static async play(src: string, endedHandler: EventListener = null) {
+	static async play(src: string, endedHandler: EventListener = null, loop: boolean = false) {
 		Platform.canvasVideos.classList.remove('hidden');
 		if (!this.paused) {
 			Platform.canvasVideos.src = src;
@@ -38,6 +38,7 @@ class Videos {
 			Platform.canvasVideos.addEventListener('ended', endedHandler, false);
 		}
 		this.currentEndedHandler = endedHandler;
+		Platform.canvasVideos.loop = loop;
 		this.paused = false;
 		await Platform.canvasVideos.play();
 	}
@@ -57,6 +58,7 @@ class Videos {
 		Platform.canvasVideos.classList.add('hidden');
 		Platform.canvasVideos.pause();
 		Platform.canvasVideos.src = '';
+		Platform.canvasVideos.loop = false;
 		this.removeEndedEventListener();
 	}
 

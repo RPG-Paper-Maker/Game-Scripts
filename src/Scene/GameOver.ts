@@ -65,7 +65,7 @@ class GameOver extends Base {
 				{ cover: true },
 			);
 		} else {
-			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.gameOverBackgroundVideoID).getPath());
+			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.gameOverBackgroundVideoID).getPath(), null, true);
 		}
 
 		// Windows

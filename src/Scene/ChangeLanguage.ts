@@ -187,7 +187,7 @@ class ChangeLanguage extends Base {
 				{ cover: true },
 			);
 		} else {
-			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath());
+			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(), null, true);
 		}
 	}
 
