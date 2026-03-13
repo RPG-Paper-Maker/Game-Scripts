@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { DYNAMIC_VALUE_KIND, PICTURE_KIND, Platform, SONG_KIND, Utils } from '../Common';
 import { MapObjectCommandType } from '../Common/Types';
 import { Game, ReactionInterpreter } from '../Core';

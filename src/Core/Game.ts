@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { CHARACTER_KIND, GROUP_KIND, ITEM_KIND, Paths, Platform, Utils } from '../Common';
 import { Data, Manager, Model, Scene } from '../index';
 import { Chrono } from './Chrono';

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { CUSTOM_SHAPE_KIND, OBJECT_COLLISION_KIND, SHAPE_KIND, Utils } from '../Common';
 import { Data } from '../index';
 import { Shape } from './Shape';

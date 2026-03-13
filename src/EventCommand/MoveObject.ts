@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import {
 	COMMAND_MOVE_KIND,
 	ELEMENT_MAP_KIND,

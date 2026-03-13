@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { ANIMATION_EFFECT_CONDITION_KIND, Utils } from '../Common';
 import { Picture2D } from '../Core';
 import { AnimationFrameEffect, AnimationFrameEffectJSON } from './AnimationFrameEffect';

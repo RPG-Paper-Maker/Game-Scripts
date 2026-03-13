@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es2020",
     "module": "esNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "lib": [
       "dom",
       "dom.iterable",

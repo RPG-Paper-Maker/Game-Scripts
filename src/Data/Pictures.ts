@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { Manager } from '..';
 import { Paths, PICTURE_KIND, Platform } from '../Common';
 import { Picture2D } from '../Core';
@@ -33,8 +33,8 @@ export class Pictures {
 	private static PROPERTY_TEXTURES_CHARACTERS = 'texturesCharacters';
 	private static PROPERTY_TEXTURES_BATTLERS = 'texturesBattlers';
 	private static list: Map<PICTURE_KIND, Map<number, Picture>>;
-	public static texturesCharacters: Map<number, THREE.MeshPhongNodeMaterial>;
-	public static texturesBattlers: Map<number, THREE.MeshPhongNodeMaterial>;
+	public static texturesCharacters: Map<number, THREE.MeshPhongMaterial>;
+	public static texturesBattlers: Map<number, THREE.MeshPhongMaterial>;
 
 	/**
 	 * Get a picture by kind and ID.
@@ -66,7 +66,7 @@ export class Pictures {
 	 */
 	static async loadTextures(pictureKind: PICTURE_KIND, texturesName: string) {
 		const pictures = this.getListByKind(pictureKind);
-		const textures = new Map<number, THREE.MeshPhongNodeMaterial>();
+		const textures = new Map<number, THREE.MeshPhongMaterial>();
 		textures.set(0, Manager.GL.loadTextureEmpty());
 		for (const [id, picture] of pictures.entries()) {
 			if (picture) {

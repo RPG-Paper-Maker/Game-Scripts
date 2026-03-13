@@ -54,14 +54,6 @@ void main() {
 	#endif
 	diffuseColor *= sampledDiffuseColor;
 	if (enableShadows && sampledDiffuseColor.a >= 1.0) {
-		#ifdef USE_MAP
-			vec4 sampledDiffuseColor = texture2D( map, coords );
-			#ifdef DECODE_VIDEO_TEXTURE
-				// use inline sRGB decode until browsers properly support SRGB8_ALPHA8 with video textures (#26516)
-				sampledDiffuseColor = sRGBTransferEOTF( sampledDiffuseColor );
-			#endif
-			diffuseColor *= sampledDiffuseColor;
-		#endif
 		#include <color_fragment>
 		#include <alphamap_fragment>
 		#include <alphatest_fragment>
@@ -79,7 +71,6 @@ void main() {
 		#include <envmap_fragment>
 		#include <opaque_fragment>
 		#include <tonemapping_fragment>
-		#include <colorspace_fragment>
 	} else {
 		gl_FragColor = sampledDiffuseColor;
 	}

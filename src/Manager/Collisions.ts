@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import { Constants, CUSTOM_SHAPE_KIND, Mathf, ORIENTATION } from '../Common';
 import {
 	CollisionSquare,
@@ -29,9 +29,9 @@ import { Data, Manager, Model, Scene } from '../index';
  *  @static
  */
 class Collisions {
-	public static BB_MATERIAL = new THREE.MeshBasicNodeMaterial();
-	public static BB_MATERIAL_DETECTION = new THREE.MeshBasicNodeMaterial();
-	public static BB_EMPTY_MATERIAL = new THREE.MeshBasicNodeMaterial({ visible: false });
+	public static BB_MATERIAL = new THREE.MeshBasicMaterial();
+	public static BB_MATERIAL_DETECTION = new THREE.MeshBasicMaterial();
+	public static BB_EMPTY_MATERIAL = new THREE.MeshBasicMaterial({ visible: false });
 	public static BB_BOX = Collisions.createBox();
 	public static BB_ORIENTED_BOX = Collisions.createOrientedBox();
 	private static BB_BOX_DETECTION = Collisions.createBox(true);

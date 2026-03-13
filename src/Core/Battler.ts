@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
-import { uniform } from 'three/tsl';
+import * as THREE from 'three';
+import { MeshPhongMaterial } from 'three';
 import {
 	ALIGN,
 	ALIGN_VERTICAL,
@@ -170,8 +170,11 @@ export class Battler {
 			const copiedTexture = texture.clone();
 			const material = Manager.GL.createMaterial({
 				texture: copiedTexture,
+				uniforms: {
+					colorD: { type: 'v4', value: Manager.GL.screenTone.clone() },
+					offset: { type: 'v2', value: this.animationOffset },
+				},
 			});
-			this.animationOffset = material.userData.uniforms.offset.value as THREE.Vector2;
 			const { width, height } = Manager.GL.getMaterialTextureSize(material);
 			this.width = width / Data.Systems.SQUARE_SIZE / Data.Systems.battlersFrames;
 			this.height = height / Data.Systems.SQUARE_SIZE / Data.Systems.battlersColumns;
@@ -214,7 +217,7 @@ export class Battler {
 	 * Initialize UV mapping for the battler mesh.
 	 * */
 	initializeTexture(): void {
-		const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongNodeMaterial);
+		const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as MeshPhongMaterial);
 		const w = (this.width * Data.Systems.SQUARE_SIZE) / width;
 		const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 		const texA = new THREE.Vector2();
@@ -242,7 +245,7 @@ export class Battler {
 					frame = this.frame.value;
 					break;
 			}
-			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongNodeMaterial);
+			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as MeshPhongMaterial);
 			const w = (this.width * Data.Systems.SQUARE_SIZE) / width;
 			const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 			const x = frame * w;
@@ -280,11 +283,11 @@ export class Battler {
 	 */
 	setActive(active: boolean) {
 		this.active = active;
-		const material = this.mesh.material as THREE.MeshPhongNodeMaterial;
+		const material = this.mesh.material as THREE.MeshPhongMaterial;
 		if (active) {
-			material.userData.uniforms.colorD = uniform(Manager.GL.screenTone);
+			material.userData.uniforms.colorD.value.copy(Manager.GL.screenTone);
 		} else {
-			material.userData.uniforms.colorD = uniform(Manager.GL.screenTone.clone().subScalar(0.3));
+			material.userData.uniforms.colorD.value.copy(Manager.GL.screenTone.clone().subScalar(0.3));
 		}
 	}
 

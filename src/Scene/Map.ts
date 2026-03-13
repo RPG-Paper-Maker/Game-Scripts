@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three/webgpu';
+import * as THREE from 'three';
 import {
 	Constants,
 	DYNAMIC_VALUE_KIND,
@@ -67,7 +67,7 @@ class Map extends Base {
 	public currentPortion: Portion;
 	public previousPortion: Portion;
 	public mapPortions: MapPortion[];
-	public textureTileset: THREE.MeshPhongNodeMaterial;
+	public textureTileset: THREE.MeshPhongMaterial;
 	public collisions: Rectangle[][][][];
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
@@ -224,10 +224,8 @@ class Map extends Base {
 	 *  Initialize sun light.
 	 */
 	initializeSunLight() {
-		Manager.GL.allLights.length = 0;
 		const ambient = new THREE.AmbientLight(0xffffff, this.mapProperties.isSunLight ? 1.37 : Math.PI);
 		this.scene.add(ambient);
-		Manager.GL.allLights.push(ambient);
 		if (this.mapProperties.isSunLight) {
 			this.sunLight = new THREE.DirectionalLight(0xffffff, 2.28);
 			this.sunLight.position.set(-1, 1.75, 1);
@@ -244,7 +242,6 @@ class Map extends Base {
 			this.sunLight.shadow.camera.bottom = -d;
 			this.sunLight.shadow.camera.far = Data.Systems.SQUARE_SIZE * 350;
 			this.sunLight.shadow.bias = -0.0003;
-			Manager.GL.allLights.push(this.sunLight);
 		}
 	}
 
@@ -1153,7 +1150,7 @@ class Map extends Base {
 				}
 			}
 			if (Game.current && Game.current.hero.mesh) {
-				Game.current.hero.mesh.material.userData.uniforms.opacity.value = opacity;
+				Game.current.hero.mesh.material.opacity = opacity;
 			}
 			this.camera.updateTimer();
 		}
