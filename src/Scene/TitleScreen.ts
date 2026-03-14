@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
+import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Manager } from '../index';
 import { Base } from './Base';
@@ -31,6 +31,18 @@ class TitleScreen extends Base {
 	 *  @type {WindowChoices}
 	 */
 	public windowChoicesCommands: WindowChoices;
+
+	/**
+	 *  Whether video autoplay was blocked by the browser (requires user interaction first).
+	 *  @type {boolean}
+	 */
+	public videoBlocked: boolean = false;
+
+	/**
+	 *  "Click anywhere to start" text shown when video autoplay is blocked.
+	 *  @type {Graphic.Text}
+	 */
+	public graphicClickToStart: Graphic.Text;
 
 	constructor() {
 		super();
@@ -67,7 +79,23 @@ class TitleScreen extends Base {
 				{ cover: true },
 			);
 		} else {
-			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(), null, true);
+			const played = await Manager.Videos.play(
+				Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
+				null,
+				true,
+			);
+			if (!played) {
+				this.videoBlocked = true;
+				this.graphicClickToStart = new Graphic.Text('Click anywhere to start', {
+					x: 0,
+					y: 0,
+					w: ScreenResolution.SCREEN_X,
+					h: ScreenResolution.SCREEN_Y,
+					align: ALIGN.CENTER,
+					verticalAlign: ALIGN_VERTICAL.CENTER,
+					fontSize: 20,
+				});
+			}
 		}
 
 		// Windows
@@ -106,7 +134,9 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	update() {
-		this.windowChoicesCommands.update();
+		if (!this.videoBlocked) {
+			this.windowChoicesCommands.update();
+		}
 	}
 
 	/**
@@ -114,6 +144,10 @@ class TitleScreen extends Base {
 	 *  @param {number} key - the key ID
 	 */
 	onKeyPressed(key: string) {
+		if (this.videoBlocked) {
+			this.resumeVideoBackground();
+			return;
+		}
 		this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands.getCurrentContent().datas);
 	}
 
@@ -123,6 +157,9 @@ class TitleScreen extends Base {
 	 *  @return {*}  {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
+		if (this.videoBlocked) {
+			return true;
+		}
 		return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
 	}
 
@@ -137,7 +174,23 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	onMouseUp(x: number, y: number) {
+		if (this.videoBlocked) {
+			this.resumeVideoBackground();
+			return;
+		}
 		this.windowChoicesCommands.onMouseUp(x, y, this.windowChoicesCommands.getCurrentContent().datas);
+	}
+
+	/**
+	 *  Retry video playback after user interaction unblocked autoplay.
+	 */
+	resumeVideoBackground() {
+		this.videoBlocked = false;
+		Manager.Videos.play(
+			Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
+			null,
+			true,
+		).catch(console.error);
 	}
 
 	/**
@@ -147,7 +200,11 @@ class TitleScreen extends Base {
 		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			this.pictureBackground.draw();
 		}
-		this.windowChoicesCommands.draw();
+		if (this.videoBlocked) {
+			this.graphicClickToStart.draw();
+		} else {
+			this.windowChoicesCommands.draw();
+		}
 	}
 }
 

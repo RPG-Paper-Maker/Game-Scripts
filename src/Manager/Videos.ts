@@ -28,7 +28,7 @@ class Videos {
 	 *  @param {string} src
 	 *  @param {EventListener} endedHandler
 	 */
-	static async play(src: string, endedHandler: EventListener = null, loop: boolean = false) {
+	static async play(src: string, endedHandler: EventListener = null, loop: boolean = false): Promise<boolean> {
 		Platform.canvasVideos.classList.remove('hidden');
 		if (!this.paused) {
 			Platform.canvasVideos.src = src;
@@ -40,7 +40,15 @@ class Videos {
 		this.currentEndedHandler = endedHandler;
 		Platform.canvasVideos.loop = loop;
 		this.paused = false;
-		await Platform.canvasVideos.play();
+		try {
+			await Platform.canvasVideos.play();
+			return true;
+		} catch (e) {
+			if ((e as DOMException).name === 'NotAllowedError') {
+				return false;
+			}
+			throw e;
+		}
 	}
 
 	/**
