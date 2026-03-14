@@ -302,7 +302,7 @@ class Picture extends Base {
 	async checkBase64(): Promise<void> {
 		if (!Platform.IS_DESKTOP && !this.isBR && Platform.WEB_DEV) {
 			this.base64 = await Platform.loadFile(
-				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Picture.getLocalFolder(this.kind)}/${this.name}`,
+				`${Platform.ROOT_DIRECTORY}${Picture.getLocalFolder(this.kind)}/${this.name}`,
 			);
 		}
 	}

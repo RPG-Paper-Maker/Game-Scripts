@@ -72,9 +72,7 @@ export class Video extends Base {
 	 */
 	async checkBase64(): Promise<void> {
 		if (!Platform.IS_DESKTOP && !this.isBR && Platform.WEB_DEV) {
-			this.base64 = await Platform.loadFile(
-				`${Platform.ROOT_DIRECTORY.slice(0, -1)}${Video.getLocalFolder()}/${this.name}`,
-			);
+			this.base64 = await Platform.loadFile(`${Platform.ROOT_DIRECTORY}${Video.getLocalFolder()}/${this.name}`);
 		}
 	}
 
