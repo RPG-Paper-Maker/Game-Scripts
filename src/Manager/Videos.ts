@@ -32,6 +32,7 @@ class Videos {
 		Platform.canvasVideos.classList.remove('hidden');
 		if (!this.paused) {
 			Platform.canvasVideos.src = src;
+			Platform.canvasVideos.load();
 		}
 		this.removeEndedEventListener();
 		if (endedHandler !== null) {

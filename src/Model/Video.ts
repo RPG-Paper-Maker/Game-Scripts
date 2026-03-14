@@ -68,11 +68,18 @@ export class Video extends Base {
 	}
 
 	/**
-	 * Load the video as a base64 string when not on desktop and not br.
+	 * Load the video as a blob URL when not on desktop and not br.
+	 * Blob URLs are required for video elements in browsers — data URLs are
+	 * rejected with NotSupportedError for large binary media files.
 	 */
 	async checkBase64(): Promise<void> {
 		if (!Platform.IS_DESKTOP && !this.isBR && Platform.WEB_DEV) {
-			this.base64 = await Platform.loadFile(`${Platform.ROOT_DIRECTORY}${Video.getLocalFolder()}/${this.name}`);
+			const content = await Platform.loadFile(`${Platform.ROOT_DIRECTORY}${Video.getLocalFolder()}/${this.name}`);
+			if (content) {
+				const response = await fetch(content);
+				const blob = await response.blob();
+				this.base64 = URL.createObjectURL(blob);
+			}
 		}
 	}
 
