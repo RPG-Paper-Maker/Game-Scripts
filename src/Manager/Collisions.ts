@@ -117,10 +117,8 @@ class Collisions {
 		box['previousCenter'] = [0, 0, 0];
 		// Update geometry now
 		box.updateMatrixWorld();
-		// Compute bounding box manually
-		if (box.geometry.boundingBox === null) {
-			box.geometry.computeBoundingBox();
-		}
+		// Compute bounding box
+		box.geometry.computeBoundingBox();
 	}
 
 	/**
@@ -181,10 +179,8 @@ class Collisions {
 		// Update geometry now
 		box.updateMatrixWorld();
 
-		// Compute bounding box manually
-		if (box.geometry.boundingBox === null) {
-			box.geometry.computeBoundingBox();
-		}
+		// Compute bounding box
+		box.geometry.computeBoundingBox();
 	}
 
 	/**
@@ -242,10 +238,44 @@ class Collisions {
 		// Update geometry now
 		box.updateMatrixWorld();
 
-		// Compute bounding box manually
-		if (box.geometry.boundingBox === null) {
-			box.geometry.computeBoundingBox();
+		// Compute bounding box
+		box.geometry.computeBoundingBox();
+	}
+
+	/**
+	 *  Get a bounding box mesh. When showBB is true, create a temporary visible
+	 *  copy that flashes in the scene.
+	 *  @static
+	 *  @returns {THREE.Mesh}
+	 */
+	static getBBBox(): THREE.Mesh {
+		if (Data.Systems.showBB) {
+			const box = Collisions.createBox();
+			this.BB_BOX = box;
+			Scene.Map.current.scene.add(box);
+			setTimeout(() => {
+				Scene.Map.current.scene.remove(box);
+			}, 1);
 		}
+		return this.BB_BOX;
+	}
+
+	/**
+	 *  Get an oriented bounding box mesh. When showBB is true, create a
+	 *  temporary visible copy that flashes in the scene.
+	 *  @static
+	 *  @returns {THREE.Mesh}
+	 */
+	static getBBOrientedBox(): THREE.Mesh {
+		if (Data.Systems.showBB) {
+			const box = Collisions.createOrientedBox();
+			this.BB_ORIENTED_BOX = box;
+			Scene.Map.current.scene.add(box);
+			setTimeout(() => {
+				Scene.Map.current.scene.remove(box);
+			}, 1);
+		}
+		return this.BB_ORIENTED_BOX;
 	}
 
 	/**
@@ -955,8 +985,9 @@ class Collisions {
 		if (collision !== null) {
 			return false;
 		}
-		this.applyBoxLandTransforms(this.BB_BOX, boundingBox);
-		return this.obbVSobb(<CustomGeometry>object.currentBoundingBox.geometry, <CustomGeometry>this.BB_BOX.geometry);
+		const box = this.getBBBox();
+		this.applyBoxLandTransforms(box, boundingBox);
+		return this.obbVSobb(<CustomGeometry>object.currentBoundingBox.geometry, <CustomGeometry>box.geometry);
 	}
 
 	/**
@@ -1115,17 +1146,13 @@ class Collisions {
 			return false;
 		}
 		if (fix) {
-			this.applyBoxSpriteTransforms(this.BB_BOX, boundingBox, true, center);
-			return this.obbVSobb(
-				<CustomGeometry>object.currentBoundingBox.geometry,
-				<CustomGeometry>this.BB_BOX.geometry,
-			);
+			const box = this.getBBBox();
+			this.applyBoxSpriteTransforms(box, boundingBox, true, center);
+			return this.obbVSobb(<CustomGeometry>object.currentBoundingBox.geometry, <CustomGeometry>box.geometry);
 		} else {
-			this.applyOrientedBoxTransforms(this.BB_ORIENTED_BOX, boundingBox, center);
-			return this.obbVSobb(
-				<CustomGeometry>object.currentBoundingBox.geometry,
-				<CustomGeometry>this.BB_ORIENTED_BOX.geometry,
-			);
+			const box = this.getBBOrientedBox();
+			this.applyOrientedBoxTransforms(box, boundingBox, center);
+			return this.obbVSobb(<CustomGeometry>object.currentBoundingBox.geometry, <CustomGeometry>box.geometry);
 		}
 	}
 
@@ -1446,7 +1473,13 @@ class Collisions {
 						if (vy >= y && vy <= y + h) {
 							const vPoint = new THREE.Vector2(vertices[i], vertices[i + 2]);
 							if (
-								Mathf.isPointOnRectangle(vPoint, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)
+								Mathf.isPointOnRectangle(
+									vPoint,
+									x,
+									x + Data.Systems.SQUARE_SIZE,
+									z,
+									z + Data.Systems.SQUARE_SIZE,
+								)
 							) {
 								return [true, null];
 							}
@@ -1593,7 +1626,10 @@ class Collisions {
 
 			// If angle limit, block — compute per-side angle from actual side width
 			const sideAngle = sideW === 0 ? 90 : (Math.atan(h / sideW) * 180) / Math.PI;
-			if (forceAlways || (!forceNever && sideAngle > (Data.Systems.mountainCollisionAngle.getValue() as number))) {
+			if (
+				forceAlways ||
+				(!forceNever && sideAngle > (Data.Systems.mountainCollisionAngle.getValue() as number))
+			) {
 				// Check if floor existing on top of the mountain angle
 				isFloor =
 					jposition.y === jpositionAfter.y

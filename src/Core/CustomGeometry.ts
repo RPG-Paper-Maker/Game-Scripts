@@ -166,14 +166,21 @@ export class CustomGeometry extends THREE.BufferGeometry {
 	 */
 	rotateFromEuler(euler: THREE.Euler, center: THREE.Vector3) {
 		const vertices = this.getVertices();
+		const normals = this.getNormals();
 		const vertex = new THREE.Vector3();
+		const normal = new THREE.Vector3();
+		const b_normals: number[] = [];
 		for (let i = 0, l = vertices.length; i < l; i += 3) {
 			vertex.set(vertices[i], vertices[i + 1], vertices[i + 2]);
 			Mathf.rotateVertexEuler(vertex, center, euler);
 			this.b_vertices.push(vertex.x, vertex.y, vertex.z);
+			normal.set(normals[i], normals[i + 1], normals[i + 2]);
+			normal.applyEuler(euler);
+			b_normals.push(normal.x, normal.y, normal.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));
 		this.b_vertices = [];
+		this.setAttribute('normal', new THREE.Float32BufferAttribute(b_normals, 3));
 	}
 
 	/**
