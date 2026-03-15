@@ -91,7 +91,7 @@ class Object3DCustom extends Object3D {
 		const uvs = modelGeometry.uvs;
 		const scale = this.datas.scale;
 		const scaleVec = new THREE.Vector3(scale * position.scaleX, scale * position.scaleY, scale * position.scaleZ);
-		const center = new THREE.Vector3();
+		const center = modelGeometry.center.clone();
 		center.multiply(scaleVec);
 		let vecA: THREE.Vector3, vecB: THREE.Vector3, vecC: THREE.Vector3;
 		for (let i = 0, l = modelGeometry.vertices.length; i < l; i += 3) {
@@ -126,9 +126,9 @@ class Object3DCustom extends Object3D {
 				p: position,
 				l: localPosition,
 				b: [
-					localPosition.x,
-					localPosition.y,
-					localPosition.z,
+					localPosition.x + minPos.x + w / 2,
+					localPosition.y + minPos.y + h / 2,
+					localPosition.z + minPos.z + d / 2,
 					w,
 					h,
 					d,
@@ -139,7 +139,6 @@ class Object3DCustom extends Object3D {
 				c: center,
 				w: Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE),
 				h: Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE),
-				cr: [-minPos.x - w / 2, -minPos.y - h / 2, -minPos.z - d / 2],
 				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
 				m: Math.max(
 					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),

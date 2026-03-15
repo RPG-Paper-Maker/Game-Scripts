@@ -1210,9 +1210,12 @@ class Collisions {
 		}
 		if (this.currentCustomObject3D) {
 			this.currentCustomObject3D.position.set(objCollision.l.x, objCollision.l.y, objCollision.l.z);
-			this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(1, 0, 0), objCollision.b[6]);
-			this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), objCollision.b[7]);
-			this.currentCustomObject3D.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), objCollision.b[8]);
+			this.currentCustomObject3D.rotation.set(
+				(objCollision.b[7] * Math.PI) / 180.0,
+				(objCollision.b[6] * Math.PI) / 180.0,
+				(objCollision.b[8] * Math.PI) / 180.0,
+				'XYZ',
+			);
 			Scene.Map.current.scene.add(this.currentCustomObject3D);
 			if (Data.Systems.showBB) {
 				this.currentCustomObject3D.material = this.BB_MATERIAL;

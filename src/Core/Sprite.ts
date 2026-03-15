@@ -230,24 +230,29 @@ class Sprite extends MapElement {
 		const objCollision: StructMapElementCollision[] = [];
 		const twidth = Math.floor((this.textureRect.width * position.scaleX) / 2);
 		const theight = Math.floor((this.textureRect.height * position.scaleY) / 2);
+		const euler = position.toRotationEuler();
 		if (tileset) {
 			const collisions = Scene.Map.current.mapProperties.tileset.picture.getSquaresForTexture(this.textureRect);
 			for (const rect of collisions) {
+				const bOffset = new THREE.Vector3(
+					-twidth * Data.Systems.SQUARE_SIZE -
+						((this.textureRect.width * position.scaleX) % 2) *
+							Math.round(Data.Systems.SQUARE_SIZE / 2) +
+						rect.x +
+						Math.round((rect.width * position.scaleX) / 2),
+					this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
+						rect.y -
+						Math.round((rect.height * position.scaleY) / 2),
+					0,
+				);
+				bOffset.applyEuler(euler);
 				objCollision.push({
 					p: position,
 					l: localPosition,
 					b: [
-						localPosition.x -
-							twidth * Data.Systems.SQUARE_SIZE -
-							((this.textureRect.width * position.scaleX) % 2) *
-								Math.round(Data.Systems.SQUARE_SIZE / 2) +
-							rect.x +
-							Math.round((rect.width * position.scaleX) / 2),
-						localPosition.y +
-							this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
-							rect.y -
-							Math.round((rect.height * position.scaleY) / 2),
-						localPosition.z,
+						localPosition.x + bOffset.x,
+						localPosition.y + bOffset.y,
+						localPosition.z + bOffset.z,
 						rect.width * position.scaleX,
 						rect.height * position.scaleY,
 						1,
@@ -257,28 +262,31 @@ class Sprite extends MapElement {
 					],
 					w: twidth,
 					h: theight,
-					cr: [0, -size.y / 2, 0],
 					k: this.kind === ELEMENT_MAP_KIND.SPRITES_FIX,
 				});
 			}
 			const climbing = Scene.Map.current.mapProperties.tileset.picture.getSquaresClimbing(this.textureRect);
 			for (const [x, y] of climbing) {
+				const bOffset = new THREE.Vector3(
+					-twidth * Data.Systems.SQUARE_SIZE -
+						((this.textureRect.width * position.scaleX) % 2) *
+							Math.round(Data.Systems.SQUARE_SIZE / 2) +
+						(x + this.xOffset) * Data.Systems.SQUARE_SIZE * position.scaleX +
+						Math.round((Data.Systems.SQUARE_SIZE * position.scaleX * position.scaleX) / 2),
+					this.yOffset * Data.Systems.SQUARE_SIZE +
+						this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
+						y * Data.Systems.SQUARE_SIZE * position.scaleY -
+						Math.round((Data.Systems.SQUARE_SIZE * position.scaleY * position.scaleY) / 2),
+					0,
+				);
+				bOffset.applyEuler(euler);
 				objCollision.push({
 					p: position,
 					l: localPosition,
 					b: [
-						localPosition.x -
-							twidth * Data.Systems.SQUARE_SIZE -
-							((this.textureRect.width * position.scaleX) % 2) *
-								Math.round(Data.Systems.SQUARE_SIZE / 2) +
-							(x + this.xOffset) * Data.Systems.SQUARE_SIZE * position.scaleX +
-							Math.round((Data.Systems.SQUARE_SIZE * position.scaleX * position.scaleX) / 2),
-						localPosition.y +
-							this.yOffset * Data.Systems.SQUARE_SIZE +
-							this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
-							y * Data.Systems.SQUARE_SIZE * position.scaleY -
-							Math.round((Data.Systems.SQUARE_SIZE * position.scaleY * position.scaleY) / 2),
-						localPosition.z,
+						localPosition.x + bOffset.x,
+						localPosition.y + bOffset.y,
+						localPosition.z + bOffset.z,
 						Data.Systems.SQUARE_SIZE * position.scaleX,
 						Data.Systems.SQUARE_SIZE * position.scaleY,
 						1,
@@ -288,7 +296,6 @@ class Sprite extends MapElement {
 					],
 					w: twidth,
 					h: theight,
-					cr: [0, -size.y / 2, 0],
 					k: this.kind === ELEMENT_MAP_KIND.SPRITES_FIX,
 					cl: true,
 				});
