@@ -49,6 +49,9 @@ export class Inputs {
 	/** Current Y coordinate of the mouse/touch. */
 	public static mouseY = -1;
 
+	/** Timestamp of last touch event, used to ignore synthetic mouse events on mobile. */
+	private static lastTouchTime = 0;
+
 	/**
 	 * Checks if a specific key is currently pressed.
 	 * @param key The key string to check
@@ -99,9 +102,9 @@ export class Inputs {
 		document.addEventListener('mousedown', this.onMouseDown.bind(this), false);
 		document.addEventListener('mouseup', this.onMouseUp.bind(this), false);
 		document.addEventListener('mousemove', this.onMouseMove.bind(this), false);
-		document.addEventListener('touchstart', this.onTouchStart.bind(this), false);
-		document.addEventListener('touchend', this.onTouchEnd.bind(this), false);
-		document.addEventListener('touchmove', this.onTouchMove.bind(this), false);
+		document.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
+		document.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false });
+		document.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
 	}
 
 	/**
@@ -159,7 +162,7 @@ export class Inputs {
 	 * - Calls stack mouse down handler.
 	 */
 	private static onMouseDown(event: MouseEvent) {
-		if (!this.isReady() || !Data.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls || Date.now() - this.lastTouchTime < 500) {
 			return;
 		}
 		if (event.button === MOUSE_BUTTON.LEFT) {
@@ -179,7 +182,7 @@ export class Inputs {
 	 * - Calls stack mouse up handler.
 	 */
 	private static onMouseUp(event: MouseEvent) {
-		if (!this.isReady() || !Data.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls || Date.now() - this.lastTouchTime < 500) {
 			return;
 		}
 		Manager.Stack.onMouseUp(event.clientX, event.clientY);
@@ -197,7 +200,7 @@ export class Inputs {
 	 * - Calls stack mouse move handler.
 	 */
 	private static onMouseMove(event: MouseEvent) {
-		if (!this.isReady() || !Data.Systems.isMouseControls) {
+		if (!this.isReady() || !Data.Systems.isMouseControls || Date.now() - this.lastTouchTime < 500) {
 			return;
 		}
 		this.mouseX = event.clientX;
@@ -215,6 +218,8 @@ export class Inputs {
 		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
+		event.preventDefault();
+		this.lastTouchTime = Date.now();
 		this.mouseLeftPressed = true;
 		this.mouseFirstPressX = event.touches[0].pageX;
 		this.mouseFirstPressY = event.touches[0].pageY;
@@ -230,6 +235,7 @@ export class Inputs {
 		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
+		event.preventDefault();
 		this.mouseX = event.touches[0].pageX;
 		this.mouseY = event.touches[0].pageY;
 		Manager.Stack.onMouseMove(this.mouseX, this.mouseY);
@@ -240,10 +246,12 @@ export class Inputs {
 	 * - Simulates mouse button release.
 	 * - Calls stack mouse up handler.
 	 */
-	private static onTouchEnd(_event: TouchEvent) {
+	private static onTouchEnd(event: TouchEvent) {
 		if (!this.isReady() || !Data.Systems.isMouseControls) {
 			return;
 		}
+		event.preventDefault();
+		this.lastTouchTime = Date.now();
 		Manager.Stack.onMouseUp(this.mouseX, this.mouseY);
 		this.mouseLeftPressed = false;
 	}

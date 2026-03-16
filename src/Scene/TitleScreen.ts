@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
+import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, Platform, ScreenResolution } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Manager } from '../index';
 import { Base } from './Base';
@@ -134,6 +134,9 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	update() {
+		if (this.videoBlocked && !Platform.canvasVideos.paused) {
+			this.videoBlocked = false;
+		}
 		if (!this.videoBlocked) {
 			this.windowChoicesCommands.update();
 		}
@@ -146,6 +149,8 @@ class TitleScreen extends Base {
 	onKeyPressed(key: string) {
 		if (this.videoBlocked) {
 			this.resumeVideoBackground();
+			this.videoBlocked = false;
+			Manager.Stack.requestPaintHUD = true;
 			return;
 		}
 		this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands.getCurrentContent().datas);
@@ -176,6 +181,8 @@ class TitleScreen extends Base {
 	onMouseUp(x: number, y: number) {
 		if (this.videoBlocked) {
 			this.resumeVideoBackground();
+			this.videoBlocked = false;
+			Manager.Stack.requestPaintHUD = true;
 			return;
 		}
 		this.windowChoicesCommands.onMouseUp(x, y, this.windowChoicesCommands.getCurrentContent().datas);
