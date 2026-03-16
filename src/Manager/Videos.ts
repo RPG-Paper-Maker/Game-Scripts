@@ -48,6 +48,9 @@ class Videos {
 			if ((e as DOMException).name === 'NotAllowedError') {
 				return false;
 			}
+			if ((e as DOMException).name === 'AbortError') {
+				return false;
+			}
 			throw e;
 		}
 	}
