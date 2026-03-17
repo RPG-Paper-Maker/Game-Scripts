@@ -121,7 +121,7 @@ export class Paths {
 	/** Base path for game scripts (adjusted for web builds). */
 	static readonly SCRIPTS =
 		(Platform.WEB_DEV && !Platform.IS_DESKTOP
-			? '.' + window.location.pathname
+			? window.location.pathname
 			: Platform.IS_DESKTOP
 				? ''
 				: Platform.ROOT_DIRECTORY) + 'Scripts/';
