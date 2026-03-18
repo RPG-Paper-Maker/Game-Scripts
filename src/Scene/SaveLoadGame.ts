@@ -39,8 +39,8 @@ class SaveLoadGame extends Base {
 		for (let i = 1; i <= Data.Systems.saveSlots; i++) {
 			this.gamesData.push(null);
 			const newGame = new Game(i);
-			await newGame.load();
 			Game.current = newGame;
+			await newGame.load();
 			this.initializeGame(Game.current);
 		}
 		Game.current = currentGame;
