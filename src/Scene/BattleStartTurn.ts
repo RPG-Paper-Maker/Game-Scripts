@@ -177,34 +177,35 @@ class BattleStartTurn {
 			}
 			if (skills.length === 0) {
 				this.battle.battleCommandKind = EFFECT_SPECIAL_ACTION_KIND.DO_NOTHING;
-				return;
-			}
-			skill = skills[Mathf.random(0, skills.length - 1)];
-			this.battle.currentSkill = skill;
-			this.battle.animationUser = new Animation(skill.animationUserID.getValue() as number);
-			this.battle.animationTarget = new Animation(skill.animationTargetID.getValue() as number);
-			let side: CHARACTER_KIND;
-			switch (restriction) {
-				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
-					side = CHARACTER_KIND.HERO;
-					break;
-				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
-					side = CHARACTER_KIND.MONSTER;
-					break;
-				case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
-					side = Mathf.random(0, 1) === 0 ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
-					break;
-			}
-			switch (skill.targetKind) {
-				case TARGET_KIND.ALL_ENEMIES: {
-					this.battle.targets = this.battle.battlers[side];
-					break;
+				this.battle.targets = [];
+			} else {
+				skill = skills[Mathf.random(0, skills.length - 1)];
+				this.battle.currentSkill = skill;
+				this.battle.animationUser = new Animation(skill.animationUserID.getValue() as number);
+				this.battle.animationTarget = new Animation(skill.animationTargetID.getValue() as number);
+				let side: CHARACTER_KIND;
+				switch (restriction) {
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
+						side = CHARACTER_KIND.HERO;
+						break;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
+						side = CHARACTER_KIND.MONSTER;
+						break;
+					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
+						side = Mathf.random(0, 1) === 0 ? CHARACTER_KIND.HERO : CHARACTER_KIND.MONSTER;
+						break;
 				}
-				case TARGET_KIND.ENEMY: {
-					this.battle.targets = [
-						this.battle.battlers[side][Mathf.random(0, this.battle.battlers[side].length - 1)],
-					];
-					break;
+				switch (skill.targetKind) {
+					case TARGET_KIND.ALL_ENEMIES: {
+						this.battle.targets = this.battle.battlers[side];
+						break;
+					}
+					case TARGET_KIND.ENEMY: {
+						this.battle.targets = [
+							this.battle.battlers[side][Mathf.random(0, this.battle.battlers[side].length - 1)],
+						];
+						break;
+					}
 				}
 			}
 		} else {
