@@ -130,7 +130,7 @@ class Game {
 		}
 		this.playTime = new Chrono(json.t);
 		this.charactersInstances = json.inst;
-		this.variables = Utils.arrayToMap(json.vars);
+		this.variables = Utils.arrayToMap(json.vars, true);
 		this.shops = json.shops;
 		this.steps = Utils.valueOrDefault(json.steps, 0);
 		this.saves = Utils.valueOrDefault(json.saves, 0);
