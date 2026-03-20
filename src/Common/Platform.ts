@@ -158,6 +158,15 @@ export class Platform {
 		await IO.saveFile(path, json);
 	}
 
+	/**
+	 * Write a file.
+	 * @param path - File path.
+	 * @param json - json data.
+	 */
+	static async writeFile(path: string, json: JsonType) {
+		await IO.saveFile(path, json);
+	}
+
 	// -------------------------------------------------------------------------
 	// Error handling
 	// -------------------------------------------------------------------------

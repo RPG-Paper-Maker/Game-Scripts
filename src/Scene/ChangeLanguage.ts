@@ -187,7 +187,11 @@ class ChangeLanguage extends Base {
 				{ cover: true },
 			);
 		} else {
-			await Manager.Videos.play(Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(), null, true);
+			await Manager.Videos.play(
+				Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
+				null,
+				true,
+			);
 		}
 	}
 
@@ -206,6 +210,16 @@ class ChangeLanguage extends Base {
 	cancel() {
 		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
+	}
+
+	translate() {
+		(this.windowBoxLanguage.content as Graphic.Text).setText(Data.Languages.extras.language.name());
+		(this.windowBoxTop.content as Graphic.Text).setText(Data.Languages.extras.languageSelectedDescription.name());
+		(this.windowBoxConfirm.content as Graphic.Text).setText(
+			Data.Languages.extras.languageSelectedDescription.name(),
+		);
+		(this.windowChoicesConfirm.listContents[0] as Graphic.Text).setText(Data.Languages.extras.yes.name());
+		(this.windowChoicesConfirm.listContents[1] as Graphic.Text).setText(Data.Languages.extras.no.name());
 	}
 
 	/**
