@@ -145,13 +145,11 @@ export class Inputs {
 	 * - Calls stack release handler.
 	 */
 	private static onKeyUp(event: KeyboardEvent) {
+		const key = event.key.toUpperCase();
+		this.keysPressed.delete(key);
+		this.lockedKeys.delete(key);
 		if (this.isReady()) {
-			const key = event.key.toUpperCase();
-			this.keysPressed.delete(key);
-			this.lockedKeys.delete(key);
 			Manager.Stack.onKeyReleased(key);
-		} else {
-			this.keysPressed.clear();
 		}
 	}
 
