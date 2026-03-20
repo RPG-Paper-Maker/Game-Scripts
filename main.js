@@ -20,9 +20,15 @@ app.commandLine.appendSwitch('high-dpi-support', 'true');
 app.commandLine.appendSwitch('force-device-scale-factor', '1');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
 if (process.platform === 'darwin') {
-	app.commandLine.appendSwitch('use-angle', 'metal');
-	app.commandLine.appendSwitch('use-gl', 'angle');
-	app.commandLine.appendSwitch('enable-features', 'Metal');
+	if (process.arch === 'arm64') {
+		// Apple Silicon: Metal works well
+		app.commandLine.appendSwitch('use-angle', 'metal');
+		app.commandLine.appendSwitch('use-gl', 'angle');
+		app.commandLine.appendSwitch('enable-features', 'Metal');
+	} else {
+		// Intel Mac: Metal/ANGLE causes BindToCurrentSequence failures, fall back to OpenGL
+		app.commandLine.appendSwitch('use-angle', 'gl');
+	}
 }
 
 let window;
