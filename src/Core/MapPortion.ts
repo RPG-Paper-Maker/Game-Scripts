@@ -617,32 +617,57 @@ class MapPortion {
 	cleanStatic() {
 		if (this.staticFloorsMesh !== null) {
 			Scene.Map.current.scene.remove(this.staticFloorsMesh);
+			this.staticFloorsMesh.geometry?.dispose();
 		}
 		if (this.staticSpritesMesh !== null) {
 			Scene.Map.current.scene.remove(this.staticSpritesMesh);
+			this.staticSpritesMesh.geometry?.dispose();
 		}
 		if (this.faceSpritesMesh !== null) {
 			Scene.Map.current.scene.remove(this.faceSpritesMesh);
+			this.faceSpritesMesh.geometry?.dispose();
 		}
 		let i: number, l: number;
 		for (i = 0, l = this.staticWallsList.length; i < l; i++) {
 			Scene.Map.current.scene.remove(this.staticWallsList[i]);
+			this.staticWallsList[i]?.geometry?.dispose();
 		}
 		this.staticWallsList = [];
 		for (const list of this.staticAutotilesList) {
 			if (list) {
 				for (const autotiles of list) {
-					Scene.Map.current.scene.remove(autotiles.mesh);
+					Scene.Map.current.scene.remove(autotiles?.mesh);
+					autotiles?.geometry?.dispose();
 				}
 			}
 		}
 		this.staticAutotilesList = [];
 		for (const [, mountains] of this.staticMountainsList) {
 			Scene.Map.current.scene.remove(mountains.mesh);
+			mountains.geometry?.dispose();
 		}
 		this.staticMountainsList.clear();
 		for (i = 0, l = this.staticObjects3DList.length; i < l; i++) {
-			Scene.Map.current.scene.remove(this.staticObjects3DList[i]);
+			const obj = this.staticObjects3DList[i];
+			Scene.Map.current.scene.remove(obj);
+			if ((obj as unknown as THREE.Group) instanceof THREE.Group) {
+				(obj as unknown as THREE.Group).traverse((child) => {
+					if (child instanceof THREE.Mesh) {
+						child.geometry?.dispose();
+						if (Array.isArray(child.material)) {
+							for (const mat of child.material) {
+								(mat as THREE.MeshStandardMaterial)?.map?.dispose();
+								mat?.dispose();
+							}
+						} else if (child.material) {
+							(child.material as THREE.MeshStandardMaterial).map?.dispose();
+							child.material.dispose();
+						}
+					}
+				});
+			} else {
+				obj?.geometry?.dispose();
+			}
 		}
 		this.staticObjects3DList = [];
 	}
