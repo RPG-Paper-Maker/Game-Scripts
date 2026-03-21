@@ -413,7 +413,10 @@ export class SpecialElements {
 		picture: Picture,
 		offset: number,
 		id: number,
-	): Promise<[TextureBundle, THREE.Texture, number]> {
+	): Promise<[TextureBundle, THREE.Texture, number] | null> {
+		if (!picture) {
+			return null;
+		}
 		const picture2D = await Picture2D.create(picture);
 		const width = 3;
 		const height = 3;
