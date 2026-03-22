@@ -238,6 +238,16 @@ class Picture2D extends Bitmap {
 						? ScreenResolution.getScreenY(h)
 						: ScreenResolution.getScreenMinXY(h);
 
+			// Round to integer pixels to prevent sub-pixel bleeding artifacts
+			x = Math.round(x);
+			y = Math.round(y);
+			w = Math.round(w);
+			h = Math.round(h);
+			sx = Math.round(sx);
+			sy = Math.round(sy);
+			sw = Math.round(sw);
+			sh = Math.round(sh);
+
 			// Draw the image according to all parameters
 			const angle = (this.angle * Math.PI) / 180;
 			Platform.ctx.save();
