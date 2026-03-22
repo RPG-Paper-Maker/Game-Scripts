@@ -531,6 +531,10 @@ class Message extends Graphic.Base {
 					j++;
 				}
 				if (graphic instanceof Picture2D) {
+					if (textAreaWidth > 0 && offsetX > 0 && offsetX + this.positions[i] > textAreaWidth) {
+						offsetY += Constants.DEFAULT_FONT_SIZE * 2;
+						offsetX = 0;
+					}
 					graphic.draw({
 						x: newX + offsetX,
 						y: newY - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) / 2 + offsetY,
@@ -542,15 +546,11 @@ class Message extends Graphic.Base {
 					offsetX += this.positions[i];
 				} else {
 					const textGraphic = graphic as Graphic.Text;
-					if (textAreaWidth > 0 && offsetX > 0 && offsetX + this.positions[i] > textAreaWidth) {
-						offsetY += textGraphic.fontSize * 2;
-						offsetX = 0;
-					}
 					const availableW = textAreaWidth > 0 ? textAreaWidth - offsetX : 0;
-					textGraphic.draw(newX + offsetX, newY + offsetY, availableW, graphic.oH);
+					textGraphic.draw(newX + offsetX, newY + offsetY, availableW, graphic.oH, offsetX > 0 ? newX : undefined, offsetX > 0 && textAreaWidth > 0 ? textAreaWidth : undefined);
 					if (textGraphic.lines.length > 1) {
 						offsetY += (textGraphic.lines.length - 1) * textGraphic.fontSize * 2;
-						offsetX = 0;
+						offsetX = textGraphic.lastLineWidth;
 					} else {
 						offsetX += this.positions[i];
 					}
