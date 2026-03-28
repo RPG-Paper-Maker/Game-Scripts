@@ -82,5 +82,6 @@ export class RandomBattle extends Base {
 					DynamicValue.readOrDefaultNumber(obj.value),
 				);
 		this.resetCurrentNumberSteps();
+		this.updateCurrentPriority();
 	}
 }

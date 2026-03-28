@@ -164,7 +164,7 @@ export class MapProperties extends Localization {
 		if (!triggered) {
 			return;
 		}
-		const rand = Mathf.random(0, 100);
+		const rand = Mathf.random(1, 100);
 		const battles = this.randomBattles.filter(
 			(b) => b.currentPriority > 0 && b.currentNumberSteps >= this.maxNumberSteps,
 		);
@@ -173,7 +173,7 @@ export class MapProperties extends Localization {
 		let cumulative = 0;
 		let chosen: RandomBattle | null = null;
 		for (const battle of battles) {
-			cumulative += ((battle.priority.getValue() as number) / total) * 100;
+			cumulative += (battle.currentPriority / total) * 100;
 			if (rand <= cumulative) {
 				chosen = battle;
 				break;
