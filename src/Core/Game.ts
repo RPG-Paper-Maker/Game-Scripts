@@ -200,7 +200,7 @@ class Game {
 		this.startupStates = json.startS;
 		this.startupProperties = json.startP;
 		this.mapsProperties = Utils.valueOrDefault(json.mapsP, {});
-		this.mapsData = json.mapsData;
+		this.mapsData = Utils.valueOrDefault(json.mapsData, {});
 		if (json.textures) {
 			this.textures = json.textures;
 		}
