@@ -148,6 +148,9 @@ class BattleVictory {
 			this.battle.xp += player.getRewardExperience();
 			currencies = player.getRewardCurrencies();
 			for (const [id, baseCurrency] of currencies.entries()) {
+				if (!Data.Systems.hasCurrency(id)) {
+					continue;
+				}
 				currency = baseCurrency;
 				// Get team currency bonus
 				for (hero of this.battle.battlers[CHARACTER_KIND.HERO]) {
