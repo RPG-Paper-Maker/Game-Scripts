@@ -86,7 +86,7 @@ class ChangeEquipment extends Base {
 				previousEquip.add(1);
 			}
 			target.equip[equipmentID] = item;
-			if (previousEquip === null || previousEquip.system.id !== weaponArmorID) {
+			if ((previousEquip === null || previousEquip.system.id !== weaponArmorID) && item.nb > 0) {
 				item.remove(1);
 			}
 		}
