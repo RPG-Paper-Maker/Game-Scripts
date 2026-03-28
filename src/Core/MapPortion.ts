@@ -120,7 +120,9 @@ class MapPortion {
 		const layers: [Position, Floor][] = [];
 		let count = 0;
 
-		for (const { k, v } of json) {
+		for (const item of json) {
+			if (!item) continue;
+			const { k, v } = item;
 			const position = Position.createFromArray(k);
 			const layer = position.layer;
 			switch (v.k) {
@@ -253,6 +255,7 @@ class MapPortion {
 				resultUpdate: [number, StructMapElementCollision[]];
 			for (let i = 0, l = json.length; i < l; i++) {
 				s = json[i];
+				if (!s) continue;
 				position = Position.createFromArray(s.k);
 				sprite = new Sprite(s.v);
 				localPosition = position.toVector3();
@@ -318,7 +321,9 @@ class MapPortion {
 	 */
 	async readSpritesWalls(json: any[]) {
 		const hash = new Map<number, any>();
-		for (const { k, v } of json) {
+		for (const item of json) {
+			if (!item) continue;
+			const { k, v } = item;
 			const position = Position.createFromArray(k);
 			const sprite = new SpriteWall(v);
 			let pictureID = Game.current.textures.walls[sprite.id];
@@ -380,7 +385,9 @@ class MapPortion {
 		if (!json) {
 			return;
 		}
-		for (const { k, v } of json) {
+		for (const item of json) {
+			if (!item) continue;
+			const { k, v } = item;
 			const position = Position.createFromArray(k);
 			const mountain = new Mountain();
 			mountain.read(v);
@@ -433,7 +440,9 @@ class MapPortion {
 	async readObjects3D(json: any[]) {
 		const hash = new Map<number, any>();
 
-		for (const { k, v } of json) {
+		for (const item of json) {
+			if (!item) continue;
+			const { k, v } = item;
 			const position = Position.createFromArray(k);
 			const datas = Data.SpecialElements.getObject3D(v.did);
 			let pictureID = Game.current.textures.objects3D[datas.id];

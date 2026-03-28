@@ -108,7 +108,7 @@ export class Monster extends Hero {
 		this.rewards.xp = new ProgressionTable(this.getProperty(Class.PROPERTY_FINAL_LEVEL), json.xp);
 
 		// Currencies
-		this.rewards.currencies = json.cur.map((hash) => new ProgressionTable(hash.k, hash.v));
+		this.rewards.currencies = json.cur.filter((hash) => hash != null).map((hash) => new ProgressionTable(hash.k, hash.v));
 
 		// Loots
 		this.rewards.loots = Utils.readJSONList(json.loots, Loot);

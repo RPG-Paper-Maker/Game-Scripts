@@ -114,7 +114,9 @@ export class Detection extends Base {
 	read(json: DetectionJSON): void {
 		const jsonList = Utils.valueOrDefault(json.b, []);
 		this.boxes = new Array(jsonList.length);
-		for (const [index, { k, v }] of jsonList.entries()) {
+		for (const [index, item] of jsonList.entries()) {
+			if (!item) continue;
+			const { k, v } = item;
 			this.boxes[index] = [
 				Position.createFromArray(k),
 				Utils.valueOrDefault(v.bls, 1),
