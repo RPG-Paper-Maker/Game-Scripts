@@ -53,7 +53,7 @@ class LoadGame extends SaveLoadGame {
 		Game.current.hero.initializeProperties();
 
 		// Stop video if existing
-		if (!Data.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
 			Manager.Videos.stop();
 		}
 

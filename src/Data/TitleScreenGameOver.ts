@@ -18,12 +18,14 @@ import { GameOverCommand, GameOverCommandJSON, PlaySong, PlaySongJSON, TitleComm
  */
 export type TitlescreenGameoverJSON = {
 	itbi: boolean;
+	itbv: boolean;
 	tb: number;
 	tbv: number;
 	tm: PlaySongJSON;
 	tc: TitleCommandJSON[];
 	ts: { id?: number; checked?: boolean }[];
 	isGameOverBackgroundImage: boolean;
+	isGameOverBackgroundVideo: boolean;
 	gameOverBackgroundImage: number;
 	gameOverBackgroundVideo: number;
 	gameOverMusic: PlaySongJSON;
@@ -35,12 +37,14 @@ export type TitlescreenGameoverJSON = {
  */
 export class TitlescreenGameover {
 	public static isTitleBackgroundImage: boolean;
+	public static isTitleBackgroundVideo: boolean;
 	public static titleBackgroundImageID: number;
 	public static titleBackgroundVideoID: number;
 	public static titleMusic: PlaySong;
 	public static titleCommands: TitleCommand[];
 	public static titleSettings: number[];
 	public static isGameOverBackgroundImage: boolean;
+	public static isGameOverBackgroundVideo: boolean;
 	public static gameOverBackgroundImageID: number;
 	public static gameOverBackgroundVideoID: number;
 	public static gameOverMusic: PlaySong;
@@ -112,6 +116,7 @@ export class TitlescreenGameover {
 
 		// Title screen
 		this.isTitleBackgroundImage = Utils.valueOrDefault(json.itbi, true);
+		this.isTitleBackgroundVideo = Utils.valueOrDefault(json.itbv, false);
 		this.titleBackgroundImageID = Utils.valueOrDefault(json.tb, 1);
 		this.titleBackgroundVideoID = Utils.valueOrDefault(json.tbv, 1);
 		this.titleMusic = new PlaySong(SONG_KIND.MUSIC, json.tm);
@@ -125,6 +130,7 @@ export class TitlescreenGameover {
 
 		// Game over
 		this.isGameOverBackgroundImage = Utils.valueOrDefault(json.isGameOverBackgroundImage, true);
+		this.isGameOverBackgroundVideo = Utils.valueOrDefault(json.isGameOverBackgroundVideo, false);
 		this.gameOverBackgroundImageID = Utils.valueOrDefault(json.gameOverBackgroundImage, 1);
 		this.gameOverBackgroundVideoID = Utils.valueOrDefault(json.gameOverBackgroundVideo, 1);
 		this.gameOverMusic = new PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);

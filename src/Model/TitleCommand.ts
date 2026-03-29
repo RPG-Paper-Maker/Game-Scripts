@@ -38,7 +38,7 @@ export class TitleCommand extends Localization {
 	 */
 	static startNewGame(): boolean {
 		// Stop video and songs if existing
-		if (!Data.TitlescreenGameover.isTitleBackgroundImage) {
+		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
 			Manager.Videos.stop();
 		}
 
