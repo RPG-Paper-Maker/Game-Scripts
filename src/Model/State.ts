@@ -101,7 +101,7 @@ export class State extends Base {
 	public setWithCamera: boolean;
 	public pixelOffset: boolean;
 	public keepPosition: boolean;
-	public detection: EventCommand.Base | null = null;
+	public detection: EventCommand.Base | null;
 	public centerX: DynamicValue;
 	public centerZ: DynamicValue;
 	public angleX: DynamicValue;
