@@ -539,7 +539,7 @@ export class Effect extends Base {
 		Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
 		if (forceReaction) {
 			Manager.Stack.top.updateInterpreters();
-			if (Manager.Stack.top.reactionInterpretersEffects.length === 0) {
+			if (!Manager.Stack.top.reactionInterpretersEffects.includes(reactionInterpreter)) {
 				this.canSkip = true;
 			}
 		}
