@@ -151,7 +151,11 @@ class MapPortion {
 					const autotile = new Autotile(v);
 					let pictureID = Game.current.textures.autotiles[autotile.autotileID];
 					if (pictureID === undefined) {
-						pictureID = Data.SpecialElements.getAutotile(autotile.autotileID).pictureID;
+						const autotileData = Data.SpecialElements.getAutotile(autotile.autotileID);
+						if (!autotileData) {
+							break;
+						}
+						pictureID = autotileData.pictureID;
 					}
 					const indexPos = position.toIndex();
 					let texture = null;

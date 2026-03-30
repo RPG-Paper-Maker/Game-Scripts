@@ -89,6 +89,9 @@ export class SpecialElements {
 	 */
 	static async loadAutotileTexture(id: number): Promise<TextureBundle[]> {
 		const autotile = this.getAutotile(id);
+		if (!autotile) {
+			return [];
+		}
 		let pictureID = Game.current.textures.autotiles[id];
 		if (pictureID === undefined) {
 			pictureID = autotile.pictureID;

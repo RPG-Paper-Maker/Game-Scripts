@@ -154,7 +154,7 @@ class ChangeState extends Base {
 					})();
 				}
 			}
-			if (currentState.map.mapProperties.allObjects && currentState.map.portionsObjectsUpdated) {
+			if (currentState.map.mapProperties?.allObjects && currentState.map.portionsObjectsUpdated) {
 				if (currentState.map === Scene.Map.current) {
 					MapObject.search(
 						currentState.objectID,
