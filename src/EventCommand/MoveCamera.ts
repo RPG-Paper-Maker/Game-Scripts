@@ -209,7 +209,7 @@ class MoveCamera extends Base {
 					}
 				}
 				Scene.Map.current.camera.updateTargetPosition();
-				if (currentState.finalDifH === 0 && currentState.finalDifV === 0) {
+				if (currentState.finalDifH === 0 && currentState.finalDifV === 0 && !currentState.target) {
 					Scene.Map.current.camera.updateAngles();
 				}
 
