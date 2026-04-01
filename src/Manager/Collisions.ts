@@ -1230,7 +1230,7 @@ class Collisions {
 		positionAfter: THREE.Vector3,
 	): boolean {
 		// Remove previous
-		const mesh = Data.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, objCollision.id).mesh;
+		const mesh = Data.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, objCollision.id)?.mesh;
 		if (mesh !== this.currentCustomObject3D) {
 			Scene.Map.current.scene.remove(this.currentCustomObject3D);
 			this.currentCustomObject3D = mesh;
