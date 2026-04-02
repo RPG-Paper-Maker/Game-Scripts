@@ -63,8 +63,8 @@ export class TitleCommand extends Localization {
 	/**
 	 * Show settings screen.
 	 */
-	static showSettings(title: string): boolean {
-		Manager.Stack.push(new Scene.TitleSettings(title));
+	static showSettings(titleCommand: TitleCommand): boolean {
+		Manager.Stack.push(new Scene.TitleSettings(titleCommand));
 		return true;
 	}
 
@@ -85,10 +85,8 @@ export class TitleCommand extends Localization {
 				return TitleCommand.startNewGame;
 			case TITLE_COMMAND_KIND.LOAD_GAME:
 				return TitleCommand.loadGame;
-			case TITLE_COMMAND_KIND.SETTINGS: {
-				const name = this.name();
-				return () => TitleCommand.showSettings(name);
-			}
+			case TITLE_COMMAND_KIND.SETTINGS:
+				return () => TitleCommand.showSettings(this);
 			case TITLE_COMMAND_KIND.EXIT:
 				return TitleCommand.exit;
 			case TITLE_COMMAND_KIND.SCRIPT:

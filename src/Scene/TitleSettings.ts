@@ -12,6 +12,7 @@
 import { ALIGN, Constants, Inputs, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Manager } from '../index';
+import { TitleCommand } from '../Model';
 import { Base } from './Base';
 
 /** @class
@@ -23,12 +24,12 @@ class TitleSettings extends Base {
 	public windowSettings: WindowBox;
 	public windowInformations: WindowBox;
 	public windowChoicesMain: WindowChoices;
-	public title: string;
+	public titleCommand: TitleCommand;
 
-	constructor(title: string) {
+	constructor(titleCommand: TitleCommand) {
 		super();
 
-		this.title = title;
+		this.titleCommand = titleCommand;
 	}
 
 	/**
@@ -51,7 +52,7 @@ class TitleSettings extends Base {
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.LARGE_SLOT_HEIGHT,
 			{
-				content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
+				content: new Graphic.Text(this.titleCommand.name(), { align: ALIGN.CENTER }),
 				padding: WindowBox.SMALL_SLOT_PADDING,
 			},
 		);
@@ -92,7 +93,15 @@ class TitleSettings extends Base {
 	/**
 	 *  Translate the scene if possible.
 	 */
-	translate() {}
+	translate() {
+		(this.windowSettings.content as Graphic.Text).setText(this.titleCommand.name());
+		this.windowChoicesMain.setContentsCallbacks(
+			Data.TitlescreenGameover.getTitleSettingsCommandsContent(),
+			Data.TitlescreenGameover.getTitleSettingsCommandsActions(),
+			this.windowChoicesMain.currentSelectedIndex,
+		);
+		this.windowInformations.content = this.windowChoicesMain.getCurrentContent();
+	}
 
 	/**
 	 *  @inheritdoc
