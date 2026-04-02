@@ -73,6 +73,7 @@ class Menu extends MenuBase {
 		for (let i = 0, l = Data.Systems.mainMenuCommands.length; i < l; i++) {
 			command = Data.Systems.mainMenuCommands[i];
 			graphics[i] = new Graphic.Text(command.name(), { align: ALIGN.CENTER });
+			graphics[i].ellipsis = true;
 			actions[i] = command.getCallback(this);
 		}
 		const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);

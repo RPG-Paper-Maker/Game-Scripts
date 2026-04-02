@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN } from '../Common';
+import { ALIGN, Constants, ScreenResolution } from '../Common';
 import { Core, Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
@@ -29,6 +29,7 @@ class Skill extends Base {
 
 		this.system = Data.Skills.get(skill.id);
 		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system);
+		this.graphicName.graphicText.ellipsis = true;
 		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: ALIGN.RIGHT });
 		this.graphicInformations = new Graphic.SkillItem(this.system);
 	}
@@ -41,8 +42,9 @@ class Skill extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		this.graphicName.draw(x, y, w, h);
+		const offset = this.graphicCost.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
 		this.graphicCost.draw(x, y, w, h);
+		this.graphicName.draw(x, y, w - offset, h);
 	}
 
 	/**
@@ -53,7 +55,8 @@ class Skill extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	draw(x: number, y: number, w: number, h: number) {
-		this.graphicInformations.draw(x, y, w, h);
+		const costOffset = this.graphicCost.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+		this.graphicInformations.draw(x, y, w, h, costOffset);
 		this.graphicCost.draw(x, y, w, 0);
 	}
 }

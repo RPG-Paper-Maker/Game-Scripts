@@ -142,7 +142,7 @@ class TextIcon extends Base {
 				sh: Data.Systems.iconsSize,
 			});
 			offset += iconWidth + this.space;
-			this.graphicText.draw(x + offset, y, w, h);
+			this.graphicText.draw(x + offset, y, w - offset, h);
 		} else if (this.side === ALIGN.RIGHT) {
 			this.graphicText.draw(x + offset, y, w, h);
 			offset += this.graphicText.textWidth + this.space;

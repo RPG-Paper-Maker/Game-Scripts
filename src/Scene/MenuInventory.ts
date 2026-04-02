@@ -45,13 +45,19 @@ class MenuInventory extends Base {
 			menuKind[i] = new Graphic.Text(Data.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
 		}
 
+		// Per-tab widths adapted to each filter name text
+		const choiceWidths = menuKind.map((text) =>
+			Math.max(50, ScreenResolution.getScreenXReverse(text.textWidth) + 24),
+		);
+
 		// All the windows
 		this.windowTop = new WindowBox(20, 20, 200, 30, {
 			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
-		this.windowChoicesTabs = new WindowChoices(5, 60, 100, WindowBox.SMALL_SLOT_HEIGHT, menuKind, {
+		this.windowChoicesTabs = new WindowChoices(5, 60, 0, WindowBox.SMALL_SLOT_HEIGHT, menuKind, {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: 6,
+			choiceWidths: choiceWidths,
 		});
 		this.createWindowChoicesList();
 		this.createWindowBoxInformation();

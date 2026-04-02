@@ -43,6 +43,7 @@ class Equip extends Base {
 			equiped === null ? '-' : equiped.system.name(),
 			isPossible ? {} : { color: Model.Color.GREY },
 		);
+		this.graphicEquipment.ellipsis = true;
 	}
 
 	/**
@@ -54,7 +55,8 @@ class Equip extends Base {
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
 		this.graphicEquipmentName.draw(x, y, w, h);
-		this.graphicEquipment.draw(x + this.length + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE), y, w, h);
+		const offset = this.length + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+		this.graphicEquipment.draw(x + offset, y, w - offset, h);
 	}
 
 	/**

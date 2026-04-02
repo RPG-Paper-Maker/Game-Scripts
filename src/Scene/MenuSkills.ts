@@ -47,14 +47,18 @@ class MenuSkills extends Base {
 			};
 		}
 
+		// Per-tab widths adapted to each hero name text
+		const choiceWidths = listHeroes.map(hero => Math.max(80, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 8));
+
 		// All the windows
 		this.windowTop = new WindowBox(20, 20, 200, 30, {
 			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
-		this.windowChoicesTabs = new WindowChoices(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT, listHeroes, {
+		this.windowChoicesTabs = new WindowChoices(50, 60, 0, WindowBox.SMALL_SLOT_HEIGHT, listHeroes, {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: 4,
 			padding: [0, 0, 0, 0],
+			choiceWidths: choiceWidths,
 		});
 		this.createWindowChoicesList();
 		this.createWindowBoxInformation();

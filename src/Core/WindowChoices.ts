@@ -63,6 +63,14 @@ interface ChoicesOptions {
 	 */
 	space?: number;
 	/**
+	 * Per-item widths for horizontal orientation. When set, each slot uses its
+	 * own width instead of the uniform choiceWidth.
+	 *
+	 * @type {number[]}
+	 * @memberof ChoicesOptions
+	 */
+	choiceWidths?: number[];
+	/**
 	 * The current selected choices index.
 	 *
 	 * @type {number}
@@ -110,6 +118,7 @@ class WindowChoices extends Bitmap {
 	public offsetSelectedIndex: number;
 	public choiceWidth: number;
 	public choiceHeight: number;
+	public choiceWidths: number[] | null;
 	public startTime: number;
 	public mouseArrowTime: number;
 	public listContents: Graphic.Base[];
@@ -131,6 +140,7 @@ class WindowChoices extends Bitmap {
 		this.currentSelectedIndex = Utils.valueOrDefault(options.currentSelectedIndex, -1);
 		this.bordersInsideVisible = Utils.valueOrDefault(options.bordersInsideVisible, true);
 		this.bordersVisible = Utils.valueOrDefault(options.bordersVisible, true);
+		this.choiceWidths = Utils.valueOrDefault(options.choiceWidths, null);
 
 		// Initialize values
 		this.offsetSelectedIndex = 0;
@@ -166,6 +176,15 @@ class WindowChoices extends Bitmap {
 	}
 
 	updatePosition() {
+		if (this.choiceWidths && this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
+			let xOffset = this.oX + this.padding[0];
+			for (let i = 0; i < this.listWindows.length; i++) {
+				this.listWindows[i].setX(xOffset);
+				this.listWindows[i].setY(this.oY);
+				xOffset += this.choiceWidths[i] + this.space;
+			}
+			return;
+		}
 		let windowBox: WindowBox;
 		for (let i = 0; i < this.listWindows.length; i++) {
 			windowBox = this.listWindows[i];
@@ -211,10 +230,18 @@ class WindowChoices extends Bitmap {
 		this.size = totalNb > this.nbItemsMax ? this.nbItemsMax : totalNb;
 		let boxWidth: number, boxHeight: number;
 		if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
-			boxWidth =
-				(this.choiceWidth + this.space) * this.size -
-				this.space +
-				(this.bordersInsideVisible ? 0 : this.padding[0] * 3);
+			if (this.choiceWidths) {
+				let sumWidths = 0;
+				for (let j = 0; j < this.size; j++) {
+					sumWidths += this.choiceWidths[j];
+				}
+				boxWidth = sumWidths + this.space * Math.max(0, this.size - 1) + (this.bordersInsideVisible ? 0 : this.padding[0] * 3);
+			} else {
+				boxWidth =
+					(this.choiceWidth + this.space) * this.size -
+					this.space +
+					(this.bordersInsideVisible ? 0 : this.padding[0] * 3);
+			}
 			boxHeight = this.choiceHeight;
 		} else {
 			boxWidth = this.choiceWidth;
@@ -229,18 +256,18 @@ class WindowChoices extends Bitmap {
 		// Create a new windowBox for each choice and according to orientation
 		this.listWindows = new Array(totalNb);
 		let window: WindowBox;
+		let xOffsetHoriz = this.oX + this.padding[0];
 		for (let i = 0; i < totalNb; i++) {
 			if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
-				window = new WindowBox(
-					this.oX + this.padding[0] + i * this.choiceWidth + i * this.space,
-					this.oY,
-					this.choiceWidth,
-					this.choiceHeight,
-					{
-						content: this.listContents[i],
-						padding: this.bordersInsideVisible ? this.padding : WindowBox.NONE_PADDING,
-					},
-				);
+				const itemWidth = this.choiceWidths ? this.choiceWidths[i] : this.choiceWidth;
+				const itemX = this.choiceWidths ? xOffsetHoriz : this.oX + this.padding[0] + i * this.choiceWidth + i * this.space;
+				window = new WindowBox(itemX, this.oY, itemWidth, this.choiceHeight, {
+					content: this.listContents[i],
+					padding: this.bordersInsideVisible ? this.padding : WindowBox.NONE_PADDING,
+				});
+				if (this.choiceWidths) {
+					xOffsetHoriz += itemWidth + this.space;
+				}
 			} else {
 				window = new WindowBox(
 					this.oX,
@@ -532,7 +559,17 @@ class WindowChoices extends Bitmap {
 			let index: number;
 			// Check which window
 			if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
-				index = Math.floor((x - this.x) / ScreenResolution.getScreenX(this.choiceWidth + this.space));
+				if (this.choiceWidths) {
+					index = this.size - 1;
+					for (let j = 0; j < this.size; j++) {
+						if (x < this.listWindows[j].x + this.listWindows[j].w) {
+							index = j;
+							break;
+						}
+					}
+				} else {
+					index = Math.floor((x - this.x) / ScreenResolution.getScreenX(this.choiceWidth + this.space));
+				}
 			} else {
 				index = Math.floor((y - this.y) / ScreenResolution.getScreenY(this.choiceHeight + this.space));
 			}

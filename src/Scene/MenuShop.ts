@@ -116,9 +116,13 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT,
 		);
-		const list = [new Graphic.Text(Data.Languages.extras.buy.name(), { align: ALIGN.CENTER })];
+		const buyText = new Graphic.Text(Data.Languages.extras.buy.name(), { align: ALIGN.CENTER });
+		buyText.ellipsis = true;
+		const list = [buyText];
 		if (!this.buyOnly) {
-			list.push(new Graphic.Text(Data.Languages.extras.sell.name(), { align: ALIGN.CENTER }));
+			const sellText = new Graphic.Text(Data.Languages.extras.sell.name(), { align: ALIGN.CENTER });
+			sellText.ellipsis = true;
+			list.push(sellText);
 		}
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -143,6 +147,7 @@ class MenuShop extends MenuBase {
 		let i: number;
 		for (i = 0, l = Data.Systems.inventoryFilters.length; i < l; i++) {
 			list[i] = new Graphic.Text(Data.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
+			list[i].ellipsis = true;
 		}
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -312,10 +317,11 @@ class MenuShop extends MenuBase {
 			WindowBox.SMALL_SLOT_WIDTH,
 			WindowBox.SMALL_SLOT_HEIGHT,
 		);
-		const list = [
-			new Graphic.Text(Data.Languages.extras.yes.name(), { align: ALIGN.CENTER }),
-			new Graphic.Text(Data.Languages.extras.no.name(), { align: ALIGN.CENTER }),
-		];
+		const yesText = new Graphic.Text(Data.Languages.extras.yes.name(), { align: ALIGN.CENTER });
+		yesText.ellipsis = true;
+		const noText = new Graphic.Text(Data.Languages.extras.no.name(), { align: ALIGN.CENTER });
+		noText.ellipsis = true;
+		const list = [yesText, noText];
 		const options = {
 			nbItemsMax: list.length,
 			padding: WindowBox.NONE_PADDING,

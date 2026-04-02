@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, CHARACTERISTIC_KIND, Interpreter, ITEM_KIND, ORIENTATION_WINDOW } from '../Common';
+import { ALIGN, CHARACTERISTIC_KIND, Interpreter, ITEM_KIND, ORIENTATION_WINDOW, ScreenResolution } from '../Common';
 import { Game, Item, Player, Rectangle, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { MenuBase } from './MenuBase';
@@ -71,15 +71,20 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	createWindowChoiceTabs() {
-		const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
 		const listHeroes = [];
 		for (let i = 0; i < this.party().length; i++) {
 			listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
 		}
+
+		// Per-tab widths adapted to each hero name text
+		const choiceWidths = listHeroes.map(hero => Math.max(80, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 8));
+
+		const rect = new Rectangle(50, 60, 0, WindowBox.SMALL_SLOT_HEIGHT);
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemMax: 4,
 			padding: [0, 0, 0, 0],
+			choiceWidths: choiceWidths,
 		};
 		this.windowChoicesTabs = new WindowChoices(rect.x, rect.y, rect.width, rect.height, listHeroes, options);
 	}
@@ -175,7 +180,9 @@ class MenuEquip extends MenuBase {
 	updateEquipmentList() {
 		const currentIndex = this.windowChoicesEquipment.currentSelectedIndex;
 		const idEquipment = Data.BattleSystems.equipmentsIDs[currentIndex];
-		const list: Graphic.Base[] = [new Graphic.Text('  [' + Data.Languages.extras.remove.name() + ']')];
+		const removeText = new Graphic.Text('  [' + Data.Languages.extras.remove.name() + ']');
+		removeText.ellipsis = true;
+		const list: Graphic.Base[] = [removeText];
 		let item: Item, systemItem: Model.CommonSkillItem;
 		let type: Model.WeaponArmorKind, nbItem: number;
 		const player = Game.current.teamHeroes[this.windowChoicesTabs.currentSelectedIndex];

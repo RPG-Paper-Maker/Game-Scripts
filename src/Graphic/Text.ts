@@ -59,6 +59,7 @@ class Text extends Base {
 	public lastWFull: number = 0;
 	public lastLineWidth: number = 0;
 	public zoom: number = 1;
+	public ellipsis: boolean = false;
 
 	constructor(
 		text = '',
@@ -196,6 +197,25 @@ class Text extends Base {
 	}
 
 	/**
+	 *  Get the text truncated to fit within maxWidth, appending ellipsis if needed.
+	 *  @param {string} text - The text to truncate
+	 *  @param {number} maxWidth - The maximum pixel width
+	 *  @returns {string}
+	 */
+	getEllipsisText(text: string, maxWidth: number): string {
+		if (Platform.ctx.measureText(text).width <= maxWidth) {
+			return text;
+		}
+		const ellipsis = '...';
+		const ellipsisWidth = Platform.ctx.measureText(ellipsis).width;
+		let truncated = text;
+		while (truncated.length > 0 && Platform.ctx.measureText(truncated).width + ellipsisWidth > maxWidth) {
+			truncated = truncated.slice(0, -1);
+		}
+		return truncated + ellipsis;
+	}
+
+	/**
 	 *  Drawing the text in choice box.
 	 *  @param {number} [x=this.x] - The x position to draw graphic
 	 *  @param {number} [y=this.y] - The y position to draw graphic
@@ -210,13 +230,25 @@ class Text extends Base {
 			this.updateFont();
 			this.measureText();
 		}
-		// Wrap text if != 0
 		const effectiveWFull = wFull ?? w;
-		if ((this.lastW !== w || this.lastWFull !== effectiveWFull) && w !== 0) {
-			this.lastW = w;
-			this.lastWFull = effectiveWFull;
+		if (this.ellipsis && w !== 0) {
 			this.updateContextFont();
-			this.wrapText(effectiveWFull, w);
+			// Ellipsis mode: single line truncated with "..."
+			const rawText = this.text.replace('\\n', '\n').split('\n')[0];
+			const ellipsized = this.getEllipsisText(rawText, w);
+			this.lines = [ellipsized];
+			this.textWidth = Platform.ctx.measureText(ellipsized).width
+				+ (this.strokeColor === null ? 0 : ScreenResolution.getScreenMinXY(2));
+			this.lastLineWidth = this.textWidth;
+			this.textHeight = this.fontSize * 2;
+		} else if (!this.ellipsis && w !== 0) {
+			this.updateContextFont();
+			if (this.lastW !== w || this.lastWFull !== effectiveWFull) {
+				// Wrap text
+				this.lastW = w;
+				this.lastWFull = effectiveWFull;
+				this.wrapText(effectiveWFull, w);
+			}
 		}
 		const textWidth = this.textWidth;
 		const textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this.strokeColor === null ? 0 : 2);
