@@ -268,8 +268,15 @@ export class Effect extends Base {
 	 */
 	executeDamages(user: Player): boolean {
 		let result = false;
+		this.canSkip = true;
 		for (const battler of Scene.Map.current.targets) {
 			const target = battler.player;
+			if (target.isDead()) {
+				battler.tempIsDamagesMiss = null;
+				battler.tempIsDamagesCritical = null;
+				continue;
+			}
+			this.canSkip = false;
 			if (this.skillItem && !this.skillItem.isPossible(target, false)) {
 				battler.tempIsDamagesMiss = null;
 				battler.tempIsDamagesCritical = null;
