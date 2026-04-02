@@ -12,6 +12,7 @@
 import {
 	CHARACTER_KIND,
 	DAMAGES_KIND,
+	DYNAMIC_VALUE_KIND,
 	EFFECT_KIND,
 	EFFECT_SPECIAL_ACTION_KIND,
 	Interpreter,
@@ -536,12 +537,27 @@ export class Effect extends Base {
 	 * @returns Always `true`, since the action was initiated.
 	 */
 	executeCommonReaction(forceReaction: boolean): boolean {
+		const reaction = Data.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID);
+		const parameters = [...this.commonReaction.parameters];
+
+		// Apply default values from the common reaction definition for missing/DEFAULT parameters
+		let v: DynamicValue, parameter: DynamicValue, k: DYNAMIC_VALUE_KIND;
+		for (const [id, reactionParameter] of reaction.parameters.entries()) {
+			v = reactionParameter.value;
+			parameter = parameters[id];
+			k = parameter ? parameter.kind : DYNAMIC_VALUE_KIND.NONE;
+			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
+				parameter = k === DYNAMIC_VALUE_KIND.DEFAULT ? v : DynamicValue.create(k, null);
+			}
+			parameters[id] = parameter;
+		}
+
 		const reactionInterpreter = new ReactionInterpreter(
 			null,
-			Data.CommonEvents.getCommonReaction(this.commonReaction.commonReactionID),
+			reaction,
 			null,
 			null,
-			Utils.arrayToMap(this.commonReaction.parameters, true),
+			Utils.arrayToMap(parameters, true),
 		);
 		Manager.Stack.top.reactionInterpretersEffects.push(reactionInterpreter);
 		if (forceReaction) {
