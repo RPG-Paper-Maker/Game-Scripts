@@ -302,6 +302,9 @@ export class SpecialElements {
 		const wall = this.getWall(id);
 		let pictureID = Game.current.textures.walls[id];
 		if (pictureID === undefined) {
+			if (!wall) {
+				return Manager.GL.loadTextureEmpty();
+			}
 			pictureID = wall.pictureID;
 		}
 		let textureWall = this.texturesWalls.get(pictureID);
@@ -390,6 +393,9 @@ export class SpecialElements {
 		const mountain = this.getMountain(id);
 		let pictureID = Game.current.textures.mountains[id];
 		if (pictureID === undefined) {
+			if (!mountain) {
+				return null;
+			}
 			pictureID = mountain.pictureID;
 		}
 		let textureMountain = this.texturesMountains.get(pictureID);
@@ -617,6 +623,9 @@ export class SpecialElements {
 		const object3D = this.getObject3D(id);
 		let pictureID = Game.current.textures.objects3D[id];
 		if (pictureID === undefined) {
+			if (!object3D) {
+				return Manager.GL.loadTextureEmpty();
+			}
 			pictureID = object3D.pictureID;
 		}
 		if (pictureID === -1) {

@@ -332,7 +332,11 @@ class MapPortion {
 			const sprite = new SpriteWall(v);
 			let pictureID = Game.current.textures.walls[sprite.id];
 			if (pictureID === undefined) {
-				pictureID = Data.SpecialElements.getWall(sprite.id).pictureID;
+				const wallData = Data.SpecialElements.getWall(sprite.id);
+				if (!wallData) {
+					continue;
+				}
+				pictureID = wallData.pictureID;
 			}
 			// Constructing the geometry
 			let obj = hash.get(sprite.id);
@@ -397,7 +401,11 @@ class MapPortion {
 			mountain.read(v);
 			let pictureID = Game.current.textures.mountains[mountain.mountainID];
 			if (pictureID === undefined) {
-				pictureID = Data.SpecialElements.getMountain(mountain.mountainID).pictureID;
+				const mountainData = Data.SpecialElements.getMountain(mountain.mountainID);
+				if (!mountainData) {
+					continue;
+				}
+				pictureID = mountainData.pictureID;
 			}
 			const textureMountain = await Data.SpecialElements.loadMountainTexture(mountain.mountainID);
 			let mountains: Mountains;
@@ -449,9 +457,12 @@ class MapPortion {
 			const { k, v } = item;
 			const position = Position.createFromArray(k);
 			const datas = Data.SpecialElements.getObject3D(v.did);
+			if (!datas) {
+				continue;
+			}
 			let pictureID = Game.current.textures.objects3D[datas.id];
 			if (pictureID === undefined) {
-				pictureID = Data.SpecialElements.getObject3D(datas.id).pictureID;
+				pictureID = datas.pictureID;
 			}
 			if (datas) {
 				// GLTF with no user texture: use embedded materials directly
