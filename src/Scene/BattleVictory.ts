@@ -46,6 +46,11 @@ class BattleVictory {
 			battler.updateAnimationStatus(s);
 		}
 
+		// Clear status animations for all battlers (visual only)
+		for (battler of this.battle.battlers[CHARACTER_KIND.MONSTER]) {
+			battler.currentStatusAnimation = null;
+		}
+
 		// If loosing, directly go to end transition
 		if (!this.battle.winning) {
 			(<Graphic.Text>this.battle.windowTopInformations.content).setText(Data.Languages.extras.defeat.name());
