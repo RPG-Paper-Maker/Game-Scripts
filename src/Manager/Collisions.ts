@@ -1410,7 +1410,7 @@ class Collisions {
 					y + h <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number)
 				);
 			if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
-				return pass ? [false, positionAfter.y - y - h === 0 ? null : y + h] : [true, null];
+				return pass ? [false, positionAfter.y >= y + h ? null : y + h] : [true, null];
 			} else {
 				if (!pass) {
 					// Collide with BB (avoiding use of checkIntersectionSprite here for perfs issues)
@@ -1465,7 +1465,7 @@ class Collisions {
 						y + h <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number)
 					);
 				if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
-					return pass ? [false, positionAfter.y - y - h === 0 ? null : y + h] : [true, null];
+					return pass ? [false, positionAfter.y >= y + h ? null : y + h] : [true, null];
 				} else if (!pass) {
 					const vertices = object.currentBoundingBox.geometry.getVertices();
 					for (let i = 0, l = vertices.length; i < l; i += 3) {
