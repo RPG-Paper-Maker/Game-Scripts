@@ -851,7 +851,8 @@ class MapObject {
 		/* If not blocked and possible Y up/down, check if there is no collision
         on top */
 		if (!blocked && yMountain !== null) {
-			position.setY(yMountain);
+			const yDelta = yMountain - this.position.y;
+			position.setY(this.position.y + Math.sign(yDelta) * Math.min(Math.abs(yDelta), distance));
 			this.updateBBPosition(position);
 			for (i = 0; i < l; i++) {
 				this.currentBoundingBox = this.meshBoundingBox[i];
