@@ -296,7 +296,13 @@ class MenuInventory extends Base {
 	 *  Update the scene.
 	 */
 	update() {
+		const hadEffectReactions = this.reactionInterpretersEffects.length > 0;
 		super.update();
+		if (hadEffectReactions && this.reactionInterpretersEffects.length === 0) {
+			this.updateForTab();
+			this.synchronize();
+			Manager.Stack.requestPaintHUD = true;
+		}
 		this.windowChoicesList.update();
 		this.windowChoicesTabs.update();
 		if (this.windowChoicesList.currentSelectedIndex !== -1) {

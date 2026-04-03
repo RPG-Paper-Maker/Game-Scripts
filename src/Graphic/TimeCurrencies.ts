@@ -20,6 +20,7 @@ import { Base } from './Base';
  */
 class TimeCurrencies extends Base {
 	public currencies: Graphic.TextIcon[];
+	public currencyIds: number[];
 	public time: number;
 	public graphicPlayTime: Graphic.Text;
 	public height: number;
@@ -30,6 +31,7 @@ class TimeCurrencies extends Base {
 
 		// Currencies
 		this.currencies = [];
+		this.currencyIds = [];
 		let graphic: Graphic.TextIcon, systemCurrency: Model.Currency;
 		for (const [id, currency] of Game.current.currencies.entries()) {
 			systemCurrency = Data.Systems.getCurrency(id);
@@ -39,6 +41,7 @@ class TimeCurrencies extends Base {
 					align: ALIGN.RIGHT,
 				});
 				this.currencies.push(graphic);
+				this.currencyIds.push(id);
 			}
 		}
 
@@ -60,11 +63,17 @@ class TimeCurrencies extends Base {
 	}
 
 	/**
-	 *  Update the play time
+	 *  Update the play time and currencies
 	 */
 	update() {
-		if (Game.current.playTime.getSeconds() !== this.time) {
-			this.graphicPlayTime.setText(Utils.getStringDate(Game.current.playTime.getSeconds()));
+		for (let i = 0; i < this.currencyIds.length; i++) {
+			const amount = Game.current.currencies.get(this.currencyIds[i]) ?? 0;
+			this.currencies[i].setText(Mathf.numberWithCommas(amount));
+		}
+		const seconds = Game.current.playTime.getSeconds();
+		if (seconds !== this.time) {
+			this.time = seconds;
+			this.graphicPlayTime.setText(Utils.getStringDate(seconds));
 		}
 	}
 
