@@ -998,6 +998,24 @@ class Player {
 	}
 
 	/**
+	 *  Remove the status with release if dead option.
+	 */
+	removeIfDeadStatus() {
+		let test = false;
+		let s: Status;
+		for (let i = this.status.length - 1; i >= 0; i--) {
+			s = this.status[i];
+			if (s.system.isReleaseIfDead) {
+				this.status.splice(i, 1);
+				test = true;
+			}
+		}
+		if (test) {
+			this.updateAllStatsValues();
+		}
+	}
+
+	/**
 	 *  Remove the status with release at end battle option.
 	 */
 	removeEndBattleStatus() {

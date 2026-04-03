@@ -357,7 +357,10 @@ export class Battler {
 	updateDead(attacked: boolean, user?: Player) {
 		let step = this.step;
 		if (this.player.isDead()) {
-			this.addStatus(1);
+			const newlyDead = this.addStatus(1);
+			if (newlyDead !== null) {
+				this.player.removeIfDeadStatus();
+			}
 			step = this.step;
 			this.lastStep = step;
 		} else {
