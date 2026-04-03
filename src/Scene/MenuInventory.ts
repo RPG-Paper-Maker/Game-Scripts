@@ -310,7 +310,7 @@ class MenuInventory extends Base {
 	 */
 	onKeyPressed(key: string) {
 		super.onKeyPressed(key);
-		if (this.reactionInterpreters.length === 0) {
+		if (this.getAllReactionInterpreters().length === 0) {
 			this.action(true, { key: key });
 		}
 	}
@@ -339,7 +339,7 @@ class MenuInventory extends Base {
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
 		const res = super.onKeyPressedAndRepeat(key);
-		if (this.reactionInterpreters.length === 0) {
+		if (this.getAllReactionInterpreters().length === 0) {
 			this.move(true, { key: key });
 		}
 		return res;
@@ -350,7 +350,7 @@ class MenuInventory extends Base {
 	 */
 	onMouseMove(x: number, y: number) {
 		super.onMouseMove(x, y);
-		if (this.reactionInterpreters.length === 0) {
+		if (this.getAllReactionInterpreters().length === 0) {
 			this.move(false, { x: x, y: y });
 		}
 	}
@@ -360,7 +360,7 @@ class MenuInventory extends Base {
 	 */
 	onMouseUp(x: number, y: number) {
 		super.onMouseUp(x, y);
-		if (this.reactionInterpreters.length === 0) {
+		if (this.getAllReactionInterpreters().length === 0) {
 			this.action(false, { x: x, y: y });
 		}
 	}
