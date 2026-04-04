@@ -460,6 +460,23 @@ class Battle extends Map {
 			return;
 		}
 
+		if (
+			(this.transitionZoom || this.transitionColor) &&
+			Game.current !== null &&
+			Game.current.hero.currentStateInstance
+		) {
+			const heroVector = new THREE.Vector3();
+			this.sceneMap.camera.getThreeCamera().getWorldDirection(heroVector);
+			Game.current.hero.updateAngle(Math.atan2(heroVector.x, heroVector.z) + Math.PI);
+			if (Game.current.hero.currentStateInstance.setWithCamera) {
+				const prevMap = Scene.Map.current;
+				Scene.Map.current = this.sceneMap;
+				Game.current.hero.updateOrientation();
+				Game.current.hero.updateUVs();
+				Scene.Map.current = prevMap;
+			}
+		}
+
 		// Y angle
 		const vector = new THREE.Vector3();
 		this.camera.getThreeCamera().getWorldDirection(vector);
