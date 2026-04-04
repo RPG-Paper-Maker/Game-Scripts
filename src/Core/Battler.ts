@@ -250,7 +250,14 @@ export class Battler {
 			const h = (this.height * Data.Systems.SQUARE_SIZE) / height;
 			const x = frame * w;
 			const y = this.step * h;
-			this.animationOffset.set(x, y);
+			const texA = new THREE.Vector2();
+			const texB = new THREE.Vector2();
+			const texC = new THREE.Vector2();
+			const texD = new THREE.Vector2();
+			CustomGeometry.uvsQuadToTex(texA, texB, texC, texD, x, y, w, h);
+			(this.mesh.geometry as CustomGeometry).pushQuadUVs(texA, texB, texC, texD);
+			(this.mesh.geometry as CustomGeometry).updateUVs();
+			this.animationOffset.set(0, 0);
 		}
 	}
 
