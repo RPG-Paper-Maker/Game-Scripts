@@ -22,7 +22,7 @@ import {
 	SHAPE_KIND,
 	Utils,
 } from '../Common';
-import { Data, EventCommand, Manager, Model, Scene } from '../index';
+import { Core, Data, EventCommand, Manager, Model, Scene } from '../index';
 import { DynamicValue, StateInstance } from '../Model';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
@@ -580,6 +580,7 @@ class MapObject {
 			this.updateOrientation();
 			let result: [CustomGeometry, [number, StructMapElementCollision[]]];
 			const positionTranformation = Position.createFromVector3(this.position);
+			Core.ReactionInterpreter.currentObject = this;
 			positionTranformation.centerX = this.currentStateInstance.centerX.getValue() as number;
 			positionTranformation.centerZ = this.currentStateInstance.centerZ.getValue() as number;
 			positionTranformation.angleX = this.currentStateInstance.angleX.getValue() as number;
@@ -1496,6 +1497,7 @@ class MapObject {
 		if (this.gltfGroup !== null) {
 			this.gltfGroup.position.set(this.position.x, this.position.y, this.position.z);
 			if (this.currentStateInstance) {
+				Core.ReactionInterpreter.currentObject = this;
 				const userAngleY = (this.currentStateInstance.angleY.getValue() as number) * (Math.PI / 180);
 				const prevX: number = this.gltfGroup.userData.prevX ?? this.position.x;
 				const prevZ: number = this.gltfGroup.userData.prevZ ?? this.position.z;
