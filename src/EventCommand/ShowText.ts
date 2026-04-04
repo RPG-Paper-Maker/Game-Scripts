@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, Utils } from '../Common';
+import { ALIGN, Constants, Utils } from '../Common';
 import { MapObject, WindowBox } from '../Core';
 import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -91,7 +91,9 @@ class ShowText extends Base {
 		this.windowMain.padding[3] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pBottom, 0);
 		this.windowMain.updateDimensions();
 		this.windowMain.content.update();
-		(<Graphic.Text>this.windowInterlocutor.content).setText(this.interlocutor.getValue() as string);
+		const nameTagText = <Graphic.Text>this.windowInterlocutor.content;
+		nameTagText.setFontSize(Utils.valueOrDefault(Data.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE));
+		nameTagText.setText(this.interlocutor.getValue() as string);
 		return {
 			clicked: false,
 			frame: 0,
