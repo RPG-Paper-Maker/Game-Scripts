@@ -968,12 +968,12 @@ class Player {
 		}
 		for (i = this.status.length - 1; i >= 0; i--) {
 			// Add according to priority
-			p = s.system.priority.getValue() as number;
+			p = this.status[i].system.priority.getValue() as number;
 			if (p <= priority) {
 				break;
 			}
 		}
-		this.status.splice(i < 0 ? 0 : 0, 0, status);
+		this.status.splice(i < 0 ? 0 : i + 1, 0, status);
 		this.updateAllStatsValues();
 		return status;
 	}
