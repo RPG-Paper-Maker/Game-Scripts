@@ -441,7 +441,7 @@ class Map extends Base {
 					}
 				}
 			}
-			this.preloadOuterShell().catch(console.error);
+			setTimeout(() => this.preloadOuterShell().catch(console.error), 0);
 			return;
 		}
 
@@ -496,7 +496,7 @@ class Map extends Base {
 			}
 		}
 		this.loading = false;
-		this.preloadOuterShell().catch(console.error);
+		setTimeout(() => this.preloadOuterShell().catch(console.error), 0);
 	}
 
 	/**
@@ -613,6 +613,7 @@ class Map extends Base {
 		const ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
 		const lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
 		const center = this.currentPortion;
+		let readCount = 0;
 		outer: for (let i = -outerLimit; i <= outerLimit; i++) {
 			for (let j = -outerLimit; j <= outerLimit; j++) {
 				for (let k = -outerLimit; k <= outerLimit; k++) {
@@ -628,6 +629,14 @@ class Map extends Base {
 					if (rx >= 0 && rx < lx && ry >= -ld && ry < lh && rz >= 0 && rz < lz) {
 						const key = [rx, ry, rz].join('_');
 						if (!this.preloadJsonCache.has(key)) {
+							// Yield to the event loop every 5 reads so requestAnimationFrame
+							// can fire between batches and avoid frame drops.
+							if (readCount > 0 && readCount % 5 === 0) {
+								await new Promise<void>((r) => setTimeout(r, 0));
+								if (Scene.Map.current !== this) {
+									break outer;
+								}
+							}
 							const portion = new Portion(rx, ry, rz);
 							const json = (await Platform.parseFileJSON(
 								Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName(),
@@ -636,6 +645,7 @@ class Map extends Base {
 								break outer;
 							}
 							this.preloadJsonCache.set(key, json ?? null);
+							readCount++;
 						}
 					}
 				}
