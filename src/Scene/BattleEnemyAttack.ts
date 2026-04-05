@@ -310,36 +310,38 @@ class BattleEnemyAttack {
 			case TARGET_KIND.ALL_ENEMIES:
 				switch (restriction) {
 					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
-						this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER];
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER].filter((b) => !b.player.isDead());
 						return;
 					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
-						this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO];
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO].filter((b) => !b.player.isDead());
 						return;
 					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
-						this.battle.targets =
+						this.battle.targets = (
 							Mathf.random(0, 1) === 0
 								? this.battle.battlers[CHARACTER_KIND.MONSTER]
-								: this.battle.battlers[CHARACTER_KIND.HERO];
+								: this.battle.battlers[CHARACTER_KIND.HERO]
+						).filter((b) => !b.player.isDead());
 						return;
 				}
-				this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO];
+				this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO].filter((b) => !b.player.isDead());
 				return;
 			case TARGET_KIND.ALL_ALLIES:
 				switch (restriction) {
 					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY:
-						this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO];
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.HERO].filter((b) => !b.player.isDead());
 						return;
 					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ENEMY:
-						this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER];
+						this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER].filter((b) => !b.player.isDead());
 						return;
 					case STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_TARGET:
-						this.battle.targets =
+						this.battle.targets = (
 							Mathf.random(0, 1) === 0
 								? this.battle.battlers[CHARACTER_KIND.MONSTER]
-								: this.battle.battlers[CHARACTER_KIND.HERO];
+								: this.battle.battlers[CHARACTER_KIND.HERO]
+						).filter((b) => !b.player.isDead());
 						return;
 				}
-				this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER];
+				this.battle.targets = this.battle.battlers[CHARACTER_KIND.MONSTER].filter((b) => !b.player.isDead());
 				return;
 		}
 

@@ -300,6 +300,10 @@ class Battle extends Map {
 	isDefined(kind: CHARACTER_KIND, index: number, target?: boolean): boolean {
 		const battler = this.battlers[kind][index];
 		if (target) {
+			const hasTargetFormula = this.skill && this.skill.targetConditionFormula.getValue() !== null;
+			if (!hasTargetFormula && battler.player.isDead()) {
+				return false;
+			}
 			return !battler.hidden && (!this.skill || this.skill.isPossible(battler.player));
 		}
 		return (
