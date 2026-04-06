@@ -69,21 +69,37 @@ export class CommonEvents {
 	 * @param jsonObject - Current object to analyze
 	 * @param reorderedList - Accumulator for reordered objects
 	 * @param jsonObjects - Original list of JSON objects
+	 * @param visiting - Set of object IDs currently being processed (used to detect inheritance cycles)
 	 */
-	static modelReOrder(jsonObject: MapObjectJSON, reorderedList: MapObjectJSON[], jsonObjects: MapObjectJSON[]): void {
+	static modelReOrder(
+		jsonObject: MapObjectJSON,
+		reorderedList: MapObjectJSON[],
+		jsonObjects: MapObjectJSON[],
+		visiting: Set<number> = new Set(),
+	): void {
 		if (jsonObject && !Object.prototype.hasOwnProperty.call(jsonObject, Data.CommonEvents.PROPERTY_STOCKED)) {
 			// If id = -1, we can add to the list
 			const id = jsonObject.hId;
-			if (id !== -1) {
+			if (id !== undefined && id !== -1) {
 				// Search id in the json list
-				let inheritedObject: MapObjectJSON;
-				for (inheritedObject of jsonObjects) {
-					if (inheritedObject.id === id) {
+				let inheritedObject: MapObjectJSON | undefined;
+				for (const obj of jsonObjects) {
+					if (obj.id === id) {
+						inheritedObject = obj;
 						break;
 					}
 				}
-				// Test inheritance for this object
-				this.modelReOrder(inheritedObject, reorderedList, jsonObjects);
+				if (inheritedObject) {
+					// Detect inheritance cycle: if the target model is already in the current call chain
+					if (visiting.has(id)) {
+						Platform.showErrorMessage(
+							`Model inheritance loop detected in common objects: "${jsonObject.name}" (ID: ${jsonObject.id}) inherits from "${inheritedObject.name}" (ID: ${id}), which creates a cycle. Please fix this in the Systems > Models tab.`,
+						);
+					}
+					visiting.add(jsonObject.id!);
+					this.modelReOrder(inheritedObject, reorderedList, jsonObjects, visiting);
+					visiting.delete(jsonObject.id!);
+				}
 			}
 			jsonObject.stocked = true;
 			reorderedList.push(jsonObject);
