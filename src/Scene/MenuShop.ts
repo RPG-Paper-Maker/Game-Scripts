@@ -397,10 +397,10 @@ class MenuShop extends MenuBase {
 				}
 			}
 			(<Graphic.Text>this.windowBoxOwned.content).setText(Data.Languages.extras.owned.name() + ': ' + owned);
+			(<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateGraphicCharactersEquip(
+				(<Graphic.Item>this.windowBoxInformation.content).item,
+			);
 		}
-		(<Graphic.UseSkillItem>this.windowBoxUseItem.content).updateGraphicCharactersEquip(
-			(<Graphic.Item>this.windowBoxInformation.content).item,
-		);
 	}
 
 	/**
@@ -526,6 +526,7 @@ class MenuShop extends MenuBase {
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
 					Data.Systems.soundCancel.playSound();
 					this.step = 0;
+					Manager.Stack.requestPaintHUD = true;
 				}
 				break;
 			case 2:
@@ -571,7 +572,7 @@ class MenuShop extends MenuBase {
 					Manager.Stack.requestPaintHUD = true;
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
 					Data.Systems.soundCancel.playSound();
-					this.step = graphic.item.system.isWeaponArmor() ? 3 : 1;
+					this.step = (this.isBuy() && graphic.item.system.isWeaponArmor()) ? 3 : 1;
 					Manager.Stack.requestPaintHUD = true;
 				}
 				break;
