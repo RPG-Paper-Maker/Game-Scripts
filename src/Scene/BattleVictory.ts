@@ -90,6 +90,9 @@ class BattleVictory {
 		// Heroes
 		let xp: number;
 		for (battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
+			if (battler.player.isDead()) {
+				continue;
+			}
 			battler.setVictory();
 			xp = this.battle.xp;
 			if (battler.player.experienceGain[0]) {
