@@ -1075,8 +1075,8 @@ class Map extends Base {
 		this.mapProperties.startupObject.update();
 		super.update();
 
-		// If map changed during interpreter update, stop processing
-		if (Scene.Map.current !== this) {
+		// If map changed or a new scene was pushed during interpreter update, stop processing
+		if (Scene.Map.current !== this || Manager.Stack.top !== this) {
 			return;
 		}
 
