@@ -175,7 +175,7 @@ class Camera {
 		if (this.targetLastPosition && Scene.Map.current.camera) {
 			const diff = this.target.position.clone().sub(this.targetLastPosition);
 			this.getThreeCamera().position.add(diff);
-			this.targetLastPosition.copy(Scene.Map.current.camera.target.position);
+			this.targetLastPosition.copy(this.target.position);
 		} else {
 			this.targetLastPosition = this.target.position.clone();
 		}
