@@ -391,7 +391,7 @@ class MenuShop extends MenuBase {
 			let item: Item;
 			for (let i = 0, l = Game.current.items.length; i < l; i++) {
 				item = Game.current.items[i];
-				if (item.system.id === (<Graphic.Item>this.windowBoxInformation.content).item.system.id) {
+				if (item.kind === (<Graphic.Item>this.windowBoxInformation.content).item.kind && item.system.id === (<Graphic.Item>this.windowBoxInformation.content).item.system.id) {
 					owned = item.nb;
 					break;
 				}
