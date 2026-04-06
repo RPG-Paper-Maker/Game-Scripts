@@ -922,7 +922,7 @@ class Player {
 	 */
 	hasStatus(id: number): boolean {
 		for (const status of this.status) {
-			if (status.id === id) {
+			if (status.system.id === id) {
 				return true;
 			}
 		}
