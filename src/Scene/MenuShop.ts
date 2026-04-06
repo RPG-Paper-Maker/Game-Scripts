@@ -138,7 +138,7 @@ class MenuShop extends MenuBase {
 		const rect = new Rectangle(
 			Constants.MEDIUM_SPACE,
 			Constants.HUGE_SPACE + WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE,
-			WindowBox.SMALL_SLOT_WIDTH,
+			ScreenResolution.SCREEN_X - Constants.MEDIUM_SPACE * 2,
 			WindowBox.SMALL_SLOT_HEIGHT,
 		);
 		let l = Data.Systems.inventoryFilters.length;
@@ -146,12 +146,17 @@ class MenuShop extends MenuBase {
 		let i: number;
 		for (i = 0, l = Data.Systems.inventoryFilters.length; i < l; i++) {
 			list[i] = new Graphic.Text(Data.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
-			list[i].ellipsis = true;
 		}
+		// Per-tab widths adapted to each filter name text, capped at 150px with ellipsis
+		const MAX_TAB_WIDTH = 150;
+		const choiceWidths = list.map((text) => {
+			text.ellipsis = true;
+			return Math.min(MAX_TAB_WIDTH, Math.max(50, ScreenResolution.getScreenXReverse(text.textWidth) + 24));
+		});
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
-			nbItemsMax: list.length,
 			padding: [0, 0, 0, 0],
+			choiceWidths: choiceWidths,
 		};
 		this.windowChoicesItemsKind = new WindowChoices(rect.x, rect.y, rect.width, rect.height, list, options);
 		l = list.length;

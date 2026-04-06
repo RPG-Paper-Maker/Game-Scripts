@@ -142,6 +142,21 @@ class WindowChoices extends Bitmap {
 		this.bordersVisible = Utils.valueOrDefault(options.bordersVisible, true);
 		this.choiceWidths = Utils.valueOrDefault(options.choiceWidths, null);
 
+		// Auto-calculate nbItemsMax to fit the available width when choiceWidths is provided
+		if (this.choiceWidths && this.orientation === ORIENTATION_WINDOW.HORIZONTAL && w > 0) {
+			let count = 0;
+			let sumW = 0;
+			for (let j = 0; j < this.choiceWidths.length; j++) {
+				sumW += (j > 0 ? this.space : 0) + this.choiceWidths[j];
+				if (sumW <= w) {
+					count++;
+				} else {
+					break;
+				}
+			}
+			this.nbItemsMax = Math.max(1, count);
+		}
+
 		// Initialize values
 		this.offsetSelectedIndex = 0;
 		this.choiceWidth = w;
@@ -406,7 +421,7 @@ class WindowChoices extends Bitmap {
 			if (this.offsetSelectedIndex > 0) {
 				this.offsetSelectedIndex--;
 			}
-		} else if (index === 0) {
+		} else if (index === 0 && this.orientation !== ORIENTATION_WINDOW.HORIZONTAL) {
 			this.currentSelectedIndex = this.listWindows.length - 1;
 			this.offsetSelectedIndex = this.size - 1;
 		}
@@ -426,7 +441,7 @@ class WindowChoices extends Bitmap {
 			if (this.offsetSelectedIndex < this.size - 1) {
 				this.offsetSelectedIndex++;
 			}
-		} else if (index === this.listWindows.length - 1) {
+		} else if (index === this.listWindows.length - 1 && this.orientation !== ORIENTATION_WINDOW.HORIZONTAL) {
 			this.currentSelectedIndex = 0;
 			this.offsetSelectedIndex = 0;
 		}
@@ -586,22 +601,41 @@ class WindowChoices extends Bitmap {
 			// If on arrow
 			const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
 			const ws = Data.Systems.getCurrentWindowSkin();
-			const arrowWidth = ScreenResolution.getScreenXY(ws.arrowUpDown.width);
-			const arrowHeight = ScreenResolution.getScreenXY(ws.arrowUpDown.height / 2);
-			const arrowX = this.x + this.w / 2 - arrowWidth / 2;
+			const arrowW = ScreenResolution.getScreenXY(ws.arrowUpDown.width);
+			const arrowH = ScreenResolution.getScreenXY(ws.arrowUpDown.height / 2);
 
-			// If pressing on arrow up
-			if (this.currentSelectedIndex - offset > 0) {
-				const rect = new Rectangle(arrowX, this.y - arrowHeight - 1, arrowWidth, arrowHeight);
-				if (rect.isInside(x, y)) {
-					this.isMouseInArrowUp = true;
+			if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
+				// After rotation, each arrow's bounding box is (arrowH wide × arrowW tall)
+				// Arrows sit inside the tab bar at its left/right edges
+				const arrowHScreen = ScreenResolution.getScreenXY(ws.arrowUpDown.height / 2);
+				const arrowWScreen = ScreenResolution.getScreenXY(ws.arrowUpDown.width);
+				const arrowY = this.y + (this.h - arrowWScreen) / 2;
+				const leftEdge = this.x + ScreenResolution.getScreenX(this.padding[0]);
+				if (this.currentSelectedIndex - offset > 0) {
+					const rect = new Rectangle(leftEdge - arrowHScreen, arrowY, arrowHScreen, arrowWScreen);
+					if (rect.isInside(x, y)) {
+						this.isMouseInArrowUp = true;
+					}
 				}
-			}
-			// If pressing on arrow down
-			if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
-				const rect = new Rectangle(arrowX, this.y + this.h + 1, arrowWidth, arrowHeight);
-				if (rect.isInside(x, y)) {
-					this.isMouseInArrowDown = true;
+				if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
+					const rect = new Rectangle(this.x + this.w, arrowY, arrowHScreen, arrowWScreen);
+					if (rect.isInside(x, y)) {
+						this.isMouseInArrowDown = true;
+					}
+				}
+			} else {
+				const arrowX = this.x + this.w / 2 - arrowW / 2;
+				if (this.currentSelectedIndex - offset > 0) {
+					const rect = new Rectangle(arrowX, this.y - arrowH - 1, arrowW, arrowH);
+					if (rect.isInside(x, y)) {
+						this.isMouseInArrowUp = true;
+					}
+				}
+				if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
+					const rect = new Rectangle(arrowX, this.y + this.h + 1, arrowW, arrowH);
+					if (rect.isInside(x, y)) {
+						this.isMouseInArrowDown = true;
+					}
 				}
 			}
 		}
@@ -639,25 +673,62 @@ class WindowChoices extends Bitmap {
 		}
 		const offset = this.currentSelectedIndex === -1 ? -1 : this.offsetSelectedIndex;
 		let index: number;
-		for (let i = 0; i < this.size; i++) {
-			index = i + this.currentSelectedIndex - offset;
-			this.listWindows[index].draw(
-				true,
-				this.listWindows[i].windowDimension,
-				this.listWindows[i].contentDimension,
-			);
+		// Right edge of the last visible item in game units (used for horizontal arrow placement)
+		let visibleRightX = this.oX + this.oW;
+
+		if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL && this.choiceWidths) {
+			// For variable-width horizontal items, recalculate positions dynamically
+			// based on the currently visible items (offset may have shifted the view)
+			let xOff = this.oX + this.padding[0];
+			for (let i = 0; i < this.size; i++) {
+				index = i + this.currentSelectedIndex - offset;
+				const iw = this.choiceWidths[index];
+				const wp = this.listWindows[index].padding;
+				const wDim = [xOff, this.oY, iw, this.choiceHeight];
+				const cDim = [
+					ScreenResolution.getScreenX(xOff + wp[0]),
+					ScreenResolution.getScreenY(this.oY + wp[1]),
+					ScreenResolution.getScreenX(iw - 2 * wp[2]),
+					ScreenResolution.getScreenY(this.choiceHeight - 2 * wp[3]),
+				];
+				this.listWindows[index].draw(true, wDim, cDim);
+				xOff += iw + this.space;
+			}
+			visibleRightX = xOff - this.space;
+		} else {
+			for (let i = 0; i < this.size; i++) {
+				index = i + this.currentSelectedIndex - offset;
+				this.listWindows[index].draw(
+					true,
+					this.listWindows[i].windowDimension,
+					this.listWindows[i].contentDimension,
+				);
+			}
 		}
 
 		// Draw arrows
 		const ws = Data.Systems.getCurrentWindowSkin();
-		const arrowWidth = ws.arrowUpDown.width;
-		const arrowHeight = ws.arrowUpDown.height / 2;
-		const arrowX = this.oX + (this.oW + this.padding[0] * 2 - arrowWidth) / 2;
-		if (this.currentSelectedIndex - offset > 0) {
-			ws.drawArrowUp(arrowX, this.oY - arrowHeight - 1);
-		}
-		if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
-			ws.drawArrowDown(arrowX, this.oY + this.oH + 1);
+		const arrowW = ws.arrowUpDown.width;
+		const arrowH = ws.arrowUpDown.height / 2;
+		if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
+			// Left/right arrows sit inside the tab bar at its edges
+			// After -90° rotation the bounding box is (arrowH wide × arrowW tall)
+			const arrowY = this.oY + (this.oH - arrowW) / 2;
+			const leftEdge = this.oX + this.padding[0];
+			if (this.currentSelectedIndex - offset > 0) {
+				ws.drawArrowLeft(leftEdge - arrowH, arrowY);
+			}
+			if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
+				ws.drawArrowRight(visibleRightX, arrowY);
+			}
+		} else {
+			const arrowX = this.oX + (this.oW + this.padding[0] * 2 - arrowW) / 2;
+			if (this.currentSelectedIndex - offset > 0) {
+				ws.drawArrowUp(arrowX, this.oY - arrowH - 1);
+			}
+			if (this.currentSelectedIndex - offset < this.listWindows.length - this.nbItemsMax) {
+				ws.drawArrowDown(arrowX, this.oY + this.oH + 1);
+			}
 		}
 	}
 }

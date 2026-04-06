@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { PICTURE_KIND, ScreenResolution } from '../Common';
+import { Platform, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Picture2D, Rectangle } from '../Core';
 import { Data } from '../index';
 import { Base } from './Base';
@@ -258,6 +258,55 @@ export class WindowSkin extends Base {
 			sh: this.arrowUpDown.height / 2,
 			positionResize: true,
 		});
+	}
+
+	/**
+	 *  Draw a left arrow for horizontal choices (up arrow sprite rotated -90°).
+	 *  x/y is the top-left of the rotated arrow's bounding box in game units.
+	 */
+	drawArrowLeft(x: number, y: number): void {
+		const sw = this.arrowUpDown.width;
+		const sh = this.arrowUpDown.height / 2;
+		const dw = ScreenResolution.getScreenX(sw);
+		const dh = ScreenResolution.getScreenY(sh);
+		// After -90° rotation, rendered size is (dh wide × dw tall); center accordingly
+		const cx = ScreenResolution.getScreenX(x) + dh / 2;
+		const cy = ScreenResolution.getScreenY(y) + dw / 2;
+		Platform.ctx.save();
+		Platform.ctx.translate(cx, cy);
+		Platform.ctx.rotate(-Math.PI / 2);
+		Platform.ctx.drawImage(
+			this.picture.image,
+			Math.round(this.arrowUpDown.x), Math.round(this.arrowUpDown.y),
+			Math.round(sw), Math.round(sh),
+			Math.round(-dw / 2), Math.round(-dh / 2),
+			Math.round(dw), Math.round(dh),
+		);
+		Platform.ctx.restore();
+	}
+
+	/**
+	 *  Draw a right arrow for horizontal choices (down arrow sprite rotated -90°).
+	 *  x/y is the top-left of the rotated arrow's bounding box in game units.
+	 */
+	drawArrowRight(x: number, y: number): void {
+		const sw = this.arrowUpDown.width;
+		const sh = this.arrowUpDown.height / 2;
+		const dw = ScreenResolution.getScreenX(sw);
+		const dh = ScreenResolution.getScreenY(sh);
+		const cx = ScreenResolution.getScreenX(x) + dh / 2;
+		const cy = ScreenResolution.getScreenY(y) + dw / 2;
+		Platform.ctx.save();
+		Platform.ctx.translate(cx, cy);
+		Platform.ctx.rotate(-Math.PI / 2);
+		Platform.ctx.drawImage(
+			this.picture.image,
+			Math.round(this.arrowUpDown.x), Math.round(this.arrowUpDown.y + sh),
+			Math.round(sw), Math.round(sh),
+			Math.round(-dw / 2), Math.round(-dh / 2),
+			Math.round(dw), Math.round(dh),
+		);
+		Platform.ctx.restore();
 	}
 
 	/**

@@ -76,13 +76,16 @@ class MenuEquip extends MenuBase {
 			listHeroes[i] = new Graphic.PlayerDescription(this.party()[i]);
 		}
 
-		// Per-tab widths adapted to each hero name text
-		const choiceWidths = listHeroes.map(hero => Math.max(80, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 8));
+		// Per-tab widths adapted to each hero name text, capped at 150px with ellipsis
+		const MAX_TAB_WIDTH = 150;
+		const choiceWidths = listHeroes.map((hero) => {
+			hero.graphicNameCenter.ellipsis = true;
+			return Math.min(MAX_TAB_WIDTH, Math.max(50, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 24));
+		});
 
-		const rect = new Rectangle(50, 60, 0, WindowBox.SMALL_SLOT_HEIGHT);
+		const rect = new Rectangle(50, 60, ScreenResolution.SCREEN_X - 100, WindowBox.SMALL_SLOT_HEIGHT);
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
-			nbItemMax: 4,
 			padding: [0, 0, 0, 0],
 			choiceWidths: choiceWidths,
 		};
