@@ -66,7 +66,6 @@ class MenuShop extends MenuBase {
 		super.create();
 		this.createAllWindows();
 		this.updateItemsList();
-		this.synchronize();
 	}
 
 	/**
@@ -371,6 +370,7 @@ class MenuShop extends MenuBase {
 		this.windowChoicesList.unselect();
 		this.windowChoicesList.offsetSelectedIndex = this.positionChoice[indexTab].offset;
 		this.windowChoicesList.select(this.positionChoice[indexTab].index);
+		this.synchronize();
 	}
 
 	/**
@@ -556,8 +556,8 @@ class MenuShop extends MenuBase {
 					if (this.step === 4 && this.windowChoicesConfirmEquip.currentSelectedIndex === 0) {
 						this.equip(shopItem);
 						(<Graphic.UseSkillItem>this.windowBoxUseItem.content).hideArrow = true;
-						this.synchronize();
 					}
+					this.synchronize();
 					this.step = 1;
 					Manager.Stack.requestPaintHUD = true;
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
