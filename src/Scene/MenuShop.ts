@@ -562,7 +562,11 @@ class MenuShop extends MenuBase {
 						this.equip(shopItem);
 						(<Graphic.UseSkillItem>this.windowBoxUseItem.content).hideArrow = true;
 					}
-					this.synchronize();
+					if (this.isBuy()) {
+						this.updateItemsList();
+					} else {
+						this.synchronize();
+					}
 					this.step = 1;
 					Manager.Stack.requestPaintHUD = true;
 				} else if (Scene.MenuBase.checkCancelMenu(isKey, options)) {
