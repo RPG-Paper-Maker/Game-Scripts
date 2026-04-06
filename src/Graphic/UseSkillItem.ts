@@ -97,7 +97,7 @@ class UseSkillItem extends Base {
 			let target: Player;
 			do {
 				this.indexArrow = Mathf.mod(this.indexArrow + index, this.graphicCharacters.length);
-				target = Game.current.teamHeroes[this.indexArrow];
+				target = this.graphicCharacters[this.indexArrow].player;
 			} while (!this.skillItem.isPossible(target));
 			Scene.Map.current.targets = [new Battler(target)];
 			Manager.Stack.requestPaintHUD = true;
@@ -192,7 +192,7 @@ class UseSkillItem extends Base {
 				}
 			}
 			if (changed && i !== this.indexArrow) {
-				const target = Game.current.teamHeroes[i];
+				const target = this.graphicCharacters[i].player;
 				if (this.skillItem.isPossible(target)) {
 					this.indexArrow = i;
 					Scene.Map.current.targets = [new Battler(target)];

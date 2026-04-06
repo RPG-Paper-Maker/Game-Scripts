@@ -618,7 +618,9 @@ class MenuShop extends MenuBase {
 				break;
 			case 3:
 				(<Graphic.UseSkillItem>this.windowBoxUseItem.content).move(isKey, options);
-				this.updateEquipmentStats();
+				if ((<Graphic.UseSkillItem>this.windowBoxUseItem.content).graphicCharacters.length > 0) {
+					this.updateEquipmentStats();
+				}
 				break;
 			case 4:
 				this.windowChoicesConfirmEquip.move(isKey, options);
