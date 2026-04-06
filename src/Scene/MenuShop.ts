@@ -465,7 +465,13 @@ class MenuShop extends MenuBase {
 		player.equip[this.currentEquipmentID] = item;
 		item.remove(1);
 		if (prev) {
-			prev.add(1);
+			const existing = Item.findItem(prev.kind, prev.system.id);
+			if (existing) {
+				existing.nb += 1;
+			} else {
+				prev.nb = 1;
+				Game.current.items.push(prev);
+			}
 		}
 		player.updateEquipmentStats(this.currentList, this.currentBonus);
 	}
