@@ -27,8 +27,10 @@ class TitleSettings extends Base {
 	public titleCommand: TitleCommand;
 
 	constructor(titleCommand: TitleCommand) {
-		super();
+		super(true, titleCommand);
+	}
 
+	initialize(titleCommand: TitleCommand) {
 		this.titleCommand = titleCommand;
 	}
 
