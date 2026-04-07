@@ -532,7 +532,7 @@ class Message extends Graphic.Base {
 				}
 				if (graphic instanceof Picture2D) {
 					if (textAreaWidth > 0 && offsetX > 0 && offsetX + this.positions[i] > textAreaWidth) {
-						offsetY += Constants.DEFAULT_FONT_SIZE * 2;
+						offsetY += this.heights[c] * 2;
 						offsetX = 0;
 					}
 					graphic.draw({
