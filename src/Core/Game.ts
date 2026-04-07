@@ -662,23 +662,23 @@ class Game {
 	 */
 	getPortionPosData(id: number, i: number, j: number, k: number): Record<string, any> {
 		let datas = this.mapsData[id];
-		if (datas === undefined) {
+		if (datas == null) {
 			return {};
 		}
 		datas = datas[i];
-		if (datas === undefined) {
+		if (datas == null) {
 			return {};
 		}
 		datas = datas[j < 0 ? 0 : 1];
-		if (datas === undefined) {
+		if (datas == null) {
 			return {};
 		}
 		datas = datas[Math.abs(j)];
-		if (datas === undefined) {
+		if (datas == null) {
 			return {};
 		}
 		datas = datas[k];
-		if (datas === undefined) {
+		if (datas == null) {
 			return {};
 		}
 		return datas;
