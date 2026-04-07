@@ -250,7 +250,10 @@ class WindowChoices extends Bitmap {
 				for (let j = 0; j < this.size; j++) {
 					sumWidths += this.choiceWidths[j];
 				}
-				boxWidth = sumWidths + this.space * Math.max(0, this.size - 1) + (this.bordersInsideVisible ? 0 : this.padding[0] * 3);
+				boxWidth =
+					sumWidths +
+					this.space * Math.max(0, this.size - 1) +
+					(this.bordersInsideVisible ? 0 : this.padding[0] * 3);
 			} else {
 				boxWidth =
 					(this.choiceWidth + this.space) * this.size -
@@ -275,7 +278,9 @@ class WindowChoices extends Bitmap {
 		for (let i = 0; i < totalNb; i++) {
 			if (this.orientation === ORIENTATION_WINDOW.HORIZONTAL) {
 				const itemWidth = this.choiceWidths ? this.choiceWidths[i] : this.choiceWidth;
-				const itemX = this.choiceWidths ? xOffsetHoriz : this.oX + this.padding[0] + i * this.choiceWidth + i * this.space;
+				const itemX = this.choiceWidths
+					? xOffsetHoriz
+					: this.oX + this.padding[0] + i * this.choiceWidth + i * this.space;
 				window = new WindowBox(itemX, this.oY, itemWidth, this.choiceHeight, {
 					content: this.listContents[i],
 					padding: this.bordersInsideVisible ? this.padding : WindowBox.NONE_PADDING,
@@ -385,6 +390,11 @@ class WindowChoices extends Bitmap {
 				this.offsetSelectedIndex = this.size - 1;
 			} else if (this.listWindows.length <= this.size) {
 				this.offsetSelectedIndex = i;
+			} else {
+				const minOffset = i + this.size - this.listWindows.length;
+				if (this.offsetSelectedIndex < minOffset) {
+					this.offsetSelectedIndex = minOffset;
+				}
 			}
 			this.currentSelectedIndex = i;
 			this.listWindows[this.currentSelectedIndex].selected = true;
@@ -407,6 +417,14 @@ class WindowChoices extends Bitmap {
 		if (this.currentSelectedIndex === this.listContents.length) {
 			this.currentSelectedIndex--;
 			this.offsetSelectedIndex--;
+		}
+		if (this.currentSelectedIndex >= 0) {
+			const newTotalNb = this.listContents.length;
+			const newSize = Math.min(newTotalNb, this.nbItemsMax);
+			const minOffset = this.currentSelectedIndex + newSize - newTotalNb;
+			if (minOffset > 0 && this.offsetSelectedIndex < minOffset) {
+				this.offsetSelectedIndex = minOffset;
+			}
 		}
 		this.updateContentSize(this.currentSelectedIndex, this.offsetSelectedIndex);
 	}
