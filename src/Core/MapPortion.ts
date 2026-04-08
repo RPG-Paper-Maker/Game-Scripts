@@ -789,10 +789,18 @@ class MapPortion {
 					z = objCollision.k ? 0 : objCollision.w;
 					for (c = -z; c <= z; c++) {
 						positionPlus = new Position(position.x + a, position.y + b, position.z + c);
-						if (Scene.Map.current.isInMap(positionPlus)) {
-							this.boundingBoxesSprites[positionPlus.toIndex()].push(objCollision);
-							this.addOverflowCollision(Scene.Map.current.overflowSprites, positionPlus);
+						if (!Scene.Map.current.isInMap(positionPlus)) {
+							positionPlus = new Position(
+								Math.max(0, Math.min(Scene.Map.current.mapProperties.length - 1, positionPlus.x)),
+								positionPlus.y,
+								Math.max(0, Math.min(Scene.Map.current.mapProperties.width - 1, positionPlus.z)),
+							);
+							if (!Scene.Map.current.isInMap(positionPlus)) {
+								continue;
+							}
 						}
+						this.boundingBoxesSprites[positionPlus.toIndex()].push(objCollision);
+						this.addOverflowCollision(Scene.Map.current.overflowSprites, positionPlus);
 					}
 				}
 			}
