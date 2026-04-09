@@ -22,6 +22,8 @@ import { Stack } from '../Manager';
  *  @param {number} [h=0] - h coord of the bitmap
  */
 class Bitmap {
+	private static readonly instances = new Set<WeakRef<Bitmap>>();
+
 	public oX: number;
 	public oY: number;
 	public oW: number;
@@ -32,10 +34,37 @@ class Bitmap {
 	public h: number;
 
 	constructor(x: number = 0, y: number = 0, w: number = 0, h: number = 0) {
+		Bitmap.instances.add(new WeakRef(this));
 		this.setX(x);
 		this.setY(y);
 		this.setW(w);
 		this.setH(h);
+	}
+
+	/**
+	 *  Re-apply screen scaling to all live Bitmap instances after a window resize.
+	 *  Stale WeakRefs are pruned automatically.
+	 */
+	static resizeAll() {
+		for (const ref of Bitmap.instances) {
+			const bitmap = ref.deref();
+			if (bitmap) {
+				bitmap.resize();
+			} else {
+				Bitmap.instances.delete(ref);
+			}
+		}
+	}
+
+	/**
+	 *  Re-apply screen scaling from the stored original (logical) coordinates.
+	 *  Subclasses with additional cached scaled values must override this.
+	 */
+	resize() {
+		this.setX(this.oX);
+		this.setY(this.oY);
+		this.setW(this.oW);
+		this.setH(this.oH);
 	}
 
 	/**

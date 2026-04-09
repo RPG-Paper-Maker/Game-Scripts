@@ -97,6 +97,7 @@ export class Battler {
 	public lastStatusHealed: Status;
 	public lastTarget: Battler | null = null;
 	public hidden = false;
+	public preventKORestore = false;
 
 	constructor(player: Player, isEnemy = false, position?: Position, vect?: THREE.Vector3, camera?: Camera) {
 		this.player = player;
@@ -364,13 +365,16 @@ export class Battler {
 	updateDead(attacked: boolean, user?: Player) {
 		let step = this.step;
 		if (this.player.isDead()) {
-			const newlyDead = this.addStatus(1);
-			if (newlyDead !== null) {
-				this.player.removeIfDeadStatus();
+			if (!this.preventKORestore) {
+				const newlyDead = this.addStatus(1);
+				if (newlyDead !== null) {
+					this.player.removeIfDeadStatus();
+				}
 			}
 			step = this.step;
 			this.lastStep = step;
 		} else {
+			this.preventKORestore = false;
 			this.removeStatus(1);
 			if (attacked) {
 				step = BATTLER_STEP.ATTACKED;

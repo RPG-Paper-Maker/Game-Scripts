@@ -22,6 +22,7 @@ import { Base } from './Base';
  *  @param {number} length - Max length of equipment kind name
  */
 class Equip extends Base {
+	public oLength: number;
 	public length: number;
 	public isPossible: boolean;
 	public graphicEquipmentName: Graphic.Text;
@@ -30,6 +31,7 @@ class Equip extends Base {
 	constructor(player: Player, id: number, length: number, isPossible: boolean) {
 		super();
 
+		this.oLength = length;
 		this.length = ScreenResolution.getScreenMinXY(length);
 		this.isPossible = isPossible;
 		const equiped = player.equip[id];
@@ -68,6 +70,11 @@ class Equip extends Base {
 	 */
 	draw(x: number, y: number, w: number, h: number) {
 		this.drawChoice(x, y, w, h);
+	}
+
+	resize() {
+		super.resize();
+		this.length = ScreenResolution.getScreenMinXY(this.oLength);
 	}
 }
 

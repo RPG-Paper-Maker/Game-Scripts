@@ -171,6 +171,23 @@ class Picture2D extends Bitmap {
 		}
 	}
 
+	resize() {
+		this.x = ScreenResolution.getScreenX(this.oX);
+		this.y = ScreenResolution.getScreenY(this.oY);
+		if (!this.empty && this.loaded) {
+			if (this.cover) {
+				this.w = ScreenResolution.CANVAS_WIDTH;
+				this.h = ScreenResolution.CANVAS_HEIGHT;
+			} else if (this.stretch) {
+				this.w = ScreenResolution.getScreenX(this.oW);
+				this.h = ScreenResolution.getScreenY(this.oH);
+			} else {
+				this.w = ScreenResolution.getScreenMinXY(this.oW);
+				this.h = ScreenResolution.getScreenMinXY(this.oH);
+			}
+		}
+	}
+
 	/**
 	 *  Create a copy of a picture2D.
 	 *  @returns {Picture2D}

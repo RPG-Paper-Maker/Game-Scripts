@@ -33,6 +33,7 @@ class TextIcon extends Base {
 	public system: Model.Base;
 	public side: ALIGN;
 	public align: ALIGN;
+	public oSpace: number;
 	public space: number;
 	public graphicIcon: Picture2D;
 	public graphicText: Graphic.Text;
@@ -52,6 +53,7 @@ class TextIcon extends Base {
 		this.indexY = indexY;
 		this.side = side;
 		this.align = align;
+		this.oSpace = space;
 		this.space = ScreenResolution.getScreenMinXY(space);
 		this.graphicIcon = Data.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.iconID);
 		this.graphicText = new Graphic.Text('', textOptions);
@@ -168,6 +170,11 @@ class TextIcon extends Base {
 	 */
 	draw(x: number, y: number, w: number, h: number) {
 		this.drawChoice(x, y, w, h);
+	}
+
+	resize() {
+		super.resize();
+		this.space = ScreenResolution.getScreenMinXY(this.oSpace);
 	}
 }
 

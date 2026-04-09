@@ -145,6 +145,11 @@ class Text extends Base {
 		this.updateFont();
 	}
 
+	resize() {
+		super.resize();
+		this.setFontSize(this.oFontSize);
+	}
+
 	/**
 	 *  Set the final font.
 	 */

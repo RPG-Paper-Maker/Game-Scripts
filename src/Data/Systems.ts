@@ -10,7 +10,7 @@
 */
 
 import { Paths, Platform, ScreenResolution, SONG_KIND, Utils } from '../Common';
-import { MapObject, Position } from '../Core';
+import { Bitmap, MapObject, Position } from '../Core';
 import { Data, EventCommand, Manager, Scene } from '../index';
 import {
 	CameraProperties,
@@ -288,6 +288,7 @@ export class Systems {
 		ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / ScreenResolution.SCREEN_X;
 		ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / ScreenResolution.SCREEN_Y;
 		Manager.GL.resize();
+		Bitmap.resizeAll();
 		Manager.Stack.requestPaintHUD = true;
 		for (const scene of Manager.Stack.content) {
 			scene.draw3D();
@@ -300,7 +301,7 @@ export class Systems {
 	 */
 	static switchFullscreen() {
 		this.isScreenWindow = !this.isScreenWindow;
-		this.updateWindowSize(this.windowWidth, this.windowHeight, this.isScreenWindow);
+		this.updateWindowSize(this.windowWidth, this.windowHeight, !this.isScreenWindow);
 	}
 
 	/**
@@ -336,7 +337,10 @@ export class Systems {
 		this.windowWidth = w;
 		this.windowHeight = h;
 		this.isScreenWindow = isScreenWindow;
-		this.updateWindowSize(w, h, !isScreenWindow);
+		this.updateWindowSize(w, h, false);
+		if (!isScreenWindow) {
+			this.updateWindowSize(w, h, true);
+		}
 		this.antialias = Utils.valueOrDefault(json.aa, false);
 		this.isMouseControls = Utils.valueOrDefault(json.isMouseControls, true);
 
