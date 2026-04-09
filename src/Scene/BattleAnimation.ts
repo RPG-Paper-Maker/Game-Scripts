@@ -356,6 +356,7 @@ class BattleAnimation {
 					let isAnotherEffect: boolean;
 					// Apply effect
 					if (this.battle.currentTargetIndex === null) {
+						(<Graphic.Text>this.battle.windowTopInformations.content).setText(this.battle.informationText);
 						this.battle.currentEffectIndex++;
 						for (
 							l = this.battle.effects.length;

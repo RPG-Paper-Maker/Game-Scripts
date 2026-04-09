@@ -272,7 +272,7 @@ export class Effect extends Base {
 		this.canSkip = true;
 		for (const battler of Scene.Map.current.targets) {
 			const target = battler.player;
-			if (target.isDead()) {
+			if (target.hasStatus(1)) {
 				battler.tempIsDamagesMiss = null;
 				battler.tempIsDamagesCritical = null;
 				continue;
@@ -493,6 +493,9 @@ export class Effect extends Base {
 				} else {
 					battler.lastStatusHealed = target.removeStatus(id);
 					battler.lastStatus = null;
+					if (id === 1 && battler.lastStatusHealed !== null) {
+						battler.preventKORestore = true;
+					}
 				}
 
 				// If first status changed, change animation
