@@ -183,6 +183,7 @@ class MenuInventory extends Base {
 			graphic.updateNb();
 		} else {
 			this.updateForTab();
+			this.synchronize();
 			this.substep = 0;
 			Manager.Stack.requestPaintHUD = true;
 		}
