@@ -268,14 +268,12 @@ export class Systems {
 	}
 
 	/**
-	 * Update the window size and all the canvas sizes.
+	 * Resize all canvases and update screen resolution values to the given
+	 * dimensions. Does not send any IPC message to resize the Electron window.
+	 * Called both from updateWindowSize and from the window resize event handler
+	 * (e.g. when moving between monitors with different DPI / device pixel ratio).
 	 */
-	static updateWindowSize(w: number, h: number, fullscreen: boolean): void {
-		if (fullscreen) {
-			w = Platform.screenWidth;
-			h = Platform.screenHeight;
-		}
-		Platform.setWindowSize(w, h, fullscreen);
+	static resizeCanvases(w: number, h: number): void {
 		Platform.canvasHUD.width = w;
 		Platform.canvasHUD.height = h;
 		Platform.canvasHUD.style.width = `${w}px`;
@@ -285,14 +283,26 @@ export class Systems {
 		Platform.canvasVideos.height = h;
 		ScreenResolution.CANVAS_WIDTH = w;
 		ScreenResolution.CANVAS_HEIGHT = h;
-		ScreenResolution.WINDOW_X = ScreenResolution.CANVAS_WIDTH / ScreenResolution.SCREEN_X;
-		ScreenResolution.WINDOW_Y = ScreenResolution.CANVAS_HEIGHT / ScreenResolution.SCREEN_Y;
+		ScreenResolution.WINDOW_X = w / ScreenResolution.SCREEN_X;
+		ScreenResolution.WINDOW_Y = h / ScreenResolution.SCREEN_Y;
 		Manager.GL.resize();
 		Bitmap.resizeAll();
 		Manager.Stack.requestPaintHUD = true;
 		for (const scene of Manager.Stack.content) {
 			scene.draw3D();
 		}
+	}
+
+	/**
+	 * Update the window size and all the canvas sizes.
+	 */
+	static updateWindowSize(w: number, h: number, fullscreen: boolean): void {
+		if (fullscreen) {
+			w = Platform.screenWidth;
+			h = Platform.screenHeight;
+		}
+		Platform.setWindowSize(w, h, fullscreen);
+		this.resizeCanvases(w, h);
 	}
 
 	/**

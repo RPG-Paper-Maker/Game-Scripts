@@ -77,6 +77,7 @@ export class Inputs {
 	static initialize() {
 		this.initializeKeyboard();
 		this.initializeMouse();
+		this.initializeResize();
 	}
 
 	static clear() {
@@ -105,6 +106,24 @@ export class Inputs {
 		document.addEventListener('touchstart', this.onTouchStart.bind(this), { passive: false });
 		document.addEventListener('touchend', this.onTouchEnd.bind(this), { passive: false });
 		document.addEventListener('touchmove', this.onTouchMove.bind(this), { passive: false });
+	}
+
+	/**
+	 * Sets up a window resize listener so that moving the game window between
+	 * monitors with different device pixel ratios (e.g. 100 % → 150 % DPI)
+	 * correctly updates all canvas sizes and the GL renderer.
+	 */
+	static initializeResize() {
+		window.addEventListener('resize', () => {
+			if (!Main.loaded) {
+				return;
+			}
+			const dpr = window.devicePixelRatio;
+			if (!Data.Systems.antialias) {
+				Manager.GL.renderer.setPixelRatio(dpr);
+			}
+			Data.Systems.resizeCanvases(window.innerWidth, window.innerHeight);
+		});
 	}
 
 	/**
