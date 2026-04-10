@@ -36,6 +36,8 @@ type JsonGame = {
 	hh?: Record<string, unknown>[];
 	currentMapId: number;
 	heroPosition: [number, number, number];
+	heroOrientation?: number;
+	cameraState?: { ha: number; va: number; d: number; to: [number, number, number] };
 	heroStates: number[];
 	heroProp: number[];
 	heroStatesOpts: Record<string, unknown>[];
@@ -85,6 +87,8 @@ class Game {
 	public previousWeatherOptions: Record<string, any> = null;
 	public currentWeatherOptions: Record<string, any> = null;
 	public textures: Record<string, any>;
+	public heroSavedOrientationEye: number = null;
+	public heroSavedCamera: { horizontalAngle: number; verticalAngle: number; distance: number; targetOffset: THREE.Vector3 } = null;
 
 	constructor(slot: number = -1) {
 		this.slot = slot;
@@ -194,6 +198,18 @@ class Game {
 		this.currentMapID = json.currentMapId;
 		const positionHero = json.heroPosition;
 		this.hero.position.set(positionHero[0], positionHero[1], positionHero[2]);
+		if (json.heroOrientation !== undefined) {
+			this.heroSavedOrientationEye = json.heroOrientation;
+		}
+		if (json.cameraState !== undefined) {
+			const cs = json.cameraState;
+			this.heroSavedCamera = {
+				horizontalAngle: cs.ha,
+				verticalAngle: cs.va,
+				distance: cs.d,
+				targetOffset: new THREE.Vector3(cs.to[0], cs.to[1], cs.to[2]),
+			};
+		}
 		this.heroStates = json.heroStates;
 		this.heroProperties = json.heroProp;
 		this.heroStatesOptions = json.heroStatesOpts;
@@ -250,6 +266,19 @@ class Game {
 			vars: Utils.mapToArray(this.variables),
 			currentMapId: this.currentMapID,
 			heroPosition: [this.hero.position.x, this.hero.position.y, this.hero.position.z],
+			heroOrientation: this.hero.orientationEye,
+			cameraState: Scene.Map.current?.camera
+				? {
+						ha: Scene.Map.current.camera.horizontalAngle,
+						va: Scene.Map.current.camera.verticalAngle,
+						d: Scene.Map.current.camera.distance,
+						to: [
+							Scene.Map.current.camera.targetOffset.x,
+							Scene.Map.current.camera.targetOffset.y,
+							Scene.Map.current.camera.targetOffset.z,
+						],
+					}
+				: undefined,
 			heroStates: this.heroStates,
 			heroProp: this.heroProperties,
 			heroStatesOpts: this.heroStatesOptions,

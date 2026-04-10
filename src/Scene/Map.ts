@@ -378,10 +378,23 @@ class Map extends Base {
 		// Hero initialize
 		if (!this.isBattleMap) {
 			await Game.current.hero.changeState();
-			if (this.heroOrientation !== null) {
-				Game.current.hero.orientation = this.heroOrientation;
-				Game.current.hero.orientationEye = this.heroOrientation;
+			const orientationOverride = this.heroOrientation !== null
+				? this.heroOrientation
+				: Game.current.heroSavedOrientationEye;
+			if (orientationOverride !== null) {
+				Game.current.hero.orientation = orientationOverride;
+				Game.current.hero.orientationEye = orientationOverride;
 				Game.current.hero.updateUVs();
+				Game.current.heroSavedOrientationEye = null;
+			}
+			if (Game.current.heroSavedCamera !== null) {
+				const sc = Game.current.heroSavedCamera;
+				this.camera.horizontalAngle = sc.horizontalAngle;
+				this.camera.verticalAngle = sc.verticalAngle;
+				this.camera.distance = sc.distance;
+				this.camera.targetOffset.copy(sc.targetOffset);
+				this.camera.update();
+				Game.current.heroSavedCamera = null;
 			}
 
 			// Start music and background sound
