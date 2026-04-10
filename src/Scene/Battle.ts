@@ -837,9 +837,9 @@ class Battle extends Map {
 	 *  Draw the battle HUD according to step.
 	 */
 	drawHUD() {
-		// Draw all battlers special HUD (skip during victory/defeat to hide status icons)
+		// Draw all battlers special HUD (skip during victory/defeat or start transition to hide status icons)
 		let i: number, l: number;
-		if (this.step !== BATTLE_STEP.VICTORY) {
+		if (this.step !== BATTLE_STEP.VICTORY && !this.transitionZoom && !this.transitionColor) {
 			for (i = 0, l = this.battlers[CHARACTER_KIND.HERO].length; i < l; i++) {
 				this.battlers[CHARACTER_KIND.HERO][i].drawHUD();
 			}
