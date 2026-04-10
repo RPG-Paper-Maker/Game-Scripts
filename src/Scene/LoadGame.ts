@@ -47,15 +47,17 @@ class LoadGame extends SaveLoadGame {
 
 	async loadGame() {
 		this.loading = true;
+
+		// Stop video and music immediately so the user sees a black loading screen
+		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
+			Manager.Videos.stop();
+		}
+		Manager.Songs.stopAll();
+
 		await Game.current.loadPositions();
 
 		// Initialize properties for hero
 		Game.current.hero.initializeProperties();
-
-		// Stop video if existing
-		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
-			Manager.Videos.stop();
-		}
 
 		// Pop load and title screen from the stack
 		Manager.Stack.pop();

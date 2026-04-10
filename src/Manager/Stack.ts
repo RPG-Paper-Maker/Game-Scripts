@@ -291,6 +291,7 @@ class Stack {
 				this.loadingDelay += this.elapsedTime;
 				if (this.loadingDelay >= Scene.Loading.MIN_DELAY) {
 					this.requestPaintHUD = false;
+					this.clearHUD();
 					this.sceneLoading.drawHUD();
 				}
 			} else {
