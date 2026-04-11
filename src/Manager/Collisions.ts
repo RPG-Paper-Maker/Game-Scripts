@@ -845,8 +845,8 @@ class Collisions {
 		// Check objects collisions
 		const portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfter));
 		let i: number, j: number, mapPortion: MapPortion;
-		for (i = 0; i < 2; i++) {
-			for (j = 0; j < 2; j++) {
+		for (i = -1; i <= 1; i++) {
+			for (j = -1; j <= 1; j++) {
 				mapPortion = Scene.Map.current.getMapPortion(portion.x + i, portion.y, portion.z + j);
 				if (mapPortion && this.checkObjects(mapPortion, object)) {
 					return [true, null, ORIENTATION.NONE];
