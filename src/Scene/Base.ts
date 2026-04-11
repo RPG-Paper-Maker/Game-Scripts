@@ -46,6 +46,7 @@ abstract class Base {
 	 *  @memberof Base
 	 */
 	public loading: boolean;
+	public clearOnLoad: boolean = false;
 
 	/**
 	 *  The scene camera.

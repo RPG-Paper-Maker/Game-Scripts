@@ -278,7 +278,7 @@ class Stack {
 	 */
 	static draw3D() {
 		if (!this.isEmpty()) {
-			if (this.isLoading()) {
+			if (this.isLoading() && this.top.clearOnLoad) {
 				Manager.GL.renderer.clear();
 			} else {
 				this.top.draw3D();

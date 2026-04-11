@@ -37,6 +37,33 @@ class Collisions {
 	private static BB_BOX_DETECTION = Collisions.createBox(true);
 	public static BB_BOX_DEFAULT_DETECTION = Collisions.createBox(true);
 	public static currentCustomObject3D: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]> = null;
+	private static _scratchVertex = new THREE.Vector3();
+	private static _scratchNormal = new THREE.Vector3();
+	private static _raycaster = new THREE.Raycaster();
+	private static _scratchCheckPortion: Portion = null;
+	private static _scratchCheckPosition: Position = null;
+	private static _scratchMtnPoint = new THREE.Vector2();
+	private static _scratchMtnPtA = new THREE.Vector2();
+	private static _scratchMtnPtB = new THREE.Vector2();
+	private static _scratchMtnPtC = new THREE.Vector2();
+	private static _scratchMtnPA = new THREE.Vector3();
+	private static _scratchMtnPB = new THREE.Vector3();
+	private static _scratchMtnPC = new THREE.Vector3();
+	private static _scratchMtnPlane = new THREE.Plane();
+	private static _scratchMtnRay = new THREE.Ray();
+	private static _scratchMtnNewPosition = new THREE.Vector3();
+	private static _scratchMtnJPosition: Position = null;
+	private static _scratchDirection = new THREE.Vector3();
+	private static _scratchJPositionBefore: Position = null;
+	private static _scratchJPositionAfter: Position = null;
+	private static _scratchPositionBeforePlus = new THREE.Vector3();
+	private static _scratchPositionAfterPlus = new THREE.Vector3();
+	private static _scratchPositionBottom = new THREE.Vector3();
+	private static _scratchPositionBottomAfter = new THREE.Vector3();
+	private static _scratchEuler = new THREE.Euler();
+	private static _scratchEulerCenter = new THREE.Vector3();
+	private static _scratchCollisionList: StructMapElementCollision[] = [];
+	private static _scratchPortion: Portion = null;
 
 	constructor() {
 		throw new Error('This is a static class');
@@ -48,6 +75,12 @@ class Collisions {
 	 */
 	static initialize() {
 		this.BB_BOX_DETECTION.geometry.boundingBox = new THREE.Box3();
+		this._scratchCheckPortion = new Portion(0, 0, 0);
+		this._scratchCheckPosition = new Position(0, 0, 0);
+		this._scratchMtnJPosition = new Position(0, 0, 0);
+		this._scratchJPositionBefore = new Position(0, 0, 0);
+		this._scratchJPositionAfter = new Position(0, 0, 0);
+		this._scratchPortion = new Portion(0, 0, 0);
 	}
 
 	/**
@@ -145,34 +178,40 @@ class Collisions {
 			-box['previousTranslate'][2] + box['previousCenter'][2],
 		);
 		const geometry = <CustomGeometry>box.geometry;
-		geometry.rotateFromEuler(
-			new THREE.Euler(
-				(-box['previousRotate'][1] * Math.PI) / 180.0,
-				(-box['previousRotate'][0] * Math.PI) / 180.0,
-				(-box['previousRotate'][2] * Math.PI) / 180.0,
-				'ZYX',
-			),
-			new THREE.Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]),
+		const se = Collisions._scratchEuler;
+		const sc = Collisions._scratchEulerCenter;
+		sc.set(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]);
+		se.set(
+			(-box['previousRotate'][1] * Math.PI) / 180.0,
+			(-box['previousRotate'][0] * Math.PI) / 180.0,
+			(-box['previousRotate'][2] * Math.PI) / 180.0,
+			'ZYX',
 		);
+		geometry.rotateFromEuler(se, sc);
 		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
 
 		// Update to the new ones
 		box.geometry.scale(boundingBox[3], boundingBox[4], boundingBox[5]);
-		geometry.rotateFromEuler(
-			new THREE.Euler(
-				(boundingBox[7] * Math.PI) / 180.0,
-				(boundingBox[6] * Math.PI) / 180.0,
-				(boundingBox[8] * Math.PI) / 180.0,
-				'XYZ',
-			),
-			new THREE.Vector3(center[0], center[1], center[2]),
+		sc.set(center[0], center[1], center[2]);
+		se.set(
+			(boundingBox[7] * Math.PI) / 180.0,
+			(boundingBox[6] * Math.PI) / 180.0,
+			(boundingBox[8] * Math.PI) / 180.0,
+			'XYZ',
 		);
+		geometry.rotateFromEuler(se, sc);
 		box.geometry.translate(boundingBox[0] - center[0], boundingBox[1] - center[1], boundingBox[2] - center[2]);
 
 		// Register previous transforms to current
-		box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
-		box['previousRotate'] = [boundingBox[6], boundingBox[7], boundingBox[8]];
-		box['previousScale'] = [boundingBox[3], boundingBox[4], boundingBox[5]];
+		box['previousTranslate'][0] = boundingBox[0];
+		box['previousTranslate'][1] = boundingBox[1];
+		box['previousTranslate'][2] = boundingBox[2];
+		box['previousRotate'][0] = boundingBox[6];
+		box['previousRotate'][1] = boundingBox[7];
+		box['previousRotate'][2] = boundingBox[8];
+		box['previousScale'][0] = boundingBox[3];
+		box['previousScale'][1] = boundingBox[4];
+		box['previousScale'][2] = boundingBox[5];
 		box['previousIsFix'] = isFixSprite;
 		box['previousCenter'] = center;
 
@@ -203,36 +242,42 @@ class Collisions {
 			-box['previousTranslate'][2],
 		);
 		const geometry = <CustomGeometry>box.geometry;
-		geometry.rotateFromEuler(
-			new THREE.Euler(
-				(-box['previousRotate'][1] * Math.PI) / 180.0,
-				(-box['previousRotate'][0] * Math.PI) / 180.0,
-				(-box['previousRotate'][2] * Math.PI) / 180.0,
-				'ZYX',
-			),
-			new THREE.Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]),
+		const se = Collisions._scratchEuler;
+		const sc = Collisions._scratchEulerCenter;
+		sc.set(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]);
+		se.set(
+			(-box['previousRotate'][1] * Math.PI) / 180.0,
+			(-box['previousRotate'][0] * Math.PI) / 180.0,
+			(-box['previousRotate'][2] * Math.PI) / 180.0,
+			'ZYX',
 		);
+		geometry.rotateFromEuler(se, sc);
 		box.geometry.rotateY(-Math.PI / 4);
 		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
 
 		// Update to the new ones
 		box.geometry.scale(size, boundingBox[4], size);
 		box.geometry.rotateY(Math.PI / 4);
-		geometry.rotateFromEuler(
-			new THREE.Euler(
-				(boundingBox[7] * Math.PI) / 180.0,
-				(boundingBox[6] * Math.PI) / 180.0,
-				(boundingBox[8] * Math.PI) / 180.0,
-				'XYZ',
-			),
-			new THREE.Vector3(center[0], center[1], center[2]),
+		sc.set(center[0], center[1], center[2]);
+		se.set(
+			(boundingBox[7] * Math.PI) / 180.0,
+			(boundingBox[6] * Math.PI) / 180.0,
+			(boundingBox[8] * Math.PI) / 180.0,
+			'XYZ',
 		);
+		geometry.rotateFromEuler(se, sc);
 		box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
 
 		// Register previous transforms to current
-		box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
-		box['previousRotate'] = [boundingBox[6], boundingBox[7], boundingBox[8]];
-		box['previousScale'] = [size, boundingBox[4], size];
+		box['previousTranslate'][0] = boundingBox[0];
+		box['previousTranslate'][1] = boundingBox[1];
+		box['previousTranslate'][2] = boundingBox[2];
+		box['previousRotate'][0] = boundingBox[6];
+		box['previousRotate'][1] = boundingBox[7];
+		box['previousRotate'][2] = boundingBox[8];
+		box['previousScale'][0] = size;
+		box['previousScale'][1] = boundingBox[4];
+		box['previousScale'][2] = size;
 		box['previousCenter'] = center;
 
 		// Update geometry now
@@ -385,16 +430,10 @@ class Collisions {
 		lA: number,
 		lB: number,
 	): boolean {
+		const sn = Collisions._scratchNormal;
 		for (let i = 0, l = normals.length; i < l; i += 3) {
-			if (
-				!this.overlapOnThisNormal(
-					verticesA,
-					verticesB,
-					lA,
-					lB,
-					new THREE.Vector3(normals[i], normals[i + 1], normals[i + 2]),
-				)
-			) {
+			sn.set(normals[i], normals[i + 1], normals[i + 2]);
+			if (!this.overlapOnThisNormal(verticesA, verticesB, lA, lB, sn)) {
 				return false;
 			}
 		}
@@ -421,10 +460,11 @@ class Collisions {
 		// We test each vertex of A
 		let minA = null;
 		let maxA = null;
-		let i: number, vertex: THREE.Vector3, buffer: number;
+		let i: number, buffer: number;
+		const sv = Collisions._scratchVertex;
 		for (i = 0; i < lA; i += 3) {
-			vertex = new THREE.Vector3(verticesA[i], verticesA[i + 1], verticesA[i + 2]);
-			buffer = Mathf.orthogonalProjection(vertex, normal);
+			sv.set(verticesA[i], verticesA[i + 1], verticesA[i + 2]);
+			buffer = Mathf.orthogonalProjection(sv, normal);
 			if (minA === null || buffer < minA) {
 				minA = buffer;
 			}
@@ -437,8 +477,8 @@ class Collisions {
 		let minB = null;
 		let maxB = null;
 		for (i = 0; i < lB; i += 3) {
-			vertex = new THREE.Vector3(verticesB[i], verticesB[i + 1], verticesB[i + 2]);
-			buffer = Mathf.orthogonalProjection(vertex, normal);
+			sv.set(verticesB[i], verticesB[i + 1], verticesB[i + 2]);
+			buffer = Mathf.orthogonalProjection(sv, normal);
 			if (minB === null || buffer < minB) {
 				minB = buffer;
 			}
@@ -466,13 +506,20 @@ class Collisions {
 		bbSettings: number[],
 		reverseTestObjects: boolean = false,
 	): [boolean, number, ORIENTATION] {
-		const direction = new THREE.Vector3();
-		direction.subVectors(positionAfter, positionBefore).normalize();
-		const jpositionBefore = Position.createFromVector3(positionBefore);
-		const jpositionAfter = Position.createFromVector3(positionAfter);
-		const positionBeforePlus = new THREE.Vector3();
-		const positionAfterPlus = new THREE.Vector3();
+		const direction = Collisions._scratchDirection.subVectors(positionAfter, positionBefore).normalize();
+		const squareSz = Data.Systems.SQUARE_SIZE;
+		const jpositionBefore = Collisions._scratchJPositionBefore;
+		jpositionBefore.x = Math.floor(positionBefore.x / squareSz);
+		jpositionBefore.y = Math.floor(positionBefore.y / squareSz);
+		jpositionBefore.z = Math.floor(positionBefore.z / squareSz);
+		const jpositionAfter = Collisions._scratchJPositionAfter;
+		jpositionAfter.x = Math.floor(positionAfter.x / squareSz);
+		jpositionAfter.y = Math.floor(positionAfter.y / squareSz);
+		jpositionAfter.z = Math.floor(positionAfter.z / squareSz);
+		const positionBeforePlus = Collisions._scratchPositionBeforePlus;
+		const positionAfterPlus = Collisions._scratchPositionAfterPlus;
 		let yMountain = null;
+		const mountainCollisionHeight = Data.Systems.mountainCollisionHeight.getValue() as number;
 
 		// Squares to inspect according to the direction of the object
 		const [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
@@ -493,28 +540,30 @@ class Collisions {
 			i2: number,
 			j2: number,
 			k2: number,
-			portion: Portion,
 			mapPortion: MapPortion,
 			result: [boolean, number, ORIENTATION];
+		const squareSize = Data.Systems.SQUARE_SIZE;
+		const chunkSize = squareSize * Constants.PORTION_SIZE;
+		const cp = Scene.Map.current.currentPortion;
+		const lp = Collisions._scratchCheckPortion;
+		const jp = Collisions._scratchCheckPosition;
 		for (i = startI; i <= endI; i++) {
 			for (j = startJ; j <= endJ; j++) {
 				for (k = startK; k <= endK; k++) {
 					positionAfterPlus.set(
-						positionAfter.x + i * Data.Systems.SQUARE_SIZE,
-						positionAfter.y + j * Data.Systems.SQUARE_SIZE,
-						positionAfter.z + k * Data.Systems.SQUARE_SIZE,
+						positionAfter.x + i * squareSize,
+						positionAfter.y + j * squareSize,
+						positionAfter.z + k * squareSize,
 					);
-					portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfterPlus));
-					mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+					lp.x = Math.floor(positionAfterPlus.x / chunkSize) - cp.x;
+					lp.y = Math.floor(positionAfterPlus.y / chunkSize) - cp.y;
+					lp.z = Math.floor(positionAfterPlus.z / chunkSize) - cp.z;
+					mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 					if (mapPortion) {
-						result = this.check(
-							mapPortion,
-							jpositionBefore,
-							new Position(jpositionAfter.x + i, jpositionAfter.y + j, jpositionAfter.z + k),
-							positionAfter,
-							object,
-							direction,
-						);
+						jp.x = jpositionAfter.x + i;
+						jp.y = jpositionAfter.y + j;
+						jp.z = jpositionAfter.z + k;
+						result = this.check(mapPortion, jpositionBefore, jp, positionAfter, object, direction);
 						if (result[0] === null) {
 							// If not already climbing, be sure that the before position can colide with climbling sprite
 							if (!object.isClimbing) {
@@ -523,24 +572,19 @@ class Collisions {
 									for (j2 = startJ; j2 <= endJ; j2++) {
 										for (k2 = startK; k2 <= endK; k2++) {
 											positionBeforePlus.set(
-												positionBefore.x + i2 * Data.Systems.SQUARE_SIZE,
-												positionBefore.y + j2 * Data.Systems.SQUARE_SIZE,
-												positionBefore.z + k2 * Data.Systems.SQUARE_SIZE,
+												positionBefore.x + i2 * squareSize,
+												positionBefore.y + j2 * squareSize,
+												positionBefore.z + k2 * squareSize,
 											);
-											portion = Scene.Map.current.getLocalPortion(
-												Portion.createFromVector3(positionBeforePlus),
-											);
-											mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+											lp.x = Math.floor(positionBeforePlus.x / chunkSize) - cp.x;
+											lp.y = Math.floor(positionBeforePlus.y / chunkSize) - cp.y;
+											lp.z = Math.floor(positionBeforePlus.z / chunkSize) - cp.z;
+											mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 											if (mapPortion) {
-												const [b, y] = this.checkSprites(
-													mapPortion,
-													new Position(
-														jpositionBefore.x + i2,
-														jpositionBefore.y + j2,
-														jpositionBefore.z + k2,
-													),
-													object,
-												);
+												jp.x = jpositionBefore.x + i2;
+												jp.y = jpositionBefore.y + j2;
+												jp.z = jpositionBefore.z + k2;
+												const [b, y] = this.checkSprites(mapPortion, jp, object);
 												// If before and after collides, get up!
 												if (b === null) {
 													object.updateMeshBBPosition(
@@ -584,15 +628,17 @@ class Collisions {
 		}
 
 		// Check empty square or square mountain height possible down
-		portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfter));
-		mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+		lp.x = Math.floor(positionAfter.x / chunkSize) - cp.x;
+		lp.y = Math.floor(positionAfter.y / chunkSize) - cp.y;
+		lp.z = Math.floor(positionAfter.z / chunkSize) - cp.z;
+		mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 		let floors: number[];
 		if (mapPortion) {
 			floors =
 				mapPortion.squareNonEmpty[jpositionAfter.x % Constants.PORTION_SIZE][
 					jpositionAfter.z % Constants.PORTION_SIZE
 				];
-			const otherMapPortion = Scene.Map.current.getMapPortion(portion.x, portion.y + 1, portion.z);
+			const otherMapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y + 1, lp.z);
 			if (otherMapPortion) {
 				floors = floors.concat(
 					otherMapPortion.squareNonEmpty[jpositionAfter.x % Constants.PORTION_SIZE][
@@ -606,14 +652,11 @@ class Collisions {
 					return [true, null, ORIENTATION.NONE];
 				} else {
 					let maxY = null;
-					const limitY = positionAfter.y - (Data.Systems.mountainCollisionHeight.getValue() as number);
+					const limitY = positionAfter.y - mountainCollisionHeight;
 					let temp: number;
 					for (i = 0; i < l; i++) {
 						temp = floors[i];
-						if (
-							temp <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number) &&
-							temp >= limitY
-						) {
+						if (temp <= positionAfter.y + mountainCollisionHeight && temp >= limitY) {
 							if (maxY === null) {
 								maxY = temp;
 							} else {
@@ -625,18 +668,16 @@ class Collisions {
 					}
 					if (maxY === null) {
 						// redo with before pos for going down two following height angled
-						portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionBefore));
-						mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+						lp.x = Math.floor(positionBefore.x / chunkSize) - cp.x;
+						lp.y = Math.floor(positionBefore.y / chunkSize) - cp.y;
+						lp.z = Math.floor(positionBefore.z / chunkSize) - cp.z;
+						mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 						if (mapPortion) {
 							floors =
 								mapPortion.squareNonEmpty[jpositionBefore.x % Constants.PORTION_SIZE][
 									jpositionBefore.z % Constants.PORTION_SIZE
 								];
-							const otherMapPortion = Scene.Map.current.getMapPortion(
-								portion.x,
-								portion.y + 1,
-								portion.z,
-							);
+							const otherMapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y + 1, lp.z);
 							if (otherMapPortion) {
 								floors = floors.concat(
 									otherMapPortion.squareNonEmpty[jpositionBefore.x % Constants.PORTION_SIZE][
@@ -650,17 +691,11 @@ class Collisions {
 									return [null, null, ORIENTATION.NONE];
 								} else {
 									let maxY = null;
-									const limitY =
-										positionBefore.y - (Data.Systems.mountainCollisionHeight.getValue() as number);
+									const limitY = positionBefore.y - mountainCollisionHeight;
 									let temp: number;
 									for (i = 0; i < l; i++) {
 										temp = floors[i];
-										if (
-											temp <=
-												positionBefore.y +
-													(Data.Systems.mountainCollisionHeight.getValue() as number) &&
-											temp >= limitY
-										) {
+										if (temp <= positionBefore.y + mountainCollisionHeight && temp >= limitY) {
 											if (maxY === null) {
 												maxY = temp;
 											} else {
@@ -676,29 +711,29 @@ class Collisions {
 											const positionFront = positionBefore.clone();
 											switch (object.orientationEye) {
 												case ORIENTATION.NORTH:
-													positionFront.setZ(positionFront.z - Data.Systems.SQUARE_SIZE / 2);
+													positionFront.setZ(positionFront.z - squareSize / 2);
 													break;
 												case ORIENTATION.SOUTH:
-													positionFront.setZ(positionFront.z + Data.Systems.SQUARE_SIZE / 2);
+													positionFront.setZ(positionFront.z + squareSize / 2);
 													break;
 												case ORIENTATION.WEST:
-													positionFront.setX(positionFront.x - Data.Systems.SQUARE_SIZE / 2);
+													positionFront.setX(positionFront.x - squareSize / 2);
 													break;
 												case ORIENTATION.EAST:
-													positionFront.setX(positionFront.x + Data.Systems.SQUARE_SIZE / 2);
+													positionFront.setX(positionFront.x + squareSize / 2);
 													break;
 											}
-											portion = Scene.Map.current.getLocalPortion(
-												Portion.createFromVector3(positionFront),
-											);
-											mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+											lp.x = Math.floor(positionFront.x / chunkSize) - cp.x;
+											lp.y = Math.floor(positionFront.y / chunkSize) - cp.y;
+											lp.z = Math.floor(positionFront.z / chunkSize) - cp.z;
+											mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 											if (mapPortion) {
 												floors =
 													mapPortion.squareNonEmpty[
-														Math.floor(positionFront.x / Data.Systems.SQUARE_SIZE) %
+														Math.floor(positionFront.x / squareSize) %
 															Constants.PORTION_SIZE
 													][
-														Math.floor(positionFront.z / Data.Systems.SQUARE_SIZE) %
+														Math.floor(positionFront.z / squareSize) %
 															Constants.PORTION_SIZE
 													];
 												if (floors.length > 0) {
@@ -711,23 +746,27 @@ class Collisions {
 											}
 										}
 										// Check if climbing stuff in 1 px bottom
-										const positionBottom = positionBefore.clone();
-										positionBottom.setY(positionBottom.y - 1);
+										const positionBottom = Collisions._scratchPositionBottom.set(
+											positionBefore.x,
+											positionBefore.y - 1,
+											positionBefore.z,
+										);
 										for (i = startI; i <= endI; i++) {
 											for (j = startJ; j <= endJ; j++) {
 												for (k = startK; k <= endK; k++) {
 													positionBeforePlus.set(
-														positionBefore.x + i * Data.Systems.SQUARE_SIZE,
-														positionBefore.y + j * Data.Systems.SQUARE_SIZE - 1,
-														positionBefore.z + k * Data.Systems.SQUARE_SIZE,
+														positionBefore.x + i * squareSize,
+														positionBefore.y + j * squareSize - 1,
+														positionBefore.z + k * squareSize,
 													);
-													portion = Scene.Map.current.getLocalPortion(
-														Portion.createFromVector3(positionBeforePlus),
-													);
-													mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+													lp.x = Math.floor(positionBeforePlus.x / chunkSize) - cp.x;
+													lp.y = Math.floor(positionBeforePlus.y / chunkSize) - cp.y;
+													lp.z = Math.floor(positionBeforePlus.z / chunkSize) - cp.z;
+													mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 													if (mapPortion) {
-														const jpositionBottom =
-															Position.createFromVector3(positionBeforePlus);
+														jp.x = Math.floor(positionBeforePlus.x / squareSize);
+														jp.y = Math.floor(positionBeforePlus.y / squareSize);
+														jp.z = Math.floor(positionBeforePlus.z / squareSize);
 														const climbingUp = object.isClimbingUp;
 														object.isClimbingUp = false;
 														object.updateMeshBBPosition(
@@ -735,41 +774,50 @@ class Collisions {
 															bbSettings,
 															positionBottom,
 														);
-														let [b, y, o] = this.checkSprites(
-															mapPortion,
-															jpositionBottom,
-															object,
-														);
+														let [b, y, o] = this.checkSprites(mapPortion, jp, object);
 														if (b === null) {
 															// Check if after moving the collision still occurs. If not, go down
-															const positionBottomAfter = positionAfter.clone();
-															positionBottomAfter.setY(positionBottomAfter.y - 1);
+															const positionBottomAfter =
+																Collisions._scratchPositionBottomAfter.set(
+																	positionAfter.x,
+																	positionAfter.y - 1,
+																	positionAfter.z,
+																);
 															for (i2 = startI; i2 <= endI; i2++) {
 																for (j2 = startJ; j2 <= endJ; j2++) {
 																	for (k2 = startK; k2 <= endK; k2++) {
 																		positionAfterPlus.set(
-																			positionAfter.x +
-																				i2 * Data.Systems.SQUARE_SIZE,
-																			positionAfter.y +
-																				j2 * Data.Systems.SQUARE_SIZE -
-																				1,
-																			positionAfter.z +
-																				k2 * Data.Systems.SQUARE_SIZE,
+																			positionAfter.x + i2 * squareSize,
+																			positionAfter.y + j2 * squareSize - 1,
+																			positionAfter.z + k2 * squareSize,
 																		);
-																		portion = Scene.Map.current.getLocalPortion(
-																			Portion.createFromVector3(
-																				positionAfterPlus,
-																			),
+																		lp.x =
+																			Math.floor(
+																				positionAfterPlus.x / chunkSize,
+																			) - cp.x;
+																		lp.y =
+																			Math.floor(
+																				positionAfterPlus.y / chunkSize,
+																			) - cp.y;
+																		lp.z =
+																			Math.floor(
+																				positionAfterPlus.z / chunkSize,
+																			) - cp.z;
+																		mapPortion = Scene.Map.current.getMapPortion(
+																			lp.x,
+																			lp.y,
+																			lp.z,
 																		);
-																		mapPortion =
-																			Scene.Map.current.getMapPortionFromPortion(
-																				portion,
-																			);
 																		if (mapPortion) {
-																			const jpositionBottomAfter =
-																				Position.createFromVector3(
-																					positionAfterPlus,
-																				);
+																			jp.x = Math.floor(
+																				positionAfterPlus.x / squareSize,
+																			);
+																			jp.y = Math.floor(
+																				positionAfterPlus.y / squareSize,
+																			);
+																			jp.z = Math.floor(
+																				positionAfterPlus.z / squareSize,
+																			);
 																			object.updateMeshBBPosition(
 																				object.currentBoundingBox,
 																				bbSettings,
@@ -777,7 +825,7 @@ class Collisions {
 																			);
 																			b = this.checkSprites(
 																				mapPortion,
-																				jpositionBottomAfter,
+																				jp,
 																				object,
 																			)[0];
 																			if (b === null) {
@@ -825,8 +873,10 @@ class Collisions {
 			}
 
 			// Check lands inside collisions
-			portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionBefore));
-			mapPortion = Scene.Map.current.getMapPortionFromPortion(portion);
+			lp.x = Math.floor(positionBefore.x / chunkSize) - cp.x;
+			lp.y = Math.floor(positionBefore.y / chunkSize) - cp.y;
+			lp.z = Math.floor(positionBefore.z / chunkSize) - cp.z;
+			mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 			return [
 				this.checkLandsInside(mapPortion, jpositionBefore, jpositionAfter, direction),
 				yMountain,
@@ -843,7 +893,12 @@ class Collisions {
 		}
 
 		// Check objects collisions
-		const portion = Scene.Map.current.getLocalPortion(Portion.createFromVector3(positionAfter));
+		const squareSzChunk = Data.Systems.SQUARE_SIZE * Constants.PORTION_SIZE;
+		const sp = Collisions._scratchPortion;
+		sp.x = Math.floor(positionAfter.x / squareSzChunk);
+		sp.y = Math.floor(positionAfter.y / squareSzChunk);
+		sp.z = Math.floor(positionAfter.z / squareSzChunk);
+		const portion = Scene.Map.current.getLocalPortion(sp);
 		let i: number, j: number, mapPortion: MapPortion;
 		for (i = -1; i <= 1; i++) {
 			for (j = -1; j <= 1; j++) {
@@ -1162,14 +1217,27 @@ class Collisions {
 		jpositionAfter: Position,
 		overflow: Map<string, Set<string>>,
 	): StructMapElementCollision[] {
-		const list = [...(mapPortion[boundingBoxPropertyName][jpositionAfter.toIndex()] ?? [])];
-		const overflowPortions = overflow.get(jpositionAfter.getGlobalPortion().toKey()) ?? new Set();
+		const base: StructMapElementCollision[] = mapPortion[boundingBoxPropertyName][jpositionAfter.toIndex()] ?? [];
+		const overflowPortions = overflow.get(jpositionAfter.getGlobalPortionKey());
+		if (!overflowPortions || overflowPortions.size === 0) {
+			return base;
+		}
+		const list = Collisions._scratchCollisionList;
+		list.length = 0;
+		for (let i = 0, l = base.length; i < l; i++) list.push(base[i]);
+		const ocp = Scene.Map.current.currentPortion;
+		const osp = Collisions._scratchCheckPortion;
 		for (const key of overflowPortions) {
-			const overflowMapPortion = Scene.Map.current.getMapPortionFromPortion(
-				Scene.Map.current.getLocalPortion(Portion.fromKey(key)),
-			);
+			// Inline Portion.fromKey + getLocalPortion to avoid two Portion allocations per entry
+			const s1 = key.indexOf('_');
+			const s2 = key.indexOf('_', s1 + 1);
+			osp.x = +key.slice(0, s1) - ocp.x;
+			osp.y = +key.slice(s1 + 1, s2) - ocp.y;
+			osp.z = +key.slice(s2 + 1) - ocp.z;
+			const overflowMapPortion = Scene.Map.current.getMapPortion(osp.x, osp.y, osp.z);
 			if (overflowMapPortion) {
-				list.push(...(overflowMapPortion[boundingBoxPropertyName][jpositionAfter.toIndex()] ?? []));
+				const extra = overflowMapPortion[boundingBoxPropertyName][jpositionAfter.toIndex()];
+				if (extra) for (let i = 0, l = extra.length; i < l; i++) list.push(extra[i]);
 			}
 		}
 		return list;
@@ -1271,7 +1339,7 @@ class Collisions {
 		direction: THREE.Vector3,
 	): boolean {
 		const vertices = meshA.geometry.getVerticesVectors();
-		const raycaster = new THREE.Raycaster();
+		const raycaster = Collisions._raycaster;
 		const directionNegate = direction.clone().negate();
 		let collisionResults: THREE.Intersection[];
 		for (const vertex of vertices) {
@@ -1391,24 +1459,28 @@ class Collisions {
 		objCollision: StructMapElementCollision,
 		object: MapObject,
 	): [boolean, number] {
-		const mountain = <Mountain>objCollision.t;
-		const forceAlways = (<Model.Mountain>mountain.getSystem()).forceAlways();
-		const forceNever = (<Model.Mountain>mountain.getSystem()).forceNever();
-		let point = new THREE.Vector2(positionAfter.x, positionAfter.z);
 		const x = objCollision.l.x;
 		const y = objCollision.l.y;
 		const z = objCollision.l.z;
 		const w = objCollision.rw;
 		const h = objCollision.rh;
+		const mtnCollisionHeight = Data.Systems.mountainCollisionHeight.getValue() as number;
+
+		// Fast Y-bounds reject: skip full geometric test if player is clearly out of this mountain's vertical range
+		if (positionAfter.y > y + h + mtnCollisionHeight || positionAfter.y < y - mtnCollisionHeight) {
+			return [false, null];
+		}
+
+		const mountain = <Mountain>objCollision.t;
+		const system = <Model.Mountain>mountain.getSystem();
+		const forceAlways = system.forceAlways();
+		const forceNever = system.forceNever();
+		const point = Collisions._scratchMtnPoint.set(positionAfter.x, positionAfter.z);
+		const mtnCollisionAngle = Data.Systems.mountainCollisionAngle.getValue() as number;
 
 		// if w = 0, check height
 		if (w === 0) {
-			const pass =
-				forceNever ||
-				-(
-					!forceAlways &&
-					y + h <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number)
-				);
+			const pass = forceNever || -(!forceAlways && y + h <= positionAfter.y + mtnCollisionHeight);
 			if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
 				return pass ? [false, positionAfter.y >= y + h ? null : y + h] : [true, null];
 			} else {
@@ -1419,7 +1491,7 @@ class Collisions {
 					for (let i = 0, l = vertices.length; i < l; i += 3) {
 						vy = vertices[i + 1];
 						if (vy >= y && vy <= y + h) {
-							point = new THREE.Vector2(vertices[i], vertices[i + 2]);
+							point.set(vertices[i], vertices[i + 2]);
 							if (
 								Mathf.isPointOnRectangle(
 									point,
@@ -1437,6 +1509,17 @@ class Collisions {
 			}
 		} else {
 			// if w > 0, go like a slope
+			// Fast XZ bounding-box reject: skip if player is outside the maximum slope footprint
+			const sqSz = Data.Systems.SQUARE_SIZE;
+			if (
+				positionAfter.x < x - w ||
+				positionAfter.x > x + sqSz + w ||
+				positionAfter.z < z - w ||
+				positionAfter.z > z + sqSz + w
+			) {
+				return [false, null];
+			}
+
 			const rwBot = objCollision.rwBot ?? objCollision.rw;
 			const rwTop = objCollision.rwTop ?? objCollision.rw;
 			const rwLeft = objCollision.rwLeft ?? objCollision.rw;
@@ -1458,12 +1541,7 @@ class Collisions {
 
 			// If this side has no slope (width = 0), fall back to box collision for the vertical wall
 			if (sideW === 0) {
-				const pass =
-					forceNever ||
-					-(
-						!forceAlways &&
-						y + h <= positionAfter.y + (Data.Systems.mountainCollisionHeight.getValue() as number)
-					);
+				const pass = forceNever || -(!forceAlways && y + h <= positionAfter.y + mtnCollisionHeight);
 				if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
 					return pass ? [false, positionAfter.y >= y + h ? null : y + h] : [true, null];
 				} else if (!pass) {
@@ -1471,10 +1549,10 @@ class Collisions {
 					for (let i = 0, l = vertices.length; i < l; i += 3) {
 						const vy = vertices[i + 1];
 						if (vy >= y && vy <= y + h) {
-							const vPoint = new THREE.Vector2(vertices[i], vertices[i + 2]);
+							point.set(vertices[i], vertices[i + 2]);
 							if (
 								Mathf.isPointOnRectangle(
-									vPoint,
+									point,
 									x,
 									x + Data.Systems.SQUARE_SIZE,
 									z,
@@ -1490,64 +1568,64 @@ class Collisions {
 			}
 
 			// Slope geometry: find the coplanar points for the intersection plane, using per-side widths
-			let ptA: THREE.Vector2,
-				ptB: THREE.Vector2,
-				ptC: THREE.Vector2,
-				pA: THREE.Vector3,
-				pB: THREE.Vector3,
-				pC: THREE.Vector3;
+			const ptA = Collisions._scratchMtnPtA;
+			const ptB = Collisions._scratchMtnPtB;
+			const ptC = Collisions._scratchMtnPtC;
+			const pA = Collisions._scratchMtnPA;
+			const pB = Collisions._scratchMtnPB;
+			const pC = Collisions._scratchMtnPC;
 			if (objCollision.left && !mountain.left) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new THREE.Vector2(x - rwLeft, z);
-					ptB = new THREE.Vector2(x, z);
-					ptC = new THREE.Vector2(x, z - rwTop);
+					ptA.set(x - rwLeft, z);
+					ptB.set(x, z);
+					ptC.set(x, z - rwTop);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new THREE.Vector3(ptA.x, y, ptA.y);
-						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-						pC = new THREE.Vector3(ptC.x, y, ptC.y);
+						pA.set(ptA.x, y, ptA.y);
+						pB.set(ptB.x, y + h, ptB.y);
+						pC.set(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new THREE.Vector2(x - rwLeft, z + Data.Systems.SQUARE_SIZE);
-					ptB = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE);
-					ptC = new THREE.Vector2(x, z + Data.Systems.SQUARE_SIZE + rwBot);
+					ptA.set(x - rwLeft, z + Data.Systems.SQUARE_SIZE);
+					ptB.set(x, z + Data.Systems.SQUARE_SIZE);
+					ptC.set(x, z + Data.Systems.SQUARE_SIZE + rwBot);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new THREE.Vector3(ptA.x, y, ptA.y);
-						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-						pC = new THREE.Vector3(ptC.x, y, ptC.y);
+						pA.set(ptA.x, y, ptA.y);
+						pB.set(ptB.x, y + h, ptB.y);
+						pC.set(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
 				} else {
 					if (Mathf.isPointOnRectangle(point, x - rwLeft, x, z, z + Data.Systems.SQUARE_SIZE)) {
-						pA = new THREE.Vector3(x - rwLeft, y, z);
-						pB = new THREE.Vector3(x, y + h, z);
-						pC = new THREE.Vector3(x, y + h, z + Data.Systems.SQUARE_SIZE);
+						pA.set(x - rwLeft, y, z);
+						pB.set(x, y + h, z);
+						pC.set(x, y + h, z + Data.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
 					}
 				}
 			} else if (objCollision.right && !mountain.right) {
 				if (objCollision.top && !mountain.top) {
-					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z - rwTop);
-					ptB = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z);
-					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + rwRight, z);
+					ptA.set(x + Data.Systems.SQUARE_SIZE, z - rwTop);
+					ptB.set(x + Data.Systems.SQUARE_SIZE, z);
+					ptC.set(x + Data.Systems.SQUARE_SIZE + rwRight, z);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new THREE.Vector3(ptA.x, y, ptA.y);
-						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-						pC = new THREE.Vector3(ptC.x, y, ptC.y);
+						pA.set(ptA.x, y, ptA.y);
+						pB.set(ptB.x, y + h, ptB.y);
+						pC.set(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE + rwBot);
-					ptB = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE);
-					ptC = new THREE.Vector2(x + Data.Systems.SQUARE_SIZE + rwRight, z + Data.Systems.SQUARE_SIZE);
+					ptA.set(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE + rwBot);
+					ptB.set(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE);
+					ptC.set(x + Data.Systems.SQUARE_SIZE + rwRight, z + Data.Systems.SQUARE_SIZE);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
-						pA = new THREE.Vector3(ptA.x, y, ptA.y);
-						pB = new THREE.Vector3(ptB.x, y + h, ptB.y);
-						pC = new THREE.Vector3(ptC.x, y, ptC.y);
+						pA.set(ptA.x, y, ptA.y);
+						pB.set(ptB.x, y + h, ptB.y);
+						pC.set(ptC.x, y, ptC.y);
 					} else {
 						return [false, null];
 					}
@@ -1561,9 +1639,9 @@ class Collisions {
 							z + Data.Systems.SQUARE_SIZE,
 						)
 					) {
-						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y + h, z + Data.Systems.SQUARE_SIZE);
-						pB = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y + h, z);
-						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE + rwRight, y, z);
+						pA.set(x + Data.Systems.SQUARE_SIZE, y + h, z + Data.Systems.SQUARE_SIZE);
+						pB.set(x + Data.Systems.SQUARE_SIZE, y + h, z);
+						pC.set(x + Data.Systems.SQUARE_SIZE + rwRight, y, z);
 					} else {
 						return [false, null];
 					}
@@ -1571,9 +1649,9 @@ class Collisions {
 			} else {
 				if (objCollision.top && !mountain.top) {
 					if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z - rwTop, z)) {
-						pA = new THREE.Vector3(x, y + h, z);
-						pB = new THREE.Vector3(x, y, z - rwTop);
-						pC = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z - rwTop);
+						pA.set(x, y + h, z);
+						pB.set(x, y, z - rwTop);
+						pC.set(x + Data.Systems.SQUARE_SIZE, y, z - rwTop);
 					} else {
 						return [false, null];
 					}
@@ -1587,9 +1665,9 @@ class Collisions {
 							z + Data.Systems.SQUARE_SIZE + rwBot,
 						)
 					) {
-						pA = new THREE.Vector3(x + Data.Systems.SQUARE_SIZE, y, z + Data.Systems.SQUARE_SIZE + rwBot);
-						pB = new THREE.Vector3(x, y, z + Data.Systems.SQUARE_SIZE + rwBot);
-						pC = new THREE.Vector3(x, y + h, z + Data.Systems.SQUARE_SIZE);
+						pA.set(x + Data.Systems.SQUARE_SIZE, y, z + Data.Systems.SQUARE_SIZE + rwBot);
+						pB.set(x, y, z + Data.Systems.SQUARE_SIZE + rwBot);
+						pC.set(x, y + h, z + Data.Systems.SQUARE_SIZE);
 					} else {
 						return [false, null];
 					}
@@ -1598,26 +1676,29 @@ class Collisions {
 				}
 			}
 			// Get the intersection point for updating mountain y
-			const plane = new THREE.Plane();
-			const ray = new THREE.Ray(
-				new THREE.Vector3(positionAfter.x, y, positionAfter.z),
-				new THREE.Vector3(0, 1, 0),
-			);
-			const newPosition = new THREE.Vector3();
+			const plane = Collisions._scratchMtnPlane;
+			const ray = Collisions._scratchMtnRay;
+			ray.origin.set(positionAfter.x, y, positionAfter.z);
+			ray.direction.set(0, 1, 0);
+			const newPosition = Collisions._scratchMtnNewPosition;
 			plane.setFromCoplanarPoints(pA, pB, pC);
 			ray.intersectPlane(plane, newPosition);
 
 			// If going down, check if there's a blocking floor
-			const jposition =
-				newPosition.y - positionAfter.y < 0
-					? new Position(
-							Math.floor(positionAfter.x / Data.Systems.SQUARE_SIZE),
-							Math.ceil(positionAfter.y / Data.Systems.SQUARE_SIZE),
-							Math.floor(positionAfter.z / Data.Systems.SQUARE_SIZE),
-						)
-					: jpositionAfter;
-			mapPortion = Scene.Map.current.getMapPortionFromPortion(
-				Scene.Map.current.getLocalPortion(jposition.getGlobalPortion()),
+			let jposition: Position;
+			if (newPosition.y - positionAfter.y < 0) {
+				jposition = Collisions._scratchMtnJPosition;
+				jposition.x = Math.floor(positionAfter.x / Data.Systems.SQUARE_SIZE);
+				jposition.y = Math.ceil(positionAfter.y / Data.Systems.SQUARE_SIZE);
+				jposition.z = Math.floor(positionAfter.z / Data.Systems.SQUARE_SIZE);
+			} else {
+				jposition = jpositionAfter;
+			}
+			const cp = Scene.Map.current.currentPortion;
+			mapPortion = Scene.Map.current.getMapPortion(
+				Math.floor(jposition.x / Constants.PORTION_SIZE) - cp.x,
+				Math.floor(jposition.y / Constants.PORTION_SIZE) - cp.y,
+				Math.floor(jposition.z / Constants.PORTION_SIZE) - cp.z,
 			);
 			let isFloor = mapPortion.boundingBoxesLands[jposition.toIndex()].length > 0;
 			if (isFloor && newPosition.y - positionAfter.y < 0) {
@@ -1626,10 +1707,7 @@ class Collisions {
 
 			// If angle limit, block — compute per-side angle from actual side width
 			const sideAngle = sideW === 0 ? 90 : (Math.atan(h / sideW) * 180) / Math.PI;
-			if (
-				forceAlways ||
-				(!forceNever && sideAngle > (Data.Systems.mountainCollisionAngle.getValue() as number))
-			) {
+			if (forceAlways || (!forceNever && sideAngle > mtnCollisionAngle)) {
 				// Check if floor existing on top of the mountain angle
 				isFloor =
 					jposition.y === jpositionAfter.y
@@ -1637,12 +1715,7 @@ class Collisions {
 						: mapPortion.boundingBoxesLands[jpositionAfter.toIndex()].length > 0;
 				return [!isFloor, null];
 			}
-			return [
-				!forceNever &&
-					Math.abs(newPosition.y - positionAfter.y) >
-						(Data.Systems.mountainCollisionHeight.getValue() as number),
-				newPosition.y,
-			];
+			return [!forceNever && Math.abs(newPosition.y - positionAfter.y) > mtnCollisionHeight, newPosition.y];
 		}
 		return [false, null];
 	}

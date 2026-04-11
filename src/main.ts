@@ -117,9 +117,7 @@ export class Main {
 				if (!Manager.Stack.isLoading()) {
 					Manager.Stack.update();
 				}
-				if (!Manager.Stack.isLoading()) {
-					Manager.Stack.draw3D();
-				}
+				Manager.Stack.draw3D();
 			}
 			Manager.Stack.drawHUD();
 

@@ -167,6 +167,14 @@ class Position extends Portion {
 	}
 
 	/**
+	 *  Get the key for the global portion without allocating a Portion object.
+	 *  @returns {string}
+	 */
+	getGlobalPortionKey(): string {
+		return `${Math.floor(this.x / Constants.PORTION_SIZE)}_${Math.floor(this.y / Constants.PORTION_SIZE)}_${Math.floor(this.z / Constants.PORTION_SIZE)}`;
+	}
+
+	/**
 	 *  Transform a position to a Vector3.
 	 *  @returns {Vector3}
 	 */

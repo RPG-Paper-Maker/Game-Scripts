@@ -84,6 +84,7 @@ class Map extends Base {
 	public overflowSprites: globalThis.Map<string, Set<string>> = new globalThis.Map();
 	public overflowMountains: globalThis.Map<string, Set<string>> = new globalThis.Map();
 	public overflowObjects3D: globalThis.Map<string, Set<string>> = new globalThis.Map();
+	private _cameraDirection: THREE.Vector3 = new THREE.Vector3();
 
 	constructor(
 		id: number,
@@ -99,6 +100,7 @@ class Map extends Base {
 		this.loading = false;
 		this.heroOrientation = heroOrientation;
 		if (!minimal) {
+			this.clearOnLoad = true;
 			this.loading = true;
 			this.load().catch(console.error);
 		}
@@ -133,6 +135,7 @@ class Map extends Base {
 		this.createWeather();
 
 		Manager.Stack.requestPaintHUD = true;
+		this.clearOnLoad = false;
 		this.loading = false;
 	}
 
@@ -157,23 +160,32 @@ class Map extends Base {
 		this.initializeCamera();
 		await this.loadTextures();
 		this.loadCollisions();
+		type ReloadTask = { mapPortion: MapPortion; portion: Portion };
+		const reloadTasks: ReloadTask[] = [];
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
 				for (k = -limit; k <= limit; k++) {
 					const mapPortion = this.getMapPortion(i, j, k);
 					if (mapPortion) {
-						const portion = new Portion(
-							this.currentPortion.x + i,
-							this.currentPortion.y + j,
-							this.currentPortion.z + k,
-						);
-						const json = (await Platform.parseFileJSON(
-							Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName(),
-						)) as any;
-						mapPortion.readStatic(json);
+						reloadTasks.push({
+							mapPortion,
+							portion: new Portion(
+								this.currentPortion.x + i,
+								this.currentPortion.y + j,
+								this.currentPortion.z + k,
+							),
+						});
 					}
 				}
 			}
+		}
+		const reloadJsons = await Promise.all(
+			reloadTasks.map((t) =>
+				Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + '/' + t.portion.getFileName()),
+			),
+		);
+		for (let n = 0; n < reloadTasks.length; n++) {
+			await reloadTasks[n].mapPortion.readStatic(reloadJsons[n]);
 		}
 		this.loading = false;
 	}
@@ -378,9 +390,8 @@ class Map extends Base {
 		// Hero initialize
 		if (!this.isBattleMap) {
 			await Game.current.hero.changeState();
-			const orientationOverride = this.heroOrientation !== null
-				? this.heroOrientation
-				: Game.current.heroSavedOrientationEye;
+			const orientationOverride =
+				this.heroOrientation !== null ? this.heroOrientation : Game.current.heroSavedOrientationEye;
 			if (orientationOverride !== null) {
 				Game.current.hero.orientation = orientationOverride;
 				Game.current.hero.orientationEye = orientationOverride;
@@ -438,37 +449,49 @@ class Map extends Base {
 		const limit = Data.Systems.PORTIONS_RAY;
 		let i: number, j: number, k: number;
 		if (!update) {
+			type Task = { realX: number; realY: number; realZ: number; x: number; y: number; z: number };
+			const tasks: Task[] = [];
 			for (i = -limit; i <= limit; i++) {
 				for (j = -limit; j <= limit; j++) {
 					for (k = -limit; k <= limit; k++) {
-						await this.loadPortion(
-							this.currentPortion.x + i,
-							this.currentPortion.y + j,
-							this.currentPortion.z + k,
-							i,
-							j,
-							k,
-						);
+						tasks.push({
+							realX: this.currentPortion.x + i,
+							realY: this.currentPortion.y + j,
+							realZ: this.currentPortion.z + k,
+							x: i,
+							y: j,
+							z: k,
+						});
 					}
 				}
+			}
+			const jsons = await Promise.all(tasks.map((t) => this.fetchPortionJSON(t.realX, t.realY, t.realZ)));
+			for (let n = 0; n < tasks.length; n++) {
+				await this.processPortionJSON(
+					tasks[n].realX,
+					tasks[n].realY,
+					tasks[n].realZ,
+					tasks[n].x,
+					tasks[n].y,
+					tasks[n].z,
+					jsons[n],
+				);
 			}
 			return;
 		}
 
 		// Make a temp copy for moving stuff correctly
 		const temp = new Array(this.mapPortions.length);
-		for (let i = 0, l = this.mapPortions.length; i < l; i++) {
-			temp[i] = this.mapPortions[i];
+		for (let idx = 0, l = this.mapPortions.length; idx < l; idx++) {
+			temp[idx] = this.mapPortions[idx];
 		}
 
-		// Remove existing portions
 		let x: number, y: number, z: number, oi: number, oj: number, ok: number;
+
+		// Remove existing portions
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
 				for (k = -limit; k <= limit; k++) {
-					x = this.currentPortion.x + i;
-					y = this.currentPortion.y + j;
-					z = this.currentPortion.z + k;
 					oi = i - offsetX;
 					oj = j - offsetY;
 					ok = k - offsetZ;
@@ -479,13 +502,10 @@ class Map extends Base {
 				}
 			}
 		}
-		// Move / Load
+		// Move (synchronous, must complete before loads so temp indices remain valid)
 		for (i = -limit; i <= limit; i++) {
 			for (j = -limit; j <= limit; j++) {
 				for (k = -limit; k <= limit; k++) {
-					x = this.currentPortion.x + i;
-					y = this.currentPortion.y + j;
-					z = this.currentPortion.z + k;
 					oi = i - offsetX;
 					oj = j - offsetY;
 					ok = k - offsetZ;
@@ -495,15 +515,40 @@ class Map extends Base {
 						const newIndex = this.getPortionIndex(oi, oj, ok);
 						this.mapPortions[newIndex] = temp[previousIndex];
 					}
+				}
+			}
+		}
+		// Collect portions to load (their slots are disjoint from moved slots)
+		type LoadTask = { realX: number; realY: number; realZ: number; x: number; y: number; z: number };
+		const loadTasks: LoadTask[] = [];
+		for (i = -limit; i <= limit; i++) {
+			for (j = -limit; j <= limit; j++) {
+				for (k = -limit; k <= limit; k++) {
+					x = this.currentPortion.x + i;
+					y = this.currentPortion.y + j;
+					z = this.currentPortion.z + k;
 					oi = i + offsetX;
 					oj = j + offsetY;
 					ok = k + offsetZ;
 					// If with positive offset, out of ray boundaries, load
 					if (oi < -limit || oi > limit || oj < -limit || oj > limit || ok < -limit || ok > limit) {
-						await this.loadPortion(x, y, z, i, j, k, true);
+						loadTasks.push({ realX: x, realY: y, realZ: z, x: i, y: j, z: k });
 					}
 				}
 			}
+		}
+		const loadJsons = await Promise.all(loadTasks.map((t) => this.fetchPortionJSON(t.realX, t.realY, t.realZ)));
+		for (let n = 0; n < loadTasks.length; n++) {
+			await this.processPortionJSON(
+				loadTasks[n].realX,
+				loadTasks[n].realY,
+				loadTasks[n].realZ,
+				loadTasks[n].x,
+				loadTasks[n].y,
+				loadTasks[n].z,
+				loadJsons[n],
+				true,
+			);
 		}
 		this.loading = false;
 	}
@@ -562,6 +607,45 @@ class Map extends Base {
 		await this.loadPortion(portion.x + x, portion.y + y, portion.z + z, x, y, z, move);
 	}
 
+	/**
+	 *  Fetch the raw JSON for a portion (bounds check + file I/O only).
+	 *  Returns null when the coordinates are outside the map or the file is missing.
+	 */
+	private async fetchPortionJSON(realX: number, realY: number, realZ: number): Promise<any> {
+		const lx = Math.ceil(this.mapProperties.length / Constants.PORTION_SIZE);
+		const lz = Math.ceil(this.mapProperties.width / Constants.PORTION_SIZE);
+		const ld = Math.ceil(this.mapProperties.depth / Constants.PORTION_SIZE);
+		const lh = Math.ceil(this.mapProperties.height / Constants.PORTION_SIZE);
+		if (realX >= 0 && realX < lx && realY >= -ld && realY < lh && realZ >= 0 && realZ < lz) {
+			const portion = new Portion(realX, realY, realZ);
+			return Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + '/' + portion.getFileName());
+		}
+		return null;
+	}
+
+	/**
+	 *  Create and read a map portion from pre-fetched JSON.
+	 *  Must be called sequentially, texture loading uses shared canvas state.
+	 */
+	private async processPortionJSON(
+		realX: number,
+		realY: number,
+		realZ: number,
+		x: number,
+		y: number,
+		z: number,
+		json: any,
+		move: boolean = false,
+	) {
+		if (json && json.hasOwnProperty('lands')) {
+			const portion = new Portion(realX, realY, realZ);
+			const mapPortion = new MapPortion(portion);
+			this.setMapPortion(x, y, z, mapPortion, move);
+			await mapPortion.read(json);
+		} else {
+			this.setMapPortion(x, y, z, null, move);
+		}
+	}
 
 	/**
 	 *  Remove a portion.
@@ -705,8 +789,7 @@ class Map extends Base {
 	 */
 	getMapPortionTotalSize(): number {
 		const size = this.getMapPortionSize();
-		const limit = Data.Systems.PORTIONS_RAY;
-		return limit * 2 * size * size + limit * 2 * size + limit * 2;
+		return size * size * size;
 	}
 
 	/**
@@ -1105,7 +1188,7 @@ class Map extends Base {
 		}
 
 		// Getting the Y angle of the camera
-		const vector = new THREE.Vector3();
+		const vector = this._cameraDirection;
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 

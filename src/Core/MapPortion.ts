@@ -844,12 +844,12 @@ class MapPortion {
 						position.z + Math.ceil(objCollision.c.z / Data.Systems.SQUARE_SIZE),
 					)
 				: new Position(position.x, position.y, position.z);
-			minW = -objCollision.m;
-			maxW = objCollision.m;
-			minH = -objCollision.m;
-			maxH = objCollision.m;
-			minD = -objCollision.m;
-			maxD = objCollision.m;
+			minW = -(objCollision.w ?? objCollision.m);
+			maxW = objCollision.w ?? objCollision.m;
+			minH = -(objCollision.h ?? objCollision.m);
+			maxH = objCollision.h ?? objCollision.m;
+			minD = -(objCollision.d ?? objCollision.m);
+			maxD = objCollision.d ?? objCollision.m;
 			for (a = minW; a <= maxW; a++) {
 				for (b = minH; b <= maxH; b++) {
 					for (c = minD; c <= maxD; c++) {
