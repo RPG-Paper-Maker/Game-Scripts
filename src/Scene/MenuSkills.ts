@@ -133,7 +133,14 @@ class MenuSkills extends Base {
 		// Get the first skills of the hero
 		const list = [];
 		for (let i = 0, l = skills.length; i < l; i++) {
-			list.push(new Graphic.Skill(skills[i]));
+			const skillSystem = Data.Skills.get(skills[i].id);
+			const targetKind = skillSystem.targetKind;
+			const availableKind = skillSystem.availableKind;
+			const possible =
+				skillSystem.isPossible() &&
+				(targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) &&
+				(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU);
+			list.push(new Graphic.Skill(skills[i], possible));
 		}
 
 		// Update the list

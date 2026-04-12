@@ -24,13 +24,14 @@ class Skill extends Base {
 	public graphicCost: Graphic.Text;
 	public graphicInformations: Graphic.SkillItem;
 
-	constructor(skill: Core.Skill) {
+	constructor(skill: Core.Skill, possible = true) {
 		super();
 
 		this.system = Data.Skills.get(skill.id);
-		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system);
+		const colorOpts = possible ? {} : { color: Model.Color.GREY };
+		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system, {}, colorOpts);
 		this.graphicName.graphicText.ellipsis = true;
-		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: ALIGN.RIGHT });
+		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: ALIGN.RIGHT, ...colorOpts });
 		this.graphicInformations = new Graphic.SkillItem(this.system);
 	}
 

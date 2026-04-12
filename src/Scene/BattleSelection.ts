@@ -91,7 +91,7 @@ class BattleSelection {
 					item.consumable &&
 					(item.availableKind === AVAILABLE_KIND.BATTLE || item.availableKind === AVAILABLE_KIND.ALWAYS)
 				) {
-					this.battle.listItems.push(new Graphic.Item(ownedItem));
+					this.battle.listItems.push(new Graphic.Item(ownedItem, { possible: item.isPossible() }));
 				}
 			}
 		}
@@ -241,6 +241,7 @@ class BattleSelection {
 		this.battle.skill = null;
 
 		// Update skills list
+		Scene.Map.current.user = this.battle.user;
 		const skills = this.battle.user.player.skills;
 		this.battle.listSkills = [];
 		let ownedSkill: Skill, skill: Model.Skill;
@@ -257,7 +258,7 @@ class BattleSelection {
 					});
 				})
 			) {
-				this.battle.listSkills.push(new Graphic.Skill(ownedSkill));
+				this.battle.listSkills.push(new Graphic.Skill(ownedSkill, skill.isPossible()));
 			}
 		}
 		this.battle.windowChoicesSkills.setContentsCallbacks(this.battle.listSkills);
@@ -304,6 +305,8 @@ class BattleSelection {
 					this.battle.skill = skill;
 					this.selectTarget(skill.targetKind);
 					this.registerLastSkillIndex();
+				} else {
+					Data.Systems.soundImpossible.playSound();
 				}
 				return;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS:
@@ -312,6 +315,8 @@ class BattleSelection {
 					this.battle.skill = item;
 					this.selectTarget(item.targetKind);
 					this.registerLastItemIndex();
+				} else {
+					Data.Systems.soundImpossible.playSound();
 				}
 				return;
 			default:
@@ -398,6 +403,8 @@ class BattleSelection {
 				if (skill.isPossible()) {
 					this.battle.skill = skill;
 					this.selectTarget(skill.targetKind);
+				} else {
+					Data.Systems.soundImpossible.playSound();
 				}
 				break;
 			default:

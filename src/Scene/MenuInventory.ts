@@ -162,7 +162,7 @@ class MenuInventory extends Base {
 		for (let i = 0; i < nbItems; i++) {
 			ownedItem = Game.current.items[i];
 			if (Data.Systems.inventoryFilters[indexTab].getFilter()(ownedItem)) {
-				list.push(new Graphic.Item(ownedItem));
+				list.push(new Graphic.Item(ownedItem, { possible: ownedItem.system.isPossible() }));
 			}
 		}
 		this.windowChoicesList.setContentsCallbacks(list);
