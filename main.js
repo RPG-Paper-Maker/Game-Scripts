@@ -66,9 +66,10 @@ function createWindow() {
 			window.setFullScreen(false);
 		}
 	});
-	ipcMain.on('save-file', async (event, path, content) => {
-		await fs.writeFile(path, content, 'utf-8');
-		return true;
+	ipcMain.on('save-file', async (event, filePath, content) => {
+		const absolutePath = path.resolve(__dirname, filePath);
+		await fs.mkdir(path.dirname(absolutePath), { recursive: true });
+		await fs.writeFile(absolutePath, content, 'utf-8');
 	});
 	window.loadFile('index.html');
 	window.removeMenu();
