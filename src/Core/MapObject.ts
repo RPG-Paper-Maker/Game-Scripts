@@ -1290,12 +1290,15 @@ class MapObject {
 			movedObjects = objects.m;
 			if (movedObjects && movedObjects.indexOf(this) === -1) {
 				movedObjects.push(this);
-				movedObjects = Scene.Map.current.getMapPortionFromPortion(
+				const originalMapPortion = Scene.Map.current.getMapPortionFromPortion(
 					Scene.Map.current.getLocalPortion(originalPortion),
-				).objectsList;
-				index = movedObjects.indexOf(this);
-				if (index !== -1) {
-					movedObjects.splice(index, 1);
+				);
+				if (originalMapPortion) {
+					movedObjects = originalMapPortion.objectsList;
+					index = movedObjects.indexOf(this);
+					if (index !== -1) {
+						movedObjects.splice(index, 1);
+					}
 				}
 			}
 		}
