@@ -365,7 +365,7 @@ class Player extends Base {
 		this.graphicName.draw(x + xOffset, yName, 0, 0);
 		this.graphicLevelName.draw(xLevelName + xOffset, yName, 0, 0);
 		this.graphicLevel.draw(xLevel + xOffset, yName, 0, 0);
-		Status.drawList(this.player.status, firstLineLength, yName);
+		Status.drawList(this.player.status, firstLineLength + xOffset, yName);
 		const yStats = yName + ScreenResolution.getScreenMinXY(20);
 
 		// Stats
