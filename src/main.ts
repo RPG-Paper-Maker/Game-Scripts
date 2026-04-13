@@ -57,6 +57,8 @@ export class Main {
 		await Manager.GL.load();
 		await Data.Pictures.read();
 		await Data.Songs.read();
+		await Data.Songs.preload();
+		await Manager.Songs.warmup();
 		await Data.Videos.read();
 		await Data.Shapes.read();
 		Manager.GL.initialize();

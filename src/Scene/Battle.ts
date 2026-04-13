@@ -235,6 +235,8 @@ class Battle extends Map {
 	 *  Load async stuff.
 	 */
 	async load() {
+		await Promise.resolve();
+		this.battleInitialize.initializeMusic();
 		await super.load();
 		this.initialize();
 		Manager.Stack.requestPaintHUD = true;

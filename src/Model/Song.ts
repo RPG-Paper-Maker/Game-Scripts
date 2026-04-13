@@ -102,10 +102,11 @@ export class Song extends Base {
 	 */
 	load(): void {
 		if (this.id !== -1 && !this.howl) {
+			const loop = this.kind === SONG_KIND.MUSIC || this.kind === SONG_KIND.BACKGROUND_SOUND;
 			this.howl = new Howl({
 				src: [this.getPath()],
-				loop: this.kind !== SONG_KIND.MUSIC_EFFECT,
-				html5: true,
+				loop: loop,
+				html5: false,
 				pool: 10,
 			});
 			if (this.base64) {

@@ -292,6 +292,9 @@ class BattleInitialize {
 	 *  Initialize musics.
 	 */
 	initializeMusic() {
+		if (this.battle.musicMap !== undefined) {
+			return;
+		}
 		this.battle.musicMap = Model.PlaySong.currentPlayingMusic;
 		const song = Manager.Songs.current[SONG_KIND.MUSIC];
 		this.battle.musicMapTime = song === null ? 0 : song.seek();

@@ -30,6 +30,7 @@ class Songs {
 	public static progressionMusicTime: number;
 	public static progressionMusicEnd: number;
 	public static currentStateMusicEffect: Record<string, any> = null;
+	public static keepAliveStarted = false;
 
 	constructor() {
 		throw new Error('This is a static class');
@@ -39,6 +40,7 @@ class Songs {
 	 *  Initialize all the lists according to SONG_KIND.
 	 */
 	static initialize() {
+		Howler.autoSuspend = false;
 		Model.PlaySong.currentPlayingMusic = new Model.PlaySong(SONG_KIND.MUSIC);
 		this.volumes[SONG_KIND.MUSIC] = 0;
 		this.volumes[SONG_KIND.BACKGROUND_SOUND] = 0;
@@ -56,6 +58,35 @@ class Songs {
 	}
 
 	/**
+	 *  Resume the AudioContext (works without user gesture in Electron), then
+	 *  start a permanently-running silent oscillator connected to the destination.
+	 *  This keeps the OS audio device active at all times so there is no
+	 *  driver wake-up delay when any sound or music plays.
+	 */
+	static async warmup(): Promise<void> {
+		const ctx = Howler.ctx as AudioContext;
+		if (!ctx) {
+			return;
+		}
+		if (ctx.state !== 'running') {
+			try {
+				await ctx.resume();
+			} catch {
+				return;
+			}
+		}
+		if (ctx.state !== 'running') {
+			return;
+		}
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		gain.gain.value = 0.000001;
+		osc.connect(gain);
+		gain.connect(ctx.destination);
+		osc.start(0);
+	}
+
+	/**
 	 *  Play a music.
 	 *  @param {SONG_KIND} kind - The kind of the song
 	 *  @param {number} id - The id of the song
@@ -64,6 +95,10 @@ class Songs {
 	 *  @param {number} end - The end of the song
 	 */
 	static playMusic(kind: SONG_KIND, id: number, volume: number, start: number, end: number) {
+		if (!this.keepAliveStarted) {
+			this.keepAliveStarted = true;
+			this.warmup().catch(() => {});
+		}
 		if (id < 1) {
 			switch (kind) {
 				case SONG_KIND.MUSIC:
@@ -169,10 +204,9 @@ class Songs {
 		}
 		const sound = Data.Songs.get(SONG_KIND.SOUND, id);
 		if (sound) {
-			const howl = new Howl({
-				src: [sound.getPath()],
-				volume: volume,
-			});
+			sound.load();
+			const howl = sound.howl;
+			howl.volume(volume);
 			this.currentSounds[id] = howl;
 			howl.play();
 		}
