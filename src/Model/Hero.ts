@@ -26,6 +26,7 @@ export type HeroJSON = LocalizationJSON & {
 	class: number;
 	bid?: number;
 	fid?: number;
+	cid?: number;
 	indexXFaceset?: number;
 	indexYFaceset?: number;
 	ci?: ClassJSON;
@@ -39,6 +40,7 @@ export class Hero extends Localization {
 	public class: Class;
 	public idBattler: number;
 	public idFaceset: number;
+	public idCharacter: number;
 	public indexXFaceset: number;
 	public indexYFaceset: number;
 	public classInherit: Class;
@@ -133,6 +135,7 @@ export class Hero extends Localization {
 		);
 		this.idBattler = Utils.valueOrDefault(json.bid, -1);
 		this.idFaceset = Utils.valueOrDefault(json.fid, -1);
+		this.idCharacter = Utils.valueOrDefault(json.cid, -1);
 		this.indexXFaceset = Utils.valueOrDefault(json.indexXFaceset, 0);
 		this.indexYFaceset = Utils.valueOrDefault(json.indexYFaceset, 0);
 		this.classInherit = new Class(json.ci);

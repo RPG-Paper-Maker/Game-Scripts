@@ -91,6 +91,7 @@ class MapObject {
 	public currentState: Model.State;
 	public currentStateInstance: StateInstance;
 	public removed: boolean;
+	public isCaterpillarFollower: boolean = false;
 	public upPosition: THREE.Vector3;
 	public halfPosition: THREE.Vector3;
 	public currentOrientationStop: boolean;
@@ -1544,11 +1545,15 @@ class MapObject {
 		}
 
 		// Moving
-		this.updateMovingState();
+		if (!this.isCaterpillarFollower) {
+			this.updateMovingState();
+		}
 
 		// Time events
 		this.receivedOneEvent = false;
-		this.updateTimeEvents();
+		if (!this.isCaterpillarFollower) {
+			this.updateTimeEvents();
+		}
 
 		// Positions
 		if (this.position) {

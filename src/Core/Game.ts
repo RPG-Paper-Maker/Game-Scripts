@@ -58,6 +58,7 @@ class Game {
 	public slot: number;
 	public hero: MapObject;
 	public heroBattle: MapObject;
+	public caterpillarFollowers: MapObject[];
 	public playTime: Chrono;
 	public charactersInstances: number;
 	public variables: Map<number, unknown>;
@@ -93,6 +94,7 @@ class Game {
 	constructor(slot: number = -1) {
 		this.slot = slot;
 		this.hero = new MapObject(Data.Systems.modelHero.system, Data.Systems.modelHero.position.clone(), true);
+		this.caterpillarFollowers = [];
 		this.battleMusic = Data.BattleSystems.battleMusic;
 		this.victoryMusic = Data.BattleSystems.battleVictory;
 		this.textures = {};

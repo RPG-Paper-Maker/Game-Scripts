@@ -124,6 +124,7 @@ class ModifyTeam extends Base {
 				break;
 			}
 		}
+		Scene.Map.caterpillarNeedsRefresh = true;
 		return 1;
 	}
 }
