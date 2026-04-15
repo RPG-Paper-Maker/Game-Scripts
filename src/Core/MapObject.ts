@@ -1487,7 +1487,7 @@ class MapObject {
 				this.mesh.position.set(this.position.x, this.position.y + offset, this.position.z);
 
 				// Update angle
-				if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
+				if (this.currentStateInstance && this.currentStateInstance.setWithCamera && !this.currentStateInstance.directionFix) {
 					this.updateOrientation();
 				}
 			}
