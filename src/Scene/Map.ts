@@ -1146,6 +1146,9 @@ class Map extends Base {
 	 *  Update the scene.
 	 */
 	update() {
+		// Flush BB flash meshes from the previous frame before starting collision checks
+		Manager.Collisions.flushBBFlash();
+
 		// Mouse down repeat
 		if (!this.loading) {
 			if (!ReactionInterpreter.blockingHero && !this.isBattleMap) {
@@ -1289,7 +1292,7 @@ class Map extends Base {
 		}
 
 		// Update portion
-		if (Scene.Map.current.updateCurrentPortion()) {
+		if (!this.loading && Scene.Map.current.updateCurrentPortion()) {
 			this.loadPortions(true).catch(console.error);
 			this.loading = true;
 		}
