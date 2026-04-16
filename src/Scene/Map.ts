@@ -474,6 +474,7 @@ class Map extends Base {
 				}
 			}
 			const jsons = await Promise.all(tasks.map((t) => this.fetchPortionJSON(t.realX, t.realY, t.realZ)));
+			let lastYield = performance.now();
 			for (let n = 0; n < tasks.length; n++) {
 				await this.processPortionJSON(
 					tasks[n].realX,
@@ -484,6 +485,10 @@ class Map extends Base {
 					tasks[n].z,
 					jsons[n],
 				);
+				if (performance.now() - lastYield > 8) {
+					await new Promise((r) => setTimeout(r, 0));
+					lastYield = performance.now();
+				}
 			}
 			return;
 		}
@@ -546,6 +551,7 @@ class Map extends Base {
 			}
 		}
 		const loadJsons = await Promise.all(loadTasks.map((t) => this.fetchPortionJSON(t.realX, t.realY, t.realZ)));
+		let lastYield = performance.now();
 		for (let n = 0; n < loadTasks.length; n++) {
 			await this.processPortionJSON(
 				loadTasks[n].realX,
@@ -557,6 +563,10 @@ class Map extends Base {
 				loadJsons[n],
 				true,
 			);
+			if (performance.now() - lastYield > 8) {
+				await new Promise((r) => setTimeout(r, 0));
+				lastYield = performance.now();
+			}
 		}
 		this.loading = false;
 	}
@@ -1550,6 +1560,7 @@ class Map extends Base {
 		for (i = this.scene.children.length - 1; i >= 0; i--) {
 			this.scene.remove(this.scene.children[i]);
 		}
+		Manager.GL.renderer.renderLists.dispose();
 
 		// Clear bounding boxes
 		Manager.Collisions.applyBoxSpriteTransforms(Manager.Collisions.BB_BOX, [0, 0, 0, 0, 0, 0, 0, 0, 0]);
