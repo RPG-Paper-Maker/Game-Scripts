@@ -244,6 +244,9 @@ class MapPortion {
 	 *  @param {Record<string, any>} json - Json object describing the sprites globals
 	 */
 	readSpritesGlobals(json: Record<string, any>) {
+		if (!json) {
+			return;
+		}
 		const material = Scene.Map.current.textureTileset;
 		const staticGeometry = new CustomGeometry();
 		const faceGeometry = new CustomGeometryFace();
@@ -324,6 +327,9 @@ class MapPortion {
 	 *  walls
 	 */
 	async readSpritesWalls(json: any[]) {
+		if (!json) {
+			return;
+		}
 		const hash = new Map<number, any>();
 		for (const item of json) {
 			if (!item) continue;
@@ -573,6 +579,9 @@ class MapPortion {
 	 *  @param {Record<string, any>} json - Json object describing the objects
 	 */
 	async readObjects(json: Record<string, any>) {
+		if (!json) {
+			return;
+		}
 		const datas = Scene.Map.current.getObjectsAtPortion(this.portion);
 		const objectsM = datas.m;
 		const objectsR = datas.r;

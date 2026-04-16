@@ -105,7 +105,7 @@ export class Land extends MapElement {
 
 		// Collision
 		let objCollision: StructMapElementCollision | null = null;
-		if (collision !== null) {
+		if (collision != null) {
 			const rect = collision.rect;
 			if (!collision.hasAllDirections() || collision.terrain > 0) {
 				let rectB =
