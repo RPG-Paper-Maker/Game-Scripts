@@ -68,22 +68,22 @@ class Songs {
 		if (!ctx) {
 			return;
 		}
-		if (ctx.state !== 'running') {
-			try {
-				await ctx.resume();
-			} catch {
+		try {
+			if (ctx.state !== 'running') {
+				await Promise.race([ctx.resume(), new Promise<void>((resolve) => setTimeout(resolve, 3000))]);
+			}
+			if (ctx.state !== 'running') {
 				return;
 			}
-		}
-		if (ctx.state !== 'running') {
+			const osc = ctx.createOscillator();
+			const gain = ctx.createGain();
+			gain.gain.value = 0.000001;
+			osc.connect(gain);
+			gain.connect(ctx.destination);
+			osc.start(0);
+		} catch {
 			return;
 		}
-		const osc = ctx.createOscillator();
-		const gain = ctx.createGain();
-		gain.gain.value = 0.000001;
-		osc.connect(gain);
-		gain.connect(ctx.destination);
-		osc.start(0);
 	}
 
 	/**
