@@ -633,13 +633,35 @@ class MapPortion {
 			// Not in battle to avoid issues if same map as current map
 			let objects = datas.min;
 			for (i = 0, l = objects.length; i < l; i++) {
-				await objects[i].changeState();
-				objects[i].addToScene();
+				if (objects[i].mesh !== null || objects[i].gltfGroup !== null) {
+					// Already initialized: just sync position and re-add without resetting state
+					if (objects[i].mesh !== null) {
+						objects[i].mesh.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+					}
+					if (objects[i].gltfGroup !== null) {
+						objects[i].gltfGroup.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+					}
+					objects[i].addToScene();
+				} else {
+					await objects[i].changeState();
+					objects[i].addToScene();
+				}
 			}
 			objects = datas.mout;
 			for (i = 0, l = objects.length; i < l; i++) {
-				await objects[i].changeState();
-				objects[i].addToScene();
+				if (objects[i].mesh !== null || objects[i].gltfGroup !== null) {
+					// Already initialized: just sync position and re-add without resetting state
+					if (objects[i].mesh !== null) {
+						objects[i].mesh.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+					}
+					if (objects[i].gltfGroup !== null) {
+						objects[i].gltfGroup.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+					}
+					objects[i].addToScene();
+				} else {
+					await objects[i].changeState();
+					objects[i].addToScene();
+				}
 			}
 		}
 	}
