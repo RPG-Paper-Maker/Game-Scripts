@@ -60,6 +60,9 @@ export class Platform {
 	/** HUD (2D overlay) canvas. */
 	static readonly canvasHUD = document.getElementById('hud') as HTMLCanvasElement;
 
+	/** HUD canvas rendered below the video player (for index < 0 pictures). */
+	static readonly canvasHUDBelow = document.getElementById('hud-below') as HTMLCanvasElement;
+
 	/** Video rendering container element. */
 	static readonly canvasVideos = document.getElementById('video-container') as HTMLVideoElement;
 
@@ -68,6 +71,9 @@ export class Platform {
 
 	/** HUD rendering context (2D). */
 	static readonly ctx = Platform.canvasHUD.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+
+	/** HUD rendering context for index < 0 pictures (below video player). */
+	static readonly ctxBelow = Platform.canvasHUDBelow.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
 
 	/** Offscreen rendering context (2D). */
 	static readonly ctxr = Platform.canvasRendering.getContext('2d', {

@@ -282,6 +282,10 @@ export class Systems {
 		Platform.canvasHUD.height = h;
 		Platform.canvasHUD.style.width = `${w}px`;
 		Platform.canvasHUD.style.height = `${h}px`;
+		Platform.canvasHUDBelow.width = w;
+		Platform.canvasHUDBelow.height = h;
+		Platform.canvasHUDBelow.style.width = `${w}px`;
+		Platform.canvasHUDBelow.style.height = `${h}px`;
 		Platform.canvas3D.style.width = `${w}px`;
 		Platform.canvas3D.style.height = `${h}px`;
 		Platform.canvasVideos.height = h;

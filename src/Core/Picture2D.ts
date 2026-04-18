@@ -227,6 +227,7 @@ class Picture2D extends Bitmap {
 		sw = this.oW,
 		sh = this.oH,
 		positionResize = false,
+		ctx = Platform.ctx,
 	}: {
 		x?: number;
 		y?: number;
@@ -237,6 +238,7 @@ class Picture2D extends Bitmap {
 		sw?: number;
 		sh?: number;
 		positionResize?: boolean;
+		ctx?: CanvasRenderingContext2D;
 	} = {}) {
 		if (!this.empty && this.loaded && sw > 0 && sh > 0) {
 			// Default values
@@ -267,36 +269,36 @@ class Picture2D extends Bitmap {
 
 			// Draw the image according to all parameters
 			const angle = (this.angle * Math.PI) / 180;
-			Platform.ctx.save();
-			Platform.ctx.globalAlpha = this.opacity;
+			ctx.save();
+			ctx.globalAlpha = this.opacity;
 			if (!this.centered) {
 				if (this.reverse) {
-					Platform.ctx.scale(-1, 1);
-					Platform.ctx.translate(-x - w, y);
+					ctx.scale(-1, 1);
+					ctx.translate(-x - w, y);
 				} else {
-					Platform.ctx.translate(x, y);
+					ctx.translate(x, y);
 				}
 			}
 			if (angle !== 0) {
 				if (this.centered) {
-					Platform.ctx.translate(x, y);
+					ctx.translate(x, y);
 				}
-				Platform.ctx.rotate(angle);
+				ctx.rotate(angle);
 				if (this.centered) {
-					Platform.ctx.translate(-x, -y);
+					ctx.translate(-x, -y);
 				}
 			}
 			if (this.centered) {
 				if (this.reverse) {
-					Platform.ctx.scale(-1, 1);
-					Platform.ctx.translate(-x - w / 2, y - h / 2);
+					ctx.scale(-1, 1);
+					ctx.translate(-x - w / 2, y - h / 2);
 				} else {
-					Platform.ctx.translate(x - w / 2, y - h / 2);
+					ctx.translate(x - w / 2, y - h / 2);
 				}
 			}
-			Platform.ctx.drawImage(this.image, sx, sy, sw, sh, 0, 0, w, h);
-			Platform.ctx.globalAlpha = 1.0;
-			Platform.ctx.restore();
+			ctx.drawImage(this.image, sx, sy, sw, sh, 0, 0, w, h);
+			ctx.globalAlpha = 1.0;
+			ctx.restore();
 		}
 	}
 }

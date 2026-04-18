@@ -23,6 +23,11 @@
 				overflow: auto;
 				position: absolute;
 			}
+			#hud-below {
+				position: absolute;
+				margin: 0;
+				padding: 0;
+			}
 			#hud {
 				position: absolute;
 				margin: 0;
@@ -49,6 +54,7 @@
 	</head>
 	<body>
 		<div id="three-d"></div>
+		<canvas id="hud-below" width="640px" height="480px"></canvas>
 		<video id="video-container" class="hidden" height="480px"></video>
 		<canvas id="hud" width="640px" height="480px"></canvas>
 		<canvas id="rendering" width="4096px" height="4096px"></canvas>

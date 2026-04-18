@@ -167,6 +167,9 @@ class Stack {
 		Platform.ctx.clearRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
 		Platform.ctx.lineWidth = 1;
 		Platform.ctx.imageSmoothingEnabled = false;
+		Platform.ctxBelow.clearRect(0, 0, ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT);
+		Platform.ctxBelow.lineWidth = 1;
+		Platform.ctxBelow.imageSmoothingEnabled = false;
 	}
 
 	/**
@@ -307,14 +310,14 @@ class Stack {
 				this.loadingDelay = 0;
 				this.clearHUD();
 				if (!this.isEmpty()) {
-					// Display < 0 index image command
+					// Display < 0 index image command (drawn below the video player)
 					let i: number, l: number, v: [number, Picture2D];
 					for (i = 0, l = this.displayedPictures.length; i < l; i++) {
 						v = this.displayedPictures[i];
 						if (v[0] >= 0) {
 							break;
 						}
-						v[1].draw();
+						v[1].draw({ ctx: Platform.ctxBelow });
 					}
 
 					// Draw System HUD
