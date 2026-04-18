@@ -498,6 +498,16 @@ class MapPortion {
 						this.staticObjects3DList.push(clone as unknown as THREE.Mesh);
 						Scene.Map.current.scene.add(clone);
 					}
+					// Still register collision even though rendering uses the GLTF scene directly
+					const gltfObj3D = new Object3DCustom(v, datas);
+					const gltfCollision = gltfObj3D.updateGeometry(new CustomGeometry(), position, 0);
+					this.updateCollision(
+						this.boundingBoxesObjects3D,
+						gltfCollision[1],
+						position,
+						true,
+						Scene.Map.current.overflowObjects3D,
+					);
 					continue;
 				}
 

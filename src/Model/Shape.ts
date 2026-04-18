@@ -192,6 +192,7 @@ export class Shape extends Base {
 		let minVertex = new THREE.Vector3();
 		let maxVertex = new THREE.Vector3();
 		let firstVertex = true;
+		gltf.scene.updateMatrixWorld(true);
 		gltf.scene.traverse((child) => {
 			if (!(child instanceof THREE.Mesh)) {
 				return;
@@ -203,11 +204,9 @@ export class Shape extends Base {
 			const posAttr = geometry.getAttribute('position');
 			const uvAttr = geometry.getAttribute('uv');
 			for (let i = 0; i < posAttr.count; i++) {
-				const vertex = new THREE.Vector3(
-					posAttr.getX(i) * squareSize,
-					posAttr.getY(i) * squareSize,
-					posAttr.getZ(i) * squareSize,
-				);
+				const vertex = new THREE.Vector3(posAttr.getX(i), posAttr.getY(i), posAttr.getZ(i));
+				vertex.applyMatrix4(child.matrixWorld);
+				vertex.multiplyScalar(squareSize);
 				vertices.push(vertex);
 				if (uvAttr) {
 					uvs.push(new THREE.Vector2(uvAttr.getX(i), 1.0 - uvAttr.getY(i)));
