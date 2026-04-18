@@ -138,7 +138,7 @@ class ChangeBattlerGraphics extends Base {
 				newBattler.addToScene();
 				map.battlers[side][index] = newBattler;
 				map.players[side][index] = player;
-				map.graphicPlayers[side][index] = new Graphic.Player(player);
+				map.graphicPlayers[side][index] = new Graphic.Player(player, { useHeroesStatistics: side === CHARACTER_KIND.HERO });
 				player.battler = newBattler;
 			}
 		}

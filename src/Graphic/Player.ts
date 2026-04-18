@@ -47,9 +47,11 @@ class Player extends Base {
 		{
 			isMainMenu = false,
 			reverse = false,
+			useHeroesStatistics = false,
 		}: {
 			isMainMenu?: boolean;
 			reverse?: boolean;
+			useHeroesStatistics?: boolean;
 		} = {},
 	) {
 		super();
@@ -83,7 +85,7 @@ class Player extends Base {
 		this.maxStatNamesLength = 0;
 		let statistics: number[];
 		let i: number, l: number;
-		if (this.isMainMenu) {
+		if (this.isMainMenu || useHeroesStatistics) {
 			l = Data.Systems.heroesStatistics.length;
 			statistics = new Array(l);
 			for (i = 0; i < l; i++) {

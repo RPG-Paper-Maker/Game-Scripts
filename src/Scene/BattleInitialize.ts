@@ -104,7 +104,7 @@ class BattleInitialize {
 			this.battle.players[CHARACTER_KIND.HERO][i] = player;
 
 			// Graphic player
-			this.battle.graphicPlayers[CHARACTER_KIND.HERO][i] = new Graphic.Player(player);
+			this.battle.graphicPlayers[CHARACTER_KIND.HERO][i] = new Graphic.Player(player, { useHeroesStatistics: true });
 		}
 	}
 
