@@ -62,6 +62,7 @@ class LoadGame extends SaveLoadGame {
 		// Pop load and title screen from the stack
 		Manager.Stack.pop();
 		Manager.Stack.replace(new Scene.Map(Game.current.currentMapID));
+		Manager.Stack.clearHUD();
 		this.loading = false;
 	}
 
