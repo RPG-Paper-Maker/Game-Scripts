@@ -201,7 +201,7 @@ export class BattleSystems {
 
 		// Musics
 		this.battleMusic = new PlaySong(SONG_KIND.MUSIC, json.bmusic);
-		this.battleLevelUp = new PlaySong(SONG_KIND.SOUND, json.blevelup);
+		this.battleLevelUp = new PlaySong(SONG_KIND.MUSIC_EFFECT, json.blevelup);
 		this.battleVictory = new PlaySong(SONG_KIND.MUSIC, json.bvictory);
 
 		// Options

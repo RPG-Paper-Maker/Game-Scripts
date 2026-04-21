@@ -336,6 +336,22 @@ class Songs {
 	}
 
 	/**
+	 *  Abort a playing music effect: stop the jingle and unpause the background
+	 *  music so the normal music transition can take over cleanly.
+	 */
+	static stopCurrentMusicEffect() {
+		if (this.current[SONG_KIND.MUSIC_EFFECT] !== null) {
+			this.current[SONG_KIND.MUSIC_EFFECT].stop();
+			this.current[SONG_KIND.MUSIC_EFFECT] = null;
+		}
+		if (this.current[SONG_KIND.MUSIC] !== null && !this.current[SONG_KIND.MUSIC].playing()) {
+			this.current[SONG_KIND.MUSIC].play();
+		}
+		this.musicEffectStep = 0;
+		this.currentStateMusicEffect = null;
+	}
+
+	/**
 	 *  Stop all the songs
 	 */
 	static stopAll() {
@@ -351,6 +367,7 @@ class Songs {
 			this.current[SONG_KIND.MUSIC_EFFECT].stop();
 			this.current[SONG_KIND.MUSIC_EFFECT] = null;
 			this.musicEffectStep = 0;
+			this.currentStateMusicEffect = null;
 		}
 
 		for (const sound of this.currentSounds) {

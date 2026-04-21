@@ -28,6 +28,7 @@ import { Status } from '../Core/Status';
 
 class BattleVictory {
 	public battle: Scene.Battle;
+	public levelUpMusicEffectState: Record<string, unknown> = null;
 
 	public constructor(battle: Scene.Battle) {
 		this.battle = battle;
@@ -228,7 +229,8 @@ class BattleVictory {
 						WindowBox.HUGE_PADDING_BOX[0] +
 						WindowBox.HUGE_PADDING_BOX[2];
 					this.battle.windowStatisticProgression.setH(h);
-					Data.BattleSystems.battleLevelUp.playSound();
+					this.levelUpMusicEffectState = Data.BattleSystems.battleLevelUp.initialize();
+					this.levelUpMusicEffectState.parallel = true;
 					this.battle.subStep = 2;
 					return;
 				}
@@ -275,6 +277,13 @@ class BattleVictory {
 	 *  Prepare the end transition.
 	 */
 	prepareEndTransition() {
+		if (this.levelUpMusicEffectState) {
+			Manager.Songs.stopCurrentMusicEffect();
+			this.levelUpMusicEffectState = null;
+			if ((this.battle.musicMap.songID.getValue() as number) < 1) {
+				Manager.Songs.stopMusic(0);
+			}
+		}
 		this.battle.transitionEnded = false;
 		Manager.Songs.initializeProgressionMusic(
 			Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
@@ -334,6 +343,9 @@ class BattleVictory {
 	 *  Update the battle.
 	 */
 	update() {
+		if (this.levelUpMusicEffectState) {
+			Data.BattleSystems.battleLevelUp.playMusicEffect(this.levelUpMusicEffectState);
+		}
 		switch (this.battle.subStep) {
 			case 0:
 				if (new Date().getTime() - this.battle.time >= Scene.Battle.TIME_END_WAIT) {
