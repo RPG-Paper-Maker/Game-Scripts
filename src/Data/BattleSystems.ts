@@ -43,6 +43,7 @@ export type BattleSystemsJSON = {
 	heroesBattlersOffset?: DynamicValueJSON;
 	troopsBattlersCenterOffset?: DynamicValueJSON;
 	troopsBattlersOffset?: DynamicValueJSON;
+	adwe?: DynamicValueJSON;
 	bmusic: PlaySongJSON;
 	blevelup: PlaySongJSON;
 	bvictory: PlaySongJSON;
@@ -78,6 +79,7 @@ export class BattleSystems {
 	public static battleMusic: PlaySong;
 	public static battleLevelUp: PlaySong;
 	public static battleVictory: PlaySong;
+	public static allyDeadWinExp: DynamicValue;
 	public static cameraMoveInBattle: boolean;
 
 	/** Get the statistic corresponding to the level. */
@@ -205,6 +207,7 @@ export class BattleSystems {
 		this.battleVictory = new PlaySong(SONG_KIND.MUSIC, json.bvictory);
 
 		// Options
+		this.allyDeadWinExp = DynamicValue.readOrDefaultSwitch(json.adwe, false);
 		this.cameraMoveInBattle = Utils.valueOrDefault(json.cmib, true);
 	}
 }

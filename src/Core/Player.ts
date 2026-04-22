@@ -113,6 +113,12 @@ class Player {
 			this.editedExpList = {};
 			this.levelingUp = false;
 			this.testedLevelUp = true;
+			this.remainingXP = 0;
+			this.totalRemainingXP = 0;
+			this.totalTimeXP = 0;
+			this.timeXP = 0;
+			this.obtainedXP = 0;
+			this.stepLevelUp = 0;
 
 			// Read if possible
 			if (json) {
