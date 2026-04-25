@@ -525,6 +525,7 @@ class MapObject {
 
 		// Remove previous mesh
 		this.removeFromScene();
+		this.mesh = null;
 		this.gltfGroup = null;
 		if (this.animationMixer) {
 			this.animationMixer.stopAllAction();
