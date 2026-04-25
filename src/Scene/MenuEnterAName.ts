@@ -96,7 +96,7 @@ class MenuEnterAName extends MenuBase {
 	 *  Create the top window.
 	 */
 	createWindowBoxTop() {
-		const slotWidth = 20;
+		const slotWidth = 40;
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			nbItemsMax: this.maxCharacters,
@@ -126,8 +126,8 @@ class MenuEnterAName extends MenuBase {
 	 *  Create main window box.
 	 */
 	createWindowBoxMain() {
-		const width = this.displayColumns * 40;
-		const height = this.displayRows * 40;
+		const width = this.displayColumns * 60;
+		const height = this.displayRows * 60;
 		const options = {
 			padding: WindowBox.SMALL_PADDING_BOX,
 		};
@@ -147,8 +147,8 @@ class MenuEnterAName extends MenuBase {
 		const rect = new Rectangle(
 			this.windowBoxMain.oX + this.windowBoxMain.padding[0],
 			this.windowBoxMain.oY + this.windowBoxMain.padding[0],
-			40,
-			40,
+			60,
+			60,
 		);
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -280,7 +280,7 @@ class MenuEnterAName extends MenuBase {
 					Data.Systems.soundCursor.playSound();
 					for (let i = 0; i < this.displayRows; i++) {
 						this.windowChoicesMain[i + this.offsetRow].setY(
-							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40,
+							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 60,
 						);
 					}
 				}
@@ -314,7 +314,7 @@ class MenuEnterAName extends MenuBase {
 					Data.Systems.soundCursor.playSound();
 					for (let i = 0; i < this.displayRows; i++) {
 						this.windowChoicesMain[i + this.offsetRow].setY(
-							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 40,
+							this.windowBoxMain.oY + this.windowBoxMain.padding[0] + i * 60,
 						);
 					}
 				}

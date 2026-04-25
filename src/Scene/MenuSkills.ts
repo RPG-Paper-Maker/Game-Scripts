@@ -48,28 +48,28 @@ class MenuSkills extends Base {
 		}
 
 		// Per-tab widths adapted to each hero name text, capped at 150px with ellipsis
-		const MAX_TAB_WIDTH = 150;
+		const MAX_TAB_WIDTH = 300;
 		const choiceWidths = listHeroes.map((hero) => {
 			hero.graphicNameCenter.ellipsis = true;
-			return Math.min(MAX_TAB_WIDTH, Math.max(50, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 24));
+			return Math.min(MAX_TAB_WIDTH, Math.max(100, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 36));
 		});
 
 		// All the windows
-		this.windowTop = new WindowBox(20, 20, 200, 30, {
+		this.windowTop = new WindowBox(40, 30, 400, 45, {
 			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
-		this.windowChoicesTabs = new WindowChoices(50, 60, ScreenResolution.SCREEN_X - 100, WindowBox.SMALL_SLOT_HEIGHT, listHeroes, {
+		this.windowChoicesTabs = new WindowChoices(100, 90, ScreenResolution.SCREEN_X - 200, WindowBox.SMALL_SLOT_HEIGHT, listHeroes, {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			padding: [0, 0, 0, 0],
 			choiceWidths: choiceWidths,
 		});
 		this.createWindowChoicesList();
 		this.createWindowBoxInformation();
-		this.windowEmpty = new WindowBox(10, 100, ScreenResolution.SCREEN_X - 20, WindowBox.SMALL_SLOT_HEIGHT, {
+		this.windowEmpty = new WindowBox(20, 150, ScreenResolution.SCREEN_X - 40, WindowBox.SMALL_SLOT_HEIGHT, {
 			content: new Graphic.Text(Data.Languages.extras.empty.name(), { align: ALIGN.CENTER }),
 			padding: WindowBox.SMALL_SLOT_PADDING,
 		});
-		this.windowBoxUseSkill = new WindowBox(240, 320, 360, 140, {
+		this.windowBoxUseSkill = new WindowBox(480, 480, 720, 210, {
 			content: new Graphic.UseSkillItem(),
 			padding: WindowBox.SMALL_PADDING_BOX,
 		});
@@ -102,7 +102,7 @@ class MenuSkills extends Base {
 	createWindowBoxInformation() {
 		const width =
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE * 2 - WindowBox.LARGE_SLOT_WIDTH - Constants.LARGE_SPACE;
-		const height = 200;
+		const height = 300;
 		const rect = new Rectangle(
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - width,
 			Constants.HUGE_SPACE + (WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2,

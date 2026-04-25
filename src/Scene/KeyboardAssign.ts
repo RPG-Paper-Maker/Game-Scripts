@@ -19,8 +19,8 @@ import { Base } from './Base';
  *  @extends Scene.Base
  */
 class KeyboardAssign extends Base {
-	public static WINDOW_PRESS_WIDTH = 300;
-	public static WINDOW_PRESS_HEIGHT = 200;
+	public static WINDOW_PRESS_WIDTH = 600;
+	public static WINDOW_PRESS_HEIGHT = 300;
 	public static MAX_WAIT_TIME_FIRST = 3000;
 	public static MAX_WAIT_TIME = 1000;
 

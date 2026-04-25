@@ -76,7 +76,7 @@ class Menu extends MenuBase {
 			graphics[i].ellipsis = true;
 			actions[i] = command.getCallback(this);
 		}
-		const rect = new Rectangle(20, 20, 150, WindowBox.MEDIUM_SLOT_HEIGHT);
+		const rect = new Rectangle(40, 30, 300, WindowBox.MEDIUM_SLOT_HEIGHT);
 		const options: ChoicesOptions = {
 			nbItemsMax: Math.min(8, graphics.length),
 			listCallbacks: actions,
@@ -91,11 +91,11 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	createTeamOrderWindow() {
-		const rect = new Rectangle(190, 20, 430, 95);
+		const rect = new Rectangle(380, 30, 860, 143);
 		const options: ChoicesOptions = {
 			nbItemsMax: 4,
 			padding: WindowBox.VERY_SMALL_PADDING_BOX,
-			space: 15,
+			space: 23,
 			currentSelectedIndex: -1,
 		};
 		this.windowChoicesTeam = new WindowChoices(
@@ -114,7 +114,7 @@ class Menu extends MenuBase {
 	 * @memberof Menu
 	 */
 	createWindowTimeCurrencies() {
-		const rect = new Rectangle(20, 0, 150, 0);
+		const rect = new Rectangle(40, 0, 300, 0);
 		this.windowTimeCurrencies = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
 			content: new Graphic.TimeCurrencies(),
 			padding: WindowBox.HUGE_PADDING_BOX,
@@ -123,7 +123,7 @@ class Menu extends MenuBase {
 			(<Graphic.TimeCurrencies>this.windowTimeCurrencies.content).height +
 			this.windowTimeCurrencies.padding[1] +
 			this.windowTimeCurrencies.padding[3];
-		this.windowTimeCurrencies.setY(ScreenResolution.SCREEN_Y - 20 - h);
+		this.windowTimeCurrencies.setY(ScreenResolution.SCREEN_Y - 30 - h);
 		this.windowTimeCurrencies.setH(h);
 	}
 

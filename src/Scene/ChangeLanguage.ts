@@ -116,8 +116,8 @@ class ChangeLanguage extends Base {
 	 *  Create the window confirmation.
 	 */
 	createWindowBoxConfirm() {
-		const width = 200;
-		const height = 75;
+		const width = 400;
+		const height = 113;
 		const rect = new Rectangle(
 			(ScreenResolution.SCREEN_X - width) / 2,
 			(ScreenResolution.SCREEN_Y - height) / 2,

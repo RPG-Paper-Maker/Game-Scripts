@@ -68,7 +68,7 @@ class Player extends Base {
 
 		// All the graphics
 		this.graphicName = new Graphic.Text(this.player.name);
-		this.graphicClass = new Graphic.Text(cl.name(), { fontSize: 10 });
+		this.graphicClass = new Graphic.Text(cl.name(), { fontSize: Constants.MEDIUM_FONT_SIZE });
 		this.graphicLevelName = new Graphic.Text(levelStat.name());
 		this.graphicLevel = new Graphic.Text(String(this.player[levelStat.abbreviation]));
 		if (expStat === null) {
@@ -231,7 +231,7 @@ class Player extends Base {
 	 */
 	drawCharacter(x: number, y: number, w: number, h: number) {
 		// Battler
-		let yOffset = ScreenResolution.getScreenMinXY(100);
+		let yOffset = ScreenResolution.getScreenMinXY(150);
 		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
 		const wBattler = this.battler.w / Data.Systems.battlersFrames;
 		const hBattler = this.battler.h / Data.Systems.battlersColumns;
@@ -239,7 +239,7 @@ class Player extends Base {
 		const ohBattler = this.battler.oH / Data.Systems.battlersColumns;
 		this.battlerRect.setCoords(
 			x,
-			y + yOffset - hBattler * coef - ScreenResolution.getScreenMinXY(15),
+			y + yOffset - hBattler * coef - ScreenResolution.getScreenMinXY(23),
 			wBattler * coef,
 			hBattler * coef,
 		);
@@ -257,7 +257,7 @@ class Player extends Base {
 		// Stats
 		let xOffset = this.graphicName.textWidth;
 		if (this.graphicStatShort) {
-			this.graphicStatShort.draw(x, y + yOffset - ScreenResolution.getScreenMinXY(15), 0, 0);
+			this.graphicStatShort.draw(x, y + yOffset - ScreenResolution.getScreenMinXY(23), 0, 0);
 		}
 		if (this.displayNameLevel) {
 			this.graphicName.draw(x, y + yOffset, 0, 0);
@@ -265,11 +265,11 @@ class Player extends Base {
 			this.graphicLevelName.draw(x + xOffset, y + yOffset, 0, 0);
 			xOffset += this.graphicLevelName.textWidth;
 			this.graphicLevel.draw(x + xOffset, y + yOffset, 0, 0);
-			yOffset += ScreenResolution.getScreenMinXY(15);
+			yOffset += ScreenResolution.getScreenMinXY(23);
 		}
 		let yStat: number;
 		for (let i = 0, l = this.listStatistics.length; i < l; i++) {
-			yStat = yOffset + i * ScreenResolution.getScreenMinXY(12);
+			yStat = yOffset + i * ScreenResolution.getScreenMinXY(18);
 			this.listStatistics[i].draw(x, y + yStat, w, h);
 		}
 	}
@@ -282,17 +282,18 @@ class Player extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		const xCharacter = x + ScreenResolution.getScreenMinXY(80);
-		const yName = y + ScreenResolution.getScreenMinXY(20);
+		const xCharacter = x + ScreenResolution.getScreenMinXY(160);
+		const yName = y + ScreenResolution.getScreenMinXY(30);
 		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
 		const wBattler = this.battler.w / Data.Systems.battlersFrames;
 		const owBattler = this.battler.oW / Data.Systems.battlersFrames;
 		const ohBattler = this.battler.oH / Data.Systems.battlersColumns;
 
 		// Battler
+		const hBattler = ohBattler * coef;
 		this.battler.draw({
-			x: x + (ScreenResolution.getScreenMinXY(80) - wBattler * coef) / 2,
-			y: y,
+			x: x + (ScreenResolution.getScreenMinXY(160) - wBattler * coef) / 2,
+			y: y + (h - hBattler) / 2,
 			w: owBattler * coef,
 			h: ohBattler * coef,
 			sx: this.battlerFrame.value * owBattler,
@@ -315,10 +316,10 @@ class Player extends Base {
 
 		// Right stats
 		if (this.isMainMenu) {
-			const xStat = x + w - ScreenResolution.getScreenMinXY(125);
+			const xStat = x + w - ScreenResolution.getScreenMinXY(250);
 			let i: number, l: number, yStat: number;
 			for (i = 0, l = this.listStatistics.length; i < l; i++) {
-				yStat = yName + ScreenResolution.getScreenMinXY(i * 20);
+				yStat = yName + ScreenResolution.getScreenMinXY(i * 30);
 				this.listStatistics[i].draw(xStat, yStat, w, h);
 			}
 		}
@@ -333,9 +334,9 @@ class Player extends Base {
 			);
 		}
 
-		const yClass = yName + ScreenResolution.getScreenMinXY(15);
+		const yClass = yName + ScreenResolution.getScreenMinXY(23);
 		this.graphicClass.draw(xCharacter, yClass, 0, 0);
-		const yExp = yClass + ScreenResolution.getScreenMinXY(29);
+		const yExp = yClass + ScreenResolution.getScreenMinXY(44);
 		if (this.graphicExpName !== null) {
 			this.graphicExpName.draw(xCharacter, yExp, 0, 0);
 			this.graphicExp.draw(
@@ -363,18 +364,18 @@ class Player extends Base {
 		const xOffset = this.reverse ? ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth) : 0;
 
 		// Name, level, status
-		const yName = y + ScreenResolution.getScreenMinXY(10);
+		const yName = y + ScreenResolution.getScreenMinXY(15);
 		this.graphicName.draw(x + xOffset, yName, 0, 0);
 		this.graphicLevelName.draw(xLevelName + xOffset, yName, 0, 0);
 		this.graphicLevel.draw(xLevel + xOffset, yName, 0, 0);
 		Status.drawList(this.player.status, firstLineLength + xOffset, yName);
-		const yStats = yName + ScreenResolution.getScreenMinXY(20);
+		const yStats = yName + ScreenResolution.getScreenMinXY(30);
 
 		// Stats
 		let i: number, l: number, xStat: number, yStat: number;
 		for (i = 0, l = this.listStatistics.length; i < l; i++) {
 			xStat = x + xOffset;
-			yStat = yStats + ScreenResolution.getScreenMinXY(i * 20);
+			yStat = yStats + ScreenResolution.getScreenMinXY(i * 30);
 			this.listStatistics[i].draw(xStat, yStat, w, h);
 		}
 

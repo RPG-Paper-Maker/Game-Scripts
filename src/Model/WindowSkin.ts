@@ -213,10 +213,10 @@ export class WindowSkin extends Base {
 	drawArrowTarget(frame: number, x: number, y: number, positionResize: boolean = false): void {
 		const width = this.arrowTargetSelection.width / Data.Systems.FRAMES;
 		this.picture.draw({
-			x: x - width / 2,
+			x: x - width * 0.75,
 			y,
-			w: width,
-			h: this.arrowTargetSelection.height,
+			w: width * 1.5,
+			h: this.arrowTargetSelection.height * 1.5,
 			sx: this.arrowTargetSelection.x + frame * width,
 			sy: this.arrowTargetSelection.y,
 			sw: width,
@@ -231,10 +231,10 @@ export class WindowSkin extends Base {
 	drawArrowMessage(frame: number, x: number, y: number): void {
 		const width = this.arrowEndMessage.width / Data.Systems.FRAMES;
 		this.picture.draw({
-			x: x - width / 2,
+			x: x - width * 0.75,
 			y,
-			w: width,
-			h: this.arrowEndMessage.height,
+			w: width * 1.5,
+			h: this.arrowEndMessage.height * 1.5,
 			sx: this.arrowEndMessage.x + frame * width,
 			sy: this.arrowEndMessage.y,
 			sw: width,
@@ -333,13 +333,14 @@ export class WindowSkin extends Base {
 		const digits = String(damage).split('').map(Number);
 		const width = rect.width / 10;
 		const height = rect.height;
+		const scaledZoom = zoom * 1.5;
 		this.picture.stretch = false;
 		for (let i = 0, l = digits.length; i < l; i++) {
 			this.picture.draw({
-				x: x + (i - (l - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * zoom),
+				x: x + (i - (l - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * scaledZoom),
 				y,
-				w: width * zoom,
-				h: height * zoom,
+				w: width * scaledZoom,
+				h: height * scaledZoom,
 				sx: rect.x + digits[i] * width,
 				sy: rect.y,
 				sw: width,
@@ -349,8 +350,8 @@ export class WindowSkin extends Base {
 		}
 		this.picture.stretch = true;
 		return [
-			x + (digits.length - (digits.length - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * zoom),
-			height * zoom,
+			x + (digits.length - (digits.length - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * scaledZoom),
+			height * scaledZoom,
 		];
 	}
 
@@ -372,7 +373,7 @@ export class WindowSkin extends Base {
 				y,
 				this.textMiss.width,
 				this.textMiss.height,
-				zoom,
+				zoom * 1.5,
 				false,
 			);
 			return [0, 0];

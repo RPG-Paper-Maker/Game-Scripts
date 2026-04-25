@@ -214,8 +214,8 @@ class UseSkillItem extends Base {
 	drawArrowAtIndex(index: number, x: number, y: number, h: number) {
 		Data.Systems.getCurrentWindowSkin().drawArrowTarget(
 			this.graphicCharacters[index].battlerFrame.value,
-			x + ScreenResolution.getScreenMinXY(32 + index * 85),
-			y + h - ScreenResolution.getScreenMinXY(20),
+			x + ScreenResolution.getScreenMinXY(64 + index * 170),
+			y + h - ScreenResolution.getScreenMinXY(30),
 		);
 	}
 
@@ -241,8 +241,8 @@ class UseSkillItem extends Base {
 		let i: number, l: number;
 		for (i = 0, l = this.graphicCharacters.length; i < l; i++) {
 			this.graphicCharacters[i].drawCharacter(
-				x + ScreenResolution.getScreenMinXY(5 + i * 85),
-				y - ScreenResolution.getScreenMinXY(32),
+				x + ScreenResolution.getScreenMinXY(10 + i * 170),
+				y - ScreenResolution.getScreenMinXY(48),
 				w,
 				h,
 			);

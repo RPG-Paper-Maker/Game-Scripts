@@ -22,10 +22,10 @@ export class ScreenResolution {
 	// -------------------------------------------------------------------------
 
 	/** Default screen width in pixels. */
-	static readonly SCREEN_X = 640;
+	static readonly SCREEN_X = 1280;
 
 	/** Default screen height in pixels. */
-	static readonly SCREEN_Y = 480;
+	static readonly SCREEN_Y = 720;
 
 	// -------------------------------------------------------------------------
 	// Dynamic resolution values

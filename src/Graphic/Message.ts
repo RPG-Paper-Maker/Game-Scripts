@@ -349,10 +349,11 @@ class Message extends Graphic.Base {
 					graphic.sy = 0;
 				}
 				result.g.push(graphic);
-				result.p.push(ScreenResolution.getScreenMinXY(Data.Systems.iconsSize));
+				const iconScaledSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5;
+				result.p.push(iconScaledSize);
 				result.a.push(result.ca);
-				if (Constants.DEFAULT_FONT_SIZE > result.h[0]) {
-					result.h[0] = Constants.DEFAULT_FONT_SIZE;
+				if (iconScaledSize > result.h[0]) {
+					result.h[0] = iconScaledSize;
 				}
 				break;
 			}
@@ -537,11 +538,11 @@ class Message extends Graphic.Base {
 					}
 					graphic.draw({
 						x: newX + offsetX,
-						y: newY - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) / 2 + offsetY,
+						y: newY - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5 / 2 + offsetY,
 						sw: Data.Systems.iconsSize,
 						sh: Data.Systems.iconsSize,
-						w: Data.Systems.iconsSize,
-						h: Data.Systems.iconsSize,
+						w: Data.Systems.iconsSize * 1.5,
+						h: Data.Systems.iconsSize * 1.5,
 					});
 					offsetX += this.positions[i];
 				} else {

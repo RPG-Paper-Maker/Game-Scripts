@@ -148,10 +148,10 @@ class MenuShop extends MenuBase {
 			list[i] = new Graphic.Text(Data.Systems.inventoryFilters[i].name(), { align: ALIGN.CENTER });
 		}
 		// Per-tab widths adapted to each filter name text, capped at 150px with ellipsis
-		const MAX_TAB_WIDTH = 150;
+		const MAX_TAB_WIDTH = 300;
 		const choiceWidths = list.map((text) => {
 			text.ellipsis = true;
-			return Math.min(MAX_TAB_WIDTH, Math.max(50, ScreenResolution.getScreenXReverse(text.textWidth) + 24));
+			return Math.min(MAX_TAB_WIDTH, Math.max(100, ScreenResolution.getScreenXReverse(text.textWidth) + 36));
 		});
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
@@ -192,7 +192,7 @@ class MenuShop extends MenuBase {
 	createWindowBoxInformation() {
 		const width =
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE * 2 - WindowBox.LARGE_SLOT_WIDTH - Constants.LARGE_SPACE;
-		const height = 215;
+		const height = 323;
 		const rect = new Rectangle(
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - width,
 			Constants.HUGE_SPACE + (WindowBox.SMALL_SLOT_HEIGHT + Constants.LARGE_SPACE) * 2,
@@ -230,7 +230,7 @@ class MenuShop extends MenuBase {
 	 */
 	createWindowBoxUseItem() {
 		const width = this.windowBoxInformation.oW;
-		const height = 140;
+		const height = 210;
 		const rect = new Rectangle(
 			ScreenResolution.SCREEN_X - Constants.HUGE_SPACE - width,
 			this.windowBoxInformation.oY + this.windowBoxInformation.oH + Constants.MEDIUM_SPACE,
@@ -295,8 +295,8 @@ class MenuShop extends MenuBase {
 	 *  Create the confirm equip window.
 	 */
 	createWindowBoxConfirmEquip() {
-		const width = 300;
-		const height = 100;
+		const width = 600;
+		const height = 150;
 		const rect = new Rectangle(
 			(ScreenResolution.SCREEN_X - width) / 2,
 			(ScreenResolution.SCREEN_Y - height) / 2,

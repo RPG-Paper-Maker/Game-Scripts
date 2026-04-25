@@ -207,8 +207,8 @@ class PlayerDescription extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	draw(x: number, y: number, w: number, h: number) {
-		const xCharacter = x + ScreenResolution.getScreenMinXY(80);
-		let yName = y + ScreenResolution.getScreenMinXY(20);
+		const xCharacter = x + ScreenResolution.getScreenMinXY(160);
+		let yName = y + ScreenResolution.getScreenMinXY(30);
 		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
 		const wBattler = this.battler.w / Data.Systems.battlersFrames;
 		const hBattler = this.battler.h / Data.Systems.battlersColumns;
@@ -217,8 +217,8 @@ class PlayerDescription extends Base {
 
 		// Battler
 		this.battler.draw({
-			x: x + (ScreenResolution.getScreenMinXY(80) - wBattler * coef) / 2,
-			y: y + ScreenResolution.getScreenMinXY(80) - hBattler * coef - ScreenResolution.getScreenMinXY(15),
+			x: x + (ScreenResolution.getScreenMinXY(160) - wBattler * coef) / 2,
+			y: y + ScreenResolution.getScreenMinXY(120) - hBattler * coef - ScreenResolution.getScreenMinXY(23),
 			w: owBattler * coef,
 			h: ohBattler * coef,
 			sx: this.battlerFrame.value * owBattler,
@@ -228,7 +228,7 @@ class PlayerDescription extends Base {
 		});
 
 		// Name, level, description, exp
-		yName = y + ScreenResolution.getScreenMinXY(10);
+		yName = y + ScreenResolution.getScreenMinXY(15);
 		this.graphicName.draw(xCharacter, yName, 0, 0);
 		const xLevelName = xCharacter + this.graphicName.textWidth + ScreenResolution.getScreenMinXY(10);
 		this.graphicLevelName.draw(xLevelName, yName, 0, 0);
@@ -250,22 +250,22 @@ class PlayerDescription extends Base {
 			);
 			yDescription += ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 		}
-		this.graphicDescription.draw(xCharacter, yDescription, ScreenResolution.getScreenX(450), 0);
+		this.graphicDescription.draw(xCharacter, yDescription, ScreenResolution.getScreenX(900), 0);
 		const yStats =
 			yDescription + this.graphicDescription.textHeight + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
 
 		// Stats
 		let xStat: number, yStat: number;
 		if (this.listStats.length > 0) {
-			const space = ScreenResolution.getScreenMinXY(30);
+			const space = ScreenResolution.getScreenMinXY(45);
 			const rows = Math.floor((h - yStats + y) / space);
 			for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-				xStat = x + ScreenResolution.getScreenMinXY(Math.floor(i / rows) * 190);
+				xStat = x + ScreenResolution.getScreenMinXY(Math.floor(i / rows) * 380);
 				yStat = yStats + (i % rows) * space;
 				this.listStatsNames[i].draw(xStat, yStat, 0, 0);
 				this.listStats[i].draw(
 					xStat +
-						ScreenResolution.getScreenMinXY(80) +
+						ScreenResolution.getScreenMinXY(160) +
 						ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE),
 					yStat,
 					0,

@@ -75,7 +75,7 @@ class MenuDescriptionState extends MenuBase {
 	 * @memberof MenuDescriptionState
 	 */
 	createWindowTop() {
-		const rect = new Rectangle(20, 20, 200, 30);
+		const rect = new Rectangle(40, 30, 400, 45);
 		const options = {
 			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		};
@@ -88,7 +88,7 @@ class MenuDescriptionState extends MenuBase {
 	 * @memberof MenuDescriptionState
 	 */
 	createWindowTabs() {
-		const rect = new Rectangle(50, 60, 110, WindowBox.SMALL_SLOT_HEIGHT);
+		const rect = new Rectangle(100, 90, 220, WindowBox.SMALL_SLOT_HEIGHT);
 		const options = { orientation: ORIENTATION_WINDOW.HORIZONTAL, nbItemsMax: 4 };
 		const listHeroes = [];
 		for (let i = 0; i < this.party().length; i++) {
@@ -103,7 +103,7 @@ class MenuDescriptionState extends MenuBase {
 	 * @memberof MenuDescriptionState
 	 */
 	createWindowInformation() {
-		const rect = new Rectangle(20, 100, 600, 340);
+		const rect = new Rectangle(40, 150, 1200, 510);
 		this.windowInformation = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
 			padding: WindowBox.HUGE_PADDING_BOX,
 		});

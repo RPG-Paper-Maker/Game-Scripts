@@ -52,7 +52,8 @@ class Status {
 	 */
 	static drawList(statusList: Status[], x: number, y: number, align = ALIGN.LEFT) {
 		const l = statusList.length;
-		let totalWidth = l * ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
+		const iconSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 2;
+		let totalWidth = l * iconSize;
 		let s: Status;
 		if (l > 1) {
 			totalWidth += (l - 1) * ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
@@ -66,16 +67,13 @@ class Status {
 				totalWidth /= 2;
 				break;
 		}
+		const originalSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
 		for (let i = 0, l = statusList.length; i < l; i++) {
 			s = statusList[i];
-			xOffset += ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
+			xOffset += iconSize;
 			s.draw(
-				x -
-					totalWidth +
-					xOffset +
-					ScreenResolution.getScreenMinXY(i * Constants.MEDIUM_SPACE) -
-					ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
-				y - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
+				x - totalWidth + xOffset + ScreenResolution.getScreenMinXY(i * Constants.MEDIUM_SPACE) - iconSize,
+				y - originalSize,
 			);
 		}
 	}
@@ -122,6 +120,7 @@ class Status {
 	 *  @param {number} y - The y position
 	 */
 	draw(x: number, y: number) {
+		const iconSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 3;
 		this.picture.draw({
 			x: x,
 			y: y,
@@ -129,8 +128,8 @@ class Status {
 			sy: this.system.pictureIndexY * Data.Systems.iconsSize,
 			sw: Data.Systems.iconsSize,
 			sh: Data.Systems.iconsSize,
-			w: ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
-			h: ScreenResolution.getScreenMinXY(Data.Systems.iconsSize),
+			w: iconSize,
+			h: iconSize,
 		});
 	}
 }

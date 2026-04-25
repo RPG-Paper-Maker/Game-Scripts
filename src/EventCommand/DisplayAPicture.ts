@@ -23,8 +23,6 @@ class DisplayAPicture extends Base {
 	public pictureID: Model.DynamicValue;
 	public index: Model.DynamicValue;
 	public centered: boolean;
-	public originX: number;
-	public originY: number;
 	public x: Model.DynamicValue;
 	public y: Model.DynamicValue;
 	public zoom: Model.DynamicValue;
@@ -42,13 +40,6 @@ class DisplayAPicture extends Base {
 		iterator.i++;
 		this.index = Model.DynamicValue.createValueCommand(command, iterator);
 		this.centered = Utils.numberToBool(command[iterator.i++]);
-		if (this.centered) {
-			this.originX = ScreenResolution.SCREEN_X / 2;
-			this.originY = ScreenResolution.SCREEN_Y / 2;
-		} else {
-			this.originX = 0;
-			this.originY = 0;
-		}
 		this.x = Model.DynamicValue.createValueCommand(command, iterator);
 		this.y = Model.DynamicValue.createValueCommand(command, iterator);
 		this.zoom = Model.DynamicValue.createValueCommand(command, iterator);
@@ -67,16 +58,58 @@ class DisplayAPicture extends Base {
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const currentIndex = this.index.getValue() as number;
 		const picture = Data.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
-		picture.setX(this.originX + (this.x.getValue() as number));
-		picture.setY(this.originY + (this.y.getValue() as number));
+
+		const xVal = this.x.getValue() as number;
+		const yVal = this.y.getValue() as number;
+
+		if (this.stretch) {
+			const scaleX = ScreenResolution.CANVAS_WIDTH / Data.Systems.windowWidth;
+			const scaleY = ScreenResolution.CANVAS_HEIGHT / Data.Systems.windowHeight;
+			if (this.centered) {
+				picture.oX = Data.Systems.windowWidth / 2 + xVal;
+				picture.x = Math.round(ScreenResolution.CANVAS_WIDTH / 2 + xVal * scaleX);
+				picture.oY = Data.Systems.windowHeight / 2 + yVal;
+				picture.y = Math.round(ScreenResolution.CANVAS_HEIGHT / 2 + yVal * scaleY);
+			} else {
+				picture.oX = xVal;
+				picture.x = Math.round(xVal * scaleX);
+				picture.oY = yVal;
+				picture.y = Math.round(yVal * scaleY);
+			}
+		} else {
+			const minScale = Math.min(ScreenResolution.WINDOW_X, ScreenResolution.WINDOW_Y);
+			const offsetX = (ScreenResolution.CANVAS_WIDTH - ScreenResolution.SCREEN_X * minScale) / 2;
+			const offsetY = (ScreenResolution.CANVAS_HEIGHT - ScreenResolution.SCREEN_Y * minScale) / 2;
+			if (this.centered) {
+				picture.oX = Data.Systems.windowWidth / 2 + xVal;
+				picture.x = Math.round(ScreenResolution.CANVAS_WIDTH / 2 + ScreenResolution.getScreenMinXY(xVal));
+				picture.oY = Data.Systems.windowHeight / 2 + yVal;
+				picture.y = Math.round(ScreenResolution.CANVAS_HEIGHT / 2 + ScreenResolution.getScreenMinXY(yVal));
+			} else {
+				picture.oX = xVal;
+				picture.x = Math.round(offsetX + ScreenResolution.getScreenMinXY(xVal));
+				picture.oY = yVal;
+				picture.y = Math.round(offsetY + ScreenResolution.getScreenMinXY(yVal));
+			}
+		}
+
 		picture.centered = this.centered;
 		picture.zoom = (this.zoom.getValue() as number) / 100;
 		picture.opacity = (this.opacity.getValue() as number) / 100;
 		picture.angle = this.angle.getValue() as number;
-		if (this.stretch) {
-			picture.stretch = true;
-			picture.setW(picture.image.width);
-			picture.setH(picture.image.height);
+		if (!picture.empty && picture.loaded) {
+			if (this.stretch) {
+				picture.stretch = true;
+				picture.oW = picture.image.width;
+				picture.w = ScreenResolution.CANVAS_WIDTH;
+				picture.oH = picture.image.height;
+				picture.h = ScreenResolution.CANVAS_HEIGHT;
+			} else {
+				picture.oW = picture.image.width;
+				picture.w = Math.round(ScreenResolution.getScreenMinXY(picture.image.width));
+				picture.oH = picture.image.height;
+				picture.h = Math.round(ScreenResolution.getScreenMinXY(picture.image.height));
+			}
 		}
 		const value: [number, Picture2D] = [currentIndex, picture];
 		let ok = false;

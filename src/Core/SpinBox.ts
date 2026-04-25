@@ -22,8 +22,8 @@ import { WindowChoices } from './WindowChoices';
  * @extends {Bitmap}
  */
 class SpinBox extends Bitmap {
-	public static DEFAULT_WIDTH: number = 150;
-	public static DEFAULT_HEIGHT: number = 50;
+	public static DEFAULT_WIDTH: number = 300;
+	public static DEFAULT_HEIGHT: number = 75;
 	public windowBox: WindowBox;
 	public value: number;
 	public min: number;

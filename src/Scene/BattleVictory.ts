@@ -119,11 +119,11 @@ class BattleVictory {
 		}
 
 		// Windows
-		const w = 200 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];
-		const h = this.battle.lootsNumber * 30 + WindowBox.SMALL_PADDING_BOX[1] + WindowBox.SMALL_PADDING_BOX[3];
+		const w = 400 + WindowBox.SMALL_PADDING_BOX[0] + WindowBox.SMALL_PADDING_BOX[2];
+		const h = this.battle.lootsNumber * 45 + WindowBox.SMALL_PADDING_BOX[1] + WindowBox.SMALL_PADDING_BOX[3];
 		this.battle.windowLoots = new WindowBox(
-			ScreenResolution.SCREEN_X - 20 - w,
-			ScreenResolution.SCREEN_Y - 20 - h,
+			ScreenResolution.SCREEN_X - 40 - w,
+			ScreenResolution.SCREEN_Y - 30 - h,
 			w,
 			h,
 			{

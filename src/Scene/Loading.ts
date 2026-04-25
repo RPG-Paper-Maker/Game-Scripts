@@ -26,10 +26,10 @@ class Loading extends Scene.Base {
 
 		this.text = new Graphic.Text(Data.Languages.extras.loading.name(), {
 			align: ALIGN.RIGHT,
-			x: 590,
-			y: 450,
-			w: 40,
-			h: 20,
+			x: 1180,
+			y: 675,
+			w: 80,
+			h: 30,
 		});
 	}
 

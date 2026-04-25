@@ -349,8 +349,8 @@ export class Systems {
 		let h = json.sh;
 		let isScreenWindow = json.isw;
 		if (!Platform.isModeTestNormal()) {
-			w = 640;
-			h = 480;
+			w = 1280;
+			h = 720;
 			isScreenWindow = true;
 		}
 		this.windowWidth = w;

@@ -59,7 +59,7 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	createWindowTop() {
-		const rect = new Rectangle(20, 20, 200, 30);
+		const rect = new Rectangle(40, 30, 400, 45);
 		this.windowTop = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
 			content: new Graphic.Text(this.title, { align: ALIGN.CENTER }),
 		});
@@ -77,13 +77,13 @@ class MenuEquip extends MenuBase {
 		}
 
 		// Per-tab widths adapted to each hero name text, capped at 150px with ellipsis
-		const MAX_TAB_WIDTH = 150;
+		const MAX_TAB_WIDTH = 300;
 		const choiceWidths = listHeroes.map((hero) => {
 			hero.graphicNameCenter.ellipsis = true;
-			return Math.min(MAX_TAB_WIDTH, Math.max(50, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 24));
+			return Math.min(MAX_TAB_WIDTH, Math.max(100, ScreenResolution.getScreenXReverse(hero.graphicNameCenter.textWidth) + 36));
 		});
 
-		const rect = new Rectangle(50, 60, ScreenResolution.SCREEN_X - 100, WindowBox.SMALL_SLOT_HEIGHT);
+		const rect = new Rectangle(100, 90, ScreenResolution.SCREEN_X - 200, WindowBox.SMALL_SLOT_HEIGHT);
 		const options = {
 			orientation: ORIENTATION_WINDOW.HORIZONTAL,
 			padding: [0, 0, 0, 0],
@@ -98,7 +98,7 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	createWindowChoiceEquipment() {
-		const rect = new Rectangle(20, 100, 290, WindowBox.SMALL_SLOT_HEIGHT);
+		const rect = new Rectangle(40, 150, 580, WindowBox.SMALL_SLOT_HEIGHT);
 		const nbEquipments = Data.BattleSystems.equipmentsIDs.length;
 		const options = {
 			nbItemsMax: Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, nbEquipments),
@@ -121,8 +121,8 @@ class MenuEquip extends MenuBase {
 	createWindowChoiceList() {
 		const nbEquips = Math.min(Scene.MenuEquip.MAX_SLOTS_EQUIPMENTS, Data.BattleSystems.equipmentsIDs.length);
 		const nbEquipChoice = MenuBase.SLOTS_TO_DISPLAY - nbEquips - 1;
-		const y = 100 + (nbEquips + 1) * WindowBox.SMALL_SLOT_HEIGHT;
-		const rect = new Rectangle(20, y, 290, WindowBox.SMALL_SLOT_HEIGHT);
+		const y = 150 + (nbEquips + 1) * WindowBox.SMALL_SLOT_HEIGHT;
+		const rect = new Rectangle(40, y, 580, WindowBox.SMALL_SLOT_HEIGHT);
 		this.windowChoicesList = new WindowChoices(rect.x, rect.y, rect.width, rect.height, [], {
 			nbItemsMax: nbEquipChoice,
 			currentSelectedIndex: -1,
@@ -135,7 +135,7 @@ class MenuEquip extends MenuBase {
 	 * @memberof MenuEquip
 	 */
 	createWindowInformation() {
-		const rect = new Rectangle(330, 100, 285, 350);
+		const rect = new Rectangle(660, 150, 570, 525);
 		this.windowInformation = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
 			padding: WindowBox.SMALL_PADDING_BOX,
 		});

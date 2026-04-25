@@ -100,7 +100,7 @@ class SkillItem extends Base {
 	 */
 	draw(x: number, y: number, w: number, h: number, rightNameOffset: number = 0) {
 		let offsetY = 0;
-		const iconScreenSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
+		const iconScreenSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5;
 		const nameOffset = this.graphicElements.length * (iconScreenSize + this.graphicName.space) + rightNameOffset;
 		this.graphicName.draw(x, y, w - nameOffset, 0);
 		offsetY += this.graphicName.getMaxHeight();
@@ -113,17 +113,17 @@ class SkillItem extends Base {
 			graphic = this.graphicElements[i];
 			graphic.draw({
 				x: offsetX,
-				y: y - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) / 2,
+				y: y - iconScreenSize / 2,
 				sw: Data.Systems.iconsSize,
 				sh: Data.Systems.iconsSize,
-				w: Data.Systems.iconsSize,
-				h: Data.Systems.iconsSize,
+				w: Data.Systems.iconsSize * 1.5,
+				h: Data.Systems.iconsSize * 1.5,
 			});
-			offsetX += ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) + this.graphicName.space;
+			offsetX += iconScreenSize + this.graphicName.space;
 		}
 		if (this.system.hasType) {
 			this.graphicType.draw(
-				x + ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) + this.graphicName.space,
+				x + iconScreenSize + this.graphicName.space,
 				y + offsetY,
 				w,
 				0,
@@ -139,7 +139,7 @@ class SkillItem extends Base {
 			pictureIcon = graphicText['elementIcon'];
 			if (pictureIcon) {
 				graphicText.measureText();
-				const iconScreenSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
+				const iconScreenSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5;
 				pictureIcon.draw({
 					x: Math.min(x + graphicText.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE), x + w - iconScreenSize),
 					y: y + offsetY - iconScreenSize / 2,

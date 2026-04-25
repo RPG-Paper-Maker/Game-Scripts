@@ -14,7 +14,7 @@
  */
 export class Constants {
 	/** Default UI font size in pixels. */
-	public static readonly DEFAULT_FONT_SIZE = 13;
+	public static readonly DEFAULT_FONT_SIZE = 20;
 
 	/** Default font family used across the UI. */
 	public static readonly DEFAULT_FONT_NAME = 'Arial';
@@ -23,19 +23,19 @@ export class Constants {
 	public static readonly BASIC_SQUARE_SIZE = 32;
 
 	/** Small font size in pixels. */
-	public static readonly SMALL_FONT_SIZE = 8;
+	public static readonly SMALL_FONT_SIZE = 12;
 
 	/** Medium font size in pixels. */
-	public static readonly MEDIUM_FONT_SIZE = 10;
+	public static readonly MEDIUM_FONT_SIZE = 15;
 
 	/** Standard medium spacing in UI layouts. */
-	public static readonly MEDIUM_SPACE = 5;
+	public static readonly MEDIUM_SPACE = 8;
 
 	/** Standard large spacing in UI layouts. */
-	public static readonly LARGE_SPACE = 10;
+	public static readonly LARGE_SPACE = 15;
 
 	/** Standard huge spacing in UI layouts. */
-	public static readonly HUGE_SPACE = 20;
+	public static readonly HUGE_SPACE = 30;
 
 	/** Raycasting distance constant (far). */
 	public static readonly PORTIONS_RAY_FAR = 0;

@@ -46,15 +46,15 @@ class SaveLoadGame extends Base {
 		Game.current = currentGame;
 
 		// Initialize windows
-		this.windowTop = new WindowBox(20, 20, ScreenResolution.SCREEN_X - 40, 30);
-		this.windowInformations = new WindowBox(120, 100, 500, 300, {
+		this.windowTop = new WindowBox(40, 30, ScreenResolution.SCREEN_X - 80, 45);
+		this.windowInformations = new WindowBox(240, 150, 1000, 450, {
 			padding: WindowBox.MEDIUM_PADDING_BOX,
 		});
-		this.windowChoicesSlots = new WindowChoices(10, 100, 100, 50, this.gamesData, {
+		this.windowChoicesSlots = new WindowChoices(20, 150, 200, 75, this.gamesData, {
 			nbItemsMax: 6,
 			padding: WindowBox.NONE_PADDING,
 		});
-		this.windowBot = new WindowBox(20, ScreenResolution.SCREEN_Y - 50, ScreenResolution.SCREEN_X - 40, 30);
+		this.windowBot = new WindowBox(40, ScreenResolution.SCREEN_Y - 75, ScreenResolution.SCREEN_X - 80, 45);
 		this.updateInformations(this.windowChoicesSlots.currentSelectedIndex);
 	}
 
