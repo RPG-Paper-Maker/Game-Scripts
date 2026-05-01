@@ -43,7 +43,9 @@ class BattleVictory {
 		for (battler of this.battle.battlers[CHARACTER_KIND.HERO]) {
 			s = battler.player.status[0];
 			battler.player.removeEndBattleStatus();
-			battler.updateStatusStep();
+			if (!battler.player.isDead()) {
+				battler.updateStatusStep();
+			}
 			battler.updateAnimationStatus(s);
 		}
 
