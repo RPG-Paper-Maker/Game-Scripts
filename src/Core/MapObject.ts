@@ -32,6 +32,7 @@ import { MapElement, StructMapElementCollision } from './MapElement';
 import { MapPortion } from './MapPortion';
 import { Object3DBox } from './Object3DBox';
 import { Object3DCustom } from './Object3DCustom';
+import { Object3DProcedural } from './Object3DProcedural';
 import { Portion } from './Portion';
 import { Position } from './Position';
 import { Rectangle } from './Rectangle';
@@ -599,10 +600,17 @@ class MapObject {
 				positionTranformation.yPixels = 0;
 				positionTranformation.z = -1 / 2;
 				const objectData = Data.SpecialElements.getObject3D(this.currentStateInstance.graphicID);
-				let object3D: Object3DBox;
+				let object3D: Object3DBox | Object3DProcedural | Object3DCustom;
 				switch (objectData.shapeKind) {
 					case SHAPE_KIND.BOX:
 						object3D = Object3DBox.create(objectData);
+						result = object3D.createGeometry(positionTranformation);
+						break;
+					case SHAPE_KIND.SPHERE:
+					case SHAPE_KIND.CYLINDER:
+					case SHAPE_KIND.CONE:
+					case SHAPE_KIND.CAPSULE:
+						object3D = Object3DProcedural.create(objectData);
 						result = object3D.createGeometry(positionTranformation);
 						break;
 					case SHAPE_KIND.CUSTOM:

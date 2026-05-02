@@ -25,6 +25,7 @@ import { Mountains } from './Mountains';
 import { Object3D } from './Object3D';
 import { Object3DBox } from './Object3DBox';
 import { Object3DCustom } from './Object3DCustom';
+import { Object3DProcedural } from './Object3DProcedural';
 import { Portion } from './Portion';
 import { Position } from './Position';
 import { Sprite } from './Sprite';
@@ -517,12 +518,10 @@ class MapPortion {
 						obj3D = new Object3DBox(v, datas);
 						break;
 					case SHAPE_KIND.SPHERE:
-						break;
 					case SHAPE_KIND.CYLINDER:
-						break;
 					case SHAPE_KIND.CONE:
-						break;
 					case SHAPE_KIND.CAPSULE:
+						obj3D = new Object3DProcedural(v, datas);
 						break;
 					case SHAPE_KIND.CUSTOM:
 						obj3D = new Object3DCustom(v, datas);
@@ -558,7 +557,7 @@ class MapPortion {
 						this.boundingBoxesObjects3D,
 						result[1],
 						position,
-						datas.shapeKind === SHAPE_KIND.CUSTOM,
+						datas.shapeKind !== SHAPE_KIND.BOX,
 						Scene.Map.current.overflowObjects3D,
 					);
 				}

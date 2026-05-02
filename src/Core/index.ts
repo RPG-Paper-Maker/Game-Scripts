@@ -31,6 +31,7 @@ export * from './Mountains';
 export * from './Node';
 export * from './Object3DBox';
 export * from './Object3DCustom';
+export * from './Object3DProcedural';
 export * from './Picture2D';
 export * from './Player';
 export * from './Portion';
