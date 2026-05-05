@@ -103,11 +103,11 @@ class Item extends Base {
 		for (let i = this.graphicCurrencies.length - 1; i >= 0; i--) {
 			graphic = this.graphicCurrencies[i];
 			graphic.draw(x - offset, y, w, h);
-			offset += graphic.getWidth() + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+			offset += graphic.getWidth() + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
 		}
 		if (this.graphicNb) {
 			this.graphicNb.draw(x - offset, y, w, h);
-			offset += this.graphicNb.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+			offset += this.graphicNb.textWidth + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
 		}
 		this.graphicName.draw(x, y, w - offset, h);
 	}

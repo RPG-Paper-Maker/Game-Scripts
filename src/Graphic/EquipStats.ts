@@ -111,18 +111,18 @@ class EquipStats extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		const xStats = x + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
-		const yStats = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const xStats = x + ScreenResolution.getScreenX(Constants.LARGE_SPACE);
+		const yStats = y + ScreenResolution.getScreenY(Constants.HUGE_SPACE);
 		let yStat: number, xStat: number;
 		for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-			yStat = yStats + i * ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+			yStat = yStats + i * ScreenResolution.getScreenY(Constants.HUGE_SPACE);
 			this.listStatsNames[i].draw(xStats, yStat, 0, 0);
-			xStat = xStats + this.nameLength + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+			xStat = xStats + this.nameLength + ScreenResolution.getScreenX(Constants.LARGE_SPACE);
 			this.listStats[i].draw(xStat, yStat, 0, 0);
 			if (this.isChanging) {
-				xStat += this.valueLength + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+				xStat += this.valueLength + ScreenResolution.getScreenX(Constants.LARGE_SPACE);
 				this.graphicArrow.draw(xStat, yStat, 0, 0);
-				xStat += this.graphicArrow.textWidth + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+				xStat += this.graphicArrow.textWidth + ScreenResolution.getScreenX(Constants.HUGE_SPACE);
 				this.listNewStats[i].draw(xStat, yStat, 0, 0);
 			}
 		}

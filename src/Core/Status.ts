@@ -56,7 +56,7 @@ class Status {
 		let totalWidth = l * iconSize;
 		let s: Status;
 		if (l > 1) {
-			totalWidth += (l - 1) * ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+			totalWidth += (l - 1) * ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
 		}
 		let xOffset: number = 0;
 		switch (align) {
@@ -72,7 +72,7 @@ class Status {
 			s = statusList[i];
 			xOffset += iconSize;
 			s.draw(
-				x - totalWidth + xOffset + ScreenResolution.getScreenMinXY(i * Constants.MEDIUM_SPACE) - iconSize,
+				x - totalWidth + xOffset + ScreenResolution.getScreenX(i * Constants.MEDIUM_SPACE) - iconSize,
 				y - originalSize,
 			);
 		}

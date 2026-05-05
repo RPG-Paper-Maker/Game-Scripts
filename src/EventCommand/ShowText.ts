@@ -48,7 +48,7 @@ class ShowText extends Base {
 			padding: WindowBox.HUGE_PADDING_BOX,
 		});
 		this.windowInterlocutor = new WindowBox(
-			this.windowMain.oX + WindowBox.MEDIUM_SLOT_HEIGHT / 2,
+			this.windowMain.oX + 40,
 			this.windowMain.oY - WindowBox.MEDIUM_SLOT_HEIGHT / 2,
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
@@ -83,7 +83,7 @@ class ShowText extends Base {
 		this.windowMain.setY(Utils.valueOrDefault(Data.Systems.dbOptions.v_y, 0));
 		this.windowMain.setW(Utils.valueOrDefault(Data.Systems.dbOptions.v_w, 0));
 		this.windowMain.setH(Utils.valueOrDefault(Data.Systems.dbOptions.v_h, 0));
-		this.windowInterlocutor.setX(this.windowMain.oX + WindowBox.MEDIUM_SLOT_HEIGHT / 2);
+		this.windowInterlocutor.setX(this.windowMain.oX + 40);
 		this.windowInterlocutor.setY(this.windowMain.oY - WindowBox.MEDIUM_SLOT_HEIGHT / 2);
 		this.windowMain.padding[0] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pLeft, 0);
 		this.windowMain.padding[1] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pTop, 0);
@@ -152,7 +152,7 @@ class ShowText extends Base {
 			Data.Systems.getCurrentWindowSkin().drawArrowMessage(
 				currentState.frame,
 				this.windowMain.oX + this.windowMain.oW / 2,
-				this.windowMain.oY + (this.windowMain.oH - 40),
+				this.windowMain.oY + (this.windowMain.oH - WindowBox.MEDIUM_SLOT_HEIGHT),
 			);
 		}
 	}

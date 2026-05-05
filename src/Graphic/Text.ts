@@ -122,7 +122,7 @@ class Text extends Base {
 			}
 			const limit = isFirstLine ? firstLineMaxWidth : maxWidth;
 			const width =
-				Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : 2);
+				Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : ScreenResolution.getScreenMinXY(2));
 			if (width < limit) {
 				currentLine += ' ' + word;
 			} else {
@@ -259,16 +259,16 @@ class Text extends Base {
 		const textHeight = this.fontSize + ScreenResolution.getScreenMinXY(this.strokeColor === null ? 0 : 2);
 		switch (this.align) {
 			case ALIGN.LEFT:
-				x += ScreenResolution.getScreenMinXY(1);
+				x += ScreenResolution.getScreenX(1);
 				if (continuationX !== undefined) {
-					continuationX += ScreenResolution.getScreenMinXY(1);
+					continuationX += ScreenResolution.getScreenX(1);
 				}
 				break;
 			case ALIGN.RIGHT:
-				x += w - ScreenResolution.getScreenMinXY(1);
+				x += w - ScreenResolution.getScreenX(1);
 				xBack = x - textWidth;
 				if (continuationX !== undefined) {
-					continuationX += effectiveWFull - ScreenResolution.getScreenMinXY(1);
+					continuationX += effectiveWFull - ScreenResolution.getScreenX(1);
 				}
 				break;
 			case ALIGN.CENTER:
@@ -308,15 +308,16 @@ class Text extends Base {
 		let yOffset: number;
 		if (this.strokeColor !== null) {
 			Platform.ctx.strokeStyle = this.strokeColor.rgb;
+			Platform.ctx.lineWidth = Math.max(2, Math.round(ScreenResolution.getScreenMinXY(2)));
+			Platform.ctx.lineJoin = 'round';
 			yOffset = 0;
 			for (i = 0; i < l; i++) {
 				const cx = i === 0 || continuationX === undefined ? x : continuationX;
-				Platform.ctx.strokeText(this.lines[i], cx - 1, y - 1 + yOffset);
-				Platform.ctx.strokeText(this.lines[i], cx - 1, y + 1 + yOffset);
-				Platform.ctx.strokeText(this.lines[i], cx + 1, y - 1 + yOffset);
-				Platform.ctx.strokeText(this.lines[i], cx + 1, y + 1 + yOffset);
+				Platform.ctx.strokeText(this.lines[i], Math.round(cx), Math.round(y + yOffset));
 				yOffset += lineHeight;
 			}
+			Platform.ctx.lineWidth = 1;
+			Platform.ctx.lineJoin = 'miter';
 		}
 
 		// Drawing the text
@@ -324,7 +325,7 @@ class Text extends Base {
 		yOffset = 0;
 		for (i = 0; i < l; i++) {
 			const cx = i === 0 || continuationX === undefined ? x : continuationX;
-			Platform.ctx.fillText(this.lines[i], cx, y + yOffset);
+			Platform.ctx.fillText(this.lines[i], Math.round(cx), Math.round(y + yOffset));
 			yOffset += lineHeight;
 		}
 

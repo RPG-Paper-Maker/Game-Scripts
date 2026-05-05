@@ -458,11 +458,11 @@ class Message extends Graphic.Base {
 	 */
 	drawFaceset(x: number, y: number, w: number, h: number) {
 		this.faceset.draw({
-			x: x + Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Data.Systems.dbOptions.v_fX), 0),
+			x: x + Utils.valueOrDefault(ScreenResolution.getScreenX(Data.Systems.dbOptions.v_fX), 0),
 			y:
 				y -
-				(ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingHeight) - h) / 2 +
-				Utils.valueOrDefault(ScreenResolution.getScreenMinXY(Data.Systems.dbOptions.v_fY), 0),
+				(ScreenResolution.getScreenY(Data.Systems.facesetScalingHeight) - h) / 2 +
+				Utils.valueOrDefault(ScreenResolution.getScreenY(Data.Systems.dbOptions.v_fY), 0),
 			w: Data.Systems.facesetScalingWidth,
 			h: Data.Systems.facesetScalingHeight,
 			sx: this.facesetIndexX * Data.Systems.facesetsSize,
@@ -496,8 +496,8 @@ class Message extends Graphic.Base {
 		if (Data.Systems.dbOptions.v_fPosAbove) {
 			this.drawFaceset(x, y, w, h);
 		}
-		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenX(Data.Systems.facesetScalingWidth));
-		const newY = y + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth) + ScreenResolution.getScreenX(Constants.HUGE_SPACE));
+		const newY = y + ScreenResolution.getScreenY(Constants.HUGE_SPACE);
 		const textAreaWidth = w - (newX - x);
 		let offsetY = 0;
 		let align = ALIGN.NONE;

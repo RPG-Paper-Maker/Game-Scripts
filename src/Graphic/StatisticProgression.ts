@@ -122,10 +122,10 @@ class StatisticProgression extends Base {
 	draw(x: number, y: number, w: number, h: number) {
 		let yStat: number;
 		for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-			yStat = y + ScreenResolution.getScreenMinXY(i * Constants.HUGE_SPACE);
+			yStat = y + ScreenResolution.getScreenY(i * Constants.HUGE_SPACE);
 			this.listStatsNames[i].draw(x, yStat, 0, 0);
 			this.listStats[i].draw(
-				x + this.maxLength + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE),
+				x + this.maxLength + ScreenResolution.getScreenX(Constants.LARGE_SPACE),
 				yStat,
 				0,
 				0,
@@ -135,7 +135,7 @@ class StatisticProgression extends Base {
 					x +
 						this.maxLength +
 						this.maxProgressionLength +
-						ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE),
+						ScreenResolution.getScreenX(Constants.HUGE_SPACE),
 					yStat,
 					0,
 					0,

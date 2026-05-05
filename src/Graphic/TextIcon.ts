@@ -54,7 +54,7 @@ class TextIcon extends Base {
 		this.side = side;
 		this.align = align;
 		this.oSpace = space;
-		this.space = ScreenResolution.getScreenMinXY(space);
+		this.space = ScreenResolution.getScreenX(space);
 		this.graphicIcon = Data.Pictures.getPictureCopy(PICTURE_KIND.ICONS, this.iconID);
 		this.graphicText = new Graphic.Text('', textOptions);
 		this.setText(text);
@@ -174,7 +174,7 @@ class TextIcon extends Base {
 
 	resize() {
 		super.resize();
-		this.space = ScreenResolution.getScreenMinXY(this.oSpace);
+		this.space = ScreenResolution.getScreenX(this.oSpace);
 	}
 }
 

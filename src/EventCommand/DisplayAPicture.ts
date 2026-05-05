@@ -82,14 +82,14 @@ class DisplayAPicture extends Base {
 			const offsetY = (ScreenResolution.CANVAS_HEIGHT - ScreenResolution.SCREEN_Y * minScale) / 2;
 			if (this.centered) {
 				picture.oX = Data.Systems.windowWidth / 2 + xVal;
-				picture.x = Math.round(ScreenResolution.CANVAS_WIDTH / 2 + ScreenResolution.getScreenMinXY(xVal));
+				picture.x = Math.round(ScreenResolution.CANVAS_WIDTH / 2 + ScreenResolution.getScreenX(xVal));
 				picture.oY = Data.Systems.windowHeight / 2 + yVal;
-				picture.y = Math.round(ScreenResolution.CANVAS_HEIGHT / 2 + ScreenResolution.getScreenMinXY(yVal));
+				picture.y = Math.round(ScreenResolution.CANVAS_HEIGHT / 2 + ScreenResolution.getScreenY(yVal));
 			} else {
 				picture.oX = xVal;
-				picture.x = Math.round(offsetX + ScreenResolution.getScreenMinXY(xVal));
+				picture.x = Math.round(offsetX + ScreenResolution.getScreenX(xVal));
 				picture.oY = yVal;
-				picture.y = Math.round(offsetY + ScreenResolution.getScreenMinXY(yVal));
+				picture.y = Math.round(offsetY + ScreenResolution.getScreenY(yVal));
 			}
 		}
 

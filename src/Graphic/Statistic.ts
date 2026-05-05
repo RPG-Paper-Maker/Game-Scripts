@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { PICTURE_KIND, ScreenResolution } from '../Common';
+import { ALIGN, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Core, Data, Graphic, Model } from '../index';
 import { Base } from './Base';
 
@@ -31,7 +31,7 @@ class Statistic extends Base {
 		super();
 		this.player = player;
 		this.statistic = statistic;
-		this.graphicName = new Graphic.Text(statistic.name() + ':');
+		this.graphicName = new Graphic.Text(statistic.name());
 		this.maxStatNamesLength = 0;
 		if (offsetStat === undefined) {
 			this.graphicName.measureText();
@@ -46,7 +46,7 @@ class Statistic extends Base {
 			txt += '/' + this.player[statistic.getMaxAbbreviation()];
 			this.pictureBar = Data.Pictures.get(PICTURE_KIND.BARS, this.statistic.pictureBarID);
 		}
-		this.graphicValue = new Graphic.Text(txt);
+		this.graphicValue = new Graphic.Text(txt, { align: ALIGN.RIGHT });
 	}
 
 	/**
@@ -90,33 +90,40 @@ class Statistic extends Base {
 	draw(x: number, y: number, w: number, h: number) {
 		let height = 0;
 		let offset = 0;
+		let barW_screen = 0;
 		if (this.pictureBar && this.pictureBar.picture) {
+			const naturalW = this.pictureBar.picture.oW / 2;
+			const minXY = Math.min(ScreenResolution.WINDOW_X, ScreenResolution.WINDOW_Y);
+			const barW_design = w > 0 ? w / minXY : naturalW;
+			barW_screen = Math.ceil(barW_design * minXY);
+			const scale = barW_design / naturalW;
 			this.pictureBar.picture.draw({
 				x: x,
 				y: y,
-				sw: this.pictureBar.picture.oW / 2,
-				w: this.pictureBar.picture.oW / 2,
+				sw: naturalW,
+				w: barW_design,
 			});
 			const percent = this.player[this.statistic.abbreviation] / this.player[this.statistic.getMaxAbbreviation()];
+			const borderLeft = this.pictureBar.borderLeft;
+			const innerW = naturalW - borderLeft - this.pictureBar.borderRight;
+			const fillSW = Math.ceil(innerW * percent);
 			this.pictureBar.picture.draw({
-				x: x + ScreenResolution.getScreenMinXY(this.pictureBar.borderLeft),
+				x: x + ScreenResolution.getScreenX(borderLeft) * scale,
 				y: y,
-				sx: this.pictureBar.picture.oW / 2 + this.pictureBar.borderLeft,
-				sw: Math.ceil(
-					(this.pictureBar.picture.oW / 2 - (this.pictureBar.borderLeft + this.pictureBar.borderRight)) *
-						percent,
-				),
-				w: Math.ceil(
-					(this.pictureBar.picture.oW / 2 - (this.pictureBar.borderLeft + this.pictureBar.borderRight)) *
-						percent,
-				),
+				sx: naturalW + borderLeft,
+				sw: fillSW,
+				w: Math.ceil(fillSW * scale),
 			});
 			height = this.pictureBar.picture.h;
 			offset = ScreenResolution.getScreenY(-5);
 		}
-		y += height / 2 + offset;
+		y = Math.round(y + height / 2 + offset);
 		this.graphicName.draw(x, y, 0, 0);
-		this.graphicValue.draw(x + this.maxStatNamesLength + ScreenResolution.getScreenMinXY(10), y, 0, 0);
+		if (barW_screen > 0) {
+			this.graphicValue.draw(x + barW_screen, y, 0, 0);
+		} else {
+			this.graphicValue.draw(x + this.maxStatNamesLength + ScreenResolution.getScreenX(10), y, 0, 0);
+		}
 	}
 }
 

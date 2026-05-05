@@ -241,7 +241,7 @@ class UseSkillItem extends Base {
 		let i: number, l: number;
 		for (i = 0, l = this.graphicCharacters.length; i < l; i++) {
 			this.graphicCharacters[i].drawCharacter(
-				x + ScreenResolution.getScreenMinXY(10 + i * 170),
+				x + ScreenResolution.getScreenX(10) + ScreenResolution.getScreenMinXY(i * 170),
 				y - ScreenResolution.getScreenMinXY(48),
 				w,
 				h,

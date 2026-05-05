@@ -64,12 +64,10 @@ class Battle extends Map {
 	public static WINDOW_DESCRIPTIONS_HEIGHT = 300;
 	public static WINDOW_EXPERIENCE_X = 20;
 	public static WINDOW_EXPERIENCE_Y = 120;
-	public static WINDOW_EXPERIENCE_WIDTH = 600;
-	public static WINDOW_EXPERIENCE_HEIGHT = 135;
-	public static WINDOW_STATS_X = 500;
+	public static WINDOW_EXPERIENCE_WIDTH = 500;
+	public static WINDOW_STATS_X = 535;
 	public static WINDOW_STATS_Y = 135;
-	public static WINDOW_STATS_WIDTH = 760;
-	public static WINDOW_STATS_HEIGHT = 300;
+	public static WINDOW_STATS_WIDTH = 725;
 	public static escapedLastBattle = false;
 
 	// Battle steps

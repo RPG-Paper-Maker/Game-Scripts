@@ -232,8 +232,7 @@ class BattleVictory {
 					);
 					h =
 						(<Graphic.StatisticProgression>this.battle.windowStatisticProgression.content).getHeight() +
-						WindowBox.HUGE_PADDING_BOX[0] +
-						WindowBox.HUGE_PADDING_BOX[2];
+						2 * WindowBox.HUGE_PADDING_BOX[3];
 					this.battle.windowStatisticProgression.setH(h);
 					this.levelUpMusicEffectState = Data.BattleSystems.battleLevelUp.initialize();
 					this.levelUpMusicEffectState.parallel = true;

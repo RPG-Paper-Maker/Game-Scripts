@@ -129,9 +129,9 @@ class SkillItem extends Base {
 				0,
 			);
 		}
-		offsetY += ScreenResolution.getScreenMinXY(Constants.MEDIUM_FONT_SIZE + Constants.LARGE_SPACE);
+		offsetY += ScreenResolution.getScreenY(Constants.MEDIUM_FONT_SIZE + Constants.LARGE_SPACE);
 		this.graphicDescription.draw(x, y + offsetY, w, h);
-		offsetY += this.graphicDescription.textHeight + ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+		offsetY += this.graphicDescription.textHeight + ScreenResolution.getScreenY(Constants.LARGE_SPACE);
 		let graphicText: Graphic.Text, pictureIcon: Picture2D;
 		for (i = 0, l = this.graphicEffects.length; i < l; i++) {
 			graphicText = this.graphicEffects[i];
@@ -141,7 +141,7 @@ class SkillItem extends Base {
 				graphicText.measureText();
 				const iconScreenSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5;
 				pictureIcon.draw({
-					x: Math.min(x + graphicText.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE), x + w - iconScreenSize),
+					x: Math.min(x + graphicText.textWidth + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE), x + w - iconScreenSize),
 					y: y + offsetY - iconScreenSize / 2,
 					sw: Data.Systems.iconsSize,
 					sh: Data.Systems.iconsSize,
@@ -149,13 +149,13 @@ class SkillItem extends Base {
 					h: Data.Systems.iconsSize,
 				});
 			}
-			offsetY += graphicText.textHeight - graphicText.fontSize + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+			offsetY += graphicText.textHeight - graphicText.fontSize + ScreenResolution.getScreenY(Constants.MEDIUM_SPACE);
 		}
-		offsetY += ScreenResolution.getScreenMinXY(Constants.LARGE_SPACE);
+		offsetY += ScreenResolution.getScreenY(Constants.LARGE_SPACE);
 		for (i = 0, l = this.graphicCharacteristics.length; i < l; i++) {
 			graphicText = this.graphicCharacteristics[i];
 			graphicText.draw(x, y + offsetY, w, 0);
-			offsetY += graphicText.textHeight - graphicText.fontSize + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+			offsetY += graphicText.textHeight - graphicText.fontSize + ScreenResolution.getScreenY(Constants.MEDIUM_SPACE);
 		}
 	}
 }

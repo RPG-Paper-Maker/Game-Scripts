@@ -18,6 +18,7 @@ import {
 	ITEM_KIND,
 	Mathf,
 	Platform,
+	ScreenResolution,
 	Utils,
 } from '../Common';
 import { Data, Graphic, Model } from '../index';
@@ -143,7 +144,7 @@ class Player {
 			graphic.updateContextFont();
 			maxLength = Math.max(Platform.ctx.measureText(graphic.text).width, maxLength);
 		}
-		return maxLength;
+		return ScreenResolution.getScreenXReverse(maxLength);
 	}
 
 	/**

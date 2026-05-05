@@ -103,12 +103,12 @@ class TimeCurrencies extends Base {
 			this.offset =
 				i *
 				(previousCurrency
-					? previousCurrency.getMaxHeight() + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE)
+					? previousCurrency.getMaxHeight() + ScreenResolution.getScreenY(Constants.MEDIUM_SPACE)
 					: 0);
 			currency.draw(x, y + this.offset, w, 0);
 			previousCurrency = currency;
 		}
-		this.offset += currency.getMaxHeight() + ScreenResolution.getScreenMinXY(Constants.HUGE_SPACE);
+		this.offset += currency.getMaxHeight() + ScreenResolution.getScreenY(Constants.HUGE_SPACE);
 		this.graphicPlayTime.draw(x, y + this.offset, w, 0);
 		this.offset += this.graphicPlayTime.fontSize;
 	}

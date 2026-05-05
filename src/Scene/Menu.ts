@@ -117,12 +117,12 @@ class Menu extends MenuBase {
 		const rect = new Rectangle(40, 0, 300, 0);
 		this.windowTimeCurrencies = new WindowBox(rect.x, rect.y, rect.width, rect.height, {
 			content: new Graphic.TimeCurrencies(),
-			padding: WindowBox.HUGE_PADDING_BOX,
+			padding: [WindowBox.MEDIUM_PADDING_BOX[0], WindowBox.HUGE_PADDING_BOX[1], WindowBox.MEDIUM_PADDING_BOX[2], WindowBox.HUGE_PADDING_BOX[3]],
 		});
 		const h =
 			(<Graphic.TimeCurrencies>this.windowTimeCurrencies.content).height +
-			this.windowTimeCurrencies.padding[1] +
-			this.windowTimeCurrencies.padding[3];
+			WindowBox.HUGE_PADDING_BOX[1] +
+			WindowBox.HUGE_PADDING_BOX[3];
 		this.windowTimeCurrencies.setY(ScreenResolution.SCREEN_Y - 30 - h);
 		this.windowTimeCurrencies.setH(h);
 	}

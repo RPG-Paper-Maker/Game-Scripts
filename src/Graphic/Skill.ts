@@ -43,7 +43,7 @@ class Skill extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		const offset = this.graphicCost.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+		const offset = this.graphicCost.textWidth + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
 		this.graphicCost.draw(x, y, w, h);
 		this.graphicName.draw(x, y, w - offset, h);
 	}
@@ -56,7 +56,7 @@ class Skill extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	draw(x: number, y: number, w: number, h: number) {
-		const costOffset = this.graphicCost.textWidth + ScreenResolution.getScreenMinXY(Constants.MEDIUM_SPACE);
+		const costOffset = this.graphicCost.textWidth + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
 		this.graphicInformations.draw(x, y, w, h, costOffset);
 		this.graphicCost.draw(x, y, w, 0);
 	}
