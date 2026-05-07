@@ -12,6 +12,7 @@
 import {
 	CHANGE_VARIABLES_OTHER_CHARACTERISTICS,
 	CHARACTER_KIND,
+	Interpreter,
 	ITEM_KIND,
 	Mathf,
 	Platform,
@@ -47,6 +48,7 @@ class ChangeVariables extends Base {
 	public valueStatisticID: Model.DynamicValue;
 	public valueEnemyIndex: number;
 	public valueOtherCHARACTERISTIC_KIND: CHANGE_VARIABLES_OTHER_CHARACTERISTICS;
+	public valueScript: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -99,6 +101,9 @@ class ChangeVariables extends Base {
 				break;
 			case 9: // Other characteristics
 				this.valueOtherCHARACTERISTIC_KIND = command[iterator.i++];
+				break;
+			case 10: // Script
+				this.valueScript = Model.DynamicValue.createMessage(String(command[iterator.i]));
 				break;
 		}
 	}
@@ -284,6 +289,12 @@ class ChangeVariables extends Base {
 							break;
 						}
 					}
+					break;
+				case 10: // Script
+					currentState.value = Interpreter.evaluate(this.valueScript.getValue() as string, {
+						thisObject: object,
+						addReturn: true,
+					});
 					break;
 			}
 		}
