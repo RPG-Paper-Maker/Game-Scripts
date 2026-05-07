@@ -156,6 +156,7 @@ class Menu extends MenuBase {
 	onQuitMenu() {
 		Data.Systems.soundCancel.playSound();
 		Manager.Stack.pop();
+		Manager.Events.sendEvent(null, 0, 0, true, 8, new Map(), true, false);
 	}
 
 	/**

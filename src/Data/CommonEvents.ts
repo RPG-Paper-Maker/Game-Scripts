@@ -10,6 +10,7 @@
 */
 
 import { Paths, Platform, Utils } from '../Common';
+import { JsonType } from '../Common/Types';
 import { Data } from '../index';
 import { CommonEvent, CommonReaction, CommonReactionJSON, MapObject, MapObjectJSON, ParameterListJSON } from '../Model';
 import { Base } from './Base';
@@ -18,7 +19,6 @@ import { Base } from './Base';
  * JSON structure for Common Events.
  */
 export type CommonEventsJSON = {
-	eventsSystem: Record<string, ParameterListJSON>[];
 	eventsUser: Record<string, ParameterListJSON>[];
 	commonReactors: Record<string, CommonReactionJSON>[];
 	commonObjects: Record<string, MapObjectJSON>[];
@@ -30,6 +30,41 @@ export type CommonEventsJSON = {
  */
 export class CommonEvents {
 	public static PROPERTY_STOCKED = 'stocked';
+
+	private static readonly SYSTEM_EVENTS: JsonType[] = [
+		{ id: 1, name: 'Time', p: [
+			{ id: 1, name: 'Interval', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'Repeat', d: { k: 10, v: true } },
+		]},
+		{ id: 2, name: 'Chronometer finished', p: [
+			{ id: 1, name: 'ID', d: { k: 3, v: 0 } },
+		]},
+		{ id: 3, name: 'KeyPress', p: [
+			{ id: 1, name: 'ID', d: { k: 1, v: null } },
+			{ id: 2, name: 'Repeat', d: { k: 10, v: false } },
+			{ id: 3, name: 'Immediate Repeat', d: { k: 10, v: false } },
+		]},
+		{ id: 4, name: 'KeyRelease', p: [
+			{ id: 1, name: 'ID', d: { k: 1, v: null } },
+		]},
+		{ id: 5, name: 'MouseDown', p: [
+			{ id: 1, name: 'x', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
+			{ id: 3, name: 'Left', d: { k: 10, v: true } },
+			{ id: 4, name: 'Repeat', d: { k: 10, v: false } },
+		]},
+		{ id: 6, name: 'MouseUp', p: [
+			{ id: 1, name: 'x', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
+			{ id: 3, name: 'Left', d: { k: 10, v: true } },
+		]},
+		{ id: 7, name: 'MouseMove', p: [
+			{ id: 1, name: 'x', d: { k: 3, v: 0 } },
+			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
+		]},
+		{ id: 8, name: 'Closing main menu', p: [] },
+	];
+
 	private static eventsSystem: Map<number, CommonEvent>;
 	private static eventsUser: Map<number, CommonEvent>;
 	private static commonReactions: Map<number, CommonReaction>;
@@ -112,7 +147,7 @@ export class CommonEvents {
 	static async read(): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_COMMON_EVENTS)) as CommonEventsJSON;
 
-		this.eventsSystem = Utils.readJSONMap(json.eventsSystem, CommonEvent);
+		this.eventsSystem = Utils.readJSONMap(CommonEvents.SYSTEM_EVENTS, CommonEvent);
 		this.eventsUser = Utils.readJSONMap(json.eventsUser, CommonEvent);
 		this.commonReactions = Utils.readJSONMap(json.commonReactors, CommonReaction);
 
