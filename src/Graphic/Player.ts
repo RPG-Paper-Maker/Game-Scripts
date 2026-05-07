@@ -183,11 +183,33 @@ class Player extends Base {
 			this.displayNameLevel = false;
 		}
 		this.graphicName.setFontSize(Constants.MEDIUM_FONT_SIZE);
+		this.graphicName.measureText();
 		this.graphicLevelName.setFontSize(Constants.MEDIUM_FONT_SIZE);
+		this.graphicLevelName.measureText();
 		this.graphicLevel.setFontSize(Constants.MEDIUM_FONT_SIZE);
+		this.graphicLevel.measureText();
 		for (const graphic of this.listStatistics) {
 			graphic.setFontSize(Constants.SMALL_FONT_SIZE);
 		}
+	}
+
+	getCharacterWidth(): number {
+		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
+		const battlerW = (this.battler.oW / Data.Systems.battlersFrames) * coef;
+		const nameLineW = this.displayNameLevel
+			? this.graphicName.textWidth
+				+ ScreenResolution.getScreenX(Constants.MEDIUM_SPACE)
+				+ this.graphicLevelName.textWidth
+				+ this.graphicLevel.textWidth
+			: 0;
+		let statLineW = 0;
+		for (const stat of this.listStatistics) {
+			const w = stat.pictureBar?.picture
+				? Math.ceil((stat.pictureBar.picture.oW / 2) * Math.min(ScreenResolution.WINDOW_X, ScreenResolution.WINDOW_Y))
+				: stat.maxStatNamesLength + ScreenResolution.getScreenX(10);
+			if (w > statLineW) statLineW = w;
+		}
+		return Math.max(battlerW, nameLineW, statLineW);
 	}
 
 	/**
@@ -242,9 +264,8 @@ class Player extends Base {
 	 *  @param {number} w - The width dimention to draw graphic
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
-	drawCharacter(x: number, y: number, w: number, h: number) {
+	drawCharacter(x: number, y: number, w: number, h: number, yOffset = ScreenResolution.getScreenY(150)) {
 		// Battler
-		let yOffset = ScreenResolution.getScreenY(150);
 		const coef = Constants.BASIC_SQUARE_SIZE / Data.Systems.SQUARE_SIZE;
 		const wBattler = this.battler.w / Data.Systems.battlersFrames;
 		const hBattler = this.battler.h / Data.Systems.battlersColumns;

@@ -47,7 +47,7 @@ class SaveLoadGame extends Base {
 
 		// Initialize windows
 		this.windowTop = new WindowBox(40, 30, ScreenResolution.SCREEN_X - 80, 45);
-		this.windowInformations = new WindowBox(240, 150, 1000, 450, {
+		this.windowInformations = new WindowBox(240, 150, 1000, 490, {
 			padding: WindowBox.MEDIUM_PADDING_BOX,
 		});
 		this.windowChoicesSlots = new WindowChoices(20, 150, 200, 75, this.gamesData, {

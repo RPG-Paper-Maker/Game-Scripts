@@ -81,12 +81,26 @@ class Save extends Base {
 			this.graphicEmpty.draw(x, y, w, h);
 		} else {
 			this.graphicTimer.draw(x, y, w, ScreenResolution.getScreenY(30));
-			for (let i = 0, l = this.graphicPlayers.length; i < l; i++) {
+			const l = this.graphicPlayers.length;
+			const maxPerRow = 4;
+			const availableH = h - ScreenResolution.getScreenY(30);
+			const rowH = l > maxPerRow ? availableH / 2 : availableH;
+			const yOffset = l > maxPerRow
+				? Math.round(ScreenResolution.getScreenY(150) * rowH / availableH)
+				: Math.round(availableH / 2);
+			const slotW = ScreenResolution.getScreenX(230);
+			const heroW = l > 0 ? this.graphicPlayers[0].getCharacterWidth() : 0;
+			for (let i = 0; i < l; i++) {
+				const col = i % maxPerRow;
+				const row = Math.floor(i / maxPerRow);
+				const heroesInRow = Math.min(maxPerRow, l - row * maxPerRow);
+				const xStart = x + (w - ((heroesInRow - 1) * slotW + heroW)) / 2;
 				this.graphicPlayers[i].drawCharacter(
-					x + ScreenResolution.getScreenX(10 + i * 230),
-					y + ScreenResolution.getScreenY(30),
+					xStart + col * slotW,
+					y + ScreenResolution.getScreenY(30) + row * rowH,
 					w,
 					h,
+					yOffset,
 				);
 			}
 		}
