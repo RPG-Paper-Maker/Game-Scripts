@@ -403,12 +403,19 @@ class BattleSelection {
 					this.battle.time = new Date().getTime();
 					this.battle.winning = true;
 					Scene.Battle.escapedLastBattle = true;
-					Manager.Songs.initializeProgressionMusic(
-						Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
-						0,
-						0,
-						Scene.Battle.TIME_LINEAR_MUSIC_END,
-					);
+					const isSameMusicAsMap =
+						(Model.PlaySong.currentPlayingMusic.songID.getValue() as number) ===
+						(this.battle.musicMap.songID.getValue() as number);
+					if (!isSameMusicAsMap) {
+						Manager.Songs.initializeProgressionMusic(
+							Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
+							0,
+							0,
+							Scene.Battle.TIME_LINEAR_MUSIC_END,
+						);
+					} else {
+						Manager.Songs.isProgressionMusicEnd = true;
+					}
 					for (i = 0, l = this.battle.battlers[CHARACTER_KIND.HERO].length; i < l; i++) {
 						this.battle.battlers[CHARACTER_KIND.HERO][i].setEscaping();
 					}

@@ -275,6 +275,12 @@ class BattleVictory {
 	 *  Play map music.
 	 */
 	playMapMusic() {
+		const isSameMusicAsMap =
+			(Model.PlaySong.currentPlayingMusic.songID.getValue() as number) ===
+			(this.battle.musicMap.songID.getValue() as number);
+		if (isSameMusicAsMap) {
+			return;
+		}
 		this.battle.musicMap.playMusic(this.battle.musicMapTime, 0);
 		Manager.Songs.initializeProgressionMusic(
 			0,
@@ -296,12 +302,19 @@ class BattleVictory {
 			}
 		}
 		this.battle.transitionEnded = false;
-		Manager.Songs.initializeProgressionMusic(
-			Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
-			0,
-			0,
-			Scene.Battle.TIME_LINEAR_MUSIC_END,
-		);
+		const isSameMusicAsMap =
+			(Model.PlaySong.currentPlayingMusic.songID.getValue() as number) ===
+			(this.battle.musicMap.songID.getValue() as number);
+		if (!isSameMusicAsMap) {
+			Manager.Songs.initializeProgressionMusic(
+				Model.PlaySong.currentPlayingMusic.volume.getValue() as number,
+				0,
+				0,
+				Scene.Battle.TIME_LINEAR_MUSIC_END,
+			);
+		} else {
+			Manager.Songs.isProgressionMusicEnd = true;
+		}
 		this.battle.subStep = 3;
 		this.battle.time = new Date().getTime();
 	}

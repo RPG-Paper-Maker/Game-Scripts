@@ -48,11 +48,9 @@ class LoadGame extends SaveLoadGame {
 	async loadGame() {
 		this.loading = true;
 
-		// Stop video and music immediately so the user sees a black loading screen
 		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
 			Manager.Videos.stop();
 		}
-		Manager.Songs.stopAll();
 
 		await Game.current.loadPositions();
 
