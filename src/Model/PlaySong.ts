@@ -28,6 +28,7 @@ export type PlaySongJSON = {
 	s?: DynamicValueJSON;
 	ie?: boolean;
 	e?: DynamicValueJSON;
+	ikc?: boolean;
 };
 
 /**
@@ -43,6 +44,7 @@ export class PlaySong extends Base {
 	public start: DynamicValue;
 	public isEnd: boolean;
 	public end: DynamicValue | null;
+	public isKeepCurrent: boolean;
 
 	constructor(kind: SONG_KIND, json?: PlaySongJSON) {
 		super();
@@ -60,6 +62,7 @@ export class PlaySong extends Base {
 		this.start = DynamicValue.createNumber(0);
 		this.isEnd = false;
 		this.end = null;
+		this.isKeepCurrent = false;
 	}
 
 	/**
@@ -126,6 +129,19 @@ export class PlaySong extends Base {
 	 * @returns 1 on success (keeps original behaviour).
 	 */
 	playMusic(start?: number, volume?: number): number {
+		if (this.isKeepCurrent) {
+			if (this.kind === SONG_KIND.MUSIC && Manager.Songs.current[SONG_KIND.MUSIC] === null) {
+				const prev = PlaySong.currentPlayingMusic;
+				if (prev) {
+					const id = prev.songID.getValue() as number;
+					const vol = (prev.volume.getValue() as number) / 100;
+					const s = prev.isStart ? (prev.start.getValue() as number) : 0;
+					const e = prev.end ? (prev.end.getValue() as number) : null;
+					Manager.Songs.playMusic(SONG_KIND.MUSIC, id, vol, s, e);
+				}
+			}
+			return 1;
+		}
 		if (start === undefined) {
 			start = this.start ? (this.start.getValue() as number) : null;
 		}
@@ -220,6 +236,7 @@ export class PlaySong extends Base {
 		this.start = this.isStart ? new DynamicValue(json.s) : DynamicValue.createNumber(0);
 		this.isEnd = json.ie;
 		this.end = this.isEnd ? new DynamicValue(json.e) : DynamicValue.createNumber(0);
+		this.isKeepCurrent = Utils.valueOrDefault(json.ikc, false);
 	}
 
 	/**
@@ -237,6 +254,9 @@ export class PlaySong extends Base {
 		json.ie = this.isEnd;
 		if (this.isEnd) {
 			json.e = this.end.toJson();
+		}
+		if (this.isKeepCurrent) {
+			json.ikc = true;
 		}
 		return json;
 	}
