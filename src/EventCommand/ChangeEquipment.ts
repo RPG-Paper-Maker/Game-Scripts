@@ -89,6 +89,7 @@ class ChangeEquipment extends Base {
 			if ((previousEquip === null || previousEquip.system.id !== weaponArmorID) && item.nb > 0) {
 				item.remove(1);
 			}
+			target.updateAllStatsValues();
 		}
 		return 1;
 	}
