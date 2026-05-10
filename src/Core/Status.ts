@@ -52,7 +52,7 @@ class Status {
 	 */
 	static drawList(statusList: Status[], x: number, y: number, align = ALIGN.LEFT) {
 		const l = statusList.length;
-		const iconSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 2;
+		const iconSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize);
 		let totalWidth = l * iconSize;
 		let s: Status;
 		if (l > 1) {
@@ -120,7 +120,7 @@ class Status {
 	 *  @param {number} y - The y position
 	 */
 	draw(x: number, y: number) {
-		const iconSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 3;
+		const iconSize = ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5;
 		this.picture.draw({
 			x: x,
 			y: y,
