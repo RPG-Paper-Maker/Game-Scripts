@@ -475,7 +475,7 @@ class MapObject {
 	/**
 	 *  Update the current state (graphics to display), also update the mesh.
 	 */
-	async changeState() {
+	async changeState(dontChangeOrientation = false) {
 		const angle = this.mesh ? this.mesh.rotation.y : 0;
 
 		// Updating the current state
@@ -579,9 +579,11 @@ class MapObject {
 				this.currentStateInstance.indexX >= Data.Systems.FRAMES
 					? Data.Systems.FRAMES - 1
 					: this.currentStateInstance.indexX;
-			this.orientationEye = this.currentStateInstance.setWithCamera
-				? this.currentStateInstance.indexY
-				: Mathf.mod(Scene.Map.current.camera.getMapOrientation() + this.currentStateInstance.indexY - 2, 4);
+			if (!dontChangeOrientation) {
+				this.orientationEye = this.currentStateInstance.setWithCamera
+					? this.currentStateInstance.indexY
+					: Mathf.mod(Scene.Map.current.camera.getMapOrientation() + this.currentStateInstance.indexY - 2, 4);
+			}
 			this.updateOrientation();
 			let result: [CustomGeometry, [number, StructMapElementCollision[]]];
 			const positionTranformation = Position.createFromVector3(this.position);
