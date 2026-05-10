@@ -419,10 +419,10 @@ class Player extends Base {
 
 		// Faceset
 		this.faceset.draw({
-			sx: this.player.getFacesetIndexX() * Data.Systems.facesetsSize,
-			sy: this.player.getFacesetIndexY() * Data.Systems.facesetsSize,
-			sw: Data.Systems.facesetsSize,
-			sh: Data.Systems.facesetsSize,
+			sx: this.player.getFacesetIndexX() * Data.Systems.facesetsSizeWidth,
+			sy: this.player.getFacesetIndexY() * Data.Systems.facesetsSizeHeight,
+			sw: Data.Systems.facesetsSizeWidth,
+			sh: Data.Systems.facesetsSizeHeight,
 			w: Data.Systems.facesetScalingWidth,
 			h: Data.Systems.facesetScalingHeight,
 		});

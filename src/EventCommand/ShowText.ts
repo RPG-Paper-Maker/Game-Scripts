@@ -148,6 +148,10 @@ class ShowText extends Base {
 		if ((<Graphic.Text>this.windowInterlocutor.content).text) {
 			this.windowInterlocutor.draw();
 		}
+		if (Data.Systems.dbOptions.v_fPosAbove) {
+			const cd = this.windowMain.contentDimension;
+			(<Graphic.Message>this.windowMain.content).drawFaceset(cd[0], cd[1], cd[2], cd[3]);
+		}
 		if (currentState) {
 			Data.Systems.getCurrentWindowSkin().drawArrowMessage(
 				currentState.frame,

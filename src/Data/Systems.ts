@@ -97,6 +97,8 @@ export type SystemsJSON = {
 	si?: PlaySongJSON;
 	dbo?: ReactionCommandJSON;
 	facesetsSize?: number;
+	facesetsSizeWidth?: number;
+	facesetsSizeHeight?: number;
 	facesetScalingWidth?: number;
 	facesetScalingHeight?: number;
 	iconsSize?: number;
@@ -156,6 +158,8 @@ export class Systems {
 	public static soundImpossible: PlaySong;
 	public static dbOptions: EventCommand.SetDialogBoxOptions;
 	public static facesetsSize: number;
+	public static facesetsSizeWidth: number;
+	public static facesetsSizeHeight: number;
 	public static facesetScalingWidth: number;
 	public static facesetScalingHeight: number;
 	public static iconsSize: number;
@@ -444,6 +448,8 @@ export class Systems {
 
 		// Faceset options
 		this.facesetsSize = Utils.valueOrDefault(json.facesetsSize, 128);
+		this.facesetsSizeWidth = Utils.valueOrDefault(json.facesetsSizeWidth, this.facesetsSize);
+		this.facesetsSizeHeight = Utils.valueOrDefault(json.facesetsSizeHeight, this.facesetsSize);
 		this.facesetScalingWidth = Utils.valueOrDefault(json.facesetScalingWidth, 120);
 		this.facesetScalingHeight = Utils.valueOrDefault(json.facesetScalingHeight, 120);
 
