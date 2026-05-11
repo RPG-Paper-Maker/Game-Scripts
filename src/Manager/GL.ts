@@ -164,7 +164,7 @@ class GL {
 			map: opts.texture,
 			side: opts.side,
 			transparent: true,
-			alphaTest: 0.5,
+			alphaTest: 0,
 			opacity: opts.opacity,
 			shininess: 0,
 			specular: new THREE.Color(0x000000),
@@ -185,6 +185,7 @@ class GL {
 			shader.uniforms.repeat = { value: opts.repeat };
 			shader.uniforms.offset = uniforms.offset;
 			shader.uniforms.enableShadows = { value: opts.shadows };
+			shader.uniforms.alpha_threshold = { value: 0.01 };
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use
