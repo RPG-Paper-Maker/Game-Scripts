@@ -248,7 +248,7 @@ class Picture extends Base {
 					}
 					squares[i] = square.rect;
 				} else {
-					squares[i] = new Rectangle(0, 0, Data.Systems.SQUARE_SIZE, Data.Systems.SQUARE_SIZE);
+					squares[i] = new Rectangle(0, 0, 1, 1);
 				}
 			} else {
 				const square = this.getCollisionAtPos(x, y);

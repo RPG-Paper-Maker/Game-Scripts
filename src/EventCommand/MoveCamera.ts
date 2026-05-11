@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Inputs, Mathf, Utils } from '../Common';
+import { Constants, Inputs, Mathf, Utils } from '../Common';
 import { MapObject, StructSearchResult } from '../Core';
 import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -89,19 +89,19 @@ class MoveCamera extends Base {
 		const operation = Mathf.OPERATORS_NUMBERS[this.operation];
 		const finalX = operation(
 			Scene.Map.current.camera.getThreeCamera().position.x,
-			(this.x.getValue() as number) * (this.xSquare ? Data.Systems.SQUARE_SIZE : 1),
+			(this.x.getValue() as number) / (this.xSquare ? 1 : Data.Systems.SQUARE_SIZE),
 		);
 		const finalY = operation(
 			Scene.Map.current.camera.getThreeCamera().position.y,
-			(this.y.getValue() as number) * (this.ySquare ? Data.Systems.SQUARE_SIZE : 1),
+			(this.y.getValue() as number) / (this.ySquare ? 1 : Data.Systems.SQUARE_SIZE),
 		);
 		const finalZ = operation(
 			Scene.Map.current.camera.getThreeCamera().position.z,
-			(this.z.getValue() as number) * (this.zSquare ? Data.Systems.SQUARE_SIZE : 1),
+			(this.z.getValue() as number) / (this.zSquare ? 1 : Data.Systems.SQUARE_SIZE),
 		);
 		const finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue() as number);
 		const finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue() as number);
-		const finalDistance = operation(Scene.Map.current.camera.distance, this.distance.getValue() as number);
+		const finalDistance = operation(Scene.Map.current.camera.distance, (this.distance.getValue() as number) / Constants.BASIC_SQUARE_SIZE);
 		return {
 			parallel: this.isWaitEnd,
 			initialH: Scene.Map.current.camera.horizontalAngle,

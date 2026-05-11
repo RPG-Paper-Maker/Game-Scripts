@@ -66,17 +66,17 @@ export class Object3D extends SpecialElement {
 
 	/** Width in pixels. */
 	widthPixels(): number {
-		return this.widthSquare * Data.Systems.SQUARE_SIZE + (this.widthPixel * Data.Systems.SQUARE_SIZE) / 100;
+		return this.widthSquare + this.widthPixel / 100;
 	}
 
 	/** Height in pixels. */
 	heightPixels(): number {
-		return this.heightSquare * Data.Systems.SQUARE_SIZE + (this.heightPixel * Data.Systems.SQUARE_SIZE) / 100;
+		return this.heightSquare + this.heightPixel / 100;
 	}
 
 	/** Depth in pixels. */
 	depthPixels(): number {
-		return this.depthSquare * Data.Systems.SQUARE_SIZE + (this.depthPixel * Data.Systems.SQUARE_SIZE) / 100;
+		return this.depthSquare + this.depthPixel / 100;
 	}
 
 	/** Width in squares. */

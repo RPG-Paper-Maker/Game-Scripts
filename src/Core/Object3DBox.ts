@@ -202,10 +202,10 @@ class Object3DBox extends Object3D {
 		const localPosition = position.toVector3(false);
 		if (this.datas.isTopLeft) {
 			localPosition.setX(
-				localPosition.x - Math.floor(Data.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterX() + coef,
+				localPosition.x - 0.5 + position.getPixelsCenterX() + coef,
 			);
 			localPosition.setZ(
-				localPosition.z - Math.floor(Data.Systems.SQUARE_SIZE / 2) + position.getPixelsCenterZ() + coef,
+				localPosition.z - 0.5 + position.getPixelsCenterZ() + coef,
 			);
 		} else {
 			localPosition.setX(localPosition.x + position.getPixelsCenterX() + coef);

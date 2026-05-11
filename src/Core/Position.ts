@@ -104,9 +104,9 @@ class Position extends Portion {
 	 */
 	static createFromVector3(position: THREE.Vector3): Position {
 		return new Position(
-			Math.floor(position.x / Data.Systems.SQUARE_SIZE),
-			Math.floor(position.y / Data.Systems.SQUARE_SIZE),
-			Math.floor(position.z / Data.Systems.SQUARE_SIZE),
+			Math.floor(position.x),
+			Math.floor(position.y),
+			Math.floor(position.z),
 		);
 	}
 
@@ -135,23 +135,23 @@ class Position extends Portion {
 	 *   @returns {number}
 	 */
 	getTotalY(): number {
-		return this.y * Data.Systems.SQUARE_SIZE + (this.yPixels * Data.Systems.SQUARE_SIZE) / 100;
+		return this.y + this.yPixels / 100;
 	}
 
 	/**
-	 *  Get the complete number of pixels for x center.
+	 *  Get the center X fractional offset within the square (0–1).
 	 *  @returns {number}
 	 */
 	getPixelsCenterX(): number {
-		return Math.floor((this.centerX * Data.Systems.SQUARE_SIZE) / 100);
+		return this.centerX / 100;
 	}
 
 	/**
-	 *  Get the complete number of pixels for z center.
+	 *  Get the center Z fractional offset within the square (0–1).
 	 *  @returns {number}
 	 */
 	getPixelsCenterZ(): number {
-		return Math.floor((this.centerZ * Data.Systems.SQUARE_SIZE) / 100);
+		return this.centerZ / 100;
 	}
 
 	/**
@@ -180,9 +180,9 @@ class Position extends Portion {
 	 */
 	toVector3(center: boolean = true): THREE.Vector3 {
 		return new THREE.Vector3(
-			this.x * Data.Systems.SQUARE_SIZE + (center ? (this.centerX / 100) * Data.Systems.SQUARE_SIZE : 0),
-			this.y * Data.Systems.SQUARE_SIZE + (this.yPixels * Data.Systems.SQUARE_SIZE) / 100,
-			this.z * Data.Systems.SQUARE_SIZE + (center ? (this.centerZ / 100) * Data.Systems.SQUARE_SIZE : 0),
+			this.x + (center ? this.centerX / 100 : 0),
+			this.y + this.yPixels / 100,
+			this.z + (center ? this.centerZ / 100 : 0),
 		);
 	}
 

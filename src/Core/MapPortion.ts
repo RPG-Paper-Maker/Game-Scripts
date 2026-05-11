@@ -477,7 +477,7 @@ class MapPortion {
 					const shape = Data.Shapes.get(CUSTOM_SHAPE_KIND.GLTF, datas.gltfID);
 					if (shape?.gltfScene) {
 						const clone = shape.gltfScene.clone();
-						const s = Data.Systems.SQUARE_SIZE * datas.scale;
+						const s = datas.scale;
 						clone.scale.set(s * position.scaleX, s * position.scaleY, s * position.scaleZ);
 						const localPosition = position.toVector3();
 						clone.position.copy(localPosition);
@@ -879,9 +879,9 @@ class MapPortion {
 			objCollision = collisions[i];
 			centeredPosition = objCollision.c
 				? new Position(
-						position.x + Math.ceil(objCollision.c.x / Data.Systems.SQUARE_SIZE),
-						position.y + Math.ceil(objCollision.c.y / Data.Systems.SQUARE_SIZE),
-						position.z + Math.ceil(objCollision.c.z / Data.Systems.SQUARE_SIZE),
+						position.x + Math.ceil(objCollision.c.x),
+						position.y + Math.ceil(objCollision.c.y),
+						position.z + Math.ceil(objCollision.c.z),
 					)
 				: new Position(position.x, position.y, position.z);
 			minW = -(objCollision.w ?? objCollision.m);

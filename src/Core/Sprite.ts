@@ -151,9 +151,9 @@ class Sprite extends MapElement {
 		if (this.kind !== ELEMENT_MAP_KIND.SPRITES_FACE && !this.front) {
 			zPlus *= -1;
 		}
-		pos.setX(this.xOffset * Data.Systems.SQUARE_SIZE);
-		pos.setY(this.yOffset * Data.Systems.SQUARE_SIZE);
-		pos.setZ(this.zOffset * Data.Systems.SQUARE_SIZE + zPlus);
+		pos.setX(this.xOffset);
+		pos.setY(this.yOffset);
+		pos.setZ(this.zOffset + zPlus);
 		vecA.multiply(size);
 		vecB.multiply(size);
 		vecC.multiply(size);
@@ -191,8 +191,8 @@ class Sprite extends MapElement {
 		const center = new THREE.Vector3();
 		const pos = new THREE.Vector3();
 		const size = new THREE.Vector3(
-			this.textureRect.width * Data.Systems.SQUARE_SIZE * position.scaleX,
-			this.textureRect.height * Data.Systems.SQUARE_SIZE * position.scaleY,
+			this.textureRect.width * position.scaleX,
+			this.textureRect.height * position.scaleY,
 			1.0,
 		);
 
@@ -235,14 +235,8 @@ class Sprite extends MapElement {
 			const collisions = Scene.Map.current.mapProperties.tileset.picture.getSquaresForTexture(this.textureRect);
 			for (const rect of collisions) {
 				const bOffset = new THREE.Vector3(
-					-twidth * Data.Systems.SQUARE_SIZE -
-						((this.textureRect.width * position.scaleX) % 2) *
-							Math.round(Data.Systems.SQUARE_SIZE / 2) +
-						rect.x +
-						Math.round((rect.width * position.scaleX) / 2),
-					this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
-						rect.y -
-						Math.round((rect.height * position.scaleY) / 2),
+					-twidth - ((this.textureRect.width * position.scaleX) % 2) * 0.5 + rect.x + (rect.width * position.scaleX) / 2,
+					this.textureRect.height * position.scaleY - rect.y - (rect.height * position.scaleY) / 2,
 					0,
 				);
 				bOffset.applyEuler(euler);
@@ -268,15 +262,9 @@ class Sprite extends MapElement {
 			const climbing = Scene.Map.current.mapProperties.tileset.picture.getSquaresClimbing(this.textureRect);
 			for (const [x, y] of climbing) {
 				const bOffset = new THREE.Vector3(
-					-twidth * Data.Systems.SQUARE_SIZE -
-						((this.textureRect.width * position.scaleX) % 2) *
-							Math.round(Data.Systems.SQUARE_SIZE / 2) +
-						(x + this.xOffset) * Data.Systems.SQUARE_SIZE * position.scaleX +
-						Math.round((Data.Systems.SQUARE_SIZE * position.scaleX * position.scaleX) / 2),
-					this.yOffset * Data.Systems.SQUARE_SIZE +
-						this.textureRect.height * position.scaleY * Data.Systems.SQUARE_SIZE -
-						y * Data.Systems.SQUARE_SIZE * position.scaleY -
-						Math.round((Data.Systems.SQUARE_SIZE * position.scaleY * position.scaleY) / 2),
+					-twidth - ((this.textureRect.width * position.scaleX) % 2) * 0.5 +
+						(x + this.xOffset) * position.scaleX + (position.scaleX * position.scaleX) / 2,
+					this.yOffset + this.textureRect.height * position.scaleY - y * position.scaleY - (position.scaleY * position.scaleY) / 2,
 					0,
 				);
 				bOffset.applyEuler(euler);
@@ -287,8 +275,8 @@ class Sprite extends MapElement {
 						localPosition.x + bOffset.x,
 						localPosition.y + bOffset.y,
 						localPosition.z + bOffset.z,
-						Data.Systems.SQUARE_SIZE * position.scaleX,
-						Data.Systems.SQUARE_SIZE * position.scaleY,
+						position.scaleX,
+						position.scaleY,
 						1,
 						position.angleY,
 						position.angleX,
@@ -312,8 +300,8 @@ class Sprite extends MapElement {
 
 		if (geometry instanceof CustomGeometryFace) {
 			// Face sprite
-			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset * Data.Systems.SQUARE_SIZE, pos.z);
-			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset * Data.Systems.SQUARE_SIZE, center.z);
+			const p = new THREE.Vector3(pos.x, localPosition.y + this.yOffset, pos.z);
+			const c = new THREE.Vector3(center.x, localPosition.y + this.yOffset, center.z);
 			geometry.pushQuadVerticesFace(
 				Sprite.MODEL[0].clone().multiply(size).add(p),
 				Sprite.MODEL[1].clone().multiply(size).add(p),
@@ -326,8 +314,8 @@ class Sprite extends MapElement {
 			count = count + 4;
 		} else {
 			// Simple sprite
-			center.setX(center.x + this.xOffset * Data.Systems.SQUARE_SIZE);
-			center.setZ(center.z + this.zOffset * Data.Systems.SQUARE_SIZE);
+			center.setX(center.x + this.xOffset);
+			center.setZ(center.z + this.zOffset);
 			const vecSimpleA = vecA.clone();
 			const vecSimpleB = vecB.clone();
 			const vecSimpleC = vecC.clone();

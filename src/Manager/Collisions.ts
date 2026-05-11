@@ -230,7 +230,7 @@ class Collisions {
 	 *  @param {number[]} boundingBox - The bounding box list parameters
 	 */
 	static applyOrientedBoxTransforms(box: THREE.Mesh, boundingBox: number[], center = [0, 0, 0]) {
-		let size = Math.floor(boundingBox[3] / Math.sqrt(2));
+		let size = boundingBox[3] / Math.sqrt(2);
 
 		// Avoid NaN values if scale values are 0
 		size = Mathf.nearZeroValue(size);
@@ -516,15 +516,14 @@ class Collisions {
 		reverseTestObjects: boolean = false,
 	): [boolean, number, ORIENTATION] {
 		const direction = Collisions._scratchDirection.subVectors(positionAfter, positionBefore).normalize();
-		const squareSz = Data.Systems.SQUARE_SIZE;
 		const jpositionBefore = Collisions._scratchJPositionBefore;
-		jpositionBefore.x = Math.floor(positionBefore.x / squareSz);
-		jpositionBefore.y = Math.floor(positionBefore.y / squareSz);
-		jpositionBefore.z = Math.floor(positionBefore.z / squareSz);
+		jpositionBefore.x = Math.floor(positionBefore.x);
+		jpositionBefore.y = Math.floor(positionBefore.y);
+		jpositionBefore.z = Math.floor(positionBefore.z);
 		const jpositionAfter = Collisions._scratchJPositionAfter;
-		jpositionAfter.x = Math.floor(positionAfter.x / squareSz);
-		jpositionAfter.y = Math.floor(positionAfter.y / squareSz);
-		jpositionAfter.z = Math.floor(positionAfter.z / squareSz);
+		jpositionAfter.x = Math.floor(positionAfter.x);
+		jpositionAfter.y = Math.floor(positionAfter.y);
+		jpositionAfter.z = Math.floor(positionAfter.z);
 		const positionBeforePlus = Collisions._scratchPositionBeforePlus;
 		const positionAfterPlus = Collisions._scratchPositionAfterPlus;
 		let yMountain = null;
@@ -551,8 +550,7 @@ class Collisions {
 			k2: number,
 			mapPortion: MapPortion,
 			result: [boolean, number, ORIENTATION];
-		const squareSize = Data.Systems.SQUARE_SIZE;
-		const chunkSize = squareSize * Constants.PORTION_SIZE;
+		const chunkSize = Constants.PORTION_SIZE;
 		const cp = Scene.Map.current.currentPortion;
 		const lp = Collisions._scratchCheckPortion;
 		const jp = Collisions._scratchCheckPosition;
@@ -560,9 +558,9 @@ class Collisions {
 			for (j = startJ; j <= endJ; j++) {
 				for (k = startK; k <= endK; k++) {
 					positionAfterPlus.set(
-						positionAfter.x + i * squareSize,
-						positionAfter.y + j * squareSize,
-						positionAfter.z + k * squareSize,
+						positionAfter.x + i,
+						positionAfter.y + j,
+						positionAfter.z + k,
 					);
 					lp.x = Math.floor(positionAfterPlus.x / chunkSize) - cp.x;
 					lp.y = Math.floor(positionAfterPlus.y / chunkSize) - cp.y;
@@ -581,9 +579,9 @@ class Collisions {
 									for (j2 = startJ; j2 <= endJ; j2++) {
 										for (k2 = startK; k2 <= endK; k2++) {
 											positionBeforePlus.set(
-												positionBefore.x + i2 * squareSize,
-												positionBefore.y + j2 * squareSize,
-												positionBefore.z + k2 * squareSize,
+												positionBefore.x + i2,
+												positionBefore.y + j2,
+												positionBefore.z + k2,
 											);
 											lp.x = Math.floor(positionBeforePlus.x / chunkSize) - cp.x;
 											lp.y = Math.floor(positionBeforePlus.y / chunkSize) - cp.y;
@@ -720,16 +718,16 @@ class Collisions {
 											const positionFront = positionBefore.clone();
 											switch (object.orientationEye) {
 												case ORIENTATION.NORTH:
-													positionFront.setZ(positionFront.z - squareSize / 2);
+													positionFront.setZ(positionFront.z - 0.5);
 													break;
 												case ORIENTATION.SOUTH:
-													positionFront.setZ(positionFront.z + squareSize / 2);
+													positionFront.setZ(positionFront.z + 0.5);
 													break;
 												case ORIENTATION.WEST:
-													positionFront.setX(positionFront.x - squareSize / 2);
+													positionFront.setX(positionFront.x - 0.5);
 													break;
 												case ORIENTATION.EAST:
-													positionFront.setX(positionFront.x + squareSize / 2);
+													positionFront.setX(positionFront.x + 0.5);
 													break;
 											}
 											lp.x = Math.floor(positionFront.x / chunkSize) - cp.x;
@@ -739,10 +737,10 @@ class Collisions {
 											if (mapPortion) {
 												floors =
 													mapPortion.squareNonEmpty[
-														Math.floor(positionFront.x / squareSize) %
+														Math.floor(positionFront.x) %
 															Constants.PORTION_SIZE
 													][
-														Math.floor(positionFront.z / squareSize) %
+														Math.floor(positionFront.z) %
 															Constants.PORTION_SIZE
 													];
 												if (floors.length > 0) {
@@ -764,18 +762,18 @@ class Collisions {
 											for (j = startJ; j <= endJ; j++) {
 												for (k = startK; k <= endK; k++) {
 													positionBeforePlus.set(
-														positionBefore.x + i * squareSize,
-														positionBefore.y + j * squareSize - 1,
-														positionBefore.z + k * squareSize,
+														positionBefore.x + i,
+														positionBefore.y + j - 1,
+														positionBefore.z + k,
 													);
 													lp.x = Math.floor(positionBeforePlus.x / chunkSize) - cp.x;
 													lp.y = Math.floor(positionBeforePlus.y / chunkSize) - cp.y;
 													lp.z = Math.floor(positionBeforePlus.z / chunkSize) - cp.z;
 													mapPortion = Scene.Map.current.getMapPortion(lp.x, lp.y, lp.z);
 													if (mapPortion) {
-														jp.x = Math.floor(positionBeforePlus.x / squareSize);
-														jp.y = Math.floor(positionBeforePlus.y / squareSize);
-														jp.z = Math.floor(positionBeforePlus.z / squareSize);
+														jp.x = Math.floor(positionBeforePlus.x);
+														jp.y = Math.floor(positionBeforePlus.y);
+														jp.z = Math.floor(positionBeforePlus.z);
 														const climbingUp = object.isClimbingUp;
 														object.isClimbingUp = false;
 														object.updateMeshBBPosition(
@@ -796,9 +794,9 @@ class Collisions {
 																for (j2 = startJ; j2 <= endJ; j2++) {
 																	for (k2 = startK; k2 <= endK; k2++) {
 																		positionAfterPlus.set(
-																			positionAfter.x + i2 * squareSize,
-																			positionAfter.y + j2 * squareSize - 1,
-																			positionAfter.z + k2 * squareSize,
+																			positionAfter.x + i2,
+																			positionAfter.y + j2 - 1,
+																			positionAfter.z + k2,
 																		);
 																		lp.x =
 																			Math.floor(
@@ -819,13 +817,13 @@ class Collisions {
 																		);
 																		if (mapPortion) {
 																			jp.x = Math.floor(
-																				positionAfterPlus.x / squareSize,
+																				positionAfterPlus.x,
 																			);
 																			jp.y = Math.floor(
-																				positionAfterPlus.y / squareSize,
+																				positionAfterPlus.y,
 																			);
 																			jp.z = Math.floor(
-																				positionAfterPlus.z / squareSize,
+																				positionAfterPlus.z,
 																			);
 																			object.updateMeshBBPosition(
 																				object.currentBoundingBox,
@@ -902,11 +900,10 @@ class Collisions {
 		}
 
 		// Check objects collisions
-		const squareSzChunk = Data.Systems.SQUARE_SIZE * Constants.PORTION_SIZE;
 		const sp = Collisions._scratchPortion;
-		sp.x = Math.floor(positionAfter.x / squareSzChunk);
-		sp.y = Math.floor(positionAfter.y / squareSzChunk);
-		sp.z = Math.floor(positionAfter.z / squareSzChunk);
+		sp.x = Math.floor(positionAfter.x / Constants.PORTION_SIZE);
+		sp.y = Math.floor(positionAfter.y / Constants.PORTION_SIZE);
+		sp.z = Math.floor(positionAfter.z / Constants.PORTION_SIZE);
 		const portion = Scene.Map.current.getLocalPortion(sp);
 		let i: number, j: number, mapPortion: MapPortion;
 		for (i = -1; i <= 1; i++) {
@@ -1017,6 +1014,9 @@ class Collisions {
 		jpositionAfter: Position,
 		direction: THREE.Vector3,
 	): boolean {
+		if (!mapPortion) {
+			return false;
+		}
 		const lands = mapPortion.boundingBoxesLands[jpositionBefore.toIndex()];
 		if (lands !== null) {
 			let objCollision: StructMapElementCollision, collision: CollisionSquare;
@@ -1162,7 +1162,6 @@ class Collisions {
 							(object.speed.getValue() as number) *
 							MapObject.SPEED_NORMAL *
 							Manager.Stack.averageElapsedTime *
-							Data.Systems.SQUARE_SIZE *
 							(Data.Systems.climbingSpeed.getValue() as number);
 						const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
 						const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
@@ -1490,7 +1489,7 @@ class Collisions {
 		// if w = 0, check height
 		if (w === 0) {
 			const pass = forceNever || -(!forceAlways && y + h <= positionAfter.y + mtnCollisionHeight);
-			if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
+			if (Mathf.isPointOnRectangle(point, x, x + 1, z, z + 1)) {
 				return pass ? [false, positionAfter.y >= y + h ? null : y + h] : [true, null];
 			} else {
 				if (!pass && object.currentBoundingBox !== null) {
@@ -1505,9 +1504,9 @@ class Collisions {
 								Mathf.isPointOnRectangle(
 									point,
 									x,
-									x + Data.Systems.SQUARE_SIZE,
+									x + 1,
 									z,
-									z + Data.Systems.SQUARE_SIZE,
+									z + 1,
 								)
 							) {
 								return [true, null];
@@ -1519,12 +1518,11 @@ class Collisions {
 		} else {
 			// if w > 0, go like a slope
 			// Fast XZ bounding-box reject: skip if player is outside the maximum slope footprint
-			const sqSz = Data.Systems.SQUARE_SIZE;
 			if (
 				positionAfter.x < x - w ||
-				positionAfter.x > x + sqSz + w ||
+				positionAfter.x > x + 1 + w ||
 				positionAfter.z < z - w ||
-				positionAfter.z > z + sqSz + w
+				positionAfter.z > z + 1 + w
 			) {
 				return [false, null];
 			}
@@ -1551,7 +1549,7 @@ class Collisions {
 			// If this side has no slope (width = 0), fall back to box collision for the vertical wall
 			if (sideW === 0) {
 				const pass = forceNever || -(!forceAlways && y + h <= positionAfter.y + mtnCollisionHeight);
-				if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z, z + Data.Systems.SQUARE_SIZE)) {
+				if (Mathf.isPointOnRectangle(point, x, x + 1, z, z + 1)) {
 					return pass ? [false, positionAfter.y >= y + h ? null : y + h] : [true, null];
 				} else if (!pass && object.currentBoundingBox !== null) {
 					const vertices = object.currentBoundingBox.geometry.getVertices();
@@ -1563,9 +1561,9 @@ class Collisions {
 								Mathf.isPointOnRectangle(
 									point,
 									x,
-									x + Data.Systems.SQUARE_SIZE,
+									x + 1,
 									z,
-									z + Data.Systems.SQUARE_SIZE,
+									z + 1,
 								)
 							) {
 								return [true, null];
@@ -1596,9 +1594,9 @@ class Collisions {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA.set(x - rwLeft, z + Data.Systems.SQUARE_SIZE);
-					ptB.set(x, z + Data.Systems.SQUARE_SIZE);
-					ptC.set(x, z + Data.Systems.SQUARE_SIZE + rwBot);
+					ptA.set(x - rwLeft, z + 1);
+					ptB.set(x, z + 1);
+					ptC.set(x, z + 1 + rwBot);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA.set(ptA.x, y, ptA.y);
 						pB.set(ptB.x, y + h, ptB.y);
@@ -1607,19 +1605,19 @@ class Collisions {
 						return [false, null];
 					}
 				} else {
-					if (Mathf.isPointOnRectangle(point, x - rwLeft, x, z, z + Data.Systems.SQUARE_SIZE)) {
+					if (Mathf.isPointOnRectangle(point, x - rwLeft, x, z, z + 1)) {
 						pA.set(x - rwLeft, y, z);
 						pB.set(x, y + h, z);
-						pC.set(x, y + h, z + Data.Systems.SQUARE_SIZE);
+						pC.set(x, y + h, z + 1);
 					} else {
 						return [false, null];
 					}
 				}
 			} else if (objCollision.right && !mountain.right) {
 				if (objCollision.top && !mountain.top) {
-					ptA.set(x + Data.Systems.SQUARE_SIZE, z - rwTop);
-					ptB.set(x + Data.Systems.SQUARE_SIZE, z);
-					ptC.set(x + Data.Systems.SQUARE_SIZE + rwRight, z);
+					ptA.set(x + 1, z - rwTop);
+					ptB.set(x + 1, z);
+					ptC.set(x + 1 + rwRight, z);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA.set(ptA.x, y, ptA.y);
 						pB.set(ptB.x, y + h, ptB.y);
@@ -1628,9 +1626,9 @@ class Collisions {
 						return [false, null];
 					}
 				} else if (objCollision.bot && !mountain.bot) {
-					ptA.set(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE + rwBot);
-					ptB.set(x + Data.Systems.SQUARE_SIZE, z + Data.Systems.SQUARE_SIZE);
-					ptC.set(x + Data.Systems.SQUARE_SIZE + rwRight, z + Data.Systems.SQUARE_SIZE);
+					ptA.set(x + 1, z + 1 + rwBot);
+					ptB.set(x + 1, z + 1);
+					ptC.set(x + 1 + rwRight, z + 1);
 					if (Mathf.isPointOnTriangle(point, ptA, ptB, ptC)) {
 						pA.set(ptA.x, y, ptA.y);
 						pB.set(ptB.x, y + h, ptB.y);
@@ -1642,25 +1640,25 @@ class Collisions {
 					if (
 						Mathf.isPointOnRectangle(
 							point,
-							x + Data.Systems.SQUARE_SIZE,
-							x + Data.Systems.SQUARE_SIZE + rwRight,
+							x + 1,
+							x + 1 + rwRight,
 							z,
-							z + Data.Systems.SQUARE_SIZE,
+							z + 1,
 						)
 					) {
-						pA.set(x + Data.Systems.SQUARE_SIZE, y + h, z + Data.Systems.SQUARE_SIZE);
-						pB.set(x + Data.Systems.SQUARE_SIZE, y + h, z);
-						pC.set(x + Data.Systems.SQUARE_SIZE + rwRight, y, z);
+						pA.set(x + 1, y + h, z + 1);
+						pB.set(x + 1, y + h, z);
+						pC.set(x + 1 + rwRight, y, z);
 					} else {
 						return [false, null];
 					}
 				}
 			} else {
 				if (objCollision.top && !mountain.top) {
-					if (Mathf.isPointOnRectangle(point, x, x + Data.Systems.SQUARE_SIZE, z - rwTop, z)) {
+					if (Mathf.isPointOnRectangle(point, x, x + 1, z - rwTop, z)) {
 						pA.set(x, y + h, z);
 						pB.set(x, y, z - rwTop);
-						pC.set(x + Data.Systems.SQUARE_SIZE, y, z - rwTop);
+						pC.set(x + 1, y, z - rwTop);
 					} else {
 						return [false, null];
 					}
@@ -1669,14 +1667,14 @@ class Collisions {
 						Mathf.isPointOnRectangle(
 							point,
 							x,
-							x + Data.Systems.SQUARE_SIZE,
-							z + Data.Systems.SQUARE_SIZE,
-							z + Data.Systems.SQUARE_SIZE + rwBot,
+							x + 1,
+							z + 1,
+							z + 1 + rwBot,
 						)
 					) {
-						pA.set(x + Data.Systems.SQUARE_SIZE, y, z + Data.Systems.SQUARE_SIZE + rwBot);
-						pB.set(x, y, z + Data.Systems.SQUARE_SIZE + rwBot);
-						pC.set(x, y + h, z + Data.Systems.SQUARE_SIZE);
+						pA.set(x + 1, y, z + 1 + rwBot);
+						pB.set(x, y, z + 1 + rwBot);
+						pC.set(x, y + h, z + 1);
 					} else {
 						return [false, null];
 					}
@@ -1697,9 +1695,9 @@ class Collisions {
 			let jposition: Position;
 			if (newPosition.y - positionAfter.y < 0) {
 				jposition = Collisions._scratchMtnJPosition;
-				jposition.x = Math.floor(positionAfter.x / Data.Systems.SQUARE_SIZE);
-				jposition.y = Math.ceil(positionAfter.y / Data.Systems.SQUARE_SIZE);
-				jposition.z = Math.floor(positionAfter.z / Data.Systems.SQUARE_SIZE);
+				jposition.x = Math.floor(positionAfter.x);
+				jposition.y = Math.ceil(positionAfter.y);
+				jposition.z = Math.floor(positionAfter.z);
 			} else {
 				jposition = jpositionAfter;
 			}
@@ -1709,7 +1707,7 @@ class Collisions {
 				Math.floor(jposition.y / Constants.PORTION_SIZE) - cp.y,
 				Math.floor(jposition.z / Constants.PORTION_SIZE) - cp.z,
 			);
-			let isFloor = mapPortion.boundingBoxesLands[jposition.toIndex()].length > 0;
+			let isFloor = mapPortion ? mapPortion.boundingBoxesLands[jposition.toIndex()].length > 0 : false;
 			if (isFloor && newPosition.y - positionAfter.y < 0) {
 				return [false, null];
 			}
@@ -1719,7 +1717,7 @@ class Collisions {
 			if (forceAlways || (!forceNever && sideAngle > mtnCollisionAngle)) {
 				// Check if floor existing on top of the mountain angle
 				isFloor =
-					jposition.y === jpositionAfter.y
+					jposition.y === jpositionAfter.y || !mapPortion
 						? false
 						: mapPortion.boundingBoxesLands[jpositionAfter.toIndex()].length > 0;
 				return [!isFloor, null];

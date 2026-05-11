@@ -257,7 +257,7 @@ class Camera {
 	updateTimer() {
 		if (
 			this.previousHidingDistance !== this.hidingDistance &&
-			Math.abs(this.previousHidingDistance - this.hidingDistance) > Data.Systems.SQUARE_SIZE
+			Math.abs(this.previousHidingDistance - this.hidingDistance) > 1
 		) {
 			this.hidingTime = 0;
 			this.hidingStart = this.hidingCurrent;
@@ -295,14 +295,16 @@ class Camera {
 			Scene.Map.current.sunLight.target.updateMatrixWorld();
 			Scene.Map.current.sunLight.position
 				.set(-1, 1.75, 1)
-				.multiplyScalar(Data.Systems.SQUARE_SIZE * 10)
+				.multiplyScalar(10)
 				.add(this.targetPosition);
-			const d = Math.max((Data.Systems.SQUARE_SIZE * this.distance) / 10, 400);
-			if (d !== Scene.Map.current.sunLight.shadow.camera.right) {
+			const d = Math.max(this.distance * 3.0, 10);
+			const far = Math.max(d * 2, 350);
+			if (d !== Scene.Map.current.sunLight.shadow.camera.right || far !== Scene.Map.current.sunLight.shadow.camera.far) {
 				Scene.Map.current.sunLight.shadow.camera.left = -d;
 				Scene.Map.current.sunLight.shadow.camera.right = d;
 				Scene.Map.current.sunLight.shadow.camera.top = d;
 				Scene.Map.current.sunLight.shadow.camera.bottom = -d;
+				Scene.Map.current.sunLight.shadow.camera.far = far;
 				Scene.Map.current.sunLight.shadow.camera.updateProjectionMatrix();
 			}
 		}

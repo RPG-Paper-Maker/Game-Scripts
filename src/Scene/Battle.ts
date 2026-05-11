@@ -14,6 +14,7 @@ import { Data, Graphic, Manager, Model, Scene } from '..';
 import {
 	BATTLE_STEP,
 	CHARACTER_KIND,
+	Constants,
 	MAP_TRANSITION_KIND,
 	STATUS_RESTRICTIONS_KIND,
 	TARGET_KIND,
@@ -48,9 +49,9 @@ class Battle extends Map {
 	public static TIME_LINEAR_MUSIC_START = 500;
 	public static TIME_ACTION_ANIMATION = 2000;
 	public static TIME_ACTION_NO_ANIMATION = 400;
-	public static CAMERA_TICK = 0.05;
-	public static CAMERA_OFFSET = 3;
-	public static START_CAMERA_DISTANCE = 10;
+	public static CAMERA_TICK = 0.05 / Constants.BASIC_SQUARE_SIZE;
+	public static CAMERA_OFFSET = 3 / Constants.BASIC_SQUARE_SIZE;
+	public static START_CAMERA_DISTANCE = 10 / Constants.BASIC_SQUARE_SIZE;
 	public static WINDOW_PROFILE_WIDTH = 400;
 	public static WINDOW_PROFILE_HEIGHT = 204;
 	public static COMMANDS_NUMBER = 6;

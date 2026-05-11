@@ -128,7 +128,8 @@ export class MapProperties extends Localization {
 	 * Update the background skybox.
 	 */
 	updateBackgroundSkybox(): void {
-		const size = (10000 * Data.Systems.SQUARE_SIZE) / Constants.BASIC_SQUARE_SIZE;
+		const cameraFar = (this.cameraProperties.far.getValue() as number) / Constants.BASIC_SQUARE_SIZE;
+		const size = (cameraFar * 2) / Math.sqrt(3);
 		this.skyboxGeometry = new THREE.BoxGeometry(size, size, size);
 		this.skyboxMesh = new THREE.Mesh(
 			this.skyboxGeometry,

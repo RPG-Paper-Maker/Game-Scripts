@@ -204,10 +204,10 @@ class Mountain extends MapElement {
 		vecBackB: THREE.Vector3;
 	} {
 		const xLeft = localPosition.x;
-		const xRight = localPosition.x + Data.Systems.SQUARE_SIZE;
+		const xRight = localPosition.x + 1;
 		const yTop = localPosition.y + hp;
 		const yBot = localPosition.y;
-		const zFront = localPosition.z + Data.Systems.SQUARE_SIZE + wp;
+		const zFront = localPosition.z + 1 + wp;
 		const zBack = zFront - wp;
 		const vecFrontA = new THREE.Vector3(xLeft - wpAdjacent, yBot, zBack);
 		const vecBackA = new THREE.Vector3(xLeft, yTop, zBack);
@@ -244,7 +244,7 @@ class Mountain extends MapElement {
 		count: number,
 	): number {
 		let xKind = Mountain.X_LEFT_OFFSET;
-		const nbSteps = Math.ceil(faceHeight / Data.Systems.SQUARE_SIZE);
+		const nbSteps = Math.ceil(faceHeight);
 		const vecCenterA = vecFrontA.clone().addScaledVector(vecBackA.clone().sub(vecFrontA), 0.5);
 		const vecCenterB = vecFrontB.clone().addScaledVector(vecBackB.clone().sub(vecFrontB), 0.5);
 
@@ -260,7 +260,7 @@ class Mountain extends MapElement {
 		}
 
 		// Draw all faces
-		if (faceHeight === Data.Systems.SQUARE_SIZE) {
+		if (faceHeight === 1) {
 			// 1 Mix sprite
 			// Mix
 			count = this.drawSideCorner(
@@ -293,7 +293,7 @@ class Mountain extends MapElement {
 				0,
 				vecFrontA.distanceTo(vecFrontB),
 			);
-		} else if (faceHeight <= 2 * Data.Systems.SQUARE_SIZE) {
+		} else if (faceHeight <= 2) {
 			// 2 B / T sprites
 			// Bottom
 			count = this.drawSideCorner(
@@ -304,7 +304,7 @@ class Mountain extends MapElement {
 				width,
 				height,
 				w,
-				Math.floor(faceHeight / 2),
+				faceHeight / 2,
 				wp,
 				xLeft,
 				xRight,
@@ -336,7 +336,7 @@ class Mountain extends MapElement {
 				width,
 				height,
 				w,
-				Math.ceil(faceHeight / 2),
+				faceHeight / 2,
 				wp,
 				xLeft,
 				xRight,
@@ -371,7 +371,7 @@ class Mountain extends MapElement {
 				width,
 				height,
 				w,
-				Math.floor(faceHeight / nbSteps),
+				faceHeight / nbSteps,
 				wp,
 				xLeft,
 				xRight,
@@ -409,7 +409,7 @@ class Mountain extends MapElement {
 					width,
 					height,
 					w,
-					Math.floor(faceHeight / nbSteps),
+					faceHeight / nbSteps,
 					wp,
 					xLeft,
 					xRight,
@@ -442,7 +442,7 @@ class Mountain extends MapElement {
 				width,
 				height,
 				w,
-				Math.ceil(faceHeight / nbSteps),
+				faceHeight / nbSteps,
 				wp,
 				xLeft,
 				xRight,
@@ -589,13 +589,15 @@ class Mountain extends MapElement {
 		xCornerOffsetBot: number,
 		isCorner: boolean,
 	): number {
-		// Textures coordinates
-		let x = (xKind * Data.Systems.SQUARE_SIZE) / width;
+		// Textures coordinates (width/height in pixels; faceHeight in squares -> convert)
+		const sq = Data.Systems.SQUARE_SIZE;
+		const faceHeightPx = faceHeight * sq;
+		let x = (xKind * sq) / width;
 		let y =
-			((isCorner ? Math.min(yKind + 4, Mountain.Y_MID_BOT_OFFSET) : yKind) * Data.Systems.SQUARE_SIZE +
-				(yKind === Mountain.Y_BOT_OFFSET ? Data.Systems.SQUARE_SIZE - faceHeight : 0)) /
+			((isCorner ? Math.min(yKind + 4, Mountain.Y_MID_BOT_OFFSET) : yKind) * sq +
+				(yKind === Mountain.Y_BOT_OFFSET ? sq - faceHeightPx : 0)) /
 			height;
-		let h = faceHeight / height;
+		let h = faceHeightPx / height;
 		const coefX = MapElement.COEF_TEX / width;
 		const coefY = MapElement.COEF_TEX / height;
 		x += coefX;
@@ -607,29 +609,19 @@ class Mountain extends MapElement {
 		let texA: THREE.Vector2, texB: THREE.Vector2, texC: THREE.Vector2, texD: THREE.Vector2;
 		if (isCorner) {
 			texA = new THREE.Vector2(
-				(Mountain.X_MID_OFFSET * Data.Systems.SQUARE_SIZE + (Data.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2) /
-					width +
-					coefX,
+				(Mountain.X_MID_OFFSET * sq + (sq - xCornerOffsetTop * sq) / 2) / width + coefX,
 				y,
 			);
 			texB = new THREE.Vector2(
-				((Mountain.X_MID_OFFSET + 1) * Data.Systems.SQUARE_SIZE -
-					(Data.Systems.SQUARE_SIZE - xCornerOffsetTop) / 2) /
-					width -
-					coefX,
+				((Mountain.X_MID_OFFSET + 1) * sq - (sq - xCornerOffsetTop * sq) / 2) / width - coefX,
 				y,
 			);
 			texC = new THREE.Vector2(
-				((Mountain.X_MID_OFFSET + 1) * Data.Systems.SQUARE_SIZE -
-					(Data.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2) /
-					width -
-					coefX,
+				((Mountain.X_MID_OFFSET + 1) * sq - (sq - xCornerOffsetBot * sq) / 2) / width - coefX,
 				y + h,
 			);
 			texD = new THREE.Vector2(
-				(Mountain.X_MID_OFFSET * Data.Systems.SQUARE_SIZE + (Data.Systems.SQUARE_SIZE - xCornerOffsetBot) / 2) /
-					width +
-					coefX,
+				(Mountain.X_MID_OFFSET * sq + (sq - xCornerOffsetBot * sq) / 2) / width + coefX,
 				y + h,
 			);
 		} else {
@@ -672,22 +664,18 @@ class Mountain extends MapElement {
 	): any[] {
 		// General configurations
 		const yOffset = texture.getOffset(pictureID, null) * 4 * Data.Systems.SQUARE_SIZE;
-		const hp = this.getHeightTotalPixels();
+		const hp = this.getHeightTotalPixels() / Data.Systems.SQUARE_SIZE;
 		const width = 4 * Data.Systems.SQUARE_SIZE;
 		const height = 7 * Data.Systems.SQUARE_SIZE;
-		const w = Data.Systems.SQUARE_SIZE / width;
+		const w = 1 / 4;
 		const localPosition = position.toVector3(false);
-		const center = new THREE.Vector3(
-			localPosition.x + Data.Systems.SQUARE_SIZE / 2,
-			localPosition.y + Data.Systems.SQUARE_SIZE / 2,
-			localPosition.z + Data.Systems.SQUARE_SIZE / 2,
-		);
+		const center = new THREE.Vector3(localPosition.x + 0.5, localPosition.y + 0.5, localPosition.z + 0.5);
 
 		// Bot
 		if (!this.bot) {
-			const wpBot = this.getWidthTotalPixelsForSide('bot');
+			const wpBot = this.getWidthTotalPixelsForSide('bot') / Data.Systems.SQUARE_SIZE;
 			const faceHeightBot = Math.sqrt(wpBot * wpBot + hp * hp);
-			const fBot = this.buildFaceVectors(wpBot, this.getWidthTotalPixelsForSide('left'), hp, localPosition);
+			const fBot = this.buildFaceVectors(wpBot, this.getWidthTotalPixelsForSide('left') / Data.Systems.SQUARE_SIZE, hp, localPosition);
 			count = this.drawEntireFaces(
 				this.left,
 				this.right,
@@ -715,9 +703,9 @@ class Mountain extends MapElement {
 		}
 		// Top
 		if (!this.top) {
-			const wpTop = this.getWidthTotalPixelsForSide('top');
+			const wpTop = this.getWidthTotalPixelsForSide('top') / Data.Systems.SQUARE_SIZE;
 			const faceHeightTop = Math.sqrt(wpTop * wpTop + hp * hp);
-			const fTop = this.buildFaceVectors(wpTop, this.getWidthTotalPixelsForSide('right'), hp, localPosition);
+			const fTop = this.buildFaceVectors(wpTop, this.getWidthTotalPixelsForSide('right') / Data.Systems.SQUARE_SIZE, hp, localPosition);
 			count = this.drawEntireFaces(
 				this.right,
 				this.left,
@@ -745,9 +733,9 @@ class Mountain extends MapElement {
 		}
 		// Left
 		if (!this.left) {
-			const wpLeft = this.getWidthTotalPixelsForSide('left');
+			const wpLeft = this.getWidthTotalPixelsForSide('left') / Data.Systems.SQUARE_SIZE;
 			const faceHeightLeft = Math.sqrt(wpLeft * wpLeft + hp * hp);
-			const fLeft = this.buildFaceVectors(wpLeft, this.getWidthTotalPixelsForSide('top'), hp, localPosition);
+			const fLeft = this.buildFaceVectors(wpLeft, this.getWidthTotalPixelsForSide('top') / Data.Systems.SQUARE_SIZE, hp, localPosition);
 			count = this.drawEntireFaces(
 				this.top,
 				this.bot,
@@ -775,9 +763,9 @@ class Mountain extends MapElement {
 		}
 		// Right
 		if (!this.right) {
-			const wpRight = this.getWidthTotalPixelsForSide('right');
+			const wpRight = this.getWidthTotalPixelsForSide('right') / Data.Systems.SQUARE_SIZE;
 			const faceHeightRight = Math.sqrt(wpRight * wpRight + hp * hp);
-			const fRight = this.buildFaceVectors(wpRight, this.getWidthTotalPixelsForSide('bot'), hp, localPosition);
+			const fRight = this.buildFaceVectors(wpRight, this.getWidthTotalPixelsForSide('bot') / Data.Systems.SQUARE_SIZE, hp, localPosition);
 			count = this.drawEntireFaces(
 				this.bot,
 				this.top,
@@ -805,12 +793,12 @@ class Mountain extends MapElement {
 		}
 
 		// Collisions — store per-side widths; use max for bounding box extents
-		const wpBot = this.getWidthTotalPixelsForSide('bot');
-		const wpTop = this.getWidthTotalPixelsForSide('top');
-		const wpLeft = this.getWidthTotalPixelsForSide('left');
-		const wpRight = this.getWidthTotalPixelsForSide('right');
+		const wpBot = this.getWidthTotalPixelsForSide('bot') / Data.Systems.SQUARE_SIZE;
+		const wpTop = this.getWidthTotalPixelsForSide('top') / Data.Systems.SQUARE_SIZE;
+		const wpLeft = this.getWidthTotalPixelsForSide('left') / Data.Systems.SQUARE_SIZE;
+		const wpRight = this.getWidthTotalPixelsForSide('right') / Data.Systems.SQUARE_SIZE;
 		const wpMax = Math.max(wpBot, wpTop, wpLeft, wpRight);
-		const wpCollision = wpMax * 2 + Data.Systems.SQUARE_SIZE;
+		const wpCollision = wpMax * 2 + 1;
 		const objCollision = [
 			{
 				p: position,
@@ -824,7 +812,7 @@ class Mountain extends MapElement {
 				rwTop: wpTop,
 				rwLeft: wpLeft,
 				rwRight: wpRight,
-				rh: this.getHeightTotalPixels(),
+				rh: this.getHeightTotalPixels() / Data.Systems.SQUARE_SIZE,
 				m: Math.max(this.getTotalSquaresWidth(), this.getTotalSquaresHeight(position[2])),
 				t: this,
 				k: true,

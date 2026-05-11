@@ -35,7 +35,7 @@ import { Status } from './Status';
  * Represents a battler in battle (ally or enemy) including its mesh, animations, and HUD.
  */
 export class Battler {
-	public static OFFSET_SELECTED = 10;
+	public static get OFFSET_SELECTED() { return 10 / Data.Systems.SQUARE_SIZE; }
 	public static TIME_MOVE = 200;
 	public static TIME_RUN = 250;
 	public static TOTAL_TIME_DAMAGE = 250;
@@ -187,23 +187,23 @@ export class Battler {
 			this.mesh.castShadow = true;
 			this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 			this.topLeftPosition = new THREE.Vector3(
-				this.position.x - (this.width / 2) * Data.Systems.SQUARE_SIZE,
-				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
+				this.position.x - this.width / 2,
+				this.position.y + this.height,
 				this.position.z,
 			);
 			this.botRightPosition = new THREE.Vector3(
-				this.position.x + (this.width / 2) * Data.Systems.SQUARE_SIZE,
+				this.position.x + this.width / 2,
 				this.position.y,
 				this.position.z,
 			);
 			this.upPosition = new THREE.Vector3(
 				this.position.x,
-				this.position.y + this.height * Data.Systems.SQUARE_SIZE,
+				this.position.y + this.height,
 				this.position.z,
 			);
 			this.halfPosition = new THREE.Vector3(
 				this.position.x,
-				this.position.y + (this.height * Data.Systems.SQUARE_SIZE) / 2,
+				this.position.y + this.height / 2,
 				this.position.z,
 			);
 			if (this.isEnemy) {

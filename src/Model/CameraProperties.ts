@@ -65,14 +65,13 @@ export class CameraProperties extends Base {
 	 */
 	initializeCamera(camera: Camera) {
 		camera.isPerspective = !this.orthographic;
-		camera.distance =
-			(this.distance.getValue() as number) * (Data.Systems.SQUARE_SIZE / Constants.BASIC_SQUARE_SIZE);
+		camera.distance = (this.distance.getValue() as number) / Constants.BASIC_SQUARE_SIZE;
 		if (camera.isPerspective) {
 			camera.perspectiveCamera = new THREE.PerspectiveCamera(
 				this.fov.getValue() as number,
 				ScreenResolution.CANVAS_WIDTH / ScreenResolution.CANVAS_HEIGHT,
-				this.near.getValue() as number,
-				this.far.getValue() as number,
+				(this.near.getValue() as number) / Constants.BASIC_SQUARE_SIZE,
+				(this.far.getValue() as number) / Constants.BASIC_SQUARE_SIZE,
 			);
 		} else {
 			const x = ScreenResolution.CANVAS_WIDTH * (camera.distance / 1000);
@@ -90,16 +89,16 @@ export class CameraProperties extends Base {
 		camera.verticalAngle = this.verticalAngle.getValue() as number;
 		camera.targetPosition = new THREE.Vector3();
 		let x = this.targetOffsetX.getValue() as number;
-		if (this.isSquareTargetOffsetX) {
-			x *= Data.Systems.SQUARE_SIZE;
+		if (!this.isSquareTargetOffsetX) {
+			x /= Data.Systems.SQUARE_SIZE;
 		}
 		let y = this.targetOffsetY.getValue() as number;
-		if (this.isSquareTargetOffsetY) {
-			y *= Data.Systems.SQUARE_SIZE;
+		if (!this.isSquareTargetOffsetY) {
+			y /= Data.Systems.SQUARE_SIZE;
 		}
 		let z = this.targetOffsetZ.getValue() as number;
-		if (this.isSquareTargetOffsetZ) {
-			z *= Data.Systems.SQUARE_SIZE;
+		if (!this.isSquareTargetOffsetZ) {
+			z /= Data.Systems.SQUARE_SIZE;
 		}
 		camera.targetOffset = new THREE.Vector3(x, y, z);
 	}

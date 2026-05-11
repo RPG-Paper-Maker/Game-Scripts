@@ -552,7 +552,7 @@ class BattleAnimation {
 		targetX /= targets.length;
 		targetZ /= targets.length;
 		avgTargetWidth /= targets.length;
-		const offset = (avgTargetWidth / 2) * Data.Systems.SQUARE_SIZE;
+		const offset = avgTargetWidth / 2;
 		const directionX = Math.sign(this.battle.user.position.x - targetX);
 		this.battle.user.startRunTo(targetX + directionX * offset, targetZ);
 	}

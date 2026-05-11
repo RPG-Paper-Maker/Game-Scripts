@@ -78,10 +78,10 @@ export class Land extends MapElement {
 		const c = localPosition.z;
 
 		// Vertices
-		const vecA = new THREE.Vector3(a - Data.Systems.SQUARE_SIZE / 2, b, c - Data.Systems.SQUARE_SIZE / 2);
-		const vecB = new THREE.Vector3(a + Data.Systems.SQUARE_SIZE / 2, b, c - Data.Systems.SQUARE_SIZE / 2);
-		const vecC = new THREE.Vector3(a + Data.Systems.SQUARE_SIZE / 2, b, c + Data.Systems.SQUARE_SIZE / 2);
-		const vecD = new THREE.Vector3(a - Data.Systems.SQUARE_SIZE / 2, b, c + Data.Systems.SQUARE_SIZE / 2);
+		const vecA = new THREE.Vector3(a - 0.5, b, c - 0.5);
+		const vecB = new THREE.Vector3(a + 0.5, b, c - 0.5);
+		const vecC = new THREE.Vector3(a + 0.5, b, c + 0.5);
+		const vecD = new THREE.Vector3(a - 0.5, b, c + 0.5);
 		const center = new THREE.Vector3(a, b, c);
 		Mathf.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);
@@ -110,7 +110,7 @@ export class Land extends MapElement {
 			if (!collision.hasAllDirections() || collision.terrain > 0) {
 				let rectB =
 					rect === null
-						? [0, 0, Data.Systems.SQUARE_SIZE, Data.Systems.SQUARE_SIZE]
+						? [0, 0, 1, 1]
 						: [rect.x, rect.y, rect.width, rect.height];
 				rectB = [a + rectB[0], b + 0.5, c + rectB[1], rectB[2], rectB[3], 1, 0];
 				objCollision = {
