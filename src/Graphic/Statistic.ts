@@ -55,7 +55,9 @@ class Statistic extends Base {
 	 */
 	setFontSize(fontSize: number) {
 		this.graphicName.setFontSize(fontSize);
+		this.graphicName.measureText();
 		this.graphicValue.setFontSize(fontSize);
+		this.graphicValue.measureText();
 	}
 
 	/**
@@ -120,7 +122,8 @@ class Statistic extends Base {
 		y = Math.round(y + height / 2 + offset);
 		this.graphicName.draw(x, y, 0, 0);
 		if (barW_screen > 0) {
-			this.graphicValue.draw(x + barW_screen, y, 0, 0);
+			const rightEdge = x + Math.max(barW_screen, this.graphicName.textWidth + this.graphicValue.textWidth + ScreenResolution.getScreenX(5));
+			this.graphicValue.draw(rightEdge, y, 0, 0);
 		} else {
 			this.graphicValue.draw(x + this.maxStatNamesLength + ScreenResolution.getScreenX(10), y, 0, 0);
 		}
