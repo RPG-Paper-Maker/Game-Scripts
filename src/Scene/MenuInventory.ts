@@ -310,6 +310,7 @@ class MenuInventory extends Base {
 		if (hadEffectReactions && this.reactionInterpretersEffects.length === 0) {
 			this.updateForTab();
 			this.synchronize();
+			this.substep = 0;
 			Manager.Stack.requestPaintHUD = true;
 		}
 		this.windowChoicesList.update();
