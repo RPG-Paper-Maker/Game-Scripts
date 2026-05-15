@@ -527,7 +527,7 @@ class Collisions {
 		const positionBeforePlus = Collisions._scratchPositionBeforePlus;
 		const positionAfterPlus = Collisions._scratchPositionAfterPlus;
 		let yMountain = null;
-		const mountainCollisionHeight = Data.Systems.mountainCollisionHeight.getValue() as number;
+		const mountainCollisionHeight = (Data.Systems.mountainCollisionHeight.getValue() as number) / Data.Systems.SQUARE_SIZE;
 
 		// Squares to inspect according to the direction of the object
 		const [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
@@ -1472,7 +1472,7 @@ class Collisions {
 		const z = objCollision.l.z;
 		const w = objCollision.rw;
 		const h = objCollision.rh;
-		const mtnCollisionHeight = Data.Systems.mountainCollisionHeight.getValue() as number;
+		const mtnCollisionHeight = (Data.Systems.mountainCollisionHeight.getValue() as number) / Data.Systems.SQUARE_SIZE;
 
 		// Fast Y-bounds reject: skip full geometric test if player is clearly out of this mountain's vertical range
 		if (positionAfter.y > y + h + mtnCollisionHeight || positionAfter.y < y - mtnCollisionHeight) {
