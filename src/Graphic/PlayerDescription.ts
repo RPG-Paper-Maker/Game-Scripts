@@ -258,9 +258,9 @@ class PlayerDescription extends Base {
 		let xStat: number, yStat: number;
 		if (this.listStats.length > 0) {
 			const space = ScreenResolution.getScreenY(45);
-			const rows = Math.floor((h - yStats + y) / space);
+			const rows = Math.floor((h - yStats + y) / space) + 1;
 			for (let i = 0, l = this.listStatsNames.length; i < l; i++) {
-				xStat = x + ScreenResolution.getScreenX(Math.floor(i / rows) * 380);
+				xStat = x + ScreenResolution.getScreenX(Math.floor(i / rows) * 300);
 				yStat = yStats + (i % rows) * space;
 				this.listStatsNames[i].draw(xStat, yStat, 0, 0);
 				this.listStats[i].draw(
