@@ -27,6 +27,13 @@ export class Videos {
 	private static list: Map<number, Video>;
 
 	/**
+	 * Check if a video exists by ID.
+	 */
+	static has(id: number): boolean {
+		return id !== -1 && this.list.has(id);
+	}
+
+	/**
 	 * Get a video by ID.
 	 */
 	static get(id: number, errorMessage?: string): Video {

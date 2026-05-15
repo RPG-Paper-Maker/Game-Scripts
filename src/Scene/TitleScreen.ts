@@ -44,6 +44,18 @@ class TitleScreen extends Base {
 	 */
 	public graphicClickToStart: Graphic.Text;
 
+	/**
+	 *  Whether the title screen is ready to show image and commands (past loopMs point or no video).
+	 *  @type {boolean}
+	 */
+	public titleReady: boolean = false;
+
+	/**
+	 *  Whether the title music has already been started.
+	 *  @type {boolean}
+	 */
+	public musicStarted: boolean = false;
+
 	constructor() {
 		super();
 	}
@@ -72,31 +84,50 @@ class TitleScreen extends Base {
 		Manager.Stack.displayedPictures = [];
 
 		// Creating background (video plays behind, image draws on top)
-		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
-			const played = await Manager.Videos.play(
-				Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
-				null,
-				true,
-			);
-			if (!played) {
-				this.videoBlocked = true;
-				this.graphicClickToStart = new Graphic.Text('Click anywhere to start', {
-					x: 0,
-					y: 0,
-					w: ScreenResolution.SCREEN_X,
-					h: ScreenResolution.SCREEN_Y,
-					align: ALIGN.CENTER,
-					verticalAlign: ALIGN_VERTICAL.CENTER,
-					fontSize: 20,
-				});
+		let videoPlayed = false;
+		if (Data.TitlescreenGameover.isTitleBackgroundVideo && Data.Videos.has(Data.TitlescreenGameover.titleBackgroundVideoID)) {
+			const loop = Data.TitlescreenGameover.titleVideoLoop;
+			const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
+			try {
+				const played = await Manager.Videos.play(
+					Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
+					null,
+					loop,
+					loopMs,
+				);
+				if (!played) {
+					this.videoBlocked = true;
+					this.titleReady = true;
+					this.graphicClickToStart = new Graphic.Text('Click anywhere to start', {
+						x: 0,
+						y: 0,
+						w: ScreenResolution.SCREEN_X,
+						h: ScreenResolution.SCREEN_Y,
+						align: ALIGN.CENTER,
+						verticalAlign: ALIGN_VERTICAL.CENTER,
+						fontSize: 20,
+					});
+				} else {
+					this.titleReady = loop && loopMs === 0;
+				}
+				videoPlayed = true;
+			} catch {
+				Manager.Videos.stop();
 			}
 		}
+		if (!videoPlayed) {
+			this.titleReady = true;
+		}
 		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
-			this.pictureBackground = await Picture2D.createWithID(
-				Data.TitlescreenGameover.titleBackgroundImageID,
-				PICTURE_KIND.TITLE_SCREEN,
-				{ cover: true },
-			);
+			try {
+				this.pictureBackground = await Picture2D.createWithID(
+					Data.TitlescreenGameover.titleBackgroundImageID,
+					PICTURE_KIND.TITLE_SCREEN,
+					{ cover: true },
+				);
+			} catch {
+				this.pictureBackground = null;
+			}
 		}
 
 		// Windows
@@ -113,9 +144,6 @@ class TitleScreen extends Base {
 				padding: [0, 0, 0, 0],
 			},
 		);
-
-		// Play title screen song
-		Data.TitlescreenGameover.titleMusic.playMusic();
 
 		this.loading = false;
 	}
@@ -138,7 +166,27 @@ class TitleScreen extends Base {
 		if (Data.TitlescreenGameover.isTitleBackgroundVideo && this.videoBlocked && !Platform.canvasVideos.paused) {
 			this.videoBlocked = false;
 		}
-		if (!this.videoBlocked) {
+		if (!this.titleReady) {
+			if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
+				const loop = Data.TitlescreenGameover.titleVideoLoop;
+				const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
+				const currentMs = Platform.canvasVideos.currentTime * 1000;
+				const videoEnded = Platform.canvasVideos.ended;
+				const ready = loop ? currentMs >= loopMs || videoEnded : videoEnded;
+				if (ready) {
+					this.titleReady = true;
+					Manager.Stack.requestPaintHUD = true;
+				}
+			} else {
+				this.titleReady = true;
+				Manager.Stack.requestPaintHUD = true;
+			}
+		}
+		if (!this.videoBlocked && this.titleReady) {
+			if (!this.musicStarted) {
+				this.musicStarted = true;
+				Data.TitlescreenGameover.titleMusic.playMusic();
+			}
 			this.windowChoicesCommands.update();
 		}
 	}
@@ -154,6 +202,9 @@ class TitleScreen extends Base {
 			Manager.Stack.requestPaintHUD = true;
 			return;
 		}
+		if (!this.titleReady) {
+			return;
+		}
 		this.windowChoicesCommands.onKeyPressed(key, this.windowChoicesCommands.getCurrentContent().datas);
 	}
 
@@ -163,7 +214,7 @@ class TitleScreen extends Base {
 	 *  @return {*}  {boolean}
 	 */
 	onKeyPressedAndRepeat(key: string): boolean {
-		if (this.videoBlocked) {
+		if (this.videoBlocked || !this.titleReady) {
 			return true;
 		}
 		return this.windowChoicesCommands.onKeyPressedAndRepeat(key);
@@ -173,6 +224,9 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	onMouseMove(x: number, y: number) {
+		if (!this.titleReady) {
+			return;
+		}
 		this.windowChoicesCommands.onMouseMove(x, y);
 	}
 
@@ -186,6 +240,9 @@ class TitleScreen extends Base {
 			Manager.Stack.requestPaintHUD = true;
 			return;
 		}
+		if (!this.titleReady) {
+			return;
+		}
 		this.windowChoicesCommands.onMouseUp(x, y, this.windowChoicesCommands.getCurrentContent().datas);
 	}
 
@@ -194,10 +251,14 @@ class TitleScreen extends Base {
 	 */
 	resumeVideoBackground() {
 		this.videoBlocked = false;
+		const loop = Data.TitlescreenGameover.titleVideoLoop;
+		const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
+		this.titleReady = loop && loopMs === 0;
 		Manager.Videos.play(
 			Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
 			null,
-			true,
+			loop,
+			loopMs,
 		).catch(console.error);
 	}
 
@@ -212,12 +273,12 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	drawHUD() {
-		if (Data.TitlescreenGameover.isTitleBackgroundImage && this.pictureBackground) {
+		if (this.titleReady && Data.TitlescreenGameover.isTitleBackgroundImage && this.pictureBackground) {
 			this.pictureBackground.draw();
 		}
 		if (this.videoBlocked) {
 			this.graphicClickToStart.draw();
-		} else {
+		} else if (this.titleReady) {
 			this.windowChoicesCommands.draw();
 		}
 	}

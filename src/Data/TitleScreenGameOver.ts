@@ -21,6 +21,8 @@ export type TitlescreenGameoverJSON = {
 	itbv: boolean;
 	tb: number;
 	tbv: number;
+	tvl: boolean;
+	tvlms: number;
 	tm: PlaySongJSON;
 	tc: TitleCommandJSON[];
 	ts: { id?: number; checked?: boolean }[];
@@ -40,6 +42,8 @@ export class TitlescreenGameover {
 	public static isTitleBackgroundVideo: boolean;
 	public static titleBackgroundImageID: number;
 	public static titleBackgroundVideoID: number;
+	public static titleVideoLoop: boolean;
+	public static titleVideoLoopMs: number;
 	public static titleMusic: PlaySong;
 	public static titleCommands: TitleCommand[];
 	public static titleSettings: number[];
@@ -119,6 +123,8 @@ export class TitlescreenGameover {
 		this.isTitleBackgroundVideo = Utils.valueOrDefault(json.itbv, false);
 		this.titleBackgroundImageID = Utils.valueOrDefault(json.tb, 1);
 		this.titleBackgroundVideoID = Utils.valueOrDefault(json.tbv, 1);
+		this.titleVideoLoop = Utils.valueOrDefault(json.tvl, true);
+		this.titleVideoLoopMs = Utils.valueOrDefault(json.tvlms, 0);
 		this.titleMusic = new PlaySong(SONG_KIND.MUSIC, json.tm);
 		this.titleCommands = Utils.readJSONList(json.tc, TitleCommand);
 		this.titleSettings = [];
