@@ -155,6 +155,10 @@ class Player {
 	 */
 	static getTemporaryPlayer(values?: number[]): Player {
 		const player = new Player();
+		player.statusRes = [];
+		player.experienceGain = [];
+		player.currencyGain = [];
+		player.skillCostRes = [];
 		const statistics = Data.BattleSystems.statisticsIDs;
 		for (let i = 0, l = statistics.length; i < l; i++) {
 			player.initStatValue(Data.BattleSystems.getStatistic(statistics[i]), values ? values[statistics[i]] : 0);
