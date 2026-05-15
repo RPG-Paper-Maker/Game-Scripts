@@ -10,6 +10,7 @@
 */
 
 import { Data, Manager, Scene } from '..';
+import { Platform } from './Platform';
 import { Main } from '../main';
 
 /**
@@ -138,7 +139,14 @@ export class Inputs {
 		}
 		const key = event.key.toUpperCase();
 
-		// Fullscreen toggle
+		// Alt+F4: quit immediately
+		if (key === 'F4' && event.altKey) {
+			event.preventDefault();
+			Platform.quit();
+			return;
+		}
+
+		// Fullscreen toggle (F4 alone, or Alt/Shift+Enter)
 		if (key === 'F4' || (event.code === 'Enter' && (event.altKey || event.shiftKey))) {
 			Data.Systems.switchFullscreen();
 			event.preventDefault();
