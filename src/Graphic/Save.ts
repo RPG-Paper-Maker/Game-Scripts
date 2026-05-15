@@ -93,8 +93,7 @@ class Save extends Base {
 			for (let i = 0; i < l; i++) {
 				const col = i % maxPerRow;
 				const row = Math.floor(i / maxPerRow);
-				const heroesInRow = Math.min(maxPerRow, l - row * maxPerRow);
-				const xStart = x + (w - ((heroesInRow - 1) * slotW + heroW)) / 2;
+				const xStart = x;
 				this.graphicPlayers[i].drawCharacter(
 					xStart + col * slotW,
 					y + ScreenResolution.getScreenY(30) + row * rowH,
