@@ -140,13 +140,10 @@ class Object3DCustom extends Object3D {
 					position.angleZ,
 				],
 				c: center,
-				w: Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE),
-				h: Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE),
-				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
-				m: Math.max(
-					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),
-					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
-				),
+				w: Math.ceil(w / 2),
+				h: Math.ceil(h / 2),
+				d: Math.ceil(d / 2),
+				m: Math.max(Math.ceil(w / 2), Math.ceil(h / 2), Math.ceil(d / 2)),
 				k: true,
 			});
 		} else if (this.datas.collisionKind === OBJECT_COLLISION_KIND.CUSTOM) {
@@ -175,15 +172,12 @@ class Object3DCustom extends Object3D {
 					position.angleZ,
 				],
 				c: center,
-				w: Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE),
-				h: Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE),
+				w: Math.ceil(w / 2),
+				h: Math.ceil(h / 2),
 				rw: w,
 				rh: h,
-				d: Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
-				m: Math.max(
-					Math.max(Math.ceil(w / 2 / Data.Systems.SQUARE_SIZE), Math.ceil(h / 2 / Data.Systems.SQUARE_SIZE)),
-					Math.ceil(d / 2 / Data.Systems.SQUARE_SIZE),
-				),
+				d: Math.ceil(d / 2),
+				m: Math.max(Math.ceil(w / 2), Math.ceil(h / 2), Math.ceil(d / 2)),
 				k: true,
 			});
 		}
