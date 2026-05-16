@@ -1229,7 +1229,7 @@ class Map extends Base {
 					const targetDist = this.heroTrailTotalDist - (i + 1);
 					const { pos: targetPos, orientation: targetOri } = this.getTrailAtDist(targetDist);
 					const prevPos = follower.previousPosition ? follower.previousPosition.clone() : targetPos.clone();
-					follower.moving = prevPos.distanceTo(targetPos) > 0.1;
+					follower.moving = prevPos.distanceTo(targetPos) > 0.001;
 					if (follower.moving) {
 						follower.orientationEye = targetOri;
 						follower.updateOrientation();
