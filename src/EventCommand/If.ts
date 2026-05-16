@@ -213,8 +213,7 @@ class If extends Base {
 				if (this.heroesInTeam) {
 					heroesSelection = Game.current.getTeam(this.heroesInTeamSelection);
 				} else {
-					heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes);
-					heroesSelection.concat(Game.current.hiddenHeroes);
+					heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes).concat(Game.current.hiddenHeroes);
 				}
 				switch (this.heroesKind) {
 					case 0:
@@ -361,8 +360,7 @@ class If extends Base {
 					}
 				}
 				if (this.weaponEquiped) {
-					heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes);
-					heroesSelection.concat(Game.current.hiddenHeroes);
+					heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes).concat(Game.current.hiddenHeroes);
 					let h: Player;
 					for (i = 0, l = heroesSelection.length; i < l; i++) {
 						h = heroesSelection[i];
@@ -387,8 +385,7 @@ class If extends Base {
 					}
 				}
 				if (this.armorEquiped) {
-					heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes);
-					heroesSelection.concat(Game.current.hiddenHeroes);
+					heroesSelection = Game.current.teamHeroes.concat(Game.current.reserveHeroes).concat(Game.current.hiddenHeroes);
 					let h: Player;
 					for (i = 0, l = heroesSelection.length; i < l; i++) {
 						h = heroesSelection[i];
