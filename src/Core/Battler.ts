@@ -545,6 +545,7 @@ export class Battler {
 		this.halfPosition.setX(newX);
 		this.halfPosition.setZ(newZ);
 		this.updatePositions();
+		this.updateDamages();
 		Manager.Stack.requestPaintHUD = true;
 	}
 
