@@ -47,9 +47,11 @@ class ModifyCurrency extends Base {
 		const previousCurrency = Game.current.getCurrency(currencyID);
 		Game.current.currencies.set(
 			currencyID,
-			Mathf.OPERATORS_NUMBERS[this.operation](
-				Game.current.getCurrency(currencyID),
-				this.value.getValue() as number,
+			Math.round(
+				Mathf.OPERATORS_NUMBERS[this.operation](
+					Game.current.getCurrency(currencyID),
+					this.value.getValue() as number,
+				),
 			),
 		);
 		const dif = Game.current.getCurrency(currencyID) - previousCurrency;

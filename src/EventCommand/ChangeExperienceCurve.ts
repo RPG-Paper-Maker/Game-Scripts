@@ -72,7 +72,7 @@ class ChangeExperienceCurve extends Base {
 		let i: number, value: number;
 		for (const target of targets) {
 			for (i = level; i <= levelTo; i++) {
-				value = Mathf.OPERATORS_NUMBERS[this.operation](target.expList[i], totalExperience);
+				value = Math.round(Mathf.OPERATORS_NUMBERS[this.operation](target.expList[i], totalExperience));
 				target.expList[i] = value;
 				target.editedExpList[i] = value;
 			}
