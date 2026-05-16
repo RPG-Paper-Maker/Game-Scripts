@@ -49,7 +49,7 @@ class BattleAnimation {
 		let content: Model.CommonSkillItem;
 		switch (this.battle.battleCommandKind) {
 			case EFFECT_SPECIAL_ACTION_KIND.APPLY_WEAPONS:
-				this.battle.informationText = this.battle.attackSkill.getMessage(this.battle.user);
+				this.battle.informationText = this.battle.attackSkill.getMessage(this.battle.user, this.battle.targets);
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_SKILLS:
 				if (this.battle.forceAnAction) {
@@ -62,7 +62,7 @@ class BattleAnimation {
 								: (<Graphic.Skill>this.battle.windowChoicesSkills.getCurrentContent()).system
 							: Data.Skills.get(this.battle.action.skillID.getValue() as number);
 				}
-				this.battle.informationText = content.getMessage(this.battle.user);
+				this.battle.informationText = content.getMessage(this.battle.user, this.battle.targets);
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.OPEN_ITEMS:
 				if (this.battle.forceAnAction) {
@@ -73,7 +73,7 @@ class BattleAnimation {
 							? (<Graphic.Item>this.battle.windowChoicesItems.getCurrentContent()).item.system
 							: Data.Items.get(this.battle.action.itemID.getValue() as number);
 				}
-				this.battle.informationText = content.getMessage(this.battle.user);
+				this.battle.informationText = content.getMessage(this.battle.user, this.battle.targets);
 				break;
 			case EFFECT_SPECIAL_ACTION_KIND.NONE: // If command was a skill without special action
 				content = <Model.Skill>(
@@ -81,7 +81,7 @@ class BattleAnimation {
 						this.battle.windowChoicesBattleCommands.getContent(this.battle.user.lastCommandIndex)
 					)).system
 				);
-				this.battle.informationText = content.getMessage(this.battle.user);
+				this.battle.informationText = content.getMessage(this.battle.user, this.battle.targets);
 				break;
 			default:
 				this.battle.informationText = '';
