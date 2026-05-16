@@ -211,7 +211,7 @@ class Text extends Base {
 		if (Platform.ctx.measureText(text).width <= maxWidth) {
 			return text;
 		}
-		const ellipsis = '...';
+		const ellipsis = '..';
 		const ellipsisWidth = Platform.ctx.measureText(ellipsis).width;
 		let truncated = text;
 		while (truncated.length > 0 && Platform.ctx.measureText(truncated).width + ellipsisWidth > maxWidth) {

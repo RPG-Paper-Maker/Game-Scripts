@@ -30,8 +30,8 @@ class Skill extends Base {
 		this.system = Data.Skills.get(skill.id);
 		const colorOpts = possible ? {} : { color: Model.Color.GREY };
 		this.graphicName = Graphic.TextIcon.createFromSystem(this.system.name(), this.system, {}, colorOpts);
-		this.graphicName.graphicText.ellipsis = true;
 		this.graphicCost = new Graphic.Text(this.system.getCostString(), { align: ALIGN.RIGHT, ...colorOpts });
+		this.graphicCost.ellipsis = true;
 		this.graphicInformations = new Graphic.SkillItem(this.system);
 	}
 
@@ -43,9 +43,9 @@ class Skill extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		const offset = this.graphicCost.textWidth + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
-		this.graphicCost.draw(x, y, w, h);
-		this.graphicName.draw(x, y, w - offset, h);
+		const offset = this.graphicName.getWidth() + ScreenResolution.getScreenX(Constants.MEDIUM_SPACE);
+		this.graphicName.draw(x, y, w, h);
+		this.graphicCost.draw(x + offset, y, w - offset, h);
 	}
 
 	/**
