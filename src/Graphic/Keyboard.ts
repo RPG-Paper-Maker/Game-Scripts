@@ -28,7 +28,9 @@ class Keyboard extends Base {
 
 		this.kb = kb;
 		this.graphicTextName = new Graphic.Text(kb.name());
+		this.graphicTextName.ellipsis = true;
 		this.graphicTextShort = new Graphic.Text(kb.toString(), { align: ALIGN.CENTER });
+		this.graphicTextShort.ellipsis = true;
 		this.graphicTextInformation = new Graphic.Text(Data.Languages.extras.pressAnyKeys.name(), {
 			align: ALIGN.CENTER,
 		});
@@ -51,7 +53,7 @@ class Keyboard extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
-		this.graphicTextName.draw(x, y, w, h);
+		this.graphicTextName.draw(x, y, w / 2, h);
 		this.graphicTextShort.draw(x + w / 2, y, w / 2, h);
 	}
 

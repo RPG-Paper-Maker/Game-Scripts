@@ -198,6 +198,16 @@ class KeyboardAssign extends Base {
 			this.compareWait = Scene.KeyboardAssign.MAX_WAIT_TIME;
 			this.nextOR = true;
 			this.waitTime = new Date().getTime();
+
+			// Remove the last combination if it duplicates an earlier one
+			const last = this.currentSC[this.currentSC.length - 1];
+			const isDuplicate = this.currentSC.slice(0, -1).some(
+				(combo) => combo.length === last.length && combo.every((k) => last.includes(k)),
+			);
+			if (isDuplicate) {
+				this.currentSC.pop();
+				(<Graphic.Keyboard>this.windowChoicesMain.getCurrentContent()).updateShort(this.currentSC);
+			}
 		}
 	}
 
