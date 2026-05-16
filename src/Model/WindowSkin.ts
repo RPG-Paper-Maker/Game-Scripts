@@ -105,16 +105,20 @@ export class WindowSkin extends Base {
 	/**
 	 * Draw the background box.
 	 */
-	drawBoxBackground(background: Rectangle, rect: Rectangle): void {
+	drawBoxBackground(background: Rectangle, rect: Rectangle, bordersVisible: boolean = true): void {
+		const bLeft = bordersVisible ? this.borderTopLeft.width : 0;
+		const bTop = bordersVisible ? this.borderTopLeft.height : 0;
+		const bRight = bordersVisible ? this.borderBotRight.width : 0;
+		const bBot = bordersVisible ? this.borderBotRight.height : 0;
 		if (this.backgroundRepeat) {
 			for (
-				let x = rect.x + this.borderTopLeft.width, l = rect.x + rect.width - this.borderTopRight.width - 1;
+				let x = rect.x + bLeft, l = rect.x + rect.width - bRight - 1;
 				x < l;
 				x += background.width
 			) {
 				for (
-					let y = rect.y + this.borderTopLeft.height,
-						m = rect.y + rect.height - this.borderBotLeft.height - 1;
+					let y = rect.y + bTop,
+						m = rect.y + rect.height - bBot - 1;
 					y < m;
 					y += background.height
 				) {
@@ -126,10 +130,10 @@ export class WindowSkin extends Base {
 		} else {
 			this.drawElement(
 				background,
-				rect.x + this.borderTopLeft.width,
-				rect.y + this.borderTopLeft.height,
-				rect.width - this.borderTopLeft.width - this.borderBotRight.width,
-				rect.height - this.borderTopLeft.height - this.borderBotRight.height,
+				rect.x + bLeft,
+				rect.y + bTop,
+				rect.width - bLeft - bRight,
+				rect.height - bTop - bBot,
 			);
 		}
 	}
@@ -201,9 +205,9 @@ export class WindowSkin extends Base {
 		}
 
 		// Background
-		this.drawBoxBackground(this.background, rect);
+		this.drawBoxBackground(this.background, rect, bordersVisible);
 		if (selected) {
-			this.drawBoxBackground(this.backgroundSelection, rect);
+			this.drawBoxBackground(this.backgroundSelection, rect, bordersVisible);
 		}
 	}
 
