@@ -125,11 +125,6 @@ class Map extends Base {
 
 		// Adding meshes for collision
 		this.collisions = [];
-		if (Data.Systems.showBB) {
-			this.scene.add(Manager.Collisions.BB_BOX);
-			this.scene.add(Manager.Collisions.BB_ORIENTED_BOX);
-			this.scene.add(Manager.Collisions.BB_BOX_DEFAULT_DETECTION);
-		}
 		await this.readMapProperties();
 		this.initializeSunLight();
 		this.initializeCamera();
