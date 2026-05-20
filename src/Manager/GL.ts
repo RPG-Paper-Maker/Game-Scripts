@@ -154,6 +154,7 @@ class GL {
 					colorD: { value: screenTone },
 					repeat: { value: opts.repeat },
 					enableShadows: { value: opts.shadows },
+					hovered: { value: false },
 				};
 
 		// Program cache key for multiple shader programs
@@ -185,6 +186,7 @@ class GL {
 			shader.uniforms.repeat = { value: opts.repeat };
 			shader.uniforms.offset = uniforms.offset;
 			shader.uniforms.enableShadows = { value: opts.shadows };
+			shader.uniforms.hovered = { value: false };
 			shader.uniforms.alpha_threshold = { value: 0.01 };
 			material.userData.uniforms = shader.uniforms;
 

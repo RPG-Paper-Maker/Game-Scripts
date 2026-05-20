@@ -82,7 +82,7 @@ void main() {
     if (opacity < 1.0)
     	gl_FragColor = vec4(gl_FragColor.x, gl_FragColor.y, gl_FragColor.z, opacity);
 	if (hovered) {
-		float colorHover = 0.1f;
+		float colorHover = 0.1;
     	gl_FragColor = vec4(gl_FragColor.x + colorHover, gl_FragColor.y + colorHover, gl_FragColor.z + colorHover, gl_FragColor.w);
 	}
 	#include <fog_fragment>
