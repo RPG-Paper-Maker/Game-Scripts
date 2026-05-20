@@ -85,6 +85,7 @@ class BattleInitialize {
 					'Heroes battlers center offset incorrect return, should be a THREE.Vecto3: ' + center,
 				);
 			}
+			center.divideScalar(Data.Systems.SQUARE_SIZE);
 			offset = Interpreter.evaluate(Data.BattleSystems.heroesBattlersOffset.getValue() as string, {
 				additionalName: 'i',
 				additionalValue: i,
@@ -94,6 +95,7 @@ class BattleInitialize {
 					'Heroes battlers offset incorrect return, should be a THREE.Vecto3: ' + center,
 				);
 			}
+			offset.divideScalar(Data.Systems.SQUARE_SIZE);
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
 			player = Game.current.teamHeroes[i];
 			battler = new Battler(player, false, Position.createFromVector3(position), position, this.battle.camera);
@@ -130,6 +132,7 @@ class BattleInitialize {
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Specific position return: ' + center);
 				}
+				center.divideScalar(Data.Systems.SQUARE_SIZE);
 				offset = new THREE.Vector3();
 			} else {
 				center = Interpreter.evaluate(
@@ -138,6 +141,7 @@ class BattleInitialize {
 				if (!(center instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers center offset incorrect return: ' + center);
 				}
+				center.divideScalar(Data.Systems.SQUARE_SIZE);
 				offset = Interpreter.evaluate(Data.BattleSystems.troopsBattlersOffset.getValue() as string, {
 					additionalName: 'i',
 					additionalValue: i,
@@ -145,6 +149,7 @@ class BattleInitialize {
 				if (!(offset instanceof THREE.Vector3)) {
 					Platform.showErrorMessage('Troops battlers offset incorrect return: ' + center);
 				}
+				offset.divideScalar(Data.Systems.SQUARE_SIZE);
 			}
 			position = Game.current.heroBattle.position.clone().add(center).add(offset);
 			player = new Player(CHARACTER_KIND.MONSTER, troopMonster.id, Game.current.charactersInstances++, [], []);
