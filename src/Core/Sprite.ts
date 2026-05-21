@@ -230,6 +230,7 @@ class Sprite extends MapElement {
 		const objCollision: StructMapElementCollision[] = [];
 		const twidth = Math.floor((this.textureRect.width * position.scaleX) / 2);
 		const theight = Math.floor((this.textureRect.height * position.scaleY) / 2);
+		const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
 		const euler = position.toRotationEuler();
 		if (tileset) {
 			const collisions = Scene.Map.current.mapProperties.tileset.picture.getSquaresForTexture(this.textureRect);
@@ -249,7 +250,7 @@ class Sprite extends MapElement {
 						localPosition.z + bOffset.z,
 						rect.width * position.scaleX,
 						rect.height * position.scaleY,
-						1,
+						pixelDepth,
 						position.angleY,
 						position.angleX,
 						position.angleZ,
@@ -277,7 +278,7 @@ class Sprite extends MapElement {
 						localPosition.z + bOffset.z,
 						position.scaleX,
 						position.scaleY,
-						1,
+						pixelDepth,
 						position.angleY,
 						position.angleX,
 						position.angleZ,

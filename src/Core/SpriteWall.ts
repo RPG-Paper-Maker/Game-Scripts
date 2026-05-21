@@ -107,6 +107,7 @@ class SpriteWall extends MapElement {
 		// Collision
 		const objCollision: StructMapElementCollision[] = [];
 		let collisions: Rectangle[] = [];
+		const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
 		const wall = Data.SpecialElements.getWall(this.id);
 		if (wall) {
 			const picture = Data.Pictures.get(PICTURE_KIND.WALLS, pictureID);
@@ -125,7 +126,7 @@ class SpriteWall extends MapElement {
 						localPosition.z,
 						rect.width,
 						rect.height - 0.001, // Small offset for climbing collisions stuff
-						1,
+						pixelDepth,
 						angle,
 						0,
 						0,
@@ -145,7 +146,7 @@ class SpriteWall extends MapElement {
 							localPosition.z,
 							rect.width,
 							rect.height,
-							1,
+							pixelDepth,
 							angle,
 							0,
 							0,

@@ -142,12 +142,12 @@ class Collisions {
 		);
 		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
 		// Update to the new ones
-		box.geometry.scale(boundingBox[3], 1, boundingBox[4]);
+		box.geometry.scale(boundingBox[3], boundingBox[5] ?? 1, boundingBox[4]);
 		box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
 		// Register previous transforms to current
 		box['previousTranslate'] = [boundingBox[0], boundingBox[1], boundingBox[2]];
 		box['previousRotate'] = [0, 0, 0];
-		box['previousScale'] = [boundingBox[3], 1, boundingBox[4]];
+		box['previousScale'] = [boundingBox[3], boundingBox[5] ?? 1, boundingBox[4]];
 		box['previousCenter'] = [0, 0, 0];
 		// Update geometry now
 		box.updateMatrixWorld();

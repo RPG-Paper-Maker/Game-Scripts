@@ -149,13 +149,14 @@ export class CollisionSquare {
 	 * Compute bounding box values from rect and grid size.
 	 */
 	static getBB(rect: Rectangle, w: number, h: number): number[] {
+		const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
 		return [
 			(rect.x - (w - rect.x - rect.width)) / 2,
 			h - rect.y - rect.height / 2,
 			0,
 			rect.width,
 			rect.height,
-			1,
+			pixelDepth,
 			0,
 			0,
 			0,
