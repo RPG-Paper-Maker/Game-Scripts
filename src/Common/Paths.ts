@@ -62,6 +62,7 @@ export class Paths {
 	static readonly FILE_SPECIAL_ELEMENTS = Platform.ROOT_DIRECTORY + 'specialElements.json';
 	static readonly FILE_VARIABLES = Platform.ROOT_DIRECTORY + 'variables.json';
 	static readonly FILE_SETTINGS = Platform.ROOT_DIRECTORY + 'settings-game.json';
+	static readonly FILE_PROJECT_SETTINGS = Platform.ROOT_DIRECTORY + 'settings.json';
 	static readonly FILE_DLCS = Platform.ROOT_DIRECTORY + 'dlcs.json';
 	static readonly FILE_ANIMATIONS = Platform.ROOT_DIRECTORY + 'animations.json';
 	static readonly FILE_STATUS = Platform.ROOT_DIRECTORY + 'status.json';

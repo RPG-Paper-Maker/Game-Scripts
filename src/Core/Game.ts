@@ -19,6 +19,7 @@ import { Player } from './Player';
 import { Portion } from './Portion';
 
 type JsonGame = {
+	pv?: string;
 	t: number;
 	inst: number;
 	vars: unknown[];
@@ -122,6 +123,16 @@ class Game {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 *  Get current project version.
+	 *  @static
+	 *  @returns {Promise<string>}
+	 */
+	static async getProjectVersion(): Promise<string> {
+		const json = await Platform.parseFileJSON(Paths.FILE_PROJECT_SETTINGS);
+		return typeof json.pv === 'string' ? json.pv : '';
 	}
 
 	/**
@@ -256,6 +267,7 @@ class Game {
 		}
 		this.saves++;
 		await Platform.registerSave(slot, this.getPathSave(slot), {
+			pv: await Game.getProjectVersion(),
 			t: this.playTime.time,
 			th: teamHeroes,
 			sh: reserveHeroes,
