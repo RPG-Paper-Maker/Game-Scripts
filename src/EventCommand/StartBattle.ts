@@ -10,9 +10,15 @@
 */
 
 import { Utils } from '../Common';
+import type { MapObjectCommandType } from '../Common/Types';
 import { Game, MapObject, Position } from '../Core';
 import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
+
+type StartBattleState = {
+	mapScene: Scene.Base;
+	sceneBattle: Scene.Battle;
+};
 
 /** @class
  *  An event command for battle processing.
@@ -34,8 +40,9 @@ class StartBattle extends Base {
 	public transitionEnd: number;
 	public transitionEndColor: Model.DynamicValue;
 	public battleMapType: number;
+	public troopIDType: number;
 
-	constructor(command: any[]) {
+	constructor(command: MapObjectCommandType[]) {
 		super();
 
 		const iterator = {
@@ -49,55 +56,32 @@ class StartBattle extends Base {
 		this.z = null;
 
 		// Options
-		this.canEscape = Utils.numberToBool(command[iterator.i++]);
-		this.canGameOver = Utils.numberToBool(command[iterator.i++]);
+		this.canEscape = Utils.numberToBool(command[iterator.i++] as number);
+		this.canGameOver = Utils.numberToBool(command[iterator.i++] as number);
 
 		// Troop
-		const type = command[iterator.i++];
-		switch (type) {
+		this.troopIDType = command[iterator.i++] as number;
+		switch (this.troopIDType) {
 			case 0: // Existing troop ID
 				this.troopID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // If random troop in map properties
-				if (Scene.Map.current.mapProperties.randomBattles.length > 0) {
-					const totalPriorities = Scene.Map.current.mapProperties.randomBattles.reduce(
-						(sum, randomBattle) => sum + (randomBattle.priority.getValue() as number),
-						0,
-					);
-					let r = Math.random() * totalPriorities;
-					let selectedBattle: Model.RandomBattle | null = null;
-					for (const battle of Scene.Map.current.mapProperties.randomBattles) {
-						r -= battle.priority.getValue() as number;
-						if (r <= 0) {
-							selectedBattle = battle;
-							break;
-						}
-					}
-					if (selectedBattle === null) {
-						selectedBattle =
-							Scene.Map.current.mapProperties.randomBattles[
-								Scene.Map.current.mapProperties.randomBattles.length - 1
-							];
-					}
-					this.troopID = Model.DynamicValue.createNumber(selectedBattle.troopID.getValue() as number);
-				} else {
-					this.troopID = Model.DynamicValue.createNumber(1);
-				}
+				this.troopID = null;
 				break;
 		}
 
 		// Battle map
-		this.battleMapType = command[iterator.i++];
+		this.battleMapType = command[iterator.i++] as number;
 		switch (this.battleMapType) {
 			case 0: // Existing battle map ID
 				this.battleMapID = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 			case 1: // Select
-				this.mapID = Model.DynamicValue.createNumber(command[iterator.i++]);
-				this.x = Model.DynamicValue.createNumber(command[iterator.i++]);
-				this.y = Model.DynamicValue.createNumber(command[iterator.i++]);
-				this.yPlus = Model.DynamicValue.createNumber(command[iterator.i++]);
-				this.z = Model.DynamicValue.createNumber(command[iterator.i++]);
+				this.mapID = Model.DynamicValue.createNumber(command[iterator.i++] as number);
+				this.x = Model.DynamicValue.createNumber(command[iterator.i++] as number);
+				this.y = Model.DynamicValue.createNumber(command[iterator.i++] as number);
+				this.yPlus = Model.DynamicValue.createNumber(command[iterator.i++] as number);
+				this.z = Model.DynamicValue.createNumber(command[iterator.i++] as number);
 				break;
 			case 2: // Numbers
 				this.mapID = Model.DynamicValue.createValueCommand(command, iterator);
@@ -109,11 +93,11 @@ class StartBattle extends Base {
 		}
 
 		// Transition
-		this.transitionStart = command[iterator.i++];
+		this.transitionStart = command[iterator.i++] as number;
 		if (Utils.numberToBool(this.transitionStart)) {
 			this.transitionStartColor = Model.DynamicValue.createValueCommand(command, iterator);
 		}
-		this.transitionEnd = command[iterator.i++];
+		this.transitionEnd = command[iterator.i++] as number;
 		if (Utils.numberToBool(this.transitionEnd)) {
 			this.transitionEndColor = Model.DynamicValue.createValueCommand(command, iterator);
 		}
@@ -123,11 +107,39 @@ class StartBattle extends Base {
 	 *  Initialize the current state.
 	 *  @returns {Record<string, any>} The current state
 	 */
-	initialize(): Record<string, any> {
+	initialize(): StartBattleState {
 		return {
 			mapScene: null,
 			sceneBattle: null,
 		};
+	}
+
+	/**
+	 *  Resolve a random troop from the current map properties.
+	 */
+	resolveRandomTroopID(): void {
+		const randomBattles = Scene.Map.current?.mapProperties?.randomBattles;
+		if (randomBattles && randomBattles.length > 0) {
+			const totalPriorities = randomBattles.reduce(
+				(sum, randomBattle) => sum + (randomBattle.priority.getValue() as number),
+				0,
+			);
+			let r = Math.random() * totalPriorities;
+			let selectedBattle: Model.RandomBattle | null = null;
+			for (const battle of randomBattles) {
+				r -= battle.priority.getValue() as number;
+				if (r <= 0) {
+					selectedBattle = battle;
+					break;
+				}
+			}
+			if (selectedBattle === null) {
+				selectedBattle = randomBattles[randomBattles.length - 1];
+			}
+			this.troopID = Model.DynamicValue.createNumber(selectedBattle.troopID.getValue() as number);
+		} else {
+			this.troopID = Model.DynamicValue.createNumber(1);
+		}
 	}
 
 	/**
@@ -137,9 +149,12 @@ class StartBattle extends Base {
 	 *  @param {number} state - The state ID
 	 *  @returns {number} The number of node to pass
 	 */
-	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+	update(currentState: StartBattleState, _object: MapObject, _state: number): number {
 		// Initializing battle
 		if (currentState.sceneBattle === null) {
+			if (this.troopIDType === 1) {
+				this.resolveRandomTroopID();
+			}
 			if (this.battleMapType === 3) {
 				this.battleMapID = Scene.Map.current.mapProperties.tileset.battleMap;
 			}
