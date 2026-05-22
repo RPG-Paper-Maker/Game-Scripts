@@ -313,6 +313,7 @@ export enum DYNAMIC_VALUE_KIND {
 	BACKGROUND_SOUND,
 	SOUND,
 	MUSIC_EFFECT,
+	VIDEOS,
 }
 
 /** Enum for the different window orientations. */
