@@ -9,10 +9,11 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Paths, PICTURE_KIND, Platform, Utils } from '../Common';
+import { Paths, PICTURE_KIND, Platform, SONG_KIND, Utils } from '../Common';
 import { CollisionSquare, CollisionSquareJSON, Picture2D, Rectangle } from '../Core';
 import { Data } from '../index';
 import { Base } from './Base';
+import { PlaySong, PlaySongJSON } from './PlaySong';
 
 export type PictureJSON = {
 	id: number;
@@ -21,6 +22,7 @@ export type PictureJSON = {
 	d?: string;
 	base64?: string;
 	col?: CollisionJSON[];
+	fts?: TerrainSoundJSON[];
 	rcol?: boolean;
 	isStopAnimation?: boolean;
 	ica?: boolean;
@@ -29,6 +31,16 @@ export type PictureJSON = {
 export type CollisionJSON = {
 	k: [number, number];
 	v: CollisionSquareJSON;
+};
+
+export type TerrainSoundJSON = {
+	ter?: number;
+	s?: PlaySongJSON;
+	sl?: TerrainSoundItemJSON[];
+};
+
+export type TerrainSoundItemJSON = {
+	s?: PlaySongJSON;
 };
 
 /** Represents a picture in the game. */
@@ -40,6 +52,7 @@ class Picture extends Base {
 	public dlc: string;
 	public base64: string;
 	public jsonCollisions: CollisionJSON[];
+	public terrainSounds: Map<number, PlaySong[]>;
 	public collisionsRepeat: boolean;
 	public collisions: CollisionSquare[];
 	public picture: Picture2D;
@@ -372,9 +385,25 @@ class Picture extends Base {
 		this.dlc = Utils.valueOrDefault(json.d, '');
 		this.base64 = json.base64;
 		this.jsonCollisions = Utils.valueOrDefault(json.col, []);
+		this.terrainSounds = new Map();
+		for (const terrainSound of Utils.valueOrDefault(json.fts, [])) {
+			const sounds = (terrainSound.sl ?? []).map((sound) => new PlaySong(SONG_KIND.SOUND, sound.s));
+			if (terrainSound.s && sounds.length === 0) {
+				sounds.push(new PlaySong(SONG_KIND.SOUND, terrainSound.s));
+			}
+			this.terrainSounds.set(terrainSound.ter ?? 0, sounds);
+		}
 		this.collisionsRepeat = Utils.valueOrDefault(json.rcol, false);
 		this.isStopAnimation = Utils.valueOrDefault(json.isStopAnimation, false);
 		this.isClimbAnimation = Utils.valueOrDefault(json.ica, false);
+	}
+
+	/** Play a random footstep sound for a terrain, when configured. */
+	playFootstep(terrain: number): void {
+		const sounds = this.terrainSounds.get(terrain);
+		if (sounds && sounds.length > 0) {
+			sounds[Math.floor(Math.random() * sounds.length)].playSound();
+		}
 	}
 }
 

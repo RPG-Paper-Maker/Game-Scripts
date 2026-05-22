@@ -71,6 +71,7 @@ class MapObject {
 	public width: number;
 	public height: number;
 	public moving: boolean = false;
+	public wasMoving: boolean = false;
 	public isClimbing: boolean = false;
 	public isClimbingUp: boolean = true;
 	public climbOrientationEye = ORIENTATION.NONE;
@@ -1527,6 +1528,15 @@ class MapObject {
 				}
 			}
 			this.updateAngle(angle);
+
+			const previousTerrain = this.terrain;
+			if (this.isHero && this.moving && !Scene.Map.current.isBattleMap) {
+				this.updateTerrain();
+				if (!this.wasMoving || this.terrain !== previousTerrain || (frame && this.frame.value === 0)) {
+					Scene.Map.current.mapProperties.tileset.picture.playFootstep(this.terrain);
+				}
+			}
+			this.wasMoving = this.moving;
 
 			// Update mesh
 			if (frame || orientation !== this.orientation) {
