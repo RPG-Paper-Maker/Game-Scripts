@@ -29,6 +29,10 @@ if (process.platform === 'darwin') {
 		// Intel Mac: Metal/ANGLE causes BindToCurrentSequence failures, fall back to OpenGL
 		app.commandLine.appendSwitch('use-angle', 'gl');
 	}
+} else if (process.platform === 'linux') {
+	app.commandLine.appendSwitch('no-sandbox');
+	app.commandLine.appendSwitch('disable-gpu-sandbox');
+	app.commandLine.appendSwitch('use-angle', 'vulkan');
 }
 
 let window;
