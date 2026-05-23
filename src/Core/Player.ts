@@ -507,13 +507,15 @@ class Player {
 			for (j = 0; j < l; j++) {
 				statisticProgression = statisticsProgression[j];
 				list[statisticProgression.id] =
-					statisticProgression.getValueAtLevel(
-						this.getCurrentLevel(),
-						previewPlayer,
-						this.system.getProperty(Model.Class.PROPERTY_FINAL_LEVEL, this.changedClass),
-					) +
-					bonus[statisticProgression.id] +
-					added[statisticProgression.id];
+					statisticProgression.clampValue(
+						statisticProgression.getValueAtLevel(
+							this.getCurrentLevel(),
+							previewPlayer,
+							this.system.getProperty(Model.Class.PROPERTY_FINAL_LEVEL, this.changedClass),
+						) +
+							bonus[statisticProgression.id] +
+							added[statisticProgression.id],
+					);
 				previewPlayer.initStatValue(
 					Data.BattleSystems.getStatistic(statisticProgression.id),
 					list[statisticProgression.id],
