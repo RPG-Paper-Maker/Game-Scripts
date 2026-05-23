@@ -1532,7 +1532,7 @@ class MapObject {
 			const previousTerrain = this.terrain;
 			if (this.isHero && this.moving && !Scene.Map.current.isBattleMap) {
 				this.updateTerrain();
-				if (!this.wasMoving || this.terrain !== previousTerrain || (frame && this.frame.value === 0)) {
+				if (!this.wasMoving || this.terrain !== previousTerrain || (frame && this.frame.value % 2 === 1)) {
 					Scene.Map.current.mapProperties.tileset.picture.playFootstep(this.terrain);
 				}
 			}
