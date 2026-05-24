@@ -10,7 +10,7 @@
 */
 
 import { Data, Manager, Scene } from '..';
-import { Constants, PICTURE_KIND, ScreenResolution } from '../Common';
+import { PICTURE_KIND } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Base } from './Base';
 
@@ -80,8 +80,8 @@ class GameOver extends Base {
 		// Windows
 		const commandsNb = Data.TitlescreenGameover.gameOverCommands.length;
 		this.windowChoicesCommands = new WindowChoices(
-			ScreenResolution.SCREEN_X / 2 - WindowBox.MEDIUM_SLOT_WIDTH / 2,
-			ScreenResolution.SCREEN_Y - Constants.HUGE_SPACE - commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT,
+			Data.TitlescreenGameover.gameOverCommandsWindowX,
+			Data.TitlescreenGameover.gameOverCommandsWindowY,
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
 			Data.TitlescreenGameover.getGameOverCommandsNames(),

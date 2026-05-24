@@ -133,8 +133,8 @@ class TitleScreen extends Base {
 		// Windows
 		const commandsNb = Data.TitlescreenGameover.titleCommands.length;
 		this.windowChoicesCommands = new WindowChoices(
-			ScreenResolution.SCREEN_X / 2 - WindowBox.MEDIUM_SLOT_WIDTH / 2,
-			ScreenResolution.SCREEN_Y - Constants.HUGE_SPACE - commandsNb * WindowBox.MEDIUM_SLOT_HEIGHT,
+			Data.TitlescreenGameover.titleCommandsWindowX,
+			Data.TitlescreenGameover.titleCommandsWindowY,
 			WindowBox.MEDIUM_SLOT_WIDTH,
 			WindowBox.MEDIUM_SLOT_HEIGHT,
 			Data.TitlescreenGameover.getTitleCommandsNames(),

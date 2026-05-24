@@ -26,12 +26,16 @@ export type TitlescreenGameoverJSON = {
 	tm: PlaySongJSON;
 	tc: TitleCommandJSON[];
 	ts: { id?: number; checked?: boolean }[];
+	tcwx?: number;
+	tcwy?: number;
 	isGameOverBackgroundImage: boolean;
 	isGameOverBackgroundVideo: boolean;
 	gameOverBackgroundImage: number;
 	gameOverBackgroundVideo: number;
 	gameOverMusic: PlaySongJSON;
 	gameOverCommands: GameOverCommandJSON[];
+	gocwx?: number;
+	gocwy?: number;
 };
 
 /**
@@ -47,12 +51,16 @@ export class TitlescreenGameover {
 	public static titleMusic: PlaySong;
 	public static titleCommands: TitleCommand[];
 	public static titleSettings: number[];
+	public static titleCommandsWindowX: number;
+	public static titleCommandsWindowY: number;
 	public static isGameOverBackgroundImage: boolean;
 	public static isGameOverBackgroundVideo: boolean;
 	public static gameOverBackgroundImageID: number;
 	public static gameOverBackgroundVideoID: number;
 	public static gameOverMusic: PlaySong;
 	public static gameOverCommands: GameOverCommand[];
+	public static gameOverCommandsWindowX: number;
+	public static gameOverCommandsWindowY: number;
 
 	/** Get title screen command graphics. */
 	static getTitleCommandsNames(): Graphic.Text[] {
@@ -133,6 +141,8 @@ export class TitlescreenGameover {
 				this.titleSettings.push(obj.id ?? 0);
 			}
 		}
+		this.titleCommandsWindowX = Utils.valueOrDefault(json.tcwx, 440);
+		this.titleCommandsWindowY = Utils.valueOrDefault(json.tcwy, 450);
 
 		// Game over
 		this.isGameOverBackgroundImage = Utils.valueOrDefault(json.isGameOverBackgroundImage, true);
@@ -141,5 +151,7 @@ export class TitlescreenGameover {
 		this.gameOverBackgroundVideoID = Utils.valueOrDefault(json.gameOverBackgroundVideo, 1);
 		this.gameOverMusic = new PlaySong(SONG_KIND.MUSIC, json.gameOverMusic);
 		this.gameOverCommands = Utils.readJSONList(json.gameOverCommands, GameOverCommand);
+		this.gameOverCommandsWindowX = Utils.valueOrDefault(json.gocwx, 440);
+		this.gameOverCommandsWindowY = Utils.valueOrDefault(json.gocwy, 510);
 	}
 }
