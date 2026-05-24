@@ -65,6 +65,8 @@ class Collisions {
 	private static _scratchCollisionList: StructMapElementCollision[] = [];
 	private static _scratchPortion: Portion = null;
 	private static _pendingBBFlash: Array<{ scene: THREE.Scene; box: THREE.Mesh }> = [];
+	private static _unitBoxVertices: Float32Array = null;
+	private static _unitBoxNormals: Float32Array = null;
 
 	constructor() {
 		throw new Error('This is a static class');
@@ -118,29 +120,49 @@ class Collisions {
 	}
 
 	/**
+	 * Reset reusable collision probe meshes after unloading a map. This avoids
+	 * carrying zero-scale or disposed geometry state into the next map.
+	 */
+	static resetBBBoxes() {
+		this.flushBBFlash();
+		this.BB_BOX.geometry?.dispose();
+		this.BB_ORIENTED_BOX.geometry?.dispose();
+		this.BB_BOX_DETECTION.geometry?.dispose();
+		this.BB_BOX_DEFAULT_DETECTION.geometry?.dispose();
+		this.BB_BOX = Collisions.createBox();
+		this.BB_ORIENTED_BOX = Collisions.createOrientedBox();
+		this.BB_BOX_DETECTION = Collisions.createBox(true);
+		this.BB_BOX_DETECTION.geometry.boundingBox = new THREE.Box3();
+		this.BB_BOX_DEFAULT_DETECTION = Collisions.createBox(true);
+	}
+
+	/**
+	 * Restore a reusable probe to its unit-box vertices before applying a new
+	 * transform. This avoids relying on the previous inverse transform.
+	 */
+	private static resetBoxGeometry(box: THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>) {
+		if (!this._unitBoxVertices) {
+			const geometry = CustomGeometry.createBox(1, 1, 1);
+			this._unitBoxVertices = new Float32Array(geometry.getVertices());
+			this._unitBoxNormals = new Float32Array(geometry.getNormals());
+			geometry.dispose();
+		}
+		const position = box.geometry.getAttribute('position') as THREE.BufferAttribute;
+		position.copyArray(this._unitBoxVertices);
+		position.needsUpdate = true;
+		const normal = box.geometry.getAttribute('normal') as THREE.BufferAttribute;
+		normal.copyArray(this._unitBoxNormals);
+		normal.needsUpdate = true;
+	}
+
+	/**
 	 *  Apply transform for lands bounding box.
 	 *  @static
 	 *  @param {THREE.Mesh} box - The mesh bounding box
 	 *  @param {number[]} boundingBox - The bounding box list parameters
 	 */
 	static applyBoxLandTransforms(box: THREE.Mesh, boundingBox: number[]) {
-		// Cancel previous geometry transforms
-		box.geometry.translate(
-			-box['previousTranslate'][0] + box['previousCenter'][0],
-			-box['previousTranslate'][1] + box['previousCenter'][1],
-			-box['previousTranslate'][2] + box['previousCenter'][2],
-		);
-		const geometry = <CustomGeometry>box.geometry;
-		geometry.rotateFromEuler(
-			new THREE.Euler(
-				(-box['previousRotate'][1] * Math.PI) / 180.0,
-				(-box['previousRotate'][0] * Math.PI) / 180.0,
-				(-box['previousRotate'][2] * Math.PI) / 180.0,
-				'ZYX',
-			),
-			new THREE.Vector3(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]),
-		);
-		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
+		this.resetBoxGeometry(box as THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>);
 		// Update to the new ones
 		box.geometry.scale(boundingBox[3], boundingBox[5] ?? 1, boundingBox[4]);
 		box.geometry.translate(boundingBox[0], boundingBox[1], boundingBox[2]);
@@ -172,28 +194,13 @@ class Collisions {
 		boundingBox[4] = Mathf.nearZeroValue(boundingBox[4]);
 		boundingBox[5] = Mathf.nearZeroValue(boundingBox[5]);
 
-		// Cancel previous geometry transforms
-		box.geometry.translate(
-			-box['previousTranslate'][0] + box['previousCenter'][0],
-			-box['previousTranslate'][1] + box['previousCenter'][1],
-			-box['previousTranslate'][2] + box['previousCenter'][2],
-		);
+		this.resetBoxGeometry(box as THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>);
 		const geometry = <CustomGeometry>box.geometry;
-		const se = Collisions._scratchEuler;
-		const sc = Collisions._scratchEulerCenter;
-		sc.set(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]);
-		se.set(
-			(-box['previousRotate'][1] * Math.PI) / 180.0,
-			(-box['previousRotate'][0] * Math.PI) / 180.0,
-			(-box['previousRotate'][2] * Math.PI) / 180.0,
-			'ZYX',
-		);
-		geometry.rotateFromEuler(se, sc);
-		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
-
 		// Update to the new ones
 		box.geometry.scale(boundingBox[3], boundingBox[4], boundingBox[5]);
+		const sc = Collisions._scratchEulerCenter;
 		sc.set(center[0], center[1], center[2]);
+		const se = Collisions._scratchEuler;
 		se.set(
 			(boundingBox[7] * Math.PI) / 180.0,
 			(boundingBox[6] * Math.PI) / 180.0,
@@ -236,30 +243,14 @@ class Collisions {
 		size = Mathf.nearZeroValue(size);
 		boundingBox[4] = Mathf.nearZeroValue(boundingBox[4]);
 
-		// Cancel previous geometry transforms
-		box.geometry.translate(
-			-box['previousTranslate'][0],
-			-box['previousTranslate'][1],
-			-box['previousTranslate'][2],
-		);
+		this.resetBoxGeometry(box as THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>);
 		const geometry = <CustomGeometry>box.geometry;
-		const se = Collisions._scratchEuler;
-		const sc = Collisions._scratchEulerCenter;
-		sc.set(box['previousCenter'][0], box['previousCenter'][1], box['previousCenter'][2]);
-		se.set(
-			(-box['previousRotate'][1] * Math.PI) / 180.0,
-			(-box['previousRotate'][0] * Math.PI) / 180.0,
-			(-box['previousRotate'][2] * Math.PI) / 180.0,
-			'ZYX',
-		);
-		geometry.rotateFromEuler(se, sc);
-		box.geometry.rotateY(-Math.PI / 4);
-		box.geometry.scale(1 / box['previousScale'][0], 1 / box['previousScale'][1], 1 / box['previousScale'][2]);
-
 		// Update to the new ones
 		box.geometry.scale(size, boundingBox[4], size);
 		box.geometry.rotateY(Math.PI / 4);
+		const sc = Collisions._scratchEulerCenter;
 		sc.set(center[0], center[1], center[2]);
+		const se = Collisions._scratchEuler;
 		se.set(
 			(boundingBox[7] * Math.PI) / 180.0,
 			(boundingBox[6] * Math.PI) / 180.0,
