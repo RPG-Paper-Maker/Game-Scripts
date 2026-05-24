@@ -61,7 +61,7 @@ export class Autotile extends Land {
 	): StructMapElementCollision {
 		const autotile = Data.SpecialElements.getAutotile(this.autotileID);
 		const picture = autotile ? Data.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID) : null;
-		return super.updateGeometryLand(
+		const objCollision = super.updateGeometryLand(
 			geometry,
 			picture ? picture.getCollisionAtIndex(Land.prototype.getIndex.call(this, picture.width)) : null,
 			position,
@@ -75,6 +75,10 @@ export class Autotile extends Land {
 			Data.Systems.SQUARE_SIZE / height,
 			count,
 		);
+		if (objCollision) {
+			objCollision.autotilePictureID = pictureID;
+		}
+		return objCollision;
 	}
 
 	/**

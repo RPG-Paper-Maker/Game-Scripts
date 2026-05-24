@@ -100,6 +100,7 @@ class MapObject {
 	public isOrientationStopWalk: boolean = false;
 	public currentOrientationClimbing: boolean;
 	public terrain: number;
+	public terrainPicture: Model.Picture | null = null;
 	public currentCenterOffset: THREE.Vector3 = new THREE.Vector3();
 	public currentAngle: THREE.Vector3 = new THREE.Vector3();
 	public currentScale: THREE.Vector3 = new THREE.Vector3();
@@ -1533,7 +1534,7 @@ class MapObject {
 			if (this.isHero && this.moving && !Scene.Map.current.isBattleMap) {
 				this.updateTerrain();
 				if (!this.wasMoving || this.terrain !== previousTerrain || (frame && this.frame.value % 2 === 1)) {
-					Scene.Map.current.mapProperties.tileset.picture.playFootstep(this.terrain);
+					(this.terrainPicture ?? Scene.Map.current.mapProperties.tileset.picture).playFootstep(this.terrain);
 				}
 			}
 			this.wasMoving = this.moving;
@@ -1834,6 +1835,7 @@ class MapObject {
 	 */
 	updateTerrain() {
 		this.terrain = 0;
+		this.terrainPicture = null;
 		if (!Scene.Map.current.loading && this.position) {
 			const mapPortion = Scene.Map.current.getMapPortionFromPortion(
 				Scene.Map.current.getLocalPortion(Portion.createFromVector3(this.position)),
@@ -1844,6 +1846,9 @@ class MapObject {
 				if (boundingBoxes.length > 0) {
 					const collision = boundingBoxes[boundingBoxes.length - 1];
 					this.terrain = collision && collision.cs ? collision.cs.terrain : 0;
+					if (collision?.autotilePictureID !== undefined) {
+						this.terrainPicture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, collision.autotilePictureID);
+					}
 				}
 			}
 		}
