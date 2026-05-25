@@ -51,6 +51,7 @@ interface ExtrasKind {
 	equipQuestion: Localization;
 	pressAnyKeys: Localization;
 	target: Localization;
+	skip: Localization;
 }
 
 /**
@@ -94,6 +95,7 @@ export type LanguagesJSON = {
 	eq: LocalizationJSON;
 	pak: LocalizationJSON;
 	ta: LocalizationJSON;
+	si: LocalizationJSON;
 };
 
 /**
@@ -183,6 +185,7 @@ export class Languages {
 			equipQuestion: new Localization(json.eq),
 			pressAnyKeys: new Localization(json.pak),
 			target: new Localization(json.ta),
+			skip: new Localization(json.si),
 		};
 	}
 }
