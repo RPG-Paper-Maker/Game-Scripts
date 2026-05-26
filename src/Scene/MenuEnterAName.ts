@@ -208,7 +208,7 @@ class MenuEnterAName extends MenuBase {
 				for (let i = 0; i < this.currentCharacterPosition; i++) {
 					name += (<Graphic.Text>this.windowChoicesTop.getContent(i)).text;
 				}
-				this.selectedhero.name = name;
+				this.selectedhero.name = name.length === 0 ? this.selectedhero.system.name() : name;
 				Manager.Stack.pop();
 			} else {
 				// If adding a char
