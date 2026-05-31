@@ -83,8 +83,10 @@ class ShowText extends Base {
 		this.windowMain.setY(Utils.valueOrDefault(Data.Systems.dbOptions.v_y, 0));
 		this.windowMain.setW(Utils.valueOrDefault(Data.Systems.dbOptions.v_w, 0));
 		this.windowMain.setH(Utils.valueOrDefault(Data.Systems.dbOptions.v_h, 0));
-		this.windowInterlocutor.setX(this.windowMain.oX + WindowBox.MEDIUM_SLOT_HEIGHT / 2);
-		this.windowInterlocutor.setY(this.windowMain.oY - WindowBox.MEDIUM_SLOT_HEIGHT / 2);
+		this.windowInterlocutor.setX(this.windowMain.oX + Utils.valueOrDefault(Data.Systems.dbOptions.v_iX, WindowBox.MEDIUM_SLOT_HEIGHT / 2));
+		this.windowInterlocutor.setY(this.windowMain.oY + Utils.valueOrDefault(Data.Systems.dbOptions.v_iY, -WindowBox.MEDIUM_SLOT_HEIGHT / 2));
+		this.windowInterlocutor.setW(Utils.valueOrDefault(Data.Systems.dbOptions.v_iW, WindowBox.MEDIUM_SLOT_WIDTH));
+		this.windowInterlocutor.setH(Utils.valueOrDefault(Data.Systems.dbOptions.v_iH, WindowBox.MEDIUM_SLOT_HEIGHT));
 		this.windowMain.padding[0] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pLeft, 0);
 		this.windowMain.padding[1] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pTop, 0);
 		this.windowMain.padding[2] = Utils.valueOrDefault(Data.Systems.dbOptions.v_pRight, 0);

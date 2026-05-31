@@ -38,6 +38,10 @@ class SetDialogBoxOptions extends Base {
 	public tcBackground: Model.DynamicValue;
 	public tSize: Model.DynamicValue;
 	public tFont: Model.DynamicValue;
+	public iX: Model.DynamicValue;
+	public iY: Model.DynamicValue;
+	public iW: Model.DynamicValue;
+	public iH: Model.DynamicValue;
 	public v_windowSkin: Model.WindowSkin;
 	public v_x: number;
 	public v_y: number;
@@ -56,6 +60,10 @@ class SetDialogBoxOptions extends Base {
 	public v_tcBackground: Model.Color;
 	public v_tSize: number;
 	public v_tFont: string;
+	public v_iX: number;
+	public v_iY: number;
+	public v_iW: number;
+	public v_iH: number;
 
 	constructor(command: any[]) {
 		super();
@@ -116,6 +124,18 @@ class SetDialogBoxOptions extends Base {
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
 			this.tFont = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.iX = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.iY = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.iW = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.iH = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 
@@ -182,6 +202,18 @@ class SetDialogBoxOptions extends Base {
 		}
 		if (this.tFont !== undefined) {
 			Data.Systems.dbOptions.v_tFont = Data.Systems.getFontName(this.tFont.getValue() as number).getName();
+		}
+		if (this.iX !== undefined) {
+			Data.Systems.dbOptions.v_iX = this.iX.getValue() as number;
+		}
+		if (this.iY !== undefined) {
+			Data.Systems.dbOptions.v_iY = this.iY.getValue() as number;
+		}
+		if (this.iW !== undefined) {
+			Data.Systems.dbOptions.v_iW = this.iW.getValue() as number;
+		}
+		if (this.iH !== undefined) {
+			Data.Systems.dbOptions.v_iH = this.iH.getValue() as number;
 		}
 		return 1;
 	}
