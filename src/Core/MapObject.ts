@@ -1130,10 +1130,7 @@ class MapObject {
 		}
 
 		// Set position
-		let speed =
-			(this.speed.getValue() as number) *
-			MapObject.SPEED_NORMAL *
-			Manager.Stack.averageElapsedTime;
+		let speed = (this.speed.getValue() as number) * MapObject.SPEED_NORMAL * Manager.Stack.averageElapsedTime;
 		if (this.previousOrientation !== null && this.previousOrientation !== this.orientation) {
 			// If already climbing, ignore
 			if (this.isClimbing && this.previousOrientation % 2 !== this.orientation % 2) {
@@ -1501,7 +1498,10 @@ class MapObject {
 				}
 
 				// Update mesh position
-				const offset = this.currentStateInstance.pixelOffset && this.frame.value % 2 !== 0 ? 1 / Data.Systems.SQUARE_SIZE : 0;
+				const offset =
+					this.currentStateInstance.pixelOffset && this.frame.value % 2 !== 0
+						? 1 / Data.Systems.SQUARE_SIZE
+						: 0;
 				this.mesh.position.set(this.position.x, this.position.y + offset, this.position.z);
 			} else {
 				if (this.currentStateInstance.stopAnimation && !this.isClimbing) {
@@ -1523,7 +1523,11 @@ class MapObject {
 				this.mesh.position.set(this.position.x, this.position.y + offset, this.position.z);
 
 				// Update angle
-				if (this.currentStateInstance && this.currentStateInstance.setWithCamera && !this.currentStateInstance.directionFix) {
+				if (
+					this.currentStateInstance &&
+					this.currentStateInstance.setWithCamera &&
+					!this.currentStateInstance.directionFix
+				) {
 					this.updateOrientation();
 				}
 			}
@@ -1601,16 +1605,8 @@ class MapObject {
 		// Positions
 		if (this.position) {
 			this.previousPosition = this.position;
-			this.upPosition = new THREE.Vector3(
-				this.position.x,
-				this.position.y + this.height,
-				this.position.z,
-			);
-			this.halfPosition = new THREE.Vector3(
-				this.position.x,
-				this.position.y + this.height / 2,
-				this.position.z,
-			);
+			this.upPosition = new THREE.Vector3(this.position.x, this.position.y + this.height, this.position.z);
+			this.halfPosition = new THREE.Vector3(this.position.x, this.position.y + this.height / 2, this.position.z);
 		}
 
 		// Climbing up
@@ -1839,12 +1835,27 @@ class MapObject {
 			);
 			if (mapPortion) {
 				const position = Position.createFromVector3(this.position);
-				const boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
-				if (boundingBoxes.length > 0) {
-					const collision = boundingBoxes[boundingBoxes.length - 1];
-					this.terrain = collision && collision.cs ? collision.cs.terrain : 0;
-					if (collision?.autotilePictureID !== undefined) {
-						this.terrainPicture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, collision.autotilePictureID);
+				const mountainBoxes = mapPortion.boundingBoxesMountains[position.toIndex()];
+				const mtnCollision = mountainBoxes?.length > 0 ? mountainBoxes[mountainBoxes.length - 1] : null;
+				const heroFractionalY = this.position.y - Math.floor(this.position.y);
+				const onMountainSlope =
+					mtnCollision?.mountainPictureID !== undefined &&
+					heroFractionalY > 0.001 &&
+					this.position.y > (mtnCollision.p?.y ?? 0);
+				if (onMountainSlope) {
+					this.terrainPicture = Data.Pictures.get(PICTURE_KIND.MOUNTAINS, mtnCollision.mountainPictureID);
+					this.terrain = mtnCollision.mountainTerrain ?? 0;
+				} else {
+					const boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
+					if (boundingBoxes.length > 0) {
+						const collision = boundingBoxes[boundingBoxes.length - 1];
+						this.terrain = collision && collision.cs ? collision.cs.terrain : 0;
+						if (collision?.autotilePictureID !== undefined) {
+							this.terrainPicture = Data.Pictures.get(
+								PICTURE_KIND.AUTOTILES,
+								collision.autotilePictureID,
+							);
+						}
 					}
 				}
 			}

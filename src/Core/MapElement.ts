@@ -53,6 +53,8 @@ export interface StructMapElementCollision {
 	cl?: boolean;
 	cr?: [number, number, number];
 	autotilePictureID?: number;
+	mountainPictureID?: number;
+	mountainTerrain?: number;
 }
 
 /**

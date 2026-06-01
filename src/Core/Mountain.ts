@@ -816,6 +816,7 @@ class Mountain extends MapElement {
 				m: Math.max(this.getTotalSquaresWidth(), this.getTotalSquaresHeight(position[2])),
 				t: this,
 				k: true,
+				mountainPictureID: pictureID,
 			},
 		];
 		return [count, objCollision];

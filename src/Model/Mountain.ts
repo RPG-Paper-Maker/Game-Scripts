@@ -18,6 +18,7 @@ import { SpecialElement, SpecialElementJSON } from './SpecialElement';
 export type MountainJSON = SpecialElementJSON & {
 	id: number;
 	mck?: MOUNTAIN_COLLISION_KIND;
+	ter?: number;
 };
 
 /**
@@ -26,6 +27,7 @@ export type MountainJSON = SpecialElementJSON & {
 export class Mountain extends SpecialElement {
 	public id: number;
 	public collisionKind: number;
+	public terrain: number;
 
 	constructor(json?: MountainJSON) {
 		super(json);
@@ -46,5 +48,6 @@ export class Mountain extends SpecialElement {
 		super.read(json);
 		this.id = json.id;
 		this.collisionKind = Utils.valueOrDefault(json.mck, MOUNTAIN_COLLISION_KIND.DEFAULT);
+		this.terrain = Utils.valueOrDefault(json.ter, 0);
 	}
 }
