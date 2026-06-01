@@ -19,6 +19,7 @@ const __dirname = path.dirname(__filename);
 app.commandLine.appendSwitch('high-dpi-support', 'true');
 app.commandLine.appendSwitch('force-device-scale-factor', '1');
 app.commandLine.appendSwitch('ignore-gpu-blocklist');
+app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling,MediaSessionService');
 if (process.platform === 'darwin') {
 	if (process.arch === 'arm64') {
 		// Apple Silicon: Metal works well
