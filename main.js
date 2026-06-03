@@ -10,11 +10,83 @@
 */
 
 import { app, BrowserWindow, dialog, globalShortcut, ipcMain } from 'electron';
-import { promises as fs } from 'fs';
+import { promises as fs, readFileSync, writeFileSync } from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const getBackendCachePath = () => {
+	let dir;
+	try {
+		dir = app.getPath('userData');
+	} catch {
+		dir = app.getPath('temp');
+	}
+	return path.join(dir, 'gpu-backend');
+};
+
+const readBackendCache = () => {
+	try {
+		const value = readFileSync(getBackendCachePath(), 'utf8').trim();
+		if (value === 'vulkan' || value === 'gl') {
+			return value;
+		}
+	} catch {}
+	return null;
+};
+
+const getLinuxAngleBackend = () => readBackendCache() ?? 'gl';
+
+const detectGLRenderer = async () => {
+	const probe = new BrowserWindow({
+		width: 1,
+		height: 1,
+		show: false,
+		webPreferences: { nodeIntegration: false, contextIsolation: true },
+	});
+	try {
+		await probe.loadURL('about:blank');
+		const renderer = await probe.webContents.executeJavaScript(`(() => {
+			try {
+				const canvas = document.createElement('canvas');
+				const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+				if (!gl) return '';
+				const ext = gl.getExtension('WEBGL_debug_renderer_info');
+				return ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : String(gl.getParameter(gl.RENDERER));
+			} catch {
+				return '';
+			}
+		})();`);
+		return String(renderer ?? '').trim();
+	} catch {
+		return '';
+	} finally {
+		if (!probe.isDestroyed()) {
+			probe.destroy();
+		}
+	}
+};
+
+const ensureLinuxAngleBackend = async () => {
+	if (process.platform !== 'linux' || readBackendCache() !== null) {
+		return false;
+	}
+	const renderer = await detectGLRenderer();
+	console.log(`[gpu-backend] glRenderer = "${renderer}"`);
+	if (renderer.length === 0) {
+		return false;
+	}
+	if (/llvmpipe|softpipe|swrast|software/i.test(renderer)) {
+		console.log('[gpu-backend] software GL detected, switching to Vulkan and relaunching');
+		writeFileSync(getBackendCachePath(), 'vulkan');
+		app.relaunch();
+		app.exit(0);
+		return true;
+	}
+	writeFileSync(getBackendCachePath(), 'gl');
+	return false;
+};
 
 app.commandLine.appendSwitch('high-dpi-support', 'true');
 app.commandLine.appendSwitch('force-device-scale-factor', '1');
@@ -33,7 +105,8 @@ if (process.platform === 'darwin') {
 } else if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('no-sandbox');
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
-	app.commandLine.appendSwitch('use-angle', 'vulkan');
+	app.commandLine.appendSwitch('use-gl', 'angle');
+	app.commandLine.appendSwitch('use-angle', getLinuxAngleBackend());
 }
 
 let window;
@@ -80,7 +153,10 @@ function createWindow() {
 	window.removeMenu();
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+	if (await ensureLinuxAngleBackend()) {
+		return;
+	}
 	const shortcuts = ['CommandOrControl+Alt+I', 'CommandOrControl+Shift+I'];
 	for (const shortcut of shortcuts) {
 		globalShortcut.register(shortcut, () => {
