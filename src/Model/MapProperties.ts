@@ -49,6 +49,10 @@ export type MapPropertiesJSON = LocalizationJSON & {
 	isFog?: boolean;
 	fogColor?: DynamicValueJSON;
 	fogIntensity?: DynamicValueJSON;
+	screenToneRed?: DynamicValueJSON;
+	screenToneGreen?: DynamicValueJSON;
+	screenToneBlue?: DynamicValueJSON;
+	screenToneGrey?: DynamicValueJSON;
 	objs: { id: number; p: number[] }[];
 };
 
@@ -83,6 +87,10 @@ export class MapProperties extends Localization {
 	public isFog: boolean;
 	public fogColorID: DynamicValue;
 	public fogIntensity: DynamicValue;
+	public screenToneRed: DynamicValue;
+	public screenToneGreen: DynamicValue;
+	public screenToneBlue: DynamicValue;
+	public screenToneGrey: DynamicValue;
 	public allObjects: Map<number, Position>;
 	public maxObjectsID: number;
 
@@ -160,6 +168,21 @@ export class MapProperties extends Localization {
 			map.scene.fog = new THREE.FogExp2(color.color.getHex(), this.fogIntensity.getValue() as number);
 		} else {
 			map.scene.fog = null;
+		}
+	}
+
+	/**
+	 * Apply this map's default screen tone to the renderer.
+	 */
+	updateScreenTone(): void {
+		Manager.GL.screenTone.set(
+			Math.max(Math.min((this.screenToneRed.getValue() as number) / 255, 1), -1),
+			Math.max(Math.min((this.screenToneGreen.getValue() as number) / 255, 1), -1),
+			Math.max(Math.min((this.screenToneBlue.getValue() as number) / 255, 1), -1),
+			Math.max(Math.min(1 - (this.screenToneGrey.getValue() as number) / 100, 1), -1),
+		);
+		if (this.backgroundColor) {
+			Manager.GL.updateBackgroundColor(this.backgroundColor);
 		}
 	}
 
@@ -294,6 +317,10 @@ export class MapProperties extends Localization {
 		this.isFog = Utils.valueOrDefault(json.isFog, false);
 		this.fogColorID = DynamicValue.readOrDefaultDatabase(json.fogColor, 1);
 		this.fogIntensity = DynamicValue.readOrDefaultNumber(json.fogIntensity, 0.06);
+		this.screenToneRed = DynamicValue.readOrDefaultNumber(json.screenToneRed, 0);
+		this.screenToneGreen = DynamicValue.readOrDefaultNumber(json.screenToneGreen, 0);
+		this.screenToneBlue = DynamicValue.readOrDefaultNumber(json.screenToneBlue, 0);
+		this.screenToneGrey = DynamicValue.readOrDefaultNumber(json.screenToneGrey, 0);
 		this.readObjects(json);
 	}
 

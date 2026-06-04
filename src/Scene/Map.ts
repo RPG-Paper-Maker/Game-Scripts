@@ -128,6 +128,13 @@ class Map extends Base {
 		await this.readMapProperties();
 		this.initializeSunLight();
 		this.mapProperties.updateFog();
+		if (!this.isBattleMap) {
+			if (Manager.GL.screenToneByCommand) {
+				Manager.GL.screenToneByCommand = false;
+			} else {
+				this.mapProperties.updateScreenTone();
+			}
+		}
 		this.initializeCamera();
 		this.initializePortionsObjects();
 		await this.loadTextures();

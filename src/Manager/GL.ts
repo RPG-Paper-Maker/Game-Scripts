@@ -26,6 +26,7 @@ class GL {
 	public static textureLoader = new THREE.TextureLoader();
 	public static raycaster = new THREE.Raycaster();
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
+	public static screenToneByCommand = false;
 
 	constructor() {
 		throw new Error('This is a static class');

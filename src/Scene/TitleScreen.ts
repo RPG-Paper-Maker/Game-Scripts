@@ -266,6 +266,7 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	draw3D() {
+		Manager.GL.renderer.setClearColor(0x000000, 1);
 		Manager.GL.renderer.clear();
 	}
 

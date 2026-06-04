@@ -56,6 +56,7 @@ class ChangeScreenTone extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
+		Manager.GL.screenToneByCommand = true;
 		const time = (this.time.getValue() as number) * 1000;
 		const color = this.colorID ? Data.Systems.getColor(this.colorID.getValue() as number) : null;
 		return {
