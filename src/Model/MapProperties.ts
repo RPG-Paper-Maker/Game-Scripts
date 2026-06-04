@@ -46,6 +46,9 @@ export type MapPropertiesJSON = LocalizationJSON & {
 	randomBattleNumberStep?: DynamicValueJSON;
 	randomBattleVariance?: DynamicValueJSON;
 	isl?: boolean;
+	isFog?: boolean;
+	fogColor?: DynamicValueJSON;
+	fogIntensity?: DynamicValueJSON;
 	objs: { id: number; p: number[] }[];
 };
 
@@ -77,6 +80,9 @@ export class MapProperties extends Localization {
 	public skyboxMesh: THREE.Mesh;
 	public maxNumberSteps: number;
 	public isSunLight: boolean;
+	public isFog: boolean;
+	public fogColorID: DynamicValue;
+	public fogIntensity: DynamicValue;
 	public allObjects: Map<number, Position>;
 	public maxObjectsID: number;
 
@@ -116,9 +122,12 @@ export class MapProperties extends Localization {
 	 * Update the background image.
 	 */
 	updateBackgroundImage(): void {
-		const texture = Manager.GL.textureLoader.load(
-			Data.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID).getPath(),
-		);
+		const picture = Data.Pictures.get(PICTURE_KIND.PICTURES, this.backgroundImageID);
+		if (this.backgroundImageID === -1 || !picture?.getPath()) {
+			Scene.Map.current.scene.background = new THREE.Color(0x000000);
+			return;
+		}
+		const texture = Manager.GL.textureLoader.load(picture.getPath());
 		texture.magFilter = THREE.NearestFilter;
 		texture.minFilter = THREE.NearestFilter;
 		Scene.Map.current.scene.background = texture;
@@ -136,6 +145,22 @@ export class MapProperties extends Localization {
 			Data.Systems.getSkybox(this.backgroundSkyboxID.getValue() as number).createTextures(),
 		);
 		Scene.Map.current.scene.add(this.skyboxMesh);
+	}
+
+	/**
+	 * Update the fog of the current map.
+	 */
+	updateFog(): void {
+		const map = Scene.Map.current;
+		if (!map) {
+			return;
+		}
+		if (this.isFog) {
+			const color = Data.Systems.getColor(this.fogColorID.getValue() as number);
+			map.scene.fog = new THREE.FogExp2(color.color.getHex(), this.fogIntensity.getValue() as number);
+		} else {
+			map.scene.fog = null;
+		}
 	}
 
 	/**
@@ -266,6 +291,9 @@ export class MapProperties extends Localization {
 		this.updateMaxNumberSteps();
 
 		this.isSunLight = Utils.valueOrDefault(json.isl, true);
+		this.isFog = Utils.valueOrDefault(json.isFog, false);
+		this.fogColorID = DynamicValue.readOrDefaultDatabase(json.fogColor, 1);
+		this.fogIntensity = DynamicValue.readOrDefaultNumber(json.fogIntensity, 0.06);
 		this.readObjects(json);
 	}
 

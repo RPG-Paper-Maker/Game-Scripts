@@ -130,6 +130,7 @@ export enum EVENT_COMMAND_KIND {
 	DISPLAY_HIDE_A_BATTLER,
 	TRANSFORM_A_BATTLER,
 	CHANGE_BATTLER_GRAPHICS,
+	CHANGE_FOG,
 }
 
 /** Enum for the different items kind. */

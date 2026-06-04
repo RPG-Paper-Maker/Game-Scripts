@@ -21,6 +21,7 @@ export * from './ChangeChronometer';
 export * from './ChangeClass';
 export * from './ChangeEquipment';
 export * from './ChangeExperienceCurve';
+export * from './ChangeFog';
 export * from './ChangeMapProperties';
 export * from './ChangeName';
 export * from './ChangeProperty';

@@ -105,6 +105,8 @@ class Events {
 				return new EventCommand.TitleScreen(command);
 			case EVENT_COMMAND_KIND.CHANGE_SCREEN_TONE:
 				return new EventCommand.ChangeScreenTone(command);
+			case EVENT_COMMAND_KIND.CHANGE_FOG:
+				return new EventCommand.ChangeFog(command);
 			case EVENT_COMMAND_KIND.REMOVE_OBJECT_FROM_MAP:
 				return new EventCommand.RemoveObjectFromMap(command);
 			case EVENT_COMMAND_KIND.STOP_REACTION:

@@ -127,6 +127,7 @@ class Map extends Base {
 		this.collisions = [];
 		await this.readMapProperties();
 		this.initializeSunLight();
+		this.mapProperties.updateFog();
 		this.initializeCamera();
 		this.initializePortionsObjects();
 		await this.loadTextures();
