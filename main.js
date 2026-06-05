@@ -151,6 +151,12 @@ function createWindow() {
 	});
 	window.loadFile('index.html');
 	window.removeMenu();
+	window.webContents.on('did-finish-load', () => {
+		if (window && !window.isDestroyed()) {
+			window.focus();
+			window.webContents.focus();
+		}
+	});
 }
 
 app.whenReady().then(async () => {
