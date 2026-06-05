@@ -1143,15 +1143,30 @@ class MapObject {
 		this.removeMoveTemp();
 
 		const normalDistance = Math.min(limit, speed);
-		const [position, isClimbing, o] = this.getFuturPosition(orientation, normalDistance, angle);
-		const distance = position.equals(this.position) ? 0 : normalDistance;
+		const referenceStep = (this.speed.getValue() as number) * MapObject.SPEED_NORMAL * (1000 / 60);
+		const stepCount = referenceStep > 0 ? Math.max(1, Math.ceil(normalDistance / referenceStep)) : 1;
+		const stepDistance = normalDistance / stepCount;
+		let distance = 0;
+		let isClimbing = this.isClimbing;
+		let o = ORIENTATION.NONE;
+		for (let step = 0; step < stepCount; step++) {
+			const [position, stepClimbing, stepO] = this.getFuturPosition(orientation, stepDistance, angle);
+			isClimbing = stepClimbing;
+			if (stepO !== ORIENTATION.NONE) {
+				o = stepO;
+			}
+			if (position.equals(this.position)) {
+				break;
+			}
+			this.position.set(position.x, position.y, position.z);
+			distance += stepDistance;
+		}
 		if (this.previousOrientation !== null) {
 			orientation = this.previousOrientation;
 		}
 		if (isCameraOrientation) {
 			orientation = Mathf.mod(orientation + Scene.Map.current.camera.getMapOrientation() - 2, 4);
 		}
-		this.position.set(position.x, position.y, position.z);
 
 		// Update orientation
 		const climbOrientationEye = this.climbOrientationEye;
