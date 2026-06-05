@@ -399,11 +399,13 @@ class Picture extends Base {
 	}
 
 	/** Play a random footstep sound for a terrain, when configured. */
-	playFootstep(terrain: number): void {
+	playFootstep(terrain: number): boolean {
 		const sounds = this.terrainSounds.get(terrain);
 		if (sounds && sounds.length > 0) {
 			sounds[Math.floor(Math.random() * sounds.length)].playSound();
+			return true;
 		}
+		return false;
 	}
 }
 

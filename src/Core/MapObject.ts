@@ -1552,7 +1552,11 @@ class MapObject {
 			if (this.isHero && this.moving && !Scene.Map.current.isBattleMap) {
 				this.updateTerrain();
 				if (this.terrain !== previousTerrain || (frame && this.frame.value % 2 === 1)) {
-					(this.terrainPicture ?? Scene.Map.current.mapProperties.tileset.picture).playFootstep(this.terrain);
+					const tilesetPicture = Scene.Map.current.mapProperties.tileset.picture;
+					const picture = this.terrainPicture ?? tilesetPicture;
+					if (!picture.playFootstep(this.terrain) && picture !== tilesetPicture) {
+						tilesetPicture.playFootstep(this.terrain);
+					}
 				}
 			}
 			// Update mesh
@@ -1850,27 +1854,27 @@ class MapObject {
 			);
 			if (mapPortion) {
 				const position = Position.createFromVector3(this.position);
-				const mountainBoxes = mapPortion.boundingBoxesMountains[position.toIndex()];
+				const mountainBoxes = Manager.Collisions.getCollisionsWithOverflows(
+					mapPortion,
+					'boundingBoxesMountains',
+					position,
+					Scene.Map.current.overflowMountains,
+				);
 				const mtnCollision = mountainBoxes?.length > 0 ? mountainBoxes[mountainBoxes.length - 1] : null;
 				const heroFractionalY = this.position.y - Math.floor(this.position.y);
 				const onMountainSlope =
 					mtnCollision?.mountainPictureID !== undefined &&
 					heroFractionalY > 0.001 &&
 					this.position.y > (mtnCollision.p?.y ?? 0);
-				if (onMountainSlope) {
+				const boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
+				if (onMountainSlope || (mtnCollision?.mountainPictureID !== undefined && boundingBoxes.length === 0)) {
 					this.terrainPicture = Data.Pictures.get(PICTURE_KIND.MOUNTAINS, mtnCollision.mountainPictureID);
 					this.terrain = mtnCollision.mountainTerrain ?? 0;
-				} else {
-					const boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
-					if (boundingBoxes.length > 0) {
-						const collision = boundingBoxes[boundingBoxes.length - 1];
-						this.terrain = collision && collision.cs ? collision.cs.terrain : 0;
-						if (collision?.autotilePictureID !== undefined) {
-							this.terrainPicture = Data.Pictures.get(
-								PICTURE_KIND.AUTOTILES,
-								collision.autotilePictureID,
-							);
-						}
+				} else if (boundingBoxes.length > 0) {
+					const collision = boundingBoxes[boundingBoxes.length - 1];
+					this.terrain = collision && collision.cs ? collision.cs.terrain : 0;
+					if (collision?.autotilePictureID !== undefined) {
+						this.terrainPicture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, collision.autotilePictureID);
 					}
 				}
 			}
