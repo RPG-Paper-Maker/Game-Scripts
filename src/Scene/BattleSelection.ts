@@ -88,10 +88,7 @@ class BattleSelection {
 			ownedItem = Game.current.items[i];
 			if (ownedItem.kind === ITEM_KIND.ITEM) {
 				item = <Model.Item>ownedItem.system;
-				if (
-					item.consumable &&
-					(item.availableKind === AVAILABLE_KIND.BATTLE || item.availableKind === AVAILABLE_KIND.ALWAYS)
-				) {
+				if (item.availableKind === AVAILABLE_KIND.BATTLE || item.availableKind === AVAILABLE_KIND.ALWAYS) {
 					this.battle.listItems.push(new Graphic.Item(ownedItem, { possible: item.isPossible() }));
 				}
 			}
