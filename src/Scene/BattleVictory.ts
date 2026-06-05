@@ -415,6 +415,7 @@ class BattleVictory {
 				// Transition None
 				if (this.battle.transitionEnd === 0) {
 					this.battle.sceneMap?.updateBackgroundColor();
+					this.playMapMusic();
 				}
 
 				// Transition zoom

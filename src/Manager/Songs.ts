@@ -358,7 +358,9 @@ class Songs {
 			}
 			const howl = this.current[SONG_KIND.MUSIC];
 			if (howl) {
-				howl.volume(this.progressionMusic.getProgressionAt(tick, this.progressionMusicEnd) / 100);
+				const volume = this.progressionMusic.getProgressionAt(tick, this.progressionMusicEnd) / 100;
+				howl.volume(volume);
+				this.volumes[SONG_KIND.MUSIC] = volume;
 				if (howl.volume() === 0) {
 					howl.stop();
 				} else if (!this.isMusicNone && !howl.playing()) {
