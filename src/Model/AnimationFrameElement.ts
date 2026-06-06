@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Utils } from '../Common';
+import { ScreenResolution, Utils } from '../Common';
 import { Picture2D } from '../Core';
 import { Base } from './Base';
 
@@ -63,8 +63,8 @@ class AnimationFrameElement extends Base {
 		const w = picture.oW / cols;
 		const h = picture.oH / rows;
 		picture.draw({
-			x: position.x + this.x,
-			y: position.y + this.y,
+			x: position.x + ScreenResolution.getScreenX(this.x),
+			y: position.y + ScreenResolution.getScreenY(this.y),
 			w: w * this.zoom,
 			h: h * this.zoom,
 			sx: w * this.texCol,
