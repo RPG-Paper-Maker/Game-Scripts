@@ -220,7 +220,7 @@ export class DynamicValue extends Base {
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				if (!Game.current) {
 					Platform.showErrorMessage('Trying to access a variable value without any game loaded.');
-					return forceVariable ? this.value : 0;
+					return forceVariable ? this.value : Data.Variables.getDefaultValue(this.value as number);
 				}
 				return forceVariable ? this.value : Game.current.getVariable(this.value as number);
 			case DYNAMIC_VALUE_KIND.PARAMETER:
