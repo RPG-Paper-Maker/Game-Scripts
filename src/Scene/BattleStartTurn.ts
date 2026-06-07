@@ -257,6 +257,7 @@ class BattleStartTurn {
 					const status = tab[1];
 					const s = status[0];
 					const message = s.getMessageStillAffected(battler);
+					this.battle.informationText = message;
 					(<Graphic.Text>this.battle.windowTopInformations.content).setText(message);
 					status.splice(0, 1);
 					if (status.length === 0) {
