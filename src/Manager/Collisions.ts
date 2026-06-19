@@ -156,12 +156,26 @@ class Collisions {
 	}
 
 	/**
+	 * Replace any non-finite (NaN / Infinity) entry of a bounding box parameter
+	 * list with 0 so a corrupted tile cannot poison the shared probe geometry
+	 * with NaN vertices (which spams "Computed min/max have NaN values").
+	 */
+	private static sanitizeBoundingBox(boundingBox: number[]) {
+		for (let i = 0, l = boundingBox.length; i < l; i++) {
+			if (!Number.isFinite(boundingBox[i])) {
+				boundingBox[i] = 0;
+			}
+		}
+	}
+
+	/**
 	 *  Apply transform for lands bounding box.
 	 *  @static
 	 *  @param {THREE.Mesh} box - The mesh bounding box
 	 *  @param {number[]} boundingBox - The bounding box list parameters
 	 */
 	static applyBoxLandTransforms(box: THREE.Mesh, boundingBox: number[]) {
+		this.sanitizeBoundingBox(boundingBox);
 		this.resetBoxGeometry(box as THREE.Mesh<CustomGeometry, THREE.Material | THREE.Material[]>);
 		// Update to the new ones
 		box.geometry.scale(boundingBox[3], boundingBox[5] ?? 1, boundingBox[4]);
@@ -190,6 +204,7 @@ class Collisions {
 		center = [0, 0, 0],
 	) {
 		// Avoid NaN values if scale values are 0
+		this.sanitizeBoundingBox(boundingBox);
 		boundingBox[3] = Mathf.nearZeroValue(boundingBox[3]);
 		boundingBox[4] = Mathf.nearZeroValue(boundingBox[4]);
 		boundingBox[5] = Mathf.nearZeroValue(boundingBox[5]);
@@ -237,6 +252,7 @@ class Collisions {
 	 *  @param {number[]} boundingBox - The bounding box list parameters
 	 */
 	static applyOrientedBoxTransforms(box: THREE.Mesh, boundingBox: number[], center = [0, 0, 0]) {
+		this.sanitizeBoundingBox(boundingBox);
 		let size = boundingBox[3] / Math.sqrt(2);
 
 		// Avoid NaN values if scale values are 0
