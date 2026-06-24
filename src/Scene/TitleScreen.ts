@@ -108,7 +108,7 @@ class TitleScreen extends Base {
 						fontSize: 20,
 					});
 				} else {
-					this.titleReady = loop && loopMs === 0;
+					this.titleReady = !loop || loopMs === 0;
 				}
 				videoPlayed = true;
 			} catch {
@@ -253,7 +253,7 @@ class TitleScreen extends Base {
 		this.videoBlocked = false;
 		const loop = Data.TitlescreenGameover.titleVideoLoop;
 		const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
-		this.titleReady = loop && loopMs === 0;
+		this.titleReady = !loop || loopMs === 0;
 		Manager.Videos.play(
 			Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
 			null,
