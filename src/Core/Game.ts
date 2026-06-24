@@ -560,13 +560,21 @@ class Game {
 	 *  @returns {Player}
 	 */
 	instanciateTeam(groupKind: GROUP_KIND, type: CHARACTER_KIND, id: number, level: number, stockID: number): Player {
+		if (groupKind === GROUP_KIND.TROOP && (!Scene.Map.current?.isBattleMap || !(<Scene.Battle>Scene.Map.current).players)) {
+			Platform.showErrorMessage(
+				'Cannot instantiate a character in the troop group outside of a battle. Use TEAM, RESERVE, or HIDDEN for initial party members, and configure battle enemies in the Troops database.',
+			);
+			return null;
+		}
+		const team = this.getTeam(groupKind);
+
 		// Stock the instanciation id in a variable
 		this.variables.set(stockID, this.charactersInstances);
 
 		// Adding the instanciated character in the right group
 		const player = new Player(type, id, this.charactersInstances++, [], []);
 		player.instanciate(level);
-		this.getTeam(groupKind).push(player);
+		team.push(player);
 		return player;
 	}
 
@@ -686,6 +694,9 @@ class Game {
 			case GROUP_KIND.HIDDEN:
 				return this.hiddenHeroes;
 			case GROUP_KIND.TROOP:
+				if (!Scene.Map.current?.isBattleMap || !(<Scene.Battle>Scene.Map.current).players) {
+					return [];
+				}
 				return (<Scene.Battle>Scene.Map.current).players[CHARACTER_KIND.MONSTER];
 		}
 	}
