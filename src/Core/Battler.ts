@@ -17,6 +17,7 @@ import {
 	BATTLER_STEP,
 	ELEMENT_MAP_KIND,
 	Interpreter,
+	PICTURE_KIND,
 	STATUS_RESTRICTIONS_KIND,
 } from '../Common';
 import { ProgressionTable } from '../Model';
@@ -186,26 +187,15 @@ export class Battler {
 			this.mesh.receiveShadow = true;
 			this.mesh.castShadow = true;
 			this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
-			this.topLeftPosition = new THREE.Vector3(
-				this.position.x - this.width / 2,
-				this.position.y + this.height,
-				this.position.z,
-			);
-			this.botRightPosition = new THREE.Vector3(
-				this.position.x + this.width / 2,
-				this.position.y,
-				this.position.z,
-			);
-			this.upPosition = new THREE.Vector3(
-				this.position.x,
-				this.position.y + this.height,
-				this.position.z,
-			);
-			this.halfPosition = new THREE.Vector3(
-				this.position.x,
-				this.position.y + this.height / 2,
-				this.position.z,
-			);
+			const limit = Data.Pictures.get(PICTURE_KIND.BATTLERS, idBattler).getLimit(this.width, this.height);
+			const limitLeft = this.position.x - this.width / 2 + limit.x;
+			const limitTop = this.position.y + this.height - limit.y;
+			const limitBot = limitTop - limit.height;
+			const limitCenterX = limitLeft + limit.width / 2;
+			this.topLeftPosition = new THREE.Vector3(limitLeft, limitTop, this.position.z);
+			this.botRightPosition = new THREE.Vector3(limitLeft + limit.width, limitBot, this.position.z);
+			this.upPosition = new THREE.Vector3(limitCenterX, limitTop + 1 / Data.Systems.SQUARE_SIZE, this.position.z);
+			this.halfPosition = new THREE.Vector3(limitCenterX, (limitTop + limitBot) / 2, this.position.z);
 			if (this.isEnemy) {
 				this.mesh.scale.set(-1, 1, 1);
 			}

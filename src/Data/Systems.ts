@@ -61,6 +61,7 @@ export type SystemsJSON = {
 	mcobv?: DynamicValueJSON;
 	cmpb?: DynamicValueJSON;
 	cfi?: DynamicValueJSON;
+	cof?: DynamicValueJSON;
 	mfd?: DynamicValueJSON;
 	battlersFrames?: number;
 	bfd?: string;
@@ -126,6 +127,7 @@ export class Systems {
 	public static moveCameraOnBlockView: DynamicValue;
 	public static caterpillarMaxPartyMembers: DynamicValue;
 	public static caterpillarFirstIndex: DynamicValue;
+	public static caterpillarOffset: DynamicValue;
 	public static mapFrameDuration: DynamicValue;
 	public static battlersFrames: number;
 	public static battlersFrameDuration: string;
@@ -377,6 +379,7 @@ export class Systems {
 		this.moveCameraOnBlockView = DynamicValue.readOrDefaultSwitch(json.mcobv, true);
 		this.caterpillarMaxPartyMembers = DynamicValue.readOrDefaultNumber(json.cmpb, 0);
 		this.caterpillarFirstIndex = DynamicValue.readOrDefaultNumber(json.cfi, 1);
+		this.caterpillarOffset = DynamicValue.readOrDefaultNumberDouble(json.cof, 0);
 		this.mapFrameDuration = DynamicValue.readOrDefaultNumber(json.mfd, 150);
 		this.battlersFrames = Utils.valueOrDefault(json.battlersFrames, 4);
 		this.battlersFrameDuration = Utils.valueOrDefault(json.bfd, 'Common.Mathf.random(250, 300)');

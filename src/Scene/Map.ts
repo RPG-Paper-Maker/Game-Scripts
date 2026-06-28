@@ -1228,9 +1228,14 @@ class Map extends Base {
 			// Update caterpillar followers
 			if (!this.isBattleMap && Game.current.caterpillarFollowers.length > 0) {
 				this.updateHeroTrail();
+				const offset = (Data.Systems.caterpillarOffset.getValue() as number) / Data.Systems.SQUARE_SIZE;
+				let cumulativeDist = 0;
+				let prevWidth = Game.current.hero.contentWidth;
 				for (let i = 0, l = Game.current.caterpillarFollowers.length; i < l; i++) {
 					const follower = Game.current.caterpillarFollowers[i];
-					const targetDist = this.heroTrailTotalDist - (i + 1);
+					cumulativeDist += offset + prevWidth / 2 + follower.contentWidth / 2;
+					prevWidth = follower.contentWidth;
+					const targetDist = this.heroTrailTotalDist - cumulativeDist;
 					const { pos: targetPos, orientation: targetOri } = this.getTrailAtDist(targetDist);
 					const prevPos = follower.previousPosition ? follower.previousPosition.clone() : targetPos.clone();
 					follower.moving = prevPos.distanceTo(targetPos) > 0.001;
@@ -1240,6 +1245,9 @@ class Map extends Base {
 					}
 					follower.position = targetPos.clone();
 					follower.update(angle);
+					if (follower.mesh) {
+						follower.mesh.renderOrder = 1 - (i + 1) * 0.001;
+					}
 				}
 			}
 		}
@@ -1627,7 +1635,7 @@ class Map extends Base {
 				break;
 		}
 
-		const spawnStep = 1;
+		const spawnStep = (Data.Systems.caterpillarOffset.getValue() as number) / Data.Systems.SQUARE_SIZE + 1;
 		if (resetTrail) {
 			const heroPos = Game.current.hero.position;
 			const heroOri = Game.current.hero.orientationEye;
@@ -1734,8 +1742,13 @@ class Map extends Base {
 			});
 			this.heroTrailLastPos = heroPos.clone();
 		}
-		const nFollowers = Game.current.caterpillarFollowers.length;
-		const maxNeeded = nFollowers + 1;
+		const offset = (Data.Systems.caterpillarOffset.getValue() as number) / Data.Systems.SQUARE_SIZE;
+		let maxNeeded = 1;
+		let prevWidth = Game.current.hero.contentWidth;
+		for (const follower of Game.current.caterpillarFollowers) {
+			maxNeeded += offset + prevWidth / 2 + follower.contentWidth / 2;
+			prevWidth = follower.contentWidth;
+		}
 		while (this.heroTrail.length > 1 && this.heroTrailTotalDist - this.heroTrail[0].dist > maxNeeded) {
 			this.heroTrail.shift();
 		}

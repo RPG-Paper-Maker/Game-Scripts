@@ -70,6 +70,7 @@ class MapObject {
 	public orientation: ORIENTATION;
 	public width: number;
 	public height: number;
+	public contentWidth: number;
 	public moving: boolean = false;
 	public isClimbing: boolean = false;
 	public isClimbingUp: boolean = true;
@@ -122,6 +123,7 @@ class MapObject {
 		this.orientation = this.orientationEye;
 		this.width = 1;
 		this.height = 1;
+		this.contentWidth = 1;
 		this.moveFrequencyTick = 0;
 		this.isStartup = position === undefined;
 		this.isInScene = false;
@@ -675,22 +677,19 @@ class MapObject {
 					y = this.currentStateInstance.rectTileset.y;
 					this.width = this.currentStateInstance.rectTileset.width;
 					this.height = this.currentStateInstance.rectTileset.height;
+					this.contentWidth = this.width;
 				} else {
 					x = 0;
 					y = 0;
 					const { width, height } = Manager.GL.getMaterialTextureSize(material);
+					const picture = Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
 					this.width = width / Data.Systems.SQUARE_SIZE / Data.Systems.FRAMES;
-					this.height =
-						height /
-						Data.Systems.SQUARE_SIZE /
-						Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID).getRows();
+					this.height = height / Data.Systems.SQUARE_SIZE / picture.getRows();
+					this.contentWidth = picture.getLimit(this.width, this.height).width;
 					this.currentOrientationStop =
 						this.currentStateInstance.indexY >= 4 && this.currentStateInstance.indexY <= 7;
 					this.currentOrientationClimbing = this.currentStateInstance.indexY >= 8;
-					this.isOrientationStopWalk = !Data.Pictures.get(
-						PICTURE_KIND.CHARACTERS,
-						this.currentStateInstance.graphicID,
-					).isStopAnimation;
+					this.isOrientationStopWalk = !picture.isStopAnimation;
 				}
 
 				const sprite = Sprite.create(

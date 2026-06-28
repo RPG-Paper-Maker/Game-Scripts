@@ -338,11 +338,12 @@ export class WindowSkin extends Base {
 		const width = rect.width / 10;
 		const height = rect.height;
 		const scaledZoom = zoom * 1.5;
+		const drawHeight = height * scaledZoom;
 		this.picture.stretch = false;
 		for (let i = 0, l = digits.length; i < l; i++) {
 			this.picture.draw({
 				x: x + (i - (l - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * scaledZoom),
-				y,
+				y: y - drawHeight,
 				w: width * scaledZoom,
 				h: height * scaledZoom,
 				sx: rect.x + digits[i] * width,
@@ -355,7 +356,7 @@ export class WindowSkin extends Base {
 		this.picture.stretch = true;
 		return [
 			x + (digits.length - (digits.length - 1) / 2) * (ScreenResolution.getScreenMinXY(width) * scaledZoom),
-			height * scaledZoom,
+			drawHeight,
 		];
 	}
 
