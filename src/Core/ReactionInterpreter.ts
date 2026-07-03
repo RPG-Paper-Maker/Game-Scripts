@@ -237,8 +237,7 @@ class ReactionInterpreter {
 					while (next.data !== null) {
 						next = next.next;
 					}
-					next = next.next;
-					return next;
+					return this.endOfBlock(command.parent, next.next);
 				} else {
 					/* If condition, or other instruction bloc, leave it
                     and go to next command */
