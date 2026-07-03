@@ -54,6 +54,9 @@ interface StructSearchResult {
  */
 class MapObject {
 	public static SPEED_NORMAL = 0.004666;
+	public static MAX_MOVE_SUBSTEPS = 4;
+	public static MAX_MOVE_UPDATE_DISTANCE = 32;
+	private static EMPTY_PARAMETERS: Map<number, Model.DynamicValue> = new Map();
 
 	public id: number;
 	public system: Model.MapObject;
@@ -445,6 +448,7 @@ class MapObject {
 
 		// Run other time events
 		const removeList = [];
+		const now = Date.now();
 		let i: number,
 			l: number,
 			events: [Model.Event, number],
@@ -457,7 +461,7 @@ class MapObject {
 			event = events[0];
 			timeEllapsed = events[1];
 			interval = event.parameters.get(1).value;
-			if (new Date().getTime() - timeEllapsed >= (interval.getValue() as number) * 1000) {
+			if (now - timeEllapsed >= (interval.getValue() as number) * 1000) {
 				repeat = event.parameters.get(2).value;
 				if (this.receiveEvent(this, true, 1, Utils.arrayToMap([interval, repeat]), this.states, events)) {
 					if (!repeat.getValue()) {
@@ -1143,7 +1147,10 @@ class MapObject {
 
 		const normalDistance = Math.min(limit, speed);
 		const referenceStep = (this.speed.getValue() as number) * MapObject.SPEED_NORMAL * (1000 / 60);
-		const stepCount = referenceStep > 0 ? Math.max(1, Math.ceil(normalDistance / referenceStep)) : 1;
+		const stepCount =
+			referenceStep > 0
+				? Math.min(MapObject.MAX_MOVE_SUBSTEPS, Math.max(1, Math.ceil(normalDistance / referenceStep)))
+				: 1;
 		const stepDistance = normalDistance / stepCount;
 		let distance = 0;
 		let isClimbing = this.isClimbing;
@@ -1495,6 +1502,7 @@ class MapObject {
 		if (this.removed) {
 			return;
 		}
+		const culled = this.isFarFromHero();
 		if (this.moveFrequencyTick > 0) {
 			this.moveFrequencyTick -= Manager.Stack.elapsedTime;
 		}
@@ -1603,14 +1611,14 @@ class MapObject {
 					this.gltfGroup.rotation.y = current + diff * t;
 				}
 			}
-			if (this.animationMixer) {
+			if (this.animationMixer && !culled) {
 				this.updateGltfAnimation();
 				this.animationMixer.update(Manager.Stack.elapsedTime / 1000);
 			}
 		}
 
 		// Moving
-		if (!this.isCaterpillarFollower) {
+		if (!this.isCaterpillarFollower && !culled) {
 			this.updateMovingState();
 		}
 
@@ -1623,8 +1631,12 @@ class MapObject {
 		// Positions
 		if (this.position) {
 			this.previousPosition = this.position;
-			this.upPosition = new THREE.Vector3(this.position.x, this.position.y + this.height, this.position.z);
-			this.halfPosition = new THREE.Vector3(this.position.x, this.position.y + this.height / 2, this.position.z);
+			if (this.upPosition === undefined) {
+				this.upPosition = new THREE.Vector3();
+				this.halfPosition = new THREE.Vector3();
+			}
+			this.upPosition.set(this.position.x, this.position.y + this.height, this.position.z);
+			this.halfPosition.set(this.position.x, this.position.y + this.height / 2, this.position.z);
 		}
 
 		// Climbing up
@@ -1637,6 +1649,26 @@ class MapObject {
 	}
 
 	/**
+	 *  Indicate if the object is too far from the hero to justify running its
+	 *  per-frame movement and skeletal animation updates.
+	 *  @returns {boolean}
+	 */
+	isFarFromHero(): boolean {
+		if (this.isHero || this.isStartup || this.isCaterpillarFollower) {
+			return false;
+		}
+		const max = MapObject.MAX_MOVE_UPDATE_DISTANCE;
+		if (max <= 0) {
+			return false;
+		}
+		const hero = Game.current?.hero;
+		if (!hero || !hero.position || !this.position) {
+			return false;
+		}
+		return this.position.distanceToSquared(hero.position) > max * max;
+	}
+
+	/**
 	 *  Update moving state.
 	 */
 	updateMovingState() {
@@ -1646,7 +1678,7 @@ class MapObject {
 				this.currentState.route,
 				this,
 				this.currentState.id,
-				new Map(),
+				MapObject.EMPTY_PARAMETERS,
 				null,
 				true,
 			);

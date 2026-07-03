@@ -74,6 +74,7 @@ class Map extends Base {
 	public collisions: Rectangle[][][][];
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
+	public objectsSpatialHash: globalThis.Map<number, MapObject[]> = new globalThis.Map();
 	public heroOrientation: ORIENTATION;
 	public previousWeatherPoints: THREE.Points = null;
 	public previousWeatherVelocities: number[];
@@ -725,6 +726,46 @@ class Map extends Base {
 	}
 
 	/**
+	 *  Rebuild the objects spatial hash (collision broad phase) from every
+	 *  loaded portion. Must run before objects move on the current frame.
+	 */
+	updateObjectsSpatialHash() {
+		const hash = this.objectsSpatialHash;
+		hash.clear();
+		const cellSize = Manager.Collisions.SPATIAL_HASH_CELL_SIZE;
+		const add = function (list: MapObject[]) {
+			if (!list) {
+				return;
+			}
+			for (let i = 0, l = list.length; i < l; i++) {
+				const obj = list[i];
+				if (!obj || obj.removed || !obj.meshBoundingBox || !obj.position) {
+					continue;
+				}
+				const key = Manager.Collisions.spatialHashKey(
+					Math.floor(obj.position.x / cellSize),
+					Math.floor(obj.position.z / cellSize),
+				);
+				let cell = hash.get(key);
+				if (cell === undefined) {
+					cell = [];
+					hash.set(key, cell);
+				}
+				cell.push(obj);
+			}
+		};
+		this.updatePortions(this, function (x: number, y: number, z: number, i: number, j: number, k: number) {
+			const mapPortion = this.getMapPortion(i, j, k);
+			if (mapPortion) {
+				add(mapPortion.objectsList);
+			}
+			const datas = Game.current.getPortionData(this.id, new Portion(x, y, z));
+			add(datas.min);
+			add(datas.mout);
+		});
+	}
+
+	/**
 	 *  Get a map portion at local postions.
 	 *  @param {number} x - The local x portion
 	 *  @param {number} y - The local y portion
@@ -1224,6 +1265,7 @@ class Map extends Base {
 
 		// Update the objects
 		if (Game.current !== null) {
+			this.updateObjectsSpatialHash();
 			Game.current.hero.update(angle);
 			// Update caterpillar followers
 			if (!this.isBattleMap && Game.current.caterpillarFollowers.length > 0) {

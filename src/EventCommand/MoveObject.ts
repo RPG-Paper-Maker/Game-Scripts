@@ -399,7 +399,12 @@ class MoveObject extends Base {
 				return false;
 			}
 			if (square && currentState.distance === currentState.normalDistance) {
-				object.position = currentState.position;
+				const dx = currentState.position.x - object.position.x;
+				const dy = currentState.position.y - object.position.y;
+				const dz = currentState.position.z - object.position.z;
+				if (dx * dx + dy * dy + dz * dz < 0.25) {
+					object.position = currentState.position;
+				}
 			}
 			object.previousOrientation = null;
 			object.previousMoveCommand = null;
