@@ -11,7 +11,7 @@
 
 import { Utils } from '../Common';
 import { MapObject } from '../Core';
-import { EventCommand, Manager, Model, Scene } from '../index';
+import { Data, EventCommand, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -69,7 +69,7 @@ class ShakeScreen extends Base {
 			shakeNumber = (floor !== 0 && totalShakes - floor < ceil - totalShakes ? floor : ceil) / t;
 		}
 		const shakeTime = (1 / (shakeNumber * 2)) * 1000;
-		const offset = this.offset.getValue() as number;
+		const offset = (this.offset.getValue() as number) / Data.Systems.SQUARE_SIZE;
 		return {
 			parallel: this.isWaitEnd,
 			offset: offset,
