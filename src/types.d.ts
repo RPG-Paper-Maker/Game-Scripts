@@ -9,4 +9,5 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-declare const Howl: typeof import('hower');
+declare const Howl: any;
+declare const Howler: import('howler').HowlerGlobal;
