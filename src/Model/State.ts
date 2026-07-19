@@ -47,7 +47,98 @@ export type StateJSON = {
 	sx?: DynamicValueJSON;
 	sy?: DynamicValueJSON;
 	sz?: DynamicValueJSON;
+	l?: StateLightJSON[];
 };
+
+export type StateLightJSON = {
+	id?: number;
+	k?: DynamicValueJSON | number;
+	c?: DynamicValueJSON | string;
+	gc?: DynamicValueJSON | string;
+	i?: DynamicValueJSON | number;
+	io?: DynamicValueJSON | number;
+	it?: DynamicValueJSON | number;
+	x?: DynamicValueJSON | number;
+	y?: DynamicValueJSON | number;
+	z?: DynamicValueJSON | number;
+	d?: DynamicValueJSON | number;
+	a?: DynamicValueJSON | number;
+	p?: DynamicValueJSON | number;
+	tx?: DynamicValueJSON | number;
+	ty?: DynamicValueJSON | number;
+	tz?: DynamicValueJSON | number;
+};
+
+/** A light attached to a map object state. */
+export class StateLight {
+	public id: number;
+	public kind: DynamicValue;
+	public color: DynamicValue;
+	public groundColor: DynamicValue;
+	public intensity: DynamicValue;
+	public intensityOffset: DynamicValue;
+	public intensityTime: DynamicValue;
+	public x: DynamicValue;
+	public y: DynamicValue;
+	public z: DynamicValue;
+	public distance: DynamicValue;
+	public angle: DynamicValue;
+	public penumbra: DynamicValue;
+	public targetX: DynamicValue;
+	public targetY: DynamicValue;
+	public targetZ: DynamicValue;
+
+	constructor(json: StateLightJSON) {
+		this.id = json.id ?? 0;
+		this.kind = StateLight.readNumber(json.k, 0);
+		this.color = StateLight.readText(json.c, '#ffffff');
+		this.groundColor = StateLight.readText(json.gc, '#444444');
+		this.intensity = StateLight.readNumber(json.i, 5);
+		this.intensityOffset = StateLight.readNumber(json.io, 0);
+		this.intensityTime = StateLight.readNumber(json.it, 0);
+		this.x = StateLight.readNumber(json.x, 0);
+		this.y = StateLight.readNumber(json.y, 1);
+		this.z = StateLight.readNumber(json.z, 0);
+		this.distance = StateLight.readNumber(json.d, 2);
+		this.angle = StateLight.readNumber(json.a, 45);
+		this.penumbra = StateLight.readNumber(json.p, 0);
+		this.targetX = StateLight.readNumber(json.tx, 0);
+		this.targetY = StateLight.readNumber(json.ty, 0);
+		this.targetZ = StateLight.readNumber(json.tz, -16);
+	}
+
+	createCopy(): StateLight {
+		const light = new StateLight({ id: this.id });
+		light.kind = this.kind.createCopy();
+		light.color = this.color.createCopy();
+		light.groundColor = this.groundColor.createCopy();
+		light.intensity = this.intensity.createCopy();
+		light.intensityOffset = this.intensityOffset.createCopy();
+		light.intensityTime = this.intensityTime.createCopy();
+		light.x = this.x.createCopy();
+		light.y = this.y.createCopy();
+		light.z = this.z.createCopy();
+		light.distance = this.distance.createCopy();
+		light.angle = this.angle.createCopy();
+		light.penumbra = this.penumbra.createCopy();
+		light.targetX = this.targetX.createCopy();
+		light.targetY = this.targetY.createCopy();
+		light.targetZ = this.targetZ.createCopy();
+		return light;
+	}
+
+	private static readNumber(json: DynamicValueJSON | number | undefined, fallback: number): DynamicValue {
+		return typeof json === 'number'
+			? DynamicValue.createNumberDouble(json)
+			: DynamicValue.readOrDefaultNumberDouble(json, fallback);
+	}
+
+	private static readText(json: DynamicValueJSON | string | undefined, fallback: string): DynamicValue {
+		return typeof json === 'string'
+			? DynamicValue.createMessage(json)
+			: DynamicValue.readOrDefaultMessage(json, fallback);
+	}
+}
 
 /**
  * Structure of a plain state copy (returned by copyInstance).
@@ -77,6 +168,7 @@ export type StateInstance = {
 	scaleX: DynamicValue;
 	scaleY: DynamicValue;
 	scaleZ: DynamicValue;
+	lights: StateLight[];
 };
 
 /**
@@ -110,6 +202,7 @@ export class State extends Base {
 	public scaleX: DynamicValue;
 	public scaleY: DynamicValue;
 	public scaleZ: DynamicValue;
+	public lights: StateLight[];
 
 	constructor(json?: StateJSON) {
 		super(json);
@@ -143,6 +236,7 @@ export class State extends Base {
 			scaleX: this.scaleX.createCopy(),
 			scaleY: this.scaleY.createCopy(),
 			scaleZ: this.scaleZ.createCopy(),
+			lights: this.lights.map((light) => light.createCopy()),
 		};
 	}
 
@@ -189,5 +283,6 @@ export class State extends Base {
 		this.scaleX = DynamicValue.readOrDefaultNumberDouble(json.sx, 1);
 		this.scaleY = DynamicValue.readOrDefaultNumberDouble(json.sy, 1);
 		this.scaleZ = DynamicValue.readOrDefaultNumberDouble(json.sz, 1);
+		this.lights = (json.l ?? []).map((light) => new StateLight(light));
 	}
 }

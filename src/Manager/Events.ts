@@ -87,6 +87,8 @@ class Events {
 				return new EventCommand.PlayMusicEffect(command);
 			case EVENT_COMMAND_KIND.CHANGE_PROPERTY:
 				return new EventCommand.ChangeProperty(command);
+			case EVENT_COMMAND_KIND.MODIFY_LIGHT:
+				return new EventCommand.ModifyLight(command);
 			case EVENT_COMMAND_KIND.DISPLAY_CHOICE:
 				return new EventCommand.DisplayChoice(command);
 			case EVENT_COMMAND_KIND.CHOICE:

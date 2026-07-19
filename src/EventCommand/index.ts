@@ -52,6 +52,7 @@ export * from './JumpToLabel';
 export * from './Label';
 export * from './ModifyCurrency';
 export * from './ModifyInventory';
+export * from './ModifyLight';
 export * from './ModifyTeam';
 export * from './MoveCamera';
 export * from './MoveObject';

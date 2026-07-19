@@ -23,7 +23,7 @@ import {
 	Utils,
 } from '../Common';
 import { Core, Data, EventCommand, Manager, Model, Scene } from '../index';
-import { DynamicValue, StateInstance } from '../Model';
+import { DynamicValue, StateInstance, StateLight } from '../Model';
 import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
 import { Frame } from './Frame';
@@ -108,6 +108,14 @@ class MapObject {
 	public currentAngle: THREE.Vector3 = new THREE.Vector3();
 	public currentScale: THREE.Vector3 = new THREE.Vector3();
 	public gltfGroup: THREE.Group | null = null;
+	public objectLightsGroup: THREE.Group | null = null;
+	public objectLights: {
+		light: THREE.Light;
+		settings: StateLight;
+		target?: THREE.Object3D;
+		parent?: THREE.Object3D;
+	}[] = [];
+	public objectLightsElapsedTime = 0;
 	public animationMixer: THREE.AnimationMixer | null = null;
 	public _currentGltfAnimIndex: number = -2;
 
@@ -535,6 +543,9 @@ class MapObject {
 		this.removeFromScene();
 		this.mesh = null;
 		this.gltfGroup = null;
+		this.objectLightsGroup = null;
+		this.objectLights = [];
+		this.objectLightsElapsedTime = 0;
 		if (this.animationMixer) {
 			this.animationMixer.stopAllAction();
 			this.animationMixer = null;
@@ -775,6 +786,7 @@ class MapObject {
 		}
 
 		this.updateTerrain();
+		this.createObjectLights();
 
 		// Add to the scene
 		this.addToScene();
@@ -1386,12 +1398,15 @@ class MapObject {
 	 *  Add object mesh to scene
 	 */
 	addToScene() {
-		if (!this.isInScene && (this.mesh !== null || this.gltfGroup !== null)) {
+		if (!this.isInScene && (this.mesh !== null || this.gltfGroup !== null || this.objectLightsGroup !== null)) {
 			if (this.mesh !== null) {
 				Scene.Map.current.scene.add(this.mesh);
 			}
 			if (this.gltfGroup !== null) {
 				Scene.Map.current.scene.add(this.gltfGroup);
+			}
+			if (this.objectLightsGroup !== null && this.objectLightsGroup.parent === null) {
+				Scene.Map.current.scene.add(this.objectLightsGroup);
 			}
 			this.isInScene = true;
 		}
@@ -1418,6 +1433,9 @@ class MapObject {
 			}
 			if (this.gltfGroup !== null) {
 				Scene.Map.current.scene.remove(this.gltfGroup);
+			}
+			if (this.objectLightsGroup !== null && this.objectLightsGroup.parent === Scene.Map.current.scene) {
+				Scene.Map.current.scene.remove(this.objectLightsGroup);
 			}
 			this.removeBBFromScene();
 			this.isInScene = false;
@@ -1617,6 +1635,8 @@ class MapObject {
 			}
 		}
 
+		this.updateObjectLights();
+
 		// Moving
 		if (!this.isCaterpillarFollower && !culled) {
 			this.updateMovingState();
@@ -1706,6 +1726,153 @@ class MapObject {
 			action.setLoop(THREE.LoopRepeat, Infinity);
 			action.play();
 		}
+	}
+
+	/** Create the lights defined by the active map-object state. */
+	createObjectLights() {
+		// Caterpillar followers reuse the hero's model state, but they must not duplicate its lights.
+		if (this.isCaterpillarFollower || !this.currentStateInstance?.lights.length) {
+			return;
+		}
+		const group = new THREE.Group();
+		group.position.copy(this.position);
+		group.scale.set(
+			this.currentStateInstance.scaleX.getValue() as number,
+			this.currentStateInstance.scaleY.getValue() as number,
+			this.currentStateInstance.scaleZ.getValue() as number,
+		);
+		this.objectLightsGroup = group;
+		for (const settings of this.currentStateInstance.lights) {
+			const light = this.createObjectLight(settings, group);
+			(light.parent ?? group).add(light.light);
+			this.objectLights.push(light);
+		}
+		this.updateObjectLights();
+	}
+
+	/** Rebuild the lights after a command changes the active state. */
+	refreshObjectLights() {
+		if (this.objectLightsGroup?.parent) {
+			this.objectLightsGroup.parent.remove(this.objectLightsGroup);
+		}
+		this.objectLightsGroup = null;
+		this.objectLights = [];
+		this.objectLightsElapsedTime = 0;
+		this.createObjectLights();
+		if (this.isInScene && this.objectLightsGroup !== null) {
+			Scene.Map.current.scene.add(this.objectLightsGroup);
+		}
+	}
+
+	private createObjectLight(settings: StateLight, group: THREE.Group) {
+		const kind = settings.kind.getValue() as number;
+		const color = settings.color.getValue() as string;
+		const intensity = settings.intensity.getValue() as number;
+		let light: THREE.Light;
+		let target: THREE.Object3D | undefined;
+		let parent: THREE.Object3D | undefined;
+		switch (kind) {
+			case 1: {
+				parent = new THREE.Group();
+				parent.rotation.set(
+					THREE.MathUtils.degToRad(this.currentStateInstance.angleX.getValue() as number),
+					this.getSpotLightsAngleY(),
+					THREE.MathUtils.degToRad(this.currentStateInstance.angleZ.getValue() as number),
+				);
+				group.add(parent);
+				const spot = new THREE.SpotLight(
+					color,
+					intensity,
+					settings.distance.getValue() as number,
+					THREE.MathUtils.degToRad(settings.angle.getValue() as number),
+					settings.penumbra.getValue() as number,
+				);
+				target = spot.target;
+				parent.add(target);
+				light = spot;
+				break;
+			}
+			case 2: {
+				const directional = new THREE.DirectionalLight(color, intensity);
+				target = directional.target;
+				group.add(target);
+				light = directional;
+				break;
+			}
+			case 3:
+				light = new THREE.HemisphereLight(color, settings.groundColor.getValue() as string, intensity);
+				break;
+			default:
+				light = new THREE.PointLight(color, intensity, settings.distance.getValue() as number);
+				break;
+		}
+		return { light, settings, target, parent };
+	}
+
+	/** Keep dynamic light values and the local object transform current. */
+	updateObjectLights() {
+		if (this.objectLightsGroup === null || !this.currentStateInstance) {
+			return;
+		}
+		Core.ReactionInterpreter.currentObject = this;
+		this.objectLightsElapsedTime += Manager.Stack.elapsedTime;
+		this.objectLightsGroup.position.copy(this.position);
+		for (const { light, settings, target, parent } of this.objectLights) {
+			const intensityTime = settings.intensityTime.getValue() as number;
+			const intensityOffset = settings.intensityOffset.getValue() as number;
+			const intensity = settings.intensity.getValue() as number;
+			const factor =
+				intensityTime > 0 && intensityOffset !== 0
+					? (1 - Math.cos((Math.PI * this.objectLightsElapsedTime) / intensityTime)) / 2
+					: 0;
+			light.intensity = Math.max(0, intensity * (1 + (intensityOffset / 100) * factor));
+			light.color.set(settings.color.getValue() as string);
+			light.position.set(
+				(settings.x.getValue() as number) / Data.Systems.SQUARE_SIZE,
+				(settings.y.getValue() as number) / Data.Systems.SQUARE_SIZE,
+				(settings.z.getValue() as number) / Data.Systems.SQUARE_SIZE,
+			);
+			if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+				light.distance = settings.distance.getValue() as number;
+			}
+			if (light instanceof THREE.SpotLight) {
+				light.angle = THREE.MathUtils.degToRad(settings.angle.getValue() as number);
+				light.penumbra = settings.penumbra.getValue() as number;
+				parent?.rotation.set(
+					THREE.MathUtils.degToRad(this.currentStateInstance.angleX.getValue() as number),
+					this.getSpotLightsAngleY(),
+					THREE.MathUtils.degToRad(this.currentStateInstance.angleZ.getValue() as number),
+				);
+			}
+			if (light instanceof THREE.HemisphereLight) {
+				light.groundColor.set(settings.groundColor.getValue() as string);
+			}
+			if (target) {
+				target.position.set(
+					(settings.targetX.getValue() as number) / Data.Systems.SQUARE_SIZE,
+					(settings.targetY.getValue() as number) / Data.Systems.SQUARE_SIZE,
+					(settings.targetZ.getValue() as number) / Data.Systems.SQUARE_SIZE,
+				);
+				target.updateMatrixWorld();
+			}
+		}
+	}
+
+	/** Get the spotlight Y rotation from the state transform and cardinal object facing. */
+	private getSpotLightsAngleY() {
+		let orientationAngle = 0;
+		switch (this.orientationEye) {
+			case ORIENTATION.EAST:
+				orientationAngle = 90;
+				break;
+			case ORIENTATION.NORTH:
+				orientationAngle = 180;
+				break;
+			case ORIENTATION.WEST:
+				orientationAngle = 270;
+				break;
+		}
+		return THREE.MathUtils.degToRad((this.currentStateInstance.angleY.getValue() as number) + orientationAngle);
 	}
 
 	/**
