@@ -9,7 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Paths, Platform, Utils } from '../Common';
+import { Paths, Platform } from '../Common';
+import { Data } from '../index';
 import { Video, VideoJSON } from '../Model';
 import { Base } from './Base';
 
@@ -47,8 +48,25 @@ export class Videos {
 	 * Read the JSON file associated with videos.
 	 */
 	static async read(): Promise<void> {
+		await this.readSelected();
+	}
+
+	/** Read only the title-screen video before the game data is fully loaded. */
+	static async readTitleScreen(): Promise<void> {
+		await this.readSelected(
+			Data.TitlescreenGameover.isTitleBackgroundVideo ? Data.TitlescreenGameover.titleBackgroundVideoID : -1,
+		);
+	}
+
+	private static async readSelected(id?: number): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)) as VideosJSON;
-		this.list = Utils.readJSONMap(json.list, Video);
+		this.list = new Map();
+		for (const videoJSON of json.list) {
+			if (id !== undefined && videoJSON.id !== id) {
+				continue;
+			}
+			this.list.set(videoJSON.id, new Video(videoJSON));
+		}
 		for (const video of this.list.values()) {
 			await video.checkBase64();
 		}

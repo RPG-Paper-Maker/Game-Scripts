@@ -10,7 +10,8 @@
 */
 
 import { Paths, Platform, SONG_KIND } from '../Common';
-import { Song, SongJSON } from '../Model';
+import { PlaySong, Song, SongJSON } from '../Model';
+import { Data } from '../index';
 import { Base } from './Base';
 
 /**
@@ -66,6 +67,28 @@ export class Songs {
 	 * Read the JSON file associated with songs.
 	 */
 	static async read(): Promise<void> {
+		await this.readSelected();
+	}
+
+	/** Read only the title music and title-screen sound effects during boot. */
+	static async readTitleScreen(): Promise<void> {
+		const selected = new Map<SONG_KIND, Set<number>>();
+		const add = (song: PlaySong, kind: SONG_KIND) => {
+			const id = song?.songID?.getValue() as number;
+			if (id !== undefined && id !== -1) {
+				if (!selected.has(kind)) selected.set(kind, new Set());
+				selected.get(kind).add(id);
+			}
+		};
+		add(Data.TitlescreenGameover.titleMusic, SONG_KIND.MUSIC);
+		add(Data.Systems.soundCursor, SONG_KIND.SOUND);
+		add(Data.Systems.soundConfirmation, SONG_KIND.SOUND);
+		add(Data.Systems.soundCancel, SONG_KIND.SOUND);
+		add(Data.Systems.soundImpossible, SONG_KIND.SOUND);
+		await this.readSelected(selected);
+	}
+
+	private static async readSelected(selected?: Map<SONG_KIND, Set<number>>): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_SONGS)) as SongsJSON;
 		this.list = new Map();
 		for (const jsonHash of json.list) {
@@ -74,6 +97,7 @@ export class Songs {
 			const list = new Map<number, Song>();
 			for (const jsonSong of jsonList) {
 				const id = jsonSong.id ?? 0;
+				if (selected && !selected.get(k)?.has(id)) continue;
 				const song = new Song(jsonSong);
 				song.kind = k;
 				await song.checkBase64();

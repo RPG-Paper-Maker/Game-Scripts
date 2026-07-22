@@ -13,6 +13,7 @@ import { Interpreter, Platform, TITLE_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
 import { Data, Manager, Scene } from '../index';
 import { Localization, LocalizationJSON } from './Localization';
+import { Main } from '../main';
 
 /**
  * JSON structure for a title screen command.
@@ -37,26 +38,38 @@ export class TitleCommand extends Localization {
 	 * Start a new game.
 	 */
 	static startNewGame(): boolean {
-		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
-			Manager.Videos.stop();
-		}
+		TitleCommand.waitForGameData(() => {
+			if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
+				Manager.Videos.stop();
+			}
 
-		// Create a new game
-		Game.current = new Game();
-		Game.current.initializeDefault();
-
-		// Add local map to stack
-		Manager.Stack.replace(new Scene.Map(Data.Systems.ID_MAP_START_HERO));
-		Manager.Stack.clearHUD();
-
+			Game.current = new Game();
+			Game.current.initializeDefault();
+			Manager.Stack.replace(new Scene.Map(Data.Systems.ID_MAP_START_HERO));
+			Manager.Stack.clearHUD();
+		});
 		return true;
+	}
+
+	/** Show the loading scene until deferred game data has completed, then continue. */
+	private static waitForGameData(action: () => void): void {
+		const titleScreen = Manager.Stack.top;
+		titleScreen.loading = true;
+		Manager.Stack.requestPaintHUD = true;
+		Main.waitForGameData()
+			.then(action)
+			.catch(console.error)
+			.finally(() => {
+				titleScreen.loading = false;
+				Manager.Stack.requestPaintHUD = true;
+			});
 	}
 
 	/**
 	 * Load an existing game.
 	 */
 	static loadGame(): boolean {
-		Manager.Stack.push(new Scene.LoadGame());
+		TitleCommand.waitForGameData(() => Manager.Stack.push(new Scene.LoadGame()));
 		return true;
 	}
 
