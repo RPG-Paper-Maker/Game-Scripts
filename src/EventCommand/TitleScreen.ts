@@ -32,7 +32,7 @@ class TitleScreen extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		Manager.Stack.popAll();
-		Manager.Stack.pushTitleScreen();
+		Manager.Stack.pushTitleScreen(true);
 		return 1;
 	}
 }

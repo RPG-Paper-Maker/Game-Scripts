@@ -30,17 +30,22 @@ class Videos {
 	 *  @param {EventListener} endedHandler
 	 *  @param {boolean} loop
 	 *  @param {number} loopMs - millisecond position to seek to on loop (0 = beginning)
+	 *  @param {number} startMs - millisecond position to start at (0 = beginning)
 	 */
 	static async play(
 		src: string,
 		endedHandler: EventListener = null,
 		loop: boolean = false,
 		loopMs: number = 0,
+		startMs: number = 0,
 	): Promise<boolean> {
 		Platform.canvasVideos.classList.remove('hidden');
 		if (!this.paused) {
 			Platform.canvasVideos.src = src;
 			Platform.canvasVideos.load();
+			if (startMs > 0) {
+				await this.seek(startMs);
+			}
 		}
 		this.removeEndedEventListener();
 		this.removeCustomLoopEventListener();
@@ -72,6 +77,25 @@ class Videos {
 			}
 			throw e;
 		}
+	}
+
+	/** Wait for video metadata before seeking to a position. */
+	static async seek(ms: number): Promise<void> {
+		if (Platform.canvasVideos.readyState < HTMLMediaElement.HAVE_METADATA) {
+			await new Promise<void>((resolve, reject) => {
+				const onLoadedMetadata = () => {
+					Platform.canvasVideos.removeEventListener('error', onError);
+					resolve();
+				};
+				const onError = () => {
+					Platform.canvasVideos.removeEventListener('loadedmetadata', onLoadedMetadata);
+					reject(Platform.canvasVideos.error);
+				};
+				Platform.canvasVideos.addEventListener('loadedmetadata', onLoadedMetadata, { once: true });
+				Platform.canvasVideos.addEventListener('error', onError, { once: true });
+			});
+		}
+		Platform.canvasVideos.currentTime = ms / 1000;
 	}
 
 	/**
