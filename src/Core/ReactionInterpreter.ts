@@ -41,6 +41,7 @@ class ReactionInterpreter {
 	public currentCommandState: Record<string, any>;
 	public currentTimeState: [Model.Event, number];
 	public isInMainMenu: boolean;
+	public originMapID: number;
 
 	constructor(
 		sender: MapObject,
@@ -61,6 +62,7 @@ class ReactionInterpreter {
 		this.currentCommandState = this.currentCommand === null ? null : this.currentCommand.data.initialize();
 		this.currentTimeState = event;
 		this.isInMainMenu = Manager.Stack.isInMainMenu;
+		this.originMapID = Scene.Map.current?.id;
 		Manager.Stack.requestPaintHUD = true;
 	}
 

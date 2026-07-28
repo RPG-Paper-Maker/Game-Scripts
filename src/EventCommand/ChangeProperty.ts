@@ -10,7 +10,7 @@
 */
 
 import { Mathf } from '../Common';
-import { Game, MapObject } from '../Core';
+import { Game, MapObject, Position, ReactionInterpreter } from '../Core';
 import { Model, Scene } from '../index';
 import { Base } from './Base';
 
@@ -59,8 +59,9 @@ class ChangeProperty extends Base {
 				Game.current.startupProperties[Scene.Map.current.id] = props;
 			}
 		} else {
-			const portion = Scene.Map.current.mapProperties.allObjects.get(object.system.id).getGlobalPortion();
-			const portionData = Game.current.getPortionData(Scene.Map.current.id, portion);
+			const mapID = ReactionInterpreter.currentReaction?.originMapID ?? Scene.Map.current.id;
+			const portion = Position.createFromVector3(object.position).getGlobalPortion();
+			const portionData = Game.current.getPortionData(mapID, portion);
 			const indexProp = portionData.pi.indexOf(object.system.id);
 			if (indexProp === -1) {
 				props = [];
