@@ -491,14 +491,18 @@ class MapPortion {
 							(position.angleZ * Math.PI) / 180,
 						);
 						clone.renderOrder = -1;
-						if (Scene.Map.current.mapProperties.isSunLight) {
-							clone.traverse((child) => {
-								if (child instanceof THREE.Mesh) {
+						clone.traverse((child) => {
+							if (child instanceof THREE.Mesh) {
+								const materials = Array.isArray(child.material) ? child.material : [child.material];
+								for (const material of materials) {
+									Manager.GL.applyScreenTone(material);
+								}
+								if (Scene.Map.current.mapProperties.isSunLight) {
 									child.receiveShadow = true;
 									child.castShadow = true;
 								}
-							});
-						}
+							}
+						});
 						clone.layers.enable(1);
 						this.staticObjects3DList.push(clone as unknown as THREE.Mesh);
 						Scene.Map.current.scene.add(clone);
@@ -649,10 +653,18 @@ class MapPortion {
 				if (objects[i].mesh !== null || objects[i].gltfGroup !== null) {
 					// Already initialized: just sync position and re-add without resetting state
 					if (objects[i].mesh !== null) {
-						objects[i].mesh.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+						objects[i].mesh.position.set(
+							objects[i].position.x,
+							objects[i].position.y,
+							objects[i].position.z,
+						);
 					}
 					if (objects[i].gltfGroup !== null) {
-						objects[i].gltfGroup.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+						objects[i].gltfGroup.position.set(
+							objects[i].position.x,
+							objects[i].position.y,
+							objects[i].position.z,
+						);
 					}
 					objects[i].addToScene();
 				} else {
@@ -665,10 +677,18 @@ class MapPortion {
 				if (objects[i].mesh !== null || objects[i].gltfGroup !== null) {
 					// Already initialized: just sync position and re-add without resetting state
 					if (objects[i].mesh !== null) {
-						objects[i].mesh.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+						objects[i].mesh.position.set(
+							objects[i].position.x,
+							objects[i].position.y,
+							objects[i].position.z,
+						);
 					}
 					if (objects[i].gltfGroup !== null) {
-						objects[i].gltfGroup.position.set(objects[i].position.x, objects[i].position.y, objects[i].position.z);
+						objects[i].gltfGroup.position.set(
+							objects[i].position.x,
+							objects[i].position.y,
+							objects[i].position.z,
+						);
 					}
 					objects[i].addToScene();
 				} else {

@@ -664,14 +664,20 @@ class MapObject {
 									(positionTranformation.angleZ * Math.PI) / 180,
 								);
 								this.gltfGroup.renderOrder = 1;
-								if (Scene.Map.current.mapProperties.isSunLight) {
-									this.gltfGroup.traverse((child) => {
-										if (child instanceof THREE.Mesh) {
+								this.gltfGroup.traverse((child) => {
+									if (child instanceof THREE.Mesh) {
+										const materials = Array.isArray(child.material)
+											? child.material
+											: [child.material];
+										for (const material of materials) {
+											Manager.GL.applyScreenTone(material);
+										}
+										if (Scene.Map.current.mapProperties.isSunLight) {
 											child.receiveShadow = true;
 											child.castShadow = true;
 										}
-									});
-								}
+									}
+								});
 								this.animationMixer = new THREE.AnimationMixer(this.gltfGroup);
 							}
 						}
