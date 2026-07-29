@@ -92,6 +92,7 @@ class Map extends Base {
 	private heroTrail: Array<{ pos: THREE.Vector3; dist: number; orientation: ORIENTATION }> = [];
 	private heroTrailTotalDist: number = 0;
 	private heroTrailLastPos: THREE.Vector3 | null = null;
+	private previousLayerDepthOffset: number = -1;
 
 	constructor(
 		id: number,
@@ -964,6 +965,17 @@ class Map extends Base {
 		}
 	}
 
+	updateLayerOffsets() {
+		const layerDepthOffset = this.camera.getLayerDepthOffset();
+		if (layerDepthOffset === this.previousLayerDepthOffset) {
+			return;
+		}
+		this.previousLayerDepthOffset = layerDepthOffset;
+		for (const mapPortion of this.mapPortions) {
+			mapPortion?.updateLayerOffsets();
+		}
+	}
+
 	/**
 	 *  Get a random particle weather position according to options.
 	 *  @param {number} portionsRay
@@ -1244,6 +1256,7 @@ class Map extends Base {
 		// Update camera
 		this.camera.forceNoHide = true;
 		this.camera.update();
+		this.updateLayerOffsets();
 
 		// Update skybox
 		if (this.mapProperties.skyboxGeometry !== null && this.previousCameraPosition) {

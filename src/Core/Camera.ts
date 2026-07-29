@@ -27,7 +27,7 @@ class Camera {
 	public static readonly SUN_UP = new THREE.Vector3(
 		Math.SQRT1_2 * (1.75 / 2.25),
 		Math.SQRT1_2 * (2 / 2.25),
-		-Math.SQRT1_2 * (1.75 / 2.25)
+		-Math.SQRT1_2 * (1.75 / 2.25),
 	);
 	private static _snapTarget = new THREE.Vector3();
 	private _stableD: number = 0;
@@ -125,6 +125,10 @@ class Camera {
 	getHeight(): number {
 		const d = this.getHidingDistance();
 		return d * Math.cos((this.verticalAngle * Math.PI) / 180.0);
+	}
+
+	getLayerDepthOffset(): number {
+		return 0.05 * Math.min((this.getHidingDistance() / 50) ** 2, 1);
 	}
 
 	/**
@@ -302,7 +306,11 @@ class Camera {
 		if (Scene.Map.current.mapProperties && Scene.Map.current.mapProperties.isSunLight) {
 			const d = Math.max(this.distance * 3.0, 10);
 			const far = Math.max(d * 2, 350);
-			if (this._stableD === 0 || Math.abs(d - this._stableD) / this._stableD > 0.05 || far !== Scene.Map.current.sunLight.shadow.camera.far) {
+			if (
+				this._stableD === 0 ||
+				Math.abs(d - this._stableD) / this._stableD > 0.05 ||
+				far !== Scene.Map.current.sunLight.shadow.camera.far
+			) {
 				this._stableD = d;
 				Scene.Map.current.sunLight.shadow.camera.left = -d;
 				Scene.Map.current.sunLight.shadow.camera.right = d;
@@ -314,7 +322,8 @@ class Camera {
 			const texelSize = (2 * this._stableD) / Scene.Map.current.sunLight.shadow.mapSize.x;
 			const snappedR = Math.round(Camera.SUN_RIGHT.dot(this.targetPosition) / texelSize) * texelSize;
 			const snappedU = Math.round(Camera.SUN_UP.dot(this.targetPosition) / texelSize) * texelSize;
-			Camera._snapTarget.set(0, 0, 0)
+			Camera._snapTarget
+				.set(0, 0, 0)
 				.addScaledVector(Camera.SUN_RIGHT, snappedR)
 				.addScaledVector(Camera.SUN_UP, snappedU)
 				.addScaledVector(Camera.SUN_FORWARD, Camera.SUN_FORWARD.dot(this.targetPosition));

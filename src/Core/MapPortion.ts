@@ -52,6 +52,27 @@ class MapPortion {
 	public staticWallsList: THREE.Mesh[];
 	public staticObjects3DList: THREE.Mesh[];
 
+	private static addLayerOffsets(geometry: CustomGeometry, start: number, offsets: number[], layerOffset: number) {
+		for (let i = start; i < geometry.b_vertices.length; i += 3) {
+			offsets.push(layerOffset);
+		}
+	}
+
+	private static setLayerOffsets(geometry: CustomGeometry, offsets: number[], axis: 'y' | 'z') {
+		if (offsets.length === 0) {
+			return;
+		}
+		const base = Float32Array.from(geometry.getVertices());
+		const axisIndex = axis === 'y' ? 1 : 2;
+		const offset = Scene.Map.current.camera.getLayerDepthOffset();
+		for (let i = 0; i < offsets.length; i++) {
+			base[i * 3 + axisIndex] -= offsets[i] * offset;
+		}
+		geometry.userData.layerOffsetBase = base;
+		geometry.userData.layerOffsets = offsets;
+		geometry.userData.layerOffsetAxis = axis;
+	}
+
 	constructor(portion: Portion) {
 		this.portion = portion;
 		this.staticFloorsMesh = null;
@@ -118,6 +139,7 @@ class MapPortion {
 		const material = Scene.Map.current.textureTileset;
 		const { width, height } = Manager.GL.getMaterialTextureSize(material);
 		const geometry = new CustomGeometry();
+		const layerOffsets: number[] = [];
 		const layers: [Position, Floor][] = [];
 		let count = 0;
 
@@ -129,6 +151,7 @@ class MapPortion {
 			switch (v.k) {
 				case ELEMENT_MAP_KIND.FLOORS:
 					const floor = new Floor(v);
+					const start = geometry.b_vertices.length;
 					if (layer > 0) {
 						let j = 0;
 						const m = layers.length;
@@ -143,6 +166,7 @@ class MapPortion {
 						}
 					} else {
 						const objCollision = floor.updateGeometry(geometry, position, width, height, count);
+						MapPortion.addLayerOffsets(geometry, start, layerOffsets, floor.up ? layer : -layer);
 						this.boundingBoxesLands[position.toIndex()].push(objCollision);
 						this.addToNonEmpty(position);
 						count++;
@@ -194,7 +218,9 @@ class MapPortion {
 		for (let i = 0, l = layers.length; i < l; i++) {
 			const position = layers[i][0];
 			const floor = layers[i][1];
+			const start = geometry.b_vertices.length;
 			const objCollision = floor.updateGeometry(geometry, position, width, height, count);
+			MapPortion.addLayerOffsets(geometry, start, layerOffsets, floor.up ? position.layer : -position.layer);
 			const index = position.toIndex();
 			if (objCollision !== null) {
 				this.boundingBoxesLands[index].push(objCollision);
@@ -206,6 +232,7 @@ class MapPortion {
 		// Creating the plane
 		if (!geometry.isEmpty()) {
 			geometry.updateAttributes();
+			MapPortion.setLayerOffsets(geometry, layerOffsets, 'y');
 			this.staticFloorsMesh = new THREE.Mesh(geometry, material);
 			this.staticFloorsMesh.renderOrder = -1;
 			if (Scene.Map.current.mapProperties.isSunLight) {
@@ -250,6 +277,7 @@ class MapPortion {
 		}
 		const material = Scene.Map.current.textureTileset;
 		const staticGeometry = new CustomGeometry();
+		const staticLayerOffsets: number[] = [];
 		const faceGeometry = new CustomGeometryFace();
 		let staticCount = 0,
 			faceCount = 0;
@@ -280,6 +308,7 @@ class MapPortion {
 					faceCount = resultUpdate[0];
 					collisions = resultUpdate[1];
 				} else {
+					const start = staticGeometry.b_vertices.length;
 					resultUpdate = sprite.updateGeometry(
 						staticGeometry,
 						width,
@@ -288,6 +317,12 @@ class MapPortion {
 						staticCount,
 						true,
 						localPosition,
+					);
+					MapPortion.addLayerOffsets(
+						staticGeometry,
+						start,
+						staticLayerOffsets,
+						sprite.front ? position.layer : -position.layer,
 					);
 					staticCount = resultUpdate[0];
 					collisions = resultUpdate[1];
@@ -300,6 +335,7 @@ class MapPortion {
 		}
 		if (!staticGeometry.isEmpty()) {
 			staticGeometry.updateAttributes();
+			MapPortion.setLayerOffsets(staticGeometry, staticLayerOffsets, 'z');
 			this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
 			this.staticSpritesMesh.renderOrder = -1;
 			if (Scene.Map.current.mapProperties.isSunLight) {
@@ -319,6 +355,30 @@ class MapPortion {
 				this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			Scene.Map.current.scene.add(this.faceSpritesMesh);
+		}
+	}
+
+	updateLayerOffsets() {
+		const offset = Scene.Map.current.camera.getLayerDepthOffset();
+		for (const mesh of [this.staticFloorsMesh, this.staticSpritesMesh]) {
+			if (!mesh) {
+				continue;
+			}
+			const geometry = mesh.geometry as CustomGeometry;
+			const base = geometry.userData.layerOffsetBase as Float32Array | undefined;
+			const offsets = geometry.userData.layerOffsets as number[] | undefined;
+			const axis = geometry.userData.layerOffsetAxis as 'y' | 'z' | undefined;
+			if (!base || !offsets || !axis) {
+				continue;
+			}
+			const attribute = geometry.getAttribute('position') as THREE.BufferAttribute;
+			const values = attribute.array as Float32Array;
+			const axisIndex = axis === 'y' ? 1 : 2;
+			for (let i = 0; i < offsets.length; i++) {
+				values[i * 3 + axisIndex] = base[i * 3 + axisIndex] + offsets[i] * offset;
+			}
+			attribute.needsUpdate = true;
+			geometry.computeBoundingSphere();
 		}
 	}
 

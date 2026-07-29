@@ -101,7 +101,10 @@ class MoveCamera extends Base {
 		);
 		const finalH = operation(Scene.Map.current.camera.horizontalAngle, this.h.getValue() as number);
 		const finalV = operation(Scene.Map.current.camera.verticalAngle, this.v.getValue() as number);
-		const finalDistance = operation(Scene.Map.current.camera.distance, (this.distance.getValue() as number) / Constants.BASIC_SQUARE_SIZE);
+		const finalDistance = operation(
+			Scene.Map.current.camera.distance,
+			(this.distance.getValue() as number) / Constants.BASIC_SQUARE_SIZE,
+		);
 		return {
 			parallel: this.isWaitEnd,
 			initialH: Scene.Map.current.camera.horizontalAngle,
@@ -216,6 +219,7 @@ class MoveCamera extends Base {
 				// Zoom
 				Scene.Map.current.camera.updateDistance();
 				Scene.Map.current.camera.distance += timeRate * currentState.finalDifDistance;
+				Scene.Map.current.updateLayerOffsets();
 
 				// If time = 0, then this is the end of the command
 				if (currentState.timeLeft === 0) {
