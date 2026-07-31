@@ -1186,6 +1186,7 @@ class MapObject {
 			this.position.set(position.x, position.y, position.z);
 			distance += stepDistance;
 		}
+		this.updateBBPosition(this.position);
 		if (this.previousOrientation !== null) {
 			orientation = this.previousOrientation;
 		}
