@@ -350,6 +350,7 @@ class Map extends Base {
 	 *  Load all the textures of the map.
 	 */
 	async loadTextures() {
+		await Data.Pictures.ensureTextures();
 		const tileset = this.mapProperties.tileset;
 		const path = tileset.getPath();
 		this.textureTileset = path ? await Manager.GL.loadTexture(path) : Manager.GL.loadTextureEmpty();

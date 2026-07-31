@@ -79,6 +79,15 @@ export class Pictures {
 		this[texturesName] = textures;
 	}
 
+	static async ensureTextures(): Promise<void> {
+		if (!this.texturesCharacters) {
+			await this.loadTextures(PICTURE_KIND.CHARACTERS, this.PROPERTY_TEXTURES_CHARACTERS);
+		}
+		if (!this.texturesBattlers) {
+			await this.loadTextures(PICTURE_KIND.BATTLERS, this.PROPERTY_TEXTURES_BATTLERS);
+		}
+	}
+
 	/**
 	 * Read the JSON file associated with pictures.
 	 */
@@ -135,10 +144,6 @@ export class Pictures {
 				list.set(id, picture);
 			}
 			this.list.set(k, list);
-		}
-		if (!selected) {
-			await this.loadTextures(PICTURE_KIND.CHARACTERS, this.PROPERTY_TEXTURES_CHARACTERS);
-			await this.loadTextures(PICTURE_KIND.BATTLERS, this.PROPERTY_TEXTURES_BATTLERS);
 		}
 	}
 }

@@ -105,6 +105,7 @@ if (process.platform === 'darwin') {
 } else if (process.platform === 'linux') {
 	app.commandLine.appendSwitch('no-sandbox');
 	app.commandLine.appendSwitch('disable-gpu-sandbox');
+	app.commandLine.appendSwitch('ozone-platform', 'x11');
 	app.commandLine.appendSwitch('use-gl', 'angle');
 	app.commandLine.appendSwitch('use-angle', getLinuxAngleBackend());
 }
