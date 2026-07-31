@@ -316,6 +316,7 @@ class MapObject {
 			Platform.showErrorMessage(
 				'Trying to access an object ID ' + objectID + " that doesn't exists. Please check your commands.",
 			);
+			return null;
 		}
 		const globalPortion = position.getGlobalPortion();
 		const mapsData = Game.current.getPortionData(Scene.Map.current.id, globalPortion);
