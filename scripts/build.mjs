@@ -81,12 +81,13 @@ async function modifyImports(dir) {
 			});
 		}
 		await runCommand('npx', ['tsc']);
-		modifyImports(SYSTEM_DIR);
+		await modifyImports(SYSTEM_DIR);
 		await fs.cp('src/Libs', 'build/Scripts/Libs', { recursive: true });
 		await fs.cp('src/Shaders', 'build/Scripts/Shaders', { recursive: true });
 		const endTime = Date.now() - startTime;
 		console.log(`Compilation completed in ${Math.floor(endTime / 1000)} seconds`);
 	} catch (error) {
 		console.error(error);
+		process.exitCode = 1;
 	}
 })();
