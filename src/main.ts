@@ -62,6 +62,7 @@ export class Main {
 		await Data.Settings.read();
 		await Data.Systems.read();
 		await Data.Variables.read();
+		await Data.Keyboards.read();
 		await Manager.GL.load();
 		Manager.GL.initialize();
 		Manager.GL.resize();
@@ -93,7 +94,6 @@ export class Main {
 		await Data.Monsters.read();
 		await Data.Troops.read();
 		await Data.BattleSystems.read();
-		await Data.Keyboards.read();
 		await Data.Animations.read();
 		await Data.CommonEvents.read();
 		Data.Systems.getModelHero();
