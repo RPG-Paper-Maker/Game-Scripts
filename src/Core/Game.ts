@@ -566,6 +566,10 @@ class Game {
 			);
 			return null;
 		}
+		const system = type === CHARACTER_KIND.HERO ? Data.Heroes.get(id) : Data.Monsters.get(id);
+		if (!system) {
+			return null;
+		}
 		const team = this.getTeam(groupKind);
 
 		// Stock the instanciation id in a variable
