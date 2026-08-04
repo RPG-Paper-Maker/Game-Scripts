@@ -17,20 +17,20 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@types/howler": "^2.2.13",
-		"@types/node": "^26.1.1",
-		"@types/three": "^0.185.1",
-		"@typescript-eslint/eslint-plugin": "^8.64.0",
-		"@typescript-eslint/parser": "^8.64.0",
-		"electron": "43.1.1",
-		"eslint": "^10.7.0",
-		"globals": "^17.7.0",
+		"@types/node": "^26.1.2",
+		"@types/three": "^0.185.3",
+		"@typescript-eslint/eslint-plugin": "^8.65.0",
+		"@typescript-eslint/parser": "^8.65.0",
+		"electron": "43.2.0",
+		"eslint": "^10.8.0",
+		"globals": "^17.9.0",
 		"howler": "^2.2.4",
 		"jiti": "^2.7.0",
 		"nodemon": "^3.1.14",
 		"three": "^0.185.1",
 		"typedoc": "^0.28.20",
 		"typedoc-github-theme": "^0.4.0",
-		"typescript": "^6.0.2",
-		"typescript-eslint": "^8.64.0"
+		"typescript": "^6.0.3",
+		"typescript-eslint": "^8.65.0"
 	}
 }
