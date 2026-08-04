@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { CHARACTER_KIND } from '../Common';
+import { BATTLER_STEP, CHARACTER_KIND } from '../Common';
 import { Battler, Game, MapObject, Player } from '../Core';
 import { Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -27,6 +27,7 @@ class ChangeBattlerGraphics extends Base {
 	public facesetIndexX: number = 0;
 	public facesetIndexY: number = 0;
 	public battlerID: Model.DynamicValue = null;
+	public pose: Model.DynamicValue = null;
 
 	constructor(command: any[]) {
 		super();
@@ -51,6 +52,9 @@ class ChangeBattlerGraphics extends Base {
 		}
 		if (command[iterator.i++]) {
 			this.battlerID = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (command[iterator.i++]) {
+			this.pose = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 
@@ -138,8 +142,14 @@ class ChangeBattlerGraphics extends Base {
 				newBattler.addToScene();
 				map.battlers[side][index] = newBattler;
 				map.players[side][index] = player;
-				map.graphicPlayers[side][index] = new Graphic.Player(player, { useHeroesStatistics: side === CHARACTER_KIND.HERO });
+				map.graphicPlayers[side][index] = new Graphic.Player(player, {
+					useHeroesStatistics: side === CHARACTER_KIND.HERO,
+				});
 				player.battler = newBattler;
+				battler = newBattler;
+			}
+			if (this.pose && battler) {
+				battler.setDefaultStep(this.pose.getValue() as BATTLER_STEP);
 			}
 		}
 		return 1;

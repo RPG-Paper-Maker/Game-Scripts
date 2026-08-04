@@ -56,6 +56,7 @@ export class Battler {
 	public frameArrow: Frame;
 	public step: BATTLER_STEP;
 	public lastStep: BATTLER_STEP;
+	public defaultStep: BATTLER_STEP;
 	public width: number;
 	public height: number;
 	public selected: boolean;
@@ -128,8 +129,9 @@ export class Battler {
 			loop: false,
 		});
 		this.frameArrow = new Frame(125);
-		this.step = BATTLER_STEP.NORMAL;
-		this.lastStep = BATTLER_STEP.NORMAL;
+		this.defaultStep = BATTLER_STEP.NORMAL;
+		this.step = this.defaultStep;
+		this.lastStep = this.defaultStep;
 		this.width = 1;
 		this.height = 1;
 		this.selected = false;
@@ -319,6 +321,11 @@ export class Battler {
 		this.frameAttacking.value = 0;
 		this.step = step;
 		this.updateUVs();
+	}
+
+	setDefaultStep(step: BATTLER_STEP): void {
+		this.defaultStep = step;
+		this.updateStatusStep();
 	}
 
 	/**
@@ -596,7 +603,7 @@ export class Battler {
 	 *  Update status step (first priority status displayed).
 	 */
 	updateStatusStep() {
-		let step = BATTLER_STEP.NORMAL;
+		let step = this.defaultStep;
 		const s = this.player.status[0];
 		if (s) {
 			step = s.system.battlerPosition.getValue() as number;
@@ -605,6 +612,7 @@ export class Battler {
 			this.step = step;
 			this.updateUVs();
 		}
+		this.lastStep = step;
 	}
 
 	/**
