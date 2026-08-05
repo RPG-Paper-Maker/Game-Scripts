@@ -1221,8 +1221,8 @@ class Player {
 	 *  Get battler ID from system, or another if modified with change graphics.
 	 *  @returns {number}
 	 */
-	getBattlerID(): number {
-		return this.temporaryBattlerID === null
+	getBattlerID(useTemporary = true): number {
+		return !useTemporary || this.temporaryBattlerID === null
 			? this.battlerID === null
 				? this.system.idBattler
 				: this.battlerID
@@ -1233,8 +1233,8 @@ class Player {
 	 *  Get faceset ID from system, or another if modified with change graphics.
 	 *  @returns {number}
 	 */
-	getFacesetID(): number {
-		return this.temporaryFacesetID === null
+	getFacesetID(useTemporary = true): number {
+		return !useTemporary || this.temporaryFacesetID === null
 			? this.facesetID === null
 				? this.system.idFaceset
 				: this.facesetID
@@ -1245,8 +1245,8 @@ class Player {
 	 *  Get faceset index x from system, or another if modified with change graphics.
 	 *  @returns {number}
 	 */
-	getFacesetIndexX(): number {
-		return this.temporaryFacesetIndexX === null
+	getFacesetIndexX(useTemporary = true): number {
+		return !useTemporary || this.temporaryFacesetIndexX === null
 			? this.facesetIndexX === null
 				? this.system.indexXFaceset
 				: this.facesetIndexX
@@ -1257,8 +1257,8 @@ class Player {
 	 *  Get faceset index y from system, or another if modified with change graphics.
 	 *  @returns {number}
 	 */
-	getFacesetIndexY(): number {
-		return this.temporaryFacesetIndexY === null
+	getFacesetIndexY(useTemporary = true): number {
+		return !useTemporary || this.temporaryFacesetIndexY === null
 			? this.facesetIndexY === null
 				? this.system.indexYFaceset
 				: this.facesetIndexY

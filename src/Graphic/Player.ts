@@ -40,6 +40,7 @@ class Player extends Base {
 	public displayNameLevel: boolean;
 	public graphicStatShort: Graphic.Text;
 	public isMainMenu: boolean;
+	public useTemporaryGraphics: boolean;
 	public battlerRect: Rectangle = new Rectangle();
 
 	constructor(
@@ -48,10 +49,12 @@ class Player extends Base {
 			isMainMenu = false,
 			reverse = false,
 			useHeroesStatistics = false,
+			useTemporaryGraphics = true,
 		}: {
 			isMainMenu?: boolean;
 			reverse?: boolean;
 			useHeroesStatistics?: boolean;
+			useTemporaryGraphics?: boolean;
 		} = {},
 	) {
 		super();
@@ -59,6 +62,7 @@ class Player extends Base {
 		this.player = player;
 		this.isMainMenu = isMainMenu;
 		this.reverse = reverse;
+		this.useTemporaryGraphics = useTemporaryGraphics;
 
 		// Informations
 		const hero = this.player.system;
@@ -115,7 +119,7 @@ class Player extends Base {
 		}
 
 		// Faceset
-		this.faceset = Data.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, player.getFacesetID());
+		this.faceset = Data.Pictures.getPictureCopy(PICTURE_KIND.FACESETS, player.getFacesetID(useTemporaryGraphics));
 		if (this.reverse) {
 			this.faceset.setLeft(Data.Systems.getCurrentWindowSkin().borderBotLeft.width);
 		} else {
@@ -125,7 +129,7 @@ class Player extends Base {
 		this.faceset.reverse = this.reverse;
 
 		// Battler
-		this.battler = Data.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID());
+		this.battler = Data.Pictures.getPictureCopy(PICTURE_KIND.BATTLERS, player.getBattlerID(useTemporaryGraphics));
 		this.battlerFrame = new Frame(250, { frames: Data.Systems.battlersFrames });
 
 		// Level up
@@ -419,8 +423,8 @@ class Player extends Base {
 
 		// Faceset
 		this.faceset.draw({
-			sx: this.player.getFacesetIndexX() * Data.Systems.facesetsSizeWidth,
-			sy: this.player.getFacesetIndexY() * Data.Systems.facesetsSizeHeight,
+			sx: this.player.getFacesetIndexX(this.useTemporaryGraphics) * Data.Systems.facesetsSizeWidth,
+			sy: this.player.getFacesetIndexY(this.useTemporaryGraphics) * Data.Systems.facesetsSizeHeight,
 			sw: Data.Systems.facesetsSizeWidth,
 			sh: Data.Systems.facesetsSizeHeight,
 			w: Data.Systems.facesetScalingWidth,

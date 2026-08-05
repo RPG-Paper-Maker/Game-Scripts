@@ -53,6 +53,7 @@ class ChangeBattlerGraphics extends Base {
 		}
 		if (command[iterator.i++]) {
 			this.battlerID = Model.DynamicValue.createValueCommand(command, iterator);
+			iterator.i++;
 		}
 		if (command[iterator.i++]) {
 			this.pose = Model.DynamicValue.createValueCommand(command, iterator);
@@ -166,6 +167,9 @@ class ChangeBattlerGraphics extends Base {
 			}
 			if (this.pose && battler) {
 				battler.setDefaultStep(this.pose.getValue() as BATTLER_STEP);
+			}
+			if (this.permanent && Scene.Map.current.isBattleMap && map.windowExperienceProgression) {
+				(<Graphic.XPProgression>map.windowExperienceProgression.content).updateGraphicCharacters();
 			}
 		}
 		return 1;

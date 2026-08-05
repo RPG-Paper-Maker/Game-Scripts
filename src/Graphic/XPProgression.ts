@@ -23,10 +23,17 @@ class XPProgression extends Base {
 	constructor() {
 		super();
 
+		this.updateGraphicCharacters();
+	}
+
+	/**
+	 *  Update character graphics.
+	 */
+	updateGraphicCharacters() {
 		const l = Game.current.teamHeroes.length;
 		this.graphicCharacters = new Array(l);
 		for (let i = 0; i < l; i++) {
-			this.graphicCharacters[i] = new Graphic.Player(Game.current.teamHeroes[i]);
+			this.graphicCharacters[i] = new Graphic.Player(Game.current.teamHeroes[i], { useTemporaryGraphics: false });
 		}
 	}
 

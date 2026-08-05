@@ -143,7 +143,7 @@ abstract class MenuBase extends Base {
 	partyGraphics(): Graphic.Player[] {
 		const array: Graphic.Player[] = [];
 		for (let i = 0; i < this.party().length; i++) {
-			array[i] = new Graphic.Player(this.party()[i], { isMainMenu: true });
+			array[i] = new Graphic.Player(this.party()[i], { isMainMenu: true, useTemporaryGraphics: false });
 		}
 		return array;
 	}
