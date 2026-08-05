@@ -68,6 +68,10 @@ class Player {
 	public facesetID: number = null;
 	public facesetIndexX: number = null;
 	public facesetIndexY: number = null;
+	public temporaryBattlerID: number = null;
+	public temporaryFacesetID: number = null;
+	public temporaryFacesetIndexX: number = null;
+	public temporaryFacesetIndexY: number = null;
 
 	constructor(
 		kind?: CHARACTER_KIND,
@@ -1218,7 +1222,11 @@ class Player {
 	 *  @returns {number}
 	 */
 	getBattlerID(): number {
-		return this.battlerID === null ? this.system.idBattler : this.battlerID;
+		return this.temporaryBattlerID === null
+			? this.battlerID === null
+				? this.system.idBattler
+				: this.battlerID
+			: this.temporaryBattlerID;
 	}
 
 	/**
@@ -1226,7 +1234,11 @@ class Player {
 	 *  @returns {number}
 	 */
 	getFacesetID(): number {
-		return this.facesetID === null ? this.system.idFaceset : this.facesetID;
+		return this.temporaryFacesetID === null
+			? this.facesetID === null
+				? this.system.idFaceset
+				: this.facesetID
+			: this.temporaryFacesetID;
 	}
 
 	/**
@@ -1234,7 +1246,11 @@ class Player {
 	 *  @returns {number}
 	 */
 	getFacesetIndexX(): number {
-		return this.facesetIndexX === null ? this.system.indexXFaceset : this.facesetIndexX;
+		return this.temporaryFacesetIndexX === null
+			? this.facesetIndexX === null
+				? this.system.indexXFaceset
+				: this.facesetIndexX
+			: this.temporaryFacesetIndexX;
 	}
 
 	/**
@@ -1242,7 +1258,11 @@ class Player {
 	 *  @returns {number}
 	 */
 	getFacesetIndexY(): number {
-		return this.facesetIndexY === null ? this.system.indexYFaceset : this.facesetIndexY;
+		return this.temporaryFacesetIndexY === null
+			? this.facesetIndexY === null
+				? this.system.indexYFaceset
+				: this.facesetIndexY
+			: this.temporaryFacesetIndexY;
 	}
 
 	/**

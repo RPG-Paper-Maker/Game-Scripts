@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { BATTLER_STEP, CHARACTER_KIND } from '../Common';
+import { BATTLER_STEP, CHARACTER_KIND, Utils } from '../Common';
 import { Battler, Game, MapObject, Player } from '../Core';
 import { Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -28,6 +28,7 @@ class ChangeBattlerGraphics extends Base {
 	public facesetIndexY: number = 0;
 	public battlerID: Model.DynamicValue = null;
 	public pose: Model.DynamicValue = null;
+	public permanent: boolean;
 
 	constructor(command: any[]) {
 		super();
@@ -56,6 +57,7 @@ class ChangeBattlerGraphics extends Base {
 		if (command[iterator.i++]) {
 			this.pose = Model.DynamicValue.createValueCommand(command, iterator);
 		}
+		this.permanent = iterator.i >= command.length || Utils.numberToBool(command[iterator.i++]);
 	}
 
 	/**
@@ -123,12 +125,26 @@ class ChangeBattlerGraphics extends Base {
 		}
 		if (player) {
 			if (this.battlerID) {
-				player.battlerID = this.battlerID.getValue() as number;
+				if (this.permanent) {
+					player.battlerID = this.battlerID.getValue() as number;
+					player.temporaryBattlerID = null;
+				} else {
+					player.temporaryBattlerID = this.battlerID.getValue() as number;
+				}
 			}
 			if (this.facesetID) {
-				player.facesetID = this.facesetID.getValue() as number;
-				player.facesetIndexX = this.facesetIndexX;
-				player.facesetIndexY = this.facesetIndexY;
+				if (this.permanent) {
+					player.facesetID = this.facesetID.getValue() as number;
+					player.facesetIndexX = this.facesetIndexX;
+					player.facesetIndexY = this.facesetIndexY;
+					player.temporaryFacesetID = null;
+					player.temporaryFacesetIndexX = null;
+					player.temporaryFacesetIndexY = null;
+				} else {
+					player.temporaryFacesetID = this.facesetID.getValue() as number;
+					player.temporaryFacesetIndexX = this.facesetIndexX;
+					player.temporaryFacesetIndexY = this.facesetIndexY;
+				}
 			}
 			if (Scene.Map.current.isBattleMap) {
 				const newBattler = new Battler(
