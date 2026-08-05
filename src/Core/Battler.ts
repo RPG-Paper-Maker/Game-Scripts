@@ -362,12 +362,13 @@ export class Battler {
 	updateDead(attacked: boolean, user?: Player) {
 		let step = this.step;
 		if (this.player.isDead()) {
+			const previousFirst = this.player.status[0];
 			if (!this.preventKORestore) {
-				const newlyDead = this.addStatus(1);
-				if (newlyDead !== null) {
-					this.player.removeIfDeadStatus();
-				}
+				this.addStatus(1);
 			}
+			this.player.removeIfDeadStatus();
+			this.updateStatusStep();
+			this.updateAnimationStatus(previousFirst);
 			step = this.step;
 			this.lastStep = step;
 		} else {
@@ -604,9 +605,13 @@ export class Battler {
 	 */
 	updateStatusStep() {
 		let step = this.defaultStep;
-		const s = this.player.status[0];
-		if (s) {
-			step = s.system.battlerPosition.getValue() as number;
+		if (this.player.isDead()) {
+			step = Data.Status.get(1).battlerPosition.getValue() as number;
+		} else {
+			const s = this.player.status[0];
+			if (s) {
+				step = s.system.battlerPosition.getValue() as number;
+			}
 		}
 		if (this.step !== step) {
 			this.step = step;

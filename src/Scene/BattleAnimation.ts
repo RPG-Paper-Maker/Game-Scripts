@@ -90,6 +90,10 @@ class BattleAnimation {
 		(<Graphic.Text>this.battle.windowTopInformations.content).setText(this.battle.informationText);
 		this.battle.time = new Date().getTime();
 		this.battle.effects = [];
+		for (const target of this.battle.targets) {
+			target.lastStatus = null;
+			target.lastStatusHealed = null;
+		}
 		this.runOnEnemy = false;
 		let i: number, l: number;
 		switch (this.battle.battleCommandKind) {
@@ -373,6 +377,7 @@ class BattleAnimation {
 							}
 						}
 					}
+					this.updateTargetsAttacked();
 					// Status message
 					if (this.battle.currentTargetIndex !== null) {
 						let target: Battler;
@@ -385,7 +390,7 @@ class BattleAnimation {
 						) {
 							target = this.battle.targets[this.battle.currentTargetIndex];
 							if (!target.isDamagesMiss) {
-								if (target.lastStatus !== null) {
+								if (target.lastStatus !== null && target.player.hasStatus(target.lastStatus.system.id)) {
 									messages.push(
 										target.player.kind === CHARACTER_KIND.HERO
 											? target.lastStatus.getMessageAllyAffected(target)
@@ -400,9 +405,6 @@ class BattleAnimation {
 						(<Graphic.Text>this.battle.windowTopInformations.content).setText(messages.join(' '));
 						this.battle.currentTargetIndex = null;
 					}
-					// Target attacked
-					this.updateTargetsAttacked();
-
 					isAnotherEffect =
 						this.battle.currentEffectIndex < this.battle.effects.length ||
 						this.battle.currentTargetIndex !== null;
