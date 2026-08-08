@@ -67,6 +67,8 @@ export class Land extends MapElement {
 		w: number,
 		h: number,
 		count: number,
+		squareWidth = 1,
+		squareHeight = 1,
 	): StructMapElementCollision {
 		const localPosition = position.toVector3();
 		const a = localPosition.x;
@@ -78,10 +80,14 @@ export class Land extends MapElement {
 		const c = localPosition.z;
 
 		// Vertices
-		const vecA = new THREE.Vector3(a - 0.5, b, c - 0.5);
-		const vecB = new THREE.Vector3(a + 0.5, b, c - 0.5);
-		const vecC = new THREE.Vector3(a + 0.5, b, c + 0.5);
-		const vecD = new THREE.Vector3(a - 0.5, b, c + 0.5);
+		const left = a - 0.5;
+		const top = c - 0.5;
+		const right = left + squareWidth;
+		const bottom = top + squareHeight;
+		const vecA = new THREE.Vector3(left, b, top);
+		const vecB = new THREE.Vector3(right, b, top);
+		const vecC = new THREE.Vector3(right, b, bottom);
+		const vecD = new THREE.Vector3(left, b, bottom);
 		const center = new THREE.Vector3(a, b, c);
 		Mathf.rotateQuadEuler(vecA, vecB, vecC, vecD, center, position.toRotationEuler());
 		geometry.pushQuadVertices(vecA, vecB, vecC, vecD);

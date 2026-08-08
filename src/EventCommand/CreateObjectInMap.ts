@@ -122,7 +122,7 @@ class CreateObjectInMap extends Base {
 			const portionData = Game.current.getOrCreatePortionData(Scene.Map.current.id, globalPortion);
 			portionData.m.push(newObject);
 			portionData.min.push(newObject);
-			newObject.changeState();
+			void newObject.changeState().then(() => MapObject.refreshAutotilesAround(newObject.position));
 		}
 		return currentState.position === null ? 0 : 1;
 	}

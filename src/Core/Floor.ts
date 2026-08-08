@@ -55,6 +55,8 @@ export class Floor extends Land {
 					(this.texture.width * Data.Systems.SQUARE_SIZE) / width,
 					(this.texture.height * Data.Systems.SQUARE_SIZE) / height,
 					count,
+					this.texture.width,
+					this.texture.height,
 				);
 	}
 }

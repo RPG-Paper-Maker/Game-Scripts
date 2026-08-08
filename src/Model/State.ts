@@ -24,6 +24,7 @@ export type StateJSON = {
 	gid: number;
 	gk: number;
 	rt?: number[];
+	layer?: DynamicValueJSON | number;
 	x?: number;
 	y?: number;
 	omk?: OBJECT_MOVING_KIND;
@@ -153,6 +154,7 @@ export type StateInstance = {
 	graphicKind: number;
 	previousGraphicKind?: number;
 	rectTileset: Rectangle | null;
+	layer: DynamicValue;
 	indexX: number;
 	indexY: number;
 	speedID: number;
@@ -184,6 +186,7 @@ export class State extends Base {
 	public graphicID: number;
 	public graphicKind: number;
 	public rectTileset: Rectangle;
+	public layer: DynamicValue;
 	public indexX: number;
 	public indexY: number;
 	public objectMovingKind: OBJECT_MOVING_KIND;
@@ -221,6 +224,7 @@ export class State extends Base {
 			graphicID: this.graphicID,
 			graphicKind: this.graphicKind,
 			rectTileset: this.rectTileset ? this.rectTileset.clone() : null,
+			layer: this.layer.createCopy(),
 			indexX: this.indexX,
 			indexY: this.indexY,
 			speedID: this.speedID,
@@ -252,9 +256,12 @@ export class State extends Base {
 		this.id = json.id;
 		this.graphicID = json.gid;
 		this.graphicKind = json.gk;
-		if (this.graphicID === 0) {
-			this.rectTileset = Rectangle.createFromArray(json.rt);
-		} else {
+		this.layer =
+			typeof json.layer === 'number'
+				? DynamicValue.createNumber(json.layer)
+				: DynamicValue.readOrDefaultNumber(json.layer, 1);
+		this.rectTileset = json.rt ? Rectangle.createFromArray(json.rt) : new Rectangle();
+		if (this.graphicID !== 0) {
 			this.indexX = json.x;
 			this.indexY = json.y;
 		}

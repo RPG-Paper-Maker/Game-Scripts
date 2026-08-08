@@ -75,6 +75,11 @@ class Map extends Base {
 	public previousCameraPosition: THREE.Vector3;
 	public portionsObjectsUpdated: boolean;
 	public objectsSpatialHash: globalThis.Map<number, MapObject[]> = new globalThis.Map();
+	public landObjectsSpatialHash: globalThis.Map<
+		number,
+		{ object: MapObject; collision: MapObject['landCollisions'][number] }[]
+	> = new globalThis.Map();
+	public landObjectsSpatialHashDirty: boolean = true;
 	public heroOrientation: ORIENTATION;
 	public previousWeatherPoints: THREE.Points = null;
 	public previousWeatherVelocities: number[];
@@ -733,7 +738,12 @@ class Map extends Base {
 	 */
 	updateObjectsSpatialHash() {
 		const hash = this.objectsSpatialHash;
+		const landHash = this.landObjectsSpatialHash;
+		const rebuildLandHash = this.landObjectsSpatialHashDirty;
 		hash.clear();
+		if (rebuildLandHash) {
+			landHash.clear();
+		}
 		const cellSize = Manager.Collisions.SPATIAL_HASH_CELL_SIZE;
 		const add = function (list: MapObject[]) {
 			if (!list) {
@@ -754,6 +764,26 @@ class Map extends Base {
 					hash.set(key, cell);
 				}
 				cell.push(obj);
+				if (!rebuildLandHash) continue;
+				for (const collision of obj.landCollisions ?? []) {
+					const b = collision.b;
+					if (!b) continue;
+					const minX = Math.floor((obj.position.x + b[0] - b[3] / 2) / cellSize);
+					const maxX = Math.floor((obj.position.x + b[0] + b[3] / 2) / cellSize);
+					const minZ = Math.floor((obj.position.z + b[2] - b[4] / 2) / cellSize);
+					const maxZ = Math.floor((obj.position.z + b[2] + b[4] / 2) / cellSize);
+					for (let x = minX; x <= maxX; x++) {
+						for (let z = minZ; z <= maxZ; z++) {
+							const landKey = Manager.Collisions.spatialHashKey(x, z);
+							let lands = landHash.get(landKey);
+							if (lands === undefined) {
+								lands = [];
+								landHash.set(landKey, lands);
+							}
+							lands.push({ object: obj, collision });
+						}
+					}
+				}
 			}
 		};
 		this.updatePortions(this, function (x: number, y: number, z: number, i: number, j: number, k: number) {
@@ -765,6 +795,7 @@ class Map extends Base {
 			add(datas.min);
 			add(datas.mout);
 		});
+		this.landObjectsSpatialHashDirty = false;
 	}
 
 	/**
