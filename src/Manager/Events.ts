@@ -34,6 +34,9 @@ class Events {
 			case EVENT_COMMAND_KIND.SHOW_TEXT:
 				return new EventCommand.ShowText(command);
 
+			case EVENT_COMMAND_KIND.CHANGE_VARIABLES:
+				return new EventCommand.ChangeVariables(command);
+
 			case EVENT_COMMAND_KIND.CHANGE_LOCAL_VARIABLE:
 				return new EventCommand.ChangeVariables(command, true);
 			case EVENT_COMMAND_KIND.GAME_OVER:

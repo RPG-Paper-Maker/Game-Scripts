@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, Platform, Utils } from '../Common';
 import { MapObject } from '../Core';
 import { Data, Manager, Model } from '../index';
 import { Base } from './Base';
@@ -64,10 +64,18 @@ class SendEvent extends Base {
 			k = command[iterator.i++];
 			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
 				// If default value
-				parameter =
-					k === DYNAMIC_VALUE_KIND.DEFAULT
-						? parameters.get(paramID).value
-						: Model.DynamicValue.create(k, null);
+				if (k === DYNAMIC_VALUE_KIND.DEFAULT) {
+					const defaultParameter = parameters.get(paramID);
+					if (!defaultParameter) {
+						Platform.showErrorMessage(
+							`Send event command: parameter ID ${paramID} does not exist in ${this.isSystem ? 'system' : 'user'} event ID ${this.eventID}. The parameter was ignored. Please review this command.`,
+						);
+						continue;
+					}
+					parameter = defaultParameter.value;
+				} else {
+					parameter = Model.DynamicValue.create(k, null);
+				}
 			} else {
 				parameter = Model.DynamicValue.create(k, command[iterator.i++]);
 			}
