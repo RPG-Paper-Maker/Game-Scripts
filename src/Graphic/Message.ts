@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, Constants, PICTURE_KIND, ScreenResolution, TAG_KIND, Utils } from '../Common';
+import { ALIGN, Constants, DYNAMIC_VALUE_KIND, PICTURE_KIND, ScreenResolution, TAG_KIND, Utils } from '../Common';
 import { Bitmap, Game, Node, Picture2D, Tree } from '../Core';
 import { Data, Graphic, Model } from '../index';
 
@@ -31,6 +31,7 @@ class Message extends Graphic.Base {
 	public static readonly TAG_BACK_COLOR = 'backcolor';
 	public static readonly TAG_STROKE_COLOR = 'strokecolor';
 	public static readonly TAG_VARIABLE = 'var';
+	public static readonly TAG_LOCAL_VARIABLE = 'lvar';
 	public static readonly TAG_PARAMETER = 'par';
 	public static readonly TAG_PROPERTY = 'pro';
 	public static readonly TAG_HERO_NAME = 'hname';
@@ -131,6 +132,8 @@ class Message extends Graphic.Base {
 					tagKind = TAG_KIND.BACK_COLOR;
 				} else if (tag.includes(Message.TAG_STROKE_COLOR)) {
 					tagKind = TAG_KIND.STROKE_COLOR;
+				} else if (tag.includes(Message.TAG_LOCAL_VARIABLE)) {
+					tagKind = TAG_KIND.LOCAL_VARIABLE;
 				} else if (tag.includes(Message.TAG_VARIABLE)) {
 					tagKind = TAG_KIND.VARIABLE;
 				} else if (tag.includes(Message.TAG_PARAMETER)) {
@@ -192,6 +195,9 @@ class Message extends Graphic.Base {
 				case TAG_KIND.HERO_NAME:
 					nodeValue = Model.DynamicValue.createVariable(parseInt(value));
 					break;
+				case TAG_KIND.LOCAL_VARIABLE:
+					nodeValue = Model.DynamicValue.create(DYNAMIC_VALUE_KIND.LOCAL_VARIABLE, value);
+					break;
 				case TAG_KIND.PARAMETER:
 					nodeValue = Model.DynamicValue.createParameter(parseInt(value));
 					break;
@@ -204,6 +210,7 @@ class Message extends Graphic.Base {
 				tag !== TAG_KIND.TEXT &&
 				tag !== TAG_KIND.NEW_LINE &&
 				tag !== TAG_KIND.VARIABLE &&
+				tag !== TAG_KIND.LOCAL_VARIABLE &&
 				tag !== TAG_KIND.ICON &&
 				tag !== TAG_KIND.PROPERTY &&
 				tag !== TAG_KIND.PARAMETER &&
@@ -298,6 +305,7 @@ class Message extends Graphic.Base {
 				break;
 			case TAG_KIND.TEXT:
 			case TAG_KIND.VARIABLE:
+			case TAG_KIND.LOCAL_VARIABLE:
 			case TAG_KIND.PARAMETER:
 			case TAG_KIND.PROPERTY:
 			case TAG_KIND.HERO_NAME: {
@@ -307,6 +315,7 @@ class Message extends Graphic.Base {
 						text = value;
 						break;
 					case TAG_KIND.VARIABLE:
+					case TAG_KIND.LOCAL_VARIABLE:
 						text = String(value.getValue() as number);
 						break;
 					case TAG_KIND.PARAMETER:
@@ -492,7 +501,12 @@ class Message extends Graphic.Base {
 	 *  according to screen resolution
 	 */
 	draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: number = this.oH) {
-		const newX = x + (this.faceset.empty ? 0 : ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth) + ScreenResolution.getScreenX(Constants.HUGE_SPACE));
+		const newX =
+			x +
+			(this.faceset.empty
+				? 0
+				: ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth) +
+					ScreenResolution.getScreenX(Constants.HUGE_SPACE));
 		const newY = y + ScreenResolution.getScreenY(Constants.HUGE_SPACE);
 		const textAreaWidth = w - (newX - x);
 		let offsetY = 0;
@@ -534,7 +548,7 @@ class Message extends Graphic.Base {
 					}
 					graphic.draw({
 						x: newX + offsetX,
-						y: newY - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5 / 2 + offsetY,
+						y: newY - (ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5) / 2 + offsetY,
 						sw: Data.Systems.iconsSize,
 						sh: Data.Systems.iconsSize,
 						w: Data.Systems.iconsSize * 1.5,
@@ -544,7 +558,14 @@ class Message extends Graphic.Base {
 				} else {
 					const textGraphic = graphic as Graphic.Text;
 					const availableW = textAreaWidth > 0 ? textAreaWidth - offsetX : 0;
-					textGraphic.draw(newX + offsetX, newY + offsetY, availableW, graphic.oH, offsetX > 0 ? newX : undefined, offsetX > 0 && textAreaWidth > 0 ? textAreaWidth : undefined);
+					textGraphic.draw(
+						newX + offsetX,
+						newY + offsetY,
+						availableW,
+						graphic.oH,
+						offsetX > 0 ? newX : undefined,
+						offsetX > 0 && textAreaWidth > 0 ? textAreaWidth : undefined,
+					);
 					if (textGraphic.lines.length > 1) {
 						offsetY += (textGraphic.lines.length - 1) * textGraphic.fontSize * 2;
 						offsetX = textGraphic.lastLineWidth;

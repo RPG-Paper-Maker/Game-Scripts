@@ -132,6 +132,7 @@ export enum EVENT_COMMAND_KIND {
 	CHANGE_BATTLER_GRAPHICS,
 	CHANGE_FOG,
 	MODIFY_LIGHT,
+	CHANGE_LOCAL_VARIABLE,
 }
 
 /** Enum for the different items kind. */
@@ -316,6 +317,7 @@ export enum DYNAMIC_VALUE_KIND {
 	SOUND,
 	MUSIC_EFFECT,
 	VIDEOS,
+	LOCAL_VARIABLE,
 }
 
 /** Enum for the different window orientations. */
@@ -502,6 +504,7 @@ export enum TAG_KIND {
 	PROPERTY,
 	HERO_NAME,
 	ICON,
+	LOCAL_VARIABLE,
 }
 
 /** Enum for the condition heroes. */

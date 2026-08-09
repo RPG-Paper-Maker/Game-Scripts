@@ -40,6 +40,7 @@ class ReactionInterpreter {
 	public currentCommand: Node;
 	public currentCommandState: Record<string, any>;
 	public currentTimeState: [Model.Event, number];
+	public localVariables: Map<string, unknown>;
 	public isInMainMenu: boolean;
 	public originMapID: number;
 
@@ -51,6 +52,7 @@ class ReactionInterpreter {
 		parameters?: Map<number, Model.DynamicValue>,
 		event?: [Model.Event, number],
 		command: Node = reaction.getFirstCommand(),
+		localVariables?: Map<string, unknown>,
 	) {
 		this.currentSender = sender;
 		this.currentReaction = reaction;
@@ -58,6 +60,7 @@ class ReactionInterpreter {
 		this.currentState = state;
 		this.currentParameters = parameters;
 		this.currentCommand = command;
+		this.localVariables = localVariables ?? new Map();
 		this.updateObjectParameters();
 		this.currentCommandState = this.currentCommand === null ? null : this.currentCommand.data.initialize();
 		this.currentTimeState = event;
@@ -125,6 +128,7 @@ class ReactionInterpreter {
 					this.currentParameters,
 					this.currentTimeState,
 					this.currentCommand,
+					this.localVariables,
 				);
 				interpreter.currentCommandState.parallel = true;
 				Scene.Map.current.parallelCommands.push(interpreter);
