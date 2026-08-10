@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import * as THREE from 'three';
 import {
 	CHANGE_VARIABLES_OTHER_CHARACTERISTICS,
 	CHARACTER_KIND,
@@ -49,6 +50,12 @@ class ChangeVariables extends Base {
 	public valueEnemyIndex: number;
 	public valueOtherCHARACTERISTIC_KIND: CHANGE_VARIABLES_OTHER_CHARACTERISTICS;
 	public valueScript: Model.DynamicValue;
+	public valueTerrainX: Model.DynamicValue;
+	public valueTerrainY: Model.DynamicValue;
+	public valueTerrainZ: Model.DynamicValue;
+	public valueTerrainXPlus: Model.DynamicValue;
+	public valueTerrainYPlus: Model.DynamicValue;
+	public valueTerrainZPlus: Model.DynamicValue;
 	public isLocal: boolean;
 	public isCreatingLocalVariable: boolean;
 	public localVariableName: string;
@@ -110,6 +117,14 @@ class ChangeVariables extends Base {
 				break;
 			case 10: // Script
 				this.valueScript = Model.DynamicValue.createMessage(String(command[iterator.i]));
+				break;
+			case 11: // Terrain at coordinates
+				this.valueTerrainX = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueTerrainY = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueTerrainZ = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueTerrainXPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueTerrainYPlus = Model.DynamicValue.createValueCommand(command, iterator);
+				this.valueTerrainZPlus = Model.DynamicValue.createValueCommand(command, iterator);
 				break;
 		}
 	}
@@ -304,6 +319,18 @@ class ChangeVariables extends Base {
 						thisObject: object,
 						addReturn: true,
 					});
+					break;
+				case 11: // Terrain at coordinates
+					currentState.value = MapObject.getTerrainAt(
+						new THREE.Vector3(
+							(this.valueTerrainX.getValue() as number) +
+								(this.valueTerrainXPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
+							(this.valueTerrainY.getValue() as number) +
+								(this.valueTerrainYPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
+							(this.valueTerrainZ.getValue() as number) +
+								(this.valueTerrainZPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
+						),
+					);
 					break;
 			}
 		}
