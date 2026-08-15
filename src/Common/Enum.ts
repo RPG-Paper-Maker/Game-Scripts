@@ -49,6 +49,11 @@ export enum COMMAND_MOVE_KIND {
 	SCRIPT,
 }
 
+export enum DISPLAY_PICTURE_KIND {
+	PICTURE,
+	TEXT,
+}
+
 /** Enum for the different event commands kind. */
 export enum EVENT_COMMAND_KIND {
 	NONE,

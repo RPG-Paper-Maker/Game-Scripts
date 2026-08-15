@@ -11,7 +11,7 @@
 
 import { CHARACTER_KIND, GROUP_KIND, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Game, MapObject, Picture2D, Player } from '../Core';
-import { Common, Data, Manager, Model, Scene } from '../index';
+import { Common, Data, Graphic, Manager, Model, Scene } from '../index';
 
 /** @class
  *  The game stack that is organizing the game scenes.
@@ -319,7 +319,7 @@ class Stack {
 						if (v[0] >= 0) {
 							break;
 						}
-						v[1].draw({ ctx: Platform.ctxBelow });
+						this.drawDisplayedPicture(v[1], Platform.ctxBelow);
 					}
 
 					// Draw System HUD
@@ -327,7 +327,7 @@ class Stack {
 
 					// Display >= 0 index image command
 					for (; i < l; i++) {
-						this.displayedPictures[i][1].draw();
+						this.drawDisplayedPicture(this.displayedPictures[i][1], Platform.ctx);
 					}
 				}
 			}
@@ -335,6 +335,30 @@ class Stack {
 				Game.current.drawHUD();
 			}
 		}
+	}
+
+	private static drawDisplayedPicture(picture: Picture2D, ctx: CanvasRenderingContext2D) {
+		const textPicture = picture as Picture2D & { textMessage?: Graphic.Message; textWidth?: number };
+		const textMessage = textPicture.textMessage;
+		if (!textMessage || ctx !== Platform.ctx) {
+			picture.draw({ ctx });
+			return;
+		}
+		ctx.save();
+		ctx.globalAlpha = picture.opacity;
+		ctx.translate(picture.x, picture.y);
+		ctx.rotate((picture.angle * Math.PI) / 180);
+		ctx.scale(picture.zoom, picture.zoom);
+		if (picture.centered) {
+			ctx.translate(-textMessage.totalWidths[0] / 2, -textMessage.heights[0]);
+		}
+		textMessage.draw(
+			0,
+			0,
+			ScreenResolution.getScreenX(textPicture.textWidth ?? 1280),
+			ScreenResolution.CANVAS_HEIGHT,
+		);
+		ctx.restore();
 	}
 }
 

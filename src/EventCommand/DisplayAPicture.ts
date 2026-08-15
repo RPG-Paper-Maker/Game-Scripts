@@ -9,9 +9,9 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { PICTURE_KIND, ScreenResolution, Utils } from '../Common';
+import { DISPLAY_PICTURE_KIND, PICTURE_KIND, ScreenResolution, Utils } from '../Common';
 import { MapObject, Picture2D } from '../Core';
-import { Data, Manager, Model } from '../index';
+import { Data, Graphic, Manager, Model } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -34,6 +34,9 @@ class DisplayAPicture extends Base {
 	public indexY: number;
 	public indexWidth: number;
 	public indexHeight: number;
+	public displayKind: DISPLAY_PICTURE_KIND;
+	public text: string;
+	public textWidth: number;
 
 	constructor(command: any[]) {
 		super();
@@ -56,6 +59,19 @@ class DisplayAPicture extends Base {
 		this.indexY = command[iterator.i++] ?? 0;
 		this.indexWidth = command[iterator.i++] ?? 1;
 		this.indexHeight = command[iterator.i++] ?? 1;
+		this.displayKind = command[iterator.i++] ?? DISPLAY_PICTURE_KIND.PICTURE;
+		const texts = new Map<number, string>();
+		this.textWidth = 1280;
+		while (iterator.i < command.length) {
+			const languageID = command[iterator.i++];
+			const value = command[iterator.i++];
+			if (languageID === -1) {
+				this.textWidth = value || 1280;
+			} else {
+				texts.set(languageID, value);
+			}
+		}
+		this.text = texts.get(Data.Languages.getMainLanguageID()) ?? [...texts.values()][0] ?? '';
 	}
 
 	/**
@@ -67,7 +83,10 @@ class DisplayAPicture extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const currentIndex = this.index.getValue() as number;
-		const picture = Data.Pictures.getPictureCopy(this.pictureKind, this.pictureID.getValue() as number);
+		const picture =
+			this.displayKind === DISPLAY_PICTURE_KIND.TEXT
+				? this.createTextPicture()
+				: Data.Pictures.getPictureCopy(this.pictureKind, this.pictureID.getValue() as number);
 
 		const xVal = this.x.getValue() as number;
 		const yVal = this.y.getValue() as number;
@@ -107,7 +126,18 @@ class DisplayAPicture extends Base {
 		picture.zoom = (this.zoom.getValue() as number) / 100;
 		picture.opacity = (this.opacity.getValue() as number) / 100;
 		picture.angle = this.angle.getValue() as number;
-		if (!picture.empty && picture.loaded) {
+		if (this.displayKind === DISPLAY_PICTURE_KIND.TEXT) {
+			picture.oW = picture.image.width;
+			picture.oH = picture.image.height;
+			if (this.stretch) {
+				picture.stretch = true;
+				picture.w = ScreenResolution.CANVAS_WIDTH;
+				picture.h = ScreenResolution.CANVAS_HEIGHT;
+			} else {
+				picture.w = Math.round(ScreenResolution.getScreenMinXY(picture.oW));
+				picture.h = Math.round(ScreenResolution.getScreenMinXY(picture.oH));
+			}
+		} else if (!picture.empty && picture.loaded) {
 			const isIcon = this.pictureKind === PICTURE_KIND.ICONS;
 			const isFaceset = this.pictureKind === PICTURE_KIND.FACESETS;
 			const isCharacter = this.pictureKind === PICTURE_KIND.CHARACTERS;
@@ -123,18 +153,19 @@ class DisplayAPicture extends Base {
 							? picture.image.width / Data.Systems.battlersFrames
 							: isTileset
 								? this.indexWidth * Data.Systems.SQUARE_SIZE
-					: picture.image.width;
+								: picture.image.width;
 			const sourceHeight = isIcon
 				? Data.Systems.iconsSize
 				: isFaceset
 					? Data.Systems.facesetsSizeHeight
 					: isCharacter
-						? picture.image.height / Data.Pictures.get(this.pictureKind, this.pictureID.getValue() as number).getRows()
+						? picture.image.height /
+							Data.Pictures.get(this.pictureKind, this.pictureID.getValue() as number).getRows()
 						: isBattler
 							? picture.image.height / Data.Systems.battlersColumns
 							: isTileset
 								? this.indexHeight * Data.Systems.SQUARE_SIZE
-					: picture.image.height;
+								: picture.image.height;
 			const hasSelectionGrid = isIcon || isFaceset || isCharacter || isBattler || isTileset;
 			picture.sx = isTileset
 				? this.indexX * Data.Systems.SQUARE_SIZE
@@ -179,6 +210,28 @@ class DisplayAPicture extends Base {
 		}
 		Manager.Stack.requestPaintHUD = true;
 		return 1;
+	}
+
+	private createTextPicture(): Picture2D {
+		const canvas = document.createElement('canvas');
+		const context = canvas.getContext('2d')!;
+		const text = this.text.replace(/\[[^\]]+\]/g, '');
+		context.font = '24px sans-serif';
+		canvas.width = Math.max(1, Math.ceil(context.measureText(text).width));
+		canvas.height = 30;
+		context.font = '24px sans-serif';
+		context.textBaseline = 'top';
+		context.fillStyle = '#FFFFFF';
+		context.fillText(text, 0, 0);
+		const picture = new Picture2D();
+		picture.image = canvas as unknown as HTMLImageElement;
+		picture.loaded = true;
+		picture.empty = false;
+		const textPicture = picture as Picture2D & { textMessage?: Graphic.Message; textWidth?: number };
+		textPicture.textMessage = new Graphic.Message(this.text, -1, 0, 0);
+		textPicture.textMessage.update();
+		textPicture.textWidth = this.textWidth;
+		return picture;
 	}
 }
 
