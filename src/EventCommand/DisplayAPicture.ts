@@ -29,6 +29,11 @@ class DisplayAPicture extends Base {
 	public opacity: Model.DynamicValue;
 	public angle: Model.DynamicValue;
 	public stretch: boolean;
+	public pictureKind: PICTURE_KIND;
+	public indexX: number;
+	public indexY: number;
+	public indexWidth: number;
+	public indexHeight: number;
 
 	constructor(command: any[]) {
 		super();
@@ -46,6 +51,11 @@ class DisplayAPicture extends Base {
 		this.opacity = Model.DynamicValue.createValueCommand(command, iterator);
 		this.angle = Model.DynamicValue.createValueCommand(command, iterator);
 		this.stretch = Utils.numberToBool(command[iterator.i++]);
+		this.pictureKind = command[iterator.i++] ?? PICTURE_KIND.PICTURES;
+		this.indexX = command[iterator.i++] ?? 0;
+		this.indexY = command[iterator.i++] ?? 0;
+		this.indexWidth = command[iterator.i++] ?? 1;
+		this.indexHeight = command[iterator.i++] ?? 1;
 	}
 
 	/**
@@ -57,7 +67,7 @@ class DisplayAPicture extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		const currentIndex = this.index.getValue() as number;
-		const picture = Data.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
+		const picture = Data.Pictures.getPictureCopy(this.pictureKind, this.pictureID.getValue() as number);
 
 		const xVal = this.x.getValue() as number;
 		const yVal = this.y.getValue() as number;
@@ -98,17 +108,55 @@ class DisplayAPicture extends Base {
 		picture.opacity = (this.opacity.getValue() as number) / 100;
 		picture.angle = this.angle.getValue() as number;
 		if (!picture.empty && picture.loaded) {
+			const isIcon = this.pictureKind === PICTURE_KIND.ICONS;
+			const isFaceset = this.pictureKind === PICTURE_KIND.FACESETS;
+			const isCharacter = this.pictureKind === PICTURE_KIND.CHARACTERS;
+			const isBattler = this.pictureKind === PICTURE_KIND.BATTLERS;
+			const isTileset = this.pictureKind === PICTURE_KIND.TILESETS;
+			const sourceWidth = isIcon
+				? Data.Systems.iconsSize
+				: isFaceset
+					? Data.Systems.facesetsSizeWidth
+					: isCharacter
+						? picture.image.width / Data.Systems.FRAMES
+						: isBattler
+							? picture.image.width / Data.Systems.battlersFrames
+							: isTileset
+								? this.indexWidth * Data.Systems.SQUARE_SIZE
+					: picture.image.width;
+			const sourceHeight = isIcon
+				? Data.Systems.iconsSize
+				: isFaceset
+					? Data.Systems.facesetsSizeHeight
+					: isCharacter
+						? picture.image.height / Data.Pictures.get(this.pictureKind, this.pictureID.getValue() as number).getRows()
+						: isBattler
+							? picture.image.height / Data.Systems.battlersColumns
+							: isTileset
+								? this.indexHeight * Data.Systems.SQUARE_SIZE
+					: picture.image.height;
+			const hasSelectionGrid = isIcon || isFaceset || isCharacter || isBattler || isTileset;
+			picture.sx = isTileset
+				? this.indexX * Data.Systems.SQUARE_SIZE
+				: hasSelectionGrid
+					? this.indexX * sourceWidth
+					: 0;
+			picture.sy = isTileset
+				? this.indexY * Data.Systems.SQUARE_SIZE
+				: hasSelectionGrid
+					? this.indexY * sourceHeight
+					: 0;
 			if (this.stretch) {
 				picture.stretch = true;
-				picture.oW = picture.image.width;
+				picture.oW = sourceWidth;
 				picture.w = ScreenResolution.CANVAS_WIDTH;
-				picture.oH = picture.image.height;
+				picture.oH = sourceHeight;
 				picture.h = ScreenResolution.CANVAS_HEIGHT;
 			} else {
-				picture.oW = picture.image.width;
-				picture.w = Math.round(ScreenResolution.getScreenMinXY(picture.image.width));
-				picture.oH = picture.image.height;
-				picture.h = Math.round(ScreenResolution.getScreenMinXY(picture.image.height));
+				picture.oW = sourceWidth;
+				picture.w = Math.round(ScreenResolution.getScreenMinXY(sourceWidth));
+				picture.oH = sourceHeight;
+				picture.h = Math.round(ScreenResolution.getScreenMinXY(sourceHeight));
 			}
 		}
 		const value: [number, Picture2D] = [currentIndex, picture];

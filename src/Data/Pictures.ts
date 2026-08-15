@@ -133,6 +133,8 @@ export class Pictures {
 						PICTURE_KIND.FACESETS,
 						PICTURE_KIND.ANIMATIONS,
 						PICTURE_KIND.BATTLERS,
+						PICTURE_KIND.CHARACTERS,
+						PICTURE_KIND.TILESETS,
 						PICTURE_KIND.BARS,
 					].includes(k)
 				) {
