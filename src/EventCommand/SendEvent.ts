@@ -10,7 +10,7 @@
 */
 
 import { DYNAMIC_VALUE_KIND, Platform, Utils } from '../Common';
-import { MapObject } from '../Core';
+import { Game, MapObject, ReactionInterpreter } from '../Core';
 import { Data, Manager, Model } from '../index';
 import { Base } from './Base';
 
@@ -27,6 +27,8 @@ class SendEvent extends Base {
 	public isSystem: boolean;
 	public eventID: number;
 	public parameters: Model.DynamicValue[];
+	public isStockLastObjectID: boolean;
+	public stockLastObjectIDVariable: Model.DynamicValue;
 
 	constructor(command: any[]) {
 		super();
@@ -59,7 +61,7 @@ class SendEvent extends Base {
 		).parameters;
 		this.parameters = [];
 		let parameter: Model.DynamicValue, paramID: number, k: DYNAMIC_VALUE_KIND;
-		while (iterator.i < l) {
+		for (let parameterIndex = 0; parameterIndex < parameters.size && iterator.i < l; parameterIndex++) {
 			paramID = command[iterator.i++];
 			k = command[iterator.i++];
 			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
@@ -81,6 +83,10 @@ class SendEvent extends Base {
 			}
 			this.parameters[paramID] = parameter;
 		}
+		this.isStockLastObjectID = iterator.i < l && Utils.numberToBool(command[iterator.i++]);
+		if (this.isStockLastObjectID) {
+			this.stockLastObjectIDVariable = Model.DynamicValue.createValueCommand(command, iterator);
+		}
 	}
 
 	/**
@@ -91,7 +97,7 @@ class SendEvent extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		Manager.Events.sendEvent(
+		const lastObjectID = Manager.Events.sendEvent(
 			object,
 			this.targetKind,
 			this.targetID ? (this.targetID.getValue() as number) : -1,
@@ -101,6 +107,16 @@ class SendEvent extends Base {
 			this.senderNoReceiver,
 			this.onlyTheClosest,
 		);
+		if (this.isStockLastObjectID && lastObjectID !== null) {
+			if (this.stockLastObjectIDVariable.kind === DYNAMIC_VALUE_KIND.LOCAL_VARIABLE) {
+				ReactionInterpreter.currentReaction.localVariables.set(
+					this.stockLastObjectIDVariable.value as string,
+					lastObjectID,
+				);
+			} else {
+				Game.current.variables.set(this.stockLastObjectIDVariable.getValue(true) as number, lastObjectID);
+			}
+		}
 		return 1;
 	}
 }
