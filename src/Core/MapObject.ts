@@ -1975,7 +1975,7 @@ class MapObject {
 	/** Create the lights defined by the active map-object state. */
 	createObjectLights() {
 		// Caterpillar followers reuse the hero's model state, but they must not duplicate its lights.
-		if (this.isCaterpillarFollower || !this.currentStateInstance?.lights.length) {
+		if (this.isCaterpillarFollower || !this.position || !this.currentStateInstance?.lights.length) {
 			return;
 		}
 		const group = new THREE.Group();
