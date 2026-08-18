@@ -46,10 +46,13 @@ class ShakeScreen extends Base {
 	 */
 	static updateTargetOffset(currentState: Record<string, any>, timeRate: number) {
 		const value = timeRate * currentState.finalDifPos;
+		const shakeOffset = -value * Data.Systems.SQUARE_SIZE;
 		Scene.Map.current.camera.targetOffset.x +=
 			value * -Math.sin((Scene.Map.current.camera.horizontalAngle * Math.PI) / 180.0);
 		Scene.Map.current.camera.targetOffset.z +=
 			value * Math.cos((Scene.Map.current.camera.horizontalAngle * Math.PI) / 180.0);
+		Manager.Stack.shakeOffsetX += shakeOffset;
+		currentState.shakeOffsetX += shakeOffset;
 	}
 
 	/**
@@ -76,6 +79,7 @@ class ShakeScreen extends Base {
 			shakeTime: shakeTime,
 			shakeTimeLeft: shakeTime,
 			currentOffset: 0,
+			shakeOffsetX: 0,
 			beginPosX: Scene.Map.current.camera.targetOffset.x,
 			beginPosZ: Scene.Map.current.camera.targetOffset.z,
 			finalDifPos: -offset,
@@ -122,6 +126,7 @@ class ShakeScreen extends Base {
 			if (currentState.timeLeft === 0) {
 				Scene.Map.current.camera.targetOffset.x = currentState.beginPosX;
 				Scene.Map.current.camera.targetOffset.z = currentState.beginPosZ;
+				Manager.Stack.shakeOffsetX -= currentState.shakeOffsetX;
 				return 1;
 			}
 			return 0;

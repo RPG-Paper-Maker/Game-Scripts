@@ -29,6 +29,7 @@ class Stack {
 	public static averageElapsedTime = 0;
 	public static lastUpdateTime = new Date().getTime();
 	public static displayedPictures: [number, Picture2D][] = [];
+	public static shakeOffsetX: number = 0;
 	public static isInMainMenu: boolean = false;
 
 	constructor() {
@@ -341,13 +342,16 @@ class Stack {
 		const textPicture = picture as Picture2D & { textMessage?: Graphic.Message; textWidth?: number };
 		const textMessage = textPicture.textMessage;
 		if (!textMessage || ctx !== Platform.ctx) {
+			ctx.save();
+			ctx.translate(this.shakeOffsetX, 0);
 			picture.draw({ ctx });
+			ctx.restore();
 			return;
 		}
 		ctx.save();
 		ctx.globalAlpha = picture.opacity;
 		ctx.translate(
-			picture.x,
+			picture.x + this.shakeOffsetX,
 			picture.y + (textMessage.heights[0] / 2 - ScreenResolution.getScreenY(Constants.HUGE_SPACE)) * picture.zoom,
 		);
 		ctx.rotate((picture.angle * Math.PI) / 180);
