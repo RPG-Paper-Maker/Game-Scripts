@@ -209,9 +209,12 @@ class TitleScreen extends Base {
 	 */
 	onKeyPressed(key: string) {
 		if (this.videoBlocked) {
-			this.resumeVideoBackground();
+			this.resumeVideoBackground(Data.Keyboards.checkActionMenu(key) && this.hasVideoIntroduction());
 			this.videoBlocked = false;
 			Manager.Stack.requestPaintHUD = true;
+			return;
+		}
+		if (Data.Keyboards.checkActionMenu(key) && this.skipVideoIntroduction()) {
 			return;
 		}
 		if (!this.titleReady) {
@@ -247,9 +250,12 @@ class TitleScreen extends Base {
 	 */
 	onMouseUp(x: number, y: number) {
 		if (this.videoBlocked) {
-			this.resumeVideoBackground();
+			this.resumeVideoBackground(this.hasVideoIntroduction());
 			this.videoBlocked = false;
 			Manager.Stack.requestPaintHUD = true;
+			return;
+		}
+		if (this.skipVideoIntroduction()) {
 			return;
 		}
 		if (!this.titleReady) {
@@ -259,13 +265,37 @@ class TitleScreen extends Base {
 	}
 
 	/**
+	 * Check whether the configured title video has a non-looping introduction.
+	 */
+	hasVideoIntroduction(): boolean {
+		return (
+			Data.TitlescreenGameover.isTitleBackgroundVideo &&
+			Data.TitlescreenGameover.titleVideoLoop &&
+			Data.TitlescreenGameover.titleVideoLoopMs > 0
+		);
+	}
+
+	/**
+	 * Skip the title-video introduction and immediately reveal the menu.
+	 */
+	skipVideoIntroduction(): boolean {
+		if (this.titleReady || this.startAtLoop || !this.hasVideoIntroduction()) {
+			return false;
+		}
+		this.titleReady = true;
+		Manager.Videos.seek(Data.TitlescreenGameover.titleVideoLoopMs).catch(() => {});
+		Manager.Stack.requestPaintHUD = true;
+		return true;
+	}
+
+	/**
 	 *  Retry video playback after user interaction unblocked autoplay.
 	 */
-	resumeVideoBackground() {
+	resumeVideoBackground(skipIntroduction: boolean = false) {
 		this.videoBlocked = false;
 		const loop = Data.TitlescreenGameover.titleVideoLoop;
 		const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
-		const startMs = this.startAtLoop && loop ? loopMs : 0;
+		const startMs = (this.startAtLoop || skipIntroduction) && loop ? loopMs : 0;
 		this.titleReady = !loop || loopMs === 0 || startMs > 0;
 		Manager.Videos.play(
 			Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
