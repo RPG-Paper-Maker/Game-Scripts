@@ -14,6 +14,7 @@ enum MODIFY_LIGHT_ACTION {
 
 const LIGHT_PROPERTIES: (keyof Model.StateLight)[] = [
 	'kind',
+	'followOrientation',
 	'color',
 	'groundColor',
 	'intensity',
@@ -29,6 +30,8 @@ const LIGHT_PROPERTIES: (keyof Model.StateLight)[] = [
 	'targetY',
 	'targetZ',
 ];
+
+const LEGACY_LIGHT_PROPERTIES = LIGHT_PROPERTIES.filter((property) => property !== 'followOrientation');
 
 class ModifyLight extends Base {
 	public objectID: Model.DynamicValue;
@@ -47,10 +50,15 @@ class ModifyLight extends Base {
 		this.selectedFields = [];
 		if (this.action !== MODIFY_LIGHT_ACTION.DELETE) {
 			this.light = new Model.StateLight({});
+			const properties =
+				command.length - iterator.i ===
+				LEGACY_LIGHT_PROPERTIES.length * (this.action === MODIFY_LIGHT_ACTION.EDIT ? 3 : 2)
+					? LEGACY_LIGHT_PROPERTIES
+					: LIGHT_PROPERTIES;
 			const hasSelectedFields =
-				this.action === MODIFY_LIGHT_ACTION.EDIT && command.length - iterator.i > LIGHT_PROPERTIES.length * 2;
-			for (const property of LIGHT_PROPERTIES) {
-				this.selectedFields.push(hasSelectedFields ? command[iterator.i++] === 1 : true);
+				this.action === MODIFY_LIGHT_ACTION.EDIT && command.length - iterator.i >= properties.length * 3;
+			for (const property of properties) {
+				this.selectedFields[LIGHT_PROPERTIES.indexOf(property)] = hasSelectedFields ? command[iterator.i++] === 1 : true;
 				(this.light[property] as Model.DynamicValue) = Model.DynamicValue.createValueCommand(command, iterator);
 			}
 		}
