@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { CHARACTER_KIND, GROUP_KIND, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
+import { CHARACTER_KIND, Constants, GROUP_KIND, Inputs, Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Game, MapObject, Picture2D, Player } from '../Core';
 import { Common, Data, Graphic, Manager, Model, Scene } from '../index';
 
@@ -346,7 +346,10 @@ class Stack {
 		}
 		ctx.save();
 		ctx.globalAlpha = picture.opacity;
-		ctx.translate(picture.x, picture.y);
+		ctx.translate(
+			picture.x,
+			picture.y + (textMessage.heights[0] / 2 - ScreenResolution.getScreenY(Constants.HUGE_SPACE)) * picture.zoom,
+		);
 		ctx.rotate((picture.angle * Math.PI) / 180);
 		ctx.scale(picture.zoom, picture.zoom);
 		if (picture.centered) {
