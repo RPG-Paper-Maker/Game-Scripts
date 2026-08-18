@@ -133,7 +133,7 @@ class MapObject {
 		this.isHero = isHero;
 		this.previousPosition = position;
 		this.mesh = null;
-		this.meshBoundingBox = null;
+		this.meshBoundingBox = [];
 		this.currentBoundingBox = null;
 		this.boundingBoxSettings = null;
 		this.landCollision = null;
