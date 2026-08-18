@@ -21,7 +21,6 @@ import {
 	Paths,
 	PICTURE_KIND,
 	Platform,
-	ScreenResolution,
 	TARGET_KIND,
 	Utils,
 } from '../Common';
@@ -1222,10 +1221,18 @@ class Map extends Base {
 
 	/**
 	 *  Update and move the camera position for hiding stuff.
-	 *  @param {THREE.Vector2} pointer 2D position on screen to test if intersect
+	 *  @param {THREE.Vector3} target Position to keep visible
 	 */
-	updateCameraHiding(pointer: THREE.Vector2) {
-		Manager.GL.raycaster.setFromCamera(pointer, this.camera.getThreeCamera());
+	updateCameraHiding(target: THREE.Vector3) {
+		const verticalAngle = (this.camera.verticalAngle * Math.PI) / 180.0;
+		const horizontalAngle = (this.camera.horizontalAngle * Math.PI) / 180.0;
+		const horizontalDistance = this.camera.distance * Math.sin(verticalAngle);
+		const origin = this.camera.targetPosition.clone();
+		origin.x -= horizontalDistance * Math.cos(horizontalAngle);
+		origin.y += this.camera.distance * Math.cos(verticalAngle);
+		origin.z -= horizontalDistance * Math.sin(horizontalAngle);
+		const direction = target.clone().sub(origin);
+		Manager.GL.raycaster.set(origin, direction.normalize());
 		Manager.GL.raycaster.layers.set(1);
 		const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 		let distance: number;
@@ -1364,16 +1371,11 @@ class Map extends Base {
 		if (Game.current !== null && (Data.Systems.moveCameraOnBlockView.getValue() as number)) {
 			this.camera.forceNoHide = false;
 			this.camera.hidingDistance = -1;
-			const pointer = Manager.GL.toScreenPosition(
+			this.updateCameraHiding(
 				this.camera.target.position.clone().add(new THREE.Vector3(0, this.camera.target.height, 0)),
-				this.camera.getThreeCamera(),
-			)
-				.divide(new THREE.Vector2(ScreenResolution.CANVAS_WIDTH, ScreenResolution.CANVAS_HEIGHT))
-				.subScalar(0.5);
-			pointer.setY(-pointer.y);
-			this.updateCameraHiding(pointer);
+			);
 			if (this.camera.isHiding()) {
-				this.updateCameraHiding(new THREE.Vector2(0, 0));
+				this.updateCameraHiding(this.camera.targetPosition);
 				this.camera.update();
 			}
 			let opacity = 1;
