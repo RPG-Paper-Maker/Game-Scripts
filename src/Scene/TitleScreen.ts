@@ -56,6 +56,8 @@ class TitleScreen extends Base {
 	 */
 	public musicStarted: boolean = false;
 
+	private waitingForVideoLoopPoint: boolean = false;
+
 	/** Whether this title-screen entry should skip the video introduction. */
 	public startAtLoop: boolean;
 
@@ -121,6 +123,9 @@ class TitleScreen extends Base {
 					});
 				} else {
 					this.titleReady = !loop || loopMs === 0 || startMs > 0;
+					if (!this.titleReady) {
+						this.waitForVideoLoopPoint();
+					}
 				}
 				videoPlayed = true;
 			} catch {
@@ -184,7 +189,7 @@ class TitleScreen extends Base {
 				const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
 				const currentMs = Platform.canvasVideos.currentTime * 1000;
 				const videoEnded = Platform.canvasVideos.ended;
-				const ready = loop ? currentMs >= loopMs || videoEnded : videoEnded;
+				const ready = videoEnded || (!this.waitingForVideoLoopPoint && (loop ? currentMs >= loopMs : false));
 				if (ready) {
 					this.titleReady = true;
 					Manager.Stack.requestPaintHUD = true;
@@ -303,7 +308,33 @@ class TitleScreen extends Base {
 			loop,
 			loopMs,
 			startMs,
-		).catch(console.error);
+		).then((played) => {
+			if (played && !this.titleReady) {
+				this.waitForVideoLoopPoint();
+			}
+		}).catch(console.error);
+	}
+
+	private waitForVideoLoopPoint() {
+		if (typeof Platform.canvasVideos.requestVideoFrameCallback !== 'function') {
+			return;
+		}
+		this.waitingForVideoLoopPoint = true;
+		const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
+		const onVideoFrame = (_now: number, metadata: VideoFrameCallbackMetadata) => {
+			if (this.titleReady) {
+				this.waitingForVideoLoopPoint = false;
+				return;
+			}
+			if (metadata.mediaTime * 1000 >= loopMs) {
+				this.waitingForVideoLoopPoint = false;
+				this.titleReady = true;
+				Manager.Stack.requestPaintHUD = true;
+				return;
+			}
+			Platform.canvasVideos.requestVideoFrameCallback(onVideoFrame);
+		};
+		Platform.canvasVideos.requestVideoFrameCallback(onVideoFrame);
 	}
 
 	/**
