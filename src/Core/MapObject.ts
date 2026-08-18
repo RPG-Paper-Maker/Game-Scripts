@@ -2405,6 +2405,7 @@ class MapObject {
 					heroFractionalY > 0.001 &&
 					this.position.y > (mtnCollision.p?.y ?? 0);
 				const boundingBoxes = mapPortion.boundingBoxesLands[position.toIndex()];
+				const terrainAutotile = mapPortion.terrainAutotiles[position.toIndex()].at(-1);
 				const mapObjectCollision = MapObject.getMapObjectLandCollision(this.position);
 				if (
 					onMountainSlope ||
@@ -2422,6 +2423,9 @@ class MapObject {
 							mapObjectCollision.collision.autotilePictureID,
 						);
 					}
+				} else if (terrainAutotile) {
+					this.terrain = terrainAutotile.cs?.terrain ?? 0;
+					this.terrainPicture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, terrainAutotile.autotilePictureID);
 				} else if (boundingBoxes.length > 0) {
 					const collision = boundingBoxes[boundingBoxes.length - 1];
 					this.terrain = collision && collision.cs ? collision.cs.terrain : 0;

@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, SHAPE_KIND } from '../Common';
+import { Constants, CUSTOM_SHAPE_KIND, ELEMENT_MAP_KIND, PICTURE_KIND, SHAPE_KIND } from '../Common';
 import { Data, Manager, Model, Scene } from '../index';
 import { Autotile } from './Autotile';
 import { Autotiles } from './Autotiles';
@@ -43,6 +43,7 @@ class MapPortion {
 	public faceSpritesMesh: THREE.Mesh;
 	public squareNonEmpty: number[][][];
 	public boundingBoxesLands: StructMapElementCollision[][];
+	public terrainAutotiles: StructMapElementCollision[][];
 	public boundingBoxesSprites: StructMapElementCollision[][];
 	public boundingBoxesMountains: StructMapElementCollision[][];
 	public boundingBoxesObjects3D: StructMapElementCollision[][];
@@ -88,11 +89,13 @@ class MapPortion {
 		}
 		const l = Constants.PORTION_SIZE * Constants.PORTION_SIZE * Constants.PORTION_SIZE;
 		this.boundingBoxesLands = new Array(l);
+		this.terrainAutotiles = new Array(l);
 		this.boundingBoxesSprites = new Array(l);
 		this.boundingBoxesMountains = new Array(l);
 		this.boundingBoxesObjects3D = new Array(l);
 		for (i = 0; i < l; i++) {
 			this.boundingBoxesLands[i] = [];
+			this.terrainAutotiles[i] = [];
 			this.boundingBoxesSprites[i] = [];
 			this.boundingBoxesMountains[i] = [];
 			this.boundingBoxesObjects3D[i] = [];
@@ -207,6 +210,12 @@ class MapPortion {
 						if (objCollision !== null) {
 							this.boundingBoxesLands[indexPos].push(objCollision);
 						}
+						const picture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID);
+						this.terrainAutotiles[indexPos].push({
+							p: position,
+							cs: picture.getCollisionAtIndex(autotile.getIndex(picture.width)),
+							autotilePictureID: pictureID,
+						});
 					}
 					this.addToNonEmpty(position);
 
