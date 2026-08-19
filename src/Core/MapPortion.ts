@@ -244,11 +244,9 @@ class MapPortion {
 			MapPortion.setLayerOffsets(geometry, layerOffsets, 'y');
 			this.staticFloorsMesh = new THREE.Mesh(geometry, material);
 			this.staticFloorsMesh.renderOrder = -1;
-			if (Scene.Map.current.mapProperties.isSunLight) {
-				this.staticFloorsMesh.receiveShadow = true;
-				this.staticFloorsMesh.castShadow = true;
-				this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
-			}
+			this.staticFloorsMesh.receiveShadow = true;
+			this.staticFloorsMesh.castShadow = true;
+			this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			Scene.Map.current.scene.add(this.staticFloorsMesh);
 		}
 
@@ -256,11 +254,9 @@ class MapPortion {
 			if (list) {
 				for (const autotiles of list) {
 					if (autotiles && autotiles.createMesh()) {
-						if (Scene.Map.current.mapProperties.isSunLight) {
-							autotiles.mesh.receiveShadow = true;
-							autotiles.mesh.castShadow = true;
-							autotiles.mesh.customDepthMaterial = autotiles.bundle.material.userData.customDepthMaterial;
-						}
+						autotiles.mesh.receiveShadow = true;
+						autotiles.mesh.castShadow = true;
+						autotiles.mesh.customDepthMaterial = autotiles.bundle.material.userData.customDepthMaterial;
 						Scene.Map.current.scene.add(autotiles.mesh);
 					}
 				}
@@ -347,22 +343,18 @@ class MapPortion {
 			MapPortion.setLayerOffsets(staticGeometry, staticLayerOffsets, 'z');
 			this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
 			this.staticSpritesMesh.renderOrder = -1;
-			if (Scene.Map.current.mapProperties.isSunLight) {
-				this.staticSpritesMesh.receiveShadow = true;
-				this.staticSpritesMesh.castShadow = true;
-				this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
-			}
+			this.staticSpritesMesh.receiveShadow = true;
+			this.staticSpritesMesh.castShadow = true;
+			this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			Scene.Map.current.scene.add(this.staticSpritesMesh);
 		}
 		if (!faceGeometry.isEmpty()) {
 			faceGeometry.updateAttributes();
 			this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
 			this.faceSpritesMesh.renderOrder = -1;
-			if (Scene.Map.current.mapProperties.isSunLight) {
-				this.faceSpritesMesh.castShadow = true;
-				this.faceSpritesMesh.receiveShadow = true;
-				this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
-			}
+			this.faceSpritesMesh.castShadow = true;
+			this.faceSpritesMesh.receiveShadow = true;
+			this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
 			Scene.Map.current.scene.add(this.faceSpritesMesh);
 		}
 	}
@@ -449,11 +441,9 @@ class MapPortion {
 			if (!geometry.isEmpty()) {
 				geometry.updateAttributes();
 				const mesh = new THREE.Mesh(geometry, obj.material);
-				if (Scene.Map.current.mapProperties.isSunLight) {
-					mesh.receiveShadow = true;
-					mesh.castShadow = true;
-					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
-				}
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				mesh.layers.enable(1);
 				this.staticWallsList.push(mesh);
 				Scene.Map.current.scene.add(mesh);
@@ -514,11 +504,9 @@ class MapPortion {
 		// Update all the geometry uvs and put it in the scene
 		for (const [, mountains] of this.staticMountainsList) {
 			if (mountains.createMesh()) {
-				if (Scene.Map.current.mapProperties.isSunLight) {
-					mountains.mesh.receiveShadow = true;
-					mountains.mesh.castShadow = true;
-					mountains.mesh.customDepthMaterial = mountains.bundle.material.userData.customDepthMaterial;
-				}
+				mountains.mesh.receiveShadow = true;
+				mountains.mesh.castShadow = true;
+				mountains.mesh.customDepthMaterial = mountains.bundle.material.userData.customDepthMaterial;
 				mountains.mesh.layers.enable(1);
 				Scene.Map.current.scene.add(mountains.mesh);
 			}
@@ -566,10 +554,8 @@ class MapPortion {
 								for (const material of materials) {
 									Manager.GL.applyScreenTone(material);
 								}
-								if (Scene.Map.current.mapProperties.isSunLight) {
-									child.receiveShadow = true;
-									child.castShadow = true;
-								}
+								child.receiveShadow = true;
+								child.castShadow = true;
 							}
 						});
 						clone.layers.enable(1);
@@ -649,11 +635,9 @@ class MapPortion {
 				const mesh = new THREE.Mesh(geometry, obj.material);
 				this.staticObjects3DList.push(mesh);
 				mesh.renderOrder = -1;
-				if (Scene.Map.current.mapProperties.isSunLight) {
-					mesh.receiveShadow = true;
-					mesh.castShadow = true;
-					mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
-				}
+				mesh.receiveShadow = true;
+				mesh.castShadow = true;
+				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				mesh.layers.enable(1);
 				Scene.Map.current.scene.add(mesh);
 			}

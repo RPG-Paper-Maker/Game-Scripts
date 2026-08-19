@@ -827,10 +827,8 @@ class MapObject {
 										for (const material of materials) {
 											Manager.GL.applyScreenTone(material);
 										}
-										if (Scene.Map.current.mapProperties.isSunLight) {
-											child.receiveShadow = true;
-											child.castShadow = true;
-										}
+										child.receiveShadow = true;
+										child.castShadow = true;
 									}
 								});
 								this.animationMixer = new THREE.AnimationMixer(this.gltfGroup);
@@ -958,11 +956,9 @@ class MapObject {
 				this.position.z + this.currentCenterOffset.z,
 			);
 			if (this.mesh !== null) {
-				if (Scene.Map.current.mapProperties.isSunLight) {
-					this.mesh.receiveShadow = true;
-					this.mesh.castShadow = true;
-					this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
-				}
+				this.mesh.receiveShadow = true;
+				this.mesh.castShadow = true;
+				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 				this.mesh.position.set(
 					this.position.x,
 					this.position.y + this.getMapObjectLayerDepthOffset(),
@@ -2062,6 +2058,17 @@ class MapObject {
 			default:
 				light = new THREE.PointLight(color, intensity, settings.distance.getValue() as number);
 				break;
+		}
+		if (
+			light instanceof THREE.PointLight ||
+			light instanceof THREE.SpotLight ||
+			light instanceof THREE.DirectionalLight
+		) {
+			light.castShadow = true;
+			if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+				light.shadow.bias = -0.0003;
+				light.shadow.normalBias = 0.5 / Data.Systems.SQUARE_SIZE;
+			}
 		}
 		return { light, settings, target, parent };
 	}
