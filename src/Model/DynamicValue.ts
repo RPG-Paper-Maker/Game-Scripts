@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { DYNAMIC_VALUE_KIND, PICTURE_KIND, Platform, SONG_KIND, Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, PICTURE_KIND, SONG_KIND, Utils } from '../Common';
 import { MapObjectCommandType } from '../Common/Types';
 import { Game, ReactionInterpreter } from '../Core';
 import { StructIterator } from '../EventCommand';
@@ -219,7 +219,6 @@ export class DynamicValue extends Base {
 		switch (this.kind) {
 			case DYNAMIC_VALUE_KIND.VARIABLE:
 				if (!Game.current) {
-					Platform.showErrorMessage('Trying to access a variable value without any game loaded.');
 					return forceVariable ? this.value : Data.Variables.getDefaultValue(this.value as number);
 				}
 				return forceVariable ? this.value : Game.current.getVariable(this.value as number);
