@@ -88,6 +88,8 @@ class SetMoveTurnAPicture extends Base {
 				const prevZoom = picture.zoom;
 				const prevOpacity = picture.opacity;
 				const prevAngle = picture.angle;
+				const prevMinPositionOffsetX = picture.minPositionOffsetX;
+				const prevMinPositionOffsetY = picture.minPositionOffsetY;
 				picture = Data.Pictures.getPictureCopy(PICTURE_KIND.PICTURES, this.pictureID.getValue() as number);
 				if (prevCentered) {
 					prevX += (prevW - picture.oW) / 2;
@@ -96,6 +98,9 @@ class SetMoveTurnAPicture extends Base {
 				picture.setX(prevX);
 				picture.setY(prevY);
 				picture.centered = prevCentered;
+				picture.minPositionOffsetX = prevMinPositionOffsetX;
+				picture.minPositionOffsetY = prevMinPositionOffsetY;
+				picture.resize();
 				picture.zoom = prevZoom;
 				picture.opacity = prevOpacity;
 				picture.angle = prevAngle;

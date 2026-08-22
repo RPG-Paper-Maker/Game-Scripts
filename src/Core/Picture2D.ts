@@ -34,6 +34,8 @@ class Picture2D extends Bitmap {
 	public empty: boolean;
 	public image: HTMLImageElement;
 	public centered: boolean;
+	public minPositionOffsetX: number = 0;
+	public minPositionOffsetY: number = 0;
 	public reverse: boolean;
 	public sx: number;
 	public sy: number;
@@ -172,8 +174,8 @@ class Picture2D extends Bitmap {
 	}
 
 	resize() {
-		this.x = ScreenResolution.getScreenX(this.oX);
-		this.y = ScreenResolution.getScreenY(this.oY);
+		this.x = ScreenResolution.getScreenX(this.oX) + ScreenResolution.getScreenMinXY(this.minPositionOffsetX);
+		this.y = ScreenResolution.getScreenY(this.oY) + ScreenResolution.getScreenMinXY(this.minPositionOffsetY);
 		if (!this.empty && this.loaded) {
 			if (this.cover) {
 				this.w = ScreenResolution.CANVAS_WIDTH;
