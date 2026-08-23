@@ -530,6 +530,7 @@ export enum VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND {
 	Z_PIXEL_POSITION,
 	ORIENTATION,
 	TERRAIN,
+	PROPERTY,
 }
 
 /** Enum for the animation position kind. */
