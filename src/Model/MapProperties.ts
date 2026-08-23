@@ -46,6 +46,7 @@ export type MapPropertiesJSON = LocalizationJSON & {
 	randomBattleNumberStep?: DynamicValueJSON;
 	randomBattleVariance?: DynamicValueJSON;
 	isl?: boolean;
+	ols?: boolean;
 	isFog?: boolean;
 	fogColor?: DynamicValueJSON;
 	fogIntensity?: DynamicValueJSON;
@@ -84,6 +85,7 @@ export class MapProperties extends Localization {
 	public skyboxMesh: THREE.Mesh;
 	public maxNumberSteps: number;
 	public isSunLight: boolean;
+	public objectLightsShadows: boolean;
 	public isFog: boolean;
 	public fogColorID: DynamicValue;
 	public fogIntensity: DynamicValue;
@@ -315,6 +317,7 @@ export class MapProperties extends Localization {
 		this.updateMaxNumberSteps();
 
 		this.isSunLight = Utils.valueOrDefault(json.isl, true);
+		this.objectLightsShadows = Utils.valueOrDefault(json.ols, true);
 		this.isFog = Utils.valueOrDefault(json.isFog, false);
 		this.fogColorID = DynamicValue.readOrDefaultDatabase(json.fogColor, 1);
 		this.fogIntensity = DynamicValue.readOrDefaultNumber(json.fogIntensity, 0.06);

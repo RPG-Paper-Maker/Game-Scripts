@@ -2066,7 +2066,7 @@ class MapObject {
 			light instanceof THREE.SpotLight ||
 			light instanceof THREE.DirectionalLight
 		) {
-			light.castShadow = true;
+			light.castShadow = Scene.Map.current.mapProperties.objectLightsShadows;
 			if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
 				light.shadow.bias = -0.0003;
 				light.shadow.normalBias = 0.5 / Data.Systems.SQUARE_SIZE;
