@@ -14,6 +14,13 @@ import { Game, Item, MapObject, Player, StructSearchResult } from '../Core';
 import { Data, Model, Scene } from '../index';
 import { Base } from './Base';
 
+type ConditionTree = {
+	condition?: any[];
+	operator: number;
+	conditions?: any[][];
+	children?: ConditionTree[];
+};
+
 /** @class
  *  An event command for condition event command block.
  *  @extends EventCommand.Base
@@ -22,6 +29,8 @@ import { Base } from './Base';
 class If extends Base {
 	public hasElse: boolean;
 	public kind: number;
+	public operator?: number;
+	public conditions?: If[];
 	public variableParamProp: Model.DynamicValue;
 	public variableParamPropOPERATION_KIND: number;
 	public variableParamPropValue: Model.DynamicValue;
@@ -72,6 +81,14 @@ class If extends Base {
 		};
 		this.hasElse = Utils.numberToBool(command[iterator.i++]);
 		this.kind = command[iterator.i++];
+		if (this.kind === -1) {
+			const tree = command[iterator.i++] as ConditionTree;
+			this.operator = tree.operator;
+			this.conditions = (tree.children ?? tree.conditions!.map((condition) => ({ condition }))).map((condition) =>
+				new If(condition.children ? [0, -1, condition] : [0, ...condition.condition!]),
+			);
+			return;
+		}
 		switch (this.kind) {
 			case 0: // Variable / Param / Prop
 				this.variableParamProp = Model.DynamicValue.createValueCommand(command, iterator);
@@ -176,6 +193,11 @@ class If extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
+		if (this.conditions) {
+			return {
+				conditions: this.conditions.map((condition) => condition.initialize()),
+			};
+		}
 		return {
 			waitingObject: false,
 			object: null,
@@ -190,6 +212,21 @@ class If extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		if (this.conditions) {
+			let result = this.operator === 0;
+			for (let index = 0; index < this.conditions.length; index++) {
+				const conditionResult = this.conditions[index].update(currentState.conditions[index], object, state);
+				if (conditionResult === 0) {
+					return 0;
+				}
+				const isValid = conditionResult === -1;
+				if (this.operator === 0 ? !isValid : isValid) {
+					result = isValid;
+					break;
+				}
+			}
+			return result ? -1 : 1 + (this.hasElse ? 0 : 1);
+		}
 		let i: number,
 			j: number,
 			l: number,
