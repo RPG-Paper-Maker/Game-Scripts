@@ -161,10 +161,12 @@ class MapObject {
 
 	private static getLoadedMapObjects(): Set<MapObject> {
 		const objects = new Set<MapObject>();
-		for (const portion of Scene.Map.current.mapPortions) {
+		const map = Scene.Map.current;
+		if (!map?.mapPortions) return objects;
+		for (const portion of map.mapPortions) {
 			if (!portion) continue;
 			for (const object of portion.objectsList) objects.add(object);
-			const data = Game.current.getPortionData(Scene.Map.current.id, portion.portion);
+			const data = Game.current.getPortionData(map.id, portion.portion);
 			for (const object of data.min) objects.add(object);
 			for (const object of data.mout) objects.add(object);
 		}
