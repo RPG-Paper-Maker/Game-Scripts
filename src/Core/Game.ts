@@ -17,6 +17,7 @@ import { Item } from './Item';
 import { MapObject } from './MapObject';
 import { Player } from './Player';
 import { Portion } from './Portion';
+import { Position } from './Position';
 
 type JsonGame = {
 	pv?: string;
@@ -338,12 +339,46 @@ class Game {
 			map: Scene.Map,
 			objectMap: Function,
 			movedObjects: MapObject[],
-			objectMapMinMout: Function;
-		objectMap = objectMap = async (t: number[]) => {
-			const obj = (await MapObject.searchOutMap(t[0])).object;
-			obj.position = new THREE.Vector3(t[1], t[2], t[3]);
+			objectMapMinMout: Function,
+			addPersistentObjectToPortion: Function;
+		objectMap = async (t: number[]) => {
+			let obj: MapObject;
+			if (t.length >= 5) {
+				const position = new THREE.Vector3(t[2], t[3], t[4]);
+				Scene.Map.current.mapProperties.allObjects.set(t[0], Position.createFromVector3(position));
+				Scene.Map.current.mapProperties.maxObjectsID = Math.max(Scene.Map.current.mapProperties.maxObjectsID, t[0]);
+				obj = new MapObject(Model.MapObject.createFromModelID(t[1], t[0]), position);
+				obj.modelID = t[1];
+				obj.isPersistent = Utils.numberToBool(t[5] ?? 0);
+			} else {
+				if (!Scene.Map.current.mapProperties.allObjects.has(t[0])) {
+					return null;
+				}
+				const result = await MapObject.searchOutMap(t[0]);
+				if (!result) {
+					return null;
+				}
+				obj = result.object;
+				obj.position = new THREE.Vector3(t[1], t[2], t[3]);
+			}
 			obj.previousPosition = obj.position;
 			return obj;
+		};
+		addPersistentObjectToPortion = (mapID: number, object: MapObject, data: Record<string, any>, portion: Portion) => {
+			if (!object.isPersistent) {
+				return;
+			}
+			const currentPortion = Position.createFromVector3(object.position).getGlobalPortion();
+			const currentData = currentPortion.equals(portion)
+				? data
+				: this.getOrCreatePortionData(mapID, currentPortion);
+			const list = currentPortion.equals(portion) ? 'min' : 'mout';
+			if (!currentData[list]) {
+				currentData[list] = [];
+			}
+			if (currentData[list].indexOf(object.system.id) === -1) {
+				currentData[list].push(object.system.id);
+			}
 		};
 		for (id in this.mapsData) {
 			l = this.mapsData[id].length;
@@ -367,9 +402,17 @@ class Game {
 									if (!map) {
 										map = new Scene.Map(parseInt(id), false, true);
 										Scene.Map.current = map;
-										await map.readMapProperties();
+										await map.readMapProperties(true);
 									}
-									datas.m = await Promise.all(datas.m.map(objectMap));
+									datas.m = (await Promise.all(datas.m.map(objectMap))).filter((object) => object !== null);
+									for (const movedObject of datas.m) {
+										addPersistentObjectToPortion(
+											parseInt(id),
+											movedObject,
+											datas,
+											new Portion(i, jp === 0 ? -j : j, k),
+										);
+									}
 									movedObjects = movedObjects.concat(datas.m);
 								}
 							}
@@ -394,10 +437,10 @@ class Game {
 							datas = this.mapsData[id][i][jp][j][k];
 							if (datas) {
 								if (datas.min && datas.min.length) {
-									datas.min = datas.min.map(objectMapMinMout);
+									datas.min = datas.min.map(objectMapMinMout).filter((object) => object !== undefined);
 								}
 								if (datas.mout && datas.mout.length) {
-									datas.mout = datas.mout.map(objectMapMinMout);
+									datas.mout = datas.mout.map(objectMapMinMout).filter((object) => object !== undefined);
 								}
 							}
 						}
@@ -444,7 +487,7 @@ class Game {
 								if (datas.min && datas.min.length) {
 									tab = [];
 									for (o of datas.min) {
-										if (o.currentStateInstance && o.currentStateInstance.keepPosition) {
+										if (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition)) {
 											tab.push(o.system.id);
 										}
 									}
@@ -455,7 +498,7 @@ class Game {
 								if (datas.mout && datas.mout.length) {
 									tab = [];
 									for (o of datas.mout) {
-										if (o.currentStateInstance && o.currentStateInstance.keepPosition) {
+										if (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition)) {
 											tab.push(o.system.id);
 										}
 									}
@@ -466,8 +509,12 @@ class Game {
 								if (datas.m && datas.m.length) {
 									tab = [];
 									for (o of datas.m) {
-										if (o.currentStateInstance && o.currentStateInstance.keepPosition) {
-											tab.push([o.system.id, o.position.x, o.position.y, o.position.z]);
+										if (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition)) {
+											tab.push(
+												o.modelID === null
+													? [o.system.id, o.position.x, o.position.y, o.position.z]
+													: [o.system.id, o.modelID, o.position.x, o.position.y, o.position.z, Utils.boolToNumber(o.isPersistent)],
+											);
 										}
 									}
 									if (tab.length) {
@@ -491,6 +538,9 @@ class Game {
 								}
 								if (datas.so && datas.so.length) {
 									inf.so = datas.so;
+								}
+								if (datas.pr && datas.pr.length) {
+									inf.pr = datas.pr;
 								}
 							}
 							objPortion[i][jp][j][k] = datas ? inf : null;
@@ -747,6 +797,7 @@ class Game {
 				r: [],
 				soi: [],
 				so: [],
+				pr: [],
 			};
 		}
 		return this.mapsData[id][i][jp][jabs][k];

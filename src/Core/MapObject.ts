@@ -62,6 +62,8 @@ class MapObject {
 	private static EMPTY_PARAMETERS: Map<number, Model.DynamicValue> = new Map();
 
 	public id: number;
+	public modelID: number = null;
+	public isPersistent: boolean = false;
 	public system: Model.MapObject;
 	public position: THREE.Vector3;
 	public positionLayer: number = 0;

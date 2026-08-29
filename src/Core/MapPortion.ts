@@ -755,6 +755,9 @@ class MapPortion {
 					objects[i].addToScene();
 				}
 			}
+			for (const object of objectsM) {
+				MapObject.refreshAutotilesAround(object.position);
+			}
 		}
 	}
 

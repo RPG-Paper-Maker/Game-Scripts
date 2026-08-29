@@ -336,13 +336,20 @@ class Map extends Base {
 						// Ids of the objects that have modified properties
 						p: datas && datas.p ? datas.p : [],
 						// Properties values of the objects according to id
-						r: datas && datas.r ? datas.r : [],
+						r: [...(datas && datas.r ? datas.r : []), ...(datas && datas.pr ? datas.pr : [])],
 						// Removed objects according to id
 						soi: datas && datas.soi ? datas.soi : [],
 						// Ids of the objects that have modified states options
 						so: datas && datas.so ? datas.so : [],
 						// States options of the objects according to id
+						pr: datas && datas.pr ? datas.pr : [],
 					};
+					for (const object of objectsPortions[i][jp][jabs][k].m) {
+						if (object.modelID !== null) {
+							this.mapProperties.allObjects.set(object.system.id, Position.createFromVector3(object.position));
+							this.mapProperties.maxObjectsID = Math.max(this.mapProperties.maxObjectsID, object.system.id);
+						}
+					}
 				}
 			}
 		}

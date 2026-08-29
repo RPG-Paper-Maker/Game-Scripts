@@ -9,6 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
+import { Utils } from '../Common';
 import { Game, MapObject, Portion, StructSearchResult } from '../Core';
 import { Model, Scene } from '../index';
 import { Base } from './Base';
@@ -20,6 +21,7 @@ import { Base } from './Base';
  */
 class RemoveObjectFromMap extends Base {
 	public objectID: Model.DynamicValue;
+	public isPermanent: boolean;
 
 	constructor(command: any[]) {
 		super();
@@ -28,6 +30,7 @@ class RemoveObjectFromMap extends Base {
 			i: 0,
 		};
 		this.objectID = Model.DynamicValue.createValueCommand(command, iterator);
+		this.isPermanent = Utils.numberToBool(command[iterator.i++] ?? 0);
 	}
 
 	/**
@@ -83,6 +86,9 @@ class RemoveObjectFromMap extends Base {
 							}
 							if (result.datas.r.indexOf(result.id) === -1) {
 								result.datas.r.push(result.id);
+							}
+							if (this.isPermanent && result.datas.pr.indexOf(result.id) === -1) {
+								result.datas.pr.push(result.id);
 							}
 					}
 					const position = result.object.position.clone();

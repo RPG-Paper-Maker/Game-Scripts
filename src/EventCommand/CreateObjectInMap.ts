@@ -29,6 +29,7 @@ class CreateObjectInMap extends Base {
 	public z: Model.DynamicValue;
 	public isStockID: boolean;
 	public stockID: Model.DynamicValue;
+	public isPermanent: boolean;
 
 	constructor(command: any[]) {
 		super();
@@ -62,6 +63,7 @@ class CreateObjectInMap extends Base {
 		if (this.isStockID) {
 			this.stockID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
+		this.isPermanent = Utils.numberToBool(command[iterator.i++] ?? 0);
 	}
 
 	/**
@@ -112,10 +114,10 @@ class CreateObjectInMap extends Base {
 			const position = Position.createFromVector3(currentState.position);
 			const globalPortion = position.getGlobalPortion();
 			Scene.Map.current.mapProperties.allObjects.set(id, position);
-			const newObject = new MapObject(
-				Model.MapObject.createFromModelID(this.modelID.getValue() as number, id),
-				currentState.position,
-			);
+			const modelID = this.modelID.getValue() as number;
+			const newObject = new MapObject(Model.MapObject.createFromModelID(modelID, id), currentState.position);
+			newObject.modelID = modelID;
+			newObject.isPersistent = this.isPermanent;
 			if (this.isStockID) {
 				Game.current.variables.set(this.stockID.getValue(true) as number, id);
 			}
