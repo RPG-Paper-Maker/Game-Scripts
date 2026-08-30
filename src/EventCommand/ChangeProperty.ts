@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mathf } from '../Common';
-import { Game, MapObject, Position, ReactionInterpreter } from '../Core';
+import { Mathf, Platform } from '../Common';
+import { Game, MapObject, Position } from '../Core';
 import { Model, Scene } from '../index';
 import { Base } from './Base';
 
@@ -20,6 +20,8 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ChangeProperty extends Base {
+	public mapID: Model.DynamicValue;
+	public objectID: Model.DynamicValue;
 	public propertyID: Model.DynamicValue;
 	public operationKind: number;
 	public newValue: Model.DynamicValue;
@@ -33,6 +35,23 @@ class ChangeProperty extends Base {
 		this.propertyID = Model.DynamicValue.createValueCommand(command, iterator);
 		this.operationKind = command[iterator.i++];
 		this.newValue = Model.DynamicValue.createValueCommand(command, iterator);
+		this.mapID =
+			iterator.i < command.length
+				? Model.DynamicValue.createValueCommand(command, iterator)
+				: Model.DynamicValue.createNumber(-1);
+		this.objectID =
+			iterator.i < command.length
+				? Model.DynamicValue.createValueCommand(command, iterator)
+				: Model.DynamicValue.createNumber(-1);
+	}
+
+	initialize(): Record<string, any> {
+		return {
+			map: null,
+			object: null,
+			mapID: this.mapID.getValue(),
+			objectID: this.objectID.getValue(),
+		};
 	}
 
 	/**
@@ -43,36 +62,72 @@ class ChangeProperty extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const propertyID = this.propertyID.getValue() as number;
-		const newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](
-			object.properties[propertyID],
-			this.newValue.getValue() as number,
-		);
-		object.properties[propertyID] = newValue;
-		let props: number[];
-		if (object.isHero) {
-			props = Game.current.heroProperties;
-		} else if (object.isStartup) {
-			props = Game.current.startupProperties[Scene.Map.current.id];
-			if (props === undefined) {
-				props = [];
-				Game.current.startupProperties[Scene.Map.current.id] = props;
+		if (!currentState.waitingObject) {
+			if (currentState.map === null) {
+				if (
+					currentState.mapID === -1 ||
+					currentState.mapID === Scene.Map.current.id ||
+					currentState.objectID === -1
+				) {
+					currentState.map = Scene.Map.current;
+				} else {
+					currentState.map = new Scene.Map(currentState.mapID, false, true);
+					void (async () => {
+						await currentState.map.readMapProperties(true);
+						currentState.map.initializePortionsObjects();
+					})();
+				}
 			}
-		} else {
-			const mapID = ReactionInterpreter.currentReaction?.originMapID ?? Scene.Map.current.id;
-			const portion = Position.createFromVector3(object.position).getGlobalPortion();
-			const portionData = Game.current.getPortionData(mapID, portion);
-			const indexProp = portionData.pi.indexOf(object.system.id);
-			if (indexProp === -1) {
-				props = [];
-				portionData.pi.push(object.system.id);
-				portionData.p.push(props);
-			} else {
-				props = portionData.p[indexProp];
+			if (currentState.map.mapProperties?.allObjects && currentState.map.portionsObjectsUpdated) {
+				if (currentState.map === Scene.Map.current) {
+					MapObject.search(currentState.objectID, (result) => {
+						currentState.object = result.object;
+					}, object);
+				} else {
+					currentState.object = {};
+				}
+				currentState.waitingObject = true;
 			}
 		}
-		props[propertyID - 1] = newValue;
-		return 1;
+		if (currentState.waitingObject && currentState.object !== null) {
+			const propertyID = this.propertyID.getValue() as number;
+			const targetObject = currentState.object as MapObject;
+			let props: number[];
+			if (targetObject.isHero) {
+				props = Game.current.heroProperties;
+			} else if (targetObject.isStartup) {
+				props = Game.current.startupProperties[Scene.Map.current.id] ?? [];
+				Game.current.startupProperties[Scene.Map.current.id] = props;
+			} else {
+				const objectID = currentState.objectID === -1 ? object.system.id : currentState.objectID;
+				const position = currentState.map.mapProperties.allObjects.get(objectID);
+				if (!position) {
+					Platform.showErrorMessage(
+						`Change property command: the object ID ${objectID} selected doesn't exist in the map ${currentState.map.name}`,
+					);
+					return 1;
+				}
+				const portion = position.getGlobalPortion();
+				const portionData = Game.current.getPortionData(currentState.map.id, portion);
+				let indexProp = portionData.pi.indexOf(objectID);
+				if (indexProp === -1) {
+					indexProp = portionData.pi.length;
+					portionData.pi.push(objectID);
+					portionData.p.push([]);
+				}
+				props = portionData.p[indexProp];
+			}
+			const newValue = Mathf.OPERATORS_NUMBERS[this.operationKind](
+				currentState.map === Scene.Map.current ? targetObject.properties[propertyID] : (props[propertyID - 1] ?? 0),
+				this.newValue.getValue() as number,
+			);
+			if (currentState.map === Scene.Map.current) {
+				targetObject.properties[propertyID] = newValue;
+			}
+			props[propertyID - 1] = newValue;
+			return 1;
+		}
+		return 0;
 	}
 }
 

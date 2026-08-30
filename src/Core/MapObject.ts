@@ -183,6 +183,7 @@ class MapObject {
 				const other = object.currentStateInstance;
 				if (
 					object !== this &&
+					!object.removed &&
 					other?.graphicKind === ELEMENT_MAP_KIND.AUTOTILES &&
 					other.graphicID === state.graphicID &&
 					object.positionLayer + (other.layer.getValue() as number) ===
@@ -460,6 +461,9 @@ class MapObject {
 		}
 		const globalPortion = position.getGlobalPortion();
 		const mapsData = Game.current.getPortionData(Scene.Map.current.id, globalPortion);
+		if (mapsData.r?.indexOf(objectID) !== -1) {
+			return null;
+		}
 		const json = await Platform.parseFileJSON(
 			Paths.FILE_MAPS + Scene.Map.current.mapFilename + '/' + globalPortion.getFileName(),
 		);

@@ -1629,21 +1629,21 @@ class Map extends Base {
 				for (k = 0; k < w; k++) {
 					portion = Game.current.getPortionPosData(this.id, i, j, k);
 					for (x = portion.min.length - 1; x >= 0; x--) {
-						if (!portion.min[x].currentState || !portion.min[x].currentStateInstance.keepPosition) {
+						if (!portion.min[x].currentState || (!portion.min[x].currentStateInstance.keepPosition && !portion.min[x].isPersistent)) {
 							portion.min.splice(x, 1);
 						} else {
 							portion.min[x].removeFromScene();
 						}
 					}
 					for (x = portion.mout.length - 1; x >= 0; x--) {
-						if (!portion.mout[x].currentState || !portion.mout[x].currentStateInstance.keepPosition) {
+						if (!portion.mout[x].currentState || (!portion.mout[x].currentStateInstance.keepPosition && !portion.mout[x].isPersistent)) {
 							portion.mout.splice(x, 1);
 						} else {
 							portion.mout[x].removeFromScene();
 						}
 					}
 					for (x = portion.m.length - 1; x >= 0; x--) {
-						if (!portion.m[x].currentState || !portion.m[x].currentStateInstance.keepPosition) {
+						if (!portion.m[x].currentState || (!portion.m[x].currentStateInstance.keepPosition && !portion.m[x].isPersistent)) {
 							portion.m.splice(x, 1);
 						} else {
 							portion.m[x].removeFromScene();

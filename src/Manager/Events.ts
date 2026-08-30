@@ -251,7 +251,7 @@ class Events {
 							let a: number, l: number, object: MapObject;
 							for (a = 0, l = objects.min.length; a < l; a++) {
 								object = objects.min[a];
-								if (object.system.id === targetID) {
+								if (!object.removed && object.system.id === targetID) {
 									object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
 									lastObjectID = object.system.id;
 									break;
@@ -259,7 +259,7 @@ class Events {
 							}
 							for (a = 0, l = objects.mout.length; a < l; a++) {
 								object = objects.mout[a];
-								if (object.system.id === targetID) {
+								if (!object.removed && object.system.id === targetID) {
 									object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
 									lastObjectID = object.system.id;
 									break;
@@ -271,7 +271,7 @@ class Events {
 							if (mapPortion) {
 								for (a = 0, l = mapPortion.objectsList.length; a < l; a++) {
 									object = mapPortion.objectsList[a];
-									if (object.system.id === targetID) {
+									if (!object.removed && object.system.id === targetID) {
 										object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
 										lastObjectID = object.system.id;
 										break;
@@ -420,6 +420,9 @@ class Events {
 		let lastObjectID: number | null = null;
 		for (let i = 0, l = objects.length; i < l; i++) {
 			object = objects[i];
+			if (object.removed) {
+				continue;
+			}
 			if (senderNoReceiver && sender === object) {
 				continue;
 			}
