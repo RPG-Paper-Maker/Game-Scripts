@@ -184,7 +184,7 @@ class ReactionInterpreter {
 			for (let i = 0, l = this.currentReaction.labels.length; i < l; i++) {
 				tab = this.currentReaction.labels[i];
 				if (result === (tab[0].getValue() as string)) {
-					value = tab[1].next;
+					return tab[1].next;
 				}
 			}
 		} else {
