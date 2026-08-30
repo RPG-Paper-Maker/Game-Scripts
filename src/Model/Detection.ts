@@ -62,6 +62,7 @@ export class Detection extends Base {
 		const orientation = sender.orientationEye;
 		const localPosition = sender.position;
 		const list = new Array(this.boxes.length);
+		const angleY = ((4 - orientation) % 4) * 90;
 		for (let i = 0; i < this.boxes.length; i++) {
 			const [p, bls, blp, bhs, bhp, bws, bwp] = this.boxes[i];
 			const length = bls + blp / 100;
@@ -100,7 +101,7 @@ export class Detection extends Base {
 				length,
 				height,
 				width,
-				0,
+				angleY,
 				0,
 				0,
 			];
