@@ -323,8 +323,13 @@ class ChangeVariables extends Base {
 					}
 					break;
 				case 10: // Script
+					currentState.value = this.isLocal
+						? (ReactionInterpreter.currentReaction.localVariables.get(this.localVariableName) ?? 0)
+						: Game.current.getVariable(this.selection);
 					currentState.value = Interpreter.evaluate(this.valueScript.getValue() as string, {
 						thisObject: object,
+						additionalName: '$value',
+						additionalValue: currentState.value,
 						addReturn: true,
 					});
 					break;
