@@ -235,12 +235,14 @@ class Events {
 			case 2: // Send to a particular object
 				if (targetID === -1) {
 					// Send to sender
-					sender.receiveEvent(sender, isSystem, eventID, parameters, sender.states);
-					lastObjectID = sender.system.id;
+					if (sender.receiveEvent(sender, isSystem, eventID, parameters, sender.states)) {
+						lastObjectID = sender.system.id;
+					}
 				} else if (targetID === 0) {
 					// Send to the hero
-					Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
-					lastObjectID = Game.current.hero.system.id;
+					if (Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates)) {
+						lastObjectID = Game.current.hero.system.id;
+					}
 				} else {
 					Scene.Map.current.updatePortions(
 						this,
@@ -252,16 +254,18 @@ class Events {
 							for (a = 0, l = objects.min.length; a < l; a++) {
 								object = objects.min[a];
 								if (!object.removed && object.system.id === targetID) {
-									object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
-									lastObjectID = object.system.id;
+									if (object.receiveEvent(sender, isSystem, eventID, parameters, object.states)) {
+										lastObjectID = object.system.id;
+									}
 									break;
 								}
 							}
 							for (a = 0, l = objects.mout.length; a < l; a++) {
 								object = objects.mout[a];
 								if (!object.removed && object.system.id === targetID) {
-									object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
-									lastObjectID = object.system.id;
+									if (object.receiveEvent(sender, isSystem, eventID, parameters, object.states)) {
+										lastObjectID = object.system.id;
+									}
 									break;
 								}
 							}
@@ -272,8 +276,9 @@ class Events {
 								for (a = 0, l = mapPortion.objectsList.length; a < l; a++) {
 									object = mapPortion.objectsList[a];
 									if (!object.removed && object.system.id === targetID) {
-										object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
-										lastObjectID = object.system.id;
+										if (object.receiveEvent(sender, isSystem, eventID, parameters, object.states)) {
+											lastObjectID = object.system.id;
+										}
 										break;
 									}
 								}
@@ -367,8 +372,7 @@ class Events {
 			}
 			if (onlyTheClosest) {
 				closests.push([Game.current.hero, sender, isSystem, eventID, parameters, Game.current.heroStates]);
-			} else {
-				Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates);
+			} else if (Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates)) {
 				lastObjectID = Game.current.hero.system.id;
 			}
 		}
@@ -385,8 +389,9 @@ class Events {
 					closest = closests[i];
 				}
 			}
-			closest[0].receiveEvent(closest[1], closest[2], closest[3], closest[4], closest[5]);
-			lastObjectID = closest[0].system.id;
+			if (closest[0].receiveEvent(closest[1], closest[2], closest[3], closest[4], closest[5])) {
+				lastObjectID = closest[0].system.id;
+			}
 		}
 		return lastObjectID;
 	}
@@ -436,8 +441,7 @@ class Events {
 			// Make the object receive the event
 			if (onlyTheClosest) {
 				closests.push([object, sender, isSystem, eventID, parameters, object.states]);
-			} else {
-				object.receiveEvent(sender, isSystem, eventID, parameters, object.states);
+			} else if (object.receiveEvent(sender, isSystem, eventID, parameters, object.states)) {
 				lastObjectID = object.system.id;
 			}
 		}

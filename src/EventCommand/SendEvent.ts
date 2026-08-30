@@ -107,14 +107,15 @@ class SendEvent extends Base {
 			this.senderNoReceiver,
 			this.onlyTheClosest,
 		);
-		if (this.isStockLastObjectID && lastObjectID !== null) {
+		if (this.isStockLastObjectID) {
+			const storedObjectID = lastObjectID ?? -1;
 			if (this.stockLastObjectIDVariable.kind === DYNAMIC_VALUE_KIND.LOCAL_VARIABLE) {
 				ReactionInterpreter.currentReaction.localVariables.set(
 					this.stockLastObjectIDVariable.value as string,
-					lastObjectID,
+					storedObjectID,
 				);
 			} else {
-				Game.current.variables.set(this.stockLastObjectIDVariable.getValue(true) as number, lastObjectID);
+				Game.current.variables.set(this.stockLastObjectIDVariable.getValue(true) as number, storedObjectID);
 			}
 		}
 		return 1;
