@@ -94,6 +94,13 @@ class TitleScreen extends Base {
 
 		// Destroy pictures
 		Manager.Stack.displayedPictures = [];
+		const pictureBackgroundPromise = Data.TitlescreenGameover.isTitleBackgroundImage
+			? Picture2D.createWithID(
+				Data.TitlescreenGameover.titleBackgroundImageID,
+				PICTURE_KIND.TITLE_SCREEN,
+				{ cover: true },
+			).catch(() => null)
+			: null;
 
 		// Creating background (video plays behind, image draws on top)
 		let videoPlayed = false;
@@ -135,16 +142,9 @@ class TitleScreen extends Base {
 		if (!videoPlayed) {
 			this.titleReady = true;
 		}
-		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
-			try {
-				this.pictureBackground = await Picture2D.createWithID(
-					Data.TitlescreenGameover.titleBackgroundImageID,
-					PICTURE_KIND.TITLE_SCREEN,
-					{ cover: true },
-				);
-			} catch {
-				this.pictureBackground = null;
-			}
+		if (pictureBackgroundPromise) {
+			this.pictureBackground = await pictureBackgroundPromise;
+			Manager.Stack.requestPaintHUD = true;
 		}
 
 		// Windows
