@@ -337,6 +337,23 @@ class MoveObject extends Base {
 	initialize(): Record<string, any> {
 		return {
 			parallel: this.isWaitEnd,
+			objectID: this.objectID.getValue(),
+			parameters: this.parameters.map((parameters) =>
+				parameters.x
+					? {
+							...parameters,
+							x: parameters.x.getValue(),
+							xPixels: parameters.xPixels.getValue(),
+							y: parameters.y.getValue(),
+							yPlus: parameters.yPlus.getValue(),
+							z: parameters.z.getValue(),
+							zPixels: parameters.zPixels.getValue(),
+							peakY: parameters.peakY.getValue(),
+							peakYPlus: parameters.peakYPlus.getValue(),
+							time: parameters.time.getValue(),
+						}
+					: parameters,
+			),
 			index: 0,
 			distance: 0,
 			normalDistance: 0,
@@ -747,19 +764,17 @@ class MoveObject extends Base {
 				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
 				const square = parameters.square ? 1 : 1 / Data.Systems.SQUARE_SIZE;
 				currentState.endJump = new THREE.Vector3(
-					(parameters.x.getValue() as number) * square +
-						(parameters.xPixels.getValue() as number) / Data.Systems.SQUARE_SIZE +
+					(parameters.x as number) * square +
+						(parameters.xPixels as number) / Data.Systems.SQUARE_SIZE +
 						currentState.startJump.x,
-					(((parameters.y.getValue() as number) * square +
-						(parameters.yPlus.getValue() as number) / Data.Systems.SQUARE_SIZE) as number) +
-						currentState.startJump.y,
-					(parameters.z.getValue() as number) * square +
-						(parameters.zPixels.getValue() as number) / Data.Systems.SQUARE_SIZE +
+					(((parameters.y as number) * square +
+						(parameters.yPlus as number) / Data.Systems.SQUARE_SIZE) as number) + currentState.startJump.y,
+					(parameters.z as number) * square +
+						(parameters.zPixels as number) / Data.Systems.SQUARE_SIZE +
 						currentState.startJump.z,
 				);
 				currentState.peak =
-					(parameters.peakY.getValue() as number) +
-					(parameters.peakYPlus.getValue() as number) / Data.Systems.SQUARE_SIZE;
+					(parameters.peakY as number) + (parameters.peakYPlus as number) / Data.Systems.SQUARE_SIZE;
 				if (currentState.peak < currentState.endJump.y) {
 					Platform.showErrorMessage(
 						'Move object command: jump peak cannot be lower than final y position offset. Final position=' +
@@ -769,7 +784,7 @@ class MoveObject extends Base {
 							'px',
 					);
 				}
-				currentState.time = (parameters.time.getValue() as number) * 1000;
+				currentState.time = (parameters.time as number) * 1000;
 			}
 			currentState.currentTime = object.jump(
 				currentState.startJump,
@@ -1433,7 +1448,7 @@ class MoveObject extends Base {
 		}
 		if (currentState.parallel && this.moves.length > 0) {
 			if (!currentState.waitingObject) {
-				const objectID = this.objectID.getValue() as number;
+				const objectID = currentState.objectID as number;
 				MapObject.search(
 					objectID,
 					(result: StructSearchResult) => {
@@ -1448,7 +1463,7 @@ class MoveObject extends Base {
 					this,
 					currentState,
 					currentState.object,
-					this.parameters[currentState.index],
+					currentState.parameters[currentState.index],
 				);
 
 				if (finished) {
