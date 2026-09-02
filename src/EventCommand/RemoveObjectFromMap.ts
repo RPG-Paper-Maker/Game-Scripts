@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, Utils } from '../Common';
 import { Game, MapObject, Portion, StructSearchResult } from '../Core';
 import { Model, Scene } from '../index';
 import { Base } from './Base';
@@ -52,7 +52,10 @@ class RemoveObjectFromMap extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
-		const objectID = this.objectID.getValue() as number;
+		const objectID =
+			this.objectID.kind === DYNAMIC_VALUE_KIND.PROPERTY && this.objectID.value === -1
+				? -1
+				: (this.objectID.getValue() as number);
 		if (!currentState.started) {
 			currentState.started = true;
 			MapObject.search(
