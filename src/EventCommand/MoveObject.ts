@@ -120,12 +120,21 @@ class MoveObject extends Base {
 				const peakY = Model.DynamicValue.createValueCommand(command, iterator);
 				const peakYPlus = Model.DynamicValue.createValueCommand(command, iterator);
 				const time = Model.DynamicValue.createValueCommand(command, iterator);
+				let xPixels = Model.DynamicValue.createNumber(0);
+				let zPixels = Model.DynamicValue.createNumber(0);
+				if (command[iterator.i] === 'pixels') {
+					iterator.i++;
+					xPixels = Model.DynamicValue.createValueCommand(command, iterator);
+					zPixels = Model.DynamicValue.createValueCommand(command, iterator);
+				}
 				this.parameters.push({
 					square,
 					x: x,
+					xPixels: xPixels,
 					y: y,
 					yPlus: yPlus,
 					z: z,
+					zPixels: zPixels,
 					peakY: peakY,
 					peakYPlus: peakYPlus,
 					time: time,
@@ -738,11 +747,15 @@ class MoveObject extends Base {
 				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
 				const square = parameters.square ? 1 : 1 / Data.Systems.SQUARE_SIZE;
 				currentState.endJump = new THREE.Vector3(
-					(parameters.x.getValue() as number) * square + currentState.startJump.x,
+					(parameters.x.getValue() as number) * square +
+						(parameters.xPixels.getValue() as number) / Data.Systems.SQUARE_SIZE +
+						currentState.startJump.x,
 					(((parameters.y.getValue() as number) * square +
 						(parameters.yPlus.getValue() as number) / Data.Systems.SQUARE_SIZE) as number) +
 						currentState.startJump.y,
-					(parameters.z.getValue() as number) * square + currentState.startJump.z,
+					(parameters.z.getValue() as number) * square +
+						(parameters.zPixels.getValue() as number) / Data.Systems.SQUARE_SIZE +
+						currentState.startJump.z,
 				);
 				currentState.peak =
 					(parameters.peakY.getValue() as number) +
