@@ -9,8 +9,8 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, ScreenResolution } from '../Common';
-import { MapObject, WindowBox, WindowChoices } from '../Core';
+import { ALIGN, DYNAMIC_VALUE_KIND, ScreenResolution, Utils } from '../Common';
+import { Game, MapObject, ReactionInterpreter, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
 import { ShowText } from './ShowText';
@@ -23,6 +23,8 @@ import { ShowText } from './ShowText';
 class DisplayChoice extends Base {
 	public cancelAutoIndex: Model.DynamicValue;
 	public maxNumberChoices: Model.DynamicValue;
+	public isStockChoiceIndex: boolean;
+	public stockChoiceIndexVariable: Model.DynamicValue;
 	public choices: string[];
 	public windowChoices: WindowChoices;
 	public showText: ShowText;
@@ -37,6 +39,12 @@ class DisplayChoice extends Base {
 		};
 		this.cancelAutoIndex = Model.DynamicValue.createValueCommand(command, iterator);
 		this.maxNumberChoices = Model.DynamicValue.createValueCommand(command, iterator);
+		this.isStockChoiceIndex = iterator.i < command.length && command[iterator.i] !== '-'
+			? Utils.numberToBool(command[iterator.i++])
+			: false;
+		if (this.isStockChoiceIndex) {
+			this.stockChoiceIndexVariable = Model.DynamicValue.createValueCommand(command, iterator);
+		}
 		this.choices = [];
 		let l = command.length;
 		let lang: Model.Localization = null;
@@ -144,6 +152,13 @@ class DisplayChoice extends Base {
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		this.windowChoices.update();
+		if (this.isStockChoiceIndex && currentState.index >= 0) {
+			if (this.stockChoiceIndexVariable.kind === DYNAMIC_VALUE_KIND.LOCAL_VARIABLE) {
+				ReactionInterpreter.currentReaction.localVariables.set(this.stockChoiceIndexVariable.value as string, currentState.index);
+			} else {
+				Game.current.variables.set(this.stockChoiceIndexVariable.getValue(true) as number, currentState.index);
+			}
+		}
 		return currentState.index + 1;
 	}
 
