@@ -49,6 +49,7 @@ class ChangeProperty extends Base {
 		return {
 			map: null,
 			object: null,
+			error: false,
 			mapID: this.mapID.getValue(),
 			objectID: this.objectID.getValue(),
 		};
@@ -81,7 +82,15 @@ class ChangeProperty extends Base {
 			if (currentState.map.mapProperties?.allObjects && currentState.map.portionsObjectsUpdated) {
 				if (currentState.map === Scene.Map.current) {
 					MapObject.search(currentState.objectID, (result) => {
-						currentState.object = result.object;
+						if (result) {
+							currentState.object = result.object;
+						} else {
+							const objectID = currentState.objectID === -1 ? object.system.id : currentState.objectID;
+							Platform.showErrorMessage(
+								`Change property command: the object ID ${objectID} selected doesn't exist in the map ${currentState.map.name} or was removed.`,
+							);
+							currentState.error = true;
+						}
 					}, object);
 				} else {
 					currentState.object = {};
@@ -89,6 +98,7 @@ class ChangeProperty extends Base {
 				currentState.waitingObject = true;
 			}
 		}
+		if (currentState.error) return 1;
 		if (currentState.waitingObject && currentState.object !== null) {
 			const propertyID = this.propertyID.getValue() as number;
 			const targetObject = currentState.object as MapObject;
