@@ -57,6 +57,7 @@ class ChangeScreenTone extends Base {
 	 */
 	initialize(): Record<string, any> {
 		Manager.GL.screenToneByCommand = true;
+		const transitionID = ++Manager.GL.screenToneTransitionID;
 		const time = (this.time.getValue() as number) * 1000;
 		const color = this.colorID ? Data.Systems.getColor(this.colorID.getValue() as number) : null;
 		return {
@@ -74,6 +75,7 @@ class ChangeScreenTone extends Base {
 				Math.max(Math.min(1 - (this.grey.getValue() as number) / 100, 1), -1) - Manager.GL.screenTone.w,
 			time: time,
 			timeLeft: time,
+			transitionID: transitionID,
 		};
 	}
 
@@ -85,6 +87,9 @@ class ChangeScreenTone extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		if (currentState.transitionID !== Manager.GL.screenToneTransitionID) {
+			return 1;
+		}
 		if (currentState.parallel) {
 			// Updating the time left
 			let timeRate: number, dif: number;
