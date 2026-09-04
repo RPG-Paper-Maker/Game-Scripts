@@ -550,6 +550,7 @@ class MapPortion {
 						clone.renderOrder = -1;
 						clone.traverse((child) => {
 							if (child instanceof THREE.Mesh) {
+								child.layers.enable(1);
 								const materials = Array.isArray(child.material) ? child.material : [child.material];
 								for (const material of materials) {
 									Manager.GL.applyScreenTone(material);

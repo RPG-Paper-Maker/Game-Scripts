@@ -829,6 +829,9 @@ class MapObject {
 								this.gltfGroup.renderOrder = 1;
 								this.gltfGroup.traverse((child) => {
 									if (child instanceof THREE.Mesh) {
+										if (!this.isHero) {
+											child.layers.enable(1);
+										}
 										const materials = Array.isArray(child.material)
 											? child.material
 											: [child.material];
@@ -966,6 +969,9 @@ class MapObject {
 			if (this.mesh !== null) {
 				this.mesh.receiveShadow = true;
 				this.mesh.castShadow = true;
+				if (!this.isHero) {
+					this.mesh.layers.enable(1);
+				}
 				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 				this.mesh.position.set(
 					this.position.x,
