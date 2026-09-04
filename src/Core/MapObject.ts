@@ -2361,11 +2361,11 @@ class MapObject {
 
 	/** Get the terrain at a map position, including map-object floors and autotiles. */
 	static getTerrainAt(position: THREE.Vector3): number {
-		if (Scene.Map.current.loading) return 0;
+		if (Scene.Map.current.loading) return -1;
 		const mapPortion = Scene.Map.current.getMapPortionFromPortion(
 			Scene.Map.current.getLocalPortion(Portion.createFromVector3(position)),
 		);
-		if (!mapPortion) return 0;
+		if (!mapPortion) return -1;
 		const squarePosition = Position.createFromVector3(position);
 		const boundingBoxes = mapPortion.boundingBoxesLands[squarePosition.toIndex()];
 		const mapObjectCollision = MapObject.getMapObjectLandCollision(position);
@@ -2392,7 +2392,7 @@ class MapObject {
 		) {
 			return mapObjectCollision.collision.cs?.terrain ?? 0;
 		}
-		return staticCollision?.cs?.terrain ?? 0;
+		return staticCollision?.cs?.terrain ?? -1;
 	}
 
 	/**
