@@ -57,6 +57,7 @@ class ChangeVariables extends Base {
 	public valueTerrainXPlus: Model.DynamicValue;
 	public valueTerrainYPlus: Model.DynamicValue;
 	public valueTerrainZPlus: Model.DynamicValue;
+	public coordinatesValueType: number = 0;
 	public isFloored: boolean;
 	public isLocal: boolean;
 	public isCreatingLocalVariable: boolean;
@@ -124,6 +125,10 @@ class ChangeVariables extends Base {
 				this.valueScript = Model.DynamicValue.createMessage(String(command[iterator.i++]));
 				break;
 			case 11: // Terrain at coordinates
+				if (command[iterator.i] === 'object-id-at-coordinates') {
+					iterator.i++;
+					this.coordinatesValueType = 1;
+				}
 				this.valueTerrainX = Model.DynamicValue.createValueCommand(command, iterator);
 				this.valueTerrainY = Model.DynamicValue.createValueCommand(command, iterator);
 				this.valueTerrainZ = Model.DynamicValue.createValueCommand(command, iterator);
@@ -336,16 +341,18 @@ class ChangeVariables extends Base {
 					});
 					break;
 				case 11: // Terrain at coordinates
-					currentState.value = MapObject.getTerrainAt(
-						new THREE.Vector3(
-							(this.valueTerrainX.getValue() as number) +
-								(this.valueTerrainXPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
-							(this.valueTerrainY.getValue() as number) +
-								(this.valueTerrainYPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
-							(this.valueTerrainZ.getValue() as number) +
-								(this.valueTerrainZPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
-						),
+					const position = new THREE.Vector3(
+						(this.valueTerrainX.getValue() as number) +
+							(this.valueTerrainXPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
+						(this.valueTerrainY.getValue() as number) +
+							(this.valueTerrainYPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
+						(this.valueTerrainZ.getValue() as number) +
+							(this.valueTerrainZPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
 					);
+					currentState.value =
+						this.coordinatesValueType === 0
+							? MapObject.getTerrainAt(position)
+							: MapObject.getIDAt(position);
 					break;
 			}
 		}

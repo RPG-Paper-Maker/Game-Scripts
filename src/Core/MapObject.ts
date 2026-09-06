@@ -2401,6 +2401,15 @@ class MapObject {
 		return staticCollision?.cs?.terrain ?? -1;
 	}
 
+	static getIDAt(position: THREE.Vector3): number {
+		for (const object of MapObject.getLoadedMapObjects()) {
+			if (!object.removed && object.position.distanceToSquared(position) < 0.000001) {
+				return object.system.id;
+			}
+		}
+		return -1;
+	}
+
 	/**
 	 *  Update the terrain the object is currently on.
 	 */
