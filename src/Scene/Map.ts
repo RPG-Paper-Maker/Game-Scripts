@@ -1413,6 +1413,11 @@ class Map extends Base {
 			}
 			this.updateCameraHiding(targets);
 			if (this.camera.isHiding()) {
+				if (previousHidingDistance === -1) {
+					this.camera.hidingCurrent = this.camera.hidingDistance;
+					this.camera.hidingStart = this.camera.hidingDistance;
+					this.camera.hidingEnd = this.camera.hidingDistance;
+				}
 				this.cameraHidingReleaseTime = 0;
 			} else if (previousHidingDistance !== -1) {
 				this.cameraHidingReleaseTime += Manager.Stack.elapsedTime;
