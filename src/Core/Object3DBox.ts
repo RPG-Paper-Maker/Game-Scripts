@@ -201,17 +201,16 @@ class Object3DBox extends Object3D {
 		const coef = 0.01;
 		const localPosition = position.toVector3(false);
 		if (this.datas.isTopLeft) {
-			localPosition.setX(
-				localPosition.x - 0.5 + position.getPixelsCenterX() + coef,
-			);
-			localPosition.setZ(
-				localPosition.z - 0.5 + position.getPixelsCenterZ() + coef,
-			);
+			localPosition.setX(localPosition.x - 0.5 + position.getPixelsCenterX() + coef);
+			localPosition.setZ(localPosition.z - 0.5 + position.getPixelsCenterZ() + coef);
 		} else {
 			localPosition.setX(localPosition.x + position.getPixelsCenterX() + coef);
 			localPosition.setZ(localPosition.z + position.getPixelsCenterZ() + coef);
 		}
 		localPosition.setY(localPosition.y + coef);
+		const rotationCenter = this.datas.isTopLeft
+			? new THREE.Vector3(localPosition.x + 0.5 - coef, localPosition.y, localPosition.z + 0.5 - coef)
+			: localPosition;
 		const size = this.datas.getSizeVector().multiply(position.toScaleVector());
 		size.setX(size.x - 2 * coef);
 		size.setY(size.y - 2 * coef);
@@ -267,7 +266,7 @@ class Object3DBox extends Object3D {
 			texB = new THREE.Vector2(textures[tB[0]], textures[tB[1]]);
 			texC = new THREE.Vector2(textures[tC[0]], textures[tC[1]]);
 			texD = new THREE.Vector2(textures[tD[0]], textures[tD[1]]);
-			Mathf.rotateQuadEuler(vecA, vecB, vecC, vecD, localPosition, position.toRotationEuler());
+			Mathf.rotateQuadEuler(vecA, vecB, vecC, vecD, rotationCenter, position.toRotationEuler());
 			count = Sprite.addStaticSpriteToGeometry(geometry, vecA, vecB, vecC, vecD, texA, texB, texC, texD, count);
 		}
 
@@ -277,16 +276,17 @@ class Object3DBox extends Object3D {
 			const ws = Math.floor(this.datas.width() * position.scaleX);
 			const hs = Math.floor(this.datas.height() * position.scaleY);
 			const ds = Math.floor(this.datas.depth() * position.scaleZ);
+			const collisionPosition = this.datas.isTopLeft ? rotationCenter : localPosition;
 			objCollision.push({
 				p: position,
 				l: localPosition,
 				b: [
-					localPosition.x,
-					localPosition.y,
-					localPosition.z,
-					Math.floor(w * position.scaleX),
-					Math.floor(h * position.scaleY),
-					Math.floor(d * position.scaleZ),
+					collisionPosition.x,
+					collisionPosition.y,
+					collisionPosition.z,
+					size.x,
+					size.y,
+					size.z,
 					position.angleY,
 					position.angleX,
 					position.angleZ,
@@ -294,9 +294,9 @@ class Object3DBox extends Object3D {
 				w: ws,
 				h: hs,
 				cr: [
-					this.datas.isTopLeft ? (-w / 2) * position.scaleX : 0,
+					this.datas.isTopLeft ? (-w / 2) * position.scaleX + 0.5 - coef : 0,
 					(-h / 2) * position.scaleY,
-					this.datas.isTopLeft ? (-d / 2) * position.scaleZ : 0,
+					this.datas.isTopLeft ? (-d / 2) * position.scaleZ + 0.5 - coef : 0,
 				],
 				d: ds,
 				m: Math.max(Math.max(ws, hs), ds),
