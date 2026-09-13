@@ -2387,6 +2387,8 @@ class MapObject {
 		if (!mapPortion) return -1;
 		const squarePosition = Position.createFromVector3(position);
 		const boundingBoxes = mapPortion.boundingBoxesLands[squarePosition.toIndex()];
+		const terrainFloors = mapPortion.terrainFloors[squarePosition.toIndex()];
+		const terrainAutotiles = mapPortion.terrainAutotiles[squarePosition.toIndex()];
 		const mapObjectCollision = MapObject.getMapObjectLandCollision(position);
 		const mountainBoxes = Manager.Collisions.getCollisionsWithOverflows(
 			mapPortion,
@@ -2397,6 +2399,10 @@ class MapObject {
 		const mountainCollision = mountainBoxes?.at(-1);
 		const staticCollision = boundingBoxes.reduce(
 			(top, collision) => (!top || (collision.p?.layer ?? 0) >= (top.p?.layer ?? 0) ? collision : top),
+			null as StructMapElementCollision | null,
+		);
+		const terrainLand = terrainFloors.concat(terrainAutotiles).reduce(
+			(top, collision) => (!top || collision.p.layer >= top.p.layer ? collision : top),
 			null as StructMapElementCollision | null,
 		);
 		if (
@@ -2411,7 +2417,7 @@ class MapObject {
 		) {
 			return mapObjectCollision.collision.cs?.terrain ?? 0;
 		}
-		return staticCollision?.cs?.terrain ?? -1;
+		return terrainLand === null ? -1 : (terrainLand.cs?.terrain ?? 0);
 	}
 
 	static getIDAt(position: THREE.Vector3): number {
