@@ -272,7 +272,10 @@ class MapObject {
 		for (let z = 0; z < texture.height; z++) {
 			for (let x = 0; x < texture.width; x++) {
 				const collision = picture.getCollisionAtPos(texture.x + x, texture.y + z);
-				if (!collision) continue;
+				if (!collision) {
+					collisions.push({ b: [x + 0.5, pixelDepth / 2, z + 0.5, 1, 1, pixelDepth, 0] });
+					continue;
+				}
 				const rect = collision.rect;
 				if (!collision.hasAllDirections() || collision.terrain > 0) {
 					const r = rect === null ? [0, 0, 1, 1] : [rect.x, rect.y, rect.width, rect.height];
@@ -285,6 +288,8 @@ class MapObject {
 						b: [x + rect.x, pixelDepth / 2, z + rect.y, rect.width, rect.height, pixelDepth, 0],
 						cs: null,
 					});
+				} else {
+					collisions.push({ b: [x + 0.5, pixelDepth / 2, z + 0.5, 1, 1, pixelDepth, 0], cs: collision });
 				}
 			}
 		}
@@ -972,7 +977,12 @@ class MapObject {
 			if (this.mesh !== null) {
 				this.mesh.receiveShadow = true;
 				this.mesh.castShadow = true;
-				if (!this.isHero) {
+				if (
+					!this.isHero &&
+					(this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D ||
+						this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.FLOORS ||
+						this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.AUTOTILES)
+				) {
 					this.mesh.layers.enable(1);
 				}
 				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
@@ -2356,40 +2366,77 @@ class MapObject {
 
 	private static getMapObjectLandCollision(
 		position: THREE.Vector3,
-	): { collision: StructMapElementCollision; layer: number } | null {
+	): { collision: StructMapElementCollision; layer: number; y: number } | null {
 		const cellSize = Manager.Collisions.SPATIAL_HASH_CELL_SIZE;
 		const lands = Scene.Map.current.landObjectsSpatialHash.get(
 			Manager.Collisions.spatialHashKey(Math.floor(position.x / cellSize), Math.floor(position.z / cellSize)),
 		);
 		if (!lands) return null;
-		let result: { collision: StructMapElementCollision; layer: number } | null = null;
+		let result: { collision: StructMapElementCollision; layer: number; y: number } | null = null;
 		for (const { object, collision } of lands) {
 			const b = collision.b;
-			if (!b || Math.floor(object.position.y) !== Math.floor(position.y)) continue;
+			if (!b) continue;
 			const x = object.position.x + b[0];
+			const y = object.position.y + b[1];
 			const z = object.position.z + b[2];
-			if (Math.floor(position.x) === Math.floor(x) && Math.floor(position.z) === Math.floor(z)) {
+			if (
+				y <= position.y + 0.001 &&
+				Math.abs(position.x - x) <= b[3] / 2 &&
+				Math.abs(position.z - z) <= b[4] / 2
+			) {
 				const layer = object.positionLayer + ((object.currentStateInstance?.layer.getValue() as number) ?? 0);
-				if (result === null || layer >= result.layer) {
-					result = { collision, layer };
+				if (result === null || y > result.y || (y === result.y && layer >= result.layer)) {
+					result = { collision, layer, y };
 				}
 			}
 		}
 		return result;
 	}
 
+	private static isPositionOnLand(position: THREE.Vector3, land: StructMapElementCollision): boolean {
+		const landPosition = land.p.toVector3();
+		const width = land.b?.[3] ?? 1;
+		const height = land.b?.[4] ?? 1;
+		return (
+			position.x >= landPosition.x - 0.5 &&
+			position.x <= landPosition.x - 0.5 + width &&
+			position.z >= landPosition.z - 0.5 &&
+			position.z <= landPosition.z - 0.5 + height
+		);
+	}
+
 	/** Get the terrain at a map position, including map-object floors and autotiles. */
 	static getTerrainAt(position: THREE.Vector3): number {
 		if (Scene.Map.current.loading) return -1;
+		const squarePosition = Position.createFromVector3(position);
+		const mapObjectCollision = MapObject.getMapObjectLandCollision(position);
+		let terrainLand: StructMapElementCollision | null = null;
+		for (let y = squarePosition.y; y >= -Scene.Map.current.mapProperties.depth; y--) {
+			const landPosition = new Position(squarePosition.x, y, squarePosition.z);
+			const mapPortion = Scene.Map.current.getMapPortionFromPortion(
+				Scene.Map.current.getLocalPortion(landPosition.getGlobalPortion()),
+			);
+			if (!mapPortion) continue;
+			const lands = mapPortion.terrainFloors[landPosition.toIndex()].concat(
+				mapPortion.terrainAutotiles[landPosition.toIndex()],
+			);
+			for (const land of lands) {
+				if (
+					MapObject.isPositionOnLand(position, land) &&
+					land.p.getTotalY() <= position.y + 0.001 &&
+					(terrainLand === null ||
+						land.p.getTotalY() > terrainLand.p.getTotalY() ||
+						(land.p.getTotalY() === terrainLand.p.getTotalY() && land.p.layer >= terrainLand.p.layer))
+				) {
+					terrainLand = land;
+				}
+			}
+		}
 		const mapPortion = Scene.Map.current.getMapPortionFromPortion(
 			Scene.Map.current.getLocalPortion(Portion.createFromVector3(position)),
 		);
-		if (!mapPortion) return -1;
-		const squarePosition = Position.createFromVector3(position);
+		if (!mapPortion) return mapObjectCollision?.collision.cs?.terrain ?? -1;
 		const boundingBoxes = mapPortion.boundingBoxesLands[squarePosition.toIndex()];
-		const terrainFloors = mapPortion.terrainFloors[squarePosition.toIndex()];
-		const terrainAutotiles = mapPortion.terrainAutotiles[squarePosition.toIndex()];
-		const mapObjectCollision = MapObject.getMapObjectLandCollision(position);
 		const mountainBoxes = Manager.Collisions.getCollisionsWithOverflows(
 			mapPortion,
 			'boundingBoxesMountains',
@@ -2401,10 +2448,6 @@ class MapObject {
 			(top, collision) => (!top || (collision.p?.layer ?? 0) >= (top.p?.layer ?? 0) ? collision : top),
 			null as StructMapElementCollision | null,
 		);
-		const terrainLand = terrainFloors.concat(terrainAutotiles).reduce(
-			(top, collision) => (!top || collision.p.layer >= top.p.layer ? collision : top),
-			null as StructMapElementCollision | null,
-		);
 		if (
 			mountainCollision?.mountainPictureID !== undefined &&
 			(position.y - Math.floor(position.y) > 0.001 || (staticCollision === null && mapObjectCollision === null))
@@ -2413,7 +2456,9 @@ class MapObject {
 		}
 		if (
 			mapObjectCollision !== null &&
-			(staticCollision === null || mapObjectCollision.layer >= (staticCollision.p?.layer ?? 0))
+			(terrainLand === null ||
+				mapObjectCollision.y > terrainLand.p.getTotalY() ||
+				(mapObjectCollision.y === terrainLand.p.getTotalY() && mapObjectCollision.layer >= terrainLand.p.layer))
 		) {
 			return mapObjectCollision.collision.cs?.terrain ?? 0;
 		}

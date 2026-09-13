@@ -174,6 +174,7 @@ class MapPortion {
 						const objCollision = floor.updateGeometry(geometry, position, width, height, count);
 						this.terrainFloors[position.toIndex()].push({
 							p: position,
+							b: [0, 0, 0, floor.texture.width, floor.texture.height],
 							cs: Scene.Map.current.mapProperties.tileset.picture.getCollisionAt(floor.texture),
 						});
 						MapPortion.addLayerOffsets(geometry, start, layerOffsets, floor.up ? layer : -layer);
@@ -220,6 +221,7 @@ class MapPortion {
 						const picture = Data.Pictures.get(PICTURE_KIND.AUTOTILES, pictureID);
 						this.terrainAutotiles[indexPos].push({
 							p: position,
+							b: [0, 0, 0, 1, 1],
 							cs: picture.getCollisionAtIndex(autotile.getIndex(picture.width)),
 							autotilePictureID: pictureID,
 						});
@@ -243,6 +245,7 @@ class MapPortion {
 			}
 			this.terrainFloors[index].push({
 				p: position,
+				b: [0, 0, 0, floor.texture.width, floor.texture.height],
 				cs: Scene.Map.current.mapProperties.tileset.picture.getCollisionAt(floor.texture),
 			});
 			this.addToNonEmpty(position);
