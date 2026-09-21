@@ -302,7 +302,6 @@ export class DynamicValue extends Base {
 				}
 				return this.value;
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
-				console.log(this);
 				if (deep) {
 					return this.customList.map((v) => v.getValue(forceVariable, true));
 				}
