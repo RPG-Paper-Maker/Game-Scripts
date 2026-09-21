@@ -300,12 +300,13 @@ export class DynamicValue extends Base {
 					}
 					return obj;
 				}
-				return this.customStructure;
+				return this.value;
 			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				console.log(this);
 				if (deep) {
 					return this.customList.map((v) => v.getValue(forceVariable, true));
 				}
-				return this.customList;
+				return this.value;
 			case DYNAMIC_VALUE_KIND.VECTOR2:
 				return new THREE.Vector2(this.x.getValue() as number as number, this.y.getValue() as number as number);
 			case DYNAMIC_VALUE_KIND.VECTOR3:
