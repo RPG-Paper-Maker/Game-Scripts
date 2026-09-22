@@ -567,7 +567,14 @@ class MapObject {
 				state.graphicID = Utils.valueOrDefault(stateValue.gid, stateSystem.graphicID);
 				state.graphicKind = Utils.valueOrDefault(stateValue.gk, stateSystem.graphicKind);
 				state.rectTileset = stateValue.gt
-					? Rectangle.createFromArray(stateValue.gt)
+					? Array.isArray(stateValue.gt)
+						? Rectangle.createFromArray(stateValue.gt)
+						: new Rectangle(
+							stateValue.gt.x,
+							stateValue.gt.y,
+							stateValue.gt.width,
+							stateValue.gt.height,
+						)
 					: (stateSystem.rectTileset?.clone() ?? null);
 				state.indexX = Utils.valueOrDefault(stateValue.gix, stateSystem.indexX);
 				state.indexY = Utils.valueOrDefault(stateValue.giy, stateSystem.indexY);

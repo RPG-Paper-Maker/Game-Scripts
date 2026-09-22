@@ -1020,7 +1020,12 @@ class MoveObject extends Base {
 				options.gid = object.currentStateInstance.graphicID;
 				options.gk = object.currentStateInstance.graphicKind;
 				options.gt = object.currentStateInstance.rectTileset
-					? object.currentStateInstance.rectTileset.clone()
+					? [
+						object.currentStateInstance.rectTileset.x,
+						object.currentStateInstance.rectTileset.y,
+						object.currentStateInstance.rectTileset.width,
+						object.currentStateInstance.rectTileset.height,
+					]
 					: object.currentStateInstance.rectTileset;
 				options.gix = object.currentStateInstance.indexX;
 				options.giy = object.currentStateInstance.indexY;
