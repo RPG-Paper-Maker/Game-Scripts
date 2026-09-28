@@ -569,12 +569,7 @@ class MapObject {
 				state.rectTileset = stateValue.gt
 					? Array.isArray(stateValue.gt)
 						? Rectangle.createFromArray(stateValue.gt)
-						: new Rectangle(
-							stateValue.gt.x,
-							stateValue.gt.y,
-							stateValue.gt.width,
-							stateValue.gt.height,
-						)
+						: new Rectangle(stateValue.gt.x, stateValue.gt.y, stateValue.gt.width, stateValue.gt.height)
 					: (stateSystem.rectTileset?.clone() ?? null);
 				state.indexX = Utils.valueOrDefault(stateValue.gix, stateSystem.indexX);
 				state.indexY = Utils.valueOrDefault(stateValue.giy, stateSystem.indexY);
@@ -588,6 +583,33 @@ class MapObject {
 				state.setWithCamera = Utils.valueOrDefault(stateValue.swc, stateSystem.setWithCamera);
 				state.pixelOffset = Utils.valueOrDefault(stateValue.po, stateSystem.pixelOffset);
 				state.keepPosition = Utils.valueOrDefault(stateValue.kp, stateSystem.keepPosition);
+				state.centerX = stateValue.cx
+					? Model.DynamicValue.readFromJSON(stateValue.cx)
+					: stateSystem.centerX.createCopy();
+				state.centerZ = stateValue.cz
+					? Model.DynamicValue.readFromJSON(stateValue.cz)
+					: stateSystem.centerZ.createCopy();
+				state.angleX = stateValue.ax
+					? Model.DynamicValue.readFromJSON(stateValue.ax)
+					: stateSystem.angleX.createCopy();
+				state.angleY = stateValue.ay
+					? Model.DynamicValue.readFromJSON(stateValue.ay)
+					: stateSystem.angleY.createCopy();
+				state.angleZ = stateValue.az
+					? Model.DynamicValue.readFromJSON(stateValue.az)
+					: stateSystem.angleZ.createCopy();
+				state.scaleX = stateValue.sx
+					? Model.DynamicValue.readFromJSON(stateValue.sx)
+					: stateSystem.scaleX.createCopy();
+				state.scaleY = stateValue.sy
+					? Model.DynamicValue.readFromJSON(stateValue.sy)
+					: stateSystem.scaleY.createCopy();
+				state.scaleZ = stateValue.sz
+					? Model.DynamicValue.readFromJSON(stateValue.sz)
+					: stateSystem.scaleZ.createCopy();
+				state.opacity = stateValue.o
+					? Model.DynamicValue.readFromJSON(stateValue.o)
+					: stateSystem.opacity.createCopy();
 			}
 		}
 	}
@@ -745,9 +767,13 @@ class MapObject {
 						: Data.Pictures.texturesCharacters.get(this.currentStateInstance.graphicID);
 			}
 		}
-		if (material && this.isHero && Manager.GL.getMaterialTexture(material)) {
-			// For opacity purposes
+		const opacity = (this.currentStateInstance?.opacity.getValue() as number | undefined) ?? 1;
+		if (material && (this.isHero || opacity < 1) && Manager.GL.getMaterialTexture(material)) {
+			// Opacity must not change a tileset / character material shared by other map objects.
 			material = Manager.GL.cloneMaterial(material);
+			material.opacity = opacity;
+			material.transparent = opacity < 1;
+			material.depthWrite = opacity >= 1;
 		}
 		this.meshBoundingBox = [];
 		this.landCollision = null;
@@ -850,9 +876,19 @@ class MapObject {
 										const materials = Array.isArray(child.material)
 											? child.material
 											: [child.material];
-										for (const material of materials) {
+										const objectMaterials = materials.map((source) => {
+											const material = opacity < 1 ? source.clone() : source;
+											if (opacity < 1) {
+												material.opacity = opacity;
+												material.transparent = true;
+												material.depthWrite = false;
+											}
 											Manager.GL.applyScreenTone(material);
-										}
+											return material;
+										});
+										child.material = Array.isArray(child.material)
+											? objectMaterials
+											: objectMaterials[0];
 										child.receiveShadow = true;
 										child.castShadow = true;
 									}
@@ -2305,10 +2341,22 @@ class MapObject {
 			(this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FACE ||
 				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX)
 		) {
-			this.mesh.material =
+			const material =
 				this.currentStateInstance.graphicID === 0
 					? Scene.Map.current.textureTileset
 					: Data.Pictures.texturesCharacters.get(this.currentStateInstance.graphicID);
+			const opacity = (this.currentStateInstance.opacity.getValue() as number | undefined) ?? 1;
+			if (material && opacity < 1 && Manager.GL.getMaterialTexture(material)) {
+				const clone = Manager.GL.cloneMaterial(material);
+				clone.opacity = opacity;
+				clone.transparent = true;
+				clone.depthWrite = false;
+				this.mesh.material = clone;
+				this.mesh.customDepthMaterial = clone.userData.customDepthMaterial;
+			} else {
+				this.mesh.material = material;
+				this.mesh.customDepthMaterial = material?.userData.customDepthMaterial;
+			}
 		} else if (this.isNone()) {
 			this.mesh = null;
 		}

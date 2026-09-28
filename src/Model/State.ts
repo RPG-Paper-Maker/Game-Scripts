@@ -48,6 +48,7 @@ export type StateJSON = {
 	sx?: DynamicValueJSON;
 	sy?: DynamicValueJSON;
 	sz?: DynamicValueJSON;
+	o?: DynamicValueJSON;
 	l?: StateLightJSON[];
 };
 
@@ -175,6 +176,7 @@ export type StateInstance = {
 	scaleX: DynamicValue;
 	scaleY: DynamicValue;
 	scaleZ: DynamicValue;
+	opacity: DynamicValue;
 	lights: StateLight[];
 };
 
@@ -210,6 +212,7 @@ export class State extends Base {
 	public scaleX: DynamicValue;
 	public scaleY: DynamicValue;
 	public scaleZ: DynamicValue;
+	public opacity: DynamicValue;
 	public lights: StateLight[];
 
 	constructor(json?: StateJSON) {
@@ -245,6 +248,7 @@ export class State extends Base {
 			scaleX: this.scaleX.createCopy(),
 			scaleY: this.scaleY.createCopy(),
 			scaleZ: this.scaleZ.createCopy(),
+			opacity: this.opacity.createCopy(),
 			lights: this.lights.map((light) => light.createCopy()),
 		};
 	}
@@ -295,6 +299,7 @@ export class State extends Base {
 		this.scaleX = DynamicValue.readOrDefaultNumberDouble(json.sx, 1);
 		this.scaleY = DynamicValue.readOrDefaultNumberDouble(json.sy, 1);
 		this.scaleZ = DynamicValue.readOrDefaultNumberDouble(json.sz, 1);
+		this.opacity = DynamicValue.readOrDefaultNumberDouble(json.o, 1);
 		this.lights = (json.l ?? []).map((light) => new StateLight(light));
 	}
 }

@@ -436,7 +436,7 @@ class Sprite extends MapElement {
 		tileset: boolean,
 		position: Position,
 	): [CustomGeometry, [number, StructMapElementCollision[]]] {
-		const geometry = new CustomGeometry();
+		const geometry = this.kind === ELEMENT_MAP_KIND.SPRITES_FACE ? new CustomGeometryFace() : new CustomGeometry();
 		const collisions = this.updateGeometry(geometry, width, height, position, 0, tileset, null);
 		geometry.updateAttributes();
 		return [geometry, collisions];

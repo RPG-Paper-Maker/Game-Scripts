@@ -103,10 +103,17 @@ class Position extends Portion {
 	 *  @returns {Position}
 	 */
 	static createFromVector3(position: THREE.Vector3): Position {
+		const x = Math.floor(position.x);
+		const y = Math.floor(position.y);
+		const z = Math.floor(position.z);
 		return new Position(
-			Math.floor(position.x),
-			Math.floor(position.y),
-			Math.floor(position.z),
+			x,
+			y,
+			z,
+			(position.y - y) * 100,
+			0,
+			(Math.round((position.x - x) * Data.Systems.SQUARE_SIZE) / Data.Systems.SQUARE_SIZE) * 100,
+			(Math.round((position.z - z) * Data.Systems.SQUARE_SIZE) / Data.Systems.SQUARE_SIZE) * 100,
 		);
 	}
 

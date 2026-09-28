@@ -193,6 +193,16 @@ class MoveObject extends Base {
 					height: height,
 				});
 				this.moves.push(this.changeGraphics);
+			} else if (this.kind === COMMAND_MOVE_KIND.UPDATE_TRANSFORMATIONS) {
+				const permanent = Utils.numberToBool(command[iterator.i++]);
+				const checked = Array.from({ length: 13 }, () => Utils.numberToBool(command[iterator.i++]));
+				const values = Array.from({ length: 13 }, () =>
+					Model.DynamicValue.createValueCommand(command, iterator),
+				);
+				const time = Model.DynamicValue.createValueCommand(command, iterator);
+				const equation = command[iterator.i++] as number;
+				this.parameters.push({ permanent, checked, values, time, equation });
+				this.moves.push(this.updateTransformations);
 			} else if (
 				this.kind >= COMMAND_MOVE_KIND.TURN_NORTH &&
 				this.kind <= COMMAND_MOVE_KIND.LOOK_AT_HERO_OPPOSITE
@@ -328,6 +338,25 @@ class MoveObject extends Base {
 			case ORIENTATION.NORTH_EAST:
 				return ORIENTATION.SOUTH_WEST;
 		}
+	}
+
+	/** Rebuild a transformed object's geometry without allowing stale async redraws to win. */
+	private refreshTransformations(currentState: Record<string, any>, object: MapObject): void {
+		currentState.transformRefreshNeeded = true;
+		if (currentState.transformRefreshPending) {
+			return;
+		}
+		const refresh = () => {
+			currentState.transformRefreshNeeded = false;
+			currentState.transformRefreshPending = true;
+			void object.changeState().finally(() => {
+				currentState.transformRefreshPending = false;
+				if (currentState.transformRefreshNeeded) {
+					refresh();
+				}
+			});
+		};
+		refresh();
 	}
 
 	/**
@@ -963,6 +992,75 @@ class MoveObject extends Base {
 		return ORIENTATION.NONE;
 	}
 
+	/** Animate selected object transformations. */
+	updateTransformations(
+		currentState: Record<string, any>,
+		object: MapObject,
+		parameters: Record<string, any>,
+	): ORIENTATION | boolean {
+		if (!object?.currentStateInstance) {
+			return ORIENTATION.NONE;
+		}
+		const keys = ['centerX', 'centerZ', 'angleX', 'angleY', 'angleZ', 'scaleX', 'scaleY', 'scaleZ', 'opacity'];
+		if (currentState.currentTime === -1) {
+			currentState.currentTime = 0;
+			currentState.transformStart = keys.map((key) => object.currentStateInstance[key].getValue() as number);
+			currentState.transformEnd = parameters.values
+				.slice(0, 9)
+				.map((value: Model.DynamicValue, index: number) =>
+					parameters.checked[index] ? (value.getValue() as number) : currentState.transformStart[index],
+				);
+			currentState.transformPositionStart = object.position.clone();
+			currentState.transformPositionEnd = parameters.values
+				.slice(9)
+				.map((value: Model.DynamicValue, index: number) =>
+					parameters.checked[index + 9] ? (value.getValue() as number) : 0,
+				);
+			currentState.transformTime = Math.max(0, (parameters.time.getValue() as number) * 1000);
+			currentState.transformEquation = parameters.equation;
+		}
+		const duration = currentState.transformTime;
+		currentState.currentTime = Math.min(currentState.currentTime + Manager.Stack.elapsedTime, duration);
+		const progress = duration === 0 ? 1 : currentState.currentTime / duration;
+		const eased = Model.ProgressionTable.createFromNumbers(0, 1, currentState.transformEquation).getProgressionAt(
+			progress * 100,
+			100,
+			true,
+		);
+		for (let i = 0; i < keys.length; i++) {
+			const value =
+				currentState.transformStart[i] +
+				(currentState.transformEnd[i] - currentState.transformStart[i]) * eased;
+			object.currentStateInstance[keys[i]].value = value;
+		}
+		object.position.set(
+			currentState.transformPositionStart.x + currentState.transformPositionEnd[0] * eased,
+			currentState.transformPositionStart.y +
+				(currentState.transformPositionEnd[1] +
+					currentState.transformPositionEnd[2] / Data.Systems.SQUARE_SIZE) *
+					eased,
+			currentState.transformPositionStart.z + currentState.transformPositionEnd[3] * eased,
+		);
+		object.updateBBPosition(object.position);
+		this.refreshTransformations(currentState, object);
+		if (currentState.currentTime !== duration) {
+			return false;
+		}
+		if (parameters.permanent) {
+			const options = this.getPermanentOptions(object);
+			if (options !== null) {
+				for (let i = 0; i < keys.length; i++) {
+					if (parameters.checked[i]) {
+						options[['cx', 'cz', 'ax', 'ay', 'az', 'sx', 'sy', 'sz', 'o'][i]] =
+							object.currentStateInstance[keys[i]].toJson();
+					}
+				}
+			}
+		}
+		currentState.currentTime = -1;
+		return true;
+	}
+
 	/**
 	 *  Function to change graphics.
 	 *  @param {Record<string, any>} - currentState The current state of the event
@@ -1021,11 +1119,11 @@ class MoveObject extends Base {
 				options.gk = object.currentStateInstance.graphicKind;
 				options.gt = object.currentStateInstance.rectTileset
 					? [
-						object.currentStateInstance.rectTileset.x,
-						object.currentStateInstance.rectTileset.y,
-						object.currentStateInstance.rectTileset.width,
-						object.currentStateInstance.rectTileset.height,
-					]
+							object.currentStateInstance.rectTileset.x,
+							object.currentStateInstance.rectTileset.y,
+							object.currentStateInstance.rectTileset.width,
+							object.currentStateInstance.rectTileset.height,
+						]
 					: object.currentStateInstance.rectTileset;
 				options.gix = object.currentStateInstance.indexX;
 				options.giy = object.currentStateInstance.indexY;
