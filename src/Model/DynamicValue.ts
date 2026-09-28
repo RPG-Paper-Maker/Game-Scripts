@@ -20,18 +20,22 @@ import { Base } from './Base';
 /**
  * JSON structure describing a dynamic value.
  */
+export type CustomStructureDynamicValueJSON = {
+	properties: { name: string; value: DynamicValueJSON }[];
+};
+
+export type CustomListDynamicValueJSON = {
+	list: { value: DynamicValueJSON }[];
+};
+
 export type DynamicValueJSON = {
 	k: DYNAMIC_VALUE_KIND;
 	v: unknown;
 	x?: DynamicValueJSON;
 	y?: DynamicValueJSON;
 	z?: DynamicValueJSON;
-	customStructure?: {
-		properties: { name: string; value: DynamicValueJSON }[];
-	};
-	customList?: {
-		list: { value: DynamicValueJSON }[];
-	};
+	customStructure?: CustomStructureDynamicValueJSON;
+	customList?: CustomListDynamicValueJSON;
 };
 
 /**
@@ -55,6 +59,18 @@ export class DynamicValue extends Base {
 		const modelValue = new DynamicValue();
 		modelValue.kind = k;
 		switch (k) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE:
+				return DynamicValue.readFromJSON({
+					k,
+					v: null,
+					customStructure: v as CustomStructureDynamicValueJSON,
+				});
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST:
+				return DynamicValue.readFromJSON({
+					k,
+					v: null,
+					customList: v as CustomListDynamicValueJSON,
+				});
 			case DYNAMIC_VALUE_KIND.NONE:
 				modelValue.value = null;
 				break;
