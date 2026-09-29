@@ -1011,10 +1011,11 @@ class MoveObject extends Base {
 					parameters.checked[index] ? (value.getValue() as number) : currentState.transformStart[index],
 				);
 			currentState.transformPositionStart = object.position.clone();
-			currentState.transformPositionEnd = parameters.values
+			currentState.transformOffsetStart = [...object.transformationOffset];
+			currentState.transformOffsetEnd = parameters.values
 				.slice(9)
 				.map((value: Model.DynamicValue, index: number) =>
-					parameters.checked[index + 9] ? (value.getValue() as number) : 0,
+					parameters.checked[index + 9] ? (value.getValue() as number) : currentState.transformOffsetStart[index],
 				);
 			currentState.transformTime = Math.max(0, (parameters.time.getValue() as number) * 1000);
 			currentState.transformEquation = parameters.equation;
@@ -1033,14 +1034,16 @@ class MoveObject extends Base {
 				(currentState.transformEnd[i] - currentState.transformStart[i]) * eased;
 			object.currentStateInstance[keys[i]].value = value;
 		}
+		const offset = currentState.transformOffsetStart.map(
+			(value: number, index: number) => value + (currentState.transformOffsetEnd[index] - value) * eased,
+		) as [number, number, number, number];
 		object.position.set(
-			currentState.transformPositionStart.x + currentState.transformPositionEnd[0] * eased,
-			currentState.transformPositionStart.y +
-				(currentState.transformPositionEnd[1] +
-					currentState.transformPositionEnd[2] / Data.Systems.SQUARE_SIZE) *
-					eased,
-			currentState.transformPositionStart.z + currentState.transformPositionEnd[3] * eased,
+			currentState.transformPositionStart.x + offset[0] - currentState.transformOffsetStart[0],
+			currentState.transformPositionStart.y + offset[1] - currentState.transformOffsetStart[1] +
+				(offset[2] - currentState.transformOffsetStart[2]) / Data.Systems.SQUARE_SIZE,
+			currentState.transformPositionStart.z + offset[3] - currentState.transformOffsetStart[3],
 		);
+		object.transformationOffset = offset;
 		object.updateBBPosition(object.position);
 		this.refreshTransformations(currentState, object);
 		if (currentState.currentTime !== duration) {

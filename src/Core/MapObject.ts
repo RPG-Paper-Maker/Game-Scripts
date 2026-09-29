@@ -113,6 +113,8 @@ class MapObject {
 	public terrain: number;
 	public terrainPicture: Model.Picture | null = null;
 	public currentCenterOffset: THREE.Vector3 = new THREE.Vector3();
+	/** Last position offsets set by Update Transformations: X, Y squares, Y pixels, Z. */
+	public transformationOffset: [number, number, number, number] = [0, 0, 0, 0];
 	public currentAngle: THREE.Vector3 = new THREE.Vector3();
 	public currentScale: THREE.Vector3 = new THREE.Vector3();
 	public gltfGroup: THREE.Group | null = null;
@@ -506,6 +508,7 @@ class MapObject {
 	read(json: Record<string, any>) {
 		const position = Position.createFromArray(json.k);
 		this.position = position.toVector3();
+		this.transformationOffset = [0, 0, 0, 0];
 		this.positionLayer = position.layer;
 		this.system = new Model.MapObject(json.v);
 	}
@@ -1548,6 +1551,7 @@ class MapObject {
 		// Set position
 		this.position.set(position.x, position.y, position.z);
 		this.previousPosition.set(position.x, position.y, position.z);
+		this.transformationOffset = [0, 0, 0, 0];
 		if (this.movingState && this.movingState.position) {
 			this.movingState.position.set(position.x, position.y, position.z);
 		}
