@@ -9,7 +9,6 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import * as THREE from 'three';
 import {
 	CHANGE_VARIABLES_OTHER_CHARACTERISTICS,
 	CHARACTER_KIND,
@@ -341,14 +340,15 @@ class ChangeVariables extends Base {
 					});
 					break;
 				case 11: // Terrain at coordinates
-					const position = new THREE.Vector3(
-						(this.valueTerrainX.getValue() as number) +
-							(this.valueTerrainXPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
-						(this.valueTerrainY.getValue() as number) +
-							(this.valueTerrainYPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
-						(this.valueTerrainZ.getValue() as number) +
-							(this.valueTerrainZPlus.getValue() as number) / Data.Systems.SQUARE_SIZE,
-					);
+					// Use the same square center and pixel offsets as CreateObjectInMap.
+					const position = new Position(
+						this.valueTerrainX.getValue() as number,
+						this.valueTerrainY.getValue() as number,
+						this.valueTerrainZ.getValue() as number,
+						((this.valueTerrainYPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
+					).toVector3();
+					position.x += (this.valueTerrainXPlus.getValue() as number) / Data.Systems.SQUARE_SIZE;
+					position.z += (this.valueTerrainZPlus.getValue() as number) / Data.Systems.SQUARE_SIZE;
 					currentState.value =
 						this.coordinatesValueType === 0
 							? MapObject.getTerrainAt(position)

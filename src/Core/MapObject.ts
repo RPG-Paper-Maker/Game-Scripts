@@ -24,8 +24,8 @@ import {
 } from '../Common';
 import { Core, Data, EventCommand, Manager, Model, Scene } from '../index';
 import { DynamicValue, StateInstance, StateLight } from '../Model';
-import { CollisionSquare } from './CollisionSquare';
 import { Autotile } from './Autotile';
+import { CollisionSquare } from './CollisionSquare';
 import { CustomGeometry } from './CustomGeometry';
 import { Floor } from './Floor';
 import { Frame } from './Frame';
@@ -2468,16 +2468,17 @@ class MapObject {
 	static getTerrainAt(position: THREE.Vector3): number {
 		if (Scene.Map.current.loading) return -1;
 		const squarePosition = Position.createFromVector3(position);
-		const mapObjectCollision = MapObject.getMapObjectLandCollision(position);
+		let mapObjectCollision = MapObject.getMapObjectLandCollision(position);
+		if (mapObjectCollision && Math.floor(mapObjectCollision.y) !== squarePosition.y) {
+			mapObjectCollision = null;
+		}
 		let terrainLand: StructMapElementCollision | null = null;
-		for (let y = squarePosition.y; y >= -Scene.Map.current.mapProperties.depth; y--) {
-			const landPosition = new Position(squarePosition.x, y, squarePosition.z);
-			const mapPortion = Scene.Map.current.getMapPortionFromPortion(
-				Scene.Map.current.getLocalPortion(landPosition.getGlobalPortion()),
-			);
-			if (!mapPortion) continue;
-			const lands = mapPortion.terrainFloors[landPosition.toIndex()].concat(
-				mapPortion.terrainAutotiles[landPosition.toIndex()],
+		const mapPortion = Scene.Map.current.getMapPortionFromPortion(
+			Scene.Map.current.getLocalPortion(Portion.createFromVector3(position)),
+		);
+		if (mapPortion) {
+			const lands = mapPortion.terrainFloors[squarePosition.toIndex()].concat(
+				mapPortion.terrainAutotiles[squarePosition.toIndex()],
 			);
 			for (const land of lands) {
 				if (
@@ -2491,9 +2492,6 @@ class MapObject {
 				}
 			}
 		}
-		const mapPortion = Scene.Map.current.getMapPortionFromPortion(
-			Scene.Map.current.getLocalPortion(Portion.createFromVector3(position)),
-		);
 		if (!mapPortion) return mapObjectCollision?.collision.cs?.terrain ?? -1;
 		const boundingBoxes = mapPortion.boundingBoxesLands[squarePosition.toIndex()];
 		const mountainBoxes = Manager.Collisions.getCollisionsWithOverflows(
