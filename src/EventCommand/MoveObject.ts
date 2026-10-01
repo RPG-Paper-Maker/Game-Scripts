@@ -1011,6 +1011,7 @@ class MoveObject extends Base {
 					parameters.checked[index] ? (value.getValue() as number) : currentState.transformStart[index],
 				);
 			currentState.transformPositionStart = object.position.clone();
+			currentState.transformCenterStart = object.currentCenterOffset.clone();
 			currentState.transformOffsetStart = [...object.transformationOffset];
 			currentState.transformOffsetEnd = parameters.values
 				.slice(9)
@@ -1038,10 +1039,12 @@ class MoveObject extends Base {
 			(value: number, index: number) => value + (currentState.transformOffsetEnd[index] - value) * eased,
 		) as [number, number, number, number];
 		object.position.set(
-			currentState.transformPositionStart.x + offset[0] - currentState.transformOffsetStart[0],
+			currentState.transformPositionStart.x - currentState.transformCenterStart.x +
+				object.currentCenterOffset.x + offset[0] - currentState.transformOffsetStart[0],
 			currentState.transformPositionStart.y + offset[1] - currentState.transformOffsetStart[1] +
 				(offset[2] - currentState.transformOffsetStart[2]) / Data.Systems.SQUARE_SIZE,
-			currentState.transformPositionStart.z + offset[3] - currentState.transformOffsetStart[3],
+			currentState.transformPositionStart.z - currentState.transformCenterStart.z +
+				object.currentCenterOffset.z + offset[3] - currentState.transformOffsetStart[3],
 		);
 		object.transformationOffset = offset;
 		object.updateBBPosition(object.position);
