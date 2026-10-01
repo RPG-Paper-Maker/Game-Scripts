@@ -1048,7 +1048,19 @@ class MoveObject extends Base {
 		);
 		object.transformationOffset = offset;
 		object.updateBBPosition(object.position);
-		this.refreshTransformations(currentState, object);
+		const geometryChanged = parameters.checked.slice(0, 8).some((checked: boolean, index: number) =>
+			checked && currentState.transformStart[index] !== currentState.transformEnd[index],
+		);
+		if (geometryChanged) {
+			this.refreshTransformations(currentState, object);
+		} else {
+			if (parameters.checked[8]) {
+				object.updateTransformationOpacity(object.currentStateInstance.opacity.getValue() as number);
+			}
+			if (object.mesh) object.mesh.position.copy(object.position);
+			if (object.gltfGroup) object.gltfGroup.position.copy(object.position);
+			if (object.objectLightsGroup) object.objectLightsGroup.position.copy(object.position);
+		}
 		if (currentState.currentTime !== duration) {
 			return false;
 		}
