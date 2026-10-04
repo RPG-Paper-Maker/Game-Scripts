@@ -266,8 +266,18 @@ class MapObject {
 	}
 
 	private getFloorLandCollisions(): StructMapElementCollision[] {
-		const texture = this.currentStateInstance.rectTileset;
-		const picture = Scene.Map.current.mapProperties.tileset.picture;
+		const isTileset = this.currentStateInstance.graphicID === 0;
+		const texture = isTileset
+			? this.currentStateInstance.rectTileset
+			: new Rectangle(
+					this.currentStateInstance.indexX * this.width,
+					this.currentStateInstance.indexY * this.height,
+					this.width,
+					this.height,
+				);
+		const picture = isTileset
+			? Scene.Map.current.mapProperties.tileset.picture
+			: Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
 		const collisions: StructMapElementCollision[] = [];
 		if (!picture || !texture) return collisions;
 		const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
@@ -731,8 +741,9 @@ class MapObject {
 			this.initializeTimeEvents();
 		}
 
-		// Remove previous mesh
-		this.removeFromScene();
+		// Keep unchanged lights in the scene while asynchronous geometry is rebuilt.
+		const keepLights = previousStateInstance === this.currentStateInstance && previousLightsGroup !== null;
+		this.removeFromScene(keepLights);
 		previousMesh?.geometry.dispose();
 		if (previousMesh?.material?.userData.rpmObjectOpacityMaterial) {
 			previousMesh.customDepthMaterial?.dispose();
@@ -751,7 +762,6 @@ class MapObject {
 		});
 		this.mesh = null;
 		this.gltfGroup = null;
-		const keepLights = previousStateInstance === this.currentStateInstance && previousLightsGroup !== null;
 		this.objectLightsGroup = keepLights ? previousLightsGroup : null;
 		this.objectLights = keepLights ? previousLights : [];
 		this.objectLightsElapsedTime = keepLights ? previousLightsElapsedTime : 0;
@@ -784,7 +794,10 @@ class MapObject {
 					) ?? null;
 				material = this.objectAutotileBundle?.material ?? null;
 			} else if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.FLOORS) {
-				material = Scene.Map.current.textureTileset;
+				material =
+					this.currentStateInstance.graphicID === 0
+						? Scene.Map.current.textureTileset
+						: Data.Pictures.texturesCharacters.get(this.currentStateInstance.graphicID);
 			} else {
 				material =
 					this.currentStateInstance.graphicID === 0
@@ -801,7 +814,7 @@ class MapObject {
 			material.userData.rpmOriginalTransparent = sourceMaterial.transparent;
 			material.userData.rpmOriginalDepthWrite = sourceMaterial.depthWrite;
 			material.opacity = opacity;
-			material.transparent = opacity < 1;
+			material.transparent = opacity < 1 || sourceMaterial.transparent;
 			material.depthWrite = opacity >= 1;
 		}
 		this.meshBoundingBox = [];
@@ -945,19 +958,28 @@ class MapObject {
 				positionTranformation.z = 0;
 				positionTranformation.centerX -= 50;
 				positionTranformation.centerZ -= 50;
-				this.width = this.currentStateInstance.rectTileset.width;
-				this.height = this.currentStateInstance.rectTileset.height;
+				const { width, height } = Manager.GL.getMaterialTextureSize(material);
+				const isTileset = this.currentStateInstance.graphicID === 0;
+				const picture = isTileset
+					? null
+					: Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
+				this.width = isTileset
+					? this.currentStateInstance.rectTileset.width
+					: width / Data.Systems.SQUARE_SIZE / Data.Systems.FRAMES;
+				this.height = isTileset
+					? this.currentStateInstance.rectTileset.height
+					: height / Data.Systems.SQUARE_SIZE / picture.getRows();
+				const textureX = isTileset
+					? this.currentStateInstance.rectTileset.x
+					: this.currentStateInstance.indexX * this.width;
+				const textureY = isTileset
+					? this.currentStateInstance.rectTileset.y
+					: this.currentStateInstance.indexY * this.height;
 				const floor = new Floor({
-					t: [
-						this.currentStateInstance.rectTileset.x,
-						this.currentStateInstance.rectTileset.y,
-						this.currentStateInstance.rectTileset.width,
-						this.currentStateInstance.rectTileset.height,
-					],
+					t: [textureX, textureY, this.width, this.height],
 				});
 				const floorGeometry = new CustomGeometry();
-				const { width, height } = Manager.GL.getMaterialTextureSize(material);
-				const collision = floor.updateGeometry(floorGeometry, positionTranformation, width, height, 0);
+				const collision = floor.updateGeometry(floorGeometry, positionTranformation, width, height, 0, picture);
 				result = [floorGeometry, [0, collision ? [collision] : []]];
 				floorGeometry.updateAttributes();
 			} else if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.AUTOTILES) {
@@ -1777,14 +1799,14 @@ class MapObject {
 	/**
 	 *  remove object mesh from scene
 	 */
-	removeFromScene() {
+	removeFromScene(keepObjectLights = false) {
 		if (this.mesh !== null) {
 			Scene.Map.current.scene.remove(this.mesh);
 		}
 		if (this.gltfGroup !== null) {
 			Scene.Map.current.scene.remove(this.gltfGroup);
 		}
-		if (this.objectLightsGroup !== null && this.objectLightsGroup.parent === Scene.Map.current.scene) {
+		if (!keepObjectLights && this.objectLightsGroup !== null && this.objectLightsGroup.parent === Scene.Map.current.scene) {
 			Scene.Map.current.scene.remove(this.objectLightsGroup);
 		}
 		this.removeBBFromScene();
@@ -2263,7 +2285,7 @@ class MapObject {
 				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
 			}
 			material.opacity = opacity;
-			const transparent = opacity < 1 || (!this.isHero && material.userData.rpmOriginalTransparent);
+			const transparent = opacity < 1 || material.userData.rpmOriginalTransparent;
 			if (material.transparent !== transparent) {
 				material.transparent = transparent;
 				material.needsUpdate = true;
@@ -2370,7 +2392,8 @@ class MapObject {
 			this.mesh !== null &&
 			!this.isNone() &&
 			(this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FACE ||
-				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX)
+				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX ||
+				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.FLOORS)
 		) {
 			const { width, height } = Manager.GL.getMaterialTextureSize(this.mesh.material as THREE.MeshPhongMaterial);
 			let w: number, h: number, x: number, y: number;
@@ -2425,7 +2448,8 @@ class MapObject {
 		if (
 			!this.isNone() &&
 			(this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FACE ||
-				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX)
+				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX ||
+				this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.FLOORS)
 		) {
 			const material =
 				this.currentStateInstance.graphicID === 0

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Data, Scene } from '../index';
+import { Data, Model, Scene } from '../index';
 import { CustomGeometry } from './CustomGeometry';
 import { Land, LandJSON } from './Land';
 import { StructMapElementCollision } from './MapElement';
@@ -41,12 +41,13 @@ export class Floor extends Land {
 		width: number,
 		height: number,
 		count: number,
+		collisionPicture: Model.Picture = Scene.Map.current.mapProperties.tileset.picture,
 	): StructMapElementCollision {
 		return width === 0 || height === 0
 			? null
 			: super.updateGeometryLand(
 					geometry,
-					Scene.Map.current.mapProperties.tileset.picture.getCollisionAt(this.texture),
+					collisionPicture.getCollisionAt(this.texture),
 					position,
 					width,
 					height,
