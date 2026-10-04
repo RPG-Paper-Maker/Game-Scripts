@@ -72,12 +72,16 @@ class DisplayAnAnimation extends Base {
 				currentState.waitingObject = true;
 			}
 			if (currentState.object !== null) {
+				const target = currentState.object as MapObject;
+				const position = target.position;
+				const upPosition = position.clone().setY(position.y + target.height);
+				const halfPosition = position.clone().setY(position.y + target.height / 2);
 				currentState.object.topPosition = Manager.GL.toScreenPosition(
-					currentState.object.upPosition,
+					upPosition,
 					Scene.Map.current.camera.getThreeCamera(),
 				);
 				currentState.object.midPosition = Manager.GL.toScreenPosition(
-					currentState.object.halfPosition,
+					halfPosition,
 					Scene.Map.current.camera.getThreeCamera(),
 				);
 				currentState.object.botPosition = Manager.GL.toScreenPosition(
