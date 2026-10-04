@@ -9,7 +9,7 @@
 		"electron": "electron ./main.js --dev",
 		"copy-project": "node scripts/copy-project.mjs",
 		"update-packages": "npx npm-check-updates -u && npm run clear-packages && npm run update-libs",
-		"update-libs": "bash scripts/update-libs.sh",
+		"update-libs": "node scripts/update-libs.mjs",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
 		"push-build": "bash scripts/push-build.sh",
 		"generate-docs": "npx typedoc src --plugin typedoc-github-theme"
@@ -17,20 +17,21 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@types/howler": "^2.2.13",
-		"@types/node": "^26.4.1",
-		"@types/three": "^0.185.4",
-		"@typescript-eslint/eslint-plugin": "^8.69.0",
-		"@typescript-eslint/parser": "^8.69.0",
-		"electron": "44.1.1",
-		"eslint": "^10.9.1",
-		"globals": "^17.12.0",
+		"@types/node": "^26.6.4",
+		"@types/three": "^0.186.0",
+		"@typescript-eslint/eslint-plugin": "^8.71.0",
+		"@typescript-eslint/parser": "^8.71.0",
+		"electron": "44.5.1",
+		"eslint": "^10.12.0",
+		"globals": "^17.13.0",
 		"howler": "^2.2.4",
 		"jiti": "^2.7.0",
 		"nodemon": "^3.1.14",
-		"three": "^0.185.1",
+		"terser": "^5.51.2",
+		"three": "^0.186.1",
 		"typedoc": "^0.28.20",
 		"typedoc-github-theme": "^0.4.0",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.69.0"
+		"typescript-eslint": "^8.71.0"
 	}
 }
