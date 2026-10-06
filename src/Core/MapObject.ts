@@ -1177,17 +1177,25 @@ class MapObject {
 				if (ez > halfBBZ) halfBBZ = ez;
 			}
 		}
+		const canMoveTowardMap = (current: number, next: number, halfBB: number, size: number): boolean => {
+			const max = size - halfBB;
+			return (
+				(next >= halfBB && next < max) ||
+				(current < halfBB && next > current && next < max) ||
+				(current >= max && next < current && next >= halfBB)
+			);
+		};
 
 		let xPlus: number, zPlus: number, res: number;
 		if (orientation === ORIENTATION.SOUTH || this.previousOrientation === ORIENTATION.SOUTH) {
 			xPlus = distance * Mathf.cos((angle * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin((angle * Math.PI) / 180.0);
 			res = position.z - zPlus;
-			if (res >= halfBBZ && res < h - halfBBZ) {
+			if (canMoveTowardMap(position.z, res, halfBBZ, h)) {
 				position.setZ(res);
 			}
 			res = position.x - xPlus;
-			if (res >= halfBBX && res < w - halfBBX) {
+			if (canMoveTowardMap(position.x, res, halfBBX, w)) {
 				position.setX(res);
 			}
 		}
@@ -1195,11 +1203,11 @@ class MapObject {
 			xPlus = distance * Mathf.cos(((angle - 90.0) * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin(((angle - 90.0) * Math.PI) / 180.0);
 			res = position.x + xPlus;
-			if (res >= halfBBX && res < w - halfBBX) {
+			if (canMoveTowardMap(position.x, res, halfBBX, w)) {
 				position.setX(res);
 			}
 			res = position.z + zPlus;
-			if (res >= halfBBZ && res < h - halfBBZ) {
+			if (canMoveTowardMap(position.z, res, halfBBZ, h)) {
 				position.setZ(res);
 			}
 		}
@@ -1207,11 +1215,11 @@ class MapObject {
 			xPlus = distance * Mathf.cos((angle * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin((angle * Math.PI) / 180.0);
 			res = position.z + zPlus;
-			if (res >= halfBBZ && res < h - halfBBZ) {
+			if (canMoveTowardMap(position.z, res, halfBBZ, h)) {
 				position.setZ(res);
 			}
 			res = position.x + xPlus;
-			if (res >= halfBBX && res < w - halfBBX) {
+			if (canMoveTowardMap(position.x, res, halfBBX, w)) {
 				position.setX(res);
 			}
 		}
@@ -1219,11 +1227,11 @@ class MapObject {
 			xPlus = distance * Mathf.cos(((angle - 90.0) * Math.PI) / 180.0);
 			zPlus = distance * Mathf.sin(((angle - 90.0) * Math.PI) / 180.0);
 			res = position.x - xPlus;
-			if (res >= halfBBX && res < w - halfBBX) {
+			if (canMoveTowardMap(position.x, res, halfBBX, w)) {
 				position.setX(res);
 			}
 			res = position.z - zPlus;
-			if (res >= halfBBZ && res < h - halfBBZ) {
+			if (canMoveTowardMap(position.z, res, halfBBZ, h)) {
 				position.setZ(res);
 			}
 		}
@@ -1806,7 +1814,11 @@ class MapObject {
 		if (this.gltfGroup !== null) {
 			Scene.Map.current.scene.remove(this.gltfGroup);
 		}
-		if (!keepObjectLights && this.objectLightsGroup !== null && this.objectLightsGroup.parent === Scene.Map.current.scene) {
+		if (
+			!keepObjectLights &&
+			this.objectLightsGroup !== null &&
+			this.objectLightsGroup.parent === Scene.Map.current.scene
+		) {
 			Scene.Map.current.scene.remove(this.objectLightsGroup);
 		}
 		this.removeBBFromScene();
