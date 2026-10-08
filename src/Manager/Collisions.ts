@@ -1110,7 +1110,7 @@ class Collisions {
 		boundingBox: number[],
 		object: MapObject,
 	): boolean {
-		if (collision !== null || object.currentBoundingBox === null) {
+		if (collision != null || object.currentBoundingBox === null) {
 			return false;
 		}
 		const box = this.getBBBox();
@@ -1137,7 +1137,7 @@ class Collisions {
 		direction: THREE.Vector3,
 		object: MapObject,
 	): boolean {
-		if (collision === null) {
+		if (collision == null) {
 			return false;
 		}
 		if (!jpositionBefore.equals(jpositionAfter)) {
@@ -1174,7 +1174,7 @@ class Collisions {
 		collision: StructMapElementCollision,
 		direction: THREE.Vector3,
 	): boolean {
-		if (collision === null) {
+		if (collision == null) {
 			return false;
 		}
 		if (!jpositionBefore.equals(jpositionAfter)) {

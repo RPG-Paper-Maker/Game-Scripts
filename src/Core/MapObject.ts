@@ -285,7 +285,7 @@ class MapObject {
 			for (let x = 0; x < texture.width; x++) {
 				const collision = picture.getCollisionAtPos(texture.x + x, texture.y + z);
 				if (!collision) {
-					collisions.push({ b: [x + 0.5, pixelDepth / 2, z + 0.5, 1, 1, pixelDepth, 0] });
+					collisions.push({ b: [x, pixelDepth / 2, z, 1, 1, pixelDepth, 0], cs: null });
 					continue;
 				}
 				const rect = collision.rect;
@@ -301,7 +301,7 @@ class MapObject {
 						cs: null,
 					});
 				} else {
-					collisions.push({ b: [x + 0.5, pixelDepth / 2, z + 0.5, 1, 1, pixelDepth, 0], cs: collision });
+					collisions.push({ b: [x, pixelDepth / 2, z, 1, 1, pixelDepth, 0], cs: collision });
 				}
 			}
 		}
@@ -955,13 +955,14 @@ class MapObject {
 				positionTranformation.layer = 0;
 				positionTranformation.x = 0;
 				positionTranformation.y = 0;
+				positionTranformation.yPixels = 0;
 				positionTranformation.z = 0;
 				positionTranformation.centerX -= 50;
 				positionTranformation.centerZ -= 50;
 				const { width, height } = Manager.GL.getMaterialTextureSize(material);
 				const isTileset = this.currentStateInstance.graphicID === 0;
 				const picture = isTileset
-					? null
+					? Scene.Map.current.mapProperties.tileset.picture
 					: Data.Pictures.get(PICTURE_KIND.CHARACTERS, this.currentStateInstance.graphicID);
 				this.width = isTileset
 					? this.currentStateInstance.rectTileset.width
@@ -995,6 +996,7 @@ class MapObject {
 				positionTranformation.layer = 0;
 				positionTranformation.x = 0;
 				positionTranformation.y = 0;
+				positionTranformation.yPixels = 0;
 				positionTranformation.z = 0;
 				positionTranformation.centerX -= 50;
 				positionTranformation.centerZ -= 50;
