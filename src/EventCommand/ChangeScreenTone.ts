@@ -114,6 +114,16 @@ class ChangeScreenTone extends Base {
 
 			// If time = 0, then this is the end of the command
 			if (currentState.timeLeft === 0) {
+				const properties = Scene.Map.current.mapProperties;
+				const defaultTone = [
+					Math.max(Math.min((properties.screenToneRed.getValue() as number) / 255, 1), -1),
+					Math.max(Math.min((properties.screenToneGreen.getValue() as number) / 255, 1), -1),
+					Math.max(Math.min((properties.screenToneBlue.getValue() as number) / 255, 1), -1),
+					Math.max(Math.min(1 - (properties.screenToneGrey.getValue() as number) / 100, 1), -1),
+				];
+				Manager.GL.screenToneByCommand = Manager.GL.screenTone.toArray().some(
+					(value, index) => Math.abs(value - defaultTone[index]) > 0.000001,
+				);
 				return 1;
 			}
 			return 0;

@@ -136,9 +136,8 @@ class Map extends Base {
 		this.initializeSunLight();
 		this.mapProperties.updateFog();
 		if (!this.isBattleMap) {
-			if (Manager.GL.screenToneByCommand) {
-				Manager.GL.screenToneByCommand = false;
-			} else {
+			// Keep a command tone across every map load until a tone command restores the map default.
+			if (!Manager.GL.screenToneByCommand) {
 				this.mapProperties.updateScreenTone();
 			}
 		}
