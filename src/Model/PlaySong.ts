@@ -130,16 +130,6 @@ export class PlaySong extends Base {
 	 */
 	playMusic(start?: number, volume?: number): number {
 		if (this.isKeepCurrent) {
-			if (this.kind === SONG_KIND.MUSIC && Manager.Songs.current[SONG_KIND.MUSIC] === null) {
-				const prev = PlaySong.currentPlayingMusic;
-				if (prev) {
-					const id = prev.songID.getValue() as number;
-					const vol = (prev.volume.getValue() as number) / 100;
-					const s = prev.isStart ? (prev.start.getValue() as number) : 0;
-					const e = prev.end ? (prev.end.getValue() as number) : null;
-					Manager.Songs.playMusic(SONG_KIND.MUSIC, id, vol, s, e);
-				}
-			}
 			return 1;
 		}
 		if (start === undefined) {
@@ -149,16 +139,18 @@ export class PlaySong extends Base {
 			volume = (this.volume.getValue() as number) / 100;
 		}
 
-		// If same music ID and same
+		const id = this.songID.getValue() as number;
+		const current = Manager.Songs.current[this.kind];
+		// Keep the position when the requested song is already playing.
 		if (
-			(this.songID.getValue() as number) === (PlaySong.currentPlayingMusic.songID.getValue() as number) &&
-			start === (PlaySong.currentPlayingMusic.start.getValue() as number)
+			current &&
+			Manager.Songs.currentIDs[this.kind] === id &&
+			Manager.Songs.starts[this.kind] === start &&
+			(current.playing() ||
+				(this.kind === SONG_KIND.MUSIC && Manager.Songs.musicEffectPausedHowl === current))
 		) {
-			// If same, be sure to update volume anyway
-			if (Manager.Songs.current[SONG_KIND.MUSIC]) {
-				Manager.Songs.current[SONG_KIND.MUSIC].volume(volume);
-				Manager.Songs.volumes[SONG_KIND.MUSIC] = volume;
-			}
+			current.volume(volume);
+			Manager.Songs.volumes[this.kind] = volume;
 			return 1;
 		}
 
@@ -169,7 +161,7 @@ export class PlaySong extends Base {
 		}
 		Manager.Songs.playMusic(
 			this.kind,
-			this.songID.getValue() as number,
+			id,
 			volume,
 			start,
 			this.end ? (this.end.getValue() as number) : null,

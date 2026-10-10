@@ -13,6 +13,7 @@ import { Mathf, Platform, ScreenResolution, Utils } from '../Common';
 import { Frame, Game, MapObject, Position, ReactionInterpreter, StructSearchResult } from '../Core';
 import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
+import { StopMusic } from './StopMusic';
 
 /** @class
  *  An event command for teleporting an object.
@@ -172,6 +173,14 @@ class TeleportObject extends Base {
 								const direction =
 									this.direction === 0 ? Game.current.hero.orientation : this.direction - 1;
 								if (Scene.Map.current.id !== id) {
+									// The old map's parallel commands stop updating after replacement
+									if (
+										Scene.Map.current.parallelCommands.some(
+											(interpreter) => interpreter.currentCommand?.data instanceof StopMusic,
+										)
+									) {
+										Manager.Songs.stopMusic(0);
+									}
 									const map = new Scene.Map(id, false, false, direction);
 									// Include current reaction in the new map so it excecute commands after teleport
 									map.reactionInterpreters.push(ReactionInterpreter.currentReaction);
