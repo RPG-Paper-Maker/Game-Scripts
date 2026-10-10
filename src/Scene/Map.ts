@@ -222,6 +222,7 @@ class Map extends Base {
 	 *  Read the map properties file.
 	 */
 	async readMapProperties(minimal: boolean = false) {
+		const previousStartupObject = this.mapProperties?.startupObject;
 		const json = (await Platform.parseFileJSON(Paths.FILE_MAPS + this.mapFilename + Paths.FILE_MAP_INFOS)) as any;
 		if (this.isBattleMap && json.tileset === undefined) {
 			Platform.showErrorMessage(
@@ -230,6 +231,19 @@ class Map extends Base {
 		}
 		this.mapProperties = new Model.MapProperties(json);
 		await this.mapProperties.load();
+		if (previousStartupObject?.timeEventsEllapsed) {
+			const previousEvents = previousStartupObject.system.timeEvents;
+			const currentEvents = this.mapProperties.startupObject.system.timeEvents;
+			const timeEvents: [Model.Event, number][] = [];
+			for (const entry of previousStartupObject.timeEventsEllapsed) {
+				const index = previousEvents.indexOf(entry[0]);
+				if (index >= 0 && index < currentEvents.length) {
+					entry[0] = currentEvents[index];
+					timeEvents.push(entry);
+				}
+			}
+			this.mapProperties.startupObject.timeEventsEllapsed = timeEvents;
+		}
 		if (!minimal) {
 			this.mapProperties.updateBackground();
 		}
@@ -1650,10 +1664,12 @@ class Map extends Base {
 	/**
 	 *  Close the map.
 	 */
-	close() {
-		this.reactionInterpreters = [];
-		this.reactionInterpretersEffects = [];
-		this.parallelCommands = [];
+	close(preserveReactions = false) {
+		if (!preserveReactions) {
+			this.reactionInterpreters = [];
+			this.reactionInterpretersEffects = [];
+			this.parallelCommands = [];
+		}
 		if (Game.current !== null && !this.isBattleMap) {
 			Game.current.caterpillarFollowers = [];
 		}
