@@ -134,7 +134,7 @@ class ChangeMapProperties extends Base {
 			if (mapID === Scene.Map.current.id) {
 				currentState.loading = true;
 				if (this.isTilesetID) {
-					Scene.Map.current.close();
+					Scene.Map.current.close(true);
 				}
 				Scene.Map.current.loading = true;
 				(async () => {
