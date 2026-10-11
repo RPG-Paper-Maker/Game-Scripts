@@ -835,6 +835,19 @@ class MapPortion {
 			}
 		}
 		this.staticObjects3DList = [];
+		for (let x = 0; x < Constants.PORTION_SIZE; x++) {
+			for (let z = 0; z < this.squareNonEmpty[x].length; z++) {
+				this.squareNonEmpty[x][z] = [];
+			}
+		}
+		for (let i = 0; i < this.boundingBoxesLands.length; i++) {
+			this.boundingBoxesLands[i] = [];
+			this.terrainFloors[i] = [];
+			this.terrainAutotiles[i] = [];
+			this.boundingBoxesSprites[i] = [];
+			this.boundingBoxesMountains[i] = [];
+			this.boundingBoxesObjects3D[i] = [];
+		}
 	}
 
 	/**

@@ -179,6 +179,11 @@ class ChangeVariables extends Base {
 					break;
 				case 4: // Map object characteristic
 					const objectID = this.valueMapObject.getValue() as number;
+					// A generated object may have been removed since its ID was stored.
+					if (objectID > 0 && !Scene.Map.current.mapProperties.allObjects.has(objectID)) {
+						currentState.skip = true;
+						break;
+					}
 					currentState.valid = false;
 					MapObject.search(
 						objectID,

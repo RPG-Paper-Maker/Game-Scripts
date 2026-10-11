@@ -174,8 +174,6 @@ class Map extends Base {
 			}
 		}
 		this.collisions = [];
-		await this.readMapProperties();
-		this.initializeCamera();
 		await this.loadTextures();
 		this.loadCollisions();
 		type ReloadTask = { mapPortion: MapPortion; portion: Portion };
@@ -205,6 +203,7 @@ class Map extends Base {
 		for (let n = 0; n < reloadTasks.length; n++) {
 			await reloadTasks[n].mapPortion.readStatic(reloadJsons[n]);
 		}
+		await MapObject.refreshTextures();
 		this.loading = false;
 	}
 

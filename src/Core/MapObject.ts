@@ -177,6 +177,29 @@ class MapObject {
 		return objects;
 	}
 
+	static async refreshTextures() {
+		for (const object of MapObject.getLoadedMapObjects()) {
+			const state = object.currentStateInstance;
+			if (
+				!object.removed &&
+				object.isInScene &&
+				state &&
+				(state.graphicKind === ELEMENT_MAP_KIND.AUTOTILES ||
+					state.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D ||
+					(state.graphicID === 0 && state.graphicKind !== ELEMENT_MAP_KIND.NONE))
+			) {
+				if (state.graphicKind === ELEMENT_MAP_KIND.AUTOTILES) {
+					const autotile = Data.SpecialElements.getAutotile(state.graphicID);
+					if (!autotile) continue;
+					const pictureID = Game.current.textures.autotiles[state.graphicID] ?? autotile.pictureID;
+					const bundles = await Data.SpecialElements.loadAutotileTexture(state.graphicID);
+					if (!bundles.some((bundle) => bundle.isInTexture(pictureID, state.rectTileset))) continue;
+				}
+				await object.changeState(false, true);
+			}
+		}
+	}
+
 	private getObjectAutotileTileID(position: Position): number {
 		const state = this.currentStateInstance;
 		const objects = MapObject.getLoadedMapObjects();
@@ -241,13 +264,14 @@ class MapObject {
 		const state = this.currentStateInstance;
 		const autotile = Data.SpecialElements.getAutotile(state.graphicID);
 		if (!autotile) return;
+		const pictureID = Game.current.textures.autotiles[state.graphicID] ?? autotile.pictureID;
 		const { width, height } = Manager.GL.getMaterialTextureSize(this.objectAutotileBundle.material);
 		if (width === 0 || height === 0) return;
 		const tileID = this.getObjectAutotileTileID(Position.createFromVector3(this.position));
 		const x = (tileID % 64) * Data.Systems.SQUARE_SIZE;
 		const y =
 			(Math.floor(tileID / 64) +
-				10 * this.objectAutotileBundle.getOffset(autotile.pictureID, state.rectTileset)) *
+				10 * this.objectAutotileBundle.getOffset(pictureID, state.rectTileset)) *
 			Data.Systems.SQUARE_SIZE;
 		const coef = MapElement.COEF_TEX;
 		const uvs = (this.mesh.geometry as CustomGeometry).getAttribute('uv');
@@ -687,7 +711,7 @@ class MapObject {
 	/**
 	 *  Update the current state (graphics to display), also update the mesh.
 	 */
-	async changeState(dontChangeOrientation = false) {
+	async changeState(dontChangeOrientation = false, preserveCurrentStates = false) {
 		const angle = this.mesh ? this.mesh.rotation.y : 0;
 		const previousMesh = this.mesh;
 		const previousGltfGroup = this.gltfGroup;
@@ -696,7 +720,11 @@ class MapObject {
 		const previousLightsElapsedTime = this.objectLightsElapsedTime;
 
 		// Updating the current state
-		if (this.isHero) {
+		if (preserveCurrentStates) {
+			if (!this.states) {
+				return;
+			}
+		} else if (this.isHero) {
 			this.states = Game.current.heroStates;
 		} else if (this.isStartup) {
 			if (!Game.current.startupStates.hasOwnProperty(Scene.Map.current.id)) {
@@ -785,12 +813,14 @@ class MapObject {
 				}
 			} else if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.AUTOTILES) {
 				const autotileData = Data.SpecialElements.getAutotile(this.currentStateInstance.graphicID);
+				const pictureID =
+					Game.current.textures.autotiles[this.currentStateInstance.graphicID] ?? autotileData?.pictureID;
 				const bundles = autotileData
 					? await Data.SpecialElements.loadAutotileTexture(this.currentStateInstance.graphicID)
 					: null;
 				this.objectAutotileBundle =
 					bundles?.find((bundle) =>
-						bundle.isInTexture(autotileData.pictureID, this.currentStateInstance.rectTileset),
+						bundle.isInTexture(pictureID, this.currentStateInstance.rectTileset),
 					) ?? null;
 				material = this.objectAutotileBundle?.material ?? null;
 			} else if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.FLOORS) {
@@ -989,6 +1019,8 @@ class MapObject {
 				if (!autotileData || !bundle) {
 					return;
 				}
+				const pictureID =
+					Game.current.textures.autotiles[this.currentStateInstance.graphicID] ?? autotileData.pictureID;
 				const autotile = new Autotile();
 				autotile.autotileID = this.currentStateInstance.graphicID;
 				autotile.texture = this.currentStateInstance.rectTileset?.clone() ?? new Rectangle();
@@ -1008,7 +1040,7 @@ class MapObject {
 					positionTranformation,
 					width,
 					height,
-					autotileData.pictureID,
+					pictureID,
 					0,
 				);
 				result[1][1] = collision ? [collision] : [];

@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Model, Scene } from '..';
+import { Data, Model, Scene } from '..';
 import { Utils } from '../Common';
 import { Game, MapObject } from '../Core';
 import { Base } from './Base';
@@ -95,31 +95,72 @@ class SwitchTexture extends Base {
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
 		if (!currentState.loading) {
 			currentState.loading = true;
+			let changed = false;
+			const switchPicture = (
+				textures: Record<number, number>,
+				id: number,
+				pictureID: number,
+				defaultPictureID: number
+			) => {
+				if ((textures[id] ?? defaultPictureID) !== pictureID) {
+					changed = true;
+				}
+				textures[id] = pictureID;
+			};
 			if (this.isTilesetID) {
-				Game.current.textures.tilesets[this.tilesetID.getValue() as number] =
-					this.tilesetPictureID.getValue() as number;
+				const id = this.tilesetID.getValue() as number;
+				switchPicture(
+					Game.current.textures.tilesets,
+					id,
+					this.tilesetPictureID.getValue() as number,
+					Data.Tilesets.get(id)?.picture?.id
+				);
 			}
 			if (this.isAutotileID) {
-				Game.current.textures.autotiles[this.autotileID.getValue() as number] =
-					this.autotilePictureID.getValue() as number;
+				const id = this.autotileID.getValue() as number;
+				switchPicture(
+					Game.current.textures.autotiles,
+					id,
+					this.autotilePictureID.getValue() as number,
+					Data.SpecialElements.getAutotile(id)?.pictureID
+				);
 			}
 			if (this.isWallID) {
-				Game.current.textures.walls[this.wallID.getValue() as number] = this.wallPictureID.getValue() as number;
+				const id = this.wallID.getValue() as number;
+				switchPicture(
+					Game.current.textures.walls,
+					id,
+					this.wallPictureID.getValue() as number,
+					Data.SpecialElements.getWall(id)?.pictureID
+				);
 			}
 			if (this.isObject3DID) {
-				Game.current.textures.objects3D[this.object3DID.getValue() as number] =
-					this.object3DPictureID.getValue() as number;
+				const id = this.object3DID.getValue() as number;
+				switchPicture(
+					Game.current.textures.objects3D,
+					id,
+					this.object3DPictureID.getValue() as number,
+					Data.SpecialElements.getObject3D(id)?.pictureID
+				);
 			}
 			if (this.isMountainID) {
-				Game.current.textures.mountains[this.mountainID.getValue() as number] =
-					this.mountainPictureID.getValue() as number;
+				const id = this.mountainID.getValue() as number;
+				switchPicture(
+					Game.current.textures.mountains,
+					id,
+					this.mountainPictureID.getValue() as number,
+					Data.SpecialElements.getMountain(id)?.pictureID
+				);
 			}
-			//Scene.Map.current.close();
-			Scene.Map.current.loading = true;
-			(async () => {
-				await Scene.Map.current.reloadTextures();
+			if (changed) {
+				Scene.Map.current.loading = true;
+				(async () => {
+					await Scene.Map.current.reloadTextures();
+					currentState.loaded = true;
+				})();
+			} else {
 				currentState.loaded = true;
-			})();
+			}
 		}
 		return currentState.loaded ? 1 : 0;
 	}
