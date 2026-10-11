@@ -404,7 +404,14 @@ class Game {
 										Scene.Map.current = map;
 										await map.readMapProperties(true);
 									}
-									datas.m = (await Promise.all(datas.m.map(objectMap))).filter((object) => object !== null);
+									// A permanent removal takes precedence over an old saved position.
+									const removedIDs = new Set<number>(datas.pr ?? []);
+									for (const removedID of removedIDs) {
+										map.mapProperties.maxObjectsID = Math.max(map.mapProperties.maxObjectsID, removedID);
+									}
+									datas.m = (
+										await Promise.all(datas.m.filter((entry: number[]) => !removedIDs.has(entry[0])).map(objectMap))
+									).filter((object) => object !== null);
 									for (const movedObject of datas.m) {
 										addPersistentObjectToPortion(
 											parseInt(id),
@@ -487,7 +494,7 @@ class Game {
 								if (datas.min && datas.min.length) {
 									tab = [];
 									for (o of datas.min) {
-										if (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition)) {
+										if (!datas.pr?.includes(o.system.id) && (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition))) {
 											tab.push(o.system.id);
 										}
 									}
@@ -498,7 +505,7 @@ class Game {
 								if (datas.mout && datas.mout.length) {
 									tab = [];
 									for (o of datas.mout) {
-										if (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition)) {
+										if (!datas.pr?.includes(o.system.id) && (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition))) {
 											tab.push(o.system.id);
 										}
 									}
@@ -509,7 +516,7 @@ class Game {
 								if (datas.m && datas.m.length) {
 									tab = [];
 									for (o of datas.m) {
-										if (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition)) {
+										if (!datas.pr?.includes(o.system.id) && (o.isPersistent || (o.currentStateInstance && o.currentStateInstance.keepPosition))) {
 											tab.push(
 												o.modelID === null
 													? [o.system.id, o.position.x, o.position.y, o.position.z]
