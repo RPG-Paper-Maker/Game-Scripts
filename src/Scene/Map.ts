@@ -331,14 +331,17 @@ class Map extends Base {
 						mapsData && mapsData[i] && mapsData[i][jp] && mapsData[i][jp][jabs]
 							? mapsData[i][jp][jabs][k]
 							: null;
+					const permanentlyRemoved = new Set<number>(datas?.pr ?? []);
+					const activeObjects = (objects: MapObject[] = []) =>
+						objects.filter((object) => !permanentlyRemoved.has(object.system.id));
 					objectsPortions[i][jp][jabs][k] = {
-						min: datas && datas.min ? datas.min : [],
+						min: activeObjects(datas?.min),
 						// All the moved objects that are in this
 						// portion
-						mout: datas && datas.mout ? datas.mout : [],
+						mout: activeObjects(datas?.mout),
 						// All the moved objects that are from another
 						// portion
-						m: datas && datas.m ? datas.m : [],
+						m: activeObjects(datas?.m),
 						// All the moved objects that are from this
 						// portion
 						si: datas && datas.si ? datas.si : [],
@@ -357,6 +360,9 @@ class Map extends Base {
 						// States options of the objects according to id
 						pr: datas && datas.pr ? datas.pr : [],
 					};
+					for (const removedID of objectsPortions[i][jp][jabs][k].pr) {
+						this.mapProperties.maxObjectsID = Math.max(this.mapProperties.maxObjectsID, removedID);
+					}
 					for (const object of objectsPortions[i][jp][jabs][k].m) {
 						if (object.modelID !== null) {
 							this.mapProperties.allObjects.set(object.system.id, Position.createFromVector3(object.position));

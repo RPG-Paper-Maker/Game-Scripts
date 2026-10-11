@@ -67,39 +67,43 @@ class RemoveObjectFromMap extends Base {
 					}
 					if (!result.object.removed) {
 						if (result.datas !== null) {
-							switch (result.kind) {
-								case 0:
-									result.datas.m.splice(result.index, 1);
-									const index = result.datas.min.indexOf(result.object);
-									if (index === -1) {
-										result.datas = Game.current.getPortionData(
-											Scene.Map.current.id,
-											Portion.createFromVector3(result.object.position),
-										);
-										result.datas.mout.splice(result.datas.mout.indexOf(result.object), 1);
-									} else {
-										result.datas.min.splice(index, 1);
-									}
-									break;
-								case 1:
-									if (result.index > -1) {
-										result.list.splice(result.index, 1);
-									}
-									break;
+							const originDatas = result.datas;
+							const movedIndex = originDatas.m.indexOf(result.object);
+							if (movedIndex !== -1) {
+								originDatas.m.splice(movedIndex, 1);
 							}
-							if (result.datas.r.indexOf(result.id) === -1) {
-								result.datas.r.push(result.id);
+							const originIndex = originDatas.min.indexOf(result.object);
+							if (originIndex !== -1) {
+								originDatas.min.splice(originIndex, 1);
+							} else {
+								const destinationDatas = Game.current.getPortionData(
+									Scene.Map.current.id,
+									Portion.createFromVector3(result.object.position),
+								);
+								const destinationIndex = destinationDatas.mout?.indexOf(result.object) ?? -1;
+								if (destinationIndex !== -1) {
+									destinationDatas.mout.splice(destinationIndex, 1);
+								}
 							}
-							if (this.isPermanent && result.datas.pr.indexOf(result.id) === -1) {
-								result.datas.pr.push(result.id);
+							if (result.list) {
+								const listIndex = result.list.indexOf(result.object);
+								if (listIndex !== -1) {
+									result.list.splice(listIndex, 1);
+								}
 							}
+							if (originDatas.r.indexOf(result.id) === -1) {
+								originDatas.r.push(result.id);
+							}
+							if (this.isPermanent && originDatas.pr.indexOf(result.id) === -1) {
+								originDatas.pr.push(result.id);
+							}
+						}
+						const position = result.object.position.clone();
+						result.object.removed = true;
+						result.object.removeFromScene();
+						Scene.Map.current.landObjectsSpatialHashDirty = true;
+						void MapObject.refreshAutotilesAround(position);
 					}
-					const position = result.object.position.clone();
-					result.object.removed = true;
-					result.object.removeFromScene();
-					Scene.Map.current.landObjectsSpatialHashDirty = true;
-					void MapObject.refreshAutotilesAround(position);
-				}
 					currentState.finished = true;
 				},
 				object,
