@@ -791,6 +791,9 @@ class MoveObject extends Base {
 			if (currentState.currentTime === -1) {
 				currentState.currentTime = 0;
 				currentState.startJump = new THREE.Vector3(object.position.x, object.position.y, object.position.z);
+				if (object.isHero) {
+					Scene.Map.current?.beginHeroJump();
+				}
 				const square = parameters.square ? 1 : 1 / Data.Systems.SQUARE_SIZE;
 				currentState.endJump = new THREE.Vector3(
 					(parameters.x as number) * square +
@@ -822,7 +825,13 @@ class MoveObject extends Base {
 				currentState.currentTime,
 				currentState.time,
 			);
+			if (object.isHero) {
+				Scene.Map.current?.updateHeroJump(currentState.currentTime, currentState.time);
+			}
 			if (currentState.currentTime === currentState.time) {
+				if (object.isHero) {
+					Scene.Map.current?.finishHeroJump();
+				}
 				currentState.currentTime = -1;
 				return true;
 			} else {

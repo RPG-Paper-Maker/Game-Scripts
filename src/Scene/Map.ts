@@ -96,6 +96,9 @@ class Map extends Base {
 	private heroTrail: Array<{ pos: THREE.Vector3; dist: number; orientation: ORIENTATION }> = [];
 	private heroTrailTotalDist: number = 0;
 	private heroTrailLastPos: THREE.Vector3 | null = null;
+	private heroJumpFollowerStartPositions: THREE.Vector3[] | null = null;
+	private heroJumpStartPosition: THREE.Vector3 | null = null;
+	private heroJumpProgress: number = 0;
 	private previousLayerDepthOffset: number = -1;
 	private cameraHidingReleaseTime: number = 0;
 
@@ -1370,7 +1373,13 @@ class Map extends Base {
 					cumulativeDist += offset + prevWidth / 2 + follower.contentWidth / 2;
 					prevWidth = follower.contentWidth;
 					const targetDist = this.heroTrailTotalDist - cumulativeDist;
-					const { pos: targetPos, orientation: targetOri } = this.getTrailAtDist(targetDist);
+					let { pos: targetPos, orientation: targetOri } = this.getTrailAtDist(targetDist);
+					if (this.heroJumpFollowerStartPositions !== null && this.heroJumpStartPosition !== null) {
+						const startPos = this.heroJumpFollowerStartPositions[i] ?? follower.position;
+						const startOffset = startPos.clone().sub(this.heroJumpStartPosition);
+						targetPos = Game.current.hero.position.clone().addScaledVector(startOffset, 1 - this.heroJumpProgress);
+						targetOri = Game.current.hero.orientationEye;
+					}
 					const prevPos = follower.previousPosition ? follower.previousPosition.clone() : targetPos.clone();
 					follower.moving = prevPos.distanceTo(targetPos) > 0.001;
 					if (follower.moving) {
@@ -1911,6 +1920,34 @@ class Map extends Base {
 		while (this.heroTrail.length > 1 && this.heroTrailTotalDist - this.heroTrail[0].dist > maxNeeded) {
 			this.heroTrail.shift();
 		}
+	}
+
+	/** Give followers the hero's jump arc, with their starting offset fading by landing. */
+	beginHeroJump() {
+		this.heroJumpStartPosition = Game.current.hero.position.clone();
+		this.heroJumpFollowerStartPositions = Game.current.caterpillarFollowers.map((follower) =>
+			follower.position.clone(),
+		);
+		this.heroJumpProgress = 0;
+	}
+
+	updateHeroJump(currentTime: number, finalTime: number) {
+		if (this.heroJumpFollowerStartPositions !== null) {
+			this.heroJumpProgress = finalTime > 0 ? Math.min(1, currentTime / finalTime) : 1;
+		}
+	}
+
+	finishHeroJump() {
+		if (this.heroJumpFollowerStartPositions === null) {
+			return;
+		}
+		const hero = Game.current.hero;
+		this.heroTrail = [{ pos: hero.position.clone(), dist: 0, orientation: hero.orientationEye }];
+		this.heroTrailTotalDist = 0;
+		this.heroTrailLastPos = hero.position.clone();
+		this.heroJumpFollowerStartPositions = null;
+		this.heroJumpStartPosition = null;
+		this.heroJumpProgress = 0;
 	}
 
 	/**
