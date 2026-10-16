@@ -11,7 +11,7 @@
 
 import { DYNAMIC_VALUE_KIND, Platform, Utils } from '../Common';
 import { Game, MapObject, ReactionInterpreter } from '../Core';
-import { Data, Manager, Model } from '../index';
+import { Data, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -60,13 +60,13 @@ class SendEvent extends Base {
 				: Data.CommonEvents.getEventUser(this.eventID)
 		).parameters;
 		this.parameters = [];
-		let parameter: Model.DynamicValue, paramID: number, k: DYNAMIC_VALUE_KIND;
+		let parameter: Model.DynamicValue, paramID: number;
 		for (let parameterIndex = 0; parameterIndex < parameters.size && iterator.i < l; parameterIndex++) {
 			paramID = command[iterator.i++];
-			k = command[iterator.i++];
-			if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
+			parameter = Model.DynamicValue.createValueCommand(command, iterator);
+			if (parameter.kind > DYNAMIC_VALUE_KIND.UNKNOWN && parameter.kind <= DYNAMIC_VALUE_KIND.DEFAULT) {
 				// If default value
-				if (k === DYNAMIC_VALUE_KIND.DEFAULT) {
+				if (parameter.kind === DYNAMIC_VALUE_KIND.DEFAULT) {
 					const defaultParameter = parameters.get(paramID);
 					if (!defaultParameter) {
 						Platform.showErrorMessage(
@@ -76,10 +76,8 @@ class SendEvent extends Base {
 					}
 					parameter = defaultParameter.value;
 				} else {
-					parameter = Model.DynamicValue.create(k, null);
+					parameter.value = null;
 				}
-			} else {
-				parameter = Model.DynamicValue.create(k, command[iterator.i++]);
 			}
 			this.parameters[paramID] = parameter;
 		}
@@ -97,10 +95,19 @@ class SendEvent extends Base {
 	 *  @returns {number} The number of node to pass
 	 */
 	update(currentState: Record<string, any>, object: MapObject, state: number): number {
+		const targetID = this.targetID ? (this.targetID.getValue() as number) : -1;
+		if (this.targetKind === 1 && !object.position) {
+			Platform.showErrorMessage(
+				object.isStartup
+					? `Send event command: map startup reactions on map ${Scene.Map.current.id} cannot target detection ID ${targetID} because the startup object has no position. Send the event from a placed map object, or choose a target that does not use detection.`
+					: `Send event command: object ID ${object.system.id} on map ${Scene.Map.current.id} cannot target detection ID ${targetID} because it has no position.`,
+			);
+			return 1;
+		}
 		const lastObjectID = Manager.Events.sendEvent(
 			object,
 			this.targetKind,
-			this.targetID ? (this.targetID.getValue() as number) : -1,
+			targetID,
 			this.isSystem,
 			this.eventID,
 			Utils.arrayToMap(Model.DynamicValue.mapWithParametersProperties(this.parameters), true),
