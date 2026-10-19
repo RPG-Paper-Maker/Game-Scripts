@@ -314,13 +314,14 @@ class Sprite extends MapElement {
 			const y = (isObjectGeometry ? 0 : localPosition.y) + this.yOffset;
 			const p = new THREE.Vector3(pos.x, y, pos.z);
 			const c = new THREE.Vector3(center.x, y, center.z);
-			geometry.pushQuadVerticesFace(
-				Sprite.MODEL[0].clone().multiply(size).add(p),
-				Sprite.MODEL[1].clone().multiply(size).add(p),
-				Sprite.MODEL[2].clone().multiply(size).add(p),
-				Sprite.MODEL[3].clone().multiply(size).add(p),
-				c,
-			);
+			const vecFaceA = Sprite.MODEL[0].clone().multiply(size).add(p);
+			const vecFaceB = Sprite.MODEL[1].clone().multiply(size).add(p);
+			const vecFaceC = Sprite.MODEL[2].clone().multiply(size).add(p);
+			const vecFaceD = Sprite.MODEL[3].clone().multiply(size).add(p);
+			const rotation = position.toRotationEuler();
+			rotation.y = 0;
+			Mathf.rotateQuadEuler(vecFaceA, vecFaceB, vecFaceC, vecFaceD, c, rotation);
+			geometry.pushQuadVerticesFace(vecFaceA, vecFaceB, vecFaceC, vecFaceD, c);
 			geometry.pushQuadIndices(count);
 			geometry.pushQuadUVs(texA, texB, texC, texD);
 			count = count + 4;
