@@ -210,13 +210,13 @@ class ChangeVariables extends Base {
 									currentState.value = Position.createFromVector3(obj.position).z;
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.X_PIXEL_POSITION:
-									currentState.value = obj.position.x;
+									currentState.value = obj.position.x * Data.Systems.SQUARE_SIZE;
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Y_PIXEL_POSITION:
-									currentState.value = obj.position.y;
+									currentState.value = obj.position.y * Data.Systems.SQUARE_SIZE;
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Z_PIXEL_POSITION:
-									currentState.value = obj.position.z;
+									currentState.value = obj.position.z * Data.Systems.SQUARE_SIZE;
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.ORIENTATION:
 									currentState.value = obj.orientation;
