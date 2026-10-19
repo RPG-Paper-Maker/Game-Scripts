@@ -500,7 +500,7 @@ class Message extends Graphic.Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: number = this.oH) {
-		this.draw(x, y, w, h);
+		this.draw(x, y, w, h, true);
 	}
 
 	/**
@@ -512,14 +512,14 @@ class Message extends Graphic.Base {
 	 *  @param {boolean} [positionResize=true] - If checked, resize postion
 	 *  according to screen resolution
 	 */
-	draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: number = this.oH) {
+	draw(x: number = this.oX, y: number = this.oY, w: number = this.oW, h: number = this.oH, isChoice = false) {
 		const newX =
 			x +
-			(this.faceset.empty
+			(isChoice || this.faceset.empty
 				? 0
 				: ScreenResolution.getScreenMinXY(Data.Systems.facesetScalingWidth) +
 					ScreenResolution.getScreenX(Constants.HUGE_SPACE));
-		const newY = y + ScreenResolution.getScreenY(Constants.HUGE_SPACE);
+		const newY = y + (isChoice ? 0 : ScreenResolution.getScreenY(Constants.HUGE_SPACE));
 		const textAreaWidth = w - (newX - x);
 		let offsetY = 0;
 		let align = ALIGN.NONE;
@@ -560,7 +560,9 @@ class Message extends Graphic.Base {
 					}
 					graphic.draw({
 						x: newX + offsetX,
-						y: newY - (ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5) / 2 + offsetY,
+						y: isChoice
+							? newY + (h - ScreenResolution.getScreenMinXY(Data.Systems.iconsSize * 1.5)) / 2 + offsetY
+							: newY - (ScreenResolution.getScreenMinXY(Data.Systems.iconsSize) * 1.5) / 2 + offsetY,
 						sw: Data.Systems.iconsSize,
 						sh: Data.Systems.iconsSize,
 						w: Data.Systems.iconsSize * 1.5,
@@ -574,7 +576,7 @@ class Message extends Graphic.Base {
 						newX + offsetX,
 						newY + offsetY,
 						availableW,
-						graphic.oH,
+						isChoice ? h : graphic.oH,
 						offsetX > 0 ? newX : undefined,
 						offsetX > 0 && textAreaWidth > 0 ? textAreaWidth : undefined,
 					);

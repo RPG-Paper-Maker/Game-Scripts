@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, DYNAMIC_VALUE_KIND, ScreenResolution, Utils } from '../Common';
+import { DYNAMIC_VALUE_KIND, ScreenResolution, Utils } from '../Common';
 import { Game, MapObject, ReactionInterpreter, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -28,7 +28,7 @@ class DisplayChoice extends Base {
 	public choices: string[];
 	public windowChoices: WindowChoices;
 	public showText: ShowText;
-	public graphics: Graphic.Text[];
+	public graphics: Graphic.Message[];
 	public maxWidth: number;
 
 	constructor(command: any[]) {
@@ -39,9 +39,10 @@ class DisplayChoice extends Base {
 		};
 		this.cancelAutoIndex = Model.DynamicValue.createValueCommand(command, iterator);
 		this.maxNumberChoices = Model.DynamicValue.createValueCommand(command, iterator);
-		this.isStockChoiceIndex = iterator.i < command.length && command[iterator.i] !== '-'
-			? Utils.numberToBool(command[iterator.i++])
-			: false;
+		this.isStockChoiceIndex =
+			iterator.i < command.length && command[iterator.i] !== '-'
+				? Utils.numberToBool(command[iterator.i++])
+				: false;
 		if (this.isStockChoiceIndex) {
 			this.stockChoiceIndexVariable = Model.DynamicValue.createValueCommand(command, iterator);
 		}
@@ -68,16 +69,11 @@ class DisplayChoice extends Base {
 		// Determine slots width
 		l = this.choices.length;
 		this.graphics = new Array(l);
-		this.maxWidth = WindowBox.MEDIUM_SLOT_WIDTH;
-		let graphic: Graphic.Text;
+		let graphic: Graphic.Message;
 		for (let i = 0; i < l; i++) {
-			graphic = new Graphic.Text(this.choices[i], { align: ALIGN.CENTER });
+			graphic = new Graphic.Message(`[c]${this.choices[i]}[/c]`, -1, 0, 0);
 			this.graphics[i] = graphic;
-			if (graphic.textWidth > this.maxWidth) {
-				this.maxWidth = graphic.textWidth;
-			}
 		}
-		this.maxWidth += WindowBox.SMALL_SLOT_PADDING[0] + WindowBox.SMALL_SLOT_PADDING[2];
 	}
 
 	/**
@@ -119,6 +115,20 @@ class DisplayChoice extends Base {
 	 *  @returns {Record<string, any>} The current state
 	 */
 	initialize(): Record<string, any> {
+		this.maxWidth = WindowBox.MEDIUM_SLOT_WIDTH;
+		for (const graphic of this.graphics) {
+			graphic.update();
+			let lineWidth = 0;
+			for (let i = 0; i < graphic.graphics.length; i++) {
+				if (graphic.graphics[i] === null) {
+					lineWidth = 0;
+				} else {
+					lineWidth += graphic.positions[i];
+				}
+				this.maxWidth = Math.max(this.maxWidth, Math.ceil(lineWidth / ScreenResolution.WINDOW_X));
+			}
+		}
+		this.maxWidth += WindowBox.SMALL_SLOT_PADDING[0] + WindowBox.SMALL_SLOT_PADDING[2];
 		const maxItems = this.maxNumberChoices.getValue() as number;
 		this.windowChoices = new WindowChoices(
 			(ScreenResolution.SCREEN_X - this.maxWidth) / 2,
@@ -154,7 +164,10 @@ class DisplayChoice extends Base {
 		this.windowChoices.update();
 		if (this.isStockChoiceIndex && currentState.index >= 0) {
 			if (this.stockChoiceIndexVariable.kind === DYNAMIC_VALUE_KIND.LOCAL_VARIABLE) {
-				ReactionInterpreter.currentReaction.localVariables.set(this.stockChoiceIndexVariable.value as string, currentState.index);
+				ReactionInterpreter.currentReaction.localVariables.set(
+					this.stockChoiceIndexVariable.value as string,
+					currentState.index,
+				);
 			} else {
 				Game.current.variables.set(this.stockChoiceIndexVariable.getValue(true) as number, currentState.index);
 			}
