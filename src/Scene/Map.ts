@@ -100,7 +100,6 @@ class Map extends Base {
 	private heroJumpStartPosition: THREE.Vector3 | null = null;
 	private heroJumpProgress: number = 0;
 	private previousLayerDepthOffset: number = -1;
-	private cameraHidingReleaseTime: number = 0;
 
 	constructor(
 		id: number,
@@ -1274,7 +1273,7 @@ class Map extends Base {
 			Manager.GL.raycaster.far = rayLength;
 			const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
 			if (intersects.length === 0) {
-				return;
+				continue;
 			}
 			Manager.GL.raycaster.set(target, direction.negate());
 			const reverseIntersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
@@ -1423,10 +1422,11 @@ class Map extends Base {
 			this.camera.hidingDistance = -1;
 			const hero = this.camera.target;
 			const targets: THREE.Vector3[] = [];
+			const horizontalAngle = (this.camera.horizontalAngle * Math.PI) / 180;
 			const horizontalDirection = new THREE.Vector3(
-				-Math.sin(this.camera.horizontalAngle),
+				-Math.sin(horizontalAngle),
 				0,
-				Math.cos(this.camera.horizontalAngle),
+				Math.cos(horizontalAngle),
 			);
 			for (const height of [0.1, 0.5, 0.9]) {
 				for (const width of [-0.4, 0, 0.4]) {
@@ -1445,14 +1445,17 @@ class Map extends Base {
 					this.camera.hidingStart = this.camera.hidingDistance;
 					this.camera.hidingEnd = this.camera.hidingDistance;
 				}
-				this.cameraHidingReleaseTime = 0;
 			} else if (previousHidingDistance !== -1) {
-				this.cameraHidingReleaseTime += Manager.Stack.elapsedTime;
-				if (this.cameraHidingReleaseTime < Camera.HIDDING_MOVE_TIME) {
-					this.camera.hidingDistance = previousHidingDistance;
-				}
+				// Match the immediate camera move when an obstruction appears.
+				this.camera.hidingCurrent = this.camera.distance;
+				this.camera.hidingStart = this.camera.distance;
+				this.camera.hidingEnd = this.camera.distance;
+				this.camera.hidingTime = Camera.HIDDING_MOVE_TIME;
 			}
+			this.camera.updateTimer();
 			if (this.camera.isHiding()) {
+				// Never leave the camera beyond the nearest obstruction while moving toward it.
+				this.camera.hidingCurrent = Math.min(this.camera.hidingCurrent, this.camera.hidingDistance);
 				this.camera.update();
 			}
 			let opacity = 1;
@@ -1473,7 +1476,6 @@ class Map extends Base {
 					}
 				}
 			}
-			this.camera.updateTimer();
 		}
 
 		// Update portion
