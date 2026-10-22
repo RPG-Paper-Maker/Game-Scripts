@@ -140,12 +140,14 @@ export class PlaySong extends Base {
 		}
 
 		const id = this.songID.getValue() as number;
+		const end = this.isEnd && this.end ? (this.end.getValue() as number) : null;
 		const current = Manager.Songs.current[this.kind];
 		// Keep the position when the requested song is already playing.
 		if (
 			current &&
 			Manager.Songs.currentIDs[this.kind] === id &&
 			Manager.Songs.starts[this.kind] === start &&
+			Manager.Songs.ends[this.kind] === end &&
 			(current.playing() ||
 				(this.kind === SONG_KIND.MUSIC && Manager.Songs.musicEffectPausedHowl === current))
 		) {
@@ -164,7 +166,7 @@ export class PlaySong extends Base {
 			id,
 			volume,
 			start,
-			this.end ? (this.end.getValue() as number) : null,
+			end,
 		);
 		return 1;
 	}
@@ -227,7 +229,7 @@ export class PlaySong extends Base {
 		this.isStart = json.is;
 		this.start = this.isStart ? new DynamicValue(json.s) : DynamicValue.createNumber(0);
 		this.isEnd = json.ie;
-		this.end = this.isEnd ? new DynamicValue(json.e) : DynamicValue.createNumber(0);
+		this.end = this.isEnd ? new DynamicValue(json.e) : null;
 		this.isKeepCurrent = Utils.valueOrDefault(json.ikc, false);
 	}
 
