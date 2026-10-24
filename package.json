@@ -29,6 +29,7 @@
 		"nodemon": "^3.1.14",
 		"terser": "^5.51.2",
 		"three": "^0.186.1",
+		"three-mesh-bvh": "^0.9.16",
 		"typedoc": "^0.28.20",
 		"typedoc-github-theme": "^0.4.0",
 		"typescript": "^6.0.3",

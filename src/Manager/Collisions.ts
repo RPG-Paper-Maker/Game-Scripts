@@ -356,6 +356,7 @@ class Collisions {
 	static flushBBFlash() {
 		for (const { scene, box } of this._pendingBBFlash) {
 			scene.remove(box);
+			box.geometry.dispose();
 		}
 		this._pendingBBFlash = [];
 	}

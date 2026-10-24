@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import { acceleratedRaycast, MeshBVH } from 'three-mesh-bvh';
 import {
 	CHARACTER_KIND,
 	Constants,
@@ -1264,28 +1265,72 @@ class Map extends Base {
 		const minimumDistance = this.camera.isPerspective
 			? this.camera.perspectiveCamera.near
 			: this.camera.orthographicCamera.near;
+		const rayBounds = new THREE.Box3().setFromPoints([origin, this.camera.targetPosition, ...targets]);
+		const candidates: THREE.Object3D[] = [];
+		const clearanceCandidates: THREE.Object3D[] = [];
+		const meshSphere = new THREE.Sphere();
+		this.scene.updateMatrixWorld(true);
+		this.scene.traverse((object) => {
+			if (
+				!(object instanceof THREE.Mesh) ||
+				(!object.layers.isEnabled(1) && !object.userData.cameraVisualOccluder)
+			) {
+				return;
+			}
+			const geometry = object.geometry;
+			if (!geometry.boundingSphere) {
+				geometry.computeBoundingSphere();
+			}
+			if (geometry.boundingSphere) {
+				meshSphere.copy(geometry.boundingSphere).applyMatrix4(object.matrixWorld);
+				if (meshSphere.intersectsBox(rayBounds)) {
+					if (object.userData.staticCameraBlocker) {
+						if (!geometry.boundsTree) {
+							geometry.boundsTree = new MeshBVH(geometry, { indirect: true });
+						}
+						object.raycast = acceleratedRaycast;
+					}
+					if (object.layers.isEnabled(1)) {
+						candidates.push(object);
+					}
+					clearanceCandidates.push(object);
+				}
+			}
+		});
 		let hidingDistance = -1;
+		const raycaster = Manager.GL.raycaster;
+		const previousFirstHitOnly = raycaster.firstHitOnly;
+		raycaster.firstHitOnly = true;
 		for (const target of targets) {
 			const direction = target.clone().sub(origin);
 			const rayLength = direction.length();
 			Manager.GL.raycaster.set(origin, direction.normalize());
 			Manager.GL.raycaster.layers.set(1);
 			Manager.GL.raycaster.far = rayLength;
-			const intersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+			const intersects = Manager.GL.raycaster.intersectObjects(candidates, false);
 			if (intersects.length === 0) {
 				continue;
 			}
 			Manager.GL.raycaster.set(target, direction.negate());
-			const reverseIntersects = Manager.GL.raycaster.intersectObjects(this.scene.children);
+			const reverseIntersects = Manager.GL.raycaster.intersectObjects(candidates, false);
 			const point = reverseIntersects.length > 0 ? reverseIntersects[0].point : intersects[0].point;
-			const distance = Math.max(
+			let distance = Math.max(
 				minimumDistance,
 				this.camera.targetPosition.clone().sub(point).dot(cameraDirection) - margin,
 			);
+			Manager.GL.raycaster.set(this.camera.targetPosition, origin.clone().sub(this.camera.targetPosition).normalize());
+			Manager.GL.raycaster.far = this.camera.distance;
+			Manager.GL.raycaster.layers.enable(0);
+			const cameraPathIntersects = Manager.GL.raycaster.intersectObjects(clearanceCandidates, false);
+			Manager.GL.raycaster.layers.set(1);
+			if (cameraPathIntersects.length > 0) {
+				distance = Math.min(distance, Math.max(minimumDistance, cameraPathIntersects[0].distance - margin));
+			}
 			if (hidingDistance === -1 || distance < hidingDistance) {
 				hidingDistance = distance;
 			}
 		}
+		raycaster.firstHitOnly = previousFirstHitOnly;
 		this.camera.hidingDistance = hidingDistance;
 	}
 
@@ -1421,24 +1466,9 @@ class Map extends Base {
 			const previousHidingDistance = this.camera.hidingDistance;
 			this.camera.hidingDistance = -1;
 			const hero = this.camera.target;
-			const targets: THREE.Vector3[] = [];
-			const horizontalAngle = (this.camera.horizontalAngle * Math.PI) / 180;
-			const horizontalDirection = new THREE.Vector3(
-				-Math.sin(horizontalAngle),
-				0,
-				Math.cos(horizontalAngle),
-			);
-			for (const height of [0.1, 0.5, 0.9]) {
-				for (const width of [-0.4, 0, 0.4]) {
-					targets.push(
-						hero.position
-							.clone()
-							.add(horizontalDirection.clone().multiplyScalar(hero.width * width))
-							.add(new THREE.Vector3(0, hero.height * height, 0)),
-					);
-				}
-			}
-			this.updateCameraHiding(targets);
+			const upperCenter = hero.position.clone();
+			upperCenter.y += hero.height * 0.9;
+			this.updateCameraHiding([upperCenter]);
 			if (this.camera.isHiding()) {
 				if (previousHidingDistance === -1) {
 					this.camera.hidingCurrent = this.camera.hidingDistance;

@@ -76,6 +76,7 @@ export class CustomGeometryFace extends CustomGeometry {
 			this.b_vertices.push(vertex.x, vertex.y, vertex.z);
 		}
 		this.setAttribute('position', new THREE.Float32BufferAttribute(this.b_vertices, 3));
+		this.boundingSphere = null;
 		this.b_vertices = [];
 		this.computeVertexNormals();
 	}

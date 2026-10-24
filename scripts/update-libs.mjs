@@ -35,5 +35,7 @@ await copy('three/examples/jsm/utils/BufferGeometryUtils.js', 'examples/jsm/util
 await copy('three/examples/jsm/utils/SkeletonUtils.js', 'examples/jsm/utils/SkeletonUtils.js');
 await copy('howler/dist/howler.core.min.js', 'howler.core.min.js');
 await copy('howler/dist/howler.min.js', 'howler.min.js');
+await copy('three-mesh-bvh/build/index.module.js', 'three-mesh-bvh.js');
+await copy('three-mesh-bvh/LICENSE', 'three-mesh-bvh.LICENSE');
 
-console.log('Three.js and Howler copied to src/Libs');
+console.log('Three.js, Howler, and three-mesh-bvh copied to src/Libs');

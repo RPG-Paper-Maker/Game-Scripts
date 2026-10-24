@@ -356,6 +356,7 @@ class MapPortion {
 			staticGeometry.updateAttributes();
 			MapPortion.setLayerOffsets(staticGeometry, staticLayerOffsets, 'z');
 			this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
+			this.staticSpritesMesh.userData.cameraVisualOccluder = true;
 			this.staticSpritesMesh.renderOrder = -1;
 			this.staticSpritesMesh.receiveShadow = true;
 			this.staticSpritesMesh.castShadow = true;
@@ -365,6 +366,7 @@ class MapPortion {
 		if (!faceGeometry.isEmpty()) {
 			faceGeometry.updateAttributes();
 			this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
+			this.faceSpritesMesh.userData.cameraVisualOccluder = true;
 			this.faceSpritesMesh.renderOrder = -1;
 			this.faceSpritesMesh.castShadow = true;
 			this.faceSpritesMesh.receiveShadow = true;
@@ -459,6 +461,7 @@ class MapPortion {
 				mesh.castShadow = true;
 				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				mesh.layers.enable(1);
+				mesh.userData.staticCameraBlocker = true;
 				this.staticWallsList.push(mesh);
 				Scene.Map.current.scene.add(mesh);
 			}
@@ -522,6 +525,7 @@ class MapPortion {
 				mountains.mesh.castShadow = true;
 				mountains.mesh.customDepthMaterial = mountains.bundle.material.userData.customDepthMaterial;
 				mountains.mesh.layers.enable(1);
+				mountains.mesh.userData.staticCameraBlocker = true;
 				Scene.Map.current.scene.add(mountains.mesh);
 			}
 		}
@@ -654,6 +658,7 @@ class MapPortion {
 				mesh.castShadow = true;
 				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
 				mesh.layers.enable(1);
+				mesh.userData.staticCameraBlocker = true;
 				Scene.Map.current.scene.add(mesh);
 			}
 		}
