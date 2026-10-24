@@ -10,7 +10,7 @@
 */
 
 import * as THREE from 'three';
-import { Constants, MAP_TRANSITION_KIND, Mathf, PICTURE_KIND, SONG_KIND, Utils } from '../Common';
+import { Constants, DYNAMIC_VALUE_KIND, MAP_TRANSITION_KIND, Mathf, PICTURE_KIND, SONG_KIND, Utils } from '../Common';
 import { Game, MapObject, Position } from '../Core';
 import { Data, Manager, Scene } from '../index';
 import { CameraProperties } from './CameraProperties';
@@ -46,6 +46,14 @@ export type MapPropertiesJSON = LocalizationJSON & {
 	randomBattleNumberStep?: DynamicValueJSON;
 	randomBattleVariance?: DynamicValueJSON;
 	isl?: boolean;
+	sll?: { c?: DynamicValueJSON; i?: DynamicValueJSON; io?: DynamicValueJSON; it?: DynamicValueJSON };
+	ial?: boolean;
+	al?: { c?: DynamicValueJSON; i?: DynamicValueJSON; io?: DynamicValueJSON; it?: DynamicValueJSON };
+	slx?: number;
+	sly?: number;
+	slyp?: number;
+	slz?: number;
+	slpu?: string;
 	ols?: boolean;
 	isFog?: boolean;
 	fogColor?: DynamicValueJSON;
@@ -85,6 +93,19 @@ export class MapProperties extends Localization {
 	public skyboxMesh: THREE.Mesh;
 	public maxNumberSteps: number;
 	public isSunLight: boolean;
+	public sunlightColor: DynamicValue;
+	public isAmbientLight: boolean;
+	public ambientLightColor: DynamicValue;
+	public ambientLightIntensity: DynamicValue;
+	public ambientLightIntensityOffset: DynamicValue;
+	public ambientLightIntensityTime: DynamicValue;
+	public sunlightIntensity: DynamicValue;
+	public sunlightIntensityOffset: DynamicValue;
+	public sunlightIntensityTime: DynamicValue;
+	public sunlightX: number;
+	public sunlightY: number;
+	public sunlightYPlus: number;
+	public sunlightZ: number;
 	public objectLightsShadows: boolean;
 	public isFog: boolean;
 	public fogColorID: DynamicValue;
@@ -317,6 +338,38 @@ export class MapProperties extends Localization {
 		this.updateMaxNumberSteps();
 
 		this.isSunLight = Utils.valueOrDefault(json.isl, true);
+		this.sunlightColor = json.sll?.c
+			? DynamicValue.readFromJSON(json.sll.c)
+			: DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, '#ffffff');
+		this.sunlightIntensity = DynamicValue.readOrDefaultNumberDouble(json.sll?.i, 2);
+		this.sunlightIntensityOffset = DynamicValue.readOrDefaultNumberDouble(json.sll?.io, 0);
+		this.sunlightIntensityTime = DynamicValue.readOrDefaultNumber(json.sll?.it, 0);
+		this.isAmbientLight = Utils.valueOrDefault(json.ial, true);
+		this.ambientLightColor = json.al?.c
+			? DynamicValue.readFromJSON(json.al.c)
+			: DynamicValue.create(DYNAMIC_VALUE_KIND.MESSAGE, '#ffffff');
+		this.ambientLightIntensity = DynamicValue.readOrDefaultNumberDouble(
+			json.al?.i,
+			this.isSunLight ? Math.PI - 14 / 9 : Math.PI,
+		);
+		this.ambientLightIntensityOffset = DynamicValue.readOrDefaultNumberDouble(json.al?.io, 0);
+		this.ambientLightIntensityTime = DynamicValue.readOrDefaultNumber(json.al?.it, 0);
+		this.sunlightX = Utils.valueOrDefault(json.slx, -10);
+		this.sunlightY = Utils.valueOrDefault(json.sly, 17);
+		this.sunlightYPlus = Utils.valueOrDefault(json.slyp, Data.Systems.SQUARE_SIZE / 2);
+		this.sunlightZ = Utils.valueOrDefault(json.slz, 10);
+		if (json.slpu !== 'px') {
+			if (this.sunlightX === -1 && this.sunlightY === 1 && this.sunlightZ === 1) {
+				const totalY = (this.sunlightY + (json.slyp === undefined ? 75 : this.sunlightYPlus) / 100) * 10;
+				this.sunlightX = -10;
+				this.sunlightY = Math.floor(totalY);
+				this.sunlightYPlus = (totalY - this.sunlightY) * Data.Systems.SQUARE_SIZE;
+				this.sunlightZ = 10;
+			} else {
+				this.sunlightYPlus =
+					((json.slyp === undefined ? 50 : this.sunlightYPlus) / 100) * Data.Systems.SQUARE_SIZE;
+			}
+		}
 		this.objectLightsShadows = Utils.valueOrDefault(json.ols, true);
 		this.isFog = Utils.valueOrDefault(json.isFog, false);
 		this.fogColorID = DynamicValue.readOrDefaultDatabase(json.fogColor, 1);
