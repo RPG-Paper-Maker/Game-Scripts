@@ -535,11 +535,21 @@ class Collisions {
 		jpositionAfter.z = Math.floor(positionAfter.z);
 		const positionBeforePlus = Collisions._scratchPositionBeforePlus;
 		const positionAfterPlus = Collisions._scratchPositionAfterPlus;
+		const checkedSprites = new Set<StructMapElementCollision>();
 		let yMountain = null;
 		const mountainCollisionHeight = (Data.Systems.mountainCollisionHeight.getValue() as number) / Data.Systems.SQUARE_SIZE;
 
 		// Squares to inspect according to the direction of the object
-		const [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
+		let [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
+		const bounds = object.currentBoundingBox?.geometry.boundingBox;
+		if (bounds) {
+			const tileX = Math.floor(positionAfter.x);
+			const tileZ = Math.floor(positionAfter.z);
+			startI = Math.max(startI, Math.floor(bounds.min.x) - tileX - 1);
+			endI = Math.min(endI, Math.floor(bounds.max.x) - tileX + 1);
+			startK = Math.max(startK, Math.floor(bounds.min.z) - tileZ - 1);
+			endK = Math.min(endK, Math.floor(bounds.max.z) - tileZ + 1);
+		}
 
 		// Test objects
 		if (reverseTestObjects) {
@@ -579,7 +589,7 @@ class Collisions {
 						jp.x = jpositionAfter.x + i;
 						jp.y = jpositionAfter.y + j;
 						jp.z = jpositionAfter.z + k;
-						result = this.check(mapPortion, jpositionBefore, jp, positionAfter, object, direction);
+						result = this.check(mapPortion, jpositionBefore, jp, positionAfter, object, direction, checkedSprites);
 						if (result[0] === null) {
 							// If not already climbing, be sure that the before position can colide with climbling sprite
 							if (!object.isClimbing) {
@@ -955,9 +965,10 @@ class Collisions {
 		positionAfter: THREE.Vector3,
 		object: MapObject,
 		direction: THREE.Vector3,
+		checkedSprites?: Set<StructMapElementCollision>,
 	): [boolean, number, ORIENTATION] {
 		// Check sprites and climbing
-		let [isCollision, yMountain, o] = this.checkSprites(mapPortion, jpositionAfter, object);
+		let [isCollision, yMountain, o] = this.checkSprites(mapPortion, jpositionAfter, object, checkedSprites);
 		// Climbing
 		if (isCollision || yMountain !== null) {
 			return [isCollision, yMountain, o];
@@ -1208,6 +1219,7 @@ class Collisions {
 		mapPortion: MapPortion,
 		jpositionAfter: Position,
 		object: MapObject,
+		checkedSprites?: Set<StructMapElementCollision>,
 	): [boolean, number, ORIENTATION] {
 		const sprites = this.getCollisionsWithOverflows(
 			mapPortion,
@@ -1221,6 +1233,10 @@ class Collisions {
 			let objCollision: StructMapElementCollision;
 			for (let i = 0, l = sprites.length; i < l; i++) {
 				objCollision = sprites[i];
+				if (checkedSprites) {
+					if (checkedSprites.has(objCollision)) continue;
+					checkedSprites.add(objCollision);
+				}
 				if (this.checkIntersectionSprite(objCollision.b, objCollision.k, object, objCollision.cr)) {
 					if (objCollision.cl) {
 						const speed =
@@ -1457,8 +1473,15 @@ class Collisions {
 			jpositionAfter,
 			Scene.Map.current.overflowMountains,
 		);
+		const isCenterSquare =
+			jpositionAfter.x === Math.floor(positionAfter.x) &&
+			jpositionAfter.y === Math.floor(positionAfter.y) &&
+			jpositionAfter.z === Math.floor(positionAfter.z);
 		let block = false;
 		for (const mountain of mountains) {
+			if (mountain.rw > 0 && !isCenterSquare) {
+				continue;
+			}
 			const result = this.checkMountain(
 				mapPortion,
 				jpositionAfter,
@@ -1772,7 +1795,20 @@ class Collisions {
 				Math.floor(jposition.y / Constants.PORTION_SIZE) - cp.y,
 				Math.floor(jposition.z / Constants.PORTION_SIZE) - cp.z,
 			);
-			let isFloor = mapPortion ? mapPortion.boundingBoxesLands[jposition.toIndex()].length > 0 : false;
+			const floorPortion = Scene.Map.current.getMapPortion(
+				Math.floor(positionAfter.x / Constants.PORTION_SIZE) - cp.x,
+				Math.floor(positionAfter.y / Constants.PORTION_SIZE) - cp.y,
+				Math.floor(positionAfter.z / Constants.PORTION_SIZE) - cp.z,
+			);
+			let isFloor = floorPortion
+				? floorPortion.squareNonEmpty[jposition.x % Constants.PORTION_SIZE][
+						jposition.z % Constants.PORTION_SIZE
+					].some(
+						(floorY) =>
+							floorY >= positionAfter.y - 0.0001 &&
+							floorY - positionAfter.y <= mtnCollisionHeight,
+					)
+				: false;
 			if (isFloor && newPosition.y - positionAfter.y < 0) {
 				return [false, null];
 			}
