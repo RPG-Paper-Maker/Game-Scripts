@@ -126,9 +126,10 @@ export class PlaySong extends Base {
 	 * If `start` or `volume` are omitted they are taken from the PlaySong instance.
 	 * @param start - Optional start position (in seconds or engine-specific units).
 	 * @param volume - Optional volume (0..1).
+	 * @param resume - Optional position to resume playback without changing the loop start.
 	 * @returns 1 on success (keeps original behaviour).
 	 */
-	playMusic(start?: number, volume?: number): number {
+	playMusic(start?: number, volume?: number, resume?: number): number {
 		if (this.isKeepCurrent) {
 			return 1;
 		}
@@ -167,6 +168,7 @@ export class PlaySong extends Base {
 			volume,
 			start,
 			end,
+			resume,
 		);
 		return 1;
 	}

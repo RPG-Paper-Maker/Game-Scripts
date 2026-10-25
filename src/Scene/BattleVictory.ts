@@ -281,7 +281,7 @@ class BattleVictory {
 		if (isSameMusicAsMap) {
 			return;
 		}
-		this.battle.musicMap.playMusic(this.battle.musicMapTime, 0);
+		this.battle.musicMap.playMusic(undefined, 0, this.battle.musicMapTime);
 		Manager.Songs.initializeProgressionMusic(
 			0,
 			this.battle.musicMap.volume.getValue() as number,

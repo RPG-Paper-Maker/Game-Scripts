@@ -102,8 +102,9 @@ class Songs {
 	 *  @param {number} volume - The volume of the song
 	 *  @param {number} start - The start of the song
 	 *  @param {number} end - The end of the song
+	 *  @param {number} resume - Playback position independent of the loop start
 	 */
-	static playMusic(kind: SONG_KIND, id: number, volume: number, start: number, end: number) {
+	static playMusic(kind: SONG_KIND, id: number, volume: number, start: number, end: number, resume?: number) {
 		const generation = ++this.playGeneration[kind];
 		if (!this.keepAliveStarted) {
 			this.keepAliveStarted = true;
@@ -152,7 +153,7 @@ class Songs {
 					howl._sprite.__default = [playStart * 1000, (loopEnd - playStart) * 1000, true];
 				}
 				howl.volume(volume);
-				howl.seek(playStart);
+				howl.seek(resume ?? playStart);
 				howl.play();
 			};
 			if (howl.state() === 'loaded') {
