@@ -57,6 +57,7 @@ export * from './ModifyTeam';
 export * from './MoveCamera';
 export * from './MoveObject';
 export * from './OpenMainMenu';
+export * from './CloseMainMenu';
 export * from './OpenSavesMenu';
 export * from './PlayAVideo';
 export * from './PlayCredits';

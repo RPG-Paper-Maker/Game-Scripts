@@ -140,6 +140,7 @@ export enum EVENT_COMMAND_KIND {
 	MODIFY_LIGHT,
 	CHANGE_LOCAL_VARIABLE,
 	PLAY_CREDITS,
+	CLOSE_MAIN_MENU,
 }
 
 /** Enum for the different items kind. */

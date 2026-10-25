@@ -55,6 +55,8 @@ class Events {
 				return new EventCommand.Else(command);
 			case EVENT_COMMAND_KIND.OPEN_MAIN_MENU:
 				return new EventCommand.OpenMainMenu(command);
+			case EVENT_COMMAND_KIND.CLOSE_MAIN_MENU:
+				return new EventCommand.CloseMainMenu();
 			case EVENT_COMMAND_KIND.OPEN_SAVES_MENU:
 				return new EventCommand.OpenSavesMenu(command);
 			case EVENT_COMMAND_KIND.MODIFY_INVENTORY:
