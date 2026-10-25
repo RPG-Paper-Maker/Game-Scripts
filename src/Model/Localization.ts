@@ -33,10 +33,12 @@ export class Localization extends Base {
 
 	/**
 	 * Gets the name corresponding to the current game language.
-	 * @returns The localized name, or an empty string if not available.
+	 * @returns The localized name, falling back to the main language when no translation exists.
 	 */
 	name(): string {
-		return this.names.get(Data.Settings.currentLanguage) ?? '';
+		return (
+			this.names.get(Data.Settings.currentLanguage) ?? this.names.get(Data.Languages.getMainLanguageID()) ?? ''
+		);
 	}
 
 	/**

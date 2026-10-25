@@ -15,6 +15,7 @@ import { Characteristic, CharacteristicJSON } from './Characteristic';
 import { DynamicValue, DynamicValueJSON } from './DynamicValue';
 import { Effect, EffectJSON } from './Effect';
 import { Icon, IconJSON } from './Icon';
+import { Localization, LocalizationJSON } from './Localization';
 import { StatusReleaseTurn, StatusReleaseTurnJSON } from './StatusReleaseTurn';
 
 /**
@@ -36,6 +37,10 @@ export type StatusJSON = IconJSON & {
 	messageEnemyAffected?: DynamicValueJSON;
 	messageStatusHealed?: DynamicValueJSON;
 	messageStatusStillAffected?: DynamicValueJSON;
+	messageAllyAffectedTranslations?: LocalizationJSON;
+	messageEnemyAffectedTranslations?: LocalizationJSON;
+	messageStatusHealedTranslations?: LocalizationJSON;
+	messageStatusStillAffectedTranslations?: LocalizationJSON;
 	effects?: EffectJSON[];
 	characteristics?: CharacteristicJSON[];
 };
@@ -59,6 +64,10 @@ export class Status extends Icon {
 	public messageEnemyAffected: DynamicValue;
 	public messageStatusHealed: DynamicValue;
 	public messageStatusStillAffected: DynamicValue;
+	public messageAllyAffectedTranslations: Localization;
+	public messageEnemyAffectedTranslations: Localization;
+	public messageStatusHealedTranslations: Localization;
+	public messageStatusStillAffectedTranslations: Localization;
 	public effects: Effect[];
 	public characteristics: Characteristic[];
 
@@ -101,6 +110,10 @@ export class Status extends Icon {
 		this.messageEnemyAffected = DynamicValue.readOrDefaultMessage(json.messageEnemyAffected);
 		this.messageStatusHealed = DynamicValue.readOrDefaultMessage(json.messageStatusHealed);
 		this.messageStatusStillAffected = DynamicValue.readOrDefaultMessage(json.messageStatusStillAffected);
+		this.messageAllyAffectedTranslations = new Localization(json.messageAllyAffectedTranslations);
+		this.messageEnemyAffectedTranslations = new Localization(json.messageEnemyAffectedTranslations);
+		this.messageStatusHealedTranslations = new Localization(json.messageStatusHealedTranslations);
+		this.messageStatusStillAffectedTranslations = new Localization(json.messageStatusStillAffectedTranslations);
 		this.effects = Utils.readJSONList(json.effects, Effect);
 		this.characteristics = Utils.readJSONList(json.characteristics, Characteristic);
 	}

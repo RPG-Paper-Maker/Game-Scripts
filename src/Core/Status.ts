@@ -10,7 +10,7 @@
 */
 
 import { Data, Model } from '..';
-import { ALIGN, Constants, PICTURE_KIND, ScreenResolution } from '../Common';
+import { ALIGN, Constants, DYNAMIC_VALUE_KIND, PICTURE_KIND, ScreenResolution } from '../Common';
 import { Battler } from './Battler';
 import { Picture2D } from './Picture2D';
 
@@ -38,8 +38,13 @@ class Status {
 	 *  @param {Battler} target
 	 *  @returns {string}
 	 */
-	static getMessage(message: Model.DynamicValue, target: Battler): string {
-		return (message.getValue() as string).replace('[target]', target.player.name);
+	static getMessage(message: Model.DynamicValue, translations: Model.Localization, target: Battler): string {
+		const translated =
+			message.kind === DYNAMIC_VALUE_KIND.MESSAGE
+				? (translations.names.get(Data.Settings.currentLanguage) ??
+					translations.names.get(Data.Languages.getMainLanguageID()))
+				: undefined;
+		return (translated ?? (message.getValue() as string)).replace('[target]', target.player.name);
 	}
 
 	/**
@@ -84,7 +89,7 @@ class Status {
 	 *  @returns {string}
 	 */
 	getMessageAllyAffected(target: Battler): string {
-		return Status.getMessage(this.system.messageAllyAffected, target);
+		return Status.getMessage(this.system.messageAllyAffected, this.system.messageAllyAffectedTranslations, target);
 	}
 
 	/**
@@ -93,7 +98,11 @@ class Status {
 	 *  @returns {string}
 	 */
 	getMessageEnemyAffected(target: Battler): string {
-		return Status.getMessage(this.system.messageEnemyAffected, target);
+		return Status.getMessage(
+			this.system.messageEnemyAffected,
+			this.system.messageEnemyAffectedTranslations,
+			target,
+		);
 	}
 
 	/**
@@ -102,7 +111,7 @@ class Status {
 	 *  @returns {string}
 	 */
 	getMessageHealed(target: Battler): string {
-		return Status.getMessage(this.system.messageStatusHealed, target);
+		return Status.getMessage(this.system.messageStatusHealed, this.system.messageStatusHealedTranslations, target);
 	}
 
 	/**
@@ -111,7 +120,11 @@ class Status {
 	 *  @returns {string}
 	 */
 	getMessageStillAffected(target: Battler): string {
-		return Status.getMessage(this.system.messageStatusStillAffected, target);
+		return Status.getMessage(
+			this.system.messageStatusStillAffected,
+			this.system.messageStatusStillAffectedTranslations,
+			target,
+		);
 	}
 
 	/**
