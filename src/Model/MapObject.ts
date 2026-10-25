@@ -25,7 +25,6 @@ export type MapObjectJSON = {
 	id?: number;
 	name?: string;
 	ooepf?: boolean;
-	canBeTriggeredAnotherObject?: boolean;
 	hId?: number;
 	states?: StateJSON[];
 	p?: PropertyJSON[];
@@ -40,7 +39,6 @@ export class MapObject extends Base {
 	public id: number;
 	public name: string;
 	public isEventFrame: boolean;
-	public canBeTriggeredAnotherObject: boolean;
 	public states: State[];
 	public properties: Property[];
 	public events: Map<number, Event[]>;
@@ -135,7 +133,6 @@ export class MapObject extends Base {
 
 		// Only one event per frame inheritance is a priority
 		this.isEventFrame = inheritedObject.isEventFrame;
-		this.canBeTriggeredAnotherObject = inheritedObject.canBeTriggeredAnotherObject;
 
 		// States & properties
 		this.states.push(...Utils.valueOrDefault(inheritedObject.states, []));
@@ -155,7 +152,6 @@ export class MapObject extends Base {
 		this.id = json.id;
 		this.name = json.name;
 		this.isEventFrame = json.ooepf;
-		this.canBeTriggeredAnotherObject = Utils.valueOrDefault(json.canBeTriggeredAnotherObject, true);
 		this.addDefaultValues();
 		this.addInheritanceModel(json.hId);
 

@@ -270,8 +270,7 @@ class MapObject {
 		const tileID = this.getObjectAutotileTileID(Position.createFromVector3(this.position));
 		const x = (tileID % 64) * Data.Systems.SQUARE_SIZE;
 		const y =
-			(Math.floor(tileID / 64) +
-				10 * this.objectAutotileBundle.getOffset(pictureID, state.rectTileset)) *
+			(Math.floor(tileID / 64) + 10 * this.objectAutotileBundle.getOffset(pictureID, state.rectTileset)) *
 			Data.Systems.SQUARE_SIZE;
 		const coef = MapElement.COEF_TEX;
 		const uvs = (this.mesh.geometry as CustomGeometry).getAttribute('uv');
@@ -819,9 +818,8 @@ class MapObject {
 					? await Data.SpecialElements.loadAutotileTexture(this.currentStateInstance.graphicID)
 					: null;
 				this.objectAutotileBundle =
-					bundles?.find((bundle) =>
-						bundle.isInTexture(pictureID, this.currentStateInstance.rectTileset),
-					) ?? null;
+					bundles?.find((bundle) => bundle.isInTexture(pictureID, this.currentStateInstance.rectTileset)) ??
+					null;
 				material = this.objectAutotileBundle?.material ?? null;
 			} else if (this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.FLOORS) {
 				material =
@@ -1892,20 +1890,6 @@ class MapObject {
 		// Option only one event per frame
 		if ((this.system.isEventFrame && this.receivedOneEvent) || this.removed) {
 			return false;
-		}
-
-		// Option can be triggered be another object
-		if (!this.system.canBeTriggeredAnotherObject) {
-			for (const interpreter of Manager.Stack.top.reactionInterpreters) {
-				if (interpreter.currentMapObject !== this && interpreter.currentMapObject != sender) {
-					return false;
-				}
-			}
-			for (const interpreter of Manager.Stack.top.parallelCommands) {
-				if (interpreter.currentMapObject !== this && interpreter.currentMapObject != sender) {
-					return false;
-				}
-			}
 		}
 
 		let test = false;
