@@ -821,7 +821,10 @@ class Player {
 			const dif = this.totalRemainingXP - xpForLvl;
 			this.remainingXP = dif > 0 ? xpForLvl : this.totalRemainingXP;
 			this.totalRemainingXP -= this.remainingXP;
-			this.totalTimeXP = Math.floor((this.remainingXP / (max - this.expList[this.getCurrentLevel()])) * fullTime);
+			this.totalTimeXP =
+				this.remainingXP === 0
+					? 0
+					: Math.floor((this.remainingXP / (max - this.expList[this.getCurrentLevel()])) * fullTime);
 		} else {
 			this.remainingXP = 0;
 			this.totalRemainingXP = 0;
