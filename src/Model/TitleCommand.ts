@@ -9,11 +9,12 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Interpreter, Platform, TITLE_COMMAND_KIND, Utils } from '../Common';
+import { Interpreter, Platform, SONG_KIND, TITLE_COMMAND_KIND, Utils } from '../Common';
 import { Game } from '../Core';
 import { Data, Manager, Scene } from '../index';
 import { Localization, LocalizationJSON } from './Localization';
 import { Main } from '../main';
+import { PlaySong, PlaySongJSON } from './PlaySong';
 
 /**
  * JSON structure for a title screen command.
@@ -21,6 +22,16 @@ import { Main } from '../main';
 export type TitleCommandJSON = LocalizationJSON & {
 	k?: TITLE_COMMAND_KIND;
 	s?: string;
+	ct?: Record<string, string>;
+	cs?: number;
+	cbc?: number;
+	cbi?: number;
+	cbv?: number;
+	cm?: PlaySongJSON;
+	ccs?: boolean;
+	csk?: number;
+	cmk?: boolean;
+	cmd?: number;
 };
 
 /**
@@ -29,6 +40,16 @@ export type TitleCommandJSON = LocalizationJSON & {
 export class TitleCommand extends Localization {
 	public kind: TITLE_COMMAND_KIND;
 	public script: string;
+	public creditsTexts: Record<string, string>;
+	public creditsSpeed: number;
+	public creditsBackgroundColorID: number;
+	public creditsBackgroundImageID: number;
+	public creditsBackgroundVideoID: number;
+	public creditsMusic: PlaySong;
+	public creditsCanSkip: boolean;
+	public creditsSkipKeyID: number;
+	public creditsMaintainKey: boolean;
+	public creditsMaintainDuration: number;
 
 	constructor(json?: TitleCommandJSON) {
 		super(json);
@@ -81,6 +102,11 @@ export class TitleCommand extends Localization {
 		return true;
 	}
 
+	static showCredits(titleCommand: TitleCommand): boolean {
+		Manager.Stack.push(new Scene.TitleCredits(titleCommand));
+		return true;
+	}
+
 	/**
 	 * Exit the game.
 	 */
@@ -104,6 +130,8 @@ export class TitleCommand extends Localization {
 				return TitleCommand.exit;
 			case TITLE_COMMAND_KIND.SCRIPT:
 				return this.executeScript;
+			case TITLE_COMMAND_KIND.CREDITS:
+				return () => TitleCommand.showCredits(this);
 		}
 	}
 
@@ -122,5 +150,15 @@ export class TitleCommand extends Localization {
 		super.read(json);
 		this.kind = Utils.valueOrDefault(json.k, TITLE_COMMAND_KIND.NEW_GAME);
 		this.script = Utils.valueOrDefault(json.s, '');
+		this.creditsTexts = Utils.valueOrDefault(json.ct, {});
+		this.creditsSpeed = Utils.valueOrDefault(json.cs, 40);
+		this.creditsBackgroundColorID = Utils.valueOrDefault(json.cbc, 1);
+		this.creditsBackgroundImageID = Utils.valueOrDefault(json.cbi, -1);
+		this.creditsBackgroundVideoID = Utils.valueOrDefault(json.cbv, -1);
+		this.creditsMusic = new PlaySong(SONG_KIND.MUSIC, json.cm);
+		this.creditsCanSkip = Utils.valueOrDefault(json.ccs, true);
+		this.creditsSkipKeyID = Utils.valueOrDefault(json.csk, 11);
+		this.creditsMaintainKey = Utils.valueOrDefault(json.cmk, true);
+		this.creditsMaintainDuration = json.cmd > 0 ? json.cmd : 3;
 	}
 }

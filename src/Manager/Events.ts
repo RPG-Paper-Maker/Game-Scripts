@@ -41,6 +41,8 @@ class Events {
 				return new EventCommand.ChangeVariables(command, true);
 			case EVENT_COMMAND_KIND.GAME_OVER:
 				return new EventCommand.GameOver(command);
+			case EVENT_COMMAND_KIND.PLAY_CREDITS:
+				return new EventCommand.PlayCredits();
 			case EVENT_COMMAND_KIND.WHILE:
 				return new EventCommand.While(command);
 			case EVENT_COMMAND_KIND.WHILE_BREAK:
@@ -240,7 +242,9 @@ class Events {
 					}
 				} else if (targetID === 0) {
 					// Send to the hero
-					if (Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates)) {
+					if (
+						Game.current.hero.receiveEvent(sender, isSystem, eventID, parameters, Game.current.heroStates)
+					) {
 						lastObjectID = Game.current.hero.system.id;
 					}
 				} else {

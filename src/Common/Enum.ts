@@ -139,6 +139,7 @@ export enum EVENT_COMMAND_KIND {
 	CHANGE_FOG,
 	MODIFY_LIGHT,
 	CHANGE_LOCAL_VARIABLE,
+	PLAY_CREDITS,
 }
 
 /** Enum for the different items kind. */
@@ -468,6 +469,7 @@ export enum TITLE_COMMAND_KIND {
 	SETTINGS,
 	EXIT,
 	SCRIPT,
+	CREDITS,
 }
 
 /** Enum for the game over commands. */

@@ -59,6 +59,7 @@ export * from './MoveObject';
 export * from './OpenMainMenu';
 export * from './OpenSavesMenu';
 export * from './PlayAVideo';
+export * from './PlayCredits';
 export * from './PlayBackgroundSound';
 export * from './PlayMusic';
 export * from './PlayMusicEffect';

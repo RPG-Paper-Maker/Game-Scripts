@@ -37,4 +37,5 @@ export * from './SaveGame';
 export * from './SaveLoadGame';
 export * from './ShowTextPreview';
 export * from './TitleScreen';
+export * from './TitleCredits';
 export * from './TitleSettings';

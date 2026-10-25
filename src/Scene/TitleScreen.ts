@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { ALIGN, ALIGN_VERTICAL, Constants, PICTURE_KIND, Platform, ScreenResolution } from '../Common';
+import { ALIGN, ALIGN_VERTICAL, PICTURE_KIND, Platform, ScreenResolution } from '../Common';
 import { Game, Picture2D, WindowBox, WindowChoices } from '../Core';
 import { Data, Graphic, Manager } from '../index';
 import { Base } from './Base';
@@ -88,6 +88,12 @@ class TitleScreen extends Base {
 		// Stop all songs and videos
 		Manager.Videos.stop();
 		Manager.Songs.stopAll();
+		if (this.startAtLoop) {
+			await Promise.resolve();
+			if (Manager.Stack.top !== this) return;
+			this.musicStarted = true;
+			Data.TitlescreenGameover.titleMusic.playMusic();
+		}
 
 		// Reset screen tone
 		Manager.GL.screenTone.set(0, 0, 0, 1);
@@ -95,16 +101,17 @@ class TitleScreen extends Base {
 		// Destroy pictures
 		Manager.Stack.displayedPictures = [];
 		const pictureBackgroundPromise = Data.TitlescreenGameover.isTitleBackgroundImage
-			? Picture2D.createWithID(
-				Data.TitlescreenGameover.titleBackgroundImageID,
-				PICTURE_KIND.TITLE_SCREEN,
-				{ cover: true },
-			).catch(() => null)
+			? Picture2D.createWithID(Data.TitlescreenGameover.titleBackgroundImageID, PICTURE_KIND.TITLE_SCREEN, {
+					cover: true,
+				}).catch(() => null)
 			: null;
 
 		// Creating background (video plays behind, image draws on top)
 		let videoPlayed = false;
-		if (Data.TitlescreenGameover.isTitleBackgroundVideo && Data.Videos.has(Data.TitlescreenGameover.titleBackgroundVideoID)) {
+		if (
+			Data.TitlescreenGameover.isTitleBackgroundVideo &&
+			Data.Videos.has(Data.TitlescreenGameover.titleBackgroundVideoID)
+		) {
 			const loop = Data.TitlescreenGameover.titleVideoLoop;
 			const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
 			const startMs = this.startAtLoop && loop ? loopMs : 0;
@@ -308,11 +315,13 @@ class TitleScreen extends Base {
 			loop,
 			loopMs,
 			startMs,
-		).then((played) => {
-			if (played && !this.titleReady) {
-				this.waitForVideoLoopPoint();
-			}
-		}).catch(console.error);
+		)
+			.then((played) => {
+				if (played && !this.titleReady) {
+					this.waitForVideoLoopPoint();
+				}
+			})
+			.catch(console.error);
 	}
 
 	private waitForVideoLoopPoint() {

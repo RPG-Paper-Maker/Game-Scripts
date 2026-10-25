@@ -11,7 +11,7 @@
 
 import * as THREE from 'three';
 import { Data, Manager } from '..';
-import { Paths, PICTURE_KIND, Platform } from '../Common';
+import { Paths, PICTURE_KIND, Platform, TITLE_COMMAND_KIND } from '../Common';
 import { Picture2D } from '../Core';
 import { Picture, PictureJSON } from '../Model';
 import { Base } from './Base';
@@ -99,6 +99,23 @@ export class Pictures {
 		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			selected.set(PICTURE_KIND.TITLE_SCREEN, new Set([Data.TitlescreenGameover.titleBackgroundImageID]));
 		}
+		for (const command of Data.TitlescreenGameover.titleCommands) {
+			if (command.kind !== TITLE_COMMAND_KIND.CREDITS) continue;
+			if (command.creditsBackgroundImageID >= 0) {
+				if (!selected.has(PICTURE_KIND.TITLE_SCREEN)) {
+					selected.set(PICTURE_KIND.TITLE_SCREEN, new Set());
+				}
+				selected.get(PICTURE_KIND.TITLE_SCREEN).add(command.creditsBackgroundImageID);
+			}
+			for (const text of Object.values(command.creditsTexts)) {
+				for (const match of text.matchAll(/\[ico=\s*(\d+)(?:;|\])/g)) {
+					if (!selected.has(PICTURE_KIND.ICONS)) {
+						selected.set(PICTURE_KIND.ICONS, new Set());
+					}
+					selected.get(PICTURE_KIND.ICONS).add(Number(match[1]));
+				}
+			}
+		}
 		await this.readSelected(selected);
 	}
 
@@ -110,7 +127,7 @@ export class Pictures {
 	/** Read only the requested pictures, or every picture when no selection is supplied. */
 	private static async readSelected(selected?: Map<PICTURE_KIND, Set<number>>): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_PICTURES)) as PicturesJSON;
-		this.list = new Map();
+		const pictures = new Map<PICTURE_KIND, Map<number, Picture>>();
 		for (const jsonHash of json.list) {
 			const k = jsonHash.k;
 			const jsonList = jsonHash.v;
@@ -134,7 +151,8 @@ export class Pictures {
 				}
 				list.set(id, picture);
 			}
-			this.list.set(k, list);
+			pictures.set(k, list);
 		}
+		this.list = pictures;
 	}
 }

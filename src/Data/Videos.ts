@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Paths, Platform } from '../Common';
+import { Paths, Platform, TITLE_COMMAND_KIND } from '../Common';
 import { Data } from '../index';
 import { Video, VideoJSON } from '../Model';
 import { Base } from './Base';
@@ -51,24 +51,32 @@ export class Videos {
 		await this.readSelected();
 	}
 
-	/** Read only the title-screen video before the game data is fully loaded. */
+	/** Read title-screen and credits videos before the game data is fully loaded. */
 	static async readTitleScreen(): Promise<void> {
-		await this.readSelected(
-			Data.TitlescreenGameover.isTitleBackgroundVideo ? Data.TitlescreenGameover.titleBackgroundVideoID : -1,
-		);
+		const selected = new Set<number>();
+		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
+			selected.add(Data.TitlescreenGameover.titleBackgroundVideoID);
+		}
+		for (const command of Data.TitlescreenGameover.titleCommands) {
+			if (command.kind === TITLE_COMMAND_KIND.CREDITS && command.creditsBackgroundVideoID >= 0) {
+				selected.add(command.creditsBackgroundVideoID);
+			}
+		}
+		await this.readSelected(selected);
 	}
 
-	private static async readSelected(id?: number): Promise<void> {
+	private static async readSelected(selected?: Set<number>): Promise<void> {
 		const json = (await Platform.parseFileJSON(Paths.FILE_VIDEOS)) as VideosJSON;
-		this.list = new Map();
+		const videos = new Map<number, Video>();
 		for (const videoJSON of json.list) {
-			if (id !== undefined && videoJSON.id !== id) {
+			if (selected && !selected.has(videoJSON.id)) {
 				continue;
 			}
-			this.list.set(videoJSON.id, new Video(videoJSON));
+			videos.set(videoJSON.id, new Video(videoJSON));
 		}
-		for (const video of this.list.values()) {
+		for (const video of videos.values()) {
 			await video.checkBase64();
 		}
+		this.list = videos;
 	}
 }
