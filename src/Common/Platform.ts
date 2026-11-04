@@ -70,7 +70,7 @@ export class Platform {
 	static readonly canvasRendering = document.getElementById('rendering') as HTMLCanvasElement;
 
 	/** HUD rendering context (2D). */
-	static readonly ctx = Platform.canvasHUD.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
+	static ctx = Platform.canvasHUD.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;
 
 	/** HUD rendering context for index < 0 pictures (below video player). */
 	static readonly ctxBelow = Platform.canvasHUDBelow.getContext('2d', { willReadFrequently: true }) as CanvasRenderingContext2D;

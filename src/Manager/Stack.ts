@@ -341,13 +341,15 @@ class Stack {
 	private static drawDisplayedPicture(picture: Picture2D, ctx: CanvasRenderingContext2D) {
 		const textPicture = picture as Picture2D & { textMessage?: Graphic.Message; textWidth?: number };
 		const textMessage = textPicture.textMessage;
-		if (!textMessage || ctx !== Platform.ctx) {
+		if (!textMessage) {
 			ctx.save();
 			ctx.translate(this.shakeOffsetX, 0);
 			picture.draw({ ctx });
 			ctx.restore();
 			return;
 		}
+		const previousCtx = Platform.ctx;
+		Platform.ctx = ctx;
 		ctx.save();
 		ctx.globalAlpha = picture.opacity;
 		ctx.translate(
@@ -366,6 +368,7 @@ class Stack {
 			ScreenResolution.CANVAS_HEIGHT,
 		);
 		ctx.restore();
+		Platform.ctx = previousCtx;
 	}
 }
 
