@@ -97,6 +97,7 @@ class Game {
 		distance: number;
 		targetOffset: THREE.Vector3;
 	} = null;
+	public teamHeroesSnapshot: number[] = null;
 
 	constructor(slot: number = -1) {
 		this.slot = slot;
@@ -645,6 +646,17 @@ class Game {
 	 */
 	getGroups(): Player[][] {
 		return [this.teamHeroes, this.reserveHeroes, this.hiddenHeroes];
+	}
+
+	/**
+	 *  Check if the team heroes changed (members or order) since the last check.
+	 *  @returns {boolean}
+	 */
+	checkTeamUpdated(): boolean {
+		const ids = this.teamHeroes.map((player) => player.instid);
+		const previous = this.teamHeroesSnapshot;
+		this.teamHeroesSnapshot = ids;
+		return previous !== null && (previous.length !== ids.length || previous.some((id, i) => id !== ids[i]));
 	}
 
 	/**

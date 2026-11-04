@@ -63,6 +63,7 @@ export class CommonEvents {
 			{ id: 2, name: 'y', d: { k: 3, v: 0 } },
 		]},
 		{ id: 8, name: 'Closing main menu', p: [] },
+		{ id: 9, name: 'Team updated', p: [] },
 	];
 
 	private static eventsSystem: Map<number, CommonEvent>;

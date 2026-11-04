@@ -1435,6 +1435,11 @@ class Map extends Base {
 		this.camera.getThreeCamera().getWorldDirection(vector);
 		const angle = Math.atan2(vector.x, vector.z) + Math.PI;
 
+		// Send team updated event if the team changed
+		if (!this.isBattleMap && Game.current !== null && Game.current.checkTeamUpdated()) {
+			Manager.Events.sendEvent(null, 0, 0, true, 9, new globalThis.Map(), true, false);
+		}
+
 		// Refresh caterpillar followers if requested
 		if (Scene.Map.caterpillarNeedsRefresh && !this.isBattleMap && Game.current !== null) {
 			Scene.Map.caterpillarNeedsRefresh = false;
@@ -1968,7 +1973,47 @@ class Map extends Base {
 				restoreStates && i < restoreStates.length ? restoreStates[i].prevPos.clone() : initPos.clone();
 			newFollowers.push(follower);
 		}
+		if (restoreStates && newFollowers.length > restoreStates.length) {
+			this.extendHeroTrail(newFollowers, restoreStates.length, bx, bz);
+		}
 		return newFollowers;
+	}
+
+	/**
+	 *  Place newly added followers behind the existing ones and extend the
+	 *  trail so that they stay at their spawn position.
+	 */
+	private extendHeroTrail(followers: MapObject[], firstNewIndex: number, bx: number, bz: number) {
+		const hero = Game.current.hero;
+		if (firstNewIndex === 0 || this.heroTrail.length === 0 || this.heroTrailLastPos === null) {
+			this.heroTrail = [
+				{ pos: hero.position.clone(), dist: this.heroTrailTotalDist, orientation: hero.orientationEye },
+			];
+			this.heroTrailLastPos = hero.position.clone();
+		}
+		const offset = (Data.Systems.caterpillarOffset.getValue() as number) / Data.Systems.SQUARE_SIZE;
+		let cumulativeDist = 0;
+		let prevWidth = hero.contentWidth;
+		let prevPos = hero.position;
+		for (let i = 0; i < followers.length; i++) {
+			const follower = followers[i];
+			const gap = offset + prevWidth / 2 + follower.contentWidth / 2;
+			cumulativeDist += gap;
+			prevWidth = follower.contentWidth;
+			if (i >= firstNewIndex) {
+				const targetDist = this.heroTrailTotalDist - cumulativeDist;
+				let pos: THREE.Vector3;
+				if (targetDist >= this.heroTrail[0].dist) {
+					pos = this.getTrailAtDist(targetDist).pos;
+				} else {
+					pos = new THREE.Vector3(prevPos.x + bx * gap, prevPos.y, prevPos.z + bz * gap);
+					this.heroTrail.unshift({ pos: pos.clone(), dist: targetDist, orientation: hero.orientationEye });
+				}
+				follower.position = pos;
+				follower.previousPosition = pos.clone();
+			}
+			prevPos = follower.position;
+		}
 	}
 
 	/**
