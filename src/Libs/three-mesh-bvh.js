@@ -21,8 +21,8 @@ const AVERAGE = 1;
 
 /**
  * Option to use a Surface Area Heuristic to split the bounds more optimally. This SAH
- * implementation tests 32 discrete splits in each node along each axis to determine
- * which split is the lowest cost.
+ * implementation tests 8 discrete splits in each node along each axis to determine
+ * which split is the lowest cost, or every primitive center in small nodes.
  *
  * This is the slowest construction option but will yield the best bounds of the three
  * options and use the least memory.
@@ -125,35 +125,6 @@ function getLongestEdgeIndex( bounds ) {
 	}
 
 	return splitDimIdx;
-
-}
-
-// copies bounds a into bounds b
-function copyBounds( source, target ) {
-
-	target.set( source );
-
-}
-
-// sets bounds target to the union of bounds a and b
-function unionBounds( a, b, target ) {
-
-	let aVal, bVal;
-	for ( let d = 0; d < 3; d ++ ) {
-
-		const d3 = d + 3;
-
-		// set the minimum values
-		aVal = a[ d ];
-		bVal = b[ d ];
-		target[ d ] = aVal < bVal ? aVal : bVal;
-
-		// set the max values
-		aVal = a[ d3 ];
-		bVal = b[ d3 ];
-		target[ d3 ] = aVal > bVal ? aVal : bVal;
-
-	}
 
 }
 
@@ -310,22 +281,47 @@ function getBounds( primitiveBounds, offset, count, target, centroidTarget ) {
 
 }
 
-const BIN_COUNT = 32;
-const binsSort = ( a, b ) => a.candidate - b.candidate;
-const sahBins = /* @__PURE__ */ new Array( BIN_COUNT ).fill().map( () => {
+const BIN_COUNT = 8;
 
-	return {
+// nodes with fewer primitives than this test a split at every primitive center instead of binning
+const SWEEP_COUNT = 8;
 
-		count: 0,
-		bounds: new Float32Array( 6 ),
-		rightCacheBounds: new Float32Array( 6 ),
-		leftCacheBounds: new Float32Array( 6 ),
-		candidate: 0,
-
-	};
-
-} );
+// per bin primitive count and bounds, and the union of the bounds from each bin to the last
+const binCounts = /* @__PURE__ */ new Int32Array( BIN_COUNT );
+const binBounds = /* @__PURE__ */ new Float32Array( BIN_COUNT * 6 );
+const binRightBounds = /* @__PURE__ */ new Float32Array( BIN_COUNT * 6 );
 const leftBounds = /* @__PURE__ */ new Float32Array( 6 );
+const rightBounds = /* @__PURE__ */ new Float32Array( 6 );
+
+// the primitives of a small node ordered along an axis, and the bounds of the tail from each position
+const sweepOrder = /* @__PURE__ */ new Int32Array( SWEEP_COUNT );
+const sweepRightBounds = /* @__PURE__ */ new Float32Array( SWEEP_COUNT * 6 );
+
+// expands the bounds stored at "offset" in "bounds" by the primitive at "startIndex"
+function expandBoundsAt( startIndex, primitiveBounds, bounds, offset ) {
+
+	for ( let d = 0; d < 3; d ++ ) {
+
+		const center = primitiveBounds[ startIndex + 2 * d ];
+		const half = primitiveBounds[ startIndex + 2 * d + 1 ];
+		const min = center - half;
+		const max = center + half;
+		if ( min < bounds[ offset + d ] ) bounds[ offset + d ] = min;
+		if ( max > bounds[ offset + d + 3 ] ) bounds[ offset + d + 3 ] = max;
+
+	}
+
+}
+
+function computeSurfaceAreaAt( array, offset ) {
+
+	const d0 = array[ offset + 3 ] - array[ offset ];
+	const d1 = array[ offset + 4 ] - array[ offset + 1 ];
+	const d2 = array[ offset + 5 ] - array[ offset + 2 ];
+
+	return 2 * ( d0 * d1 + d1 * d2 + d2 * d0 );
+
+}
 
 function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBounds, offset, count, strategy ) {
 
@@ -369,105 +365,61 @@ function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBound
 
 			// If we have fewer primitives than we're planning to split then just check all
 			// the primitive positions because it will be faster.
-			if ( count < BIN_COUNT / 4 ) {
+			if ( count < SWEEP_COUNT ) {
 
-				// initialize the bin candidates
-				const truncatedBins = [ ...sahBins ];
-				truncatedBins.length = count;
+				// order the primitives by center along the axis
+				for ( let i = 0; i < count; i ++ ) {
 
-				// set the candidates
-				let b = 0;
-				for ( let c = cStart; c < cEnd; c += 6, b ++ ) {
-
-					const bin = truncatedBins[ b ];
-					bin.candidate = primitiveBounds[ c + 2 * a ];
-					bin.count = 0;
-
-					const {
-						bounds,
-						leftCacheBounds,
-						rightCacheBounds,
-					} = bin;
-					for ( let d = 0; d < 3; d ++ ) {
-
-						rightCacheBounds[ d ] = Infinity;
-						rightCacheBounds[ d + 3 ] = - Infinity;
-
-						leftCacheBounds[ d ] = Infinity;
-						leftCacheBounds[ d + 3 ] = - Infinity;
-
-						bounds[ d ] = Infinity;
-						bounds[ d + 3 ] = - Infinity;
-
-					}
-
-					expandByPrimitiveBounds( c, primitiveBounds, bounds );
-
-				}
-
-				truncatedBins.sort( binsSort );
-
-				// remove redundant splits
-				let splitCount = count;
-				for ( let bi = 0; bi < splitCount; bi ++ ) {
-
-					const bin = truncatedBins[ bi ];
-					while ( bi + 1 < splitCount && truncatedBins[ bi + 1 ].candidate === bin.candidate ) {
-
-						truncatedBins.splice( bi + 1, 1 );
-						splitCount --;
-
-					}
-
-				}
-
-				// find the appropriate bin for each primitive and expand the bounds.
-				for ( let c = cStart; c < cEnd; c += 6 ) {
-
+					const c = cStart + i * 6;
 					const center = primitiveBounds[ c + 2 * a ];
-					for ( let bi = 0; bi < splitCount; bi ++ ) {
+					let j = i;
+					while ( j > 0 && primitiveBounds[ sweepOrder[ j - 1 ] + 2 * a ] > center ) {
 
-						const bin = truncatedBins[ bi ];
-						if ( center >= bin.candidate ) {
-
-							expandByPrimitiveBounds( c, primitiveBounds, bin.rightCacheBounds );
-
-						} else {
-
-							expandByPrimitiveBounds( c, primitiveBounds, bin.leftCacheBounds );
-							bin.count ++;
-
-						}
+						sweepOrder[ j ] = sweepOrder[ j - 1 ];
+						j --;
 
 					}
 
+					sweepOrder[ j ] = c;
+
 				}
 
-				// expand all the bounds
-				for ( let bi = 0; bi < splitCount; bi ++ ) {
+				// the bounds of the primitives from each position to the end
+				for ( let d = 0; d < 3; d ++ ) {
 
-					const bin = truncatedBins[ bi ];
-					const leftCount = bin.count;
-					const rightCount = count - bin.count;
+					leftBounds[ d ] = Infinity;
+					leftBounds[ d + 3 ] = - Infinity;
+					rightBounds[ d ] = Infinity;
+					rightBounds[ d + 3 ] = - Infinity;
+
+				}
+
+				for ( let i = count - 1; i >= 0; i -- ) {
+
+					expandByPrimitiveBounds( sweepOrder[ i ], primitiveBounds, rightBounds );
+					sweepRightBounds.set( rightBounds, i * 6 );
+
+				}
+
+				// sweep the splits between consecutive centers, growing the left bounds as we go
+				for ( let i = 0; i < count - 1; i ++ ) {
+
+					expandByPrimitiveBounds( sweepOrder[ i ], primitiveBounds, leftBounds );
+
+					// a primitive whose center lies on the split plane is considered to be on the right
+					// side, so equal centers cannot be split apart
+					const candidate = primitiveBounds[ sweepOrder[ i + 1 ] + 2 * a ];
+					if ( primitiveBounds[ sweepOrder[ i ] + 2 * a ] === candidate ) {
+
+						continue;
+
+					}
 
 					// check the cost of this split
-					const leftBounds = bin.leftCacheBounds;
-					const rightBounds = bin.rightCacheBounds;
-
-					let leftProb = 0;
-					if ( leftCount !== 0 ) {
-
-						leftProb = computeSurfaceArea( leftBounds ) / rootSurfaceArea;
-
-					}
-
-					let rightProb = 0;
-					if ( rightCount !== 0 ) {
-
-						rightProb = computeSurfaceArea( rightBounds ) / rootSurfaceArea;
-
-					}
-
+					const leftCount = i + 1;
+					const rightCount = count - leftCount;
+					const leftProb = computeSurfaceArea( leftBounds ) / rootSurfaceArea;
+					const rightProb = computeSurfaceAreaAt( sweepRightBounds, leftCount * 6 ) / rootSurfaceArea;
 					const cost = TRAVERSAL_COST + PRIMITIVE_INTERSECT_COST * (
 						leftProb * leftCount + rightProb * rightCount
 					);
@@ -476,7 +428,7 @@ function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBound
 
 						axis = a;
 						bestCost = cost;
-						pos = bin.candidate;
+						pos = candidate;
 
 					}
 
@@ -487,15 +439,11 @@ function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBound
 				// reset the bins
 				for ( let i = 0; i < BIN_COUNT; i ++ ) {
 
-					const bin = sahBins[ i ];
-					bin.count = 0;
-					bin.candidate = axisLeft + binWidth + i * binWidth;
-
-					const bounds = bin.bounds;
+					binCounts[ i ] = 0;
 					for ( let d = 0; d < 3; d ++ ) {
 
-						bounds[ d ] = Infinity;
-						bounds[ d + 3 ] = - Infinity;
+						binBounds[ i * 6 + d ] = Infinity;
+						binBounds[ i * 6 + d + 3 ] = - Infinity;
 
 					}
 
@@ -512,44 +460,54 @@ function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBound
 					let binIndex = ~ ~ ( relativeCenter / binWidth );
 					if ( binIndex >= BIN_COUNT ) binIndex = BIN_COUNT - 1;
 
-					const bin = sahBins[ binIndex ];
-					bin.count ++;
-
-					expandByPrimitiveBounds( c, primitiveBounds, bin.bounds );
+					binCounts[ binIndex ] ++;
+					expandBoundsAt( c, primitiveBounds, binBounds, binIndex * 6 );
 
 				}
 
 				// cache the unioned bounds from right to left so we don't have to regenerate them each time
-				const lastBin = sahBins[ BIN_COUNT - 1 ];
-				copyBounds( lastBin.bounds, lastBin.rightCacheBounds );
+				const last = ( BIN_COUNT - 1 ) * 6;
+				for ( let d = 0; d < 6; d ++ ) {
+
+					binRightBounds[ last + d ] = binBounds[ last + d ];
+
+				}
+
 				for ( let i = BIN_COUNT - 2; i >= 0; i -- ) {
 
-					const bin = sahBins[ i ];
-					const nextBin = sahBins[ i + 1 ];
-					unionBounds( bin.bounds, nextBin.rightCacheBounds, bin.rightCacheBounds );
+					const o = i * 6;
+					const next = o + 6;
+					for ( let d = 0; d < 3; d ++ ) {
+
+						binRightBounds[ o + d ] = Math.min( binBounds[ o + d ], binRightBounds[ next + d ] );
+						binRightBounds[ o + d + 3 ] = Math.max( binBounds[ o + d + 3 ], binRightBounds[ next + d + 3 ] );
+
+					}
 
 				}
 
 				let leftCount = 0;
 				for ( let i = 0; i < BIN_COUNT - 1; i ++ ) {
 
-					const bin = sahBins[ i ];
-					const binCount = bin.count;
-					const bounds = bin.bounds;
-
-					const nextBin = sahBins[ i + 1 ];
-					const rightBounds = nextBin.rightCacheBounds;
+					const o = i * 6;
+					const binCount = binCounts[ i ];
 
 					// don't do anything with the bounds if the new bounds have no primitives
 					if ( binCount !== 0 ) {
 
-						if ( leftCount === 0 ) {
+						for ( let d = 0; d < 3; d ++ ) {
 
-							copyBounds( bounds, leftBounds );
+							if ( leftCount === 0 ) {
 
-						} else {
+								leftBounds[ d ] = binBounds[ o + d ];
+								leftBounds[ d + 3 ] = binBounds[ o + d + 3 ];
 
-							unionBounds( bounds, leftBounds, leftBounds );
+							} else {
+
+								leftBounds[ d ] = Math.min( leftBounds[ d ], binBounds[ o + d ] );
+								leftBounds[ d + 3 ] = Math.max( leftBounds[ d + 3 ], binBounds[ o + d + 3 ] );
+
+							}
 
 						}
 
@@ -570,7 +528,7 @@ function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBound
 					const rightCount = count - leftCount;
 					if ( rightCount !== 0 ) {
 
-						rightProb = computeSurfaceArea( rightBounds ) / rootSurfaceArea;
+						rightProb = computeSurfaceAreaAt( binRightBounds, o + 6 ) / rootSurfaceArea;
 
 					}
 
@@ -582,7 +540,7 @@ function getOptimalSplit( nodeBoundingData, centroidBoundingData, primitiveBound
 
 						axis = a;
 						bestCost = cost;
-						pos = bin.candidate;
+						pos = axisLeft + binWidth + i * binWidth;
 
 					}
 
@@ -614,19 +572,6 @@ function getAverage( primitiveBounds, offset, count, axis ) {
 	}
 
 	return avg / count;
-
-}
-
-class BVHNode {
-
-	constructor() {
-
-		// internal nodes have boundingData, left, right, and splitAxis
-		// leaf nodes have offset and count (referring to primitives in the mesh geometry)
-
-		this.boundingData = new Float32Array( 6 );
-
-	}
 
 }
 
@@ -693,97 +638,20 @@ function partition( buffer, stride, primitiveBounds, offset, count, split ) {
 
 }
 
-let float32Array, uint32Array, uint16Array, uint8Array;
 const MAX_POINTER = Math.pow( 2, 32 );
 
-function countNodes( node ) {
+// the bounds and centroid bounds of the node about to be split
+const _nodeBounds = /* @__PURE__ */ new Float32Array( 6 );
+const _centroidBounds = /* @__PURE__ */ new Float32Array( 6 );
 
-	if ( 'count' in node ) {
-
-		return 1;
-
-	} else {
-
-		return 1 + countNodes( node.left ) + countNodes( node.right );
-
-	}
-
-}
-
-function populateBuffer( byteOffset, node, buffer ) {
-
-	float32Array = new Float32Array( buffer );
-	uint32Array = new Uint32Array( buffer );
-	uint16Array = new Uint16Array( buffer );
-	uint8Array = new Uint8Array( buffer );
-
-	return _populateBuffer( byteOffset, node );
-
-}
-
+// Builds the tree over the given primitive range directly into a packed node buffer and returns
+// it trimmed to the nodes written. Nodes are written depth first, so a left child directly follows
+// its parent and the right child is stored as a relative node offset.
+//
 // pack structure
 // boundingData  				: 6 float32
 // right / offset 				: 1 uint32
 // splitAxis / isLeaf + count 	: 1 uint32 / 2 uint16
-function _populateBuffer( byteOffset, node ) {
-
-	const node32Index = byteOffset / 4;
-	const node16Index = byteOffset / 2;
-	const isLeaf = 'count' in node;
-	const boundingData = node.boundingData;
-	for ( let i = 0; i < 6; i ++ ) {
-
-		float32Array[ node32Index + i ] = boundingData[ i ];
-
-	}
-
-	if ( isLeaf ) {
-
-		if ( node.buffer ) {
-
-			uint8Array.set( new Uint8Array( node.buffer ), byteOffset );
-			return byteOffset + node.buffer.byteLength;
-
-		} else {
-
-			uint32Array[ node32Index + 6 ] = node.offset;
-			uint16Array[ node16Index + 14 ] = node.count;
-			uint16Array[ node16Index + 15 ] = IS_LEAFNODE_FLAG;
-			return byteOffset + BYTES_PER_NODE;
-
-		}
-
-	} else {
-
-		const { left, right, splitAxis } = node;
-
-		// fill in the left node contents
-		const leftByteOffset = byteOffset + BYTES_PER_NODE;
-		let rightByteOffset = _populateBuffer( leftByteOffset, left );
-
-		// calculate relative offset from parent to right child
-		const currentNodeIndex = byteOffset / BYTES_PER_NODE;
-		const rightNodeIndex = rightByteOffset / BYTES_PER_NODE;
-		const relativeRightIndex = rightNodeIndex - currentNodeIndex;
-
-		// check if the relative offset is too high
-		if ( relativeRightIndex > MAX_POINTER ) {
-
-			throw new Error( 'MeshBVH: Cannot store relative child node offset greater than 32 bits.' );
-
-		}
-
-		// fill in the right node contents (store as relative offset)
-		uint32Array[ node32Index + 6 ] = relativeRightIndex;
-		uint32Array[ node32Index + 7 ] = splitAxis;
-
-		// return the next available buffer pointer
-		return _populateBuffer( rightByteOffset, right );
-
-	}
-
-}
-
 function buildTree( bvh, primitiveBounds, offset, count, options, loadRange ) {
 
 	// expand variables
@@ -794,19 +662,25 @@ function buildTree( bvh, primitiveBounds, offset, count, options, loadRange ) {
 		_strictLeafSize = Infinity,
 		strategy,
 		onProgress,
+		useSharedArrayBuffer = false,
 	} = options;
 
 	const partitionBuffer = bvh.primitiveBuffer;
 	const partitionStride = bvh.primitiveBufferStride;
 
-	// generate intermediate variables
-	const cacheCentroidBoundingData = new Float32Array( 6 );
+	// a binary tree with at least one primitive per leaf has at most 2n - 1 nodes. Group ranges that
+	// don't line up with triangles give a fractional count.
+	const BufferConstructor = useSharedArrayBuffer ? SharedArrayBuffer : ArrayBuffer;
+	const buffer = new BufferConstructor( BYTES_PER_NODE * Math.max( 1, 2 * Math.ceil( count ) - 1 ) );
+	const float32Array = new Float32Array( buffer );
+	const uint32Array = new Uint32Array( buffer );
+	const uint16Array = new Uint16Array( buffer );
+	let nodeCount = 0;
 	let reachedMaxDepth = false;
 
-	const root = new BVHNode();
-	getBounds( primitiveBounds, offset, count, root.boundingData, cacheCentroidBoundingData );
-	splitNode( root, offset, count, cacheCentroidBoundingData );
-	return root;
+	getBounds( primitiveBounds, offset, count, _nodeBounds, _centroidBounds );
+	splitNode( offset, count, 0 );
+	return buffer.slice( 0, nodeCount * BYTES_PER_NODE );
 
 	function triggerProgress( primitivesProcessed ) {
 
@@ -818,9 +692,23 @@ function buildTree( bvh, primitiveBounds, offset, count, options, loadRange ) {
 
 	}
 
-	// either recursively splits the given node, creating left and right subtrees for it, or makes it a leaf node,
-	// recording the offset and count of its primitives and writing them into the reordered geometry index.
-	function splitNode( node, offset, count, centroidBoundingData = null, depth = 0 ) {
+	function writeLeaf( node32, offset, count ) {
+
+		const node16 = node32 * 2;
+		uint32Array[ node32 + 6 ] = offset;
+		uint16Array[ node16 + 14 ] = count;
+		uint16Array[ node16 + 15 ] = IS_LEAFNODE_FLAG;
+		triggerProgress( offset + count );
+
+	}
+
+	// writes the node whose bounds are in "_nodeBounds" and either recursively splits it, creating left and right
+	// subtrees for it, or makes it a leaf node, recording the offset and count of its primitives.
+	function splitNode( offset, count, depth ) {
+
+		const nodeIndex = nodeCount ++;
+		const node32 = nodeIndex * UINT32_PER_NODE;
+		float32Array.set( _nodeBounds, node32 );
 
 		if ( ! reachedMaxDepth && depth >= maxDepth ) {
 
@@ -840,15 +728,13 @@ function buildTree( bvh, primitiveBounds, offset, count, options, loadRange ) {
 		// early out if we've met our capacity - unless the strict guarantee still requires a split
 		if ( ( count <= targetLeafSize && ! mustSplit ) || depth >= maxDepth ) {
 
-			triggerProgress( offset + count );
-			node.offset = offset;
-			node.count = count;
-			return node;
+			writeLeaf( node32, offset, count );
+			return;
 
 		}
 
 		// Find where to split the volume
-		const split = getOptimalSplit( node.boundingData, centroidBoundingData, primitiveBounds, offset, count, strategy );
+		const split = getOptimalSplit( _nodeBounds, _centroidBounds, primitiveBounds, offset, count, strategy );
 		let splitOffset = split.axis === - 1 ? - 1 : partition( partitionBuffer, partitionStride, primitiveBounds, offset, count, split );
 
 		// If the heuristic can't produce a usable split then make a leaf unless the strict guarantee requires the split -
@@ -858,48 +744,42 @@ function buildTree( bvh, primitiveBounds, offset, count, options, loadRange ) {
 
 			if ( ! mustSplit ) {
 
-				triggerProgress( offset + count );
-				node.offset = offset;
-				node.count = count;
-				return node;
+				writeLeaf( node32, offset, count );
+				return;
 
 			}
 
-			split.axis = Math.max( 0, getLongestEdgeIndex( node.boundingData ) );
+			split.axis = Math.max( 0, getLongestEdgeIndex( _nodeBounds ) );
 			splitOffset = offset + Math.max( 1, Math.floor( count / 2 ) );
 
 		}
 
-		// create the two new child nodes
-		node.splitAxis = split.axis;
+		uint32Array[ node32 + 7 ] = split.axis;
 
-		// create the left child and compute its bounding box
-		const left = new BVHNode();
-		const lstart = offset;
-		const lcount = splitOffset - offset;
-		node.left = left;
+		// the left child directly follows this node
+		const leftCount = splitOffset - offset;
+		getBounds( primitiveBounds, offset, leftCount, _nodeBounds, _centroidBounds );
+		splitNode( offset, leftCount, depth + 1 );
 
-		getBounds( primitiveBounds, lstart, lcount, left.boundingData, cacheCentroidBoundingData );
-		splitNode( left, lstart, lcount, cacheCentroidBoundingData, depth + 1 );
+		// the right child follows the left subtree, stored as an offset relative to this node
+		const relativeRightIndex = nodeCount - nodeIndex;
+		if ( relativeRightIndex > MAX_POINTER ) {
 
-		// repeat for right
-		const right = new BVHNode();
-		const rstart = splitOffset;
-		const rcount = count - lcount;
-		node.right = right;
+			throw new Error( 'MeshBVH: Cannot store relative child node offset greater than 32 bits.' );
 
-		getBounds( primitiveBounds, rstart, rcount, right.boundingData, cacheCentroidBoundingData );
-		splitNode( right, rstart, rcount, cacheCentroidBoundingData, depth + 1 );
+		}
 
-		return node;
+		uint32Array[ node32 + 6 ] = relativeRightIndex;
+
+		const rightCount = count - leftCount;
+		getBounds( primitiveBounds, splitOffset, rightCount, _nodeBounds, _centroidBounds );
+		splitNode( splitOffset, rightCount, depth + 1 );
 
 	}
 
 }
 
 function buildPackedTree( bvh, options ) {
-
-	const BufferConstructor = options.useSharedArrayBuffer ? SharedArrayBuffer : ArrayBuffer;
 
 	// get the range of buffer data to construct / arrange
 	const rootRanges = bvh.getRootRanges( options.range );
@@ -918,11 +798,7 @@ function buildPackedTree( bvh, options ) {
 	// Build BVH roots
 	bvh._roots = rootRanges.map( range => {
 
-		const root = buildTree( bvh, primitiveBounds, range.offset, range.count, options, fullRange );
-		const nodeCount = countNodes( root );
-		const buffer = new BufferConstructor( BYTES_PER_NODE * nodeCount );
-		populateBuffer( 0, root, buffer );
-		return buffer;
+		return buildTree( bvh, primitiveBounds, range.offset, range.count, options, fullRange );
 
 	} );
 
@@ -2947,10 +2823,30 @@ ExtendedTriangle.prototype.closestPointToSegment = ( function () {
 
 	return function distanceToSegment( segment, target1 = null, target2 = null ) {
 
+		if ( this.needsUpdate ) {
+
+			this.update();
+
+		}
+
 		const { start, end } = segment;
 		const points = this.points;
 		let distSq;
 		let closestDistanceSq = Infinity;
+
+		const startDist = this.plane.distanceToPoint( start );
+		const endDist = this.plane.distanceToPoint( end );
+		if (
+			startDist * endDist < 0 &&
+			this.plane.intersectLine( segment, point1 ) !== null &&
+			this.containsPoint( point1 )
+		) {
+
+			if ( target1 ) target1.copy( point1 );
+			if ( target2 ) target2.copy( point1 );
+			return 0;
+
+		}
 
 		// check the triangle edges
 		for ( let i = 0; i < 3; i ++ ) {
@@ -4077,11 +3973,11 @@ OrientedBox.prototype.distanceToBox = ( function () {
 
 					start[ f1 ] = min[ f1 ];
 					start[ f2 ] = i1 ? min[ f2 ] : max[ f2 ];
-					start[ f3 ] = i2 ? min[ f3 ] : max[ f2 ];
+					start[ f3 ] = i2 ? min[ f3 ] : max[ f3 ];
 
 					end[ f1 ] = max[ f1 ];
 					end[ f2 ] = i1 ? min[ f2 ] : max[ f2 ];
-					end[ f3 ] = i2 ? min[ f3 ] : max[ f2 ];
+					end[ f3 ] = i2 ? min[ f3 ] : max[ f3 ];
 
 					count ++;
 
@@ -5016,7 +4912,12 @@ function iterateOverTriangles_indirect(
 function raycast( bvh, root, materialOrSide, ray, intersects, near, far ) {
 
 	BufferStack.setBuffer( bvh._roots[ root ] );
-	_raycast$1( 0, bvh, materialOrSide, ray, intersects, near, far );
+	if ( intersectsNodeBounds( 0, BufferStack.float32Array, ray, near, far ) ) {
+
+		_raycast$1( 0, bvh, materialOrSide, ray, intersects, near, far );
+
+	}
+
 	BufferStack.clearBuffer();
 
 }
@@ -5064,7 +4965,14 @@ const _xyzFields$1 = [ 'x', 'y', 'z' ];
 function raycastFirst( bvh, root, materialOrSide, ray, near, far ) {
 
 	BufferStack.setBuffer( bvh._roots[ root ] );
-	const result = _raycastFirst$1( 0, bvh, materialOrSide, ray, near, far );
+
+	let result = null;
+	if ( intersectsNodeBounds( 0, BufferStack.float32Array, ray, near, far ) ) {
+
+		result = _raycastFirst$1( 0, bvh, materialOrSide, ray, near, far );
+
+	}
+
 	BufferStack.clearBuffer();
 
 	return result;
@@ -5744,7 +5652,12 @@ function refit_indirect( bvh, nodeIndices = null ) {
 function raycast_indirect( bvh, root, materialOrSide, ray, intersects, near, far ) {
 
 	BufferStack.setBuffer( bvh._roots[ root ] );
-	_raycast( 0, bvh, materialOrSide, ray, intersects, near, far );
+	if ( intersectsNodeBounds( 0, BufferStack.float32Array, ray, near, far ) ) {
+
+		_raycast( 0, bvh, materialOrSide, ray, intersects, near, far );
+
+	}
+
 	BufferStack.clearBuffer();
 
 }
@@ -5791,7 +5704,14 @@ const _xyzFields = [ 'x', 'y', 'z' ];
 function raycastFirst_indirect( bvh, root, materialOrSide, ray, near, far ) {
 
 	BufferStack.setBuffer( bvh._roots[ root ] );
-	const result = _raycastFirst( 0, bvh, materialOrSide, ray, near, far );
+
+	let result = null;
+	if ( intersectsNodeBounds( 0, BufferStack.float32Array, ray, near, far ) ) {
+
+		result = _raycastFirst( 0, bvh, materialOrSide, ray, near, far );
+
+	}
+
 	BufferStack.clearBuffer();
 
 	return result;
