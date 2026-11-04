@@ -27,6 +27,8 @@ class Camera {
 	public static readonly SUN_UP = new THREE.Vector3();
 	private static readonly _sunOffset = new THREE.Vector3();
 	private static _snapTarget = new THREE.Vector3();
+	private static readonly MIN_VIEW_DISTANCE_SQ = 1e-6;
+	private static readonly _lookTarget = new THREE.Vector3();
 	private _stableD: number = 0;
 
 	public system: Model.CameraProperties;
@@ -240,6 +242,9 @@ class Camera {
 	 */
 	updateAngles() {
 		const camera = this.getThreeCamera();
+		if (camera.position.distanceToSquared(this.targetPosition) < Camera.MIN_VIEW_DISTANCE_SQ) {
+			return;
+		}
 		this.horizontalAngle = this.getHorizontalAngle(camera.position, this.targetPosition);
 		this.verticalAngle = this.getVerticalAngle(camera.position, this.targetPosition);
 	}
@@ -258,7 +263,17 @@ class Camera {
 	 * Update the three.js camera view.
 	 */
 	updateView() {
-		this.getThreeCamera().lookAt(this.targetPosition);
+		const camera = this.getThreeCamera();
+		if (camera.position.distanceToSquared(this.targetPosition) < Camera.MIN_VIEW_DISTANCE_SQ) {
+			const h = (this.horizontalAngle * Math.PI) / 180.0;
+			const v = (this.verticalAngle * Math.PI) / 180.0;
+			Camera._lookTarget
+				.set(Math.sin(v) * Math.cos(h), -Math.cos(v), Math.sin(v) * Math.sin(h))
+				.add(camera.position);
+			camera.lookAt(Camera._lookTarget);
+		} else {
+			camera.lookAt(this.targetPosition);
+		}
 	}
 
 	/**
