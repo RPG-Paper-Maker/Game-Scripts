@@ -18,6 +18,7 @@ import {
 	EFFECT_SPECIAL_ACTION_KIND,
 	Interpreter,
 	ITEM_KIND,
+	ScreenResolution,
 	STATUS_RESTRICTIONS_KIND,
 	TARGET_KIND,
 } from '../Common';
@@ -213,7 +214,13 @@ class BattleSelection {
 		// Updating window informations
 		const window =
 			this.battle.subStep === 2 ? this.battle.windowTargetInformations : this.battle.windowUserInformations;
-		window.content = this.battle.graphicPlayers[this.battle.kindSelection][this.selectedUserTargetIndex()];
+		const graphicPlayer = this.battle.graphicPlayers[this.battle.kindSelection][this.selectedUserTargetIndex()];
+		const width = graphicPlayer.getWindowProfileWidth();
+		window.setW(width);
+		if (window === this.battle.windowUserInformations) {
+			window.setX(ScreenResolution.SCREEN_X - width);
+		}
+		window.content = graphicPlayer;
 		window.content.update();
 		Manager.Stack.requestPaintHUD = true;
 	}

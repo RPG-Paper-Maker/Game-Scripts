@@ -96,26 +96,24 @@ class Statistic extends Base {
 		if (this.pictureBar && this.pictureBar.picture) {
 			const naturalW = this.pictureBar.picture.oW / 2;
 			const minXY = Math.min(ScreenResolution.WINDOW_X, ScreenResolution.WINDOW_Y);
-			const barW_design = w > 0 ? w / minXY : naturalW;
-			barW_screen = Math.ceil(barW_design * minXY);
-			const scale = barW_design / naturalW;
-			this.pictureBar.picture.draw({
-				x: x,
-				y: y,
-				sw: naturalW,
-				w: barW_design,
-			});
-			const percent = this.player[this.statistic.abbreviation] / this.player[this.statistic.getMaxAbbreviation()];
+			barW_screen = w > 0 ? Math.round(w) : Math.round(naturalW * minXY);
+			const cap = Math.floor(naturalW / 3);
 			const borderLeft = this.pictureBar.borderLeft;
-			const innerW = naturalW - borderLeft - this.pictureBar.borderRight;
-			const fillSW = Math.ceil(innerW * percent);
-			this.pictureBar.picture.draw({
-				x: x + ScreenResolution.getScreenX(borderLeft) * scale,
-				y: y,
-				sx: naturalW + borderLeft,
-				sw: fillSW,
-				w: Math.ceil(fillSW * scale),
-			});
+			const borderRight = this.pictureBar.borderRight;
+			this.drawBarSlices(0, naturalW, cap, cap, x, y, barW_screen);
+			const percent = this.player[this.statistic.abbreviation] / this.player[this.statistic.getMaxAbbreviation()];
+			const xFill = Math.round(borderLeft * minXY);
+			const fillW = barW_screen - xFill - Math.round(borderRight * minXY);
+			this.drawBarSlices(
+				naturalW + borderLeft,
+				naturalW - borderLeft - borderRight,
+				Math.max(cap - borderLeft, 0),
+				Math.max(cap - borderRight, 0),
+				x + xFill,
+				y,
+				fillW,
+				Math.round(fillW * percent),
+			);
 			height = this.pictureBar.picture.h;
 			offset = ScreenResolution.getScreenY(-5);
 		}
@@ -127,6 +125,55 @@ class Statistic extends Base {
 		} else {
 			this.graphicValue.draw(x + this.maxStatNamesLength + ScreenResolution.getScreenX(10), y, 0, 0);
 		}
+	}
+
+	/**
+	 *  Draw a horizontal part of the bar texture cut in 3 slices: left and
+	 *  right caps are drawn once, the middle slice is repeated to fill width.
+	 *  @param {number} sx - The source x position
+	 *  @param {number} sw - The source width
+	 *  @param {number} capL - The source left cap width
+	 *  @param {number} capR - The source right cap width
+	 *  @param {number} x - The screen x position
+	 *  @param {number} y - The screen y position
+	 *  @param {number} w - The screen width
+	 *  @param {number} [clipW=w] - The screen width to clip drawing to
+	 */
+	drawBarSlices(
+		sx: number,
+		sw: number,
+		capL: number,
+		capR: number,
+		x: number,
+		y: number,
+		w: number,
+		clipW: number = w,
+	) {
+		if (w <= 0 || clipW <= 0) {
+			return;
+		}
+		const picture = this.pictureBar.picture;
+		const minXY = Math.min(ScreenResolution.WINDOW_X, ScreenResolution.WINDOW_Y);
+		let wL = Math.round(capL * minXY);
+		let wR = Math.round(capR * minXY);
+		if (wL + wR > w) {
+			wL = Math.round((w * capL) / (capL + capR));
+			wR = w - wL;
+		}
+		const drawPart = (srcX: number, dstX: number, dstW: number) => {
+			dstW = Math.min(dstW, clipW - dstX);
+			if (dstW > 0) {
+				picture.draw({ x: x + dstX, y: y, sx: srcX, sw: dstW / minXY, w: dstW / minXY });
+			}
+		};
+		drawPart(sx, 0, wL);
+		const tileW = Math.round((sw - capL - capR) * minXY);
+		if (tileW > 0) {
+			for (let dx = wL; dx < w - wR; dx += tileW) {
+				drawPart(sx + capL, dx, Math.min(tileW, w - wR - dx));
+			}
+		}
+		drawPart(sx + sw - wR / minXY, w - wR, wR);
 	}
 }
 

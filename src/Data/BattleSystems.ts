@@ -48,6 +48,8 @@ export type BattleSystemsJSON = {
 	blevelup: PlaySongJSON;
 	bvictory: PlaySongJSON;
 	cmib?: boolean;
+	windowProfileStatisticsWidth?: number;
+	windowProfileHeight?: number;
 };
 
 /**
@@ -81,6 +83,8 @@ export class BattleSystems {
 	public static battleVictory: PlaySong;
 	public static allyDeadWinExp: DynamicValue;
 	public static cameraMoveInBattle: boolean;
+	public static windowProfileStatisticsWidth: number;
+	public static windowProfileHeight: number;
 
 	/** Get the statistic corresponding to the level. */
 	static getLevelStatistic(): Statistic {
@@ -209,5 +213,7 @@ export class BattleSystems {
 		// Options
 		this.allyDeadWinExp = DynamicValue.readOrDefaultSwitch(json.adwe, false);
 		this.cameraMoveInBattle = Utils.valueOrDefault(json.cmib, true);
+		this.windowProfileStatisticsWidth = Utils.valueOrDefault(json.windowProfileStatisticsWidth, 250);
+		this.windowProfileHeight = Utils.valueOrDefault(json.windowProfileHeight, 200);
 	}
 }

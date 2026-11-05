@@ -52,8 +52,6 @@ class Battle extends Map {
 	public static CAMERA_TICK = 0.05 / Constants.BASIC_SQUARE_SIZE;
 	public static CAMERA_OFFSET = 3 / Constants.BASIC_SQUARE_SIZE;
 	public static START_CAMERA_DISTANCE = 10 / Constants.BASIC_SQUARE_SIZE;
-	public static WINDOW_PROFILE_WIDTH = 400;
-	public static WINDOW_PROFILE_HEIGHT = 204;
 	public static COMMANDS_NUMBER = 6;
 	public static WINDOW_COMMANDS_WIDTH = 300;
 	public static WINDOW_COMMANDS_SELECT_X = 50;
