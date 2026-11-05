@@ -62,7 +62,7 @@ class Frame {
 		this.tick += Manager.Stack.elapsedTime;
 		if (this.tick >= duration) {
 			this.value = (this.value + 1) % this.frames;
-			this.tick = 0;
+			this.tick = duration > 0 ? this.tick % duration : 0;
 		}
 		return frame !== this.value;
 	}

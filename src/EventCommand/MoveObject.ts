@@ -1280,6 +1280,9 @@ class MoveObject extends Base {
 	): ORIENTATION | boolean {
 		if (object) {
 			// Change object current state value
+			if (parameters.onOff && !object.currentStateInstance.stopAnimation) {
+				object.frame.tick = 0;
+			}
 			object.currentStateInstance.stopAnimation = parameters.onOff;
 
 			// Permanent change
