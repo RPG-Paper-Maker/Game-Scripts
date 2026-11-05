@@ -27,8 +27,8 @@ class CreateObjectInMap extends Base {
 	public y: Model.DynamicValue;
 	public yPlus: Model.DynamicValue;
 	public z: Model.DynamicValue;
-	public xPixels: Model.DynamicValue;
-	public zPixels: Model.DynamicValue;
+	public xPixels: Model.DynamicValue = null;
+	public zPixels: Model.DynamicValue = null;
 	public isStockID: boolean;
 	public stockID: Model.DynamicValue;
 	public isPermanent: boolean;
@@ -66,8 +66,6 @@ class CreateObjectInMap extends Base {
 			this.stockID = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 		this.isPermanent = Utils.numberToBool(command[iterator.i++] ?? 0);
-		this.xPixels = Model.DynamicValue.createNumber(0);
-		this.zPixels = Model.DynamicValue.createNumber(0);
 		if (command[iterator.i++] === 'pixels') {
 			this.xPixels = Model.DynamicValue.createValueCommand(command, iterator);
 			this.zPixels = Model.DynamicValue.createValueCommand(command, iterator);
@@ -105,9 +103,14 @@ class CreateObjectInMap extends Base {
 					this.y.getValue() as number,
 					this.z.getValue() as number,
 					((this.yPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
+					0,
+					this.xPixels === null
+						? 50
+						: ((this.xPixels.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
+					this.zPixels === null
+						? 50
+						: ((this.zPixels.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
 				).toVector3();
-				currentState.position.x += (this.xPixels.getValue() as number) / Data.Systems.SQUARE_SIZE;
-				currentState.position.z += (this.zPixels.getValue() as number) / Data.Systems.SQUARE_SIZE;
 			} else {
 				MapObject.search(
 					this.objectIDPosition.getValue() as number,

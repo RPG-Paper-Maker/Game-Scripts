@@ -140,6 +140,18 @@ class ChangeVariables extends Base {
 	}
 
 	/**
+	 *  Get the pixel position inside the square, between 0 and SQUARE_SIZE - 1.
+	 *  @param {number} value - The coordinate in squares
+	 *  @returns {number}
+	 */
+	static getPixelInSquare(value: number): number {
+		return Math.min(
+			Math.round((value - Math.floor(value)) * Data.Systems.SQUARE_SIZE),
+			Data.Systems.SQUARE_SIZE - 1,
+		);
+	}
+
+	/**
 	 *  Initialize the current.
 	 *  @returns {Record<string, any>} The current state
 	 */
@@ -210,13 +222,13 @@ class ChangeVariables extends Base {
 									currentState.value = Position.createFromVector3(obj.position).z;
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.X_PIXEL_POSITION:
-									currentState.value = obj.position.x * Data.Systems.SQUARE_SIZE;
+									currentState.value = ChangeVariables.getPixelInSquare(obj.position.x);
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Y_PIXEL_POSITION:
-									currentState.value = obj.position.y * Data.Systems.SQUARE_SIZE;
+									currentState.value = ChangeVariables.getPixelInSquare(obj.position.y);
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Z_PIXEL_POSITION:
-									currentState.value = obj.position.z * Data.Systems.SQUARE_SIZE;
+									currentState.value = ChangeVariables.getPixelInSquare(obj.position.z);
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.ORIENTATION:
 									currentState.value = obj.orientation;
@@ -345,15 +357,16 @@ class ChangeVariables extends Base {
 					});
 					break;
 				case 11: // Terrain at coordinates
-					// Use the same square center and pixel offsets as CreateObjectInMap.
+					// Use the same square and pixel positions as CreateObjectInMap.
 					const position = new Position(
 						this.valueTerrainX.getValue() as number,
 						this.valueTerrainY.getValue() as number,
 						this.valueTerrainZ.getValue() as number,
 						((this.valueTerrainYPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
+						0,
+						((this.valueTerrainXPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
+						((this.valueTerrainZPlus.getValue() as number) * 100) / Data.Systems.SQUARE_SIZE,
 					).toVector3();
-					position.x += (this.valueTerrainXPlus.getValue() as number) / Data.Systems.SQUARE_SIZE;
-					position.z += (this.valueTerrainZPlus.getValue() as number) / Data.Systems.SQUARE_SIZE;
 					currentState.value =
 						this.coordinatesValueType === 0
 							? MapObject.getTerrainAt(position)
