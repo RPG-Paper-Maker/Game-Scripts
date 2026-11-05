@@ -1600,10 +1600,12 @@ class MapObject {
 		if (o !== ORIENTATION.NONE) {
 			this.climbOrientationEye = o;
 		}
-		if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
-			this.orientationEye = orientation;
+		if (this.currentStateInstance) {
+			if (!this.currentStateInstance.directionFix) {
+				this.orientationEye = orientation;
+			}
 			orientation = this.orientation;
-			if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
+			if (this.currentStateInstance.setWithCamera) {
 				this.updateOrientation();
 			}
 			if (this.orientation !== orientation || this.climbOrientationEye !== climbOrientationEye) {
@@ -1694,18 +1696,20 @@ class MapObject {
 		this.updateBBPosition(this.position);
 
 		// Update orientation
-		if (this.currentStateInstance && !this.currentStateInstance.directionFix) {
+		if (this.currentStateInstance) {
 			let orientation = this.orientationEye;
-			x = end.x - start.x;
-			z = end.z - start.z;
-			if (x !== 0) {
-				orientation = x > 0 ? ORIENTATION.EAST : ORIENTATION.WEST;
-			} else if (z !== 0) {
-				orientation = z > 0 ? ORIENTATION.SOUTH : ORIENTATION.NORTH;
+			if (!this.currentStateInstance.directionFix) {
+				x = end.x - start.x;
+				z = end.z - start.z;
+				if (x !== 0) {
+					orientation = x > 0 ? ORIENTATION.EAST : ORIENTATION.WEST;
+				} else if (z !== 0) {
+					orientation = z > 0 ? ORIENTATION.SOUTH : ORIENTATION.NORTH;
+				}
+				this.orientationEye = orientation;
 			}
-			this.orientationEye = orientation;
 			orientation = this.orientation;
-			if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
+			if (this.currentStateInstance.setWithCamera) {
 				this.updateOrientation();
 			}
 			if (this.orientation !== orientation) {
@@ -1972,11 +1976,7 @@ class MapObject {
 				);
 
 				// Update angle
-				if (
-					this.currentStateInstance &&
-					this.currentStateInstance.setWithCamera &&
-					!this.currentStateInstance.directionFix
-				) {
+				if (this.currentStateInstance && this.currentStateInstance.setWithCamera) {
 					this.updateOrientation();
 				}
 			}
