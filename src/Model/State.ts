@@ -56,6 +56,7 @@ export type StateLightJSON = {
 	id?: number;
 	k?: DynamicValueJSON | number;
 	fo?: DynamicValueJSON | number;
+	cs?: DynamicValueJSON | number;
 	c?: DynamicValueJSON | string;
 	gc?: DynamicValueJSON | string;
 	i?: DynamicValueJSON | number;
@@ -77,6 +78,7 @@ export class StateLight {
 	public id: number;
 	public kind: DynamicValue;
 	public followOrientation: DynamicValue;
+	public castShadow: DynamicValue;
 	public color: DynamicValue;
 	public groundColor: DynamicValue;
 	public intensity: DynamicValue;
@@ -97,6 +99,7 @@ export class StateLight {
 		this.kind = StateLight.readNumber(json.k, 0);
 		const kind = typeof json.k === 'number' ? json.k : ((json.k as { v?: number } | undefined)?.v ?? 0);
 		this.followOrientation = StateLight.readNumber(json.fo, kind === 1 ? 1 : 0);
+		this.castShadow = StateLight.readNumber(json.cs, 1);
 		this.color = StateLight.readText(json.c, '#ffffff');
 		this.groundColor = StateLight.readText(json.gc, '#444444');
 		this.intensity = StateLight.readNumber(json.i, 5);
@@ -117,6 +120,7 @@ export class StateLight {
 		const light = new StateLight({ id: this.id });
 		light.kind = this.kind.createCopy();
 		light.followOrientation = this.followOrientation.createCopy();
+		light.castShadow = this.castShadow.createCopy();
 		light.color = this.color.createCopy();
 		light.groundColor = this.groundColor.createCopy();
 		light.intensity = this.intensity.createCopy();

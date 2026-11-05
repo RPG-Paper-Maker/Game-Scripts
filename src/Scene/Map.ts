@@ -1746,9 +1746,49 @@ class Map extends Base {
 	}
 
 	/**
+	 *  Restrict shadow-casting object lights to the closest ones fitting in the
+	 *  GPU texture units budget.
+	 */
+	limitObjectLightShadows() {
+		const shadowBudget = Math.max(0, Manager.GL.renderer.capabilities.maxTextures - 8);
+		const cameraPosition = this.camera.getThreeCamera().getWorldPosition(new THREE.Vector3());
+		const lightPosition = new THREE.Vector3();
+		const objectLights: { light: THREE.Light; distance: number }[] = [];
+		let otherShadows = 0;
+		this.scene.traverse((object) => {
+			if (!(object instanceof THREE.Light)) {
+				return;
+			}
+			if (!object.userData.isObjectLight) {
+				if (object.castShadow) {
+					otherShadows++;
+				}
+				return;
+			}
+			if (!object.userData.castShadow) {
+				object.castShadow = false;
+				return;
+			}
+			objectLights.push({
+				light: object,
+				distance:
+					object instanceof THREE.DirectionalLight
+						? -1
+						: object.getWorldPosition(lightPosition).distanceToSquared(cameraPosition),
+			});
+		});
+		objectLights.sort((a, b) => a.distance - b.distance || a.light.id - b.light.id);
+		const allowed = this.mapProperties.objectLightsShadows ? Math.max(0, shadowBudget - otherShadows) : 0;
+		for (let i = 0; i < objectLights.length; i++) {
+			objectLights[i].light.castShadow = i < allowed;
+		}
+	}
+
+	/**
 	 *  Draw the 3D scene.
 	 */
 	draw3D() {
+		this.limitObjectLightShadows();
 		Manager.GL.renderer.clear();
 		Manager.GL.renderer.render(this.scene, this.camera.getThreeCamera());
 	}
