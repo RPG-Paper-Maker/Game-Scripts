@@ -1085,6 +1085,7 @@ class MapObject {
 			const objCollision = result[1];
 			this.mesh = new THREE.Mesh(geometry, material);
 			this.mesh.userData.mapObjectID = this.id;
+			this.mesh.userData.isCaterpillarFollower = this.isCaterpillarFollower;
 			if (isGltfNoTexture) {
 				this.mesh = null;
 			}

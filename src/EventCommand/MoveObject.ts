@@ -1124,11 +1124,18 @@ class MoveObject extends Base {
 				object.mesh = null;
 			}
 			if (parameters.kind === ELEMENT_MAP_KIND.NONE) {
+				const toRemove: THREE.Object3D[] = [];
 				Scene.Map.current.scene.traverse((child) => {
-					if (child.userData.mapObjectID === object.id) {
-						child.parent?.remove(child);
+					if (
+						child.userData.mapObjectID === object.id &&
+						!!child.userData.isCaterpillarFollower === object.isCaterpillarFollower
+					) {
+						toRemove.push(child);
 					}
 				});
+				for (const child of toRemove) {
+					child.parent?.remove(child);
+				}
 			}
 			if (
 				object.currentStateInstance.graphicID === 0 ||
