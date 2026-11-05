@@ -44,6 +44,12 @@ You also need to have a project to test. You can run this command to automatical
 npm run copy-project
 ```
 
+To copy another project, pass its folder name as an argument:
+
+```bash
+npm run copy-project -- "My-Project"
+```
+
 You can change the project at anytime by reusing this command.
 
 ## How to run
