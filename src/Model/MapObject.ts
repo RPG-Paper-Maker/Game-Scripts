@@ -180,7 +180,8 @@ export class MapObject extends Base {
 			}
 		}
 
-		// Events
+		// Events (only inherited events can be overridden)
+		const inheritedEvents = new Set([...this.events.values()].flat());
 		for (const eventJson of Utils.valueOrDefault(json.events, [])) {
 			const event = new Event(eventJson);
 			let list = this.events.get(event.idEvent);
@@ -188,7 +189,7 @@ export class MapObject extends Base {
 				list = [];
 				this.events.set(event.idEvent, list);
 			}
-			const existing = list.find((e) => e.isEqual(event));
+			const existing = list.find((e) => inheritedEvents.has(e) && e.isEqual(event));
 			if (existing) {
 				existing.addReactions(event.reactions);
 			} else {
