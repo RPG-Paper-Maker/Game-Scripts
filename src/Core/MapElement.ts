@@ -28,6 +28,7 @@ export type MapElementJSON = {
  */
 export interface StructMapElementCollision {
 	b?: number[];
+	bs?: number[][];
 	p?: Position;
 	l?: THREE.Vector3;
 	c?: THREE.Vector3;

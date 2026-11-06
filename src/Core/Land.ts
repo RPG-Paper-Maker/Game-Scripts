@@ -112,23 +112,16 @@ export class Land extends MapElement {
 		// Collision
 		let objCollision: StructMapElementCollision | null = null;
 		if (collision != null) {
-			const rect = collision.rect;
-			const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
-			if (!collision.hasAllDirections() || collision.terrain > 0) {
-				let rectB = rect === null ? [0, 0, 1, 1] : [rect.x, rect.y, rect.width, rect.height];
-				rectB = [a + rectB[0], b + pixelDepth / 2, c + rectB[1], rectB[2], rectB[3], pixelDepth, 0];
+			const boxes = collision.getLandBoxes();
+			if (boxes.length > 0 || collision.terrain > 0) {
+				const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
+				const y = b + pixelDepth / 2;
 				objCollision = {
 					p: position,
 					l: localPosition,
-					b: rectB,
+					b: [a, y, c, 1, 1, pixelDepth, 0],
+					bs: boxes.map((box) => [a + box[0], y, c + box[1], box[2], box[3], pixelDepth, 0]),
 					cs: collision,
-				};
-			} else if (rect !== null) {
-				objCollision = {
-					p: position,
-					l: localPosition,
-					b: [a + rect.x, b + pixelDepth / 2, c + rect.y, rect.width, rect.height, pixelDepth, 0],
-					cs: null,
 				};
 			}
 		}

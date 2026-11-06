@@ -171,6 +171,41 @@ export class CollisionSquare {
 	}
 
 	/**
+	 * Get the land blocking boxes as [x, z, width, depth] offsets from the square center.
+	 * With 0 or 4 enabled directions, the whole area blocks. Otherwise, only the
+	 * faces of the area with a disabled direction block.
+	 */
+	getLandBoxes(): number[][] {
+		const count = Number(this.left) + Number(this.right) + Number(this.top) + Number(this.bot);
+		if (this.rect === null && count === 4) {
+			return [];
+		}
+		const rect = this.rect ?? new Rectangle(0, 0, 1, 1);
+		const x = rect.x - 0.5;
+		const z = rect.y - 0.5;
+		const cx = x + rect.width / 2;
+		const cz = z + rect.height / 2;
+		if (count === 0 || count === 4) {
+			return [[cx, cz, rect.width, rect.height]];
+		}
+		const pixelDepth = 1 / Data.Systems.SQUARE_SIZE;
+		const boxes: number[][] = [];
+		if (!this.left) {
+			boxes.push([x, cz, pixelDepth, rect.height]);
+		}
+		if (!this.right) {
+			boxes.push([x + rect.width, cz, pixelDepth, rect.height]);
+		}
+		if (!this.top) {
+			boxes.push([cx, z, rect.width, pixelDepth]);
+		}
+		if (!this.bot) {
+			boxes.push([cx, z + rect.height, rect.width, pixelDepth]);
+		}
+		return boxes;
+	}
+
+	/**
 	 * Load collision square data from JSON.
 	 */
 	read(json: CollisionSquareJSON) {

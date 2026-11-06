@@ -307,25 +307,18 @@ class MapObject {
 		for (let z = 0; z < texture.height; z++) {
 			for (let x = 0; x < texture.width; x++) {
 				const collision = picture.getCollisionAtPos(texture.x + x, texture.y + z);
+				const b = [x, pixelDepth / 2, z, 1, 1, pixelDepth, 0];
 				if (!collision) {
-					collisions.push({ b: [x, pixelDepth / 2, z, 1, 1, pixelDepth, 0], cs: null });
+					collisions.push({ b, bs: [b], cs: null });
 					continue;
 				}
-				const rect = collision.rect;
-				if (!collision.hasAllDirections() || collision.terrain > 0) {
-					const r = rect === null ? [0, 0, 1, 1] : [rect.x, rect.y, rect.width, rect.height];
-					collisions.push({
-						b: [x + r[0], pixelDepth / 2, z + r[1], r[2], r[3], pixelDepth, 0],
-						cs: collision,
-					});
-				} else if (rect !== null) {
-					collisions.push({
-						b: [x + rect.x, pixelDepth / 2, z + rect.y, rect.width, rect.height, pixelDepth, 0],
-						cs: null,
-					});
-				} else {
-					collisions.push({ b: [x, pixelDepth / 2, z, 1, 1, pixelDepth, 0], cs: collision });
-				}
+				collisions.push({
+					b,
+					bs: collision
+						.getLandBoxes()
+						.map((box) => [x + box[0], pixelDepth / 2, z + box[1], box[2], box[3], pixelDepth, 0]),
+					cs: collision,
+				});
 			}
 		}
 		return collisions;
