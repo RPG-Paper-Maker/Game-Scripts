@@ -34,6 +34,7 @@ export type ReactionJSON = {
 	id?: number;
 	bh: boolean;
 	c: ReactionCommandJSON[];
+	inh?: boolean;
 };
 
 /**
@@ -43,6 +44,7 @@ export class Reaction extends Base {
 	public labels: [DynamicValue, Node][];
 	public idEvent: number;
 	public blockingHero: boolean;
+	public inherit: boolean;
 	public commands: Tree;
 	public event: Event;
 
@@ -64,6 +66,7 @@ export class Reaction extends Base {
 		this.labels = [];
 		this.idEvent = json.id;
 		this.blockingHero = json.bh;
+		this.inherit = json.inh ?? false;
 		this.commands = new Tree('root');
 		this.readChildrenJSON(json.c, this.commands.root);
 	}

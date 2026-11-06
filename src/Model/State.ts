@@ -50,7 +50,25 @@ export type StateJSON = {
 	sz?: DynamicValueJSON;
 	o?: DynamicValueJSON;
 	l?: StateLightJSON[];
+	ov?: string[];
 };
+
+/**
+ * JSON keys of a state grouped by override group.
+ */
+export const STATE_GROUP_KEYS: Record<string, (keyof StateJSON)[]> = {
+	graphics: ['gk', 'gid', 'x', 'y', 'rt'],
+	moving: ['omk', 'ecr', 's', 'f'],
+	options: ['move', 'stop', 'climb', 'dir', 'through', 'cam', 'pix', 'pos'],
+	transform: ['layer', 'cx', 'cz', 'ax', 'ay', 'az', 'sx', 'sy', 'sz', 'o'],
+	lights: ['l'],
+	detection: ['ecd'],
+};
+
+/**
+ * All the state override groups.
+ */
+export const ALL_STATE_GROUPS = Object.keys(STATE_GROUP_KEYS);
 
 export type StateLightJSON = {
 	id?: number;
@@ -218,6 +236,7 @@ export class State extends Base {
 	public scaleZ: DynamicValue;
 	public opacity: DynamicValue;
 	public lights: StateLight[];
+	public json: StateJSON;
 
 	constructor(json?: StateJSON) {
 		super(json);
@@ -258,9 +277,27 @@ export class State extends Base {
 	}
 
 	/**
+	 * Create a state merging inherited JSON with the overridden groups of own JSON.
+	 * @param inherited - The inherited state.
+	 * @param json - The own state JSON.
+	 */
+	static createMerged(inherited: State, json: StateJSON): State {
+		const groups = json.ov ?? ALL_STATE_GROUPS;
+		const merged = { ...inherited.json, id: json.id } as Record<string, unknown>;
+		delete merged.ov;
+		for (const group of groups) {
+			for (const key of STATE_GROUP_KEYS[group] ?? []) {
+				merged[key] = json[key];
+			}
+		}
+		return new State(merged as StateJSON);
+	}
+
+	/**
 	 * Initialize this state from JSON data.
 	 */
 	read(json: StateJSON): void {
+		this.json = json;
 		this.id = json.id;
 		this.graphicID = json.gid;
 		this.graphicKind = json.gk;

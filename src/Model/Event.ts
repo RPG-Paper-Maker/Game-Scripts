@@ -53,10 +53,26 @@ export class Event extends Base {
 	}
 
 	/**
-	 * Add reactions to the event.
+	 * Create a copy of this event with its own reactions map, for inheritance.
+	 */
+	cloneForInheritance(): Event {
+		const event = new Event();
+		event.isSystem = this.isSystem;
+		event.idEvent = this.idEvent;
+		event.parameters = this.parameters;
+		event.reactions = new Map(this.reactions);
+		return event;
+	}
+
+	/**
+	 * Add reactions to the event. Reactions flagged as inherited are skipped
+	 * if a reaction already exists for that state.
 	 */
 	addReactions(reactions: Map<number, Reaction>): void {
 		for (const [idState, reaction] of reactions) {
+			if (reaction.inherit && this.reactions.has(idState)) {
+				continue;
+			}
 			this.reactions.set(idState, reaction);
 		}
 	}

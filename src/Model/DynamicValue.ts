@@ -389,6 +389,49 @@ export class DynamicValue extends Base {
 		return (this.getValue() as number) === (value.getValue() as number);
 	}
 
+	/**
+	 * Check if this value has the same definition as another one, without evaluating it.
+	 */
+	isSameDefinition(value: DynamicValue | undefined): boolean {
+		if (!value) {
+			return false;
+		}
+		if (this === value) {
+			return true;
+		}
+		if (this.kind !== value.kind || JSON.stringify(this.value) !== JSON.stringify(value.value)) {
+			return false;
+		}
+		switch (this.kind) {
+			case DYNAMIC_VALUE_KIND.CUSTOM_STRUCTURE: {
+				const keys = Object.keys(this.customStructure ?? {});
+				const otherKeys = Object.keys(value.customStructure ?? {});
+				return (
+					keys.length === otherKeys.length &&
+					keys.every((key) => this.customStructure[key].isSameDefinition(value.customStructure?.[key]))
+				);
+			}
+			case DYNAMIC_VALUE_KIND.CUSTOM_LIST: {
+				const list = this.customList ?? [];
+				const otherList = value.customList ?? [];
+				return (
+					list.length === otherList.length &&
+					list.every((element, index) => element.isSameDefinition(otherList[index]))
+				);
+			}
+			case DYNAMIC_VALUE_KIND.VECTOR2:
+				return this.x.isSameDefinition(value.x) && this.y.isSameDefinition(value.y);
+			case DYNAMIC_VALUE_KIND.VECTOR3:
+				return (
+					this.x.isSameDefinition(value.x) &&
+					this.y.isSameDefinition(value.y) &&
+					this.z.isSameDefinition(value.z)
+				);
+			default:
+				return true;
+		}
+	}
+
 	/** Create a copy of the value. */
 	createCopy(): DynamicValue {
 		return DynamicValue.create(this.kind, this.value);

@@ -64,8 +64,8 @@ export class Parameter extends Base {
 	/**
 	 * Check if the parameter is equal to another one.
 	 */
-	isEqual(parameter: Parameter): boolean {
-		return this.value === parameter.value && this.kind === parameter.kind;
+	isEqual(parameter: Parameter | undefined): boolean {
+		return !!parameter && this.value.isSameDefinition(parameter.value);
 	}
 
 	/**

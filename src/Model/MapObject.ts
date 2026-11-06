@@ -25,6 +25,7 @@ export type MapObjectJSON = {
 	id?: number;
 	name?: string;
 	ooepf?: boolean;
+	ooepfOv?: boolean;
 	hId?: number;
 	states?: StateJSON[];
 	p?: PropertyJSON[];
@@ -138,10 +139,10 @@ export class MapObject extends Base {
 		this.states.push(...Utils.valueOrDefault(inheritedObject.states, []));
 		this.properties.push(...Utils.valueOrDefault(inheritedObject.properties, []));
 
-		// Events (clone arrays to avoid mutating the inherited object)
+		// Events (clone events to avoid mutating the inherited object)
 		this.events = new Map();
 		for (const [idEvent, eventsList] of inheritedObject.events.entries()) {
-			this.events.set(Number(idEvent), [...eventsList]);
+			this.events.set(Number(idEvent), eventsList.map((event) => event.cloneForInheritance()));
 		}
 	}
 
@@ -154,15 +155,17 @@ export class MapObject extends Base {
 		this.isEventFrame = json.ooepf;
 		this.addDefaultValues();
 		this.addInheritanceModel(json.hId);
+		if (json.ooepfOv) {
+			this.isEventFrame = json.ooepf;
+		}
 
 		// States
 		for (const stateJson of Utils.valueOrDefault(json.states, [])) {
-			const state = new State(stateJson);
-			const index = this.states.findIndex((s) => s.id === state.id);
+			const index = this.states.findIndex((s) => s.id === stateJson.id);
 			if (index === -1) {
-				this.states.push(state);
+				this.states.push(new State(stateJson));
 			} else {
-				this.states[index] = state;
+				this.states[index] = State.createMerged(this.states[index], stateJson);
 			}
 		}
 
