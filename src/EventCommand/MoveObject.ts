@@ -64,8 +64,10 @@ class MoveObject extends Base {
 		while (iterator.i < l) {
 			this.kind = command[iterator.i++];
 			if (this.kind >= COMMAND_MOVE_KIND.MOVE_NORTH && this.kind <= COMMAND_MOVE_KIND.MOVE_BACK) {
+				const squareStep = command[iterator.i++];
 				this.parameters.push({
-					square: command[iterator.i++] === 0,
+					square: squareStep === 0,
+					pixels: squareStep === 2 ? Model.DynamicValue.createValueCommand(command, iterator) : null,
 				});
 				switch (this.kind) {
 					case COMMAND_MOVE_KIND.MOVE_NORTH:
@@ -381,7 +383,9 @@ class MoveObject extends Base {
 							peakYPlus: parameters.peakYPlus.getValue(),
 							time: parameters.time.getValue(),
 						}
-					: parameters,
+					: parameters.pixels
+						? { ...parameters, pixels: parameters.pixels.getValue() }
+						: parameters,
 			),
 			index: 0,
 			distance: 0,
@@ -418,13 +422,25 @@ class MoveObject extends Base {
 	 *  Function to move north.
 	 *  @param {Record<string, any>} - currentState The current state of the event
 	 *  @param {MapObject} object - The object to move
-	 *  @param {bool} square - Indicate if it is a square move
+	 *  @param {Record<string, any>} parameters - The parameters (square or pixels move)
 	 *  @param {Orientation} orientation - The orientation where to move
 	 *  @returns {boolean}
 	 */
-	move(currentState: Record<string, any>, object: MapObject, square: boolean, orientation: ORIENTATION): boolean {
+	move(
+		currentState: Record<string, any>,
+		object: MapObject,
+		parameters: Record<string, any>,
+		orientation: ORIENTATION,
+	): boolean {
 		if (object.moveFrequencyTick > 0) {
 			return false;
+		}
+		const square: boolean = parameters.square;
+		const isPixels = parameters.pixels !== null && parameters.pixels !== undefined;
+		const target = isPixels ? (parameters.pixels as number) / Data.Systems.SQUARE_SIZE : 1;
+		const isDistance = square || isPixels;
+		if (isPixels && target <= 0) {
+			return true;
 		}
 		if (MoveObject.lockedInputs) {
 			orientation = this.getLockedOrientation(orientation);
@@ -454,16 +470,16 @@ class MoveObject extends Base {
 		} else if (object.previousMoveCommand !== this) {
 			object.otherMoveCommand = this;
 		}
-		const distances = object.move(orientation, 1 - currentState.distance, angle, this.isCameraOrientation);
+		const distances = object.move(orientation, target - currentState.distance, angle, this.isCameraOrientation);
 		currentState.distance += distances[0];
 		currentState.normalDistance += distances[1];
 		if (
-			!square ||
-			(square && currentState.normalDistance >= 1) ||
-			(square && currentState.distance >= 1) ||
+			!isDistance ||
+			currentState.normalDistance >= target ||
+			currentState.distance >= target ||
 			distances[0] === 0
 		) {
-			if (distances[0] === 0 && square && !this.isIgnore) {
+			if (distances[0] === 0 && isDistance && !this.isIgnore) {
 				currentState.position = null;
 				object.moving = true;
 				return false;
@@ -509,7 +525,7 @@ class MoveObject extends Base {
 		object: MapObject,
 		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
-		return object ? this.move(currentState, object, parameters.square, ORIENTATION.NORTH) : ORIENTATION.NORTH;
+		return object ? this.move(currentState, object, parameters, ORIENTATION.NORTH) : ORIENTATION.NORTH;
 	}
 
 	/**
@@ -525,7 +541,7 @@ class MoveObject extends Base {
 		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			return this.move(currentState, object, parameters.square, ORIENTATION.SOUTH);
+			return this.move(currentState, object, parameters, ORIENTATION.SOUTH);
 		}
 		return ORIENTATION.SOUTH;
 	}
@@ -543,7 +559,7 @@ class MoveObject extends Base {
 		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			return this.move(currentState, object, parameters.square, ORIENTATION.WEST);
+			return this.move(currentState, object, parameters, ORIENTATION.WEST);
 		}
 		return ORIENTATION.WEST;
 	}
@@ -561,7 +577,7 @@ class MoveObject extends Base {
 		parameters: Record<string, any>,
 	): ORIENTATION | boolean {
 		if (object) {
-			return this.move(currentState, object, parameters.square, ORIENTATION.EAST);
+			return this.move(currentState, object, parameters, ORIENTATION.EAST);
 		}
 		return ORIENTATION.EAST;
 	}
@@ -729,7 +745,7 @@ class MoveObject extends Base {
 				case ORIENTATION.NORTH_EAST:
 					return this.moveNorthEast(currentState, object, parameters);
 				default:
-					return this.move(currentState, object, parameters.square, orientation);
+					return this.move(currentState, object, parameters, orientation);
 			}
 		}
 		return ORIENTATION.NONE;
@@ -751,7 +767,7 @@ class MoveObject extends Base {
 			const orientation =
 				currentState.moveHeroOrientation === null ? object.orientationEye : currentState.moveHeroOrientation;
 			currentState.moveHeroOrientation = orientation;
-			return this.move(currentState, object, parameters.square, currentState.moveHeroOrientation);
+			return this.move(currentState, object, parameters, currentState.moveHeroOrientation);
 		}
 		return ORIENTATION.NONE;
 	}
@@ -774,7 +790,7 @@ class MoveObject extends Base {
 					? EventCommand.MoveObject.oppositeOrientation(object.orientationEye)
 					: currentState.moveHeroOrientation;
 			currentState.moveHeroOrientation = orientation;
-			return this.move(currentState, object, parameters.square, currentState.moveHeroOrientation);
+			return this.move(currentState, object, parameters, currentState.moveHeroOrientation);
 		}
 		return ORIENTATION.NONE;
 	}
