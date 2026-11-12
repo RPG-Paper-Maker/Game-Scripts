@@ -63,7 +63,22 @@ class BattleEnemyAttack {
 			this.battle.user = this.battle.battlers[CHARACTER_KIND.MONSTER][i];
 			i++;
 		} while (!this.battle.isDefined(CHARACTER_KIND.MONSTER, i - 1));
+		const user = this.battle.user;
+		this.battle.runTroopReactions(this.battle.getBattlerTurnFrequencies(user, true), () => {
+			if (!this.battle.isDefined(CHARACTER_KIND.MONSTER, this.battle.battlers[CHARACTER_KIND.MONSTER].indexOf(user))) {
+				this.initialize();
+				return;
+			}
+			this.battle.user = user;
+			this.battle.battlerTurnStartedUser = user;
+			this.start();
+		});
+	}
 
+	/**
+	 *  Define the action and targets of the enemy, and start waiting before attacking.
+	 */
+	start() {
 		// Define action
 		this.defineAction();
 

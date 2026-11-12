@@ -10,7 +10,7 @@
 */
 
 import { Model, Scene } from '..';
-import { BATTLE_STEP, TROOP_REACTION_FREQUENCY_KIND } from '../Common';
+import { BATTLE_STEP } from '../Common';
 import { ReactionInterpreter } from '../Core';
 
 // -------------------------------------------------------
@@ -35,11 +35,12 @@ class BattleEndTurn {
 	public initialize() {
 		// Each end turn troop reaction
 		if (this.step === 0) {
+			const frequencies = this.battle.getPhaseFrequencies(false);
 			const reactions = this.battle.troop.reactions;
 			let reaction: Model.TroopReaction, l: number;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
-				if (reaction.frequency === TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_END) {
+				if (frequencies.includes(reaction.frequency)) {
 					// Check conditions
 					if (!reaction.conditions.isValid()) {
 						continue;

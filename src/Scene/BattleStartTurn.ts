@@ -17,7 +17,6 @@ import {
 	Mathf,
 	STATUS_RESTRICTIONS_KIND,
 	TARGET_KIND,
-	TROOP_REACTION_FREQUENCY_KIND,
 } from '../Common';
 import { Animation, Battler, ReactionInterpreter } from '../Core';
 import { Status } from '../Core/Status';
@@ -39,6 +38,7 @@ class BattleStartTurn {
 	public statusStill: [Battler, Status[]][] = [];
 	public indexTroopReaction: number = 0;
 	public interpreter: ReactionInterpreter = null;
+	public skippedBattlers: Battler[] = [];
 
 	constructor(battle: Scene.Battle) {
 		this.battle = battle;
@@ -54,11 +54,12 @@ class BattleStartTurn {
 		// One time troop reaction or each begin turn
 		let i: number, l: number, battler: Battler;
 		if (this.step === 0) {
+			const frequencies = this.battle.getPhaseFrequencies(true);
 			const reactions = this.battle.troop.reactions;
 			let reaction: Model.TroopReaction;
 			for (l = reactions.length; this.indexTroopReaction < l; this.indexTroopReaction++) {
 				reaction = reactions[this.indexTroopReaction];
-				if (reaction.frequency === TROOP_REACTION_FREQUENCY_KIND.EACH_TURN_BEGIN) {
+				if (frequencies.includes(reaction.frequency)) {
 					// Check conditions
 					if (!reaction.conditions.isValid()) {
 						continue;
@@ -109,6 +110,15 @@ class BattleStartTurn {
 				battler = this.battle.battlers[this.battle.attackingGroup][i];
 				if (battler.active) {
 					if (battler.containsRestriction(STATUS_RESTRICTIONS_KIND.CANT_DO_ANYTHING)) {
+						if (!this.skippedBattlers.includes(battler) && !battler.player.isDead() && !battler.hidden) {
+							this.skippedBattlers.push(battler);
+							this.battle.runTroopReactions(this.battle.getBattlerTurnFrequencies(battler, true), () =>
+								this.battle.runTroopReactions(this.battle.getBattlerTurnFrequencies(battler, false), () =>
+									this.initialize(),
+								),
+							);
+							return;
+						}
 						continue;
 					}
 					if (battler.containsRestriction(STATUS_RESTRICTIONS_KIND.ATTACK_RANDOM_ALLY)) {
@@ -133,6 +143,7 @@ class BattleStartTurn {
 		this.active = false;
 		this.step = 0;
 		this.indexTroopReaction = 0;
+		this.skippedBattlers = [];
 		if (this.battle.attackingGroup === CHARACTER_KIND.HERO) {
 			this.battle.changeStep(BATTLE_STEP.SELECTION); // Attack of heroes
 		} else {
