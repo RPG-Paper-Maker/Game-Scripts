@@ -140,14 +140,22 @@ class ChangeVariables extends Base {
 	}
 
 	/**
+	 *  Get the square position.
+	 *  @param {number} value - The coordinate in squares
+	 *  @returns {number}
+	 */
+	static getSquare(value: number): number {
+		return Math.floor(Math.round(value * Data.Systems.SQUARE_SIZE) / Data.Systems.SQUARE_SIZE);
+	}
+
+	/**
 	 *  Get the pixel position inside the square, between 0 and SQUARE_SIZE - 1.
 	 *  @param {number} value - The coordinate in squares
 	 *  @returns {number}
 	 */
 	static getPixelInSquare(value: number): number {
-		return Math.min(
-			Math.round((value - Math.floor(value)) * Data.Systems.SQUARE_SIZE),
-			Data.Systems.SQUARE_SIZE - 1,
+		return (
+			Math.round(value * Data.Systems.SQUARE_SIZE) - ChangeVariables.getSquare(value) * Data.Systems.SQUARE_SIZE
 		);
 	}
 
@@ -213,13 +221,13 @@ class ChangeVariables extends Base {
 							}
 							switch (this.valueMapObjectChar) {
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.X_SQUARE_POSITION:
-									currentState.value = Position.createFromVector3(obj.position).x;
+									currentState.value = ChangeVariables.getSquare(obj.position.x);
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Y_SQUARE_POSITION:
-									currentState.value = Position.createFromVector3(obj.position).y;
+									currentState.value = ChangeVariables.getSquare(obj.position.y);
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.Z_SQUARE_POSITION:
-									currentState.value = Position.createFromVector3(obj.position).z;
+									currentState.value = ChangeVariables.getSquare(obj.position.z);
 									break;
 								case VARIABLE_MAP_OBJECT_CHARACTERISTIC_KIND.X_PIXEL_POSITION:
 									currentState.value = ChangeVariables.getPixelInSquare(obj.position.x);
