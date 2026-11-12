@@ -81,10 +81,8 @@ export class Songs {
 			}
 		};
 		add(Data.TitlescreenGameover.titleMusic, SONG_KIND.MUSIC);
-		for (const command of Data.TitlescreenGameover.titleCommands) {
-			if (command.kind === TITLE_COMMAND_KIND.CREDITS) {
-				add(command.creditsMusic, SONG_KIND.MUSIC);
-			}
+		if (Data.TitlescreenGameover.titleCommands.some((command) => command.kind === TITLE_COMMAND_KIND.CREDITS)) {
+			add(Data.TitlescreenGameover.credits.music, SONG_KIND.MUSIC);
 		}
 		add(Data.Systems.soundCursor, SONG_KIND.SOUND);
 		add(Data.Systems.soundConfirmation, SONG_KIND.SOUND);

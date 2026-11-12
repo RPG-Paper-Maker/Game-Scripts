@@ -26,6 +26,7 @@ export * from './CommonEvent';
 export * from './CommonReaction';
 export * from './CommonSkillItem';
 export * from './Cost';
+export * from './Credits';
 export * from './Currency';
 export * from './Detection';
 export * from './DynamicValue';

@@ -99,15 +99,15 @@ export class Pictures {
 		if (Data.TitlescreenGameover.isTitleBackgroundImage) {
 			selected.set(PICTURE_KIND.TITLE_SCREEN, new Set([Data.TitlescreenGameover.titleBackgroundImageID]));
 		}
-		for (const command of Data.TitlescreenGameover.titleCommands) {
-			if (command.kind !== TITLE_COMMAND_KIND.CREDITS) continue;
-			if (command.creditsBackgroundImageID >= 0) {
+		const credits = Data.TitlescreenGameover.credits;
+		if (Data.TitlescreenGameover.titleCommands.some((command) => command.kind === TITLE_COMMAND_KIND.CREDITS)) {
+			if (credits.backgroundImageID >= 0) {
 				if (!selected.has(PICTURE_KIND.TITLE_SCREEN)) {
 					selected.set(PICTURE_KIND.TITLE_SCREEN, new Set());
 				}
-				selected.get(PICTURE_KIND.TITLE_SCREEN).add(command.creditsBackgroundImageID);
+				selected.get(PICTURE_KIND.TITLE_SCREEN).add(credits.backgroundImageID);
 			}
-			for (const text of Object.values(command.creditsTexts)) {
+			for (const text of Object.values(credits.texts)) {
 				for (const match of text.matchAll(/\[ico=\s*(\d+)(?:;|\])/g)) {
 					if (!selected.has(PICTURE_KIND.ICONS)) {
 						selected.set(PICTURE_KIND.ICONS, new Set());

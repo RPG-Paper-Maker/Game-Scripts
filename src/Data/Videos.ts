@@ -57,10 +57,12 @@ export class Videos {
 		if (Data.TitlescreenGameover.isTitleBackgroundVideo) {
 			selected.add(Data.TitlescreenGameover.titleBackgroundVideoID);
 		}
-		for (const command of Data.TitlescreenGameover.titleCommands) {
-			if (command.kind === TITLE_COMMAND_KIND.CREDITS && command.creditsBackgroundVideoID >= 0) {
-				selected.add(command.creditsBackgroundVideoID);
-			}
+		const credits = Data.TitlescreenGameover.credits;
+		if (
+			credits.backgroundVideoID >= 0 &&
+			Data.TitlescreenGameover.titleCommands.some((command) => command.kind === TITLE_COMMAND_KIND.CREDITS)
+		) {
+			selected.add(credits.backgroundVideoID);
 		}
 		await this.readSelected(selected);
 	}

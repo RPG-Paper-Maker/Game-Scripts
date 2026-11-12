@@ -11,7 +11,16 @@
 
 import { ALIGN, Paths, Platform, SONG_KIND, TITLE_SETTING_KIND, Utils } from '../Common';
 import { Graphic, Manager, Scene } from '../index';
-import { GameOverCommand, GameOverCommandJSON, PlaySong, PlaySongJSON, TitleCommand, TitleCommandJSON } from '../Model';
+import {
+	Credits,
+	CreditsJSON,
+	GameOverCommand,
+	GameOverCommandJSON,
+	PlaySong,
+	PlaySongJSON,
+	TitleCommand,
+	TitleCommandJSON,
+} from '../Model';
 
 /**
  * JSON structure for title screen and game over.
@@ -28,6 +37,7 @@ export type TitlescreenGameoverJSON = {
 	ts: { id?: number; checked?: boolean }[];
 	tcwx?: number;
 	tcwy?: number;
+	cr?: CreditsJSON;
 	isGameOverBackgroundImage: boolean;
 	isGameOverBackgroundVideo: boolean;
 	gameOverBackgroundImage: number;
@@ -53,6 +63,7 @@ export class TitlescreenGameover {
 	public static titleSettings: number[];
 	public static titleCommandsWindowX: number;
 	public static titleCommandsWindowY: number;
+	public static credits: Credits;
 	public static isGameOverBackgroundImage: boolean;
 	public static isGameOverBackgroundVideo: boolean;
 	public static gameOverBackgroundImageID: number;
@@ -143,6 +154,7 @@ export class TitlescreenGameover {
 		}
 		this.titleCommandsWindowX = Utils.valueOrDefault(json.tcwx, 440);
 		this.titleCommandsWindowY = Utils.valueOrDefault(json.tcwy, 450);
+		this.credits = new Credits(json.cr ?? {});
 
 		// Game over
 		this.isGameOverBackgroundImage = Utils.valueOrDefault(json.isGameOverBackgroundImage, true);

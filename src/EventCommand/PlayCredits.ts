@@ -9,20 +9,14 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { TITLE_COMMAND_KIND } from '../Common';
 import { MapObject } from '../Core';
 import { Data, Manager, Scene } from '../index';
 import { Base } from './Base';
 
-/** Plays the credits configured in the title screen choices. */
+/** Plays the credits configured in the title screen. */
 class PlayCredits extends Base {
 	update(_currentState: Record<string, unknown>, _object: MapObject, _state: number): number {
-		const command = Data.TitlescreenGameover.titleCommands.find(
-			(choice) => choice.kind === TITLE_COMMAND_KIND.CREDITS,
-		);
-		if (command) {
-			Manager.Stack.push(new Scene.TitleCredits(command));
-		}
+		Manager.Stack.push(new Scene.TitleCredits(Data.TitlescreenGameover.credits));
 		return 1;
 	}
 }
