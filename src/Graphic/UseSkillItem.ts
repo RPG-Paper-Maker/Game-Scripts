@@ -9,7 +9,7 @@
         http://rpg-paper-maker.com/index.php/eula.
 */
 
-import { Mathf, ScreenResolution } from '../Common';
+import { Mathf, ScreenResolution, TARGET_KIND } from '../Common';
 import { Battler, Game, Item, Player } from '../Core';
 import { Data, Graphic, Manager, Model, Scene } from '../index';
 import { Base } from './Base';
@@ -45,6 +45,21 @@ class UseSkillItem extends Base {
 	 */
 	setSkillItem(skillItem: Model.CommonSkillItem) {
 		this.skillItem = skillItem;
+	}
+
+	/**
+	 *  Check if a player can be selected as target.
+	 *  @param {Core.Player} target
+	 *  @returns {boolean}
+	 */
+	isTargetPossible(target: Player): boolean {
+		if (this.skillItem.targetKind === TARGET_KIND.USER) {
+			const user = Scene.Map.current.user;
+			if (user && user.player !== target) {
+				return false;
+			}
+		}
+		return this.skillItem.isPossible(target);
 	}
 
 	/**
@@ -98,7 +113,7 @@ class UseSkillItem extends Base {
 			do {
 				this.indexArrow = Mathf.mod(this.indexArrow + index, this.graphicCharacters.length);
 				target = this.graphicCharacters[this.indexArrow].player;
-			} while (!this.skillItem.isPossible(target));
+			} while (!this.isTargetPossible(target));
 			Scene.Map.current.targets = [new Battler(target)];
 			Manager.Stack.requestPaintHUD = true;
 			Data.Systems.soundCursor.playSound();
@@ -194,7 +209,7 @@ class UseSkillItem extends Base {
 			}
 			if (changed && i !== this.indexArrow) {
 				const target = this.graphicCharacters[i].player;
-				if (this.skillItem.isPossible(target)) {
+				if (this.isTargetPossible(target)) {
 					this.indexArrow = i;
 					Scene.Map.current.targets = [new Battler(target)];
 					Manager.Stack.requestPaintHUD = true;

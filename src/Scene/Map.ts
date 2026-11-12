@@ -259,7 +259,7 @@ class Map extends Base {
 	 */
 	getPossibleTargets(targetKind: TARGET_KIND): Player[] {
 		if (targetKind === TARGET_KIND.USER) {
-			return this.user ? [this.user.player] : [];
+			return this.user ? [this.user.player] : Game.current.teamHeroes;
 		} else if (targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) {
 			return Game.current.teamHeroes;
 		} else {

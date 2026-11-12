@@ -138,7 +138,9 @@ class MenuSkills extends Base {
 			const availableKind = skillSystem.availableKind;
 			const possible =
 				skillSystem.isPossible() &&
-				(targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) &&
+				(targetKind === TARGET_KIND.USER ||
+					targetKind === TARGET_KIND.ALLY ||
+					targetKind === TARGET_KIND.ALL_ALLIES) &&
 				(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU);
 			list.push(new Graphic.Skill(skills[i], possible));
 		}
@@ -197,7 +199,9 @@ class MenuSkills extends Base {
 					const availableKind = graphic.system.availableKind;
 					if (
 						graphic.system.isPossible() &&
-						(targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) &&
+						(targetKind === TARGET_KIND.USER ||
+							targetKind === TARGET_KIND.ALLY ||
+							targetKind === TARGET_KIND.ALL_ALLIES) &&
 						(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU)
 					) {
 						Data.Systems.soundConfirmation.playSound();

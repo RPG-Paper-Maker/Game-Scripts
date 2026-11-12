@@ -170,6 +170,7 @@ class MenuInventory extends Base {
 							(ownedItem.system.availableKind === AVAILABLE_KIND.ALWAYS ||
 								ownedItem.system.availableKind === AVAILABLE_KIND.MAIN_MENU) &&
 							(ownedItem.system.targetKind === TARGET_KIND.NONE ||
+								ownedItem.system.targetKind === TARGET_KIND.USER ||
 								ownedItem.system.targetKind === TARGET_KIND.ALLY ||
 								ownedItem.system.targetKind === TARGET_KIND.ALL_ALLIES),
 					}),
@@ -251,7 +252,11 @@ class MenuInventory extends Base {
 						graphic.item.system.isPossible() &&
 						(availableKind === AVAILABLE_KIND.ALWAYS || availableKind === AVAILABLE_KIND.MAIN_MENU)
 					) {
-						if (targetKind === TARGET_KIND.ALLY || targetKind === TARGET_KIND.ALL_ALLIES) {
+						if (
+							targetKind === TARGET_KIND.USER ||
+							targetKind === TARGET_KIND.ALLY ||
+							targetKind === TARGET_KIND.ALL_ALLIES
+						) {
 							Data.Systems.soundConfirmation.playSound();
 							this.substep = 1;
 							graphicUse.setSkillItem(graphic.item.system);
@@ -277,7 +282,12 @@ class MenuInventory extends Base {
 				break;
 			case 1:
 				if (Scene.MenuBase.checkActionMenu(isKey, options)) {
-					if (graphic.item.system.isPossible() && graphic.item.system.use()) {
+					if (graphic.item.system.targetKind === TARGET_KIND.USER) {
+						Scene.Map.current.user = Scene.Map.current.targets[0];
+					}
+					const used = graphic.item.system.isPossible() && graphic.item.system.use();
+					Scene.Map.current.user = null;
+					if (used) {
 						Data.Systems.soundConfirmation.playSound();
 						this.useItem();
 					} else {
