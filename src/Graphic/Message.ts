@@ -47,6 +47,7 @@ class Message extends Graphic.Base {
 	public heights: number[];
 	public aligns: ALIGN[];
 	public totalWidths: number[];
+	public visibleCharacters: number = -1;
 
 	constructor(message: string, facesetID: number, facesetIndexX: number, facesetIndexY: number) {
 		super();
@@ -458,6 +459,30 @@ class Message extends Graphic.Base {
 	}
 
 	/**
+	 *  Get the number of characters that can be revealed.
+	 *  @returns {number}
+	 */
+	getCharactersCount(): number {
+		let count = 0;
+		for (const graphic of this.graphics) {
+			if (graphic instanceof Graphic.Text) {
+				count += graphic.getCharactersCount();
+			} else if (graphic !== null) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	/**
+	 *  Check if all the characters are revealed.
+	 *  @returns {boolean}
+	 */
+	isFullyRevealed(): boolean {
+		return this.visibleCharacters < 0 || this.visibleCharacters >= this.getCharactersCount();
+	}
+
+	/**
 	 *  Drawing the faceset behind.
 	 *  @param {number} x - The x position to draw graphic
 	 *  @param {number} y - The y position to draw graphic
@@ -528,8 +553,12 @@ class Message extends Graphic.Base {
 		// Draw each graphics
 		let offsetX = 0;
 		let graphic: Bitmap;
+		let remaining = this.visibleCharacters;
 		for (let i = 0, j = 0, l = this.graphics.length; i < l; i++) {
 			graphic = this.graphics[i];
+			if (this.visibleCharacters >= 0 && remaining <= 0) {
+				break;
+			}
 
 			// New line
 			if (graphic === null) {
@@ -558,6 +587,7 @@ class Message extends Graphic.Base {
 						offsetY += this.heights[c] * 2;
 						offsetX = 0;
 					}
+					remaining--;
 					graphic.draw({
 						x: newX + offsetX,
 						y: isChoice
@@ -571,6 +601,8 @@ class Message extends Graphic.Base {
 					offsetX += this.positions[i];
 				} else {
 					const textGraphic = graphic as Graphic.Text;
+					textGraphic.visibleCharacters = this.visibleCharacters < 0 ? -1 : remaining;
+					remaining -= textGraphic.getCharactersCount();
 					const availableW = textAreaWidth > 0 ? textAreaWidth - offsetX : 0;
 					textGraphic.draw(
 						newX + offsetX,

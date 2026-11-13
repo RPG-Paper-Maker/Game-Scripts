@@ -42,6 +42,10 @@ class SetDialogBoxOptions extends Base {
 	public iY: Model.DynamicValue;
 	public iW: Model.DynamicValue;
 	public iH: Model.DynamicValue;
+	public tTypewriter: boolean;
+	public tTypewriterInterval: Model.DynamicValue;
+	public tTypewriterSound: Model.DynamicValue;
+	public tTypewriterVolume: Model.DynamicValue;
 	public v_windowSkin: Model.WindowSkin;
 	public v_x: number;
 	public v_y: number;
@@ -64,6 +68,10 @@ class SetDialogBoxOptions extends Base {
 	public v_iY: number;
 	public v_iW: number;
 	public v_iH: number;
+	public v_tTypewriter: boolean;
+	public v_tTypewriterInterval: number;
+	public v_tTypewriterSound: number;
+	public v_tTypewriterVolume: number;
 
 	constructor(command: any[]) {
 		super();
@@ -136,6 +144,19 @@ class SetDialogBoxOptions extends Base {
 		}
 		if (Utils.numberToBool(command[iterator.i++])) {
 			this.iH = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.tTypewriter = !Utils.numberToBool(command[iterator.i++]);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.tTypewriterInterval = Model.DynamicValue.createValueCommand(command, iterator);
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.tTypewriterSound = Model.DynamicValue.createValueCommand(command, iterator);
+			iterator.i++;
+		}
+		if (Utils.numberToBool(command[iterator.i++])) {
+			this.tTypewriterVolume = Model.DynamicValue.createValueCommand(command, iterator);
 		}
 	}
 
@@ -214,6 +235,18 @@ class SetDialogBoxOptions extends Base {
 		}
 		if (this.iH !== undefined) {
 			Data.Systems.dbOptions.v_iH = this.iH.getValue() as number;
+		}
+		if (this.tTypewriter !== undefined) {
+			Data.Systems.dbOptions.v_tTypewriter = this.tTypewriter;
+		}
+		if (this.tTypewriterInterval !== undefined) {
+			Data.Systems.dbOptions.v_tTypewriterInterval = this.tTypewriterInterval.getValue() as number;
+		}
+		if (this.tTypewriterSound !== undefined) {
+			Data.Systems.dbOptions.v_tTypewriterSound = this.tTypewriterSound.getValue() as number;
+		}
+		if (this.tTypewriterVolume !== undefined) {
+			Data.Systems.dbOptions.v_tTypewriterVolume = this.tTypewriterVolume.getValue() as number;
 		}
 		return 1;
 	}

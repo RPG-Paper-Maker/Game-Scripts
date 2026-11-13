@@ -20,6 +20,10 @@ import { Base } from './Base';
  *  @param {any[]} command - Direct JSON command to parse
  */
 class ShowText extends Base {
+	public static readonly DEFAULT_TYPEWRITER_INTERVAL = 30;
+	public static readonly DEFAULT_TYPEWRITER_VOLUME = 100;
+	public static readonly TYPEWRITER_SOUND_MIN_INTERVAL = 50;
+
 	public interlocutor: Model.DynamicValue;
 	public facesetID: number;
 	public facesetIndexX: number;
@@ -70,7 +74,13 @@ class ShowText extends Base {
 			Scene.MenuBase.checkActionMenu(isKey, options) &&
 			(isKey || (!isKey && this.windowMain.isInside(options.x, options.y)))
 		) {
-			currentState.clicked = true;
+			const message = <Graphic.Message>this.windowMain.content;
+			if (message.isFullyRevealed()) {
+				currentState.clicked = true;
+			} else {
+				message.visibleCharacters = -1;
+				Manager.Stack.requestPaintHUD = true;
+			}
 		}
 	}
 
@@ -96,12 +106,61 @@ class ShowText extends Base {
 		const nameTagText = <Graphic.Text>this.windowInterlocutor.content;
 		nameTagText.setFontSize(Utils.valueOrDefault(Data.Systems.dbOptions.v_tSize, Constants.DEFAULT_FONT_SIZE));
 		nameTagText.setText(this.interlocutor.getValue() as string);
+		const message = <Graphic.Message>this.windowMain.content;
+		message.visibleCharacters = Data.Systems.dbOptions.v_tTypewriter && message.getCharactersCount() > 0 ? 0 : -1;
 		return {
 			clicked: false,
 			frame: 0,
 			frameTick: 0,
 			frameDuration: 150,
+			typewriterTick: 0,
+			typewriterSoundTick: ShowText.TYPEWRITER_SOUND_MIN_INTERVAL,
 		};
+	}
+
+	/**
+	 *  Reveal the message characters progressively.
+	 *  @param {Record<string, any>} - currentState The current state of the event
+	 */
+	updateTypewriter(currentState: Record<string, any>) {
+		const message = <Graphic.Message>this.windowMain.content;
+		if (message.isFullyRevealed()) {
+			message.visibleCharacters = -1;
+			return;
+		}
+		const interval = Math.max(
+			0,
+			Utils.valueOrDefault(Data.Systems.dbOptions.v_tTypewriterInterval, ShowText.DEFAULT_TYPEWRITER_INTERVAL),
+		);
+		currentState.typewriterTick += Manager.Stack.elapsedTime;
+		currentState.typewriterSoundTick += Manager.Stack.elapsedTime;
+		const previous = message.visibleCharacters;
+		if (interval === 0) {
+			message.visibleCharacters = -1;
+		} else {
+			const count = Math.floor(currentState.typewriterTick / interval);
+			if (count > 0) {
+				message.visibleCharacters += count;
+				currentState.typewriterTick -= count * interval;
+			}
+		}
+		if (message.visibleCharacters !== previous) {
+			Manager.Stack.requestPaintHUD = true;
+			if (currentState.typewriterSoundTick >= ShowText.TYPEWRITER_SOUND_MIN_INTERVAL) {
+				currentState.typewriterSoundTick = 0;
+				const soundID = Utils.valueOrDefault(Data.Systems.dbOptions.v_tTypewriterSound, -1);
+				if (soundID !== -1) {
+					const volume = Utils.valueOrDefault(
+						Data.Systems.dbOptions.v_tTypewriterVolume,
+						ShowText.DEFAULT_TYPEWRITER_VOLUME,
+					);
+					Manager.Songs.playSound(soundID, Math.max(0, Math.min(100, volume)) / 100);
+				}
+			}
+		}
+		if (message.isFullyRevealed()) {
+			message.visibleCharacters = -1;
+		}
 	}
 
 	/**
@@ -115,6 +174,7 @@ class ShowText extends Base {
 		if (currentState.clicked) {
 			return 1;
 		}
+		this.updateTypewriter(currentState);
 		currentState.frameTick += Manager.Stack.elapsedTime;
 		if (currentState.frameTick >= currentState.frameDuration) {
 			currentState.frame = (currentState.frame + 1) % Data.Systems.FRAMES;
@@ -154,7 +214,7 @@ class ShowText extends Base {
 			const cd = this.windowMain.contentDimension;
 			(<Graphic.Message>this.windowMain.content).drawFaceset(cd[0], cd[1], cd[2], cd[3]);
 		}
-		if (currentState) {
+		if (currentState && (<Graphic.Message>this.windowMain.content).isFullyRevealed()) {
 			Data.Systems.getCurrentWindowSkin().drawArrowMessage(
 				currentState.frame,
 				this.windowMain.oX + this.windowMain.oW / 2,
