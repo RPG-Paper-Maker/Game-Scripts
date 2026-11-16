@@ -1550,7 +1550,7 @@ class MapObject {
 		let speed = (this.speed.getValue() as number) * MapObject.SPEED_NORMAL * Manager.Stack.averageElapsedTime;
 		if (this.previousOrientation !== null && this.previousOrientation !== this.orientation) {
 			// If already climbing, ignore
-			if (this.isClimbing && this.previousOrientation % 2 !== this.orientation % 2) {
+			if (this.isClimbing && this.moving && this.previousOrientation % 2 !== this.orientation % 2) {
 				return [0, 0];
 			}
 			speed *= Math.SQRT1_2;

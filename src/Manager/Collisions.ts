@@ -538,6 +538,7 @@ class Collisions {
 		const checkedSprites = new Set<StructMapElementCollision>();
 		let yMountain = null;
 		const mountainCollisionHeight = (Data.Systems.mountainCollisionHeight.getValue() as number) / Data.Systems.SQUARE_SIZE;
+		const pixel = 1 / Data.Systems.SQUARE_SIZE;
 
 		// Squares to inspect according to the direction of the object
 		let [startI, endI, startJ, endJ, startK, endK] = object.getSquaresBB();
@@ -774,7 +775,7 @@ class Collisions {
 										// Check if climbing stuff in 1 px bottom
 										const positionBottom = Collisions._scratchPositionBottom.set(
 											positionBefore.x,
-											positionBefore.y - 1,
+											positionBefore.y - pixel,
 											positionBefore.z,
 										);
 										for (i = startI; i <= endI; i++) {
@@ -782,7 +783,7 @@ class Collisions {
 												for (k = startK; k <= endK; k++) {
 													positionBeforePlus.set(
 														positionBefore.x + i,
-														positionBefore.y + j - 1,
+														positionBefore.y + j - pixel,
 														positionBefore.z + k,
 													);
 													lp.x = Math.floor(positionBeforePlus.x / chunkSize) - cp.x;
@@ -806,7 +807,7 @@ class Collisions {
 															const positionBottomAfter =
 																Collisions._scratchPositionBottomAfter.set(
 																	positionAfter.x,
-																	positionAfter.y - 1,
+																	positionAfter.y - pixel,
 																	positionAfter.z,
 																);
 															for (i2 = startI; i2 <= endI; i2++) {
@@ -814,7 +815,7 @@ class Collisions {
 																	for (k2 = startK; k2 <= endK; k2++) {
 																		positionAfterPlus.set(
 																			positionAfter.x + i2,
-																			positionAfter.y + j2 - 1,
+																			positionAfter.y + j2 - pixel,
 																			positionAfter.z + k2,
 																		);
 																		lp.x =
@@ -1092,8 +1093,9 @@ class Collisions {
 							MapObject.SPEED_NORMAL *
 							Manager.Stack.averageElapsedTime *
 							(Data.Systems.climbingSpeed.getValue() as number);
-						const limitTop = objCollision.b[1] + Math.ceil(objCollision.b[4] / 2);
-						const limitBot = objCollision.b[1] - Math.ceil(objCollision.b[4] / 2);
+						const squareSize = Data.Systems.SQUARE_SIZE;
+						const limitTop = objCollision.b[1] + Math.ceil((objCollision.b[4] * squareSize) / 2) / squareSize;
+						const limitBot = objCollision.b[1] - Math.ceil((objCollision.b[4] * squareSize) / 2) / squareSize;
 						const y = object.isClimbingUp
 							? Math.min(object.position.y + speed, limitTop)
 							: Math.max(object.position.y - speed, limitBot);
