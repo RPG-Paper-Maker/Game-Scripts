@@ -260,7 +260,7 @@ class MapPortion {
 			this.staticFloorsMesh.renderOrder = -1;
 			this.staticFloorsMesh.receiveShadow = true;
 			this.staticFloorsMesh.castShadow = true;
-			this.staticFloorsMesh.customDepthMaterial = material.userData.customDepthMaterial;
+			Manager.GL.applyShadowMaterials(this.staticFloorsMesh, material);
 			Scene.Map.current.scene.add(this.staticFloorsMesh);
 		}
 
@@ -270,7 +270,7 @@ class MapPortion {
 					if (autotiles && autotiles.createMesh()) {
 						autotiles.mesh.receiveShadow = true;
 						autotiles.mesh.castShadow = true;
-						autotiles.mesh.customDepthMaterial = autotiles.bundle.material.userData.customDepthMaterial;
+						Manager.GL.applyShadowMaterials(autotiles.mesh, autotiles.bundle.material);
 						Scene.Map.current.scene.add(autotiles.mesh);
 					}
 				}
@@ -360,7 +360,7 @@ class MapPortion {
 			this.staticSpritesMesh.renderOrder = -1;
 			this.staticSpritesMesh.receiveShadow = true;
 			this.staticSpritesMesh.castShadow = true;
-			this.staticSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
+			Manager.GL.applyShadowMaterials(this.staticSpritesMesh, material);
 			Scene.Map.current.scene.add(this.staticSpritesMesh);
 		}
 		if (!faceGeometry.isEmpty()) {
@@ -370,7 +370,7 @@ class MapPortion {
 			this.faceSpritesMesh.renderOrder = -1;
 			this.faceSpritesMesh.castShadow = true;
 			this.faceSpritesMesh.receiveShadow = true;
-			this.faceSpritesMesh.customDepthMaterial = material.userData.customDepthMaterial;
+			Manager.GL.applyShadowMaterials(this.faceSpritesMesh, material);
 			Scene.Map.current.scene.add(this.faceSpritesMesh);
 		}
 	}
@@ -459,7 +459,7 @@ class MapPortion {
 				const mesh = new THREE.Mesh(geometry, obj.material);
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
-				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(mesh, obj.material);
 				mesh.layers.enable(1);
 				mesh.userData.staticCameraBlocker = true;
 				this.staticWallsList.push(mesh);
@@ -523,7 +523,7 @@ class MapPortion {
 			if (mountains.createMesh()) {
 				mountains.mesh.receiveShadow = true;
 				mountains.mesh.castShadow = true;
-				mountains.mesh.customDepthMaterial = mountains.bundle.material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(mountains.mesh, mountains.bundle.material);
 				mountains.mesh.layers.enable(1);
 				mountains.mesh.userData.staticCameraBlocker = true;
 				Scene.Map.current.scene.add(mountains.mesh);
@@ -572,6 +572,14 @@ class MapPortion {
 								const materials = Array.isArray(child.material) ? child.material : [child.material];
 								for (const material of materials) {
 									Manager.GL.applyScreenTone(material);
+								}
+								const first = (Array.isArray(child.material) ? child.material[0] : child.material) as
+									| THREE.MeshPhongMaterial
+									| undefined;
+								if (first) {
+									const shadows = Manager.GL.createShadowMaterials(first.map, first.opacity, first.alphaMap);
+									child.customDepthMaterial = shadows.depth;
+									child.customDistanceMaterial = shadows.distance;
 								}
 								child.receiveShadow = true;
 								child.castShadow = true;
@@ -656,7 +664,7 @@ class MapPortion {
 				mesh.renderOrder = -1;
 				mesh.receiveShadow = true;
 				mesh.castShadow = true;
-				mesh.customDepthMaterial = obj.material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(mesh, obj.material);
 				mesh.layers.enable(1);
 				mesh.userData.staticCameraBlocker = true;
 				Scene.Map.current.scene.add(mesh);

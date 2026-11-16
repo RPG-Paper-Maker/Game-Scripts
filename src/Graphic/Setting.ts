@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, TITLE_SETTING_KIND } from '../Common';
-import { Data, Graphic } from '../index';
+import { Data, Graphic, Manager } from '../index';
 import { Base } from './Base';
 
 /** @class
@@ -22,6 +22,12 @@ class Setting extends Base {
 	public graphicRight: Graphic.Text;
 	public graphicTextLeft: Graphic.Text;
 	public graphicTextInformation: Graphic.Text;
+	private isAdvancedShadows = false;
+
+	/** Texts used when the project's languages have no translation for the setting yet. */
+	public static readonly DEFAULT_ADVANCED_SHADOWS = 'Advanced shadows';
+	public static readonly DEFAULT_ADVANCED_SHADOWS_DESCRIPTION =
+		'Draws sharper shadows and lets overlapping glass tint the light. Needs a stronger graphics card.';
 
 	constructor(id: number) {
 		super();
@@ -38,9 +44,24 @@ class Setting extends Base {
 				textInformation = Data.Languages.extras.languageDescription.name();
 				this.graphicRight = new Graphic.Text('...', { align: ALIGN.CENTER });
 				break;
+			case TITLE_SETTING_KIND.ADVANCED_SHADOWS:
+				textLeft = Data.Languages.extras.advancedShadows.name() || Setting.DEFAULT_ADVANCED_SHADOWS;
+				textInformation =
+					Data.Languages.extras.advancedShadowsDescription.name() ||
+					Setting.DEFAULT_ADVANCED_SHADOWS_DESCRIPTION;
+				this.isAdvancedShadows = true;
+				this.graphicRight = new Graphic.Text(Setting.getAdvancedShadowsText(), { align: ALIGN.CENTER });
+				break;
 		}
 		this.graphicTextLeft = new Graphic.Text(textLeft);
 		this.graphicTextInformation = new Graphic.Text(textInformation, { align: ALIGN.CENTER });
+	}
+
+	/** The text showing whether Advanced shadows is on. */
+	static getAdvancedShadowsText(): string {
+		return Manager.ShadowTint.advanced
+			? Data.Languages.extras.yes.name() || 'Yes'
+			: Data.Languages.extras.no.name() || 'No';
 	}
 
 	/**
@@ -51,6 +72,12 @@ class Setting extends Base {
 	 *  @param {number} h - The height dimention to draw graphic
 	 */
 	drawChoice(x: number, y: number, w: number, h: number) {
+		if (this.isAdvancedShadows) {
+			const text = Setting.getAdvancedShadowsText();
+			if (this.graphicRight.text !== text) {
+				this.graphicRight.setText(text);
+			}
+		}
 		this.graphicTextLeft.draw(x, y, w, h);
 		this.graphicRight.draw(x + w / 2, y, w / 2, h);
 	}

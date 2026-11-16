@@ -767,6 +767,7 @@ class MapObject {
 		previousMesh?.geometry.dispose();
 		if (previousMesh?.material?.userData.rpmObjectOpacityMaterial) {
 			previousMesh.customDepthMaterial?.dispose();
+			previousMesh.customDistanceMaterial?.dispose();
 			previousMesh.material.dispose();
 		}
 		const disposedGltfMaterials = new Set<THREE.Material>();
@@ -955,6 +956,18 @@ class MapObject {
 										child.material = Array.isArray(child.material)
 											? objectMaterials
 											: objectMaterials[0];
+										const first = (Array.isArray(child.material) ? child.material[0] : child.material) as
+											| THREE.MeshPhongMaterial
+											| undefined;
+										if (first) {
+											const shadows = Manager.GL.createShadowMaterials(
+												first.map,
+												first.opacity,
+												first.alphaMap,
+											);
+											child.customDepthMaterial = shadows.depth;
+											child.customDistanceMaterial = shadows.distance;
+										}
 										child.receiveShadow = true;
 										child.castShadow = true;
 									}
@@ -1108,7 +1121,7 @@ class MapObject {
 				) {
 					this.mesh.layers.enable(1);
 				}
-				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(this.mesh, material);
 				this.mesh.position.set(
 					this.position.x,
 					this.position.y + this.getMapObjectLayerDepthOffset(),
@@ -2231,8 +2244,13 @@ class MapObject {
 			light.userData.castShadow = (settings.castShadow.getValue() as number) === 1;
 			light.castShadow = Scene.Map.current.mapProperties.objectLightsShadows && light.userData.castShadow;
 			if (light instanceof THREE.PointLight || light instanceof THREE.SpotLight) {
+				// Same values as the editor
+				const shadowMapSize = Manager.ShadowTint.getLightShadowMapSize(light);
+				light.shadow.mapSize.set(shadowMapSize, shadowMapSize);
+				light.shadow.camera.near = 0.01;
+				light.shadow.camera.updateProjectionMatrix();
 				light.shadow.bias = -0.0003;
-				light.shadow.normalBias = 0.5 / Data.Systems.SQUARE_SIZE;
+				light.shadow.normalBias = 0.1 / Data.Systems.SQUARE_SIZE;
 			}
 		}
 		return { light, settings, target, parent };
@@ -2308,7 +2326,7 @@ class MapObject {
 				material.userData.rpmOriginalTransparent = sourceMaterial.transparent;
 				material.userData.rpmOriginalDepthWrite = sourceMaterial.depthWrite;
 				this.mesh.material = material;
-				this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(this.mesh, material);
 			}
 			material.opacity = opacity;
 			const transparent = opacity < 1 || material.userData.rpmOriginalTransparent;
@@ -2488,10 +2506,10 @@ class MapObject {
 				clone.transparent = true;
 				clone.depthWrite = false;
 				this.mesh.material = clone;
-				this.mesh.customDepthMaterial = clone.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(this.mesh, clone);
 			} else {
 				this.mesh.material = material;
-				this.mesh.customDepthMaterial = material?.userData.customDepthMaterial;
+				Manager.GL.applyShadowMaterials(this.mesh, material);
 			}
 		} else if (this.isNone()) {
 			this.mesh = null;
