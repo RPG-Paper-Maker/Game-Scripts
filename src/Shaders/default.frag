@@ -11,7 +11,8 @@ uniform vec2 offset;
 uniform float repeat;
 uniform bool enableShadows;
 uniform bool hovered;
-// 1 on semitransparent pixels: they are lit from both sides (see ShadowTint.patchShaderChunks)
+// How much light a semitransparent pixel lets through to its other side: 1 - alpha, 0 when (almost) opaque
+// (see ShadowTint.patchShaderChunks)
 float rpmTranslucent = 0.0;
 #include <common>
 #include <packing>
@@ -50,7 +51,7 @@ void main() {
 	vec4 sampledDiffuseColor = texture2D(map, coords);
 	if (sampledDiffuseColor.a <= alpha_threshold)
         discard;
-	rpmTranslucent = sampledDiffuseColor.a * opacity < 0.9 ? 1.0 : 0.0;
+	rpmTranslucent = sampledDiffuseColor.a * opacity < 0.9 ? 1.0 - sampledDiffuseColor.a * opacity : 0.0;
 	#ifdef DECODE_VIDEO_TEXTURE
 		// inline sRGB decode (TODO: Remove this code when https://crbug.com/1256340 is solved)
 		sampledDiffuseColor = vec4( mix( pow( sampledDiffuseColor.rgb * 0.9478672986 + vec3( 0.0521327014 ), vec3( 2.4 ) ), sampledDiffuseColor.rgb * 0.0773993808, vec3( lessThanEqual( sampledDiffuseColor.rgb, vec3( 0.04045 ) ) ) ), sampledDiffuseColor.w );
