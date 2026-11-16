@@ -62,6 +62,7 @@ export type MapPropertiesJSON = LocalizationJSON & {
 	screenToneGreen?: DynamicValueJSON;
 	screenToneBlue?: DynamicValueJSON;
 	screenToneGrey?: DynamicValueJSON;
+	stl?: boolean;
 	objs: { id: number; p: number[] }[];
 };
 
@@ -114,6 +115,8 @@ export class MapProperties extends Localization {
 	public screenToneGreen: DynamicValue;
 	public screenToneBlue: DynamicValue;
 	public screenToneGrey: DynamicValue;
+	/** @deprecated Screen tone legacy mode (pre-3.2.30 projects), to remove. */
+	public screenToneLegacy: boolean;
 	public allObjects: Map<number, Position>;
 	public maxObjectsID: number;
 
@@ -205,6 +208,7 @@ export class MapProperties extends Localization {
 			Math.max(Math.min((this.screenToneBlue.getValue() as number) / 255, 1), -1),
 			Math.max(Math.min(1 - (this.screenToneGrey.getValue() as number) / 100, 1), -1),
 		);
+		Manager.GL.screenToneLegacy.value = this.screenToneLegacy;
 		if (this.backgroundColor) {
 			Manager.GL.updateBackgroundColor(this.backgroundColor);
 		}
@@ -378,6 +382,7 @@ export class MapProperties extends Localization {
 		this.screenToneGreen = DynamicValue.readOrDefaultNumber(json.screenToneGreen, 0);
 		this.screenToneBlue = DynamicValue.readOrDefaultNumber(json.screenToneBlue, 0);
 		this.screenToneGrey = DynamicValue.readOrDefaultNumber(json.screenToneGrey, 0);
+		this.screenToneLegacy = Utils.valueOrDefault(json.stl, false);
 		this.readObjects(json);
 	}
 

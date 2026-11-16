@@ -28,6 +28,8 @@ class ChangeScreenTone extends Base {
 	public colorID: Model.DynamicValue;
 	public waitEnd: boolean;
 	public time: Model.DynamicValue;
+	/** @deprecated Screen tone legacy mode (pre-3.2.30 projects), to remove. */
+	public legacy: boolean;
 
 	constructor(command: any[]) {
 		super();
@@ -48,6 +50,7 @@ class ChangeScreenTone extends Base {
 		}
 		this.waitEnd = Utils.numberToBool(command[iterator.i++]);
 		this.time = Model.DynamicValue.createValueCommand(command, iterator);
+		this.legacy = Utils.numberToBool(command[iterator.i++]);
 		this.parallel = !this.waitEnd;
 	}
 
@@ -57,6 +60,7 @@ class ChangeScreenTone extends Base {
 	 */
 	initialize(): Record<string, any> {
 		Manager.GL.screenToneByCommand = true;
+		Manager.GL.screenToneLegacy.value = this.legacy;
 		const transitionID = ++Manager.GL.screenToneTransitionID;
 		const time = (this.time.getValue() as number) * 1000;
 		const color = this.colorID ? Data.Systems.getColor(this.colorID.getValue() as number) : null;

@@ -193,6 +193,8 @@ class Events {
 				return new EventCommand.TransformABattler(command);
 			case EVENT_COMMAND_KIND.CHANGE_BATTLER_GRAPHICS:
 				return new EventCommand.ChangeBattlerGraphics(command);
+			case EVENT_COMMAND_KIND.CHANGE_SUNLIGHT_AMBIENT_LIGHT:
+				return new EventCommand.ChangeSunlightAmbientLight(command);
 			default:
 				return null;
 		}

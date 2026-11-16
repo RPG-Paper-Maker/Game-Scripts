@@ -19,6 +19,12 @@ import { Stack } from './Stack';
  *  The GL class handling some 3D stuff.
  *  @static
  */
+/** A sunlight or ambient light value changed by command. */
+export type LightingOverride = {
+	color: THREE.Color;
+	intensity: number;
+};
+
 class GL {
 	public static SHADER_FIX_VERTEX: string;
 	public static SHADER_FIX_FRAGMENT: string;
@@ -28,6 +34,16 @@ class GL {
 	public static screenTone = new THREE.Vector4(0, 0, 0, 1);
 	public static screenToneByCommand = false;
 	public static screenToneTransitionID = 0;
+	/** @deprecated Screen tone legacy mode (pre-3.2.30 projects), to remove. */
+	public static screenToneLegacy = { value: false };
+	public static lightingSun: LightingOverride | null = null;
+	public static lightingAmbient: LightingOverride | null = null;
+	public static lightingKeep = true;
+	public static lightingMapID = -1;
+	public static lightingSky = new THREE.Color(1, 1, 1);
+	public static lightingTransitionID = 0;
+	private static skyTintRGB = { r: 1, g: 1, b: 1 };
+	private static clearColor = new THREE.Color();
 
 	constructor() {
 		throw new Error('This is a static class');
@@ -136,13 +152,14 @@ class GL {
 		material.onBeforeCompile = (shader, renderer): void => {
 			onBeforeCompile(shader, renderer);
 			shader.uniforms.rpmScreenTone = { value: GL.screenTone };
+			shader.uniforms.rpmScreenToneLegacy = GL.screenToneLegacy;
 			shader.fragmentShader = shader.fragmentShader.replace(
 				'#include <common>',
-				'#include <common>\nuniform vec4 rpmScreenTone;',
+				'#include <common>\nuniform vec4 rpmScreenTone;\nuniform bool rpmScreenToneLegacy;',
 			);
 			shader.fragmentShader = shader.fragmentShader.replace(
 				'#include <fog_fragment>',
-				`vec3 rpmScreenToneRgb = gl_FragColor.rgb + rpmScreenTone.rgb;
+				`vec3 rpmScreenToneRgb = (rpmScreenToneLegacy ? gl_FragColor.rgb : clamp(gl_FragColor.rgb, 0.0, 1.0)) + rpmScreenTone.rgb;
 const vec3 rpmScreenToneWeights = vec3(0.2125, 0.7154, 0.0721);
 gl_FragColor.rgb = mix(
 	vec3(dot(rpmScreenToneRgb, rpmScreenToneWeights)),
@@ -221,6 +238,7 @@ gl_FragColor.rgb = mix(
 			shader.fragmentShader = fragment;
 			shader.vertexShader = vertex;
 			shader.uniforms.colorD = uniforms.colorD;
+			shader.uniforms.screenToneLegacy = GL.screenToneLegacy;
 			shader.uniforms.reverseH = { value: opts.flipX };
 			shader.uniforms.repeat = { value: opts.repeat };
 			shader.uniforms.offset = uniforms.offset;
@@ -260,12 +278,55 @@ gl_FragColor.rgb = mix(
 	}
 
 	/**
+	 *  Reset the sunlight and ambient light values changed by command.
+	 *  @static
+	 */
+	static resetLighting() {
+		this.lightingSun = null;
+		this.lightingAmbient = null;
+		this.lightingKeep = true;
+		this.lightingMapID = -1;
+		this.lightingSky.setRGB(1, 1, 1);
+		this.lightingTransitionID++;
+	}
+
+	/**
+	 *  Update the sky tint from the ratio between the current lights and the
+	 *  map properties lights (colors multiplied by intensities).
+	 *  @static
+	 *  @param {THREE.Color} mapLight
+	 *  @param {THREE.Color} currentLight
+	 */
+	static updateLightingSky(mapLight: THREE.Color, currentLight: THREE.Color) {
+		this.lightingSky.setRGB(
+			mapLight.r > 0 ? currentLight.r / mapLight.r : 1,
+			mapLight.g > 0 ? currentLight.g / mapLight.g : 1,
+			mapLight.b > 0 ? currentLight.b / mapLight.b : 1,
+		);
+	}
+
+	/**
+	 *  Update the skybox materials tint.
+	 *  @static
+	 *  @param {THREE.Material | THREE.Material[]} materials
+	 */
+	static updateSkyTint(materials: THREE.Material | THREE.Material[]) {
+		const sky = this.lightingSky.getRGB(this.skyTintRGB, THREE.SRGBColorSpace);
+		for (const material of Array.isArray(materials) ? materials : [materials]) {
+			if (material instanceof THREE.MeshPhongMaterial) {
+				material.color.setRGB(sky.r, sky.g, sky.b);
+			}
+		}
+	}
+
+	/**
 	 *  Update the background color
 	 *  @static
 	 *  @param {System.Color} color
 	 */
 	static updateBackgroundColor(color: Model.Color) {
-		this.renderer.setClearColor(color.getHex(this.screenTone), color.alpha);
+		this.clearColor.set(color.getHex(this.screenTone)).multiply(this.lightingSky);
+		this.renderer.setClearColor(this.clearColor, color.alpha);
 	}
 
 	/**

@@ -6,6 +6,7 @@ uniform float shininess;
 uniform float opacity;
 uniform float alpha_threshold;
 uniform vec4 colorD;
+uniform bool screenToneLegacy;
 uniform bool reverseH;
 uniform vec2 offset;
 uniform float repeat;
@@ -73,9 +74,9 @@ void main() {
 		#include <tonemapping_fragment>
 		#include <colorspace_fragment>
 	} else {
-		gl_FragColor = sampledDiffuseColor;
+		gl_FragColor = vec4(sampledDiffuseColor.rgb * diffuse, sampledDiffuseColor.a);
 	}
-	vec3 rgb = vec3(gl_FragColor.x + colorD.x, gl_FragColor.y + colorD.y, gl_FragColor.z + colorD.z);
+	vec3 rgb = (screenToneLegacy ? gl_FragColor.rgb : clamp(gl_FragColor.rgb, 0.0, 1.0)) + colorD.rgb;
     const vec3 W = vec3(0.2125, 0.7154, 0.0721);
     vec3 intensity = vec3(dot(rgb, W));
     gl_FragColor = vec4(mix(intensity, rgb, colorD.w), gl_FragColor.a);
