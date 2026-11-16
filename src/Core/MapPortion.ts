@@ -662,6 +662,8 @@ class MapPortion {
 			if (!geometry.isEmpty()) {
 				geometry.updateAttributes();
 				const mesh = new THREE.Mesh(geometry, obj.material);
+				// Semitransparent 3D shapes blend without writing depth, see ShadowTint
+				mesh.userData.rpmGlassDepth = true;
 				this.staticObjects3DList.push(mesh);
 				mesh.renderOrder = -1;
 				mesh.receiveShadow = true;

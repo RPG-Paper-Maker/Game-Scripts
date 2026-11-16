@@ -328,7 +328,8 @@ class Camera {
 			if (Camera.SUN_RIGHT.lengthSq() === 0) Camera.SUN_RIGHT.set(1, 0, 0);
 			Camera.SUN_RIGHT.normalize();
 			Camera.SUN_UP.crossVectors(Camera.SUN_RIGHT, Camera.SUN_FORWARD).normalize();
-			const d = Math.max(this.distance * 3.0, 10);
+			// Advanced shadows: a bigger shadow map covers a wider area at the same sharpness
+			const d = Math.max(this.distance * (Manager.ShadowTint.advanced ? 5.0 : 3.0), 10);
 			const far = Math.max(d * 2, 350);
 			if (
 				this._stableD === 0 ||
