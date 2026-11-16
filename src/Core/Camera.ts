@@ -343,6 +343,10 @@ class Camera {
 				Scene.Map.current.sunLight.shadow.camera.bottom = -d;
 				Scene.Map.current.sunLight.shadow.camera.far = far;
 				Scene.Map.current.sunLight.shadow.camera.updateProjectionMatrix();
+				// Same bias as the editor: a small depth bias plus a normal offset of about a texel
+				Scene.Map.current.sunLight.shadow.bias = -0.00002 * (d / 10);
+				Scene.Map.current.sunLight.shadow.normalBias =
+					((2 * d) / Scene.Map.current.sunLight.shadow.mapSize.x) * 1.0;
 			}
 			const texelSize = (2 * this._stableD) / Scene.Map.current.sunLight.shadow.mapSize.x;
 			const snappedR = Math.round(Camera.SUN_RIGHT.dot(this.targetPosition) / texelSize) * texelSize;

@@ -20,6 +20,7 @@ export type SettingsJSON = {
 		[id: number]: string[][];
 	};
 	[TITLE_SETTING_KIND.LANGUAGE]: number;
+	[TITLE_SETTING_KIND.ADVANCED_SHADOWS]?: boolean;
 };
 
 /**
@@ -28,6 +29,8 @@ export type SettingsJSON = {
 export class Settings {
 	public static kb: Map<number, string[][]>;
 	public static currentLanguage: number;
+	/** The player's Advanced shadows choice. null until chosen: then the engine (editor) setting is used. */
+	public static advancedShadows: boolean | null = null;
 	public static isProtected: boolean;
 
 	/**
@@ -57,11 +60,21 @@ export class Settings {
 	}
 
 	/**
+	 * Update the Advanced shadows choice.
+	 * @param value - True for advanced shadows
+	 */
+	static async updateAdvancedShadows(value: boolean): Promise<void> {
+		this.advancedShadows = value;
+		await this.save();
+	}
+
+	/**
 	 * Read the settings file.
 	 */
 	static async read(): Promise<void> {
 		this.kb = new Map();
 		this.currentLanguage = Languages.getMainLanguageID();
+		this.advancedShadows = null;
 		if (!(await Platform.fileExists(Paths.FILE_SETTINGS))) {
 			return;
 		}
@@ -71,6 +84,8 @@ export class Settings {
 			this.kb.set(Number(id), jsonObjs[id]);
 		}
 		this.currentLanguage = Utils.valueOrDefault(json[TITLE_SETTING_KIND.LANGUAGE], Languages.getMainLanguageID());
+		const advancedShadows = json[TITLE_SETTING_KIND.ADVANCED_SHADOWS];
+		this.advancedShadows = typeof advancedShadows === 'boolean' ? advancedShadows : null;
 	}
 
 	/**
@@ -84,6 +99,9 @@ export class Settings {
 		}
 		json[TITLE_SETTING_KIND.KEYBOARD_ASSIGNMENT] = jsonObjs;
 		json[TITLE_SETTING_KIND.LANGUAGE] = this.currentLanguage;
+		if (this.advancedShadows !== null) {
+			json[TITLE_SETTING_KIND.ADVANCED_SHADOWS] = this.advancedShadows;
+		}
 		await Platform.writeFile(Paths.FILE_SETTINGS, json);
 	}
 }

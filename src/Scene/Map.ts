@@ -289,8 +289,11 @@ class Map extends Base {
 			this.sunLight.target.position.set(0, 0, 0);
 			this.scene.add(this.sunLight);
 			this.sunLight.castShadow = true;
-			this.sunLight.shadow.mapSize.width = 2048;
-			this.sunLight.shadow.mapSize.height = 2048;
+			const shadowMapSize = Manager.ShadowTint.advanced
+				? Manager.ShadowTint.SUN_MAP_SIZE_ADVANCED
+				: Manager.ShadowTint.SUN_MAP_SIZE;
+			this.sunLight.shadow.mapSize.width = shadowMapSize;
+			this.sunLight.shadow.mapSize.height = shadowMapSize;
 			const d = 10;
 			this.sunLight.shadow.camera.left = -d;
 			this.sunLight.shadow.camera.right = d;
@@ -1789,6 +1792,7 @@ class Map extends Base {
 	 */
 	draw3D() {
 		this.limitObjectLightShadows();
+		Manager.ShadowTint.render(Manager.GL.renderer, this.scene, Manager.GL.SHADOW_ALPHA_THRESHOLD);
 		Manager.GL.renderer.clear();
 		Manager.GL.renderer.render(this.scene, this.camera.getThreeCamera());
 	}

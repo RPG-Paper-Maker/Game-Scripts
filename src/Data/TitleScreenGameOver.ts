@@ -10,7 +10,7 @@
 */
 
 import { ALIGN, Paths, Platform, SONG_KIND, TITLE_SETTING_KIND, Utils } from '../Common';
-import { Graphic, Manager, Scene } from '../index';
+import { Data, Graphic, Manager, Scene } from '../index';
 import {
 	Credits,
 	CreditsJSON,
@@ -104,12 +104,21 @@ export class TitlescreenGameover {
 				return this.keyboardAssignment;
 			case TITLE_SETTING_KIND.LANGUAGE:
 				return this.language;
+			case TITLE_SETTING_KIND.ADVANCED_SHADOWS:
+				return this.advancedShadows;
 		}
 	}
 
 	/** Setting action: open keyboard assignment. */
 	static keyboardAssignment(): boolean {
 		Manager.Stack.push(new Scene.KeyboardAssign());
+		return true;
+	}
+
+	/** Setting action: switch Advanced shadows on or off. */
+	static advancedShadows(): boolean {
+		Data.Settings.updateAdvancedShadows(!Manager.ShadowTint.advanced).catch(console.error);
+		Manager.Stack.requestPaintHUD = true;
 		return true;
 	}
 
@@ -151,6 +160,10 @@ export class TitlescreenGameover {
 			if (Utils.valueOrDefault(obj.checked, true)) {
 				this.titleSettings.push(obj.id ?? 0);
 			}
+		}
+		// Projects made before Advanced shadows existed do not list it: show it by default
+		if (!json.ts.some((obj) => (obj.id ?? 0) === TITLE_SETTING_KIND.ADVANCED_SHADOWS)) {
+			this.titleSettings.push(TITLE_SETTING_KIND.ADVANCED_SHADOWS);
 		}
 		this.titleCommandsWindowX = Utils.valueOrDefault(json.tcwx, 440);
 		this.titleCommandsWindowY = Utils.valueOrDefault(json.tcwy, 450);

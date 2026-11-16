@@ -485,6 +485,7 @@ export enum GAME_OVER_COMMAND_KIND {
 export enum TITLE_SETTING_KIND {
 	KEYBOARD_ASSIGNMENT,
 	LANGUAGE,
+	ADVANCED_SHADOWS,
 }
 
 /** Enum for the object moving. */

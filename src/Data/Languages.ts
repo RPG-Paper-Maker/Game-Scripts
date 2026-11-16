@@ -27,6 +27,8 @@ interface ExtrasKind {
 	language: Localization;
 	languageDescription: Localization;
 	languageSelectedDescription: Localization;
+	advancedShadows: Localization;
+	advancedShadowsDescription: Localization;
 	confirm: Localization;
 	ok: Localization;
 	yes: Localization;
@@ -71,6 +73,8 @@ export type LanguagesJSON = {
 	l: LocalizationJSON;
 	ld: LocalizationJSON;
 	lsd: LocalizationJSON;
+	ash?: LocalizationJSON;
+	ashd?: LocalizationJSON;
 	co: LocalizationJSON;
 	ok: LocalizationJSON;
 	ye: LocalizationJSON;
@@ -161,6 +165,8 @@ export class Languages {
 			language: new Localization(json.l),
 			languageDescription: new Localization(json.ld),
 			languageSelectedDescription: new Localization(json.lsd),
+			advancedShadows: new Localization(json.ash),
+			advancedShadowsDescription: new Localization(json.ashd),
 			confirm: new Localization(json.co),
 			ok: new Localization(json.ok),
 			yes: new Localization(json.ye),

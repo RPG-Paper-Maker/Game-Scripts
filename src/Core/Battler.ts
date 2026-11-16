@@ -188,7 +188,7 @@ export class Battler {
 			this.mesh.position.set(this.position.x, this.position.y, this.position.z);
 			this.mesh.receiveShadow = true;
 			this.mesh.castShadow = true;
-			this.mesh.customDepthMaterial = material.userData.customDepthMaterial;
+			Manager.GL.applyShadowMaterials(this.mesh, material);
 			const limit = Data.Pictures.get(PICTURE_KIND.BATTLERS, idBattler).getLimit(this.width, this.height);
 			const limitLeft = this.position.x - this.width / 2 + limit.x;
 			const limitTop = this.position.y + this.height - limit.y;

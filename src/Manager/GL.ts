@@ -13,6 +13,7 @@ import * as THREE from 'three';
 import { Paths, Platform, ScreenResolution, Utils } from '../Common';
 import { Camera } from '../Core';
 import { Data, Model } from '../index';
+import { ShadowTint } from './ShadowTint';
 import { Stack } from './Stack';
 
 /** @class
@@ -59,6 +60,7 @@ class GL {
 		this.SHADER_FIX_VERTEX = json;
 		json = await Platform.loadFile(Paths.SHADERS + 'default.frag', true);
 		this.SHADER_FIX_FRAGMENT = json;
+		ShadowTint.patchShaderChunks();
 	}
 
 	/**
@@ -160,6 +162,41 @@ gl_FragColor.rgb = mix(
 	 *  Create a material from texture.
 	 *  @returns {THREE.MeshPhongMaterial}
 	 */
+	/** Alpha below this (texture alpha * opacity) casts no shadow. */
+	static SHADOW_ALPHA_THRESHOLD = 0.9;
+
+	/**
+	 *  Create the depth (directional and spot lights) and distance (point lights) materials used to cast
+	 *  shadows. They let light through the transparent and semitransparent parts of a texture.
+	 */
+	static createShadowMaterials(
+		map?: THREE.Texture | null,
+		opacity = 1,
+		alphaMap?: THREE.Texture | null,
+	): { depth: THREE.MeshDepthMaterial; distance: THREE.MeshDistanceMaterial } {
+		// Only set maps that exist: three.js warns on undefined parameters
+		const opts: THREE.MeshDepthMaterialParameters & THREE.MeshDistanceMaterialParameters = { opacity };
+		if (map) opts.map = map;
+		if (alphaMap) opts.alphaMap = alphaMap;
+		const depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, ...opts });
+		const distance = new THREE.MeshDistanceMaterial(opts);
+
+		// The depth and distance shaders ignore material opacity, so fold it into the threshold:
+		// texture alpha * opacity < T  <=>  texture alpha < T / opacity. three.js copies alphaTest from the
+		// scene material into custom shadow materials on every shadow pass, so lock the value.
+		const threshold = opacity > 0 ? GL.SHADOW_ALPHA_THRESHOLD / opacity : 2;
+		for (const material of [depth, distance]) {
+			Object.defineProperty(material, 'alphaTest', { get: () => threshold, set: () => {} });
+		}
+		return { depth, distance };
+	}
+
+	static applyShadowMaterials(mesh: THREE.Mesh, material?: THREE.Material | null) {
+		if (!material) return;
+		mesh.customDepthMaterial = material.userData.customDepthMaterial;
+		mesh.customDistanceMaterial = material.userData.customDistanceMaterial;
+	}
+
 	static createMaterial(opts: {
 		texture?: THREE.Texture | null;
 		flipX?: boolean;
@@ -210,11 +247,11 @@ gl_FragColor.rgb = mix(
 			specular: new THREE.Color(0x000000),
 		});
 		material.userData.uniforms = uniforms;
-		material.userData.customDepthMaterial = new THREE.MeshDepthMaterial({
-			depthPacking: THREE.RGBADepthPacking,
-			map: opts.texture,
-			alphaTest: 0.5,
-		});
+		// Receives the colored translucent shadows (see ShadowTint)
+		material.defines = { USE_SHADOW_TINT: '' };
+		const shadowMaterials = GL.createShadowMaterials(opts.texture, opts.opacity);
+		material.userData.customDepthMaterial = shadowMaterials.depth;
+		material.userData.customDistanceMaterial = shadowMaterials.distance;
 
 		// Edit shader information before compiling shader
 		material.onBeforeCompile = (shader) => {
@@ -227,6 +264,7 @@ gl_FragColor.rgb = mix(
 			shader.uniforms.enableShadows = { value: opts.shadows };
 			shader.uniforms.hovered = { value: false };
 			shader.uniforms.alpha_threshold = { value: 0.01 };
+			Object.assign(shader.uniforms, ShadowTint.uniforms);
 			material.userData.uniforms = shader.uniforms;
 
 			// Important to run a unique shader only once and be able to use
