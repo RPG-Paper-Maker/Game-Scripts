@@ -651,9 +651,36 @@ class ShadowTint {
 		return this.TINT_SIZES[light instanceof THREE.PointLight ? 'point' : 'spot'][this.advanced ? 1 : 0];
 	}
 
+	/**
+	 * Semitransparent materials must not write depth: three.js sorts transparent objects by their center, and a
+	 * pane drawn too early would hide everything behind it. Opaque materials are left alone.
+	 */
+	private static updateGlassDepthWrite(scene: THREE.Scene, threshold: number) {
+		scene.traverse((object) => {
+			if (!(object instanceof THREE.Mesh)) {
+				return;
+			}
+			const materials = Array.isArray(object.material) ? object.material : [object.material];
+			for (const material of materials) {
+				if (!material || !material.depthWrite || material.userData.rpmGlassChecked === material.opacity) {
+					continue;
+				}
+				// Only the materials of the engine (see USE_SHADOW_TINT)
+				if ((material as THREE.MeshPhongMaterial).defines?.USE_SHADOW_TINT === undefined) {
+					continue;
+				}
+				material.userData.rpmGlassChecked = material.opacity;
+				if (this.isTranslucent(material, threshold)) {
+					material.depthWrite = false;
+				}
+			}
+		});
+	}
+
 	/** Render the tint maps of the lights. Call before the regular render of the scene. */
 	static render(renderer: THREE.WebGLRenderer, scene: THREE.Scene, threshold: number) {
 		this.patchShaderChunks();
+		this.updateGlassDepthWrite(scene, threshold);
 
 		const lights: TintLight[] = [];
 		this.collectLights(scene, lights);
