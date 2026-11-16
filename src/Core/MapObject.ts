@@ -1113,6 +1113,10 @@ class MapObject {
 			if (this.mesh !== null) {
 				this.mesh.receiveShadow = true;
 				this.mesh.castShadow = true;
+				// Flat sprites (not solid 3D shapes) blend without writing depth, see ShadowTint
+				this.mesh.userData.rpmGlassDepth =
+					this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FACE ||
+					this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.SPRITES_FIX;
 				if (
 					!this.isHero &&
 					(this.currentStateInstance.graphicKind === ELEMENT_MAP_KIND.OBJECT_3D ||
