@@ -96,6 +96,19 @@ class Map extends Base {
 	public overflowSprites: globalThis.Map<string, Set<string>> = new globalThis.Map();
 	public overflowMountains: globalThis.Map<string, Set<string>> = new globalThis.Map();
 	public overflowObjects3D: globalThis.Map<string, Set<string>> = new globalThis.Map();
+	/** Most object lights that cast shadows at once when Advanced shadows is off. */
+	public static MAX_OBJECT_LIGHT_SHADOWS = 6;
+	/** A light that already casts counts as this much closer (squared distance), so shadows do not flicker. */
+	public static LIGHT_SHADOW_STICKINESS = 0.8;
+	/**
+	 *  Dimmest light (1 = a white surface fully lit) that still gets a shadow. Brightness is estimated as
+	 *  intensity / (PI * distance^2), so the shadow range is sqrt(intensity / (PI * this)) squares
+	 *  (about 23 squares at intensity 50).
+	 */
+	public static LIGHT_SHADOW_MIN_BRIGHTNESS = 0.03;
+	private _lightCullMatrix = new THREE.Matrix4();
+	private _lightCullFrustum = new THREE.Frustum();
+	private _lightCullSphere = new THREE.Sphere();
 	private _cameraDirection: THREE.Vector3 = new THREE.Vector3();
 	private heroTrail: Array<{ pos: THREE.Vector3; dist: number; orientation: ORIENTATION }> = [];
 	private heroTrailTotalDist: number = 0;
@@ -1849,13 +1862,57 @@ class Map extends Base {
 				distance:
 					object instanceof THREE.DirectionalLight
 						? -1
-						: object.getWorldPosition(lightPosition).distanceToSquared(cameraPosition),
+						: object.getWorldPosition(lightPosition).distanceToSquared(cameraPosition) *
+							(object.castShadow ? Scene.Map.LIGHT_SHADOW_STICKINESS : 1),
 			});
 		});
 		objectLights.sort((a, b) => a.distance - b.distance || a.light.id - b.light.id);
-		const allowed = this.mapProperties.objectLightsShadows ? Math.max(0, shadowBudget - otherShadows) : 0;
+		let allowed = this.mapProperties.objectLightsShadows ? Math.max(0, shadowBudget - otherShadows) : 0;
+		if (!Manager.ShadowTint.advanced) {
+			allowed = Math.min(allowed, Scene.Map.MAX_OBJECT_LIGHT_SHADOWS);
+		}
 		for (let i = 0; i < objectLights.length; i++) {
 			objectLights[i].light.castShadow = i < allowed;
+		}
+		this.limitLightShadowRange(objectLights, lightPosition);
+	}
+
+	/**
+	 *  Limit the shadows of point and spot lights to the distance where the light is bright enough to see
+	 *  (see LIGHT_SHADOW_MIN_BRIGHTNESS), or to their range if smaller. Lights without a range get a shadow camera
+	 *  that ends there, so farther objects are not drawn into their shadow map. A light whose reach does not touch
+	 *  the camera view does not redraw its shadow map.
+	 *  @param {{ light: THREE.Light }[]} objectLights - The object lights
+	 *  @param {THREE.Vector3} position - A scratch vector
+	 */
+	private limitLightShadowRange(objectLights: { light: THREE.Light }[], position: THREE.Vector3) {
+		const camera = this.camera.getThreeCamera();
+		camera.updateMatrixWorld();
+		this._lightCullMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+		this._lightCullFrustum.setFromProjectionMatrix(this._lightCullMatrix);
+		for (const { light } of objectLights) {
+			if (!(light instanceof THREE.PointLight || light instanceof THREE.SpotLight)) {
+				continue;
+			}
+			let inView = true;
+			if (light.castShadow) {
+				const strength = Math.max(light.color.r, light.color.g, light.color.b) * light.intensity;
+				let range = Math.sqrt(strength / (Math.PI * Scene.Map.LIGHT_SHADOW_MIN_BRIGHTNESS));
+				if (light.distance > 0) {
+					range = Math.min(range, light.distance);
+				} else {
+					// three.js uses light.distance as the far plane when it is not 0, so only change it otherwise
+					const shadowCamera = light.shadow.camera;
+					const far = Math.max(range, shadowCamera.near + 1);
+					if (shadowCamera.far !== far) {
+						shadowCamera.far = far;
+						shadowCamera.updateProjectionMatrix();
+					}
+				}
+				this._lightCullSphere.set(light.getWorldPosition(position), range + 1);
+				inView = this._lightCullFrustum.intersectsSphere(this._lightCullSphere);
+			}
+			light.shadow.autoUpdate = inView;
 		}
 	}
 

@@ -758,11 +758,8 @@ class ShadowTint {
 		// Decide what to render. Point lights follow three.js: static ones only update on request.
 		const jobs: { light: TintLight; entry: TintEntry; render: boolean }[] = lights.map((light) => {
 			const entry = this.getEntry(light);
-			const render =
-				!(light instanceof THREE.PointLight) ||
-				!entry.rendered ||
-				light.shadow.autoUpdate ||
-				light.shadow.needsUpdate;
+			// Lights out of range are not redrawn, like the regular shadow maps (see Map.limitLightShadowRange)
+			const render = !entry.rendered || light.shadow.autoUpdate || light.shadow.needsUpdate;
 			return { light, entry, render };
 		});
 
