@@ -115,16 +115,6 @@ abstract class Base {
 		// Index of all the finished parallel reactions
 		const endingReactions: ReactionInterpreter[] = [];
 
-		// Updating blocking hero
-		ReactionInterpreter.blockingHero = false;
-		let reaction: ReactionInterpreter;
-		for (reaction of this.reactionInterpreters) {
-			if (reaction.currentReaction?.blockingHero) {
-				ReactionInterpreter.blockingHero = true;
-				break;
-			}
-		}
-
 		// Updating all reactions
 		const reactionInterpreters = this.getAllReactionInterpreters();
 		for (const reaction of reactionInterpreters) {
@@ -143,6 +133,11 @@ abstract class Base {
 		this.reactionInterpreters = this.reactionInterpreters.filter((reaction) => !endingReactions.includes(reaction));
 		this.reactionInterpretersEffects = this.reactionInterpretersEffects.filter(
 			(reaction) => !endingReactions.includes(reaction),
+		);
+
+		// Updating blocking hero
+		ReactionInterpreter.blockingHero = this.reactionInterpreters.some(
+			(reaction) => reaction.currentReaction?.blockingHero && reactionInterpreters.includes(reaction),
 		);
 	}
 
