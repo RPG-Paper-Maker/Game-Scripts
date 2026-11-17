@@ -2249,8 +2249,10 @@ class MapObject {
 				light.shadow.mapSize.set(shadowMapSize, shadowMapSize);
 				light.shadow.camera.near = 0.01;
 				light.shadow.camera.updateProjectionMatrix();
-				light.shadow.bias = -0.0003;
-				light.shadow.normalBias = 0.1 / Data.Systems.SQUARE_SIZE;
+				// No depth bias: for point lights it is a fraction of the light's far distance and opens a gap
+				// between objects and their shadows. A small normal offset prevents acne instead.
+				light.shadow.bias = 0;
+				light.shadow.normalBias = 0.1;
 			}
 		}
 		return { light, settings, target, parent };
