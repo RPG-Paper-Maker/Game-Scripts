@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import { TITLE_SETTING_KIND } from '../Common';
 import { Data } from '../index';
 
 type TintLight = THREE.DirectionalLight | THREE.SpotLight | THREE.PointLight;
@@ -49,16 +50,17 @@ class ShadowTint {
 	/** Tint strength = alpha ^ this. Below 1 makes faint pixels (low alpha) still visibly tint. */
 	public static STRENGTH_CURVE = 0.5;
 	/**
-	 * Advanced shadows: the player's choice in the game Settings, or until they choose the engine setting of the
-	 * editor (Options > General options), passed to the game window with window.rpgPaperMakerAdvancedShadows.
+	 * Advanced shadows: the player's choice in the title screen Settings when that entry is shown, otherwise the
+	 * project's Systems option.
 	 * Off keeps low-end PCs fast.
 	 */
 	static get advanced(): boolean {
 		const chosen = Data.Settings.advancedShadows;
-		if (chosen !== null && chosen !== undefined) {
+		const shown = Data.TitlescreenGameover.titleSettings?.includes(TITLE_SETTING_KIND.ADVANCED_SHADOWS) ?? false;
+		if (shown && chosen !== null && chosen !== undefined) {
 			return chosen;
 		}
-		return (window as unknown as Record<string, unknown>).rpgPaperMakerAdvancedShadows === true;
+		return Data.Systems.advancedShadows === true;
 	}
 	public static readonly SUN_MAP_SIZE = 2048;
 	public static readonly SUN_MAP_SIZE_ADVANCED = 4096;
@@ -76,6 +78,7 @@ class ShadowTint {
 	public static readonly MAX_LIGHTS = 4;
 	/** Overlapping glass needs two more texture units per light, so it only works with few lights. */
 	public static readonly MAX_OVERLAP_LIGHTS = 2;
+	public static readonly GLASS_RENDER_ORDER = 4.5;
 
 	public static uniforms = {
 		tintOn: { value: 0 } as THREE.IUniform<number>,
@@ -109,6 +112,7 @@ class ShadowTint {
 	private static entries = new Map<TintLight, TintEntry>();
 	private static materials = new WeakMap<THREE.Material, Partial<Record<TintVariant, THREE.ShaderMaterial>>>();
 	private static translucency = new WeakMap<THREE.Texture, { version: number; value: boolean }>();
+	private static glassMaterials = new WeakMap<THREE.Material, THREE.Material>();
 	private static noop = () => {};
 	private static readonly CUBE_DIRECTIONS = [
 		new THREE.Vector3(1, 0, 0),
@@ -482,7 +486,7 @@ class ShadowTint {
 						float a = c.a * opacity;
 						// Transparent: lets everything through. Opaque: handled by the regular shadow map.
 						if ( a < minAlpha || a >= threshold ) discard;
-						gl_FragColor = vec4( mix( vec3( 1.0 ), c.rgb, pow( a, curve ) ), 1.0 );
+						gl_FragColor = vec4( c.a >= threshold ? vec3( 1.0 - a ) : mix( vec3( 1.0 ), c.rgb, pow( a, curve ) ), 1.0 );
 					}`,
 			});
 			if (variant === 'product') {
@@ -530,21 +534,6 @@ class ShadowTint {
 		}
 		for (const child of object.children) {
 			this.collectLights(child, lights);
-		}
-	}
-
-	/** Resize the sun's shadow map when the Advanced shadows option changed. */
-	static applyQuality(sun: THREE.DirectionalLight | null) {
-		if (!sun) {
-			return;
-		}
-		const size = this.advanced ? this.SUN_MAP_SIZE_ADVANCED : this.SUN_MAP_SIZE;
-		if (sun.shadow.mapSize.x !== size) {
-			sun.shadow.mapSize.set(size, size);
-			sun.shadow.map?.dispose();
-			sun.shadow.map = null;
-			// Keep the normal offset at about one texel (see Camera.ts)
-			sun.shadow.normalBias = ((2 * sun.shadow.camera.right) / size) * 1.0;
 		}
 	}
 
@@ -652,53 +641,177 @@ class ShadowTint {
 	}
 
 	/**
-	 * Semitransparent sprites and objects must not write depth while they are drawn: three.js sorts transparent
-	 * objects by their position, and a pane drawn too early would hide everything behind it. The static map
-	 * (renderOrder 0 or below, often sharing its material with them) keeps writing depth, unless its mesh is
-	 * marked userData.rpmGlassDepth (sprites). The change is made only around the draw of each mesh, since the
-	 * material is shared.
+	 * Meshes whose texture has semitransparent pixels are drawn in two parts: the mesh itself only draws its opaque
+	 * pixels (writing depth, in its usual order), and a child mesh draws the semitransparent ones without writing
+	 * depth, after everything else (GLASS_RENDER_ORDER), so they blend over whatever is behind them. Meshes that are
+	 * entirely semitransparent (opacity below 1 or no depth writing) are only drawn later.
 	 */
 	private static updateGlassDepthWrite(scene: THREE.Scene, threshold: number) {
 		scene.traverse((object) => {
-			if (
-				!(object instanceof THREE.Mesh) ||
-				(object.renderOrder <= 0 && !object.userData.rpmGlassDepth) ||
-				object.userData.rpmGlassChecked
-			) {
+			if (!(object instanceof THREE.Mesh) || object.userData.rpmGlassPart) {
 				return;
 			}
-			const materials = (Array.isArray(object.material) ? object.material : [object.material]).filter(
-				// Only the materials of the engine (see USE_SHADOW_TINT)
-				(material) => (material as THREE.MeshPhongMaterial)?.defines?.USE_SHADOW_TINT !== undefined,
-			);
-			if (materials.length === 0) {
+			const materials = Array.isArray(object.material) ? object.material : [object.material];
+			if (materials.length === 0 || !materials.every((material) => this.isEngineMaterial(material))) {
 				return;
 			}
-			object.userData.rpmGlassChecked = true;
-			// Without depth writing it can no longer protect itself from what is drawn after it, so it must be drawn
-			// after the static map (the ground would otherwise paint over it)
-			object.renderOrder = Math.max(object.renderOrder, 1);
-			const previousBefore = object.onBeforeRender;
-			const previousAfter = object.onAfterRender;
-			const saved = new Map<THREE.Material, boolean>();
-			object.onBeforeRender = (...args) => {
-				previousBefore.apply(object, args);
-				const material = Array.isArray(object.material) ? object.material : [object.material];
-				for (const m of material) {
-					if (m.depthWrite && this.isTranslucent(m, threshold)) {
-						saved.set(m, true);
-						m.depthWrite = false;
-					}
-				}
-			};
-			object.onAfterRender = (...args) => {
-				for (const m of saved.keys()) {
-					m.depthWrite = true;
-				}
-				saved.clear();
-				previousAfter.apply(object, args);
-			};
+			if (!object.userData.rpmGlassChecked) {
+				this.installGlassSplit(object, threshold);
+			}
+			this.updateGlass(object, materials, threshold);
 		});
+	}
+
+	private static isEngineMaterial(material: THREE.Material | undefined): boolean {
+		// Only the materials of the engine (see USE_SHADOW_TINT)
+		return (material as THREE.MeshPhongMaterial)?.defines?.USE_SHADOW_TINT !== undefined;
+	}
+
+	private static getAlphaThreshold(material: THREE.Material): THREE.IUniform<number> | undefined {
+		return (
+			(material.userData.rpmAlphaThreshold as THREE.IUniform<number> | undefined) ??
+			(material.userData.uniforms as Record<string, THREE.IUniform<number>> | undefined)?.alpha_threshold
+		);
+	}
+
+	private static hasGlassPixels(material: THREE.Material, threshold: number): boolean {
+		const map = (material as THREE.MeshPhongMaterial).map;
+		return (
+			material.visible &&
+			material.depthWrite &&
+			material.opacity >= 1 &&
+			!!map &&
+			this.textureIsTranslucent(map, threshold)
+		);
+	}
+
+	private static installGlassSplit(object: THREE.Mesh, threshold: number) {
+		object.userData.rpmGlassChecked = true;
+		const cut = threshold - 0.0001;
+		const previousBefore = object.onBeforeRender;
+		const previousAfter = object.onAfterRender;
+		const saved: { uniform: THREE.IUniform<number>; value: number }[] = [];
+		object.onBeforeRender = (...args) => {
+			previousBefore.apply(object, args);
+			if (!object.userData.rpmGlassSplit) {
+				return;
+			}
+			const materials = Array.isArray(object.material) ? object.material : [object.material];
+			for (const material of materials) {
+				const uniform = this.getAlphaThreshold(material);
+				if (uniform) {
+					saved.push({ uniform, value: uniform.value });
+					uniform.value = cut;
+				}
+			}
+		};
+		object.onAfterRender = (...args) => {
+			for (let i = saved.length - 1; i >= 0; i--) {
+				saved[i].uniform.value = saved[i].value;
+			}
+			saved.length = 0;
+			previousAfter.apply(object, args);
+		};
+	}
+
+	private static updateGlass(object: THREE.Mesh, materials: THREE.Material[], threshold: number) {
+		const split = materials.some((material) => this.hasGlassPixels(material, threshold));
+		const ready =
+			split &&
+			materials.every((material) => this.getAlphaThreshold(material) !== undefined);
+		const whole = !split && materials.some((material) => material.visible && this.isTranslucent(material, threshold));
+		if (object.renderOrder !== object.userData.rpmGlassOrder) {
+			object.userData.rpmBaseOrder = object.renderOrder;
+		}
+		const base = object.userData.rpmBaseOrder as number;
+		object.renderOrder = whole ? Math.max(base, this.GLASS_RENDER_ORDER) : base;
+		object.userData.rpmGlassOrder = object.renderOrder;
+		object.userData.rpmGlassSplit = ready;
+		let part = object.userData.rpmGlassMesh as THREE.Mesh | undefined;
+		if (!ready) {
+			if (part) {
+				part.visible = false;
+			}
+			return;
+		}
+		if (!part) {
+			part = new THREE.Mesh(object.geometry);
+			part.userData.rpmGlassPart = true;
+			part.castShadow = false;
+			part.matrixAutoUpdate = false;
+			part.raycast = this.noop;
+			Object.defineProperty(object.userData, 'rpmGlassMesh', {
+				value: part,
+				enumerable: false,
+				writable: true,
+				configurable: true,
+			});
+			object.add(part);
+		}
+		part.visible = true;
+		part.geometry = object.geometry;
+		part.receiveShadow = object.receiveShadow;
+		part.renderOrder = Math.max(base, this.GLASS_RENDER_ORDER);
+		part.material = Array.isArray(object.material)
+			? object.material.map((material) => this.getGlassMaterial(material, threshold))
+			: this.getGlassMaterial(object.material, threshold);
+	}
+
+	private static getGlassMaterial(source: THREE.Material, threshold: number): THREE.Material {
+		let material = this.glassMaterials.get(source);
+		if (!material) {
+			const userData = source.userData;
+			source.userData = {};
+			const glass = source.clone();
+			source.userData = userData;
+			const cut = threshold.toFixed(4);
+			glass.onBeforeCompile = (shader, renderer) => {
+				const sourceUniforms = source.userData.uniforms;
+				source.onBeforeCompile(shader, renderer);
+				source.userData.uniforms = sourceUniforms;
+				const replaced = shader.fragmentShader.replace(
+					/if\s*\(\s*sampledDiffuseColor\.a\s*<=\s*alpha_threshold\s*\)/,
+					`if ( sampledDiffuseColor.a <= alpha_threshold || sampledDiffuseColor.a >= ${cut} )`,
+				);
+				if (replaced === shader.fragmentShader) {
+					console.warn('ShadowTint: the fragment shader changed, semitransparent pixels are drawn twice');
+				}
+				shader.fragmentShader = replaced;
+				Object.defineProperty(glass.userData, 'uniforms', {
+					value: shader.uniforms,
+					enumerable: false,
+					writable: true,
+					configurable: true,
+				});
+				glass.userData.rpmGlassCompiled = true;
+			};
+			glass.customProgramCacheKey = () => `${source.customProgramCacheKey()}|rpmGlass`;
+			glass.transparent = true;
+			glass.depthWrite = false;
+			this.glassMaterials.set(source, glass);
+			material = glass;
+		}
+		material.side = source.side;
+		material.opacity = source.opacity;
+		(material as THREE.MeshPhongMaterial).map = (source as THREE.MeshPhongMaterial).map;
+		const from = source.userData.uniforms as Record<string, THREE.IUniform<unknown>> | undefined;
+		const to = material.userData.uniforms as Record<string, THREE.IUniform<unknown>> | undefined;
+		if (material.userData.rpmGlassCompiled && from && to) {
+			for (const name of ['offset', 'colorD', 'repeat', 'reverseH', 'hovered', 'enableShadows']) {
+				const a = from[name];
+				const b = to[name];
+				if (!a || !b || a === b) {
+					continue;
+				}
+				const value = a.value as { copy?: unknown } | null;
+				if (value && typeof value === 'object' && typeof value.copy === 'function' && b.value) {
+					(b.value as { copy: (v: unknown) => void }).copy(value);
+				} else {
+					b.value = a.value;
+				}
+			}
+		}
+		return material;
 	}
 
 	/** Render the tint maps of the lights. Call before the regular render of the scene. */
@@ -715,6 +828,13 @@ class ShadowTint {
 				this.disposeEntry(entry);
 				this.entries.delete(light);
 			}
+		}
+		if (!this.advanced) {
+			for (const entry of this.entries.values()) {
+				this.disposeEntry(entry);
+			}
+			this.entries.clear();
+			return;
 		}
 		if (lights.length === 0 || lights.length > this.MAX_LIGHTS) {
 			return;

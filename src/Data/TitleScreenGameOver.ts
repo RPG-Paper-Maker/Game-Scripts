@@ -161,10 +161,6 @@ export class TitlescreenGameover {
 				this.titleSettings.push(obj.id ?? 0);
 			}
 		}
-		// Projects made before Advanced shadows existed do not list it: show it by default
-		if (!json.ts.some((obj) => (obj.id ?? 0) === TITLE_SETTING_KIND.ADVANCED_SHADOWS)) {
-			this.titleSettings.push(TITLE_SETTING_KIND.ADVANCED_SHADOWS);
-		}
 		this.titleCommandsWindowX = Utils.valueOrDefault(json.tcwx, 440);
 		this.titleCommandsWindowY = Utils.valueOrDefault(json.tcwy, 450);
 		this.credits = new Credits(json.cr ?? {});

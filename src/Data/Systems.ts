@@ -51,6 +51,7 @@ export type SystemsJSON = {
 	sh: number;
 	isw: boolean;
 	aa?: boolean;
+	as?: boolean;
 	isMouseControls?: boolean;
 	ss: number;
 	portionRayIngame?: number;
@@ -120,6 +121,7 @@ export class Systems {
 	public static heroMapPosition: Position;
 	public static projectName: Localization;
 	public static antialias: boolean;
+	public static advancedShadows: boolean;
 	public static isMouseControls: boolean;
 	public static mountainCollisionHeight: DynamicValue;
 	public static mountainCollisionAngle: DynamicValue;
@@ -367,6 +369,7 @@ export class Systems {
 			this.updateWindowSize(w, h, true);
 		}
 		this.antialias = Utils.valueOrDefault(json.aa, false);
+		this.advancedShadows = Utils.valueOrDefault(json.as, false);
 		this.isMouseControls = Utils.valueOrDefault(json.isMouseControls, true);
 
 		// Other numbers

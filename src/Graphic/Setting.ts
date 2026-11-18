@@ -27,7 +27,7 @@ class Setting extends Base {
 	/** Texts used when the project's languages have no translation for the setting yet. */
 	public static readonly DEFAULT_ADVANCED_SHADOWS = 'Advanced shadows';
 	public static readonly DEFAULT_ADVANCED_SHADOWS_DESCRIPTION =
-		'Draws sharper shadows and lets overlapping glass tint the light. Needs a stronger graphics card.';
+		'Colored, sharper shadows (strong GPU)';
 
 	constructor(id: number) {
 		super();
