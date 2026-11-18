@@ -357,7 +357,6 @@ class MapPortion {
 			MapPortion.setLayerOffsets(staticGeometry, staticLayerOffsets, 'z');
 			this.staticSpritesMesh = new THREE.Mesh(staticGeometry, material);
 			this.staticSpritesMesh.userData.cameraVisualOccluder = true;
-			this.staticSpritesMesh.userData.rpmGlassDepth = true;
 			this.staticSpritesMesh.renderOrder = -1;
 			this.staticSpritesMesh.receiveShadow = true;
 			this.staticSpritesMesh.castShadow = true;
@@ -368,7 +367,6 @@ class MapPortion {
 			faceGeometry.updateAttributes();
 			this.faceSpritesMesh = new THREE.Mesh(faceGeometry, material);
 			this.faceSpritesMesh.userData.cameraVisualOccluder = true;
-			this.faceSpritesMesh.userData.rpmGlassDepth = true;
 			this.faceSpritesMesh.renderOrder = -1;
 			this.faceSpritesMesh.castShadow = true;
 			this.faceSpritesMesh.receiveShadow = true;
@@ -662,8 +660,6 @@ class MapPortion {
 			if (!geometry.isEmpty()) {
 				geometry.updateAttributes();
 				const mesh = new THREE.Mesh(geometry, obj.material);
-				// Semitransparent 3D shapes blend without writing depth, see ShadowTint
-				mesh.userData.rpmGlassDepth = true;
 				this.staticObjects3DList.push(mesh);
 				mesh.renderOrder = -1;
 				mesh.receiveShadow = true;
