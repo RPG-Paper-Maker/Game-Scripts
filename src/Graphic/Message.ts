@@ -274,6 +274,10 @@ class Message extends Graphic.Base {
 		this.totalWidths = [];
 		let currentAlign: ALIGN, c: number, width: number, align: ALIGN;
 		for (let i = 0, l = this.graphics.length; i < l; i++) {
+			if (this.graphics[i] === null) {
+				this.totalWidths.push(0);
+				continue;
+			}
 			currentAlign = this.aligns[i];
 			c = i;
 			width = 0;
