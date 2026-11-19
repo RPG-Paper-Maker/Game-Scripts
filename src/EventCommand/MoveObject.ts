@@ -17,7 +17,6 @@ import {
 	Inputs,
 	Mathf,
 	ORIENTATION,
-	Platform,
 	Utils,
 } from '../Common';
 import { Game, MapObject, ReactionInterpreter, Rectangle, StructSearchResult } from '../Core';
@@ -823,15 +822,6 @@ class MoveObject extends Base {
 				);
 				currentState.peak =
 					(parameters.peakY as number) + (parameters.peakYPlus as number) / Data.Systems.SQUARE_SIZE;
-				if (currentState.peak < currentState.endJump.y) {
-					Platform.showErrorMessage(
-						'Move object command: jump peak cannot be lower than final y position offset. Final position=' +
-							currentState.endJump.y +
-							'px, Peak position=' +
-							currentState.peak +
-							'px',
-					);
-				}
 				currentState.time = (parameters.time as number) * 1000;
 			}
 			currentState.currentTime = object.jump(

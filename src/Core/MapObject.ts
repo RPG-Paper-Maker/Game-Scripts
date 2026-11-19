@@ -1687,6 +1687,7 @@ class MapObject {
 		this.removeMoveTemp();
 
 		// Set position
+		peak = Math.max(peak, start.y + 1 / Data.Systems.SQUARE_SIZE, end.y);
 		const a = -(peak - start.y) / ((finalTime / 2) * (finalTime / 2));
 		let coef = 1;
 		if (start.y !== end.y) {
