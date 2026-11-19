@@ -124,7 +124,7 @@ class Text extends Base {
 			const limit = isFirstLine ? firstLineMaxWidth : maxWidth;
 			const width =
 				Platform.ctx.measureText(currentLine + ' ' + word).width + (this.strokeColor === null ? 0 : ScreenResolution.getScreenMinXY(2));
-			if (width < limit) {
+			if (width <= limit) {
 				currentLine += ' ' + word;
 			} else {
 				this.lines.push(currentLine);

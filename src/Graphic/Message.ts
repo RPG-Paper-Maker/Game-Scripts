@@ -578,10 +578,10 @@ class Message extends Graphic.Base {
 							offsetX = 0;
 							break;
 						case ALIGN.CENTER:
-							offsetX = (w - this.totalWidths[j]) / 2;
+							offsetX = Math.max(0, (textAreaWidth - this.totalWidths[j]) / 2);
 							break;
 						case ALIGN.RIGHT:
-							offsetX = w - this.totalWidths[j];
+							offsetX = Math.max(0, textAreaWidth - this.totalWidths[j]);
 							break;
 					}
 					j++;
