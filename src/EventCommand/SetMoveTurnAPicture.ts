@@ -177,6 +177,9 @@ class SetMoveTurnAPicture extends Base {
 
 			// If time = 0, then this is the end of the command
 			if (currentState.timeLeft === 0) {
+				if (this.opacity) {
+					currentState.picture.opacity = (this.opacity.getValue() as number) / 100;
+				}
 				return 1;
 			}
 			return 0;

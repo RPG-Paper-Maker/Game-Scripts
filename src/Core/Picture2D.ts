@@ -272,7 +272,7 @@ class Picture2D extends Bitmap {
 			// Draw the image according to all parameters
 			const angle = (this.angle * Math.PI) / 180;
 			ctx.save();
-			ctx.globalAlpha = this.opacity;
+			ctx.globalAlpha = Math.max(0, Math.min(1, this.opacity));
 			if (!this.centered) {
 				if (this.reverse) {
 					ctx.scale(-1, 1);

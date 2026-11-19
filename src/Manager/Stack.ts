@@ -351,7 +351,7 @@ class Stack {
 		const previousCtx = Platform.ctx;
 		Platform.ctx = ctx;
 		ctx.save();
-		ctx.globalAlpha = picture.opacity;
+		ctx.globalAlpha = Math.max(0, Math.min(1, picture.opacity));
 		ctx.translate(
 			picture.x + this.shakeOffsetX,
 			picture.y + (textMessage.heights[0] / 2 - ScreenResolution.getScreenY(Constants.HUGE_SPACE)) * picture.zoom,
