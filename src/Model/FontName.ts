@@ -18,6 +18,7 @@ import { DynamicValueJSON } from './DynamicValue';
  * JSON structure describing a font name.
  */
 export type FontNameJSON = {
+	id?: number;
 	name: string;
 	isBasic?: boolean;
 	f?: DynamicValueJSON;
@@ -28,6 +29,7 @@ export type FontNameJSON = {
  * A font name of the game.
  */
 export class FontName extends Base {
+	public id: number;
 	public name: string;
 	public isBasic: boolean;
 	public font: Model.DynamicValue;
@@ -41,13 +43,14 @@ export class FontName extends Base {
 	 * Get the font name (default or custom).
 	 */
 	getName(): string {
-		return this.isBasic ? (this.font.getValue() as string) : this.name;
+		return this.isBasic ? (this.font.getValue() as string) : `RPM-Font-${this.id}`;
 	}
 
 	/**
 	 * Read the JSON associated to the font name.
 	 */
 	read(json: FontNameJSON) {
+		this.id = json.id;
 		this.name = json.name;
 		this.isBasic = Utils.valueOrDefault(json.isBasic, true);
 		this.font = Model.DynamicValue.readOrDefaultMessage(json.f, Constants.DEFAULT_FONT_NAME);

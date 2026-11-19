@@ -72,6 +72,7 @@ export class Main {
 		await Data.Songs.readTitleScreen();
 		await Data.Videos.readTitleScreen();
 		await Data.Systems.getCurrentWindowSkin().updatePicture();
+		await Data.Systems.loadFonts();
 	}
 
 	/** Load the game data deferred until after the title screen is available. */

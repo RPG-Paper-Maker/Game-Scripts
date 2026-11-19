@@ -342,6 +342,27 @@ export class Systems {
 	}
 
 	/**
+	 *  Load all the custom fonts.
+	 *  @static
+	 */
+	static async loadFonts() {
+		if (typeof document === 'undefined' || !document.fonts) {
+			return;
+		}
+		const promises: Promise<FontFace[] | void>[] = [];
+		for (const fontName of this.fontNames.values()) {
+			if (!fontName.isBasic) {
+				promises.push(
+					document.fonts.load(Utils.createFont(16, fontName.getName(), false, false)).catch((e) => {
+						console.warn(`Could not load font "${fontName.getName()}"`, e);
+					}),
+				);
+			}
+		}
+		await Promise.all(promises);
+	}
+
+	/**
 	 *  Read the JSON file associated to
 	 *  @static
 	 */
