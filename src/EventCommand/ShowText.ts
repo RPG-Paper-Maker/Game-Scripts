@@ -23,6 +23,7 @@ class ShowText extends Base {
 	public static readonly DEFAULT_TYPEWRITER_INTERVAL = 30;
 	public static readonly DEFAULT_TYPEWRITER_VOLUME = 100;
 	public static readonly TYPEWRITER_SOUND_MIN_INTERVAL = 50;
+	public static readonly SILENT_CHARACTERS = /^[\s\p{P}]$/u;
 
 	public interlocutor: Model.DynamicValue;
 	public facesetID: number;
@@ -146,7 +147,10 @@ class ShowText extends Base {
 		}
 		if (message.visibleCharacters !== previous) {
 			Manager.Stack.requestPaintHUD = true;
-			if (currentState.typewriterSoundTick >= ShowText.TYPEWRITER_SOUND_MIN_INTERVAL) {
+			if (
+				currentState.typewriterSoundTick >= ShowText.TYPEWRITER_SOUND_MIN_INTERVAL &&
+				this.hasSoundCharacter(message, previous, message.visibleCharacters)
+			) {
 				currentState.typewriterSoundTick = 0;
 				const soundID = Utils.valueOrDefault(Data.Systems.dbOptions.v_tTypewriterSound, -1);
 				if (soundID !== -1) {
@@ -161,6 +165,26 @@ class ShowText extends Base {
 		if (message.isFullyRevealed()) {
 			message.visibleCharacters = -1;
 		}
+	}
+
+	/**
+	 *  Check if the revealed characters between two indexes include one that
+	 *  should play the typewriter sound (not a space or punctuation).
+	 *  @param {Graphic.Message} message
+	 *  @param {number} from - First revealed index
+	 *  @param {number} to - Revealed count after update (-1 for all)
+	 *  @returns {boolean}
+	 */
+	hasSoundCharacter(message: Graphic.Message, from: number, to: number): boolean {
+		const count = message.getCharactersCount();
+		const end = to < 0 ? count : Math.min(to, count);
+		for (let i = Math.max(0, from); i < end; i++) {
+			const char = message.getCharacterAt(i);
+			if (char === null || !ShowText.SILENT_CHARACTERS.test(char)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

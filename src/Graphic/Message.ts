@@ -479,6 +479,29 @@ class Message extends Graphic.Base {
 	}
 
 	/**
+	 *  Get the revealable character at an index (null for icons or out of range).
+	 *  @param {number} index
+	 *  @returns {string}
+	 */
+	getCharacterAt(index: number): string {
+		for (const graphic of this.graphics) {
+			if (graphic instanceof Graphic.Text) {
+				const count = graphic.getCharactersCount();
+				if (index < count) {
+					return graphic.text.charAt(index);
+				}
+				index -= count;
+			} else if (graphic !== null) {
+				if (index === 0) {
+					return null;
+				}
+				index--;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 *  Check if all the characters are revealed.
 	 *  @returns {boolean}
 	 */
