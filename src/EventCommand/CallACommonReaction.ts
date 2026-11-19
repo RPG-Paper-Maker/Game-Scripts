@@ -66,7 +66,7 @@ class CallACommonReaction extends Base {
 			for (const [id, reactionParameter] of reaction.parameters.entries()) {
 				v = reactionParameter.value;
 				parameter = parameters[id];
-				k = parameter ? parameter.kind : DYNAMIC_VALUE_KIND.NONE;
+				k = this.parameters[id] ? this.parameters[id].kind : DYNAMIC_VALUE_KIND.NONE;
 				if (k > DYNAMIC_VALUE_KIND.UNKNOWN && k <= DYNAMIC_VALUE_KIND.DEFAULT) {
 					parameter = k === DYNAMIC_VALUE_KIND.DEFAULT ? v : Model.DynamicValue.create(k, null);
 				}
