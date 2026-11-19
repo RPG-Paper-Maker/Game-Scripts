@@ -50,7 +50,7 @@ class ShowText extends Base {
 		this.message = lang.name();
 		this.windowMain = new WindowBox(0, 0, 0, 0, {
 			content: new Graphic.Message(this.message, this.facesetID, this.facesetIndexX, this.facesetIndexY),
-			padding: WindowBox.HUGE_PADDING_BOX,
+			padding: [...WindowBox.HUGE_PADDING_BOX],
 		});
 		this.windowInterlocutor = new WindowBox(
 			this.windowMain.oX + WindowBox.MEDIUM_SLOT_HEIGHT / 2,
