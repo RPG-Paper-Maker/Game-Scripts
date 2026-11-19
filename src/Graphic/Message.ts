@@ -66,9 +66,17 @@ class Message extends Graphic.Base {
 	 *  @param {string} message - The message to parse
 	 */
 	setMessage(message: string) {
-		this.tree = new Tree(null);
-		const root = this.tree.root;
-		let currentNode = root;
+		this.tree = this.parse(message);
+	}
+
+	/**
+	 *  Parse a text into a tags tree.
+	 *  @param {string} message - The text to parse
+	 *  @returns {Tree}
+	 */
+	parse(message: string): Tree {
+		const tree = new Tree(null);
+		let currentNode = tree.root;
 		let lastC = 0;
 		const notClosed = [];
 		let c: number,
@@ -174,6 +182,7 @@ class Message extends Graphic.Base {
 		if (l === 0 || c > lastC) {
 			currentNode = this.updateTag(currentNode, TAG_KIND.TEXT, message.substring(lastC, c), true, notClosed);
 		}
+		return tree;
 	}
 
 	/**
@@ -299,7 +308,7 @@ class Message extends Graphic.Base {
 	 *  @param {Node} node - The current node
 	 *  @param {Record<string, any>} - result The result object
 	 */
-	updateNodes(node: Node, result: Record<string, any>) {
+	updateNodes(node: Node, result: Record<string, any>, depth: number = 0) {
 		const tag = node.data[0];
 		const value = node.data[1];
 		let bold: boolean,
@@ -344,6 +353,10 @@ class Message extends Graphic.Base {
 					case TAG_KIND.HERO_NAME:
 						text = Game.current.getHeroByInstanceID(value.getValue() as number).name;
 						break;
+				}
+				if (tag !== TAG_KIND.TEXT && depth < 10 && text.includes('[')) {
+					this.updateNodes(this.parse(text).root.firstChild, result, depth + 1);
+					break;
 				}
 				const graphic = new Graphic.Text(text, {
 					bold: result.cb,
@@ -425,7 +438,7 @@ class Message extends Graphic.Base {
 				break;
 		}
 		if (node.firstChild !== null) {
-			this.updateNodes(node.firstChild, result);
+			this.updateNodes(node.firstChild, result, depth);
 		}
 		// Handle closures
 		switch (node.data[0]) {
@@ -458,7 +471,7 @@ class Message extends Graphic.Base {
 		}
 		// Go next if possible
 		if (node.next !== null) {
-			this.updateNodes(node.next, result);
+			this.updateNodes(node.next, result, depth);
 		}
 	}
 
