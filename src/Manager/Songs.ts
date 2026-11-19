@@ -116,6 +116,7 @@ class Songs {
 					this.stopMusic(0);
 					break;
 				case SONG_KIND.BACKGROUND_SOUND:
+					this.stopSong(SONG_KIND.BACKGROUND_SOUND, 0, 0);
 					break;
 			}
 			return;
