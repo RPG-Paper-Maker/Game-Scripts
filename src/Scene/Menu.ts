@@ -329,4 +329,5 @@ class Menu extends MenuBase {
 	}
 }
 
-export { Menu, StructPositionChoice };
+export { Menu };
+export type { StructPositionChoice };

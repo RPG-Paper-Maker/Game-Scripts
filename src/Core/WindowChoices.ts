@@ -781,4 +781,5 @@ class WindowChoices extends Bitmap {
 	}
 }
 
-export { ChoicesOptions, WindowChoices };
+export { WindowChoices };
+export type { ChoicesOptions };

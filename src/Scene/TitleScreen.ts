@@ -223,7 +223,7 @@ class TitleScreen extends Base {
 	 */
 	onKeyPressed(key: string) {
 		if (this.videoBlocked) {
-			this.resumeVideoBackground(Data.Keyboards.checkActionMenu(key) && this.hasVideoIntroduction());
+			this.resumeVideoBackground();
 			this.videoBlocked = false;
 			Manager.Stack.requestPaintHUD = true;
 			return;
@@ -264,7 +264,7 @@ class TitleScreen extends Base {
 	 */
 	onMouseUp(x: number, y: number) {
 		if (this.videoBlocked) {
-			this.resumeVideoBackground(this.hasVideoIntroduction());
+			this.resumeVideoBackground();
 			this.videoBlocked = false;
 			Manager.Stack.requestPaintHUD = true;
 			return;
@@ -305,11 +305,11 @@ class TitleScreen extends Base {
 	/**
 	 *  Retry video playback after user interaction unblocked autoplay.
 	 */
-	resumeVideoBackground(skipIntroduction: boolean = false) {
+	resumeVideoBackground() {
 		this.videoBlocked = false;
 		const loop = Data.TitlescreenGameover.titleVideoLoop;
 		const loopMs = Data.TitlescreenGameover.titleVideoLoopMs;
-		const startMs = (this.startAtLoop || skipIntroduction) && loop ? loopMs : 0;
+		const startMs = this.startAtLoop && loop ? loopMs : 0;
 		this.titleReady = !loop || loopMs === 0 || startMs > 0;
 		Manager.Videos.play(
 			Data.Videos.get(Data.TitlescreenGameover.titleBackgroundVideoID).getPath(),
@@ -360,7 +360,12 @@ class TitleScreen extends Base {
 	 *  @inheritdoc
 	 */
 	drawHUD() {
-		if (this.titleReady && Data.TitlescreenGameover.isTitleBackgroundImage && this.pictureBackground) {
+		if (
+			this.titleReady &&
+			!this.videoBlocked &&
+			Data.TitlescreenGameover.isTitleBackgroundImage &&
+			this.pictureBackground
+		) {
 			this.pictureBackground.draw();
 		}
 		if (this.videoBlocked) {

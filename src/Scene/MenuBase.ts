@@ -184,4 +184,5 @@ abstract class MenuBase extends Base {
 	}
 }
 
-export { MenuBase, MenuCommands };
+export { MenuBase };
+export type { MenuCommands };

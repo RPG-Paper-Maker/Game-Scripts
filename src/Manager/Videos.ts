@@ -76,6 +76,7 @@ class Videos {
 			return true;
 		} catch (e) {
 			if ((e as DOMException).name === 'NotAllowedError') {
+				Platform.canvasVideos.classList.add('hidden');
 				return false;
 			}
 			if ((e as DOMException).name === 'AbortError') {

@@ -113,4 +113,5 @@ abstract class Base {
 	drawHUD(currentState?: object) {}
 }
 
-export { Base, StructIterator };
+export { Base };
+export type { StructIterator };

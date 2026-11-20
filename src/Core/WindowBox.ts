@@ -231,4 +231,5 @@ class WindowBox extends Bitmap {
 	}
 }
 
-export { WindowBox, WindowBoxOptions };
+export { WindowBox };
+export type { WindowBoxOptions };

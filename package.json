@@ -8,8 +8,7 @@
 		"start": "node scripts/build.mjs && electron ./main.js --dev",
 		"electron": "electron ./main.js --dev",
 		"copy-project": "node scripts/copy-project.mjs",
-		"update-packages": "npx npm-check-updates -u && npm run clear-packages && npm run update-libs",
-		"update-libs": "node scripts/update-libs.mjs",
+		"update-packages": "npx npm-check-updates -u && npm run clear-packages",
 		"clear-packages": "rm -rf node_modules && rm package-lock.json && npm install",
 		"push-build": "bash scripts/push-build.sh",
 		"generate-docs": "npx typedoc src --plugin typedoc-github-theme"
@@ -27,12 +26,12 @@
 		"howler": "^2.2.4",
 		"jiti": "^2.7.0",
 		"nodemon": "^3.1.14",
-		"terser": "^5.51.2",
 		"three": "^0.187.0",
 		"three-mesh-bvh": "^0.9.17",
 		"typedoc": "^0.28.20",
 		"typedoc-github-theme": "^0.4.0",
 		"typescript": "^6.0.3",
-		"typescript-eslint": "^8.72.1"
+		"typescript-eslint": "^8.72.1",
+		"vite": "^8.3.5"
 	}
 }

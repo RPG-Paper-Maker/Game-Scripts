@@ -1,91 +1,171 @@
 import { exec } from 'child_process';
 import fs from 'fs/promises';
 import path from 'path';
+import { build } from 'vite';
 
-function runCommand(command, args = []) {
+const ROOT = path.resolve(import.meta.dirname, '..');
+const SRC_DIR = path.join(ROOT, 'src');
+const OUT_DIR = path.join(ROOT, 'build', 'Scripts');
+const PLATFORM_SOURCE = path.join(SRC_DIR, 'Common', 'Platform.ts');
+const PLATFORM_EXTERNAL_ID = 'rpm-platform';
+const ENGINE_EXTERNAL_ID = 'rpm-engine';
+const BANNER = `/*!
+    RPG Paper Maker Copyright (C) 2017-${new Date().getFullYear()} Wano
+
+    RPG Paper Maker engine is under proprietary license.
+    This source code is also copyrighted.
+
+    Use Commercial edition for commercial use of your games.
+    See RPG Paper Maker EULA here:
+        http://rpg-paper-maker.com/index.php/eula.
+
+    Original TypeScript sources are available in the src folder next to this file.
+*/`;
+
+function runCommand(command) {
 	return new Promise((resolve, reject) => {
-		const commandArgs = args.join(',').replace(',', ' ');
-
-		exec(`${command} ${commandArgs}`, async (err, stdout, stderr) => {
+		exec(command, { cwd: ROOT }, (err, stdout, stderr) => {
 			if (err) {
-				reject(`"Problem running ${command} ${commandArgs} \n ${stdout}"`);
+				reject(`Problem running ${command}\n${stdout}${stderr}`);
 				return;
 			}
-			if (stdout.length > 0) {
-				console.log(stdout);
-			} else if (stderr.length > 0) {
-				console.log(stderr);
-			}
-			resolve({ stdout, stderr });
+			resolve();
 		});
 	});
 }
 
-async function exists(path) {
-	try {
-		await fs.stat(path);
-		return true;
-	} catch (error) {
-		return false;
-	}
+const isPlatformSource = (id) => path.normalize(id.split('?')[0]) === PLATFORM_SOURCE;
+
+const toSourcePath = (relativeSourcePath, sourcemapPath) => {
+	const absolute = path.resolve(path.dirname(sourcemapPath), relativeSourcePath);
+	return path.relative(ROOT, absolute).split(path.sep).join('/');
+};
+
+const commonConfig = {
+	configFile: false,
+	root: ROOT,
+	publicDir: false,
+	logLevel: 'warn',
+	build: {
+		outDir: OUT_DIR,
+		target: 'es2020',
+		minify: false,
+		sourcemap: true,
+		reportCompressedSize: false,
+	},
+};
+
+const minifyOptions = {
+	compress: true,
+	mangle: false,
+	codegen: { removeWhitespace: true, legalComments: 'eof' },
+};
+
+async function getThirdPartyBanner() {
+	const license = await fs.readFile(path.join(ROOT, 'node_modules', 'three-mesh-bvh', 'LICENSE'), 'utf8');
+	return `/*!\n    three-mesh-bvh\n\n${license.trim().replaceAll('*/', '* /')}\n*/`;
 }
 
-// Solves that dammit stupid TypeScript decision to not add .js extensions to import paths... :°
-async function modifyImportsInFile(filePath) {
-	try {
-		const content = await fs.readFile(filePath, 'utf-8');
-		const modifiedContent = content
-			.replace(/import THREE from \'three\'/g, `import * as THREE from '../Libs/three'`)
-			.replace(/export \* from ['"](.+)['"]/g, 'export * from "$1.js"')
-			.replace(/export \* as (.+) from ['"](.+)['"]/g, 'export * as $1 from "./$1/index.js"')
-			.replace(/import ({ .+ }|\* as .+) from ['"](..?\/)(.+)['"]/g, `import $1 from '$2$3.js'`)
-			.replace(
-				/import ({ .+ }|\* as .+) from ['"](..?\/?\.?\.?\/)(Graphic|Core|Data|EventCommand|Manager|Scene|Common|Model|Libs|Utils).js['"]/g,
-				`import $1 from '$2$3/index.js'`
-			)
-			.replace(/import ({ .+ }|\* as .+) from ['"](..?)['"]/g, 'import $1 from "$2/index.js"');
-		await fs.writeFile(filePath, modifiedContent, 'utf-8');
-	} catch (error) {
-		console.error(`Error modifying imports in file: ${filePath}`);
-		console.error(error);
-	}
+async function buildEngine() {
+	const thirdPartyBanner = await getThirdPartyBanner();
+	await build({
+		...commonConfig,
+		plugins: [
+			{
+				name: 'rpm-platform-external',
+				enforce: 'pre',
+				async resolveId(source, importer, options) {
+					if (!importer) {
+						return null;
+					}
+					const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
+					if (resolved && isPlatformSource(resolved.id)) {
+						return { id: PLATFORM_EXTERNAL_ID, external: true };
+					}
+					return null;
+				},
+			},
+		],
+		build: {
+			...commonConfig.build,
+			emptyOutDir: true,
+			lib: {
+				entry: path.join(SRC_DIR, 'engine.ts'),
+				formats: ['es'],
+				fileName: () => 'main.js',
+			},
+			rolldownOptions: {
+				output: {
+					keepNames: true,
+					banner: `${BANNER}\n${thirdPartyBanner}`,
+					sourcemapExcludeSources: true,
+					comments: { legal: true, annotation: false, jsdoc: false },
+					paths: { [PLATFORM_EXTERNAL_ID]: './Common/Platform.js' },
+					minify: minifyOptions,
+					sourcemapPathTransform: toSourcePath,
+				},
+			},
+		},
+	});
 }
 
-async function modifyImports(dir) {
-	try {
-		const entries = await fs.readdir(dir, { withFileTypes: true });
-		for (const entry of entries) {
-			const filePath = path.join(dir, entry.name);
+async function buildPlatform() {
+	await build({
+		...commonConfig,
+		plugins: [
+			{
+				name: 'rpm-engine-external',
+				enforce: 'pre',
+				async resolveId(source, importer, options) {
+					if (!importer) {
+						return null;
+					}
+					const resolved = await this.resolve(source, importer, { ...options, skipSelf: true });
+					if (resolved && !isPlatformSource(resolved.id)) {
+						return { id: ENGINE_EXTERNAL_ID, external: true };
+					}
+					return null;
+				},
+			},
+		],
+		build: {
+			...commonConfig.build,
+			outDir: path.join(OUT_DIR, 'Common'),
+			emptyOutDir: false,
+			lib: {
+				entry: PLATFORM_SOURCE,
+				formats: ['es'],
+				fileName: () => 'Platform.js',
+			},
+			rolldownOptions: {
+				output: {
+					keepNames: true,
+					banner: BANNER,
+					sourcemapExcludeSources: true,
+					comments: { legal: true, annotation: false, jsdoc: false },
+					paths: { [ENGINE_EXTERNAL_ID]: '../main.js' },
+					minify: minifyOptions,
+					sourcemapPathTransform: (relativeSourcePath, sourcemapPath) =>
+						'../' + toSourcePath(relativeSourcePath, sourcemapPath),
+				},
+			},
+		},
+	});
+}
 
-			if (entry.isDirectory()) {
-				await modifyImports(filePath);
-			} else {
-				await modifyImportsInFile(filePath);
-			}
-		}
-	} catch (error) {
-		console.error(`Error reading directory: ${dir}`);
-		console.error(error);
-	}
+async function copyAssets() {
+	await fs.cp(path.join(SRC_DIR, 'Shaders'), path.join(OUT_DIR, 'Shaders'), { recursive: true });
+	await fs.cp(SRC_DIR, path.join(OUT_DIR, 'src'), { recursive: true });
 }
 
 (async function () {
-	const BUILD_DIR = './build';
-	const SYSTEM_DIR = `${BUILD_DIR}/Scripts`;
 	const startTime = Date.now();
-
 	try {
-		if (await exists(SYSTEM_DIR)) {
-			await fs.rm(SYSTEM_DIR, {
-				recursive: true,
-			});
-		}
-		await runCommand('npx', ['tsc']);
-		await modifyImports(SYSTEM_DIR);
-		await fs.cp('src/Libs', 'build/Scripts/Libs', { recursive: true });
-		await fs.cp('src/Shaders', 'build/Scripts/Shaders', { recursive: true });
-		const endTime = Date.now() - startTime;
-		console.log(`Compilation completed in ${Math.floor(endTime / 1000)} seconds`);
+		await runCommand('npx tsc --noEmit');
+		await buildEngine();
+		await buildPlatform();
+		await copyAssets();
+		console.log(`Compilation completed in ${((Date.now() - startTime) / 1000).toFixed(1)} seconds`);
 	} catch (error) {
 		console.error(error);
 		process.exitCode = 1;

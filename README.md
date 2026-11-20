@@ -62,7 +62,14 @@ npm start
 
 ## Game script build
 
-`npm start` will compile ts code and create complete the build/scripts folder. You can copy this content to [https://github.com/RPG-Paper-Maker/Game-Scripts-Build](https://github.com/RPG-Paper-Maker/Game-Scripts-Build) and push to game scripts thanks to the command:
+`npm start` bundles the TypeScript code with Vite (`scripts/build.mjs`) and generates the `build/Scripts` folder:
+
+-   `main.js`: the whole engine bundled in one file (three.js included), with its source map.
+-   `Common/Platform.js`: the platform layer, kept as a separate module so the editor can replace it (web version, deployed games).
+-   `Shaders`: shader files loaded at runtime (Howler, three.js and three-mesh-bvh are bundled in `main.js`).
+-   `src`: a copy of the TypeScript sources, used by the source maps and to read the original code.
+
+You can copy this content to [https://github.com/RPG-Paper-Maker/Game-Scripts-Build](https://github.com/RPG-Paper-Maker/Game-Scripts-Build) and push to game scripts thanks to the command:
 
 ```bash
 npm run push-build

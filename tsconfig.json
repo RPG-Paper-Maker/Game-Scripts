@@ -11,6 +11,8 @@
     ],
     "noEmit": false,
     "strict": false,
+    "useDefineForClassFields": false,
+    "isolatedModules": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,

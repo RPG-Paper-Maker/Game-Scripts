@@ -2777,4 +2777,5 @@ class MapObject {
 	}
 }
 
-export { MapObject, StructSearchResult };
+export { MapObject };
+export type { StructSearchResult };
