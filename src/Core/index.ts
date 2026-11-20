@@ -39,6 +39,7 @@ export * from './Position';
 export * from './ReactionInterpreter';
 export * from './Rectangle';
 export * from './Skill';
+export * from './SongIntro';
 export * from './Sprite';
 export * from './SpriteWall';
 export * from './TextureBundle';

@@ -10,6 +10,7 @@
 */
 
 import { Paths, Platform, SONG_KIND, Utils } from '../Common';
+import { SongIntro } from '../Core';
 import { Data } from '../index';
 import { Base } from './Base';
 
@@ -35,6 +36,7 @@ export class Song extends Base {
 	public dlc: string;
 	public base64: string;
 	public howl: typeof Howl;
+	public intro: Promise<AudioBuffer | null> | null = null;
 
 	constructor(json?: SongJSON) {
 		super(json);
@@ -113,6 +115,21 @@ export class Song extends Base {
 				this.base64 = '';
 			}
 		}
+	}
+
+	loadIntro(): Promise<AudioBuffer | null> | null {
+		if (
+			!this.intro &&
+			this.id !== -1 &&
+			(this.kind === SONG_KIND.MUSIC || this.kind === SONG_KIND.BACKGROUND_SOUND)
+		) {
+			const src = this.howl ? this.howl._src : this.getPath();
+			this.intro = SongIntro.load(
+				`${Song.getFolder(this.kind, this.isBR, this.dlc)}/${this.name}`,
+				Array.isArray(src) ? src[0] : src,
+			);
+		}
+		return this.intro;
 	}
 
 	/**

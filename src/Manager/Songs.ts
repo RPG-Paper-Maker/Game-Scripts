@@ -10,6 +10,7 @@
 */
 
 import { SONG_KIND } from '../Common';
+import { SongIntro } from '../Core';
 import { Data, Model } from '../index';
 import { ProgressionTable } from '../Model';
 
@@ -135,6 +136,7 @@ class Songs {
 		this.currentIDs[kind] = null;
 		const song = Data.Songs.get(kind, id);
 		if (song) {
+			const pendingIntro = resume == null && !start && end == null ? song.loadIntro() : null;
 			song.load();
 			const howl = song.howl;
 			this.volumes[kind] = volume;
@@ -142,10 +144,8 @@ class Songs {
 			this.ends[kind] = end;
 			this.current[kind] = howl;
 			this.currentIDs[kind] = id;
-			const play = () => {
-				if (this.playGeneration[kind] !== generation || this.current[kind] !== howl) {
-					return;
-				}
+			let intro: SongIntro | null = null;
+			const applyLoop = (): number => {
 				let playStart = start ?? 0;
 				if (kind === SONG_KIND.MUSIC || kind === SONG_KIND.BACKGROUND_SOUND) {
 					const duration = howl.duration();
@@ -153,14 +153,64 @@ class Songs {
 					const loopEnd = end != null && end > playStart ? Math.min(end, duration) : duration;
 					howl._sprite.__default = [playStart * 1000, (loopEnd - playStart) * 1000, true];
 				}
+				return playStart;
+			};
+			const play = () => {
+				if (this.playGeneration[kind] !== generation) {
+					return;
+				}
+				if (intro !== null) {
+					if (this.current[kind] !== intro) {
+						return;
+					}
+					const position = intro.seek();
+					const wasPlaying = intro.playing();
+					const introVolume = intro.volume();
+					this.current[kind] = howl;
+					if (this.musicEffectPausedHowl === intro) {
+						this.musicEffectPausedHowl = howl;
+					}
+					applyLoop();
+					howl.seek(position);
+					if (wasPlaying) {
+						howl.volume(0);
+						howl.play();
+						howl.fade(0, introVolume, SongIntro.CROSSFADE_SECONDS * 1000);
+						intro.fadeOut();
+					} else {
+						howl.volume(introVolume);
+						intro.stop();
+					}
+					return;
+				}
+				if (this.current[kind] !== howl) {
+					return;
+				}
+				const playStart = applyLoop();
 				howl.volume(volume);
 				howl.seek(resume ?? playStart);
 				howl.play();
+			};
+			const playIntro = (buffer: AudioBuffer | null) => {
+				if (
+					buffer === null ||
+					this.playGeneration[kind] !== generation ||
+					this.current[kind] !== howl ||
+					this.musicEffectPausedHowl === howl ||
+					howl.state() === 'loaded'
+				) {
+					return;
+				}
+				intro = new SongIntro(buffer);
+				intro.volume(this.volumes[kind]);
+				this.current[kind] = intro;
+				intro.play();
 			};
 			if (howl.state() === 'loaded') {
 				play();
 			} else {
 				howl.once('load', play);
+				pendingIntro?.then(playIntro).catch(() => {});
 			}
 		}
 	}

@@ -79,6 +79,7 @@ export class Main {
 	static async loadGameData() {
 		await Data.Pictures.read();
 		await Data.Songs.read();
+		Data.Songs.preloadStartMap().catch(console.error);
 		await Data.Songs.preload();
 		await Manager.Songs.warmup();
 		await Data.Videos.read();

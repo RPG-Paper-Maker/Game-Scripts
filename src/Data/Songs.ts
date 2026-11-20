@@ -10,8 +10,8 @@
 */
 
 import { Paths, Platform, SONG_KIND, TITLE_COMMAND_KIND } from '../Common';
-import { PlaySong, Song, SongJSON } from '../Model';
-import { Data } from '../index';
+import { MapPropertiesJSON, PlaySong, PlaySongJSON, Song, SongJSON } from '../Model';
+import { Data, Scene } from '../index';
 import { Base } from './Base';
 
 /**
@@ -41,11 +41,14 @@ export class Songs {
 	}
 
 	/**
-	 * Create every Howl object and wait for all audio to fully decode.
+	 * Create the Howl objects of sounds and music effects and wait for them to fully decode.
 	 */
 	static async preload(): Promise<void> {
 		const promises: Promise<void>[] = [];
-		for (const kindList of this.list.values()) {
+		for (const [kind, kindList] of this.list) {
+			if (kind !== SONG_KIND.SOUND && kind !== SONG_KIND.MUSIC_EFFECT) {
+				continue;
+			}
 			for (const song of kindList.values()) {
 				song.load();
 				const howl = song.howl;
@@ -61,6 +64,24 @@ export class Songs {
 			}
 		}
 		await Promise.all(promises);
+	}
+
+	static async preloadStartMap(): Promise<void> {
+		const json = (await Platform.parseFileJSON(
+			Paths.FILE_MAPS + Scene.Map.generateMapName(Data.Systems.ID_MAP_START_HERO) + Paths.FILE_MAP_INFOS,
+		)) as MapPropertiesJSON;
+		const songs: [SONG_KIND, PlaySongJSON][] = [
+			[SONG_KIND.MUSIC, json?.music],
+			[SONG_KIND.BACKGROUND_SOUND, json?.bgs],
+		];
+		for (const [kind, playSong] of songs) {
+			if (!playSong || playSong.isbi || playSong.id === undefined || playSong.id === -1) {
+				continue;
+			}
+			const song = this.list.get(kind)?.get(playSong.id);
+			song?.loadIntro();
+			song?.load();
+		}
 	}
 
 	/**
@@ -109,5 +130,19 @@ export class Songs {
 			songs.set(k, list);
 		}
 		this.list = songs;
+		this.loadIntros(songs).catch(console.error);
+	}
+
+	private static async loadIntros(songs: Map<SONG_KIND, Map<number, Song>>): Promise<void> {
+		const queue = [
+			...(songs.get(SONG_KIND.MUSIC)?.values() ?? []),
+			...(songs.get(SONG_KIND.BACKGROUND_SOUND)?.values() ?? []),
+		];
+		const worker = async () => {
+			while (queue.length > 0) {
+				await queue.shift().loadIntro();
+			}
+		};
+		await Promise.all([worker(), worker()]);
 	}
 }
