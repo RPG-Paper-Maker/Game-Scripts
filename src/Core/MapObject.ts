@@ -684,12 +684,23 @@ class MapObject {
 			interval = event.parameters.get(1).value;
 			if (now - timeEllapsed >= (interval.getValue() as number) * 1000) {
 				repeat = event.parameters.get(2).value;
-				if (this.receiveEvent(this, true, 1, Utils.arrayToMap([interval, repeat]), this.states, events)) {
+				const parameters = Utils.arrayToMap([interval, repeat]);
+				const reactions = this.states.flatMap((state) =>
+					this.system.getReactions(true, 1, state, parameters),
+				);
+				if (reactions.length > 0 && reactions.every((reaction) => reaction.getFirstCommand() === null)) {
+					events[1] = now;
 					if (!repeat.getValue()) {
 						removeList.push(i);
 					}
-				} else {
-					return;
+					continue;
+				}
+				if (this.receiveEvent(this, true, 1, parameters, this.states, events)) {
+					if (!repeat.getValue()) {
+						removeList.push(i);
+					}
+				} else if (this.removed || (this.system.isEventFrame && this.receivedOneEvent)) {
+					break;
 				}
 			}
 		}
@@ -697,6 +708,33 @@ class MapObject {
 		// Remove useless no repeat events
 		for (i = removeList.length - 1; i >= 0; i--) {
 			this.timeEventsEllapsed.splice(removeList[i], 1);
+		}
+	}
+
+	stopInactiveStateReactions() {
+		const map = Scene.Map.current;
+		if (!map) {
+			return;
+		}
+		const executing = Core.ReactionInterpreter.currentReaction;
+		const executingReaction = executing ? executing.currentReaction : null;
+		const routes = new Set(this.system.states.map((state) => state.route));
+		const activeRoute = this.currentState ? this.currentState.route : null;
+		for (const interpreter of [...map.reactionInterpreters, ...map.parallelCommands]) {
+			if (
+				interpreter.currentMapObject !== this ||
+				interpreter === executing ||
+				(executingReaction !== null && interpreter.currentReaction === executingReaction)
+			) {
+				continue;
+			}
+			if (routes.has(interpreter.currentReaction)) {
+				if (interpreter.currentReaction !== activeRoute) {
+					interpreter.stopRequested = true;
+				}
+			} else if (interpreter.currentTimeState && this.states.indexOf(interpreter.currentState) === -1) {
+				interpreter.stopRequested = true;
+			}
 		}
 	}
 
@@ -759,6 +797,7 @@ class MapObject {
 		// Reinitialize time events chrono
 		if (previousStateInstance !== this.currentStateInstance) {
 			this.initializeTimeEvents();
+			this.stopInactiveStateReactions();
 		}
 
 		// Keep unchanged lights in the scene while asynchronous geometry is rebuilt.

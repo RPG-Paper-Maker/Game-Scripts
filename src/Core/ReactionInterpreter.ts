@@ -43,6 +43,7 @@ class ReactionInterpreter {
 	public localVariables: Map<string, unknown>;
 	public isInMainMenu: boolean;
 	public originMapID: number;
+	public stopRequested: boolean = false;
 
 	constructor(
 		sender: MapObject,
@@ -119,6 +120,10 @@ class ReactionInterpreter {
 		let directNode = true;
 		let interpreter: ReactionInterpreter, newCommand: Node;
 		while (directNode) {
+			if (this.stopRequested && this.canStop()) {
+				this.currentCommand = null;
+				break;
+			}
 			if (this.currentCommand.data.parallel) {
 				interpreter = new ReactionInterpreter(
 					this.currentSender,
@@ -149,6 +154,26 @@ class ReactionInterpreter {
 		}
 	}
 
+	canStop(): boolean {
+		if (!(this.currentCommand.data instanceof EventCommand.MoveObject)) {
+			return true;
+		}
+		const state = this.currentCommandState;
+		if (!state) {
+			return true;
+		}
+		if (state.distance > 0 || state.position !== null || state.currentTime !== -1 || state.commandState !== null) {
+			return false;
+		}
+		const object: MapObject = state.object;
+		if (object && object.previousMoveCommand === this.currentCommand.data) {
+			object.previousMoveCommand = null;
+			object.previousOrientation = null;
+			object.otherMoveCommand = null;
+		}
+		return true;
+	}
+
 	/**
 	 *  Update a command and return the next command to excecute (if finished)
 	 *  @returns {Node}
@@ -159,6 +184,9 @@ class ReactionInterpreter {
 		}
 		if (Scene.Map.current.loading) {
 			return this.currentCommand;
+		}
+		if (this.stopRequested && this.canStop()) {
+			return null;
 		}
 		this.updateObjectParameters();
 
