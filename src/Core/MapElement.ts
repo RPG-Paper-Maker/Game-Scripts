@@ -32,6 +32,7 @@ export interface StructMapElementCollision {
 	p?: Position;
 	l?: THREE.Vector3;
 	c?: THREE.Vector3;
+	s?: THREE.Vector3;
 	cs?: CollisionSquare;
 	w?: number;
 	h?: number;

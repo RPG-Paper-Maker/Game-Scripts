@@ -160,6 +160,7 @@ class Object3DCustom extends Object3D {
 				id: this.datas.collisionCustomID,
 				p: position,
 				l: localPosition,
+				s: scaleVec,
 				b: [
 					localPosition.x + minPos.x + w / 2,
 					localPosition.y + minPos.y + h / 2,

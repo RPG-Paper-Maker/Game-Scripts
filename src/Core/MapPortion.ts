@@ -583,6 +583,9 @@ class MapPortion {
 								}
 								child.receiveShadow = true;
 								child.castShadow = true;
+								if (!(child as THREE.SkinnedMesh).isSkinnedMesh) {
+									child.userData.staticCameraBlocker = true;
+								}
 							}
 						});
 						clone.layers.enable(1);
@@ -596,7 +599,7 @@ class MapPortion {
 						this.boundingBoxesObjects3D,
 						gltfCollision[1],
 						position,
-						true,
+						false,
 						Scene.Map.current.overflowObjects3D,
 					);
 					continue;
@@ -647,7 +650,7 @@ class MapPortion {
 						this.boundingBoxesObjects3D,
 						result[1],
 						position,
-						datas.shapeKind !== SHAPE_KIND.BOX,
+						false,
 						Scene.Map.current.overflowObjects3D,
 					);
 				}

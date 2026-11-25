@@ -10,6 +10,7 @@
 */
 
 import * as THREE from 'three';
+import { acceleratedRaycast, MeshBVH } from 'three-mesh-bvh';
 import { Constants, CUSTOM_SHAPE_KIND, Mathf, ORIENTATION } from '../Common';
 import {
 	CollisionSquare,
@@ -41,6 +42,7 @@ class Collisions {
 	private static _scratchVertex = new THREE.Vector3();
 	private static _scratchNormal = new THREE.Vector3();
 	private static _raycaster = new THREE.Raycaster();
+	private static _scratchCustomCenter = new THREE.Vector3();
 	private static _scratchCheckPortion: Portion = null;
 	private static _scratchCheckPosition: Position = null;
 	private static _scratchMtnPoint = new THREE.Vector2();
@@ -536,6 +538,7 @@ class Collisions {
 		const positionBeforePlus = Collisions._scratchPositionBeforePlus;
 		const positionAfterPlus = Collisions._scratchPositionAfterPlus;
 		const checkedSprites = new Set<StructMapElementCollision>();
+		const checkedObjects3D = new Set<StructMapElementCollision>();
 		let yMountain = null;
 		const mountainCollisionHeight = (Data.Systems.mountainCollisionHeight.getValue() as number) / Data.Systems.SQUARE_SIZE;
 		const pixel = 1 / Data.Systems.SQUARE_SIZE;
@@ -590,7 +593,16 @@ class Collisions {
 						jp.x = jpositionAfter.x + i;
 						jp.y = jpositionAfter.y + j;
 						jp.z = jpositionAfter.z + k;
-						result = this.check(mapPortion, jpositionBefore, jp, positionAfter, object, direction, checkedSprites);
+						result = this.check(
+							mapPortion,
+							jpositionBefore,
+							jp,
+							positionAfter,
+							object,
+							direction,
+							checkedSprites,
+							checkedObjects3D,
+						);
 						if (result[0] === null) {
 							// If not already climbing, be sure that the before position can colide with climbling sprite
 							if (!object.isClimbing) {
@@ -962,6 +974,7 @@ class Collisions {
 		object: MapObject,
 		direction: THREE.Vector3,
 		checkedSprites?: Set<StructMapElementCollision>,
+		checkedObjects3D?: Set<StructMapElementCollision>,
 	): [boolean, number, ORIENTATION] {
 		// Check sprites and climbing
 		let [isCollision, yMountain, o] = this.checkSprites(mapPortion, jpositionAfter, object, checkedSprites);
@@ -979,7 +992,7 @@ class Collisions {
 		// Check other tests
 		return [
 			this.checkLands(mapPortion, jpositionAfter, object) ||
-				this.checkObjects3D(mapPortion, jpositionAfter, positionAfter, object),
+				this.checkObjects3D(mapPortion, jpositionAfter, positionAfter, object, checkedObjects3D),
 			yMountain,
 			ORIENTATION.NONE,
 		];
@@ -1194,6 +1207,8 @@ class Collisions {
 	 *  @param {THREE.Vector3} positionAfter - The position after collision
 	 *  collisions that were already tested
 	 *  @param {MapObject} object - The map object collision test
+	 *  @param {Set<StructMapElementCollision>} [checkedObjects3D] - The objects
+	 *  3D collisions already tested for this move
 	 *  @returns {boolean}
 	 */
 	static checkObjects3D(
@@ -1201,6 +1216,7 @@ class Collisions {
 		jpositionAfter: Position,
 		positionAfter: THREE.Vector3,
 		object: MapObject,
+		checkedObjects3D?: Set<StructMapElementCollision>,
 	): boolean {
 		const objects3D = this.getCollisionsWithOverflows(
 			mapPortion,
@@ -1212,6 +1228,12 @@ class Collisions {
 			let objCollision: StructMapElementCollision;
 			for (let i = 0, l = objects3D.length; i < l; i++) {
 				objCollision = objects3D[i];
+				if (checkedObjects3D) {
+					if (checkedObjects3D.has(objCollision)) {
+						continue;
+					}
+					checkedObjects3D.add(objCollision);
+				}
 				if (objCollision.id) {
 					if (this.checkCustomObject3D(objCollision, object, positionAfter)) {
 						return true;
@@ -1240,6 +1262,17 @@ class Collisions {
 		object: MapObject,
 		positionAfter: THREE.Vector3,
 	): boolean {
+		const bounds = object.currentBoundingBox?.geometry.boundingBox;
+		if (bounds && objCollision.b && objCollision.l) {
+			const center = Collisions._scratchCustomCenter.set(objCollision.b[0], objCollision.b[1], objCollision.b[2]);
+			const radius =
+				center.distanceTo(objCollision.l) +
+				0.5 * Math.hypot(objCollision.b[3], objCollision.b[4], objCollision.b[5]);
+			if (bounds.distanceToPoint(objCollision.l) > radius) {
+				return false;
+			}
+		}
+
 		// Remove previous
 		const mesh = Data.Shapes.get(CUSTOM_SHAPE_KIND.COLLISIONS, objCollision.id)?.mesh;
 		if (mesh !== this.currentCustomObject3D) {
@@ -1254,6 +1287,17 @@ class Collisions {
 				(objCollision.b[8] * Math.PI) / 180.0,
 				'XYZ',
 			);
+			if (objCollision.s) {
+				this.currentCustomObject3D.scale.copy(objCollision.s);
+			} else {
+				this.currentCustomObject3D.scale.set(1, 1, 1);
+			}
+			this.currentCustomObject3D.updateMatrixWorld(true);
+			const geometry = this.currentCustomObject3D.geometry;
+			if (!geometry.boundsTree) {
+				geometry.boundsTree = new MeshBVH(geometry);
+			}
+			this.currentCustomObject3D.raycast = acceleratedRaycast;
 			Scene.Map.current.scene.add(this.currentCustomObject3D);
 			if (Data.Systems.showBB) {
 				this.currentCustomObject3D.material = this.BB_MATERIAL;
@@ -1283,6 +1327,7 @@ class Collisions {
 	): boolean {
 		const vertices = meshA.geometry.getVerticesVectors();
 		const raycaster = Collisions._raycaster;
+		raycaster.firstHitOnly = true;
 		const directionNegate = direction.clone().negate();
 		let collisionResults: THREE.Intersection[];
 		for (const vertex of vertices) {
