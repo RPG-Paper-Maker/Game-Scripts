@@ -422,7 +422,7 @@ export class Systems {
 
 		// Hero beginning
 		this.ID_MAP_START_HERO = json.idMapHero;
-		this.heroMapPosition = Position.createFromArray(json.hmp);
+		this.heroMapPosition = json.hmp ? Position.createFromArray(json.hmp) : new Position(0, 0, 0);
 
 		// Debug bounding box
 		this.showBB = Utils.valueOrDefault(json.bb, false);
