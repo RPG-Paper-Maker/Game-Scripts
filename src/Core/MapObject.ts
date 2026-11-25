@@ -86,6 +86,8 @@ class MapObject {
 	public isFreeAngleMove: boolean = false;
 	public isClimbing: boolean = false;
 	public isClimbingUp: boolean = true;
+	/** Skip the floor check when moving (air movement), can be set by plugins. */
+	public ignoreFloor: boolean = false;
 	public climbOrientationEye = ORIENTATION.NONE;
 	public climbOrientation = ORIENTATION.NONE;
 	public moveFrequencyTick: number;

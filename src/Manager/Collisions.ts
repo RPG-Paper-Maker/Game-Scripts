@@ -654,6 +654,10 @@ class Collisions {
 			}
 		}
 
+		if (object.ignoreFloor) {
+			return [false, yMountain, ORIENTATION.NONE];
+		}
+
 		// Check empty square or square mountain height possible down
 		lp.x = Math.floor(positionAfter.x / chunkSize) - cp.x;
 		lp.y = Math.floor(positionAfter.y / chunkSize) - cp.y;
