@@ -12,7 +12,7 @@
 import * as THREE from 'three';
 import { ORIENTATION, Utils } from '../Common';
 import { MapObject, Position } from '../Core';
-import { Manager } from '../index';
+import { Manager, Scene } from '../index';
 import { Base } from './Base';
 
 /**
@@ -63,7 +63,11 @@ export class Detection extends Base {
 		const orientation = sender.orientationEye;
 		const localPosition = sender.position;
 		const list = new Array(this.boxes.length);
-		const angleY = ((4 - orientation) % 4) * 90;
+		const delta = this.getFreeAngleDelta(sender);
+		const deltaRad = THREE.MathUtils.degToRad(delta);
+		const cosDelta = Math.cos(deltaRad);
+		const sinDelta = Math.sin(deltaRad);
+		const angleY = ((4 - orientation) % 4) * 90 - delta;
 		const senderRotation = new THREE.Quaternion().setFromAxisAngle(
 			new THREE.Vector3(0, 1, 0),
 			THREE.MathUtils.degToRad(angleY),
@@ -117,6 +121,11 @@ export class Detection extends Base {
 					z = 0;
 					break;
 			}
+			if (delta !== 0) {
+				const rx = x * cosDelta - z * sinDelta;
+				z = x * sinDelta + z * cosDelta;
+				x = rx;
+			}
 			list[i] = [
 				localPosition.x + x,
 				localPosition.y + center.y,
@@ -130,6 +139,15 @@ export class Detection extends Base {
 			];
 		}
 		return list;
+	}
+
+	getFreeAngleDelta(sender: MapObject): number {
+		const camera = Scene.Map.current?.camera;
+		if (!sender.isFreeAngleMove || !camera) {
+			return 0;
+		}
+		const angle = camera.horizontalAngle;
+		return angle - Math.round(angle / 90) * 90;
 	}
 
 	/**

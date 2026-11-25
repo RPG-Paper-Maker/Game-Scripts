@@ -469,6 +469,7 @@ class MoveObject extends Base {
 		} else if (object.previousMoveCommand !== this) {
 			object.otherMoveCommand = this;
 		}
+		object.isFreeAngleMove = this.isCameraOrientation && !MoveObject.followGrid;
 		const distances = object.move(orientation, target - currentState.distance, angle, this.isCameraOrientation);
 		currentState.distance += distances[0];
 		currentState.normalDistance += distances[1];

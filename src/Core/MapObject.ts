@@ -83,6 +83,7 @@ class MapObject {
 	public height: number;
 	public contentWidth: number;
 	public moving: boolean = false;
+	public isFreeAngleMove: boolean = false;
 	public isClimbing: boolean = false;
 	public isClimbingUp: boolean = true;
 	public climbOrientationEye = ORIENTATION.NONE;
